@@ -30,3 +30,8 @@
 - Extraction du CSS et du code React hors de `src/Index.html`.
 - Ajout d'un build esbuild qui génère l'artefact `src/Index.html` sans Babel côté navigateur.
 - Mise à jour des scripts npm pour construire avant un `clasp push`.
+
+## 2026-09-04 — Chargement robuste des métadonnées Codex
+
+- Les métadonnées de `Codex.js` ne sont plus construites lors de l'évaluation globale.
+- Elles sont désormais créées à l'appel pour éviter une dépendance à l'ordre de chargement de `SyncCodex.js`.

@@ -9,7 +9,14 @@ const CODEX_SYNC_SHEET_NAME = "SyncCodex";
 // MÉTADONNÉES DOCUMENTAIRES
 // ============================================================
 
-const CODEX_DOCUMENT_METADATA = {
+/*
+  Les identifiants de documents sont déclarés dans SyncCodex.js.
+  On construit ces métadonnées à l'appel, plutôt qu'au chargement
+  du fichier, afin de ne pas dépendre de l'ordre d'évaluation des
+  fichiers Apps Script.
+*/
+function getCodexDocumentMetadata_() {
+  return {
   "Codex Judiciaire de Blancherive": {
     famille: "Droit de Blancherive",
     autorite: "Châtellerie de Blancherive",
@@ -86,7 +93,8 @@ const CODEX_DOCUMENT_METADATA = {
       CODEX_PAENITUS_DOC_ID +
       "/edit"
   }
-};
+  };
+}
 
 
 // ============================================================
@@ -98,6 +106,9 @@ function getCodex(token) {
     token,
     ["GARDE", "OFFICIER"]
   );
+
+  const documentMetadata =
+    getCodexDocumentMetadata_();
 
   const ss =
     SpreadsheetApp.openById(
@@ -174,7 +185,7 @@ function getCodex(token) {
     }
 
     const metadata =
-      CODEX_DOCUMENT_METADATA[source] || {
+      documentMetadata[source] || {
         famille: "Autres textes",
         autorite: "",
         applicabilite: "",
@@ -249,7 +260,7 @@ function getCodex(token) {
 
   const sources =
     Object.entries(
-      CODEX_DOCUMENT_METADATA
+      documentMetadata
     ).map(
       ([nom, metadata]) => ({
         nom: nom,

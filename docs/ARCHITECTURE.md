@@ -86,4 +86,6 @@ Pages :
 - `SyncCodex!L:O` pour les infractions et leurs sanctions ;
 - `Données!O2:O` pour la liste des gardes actifs.
 
+`Codex.js` utilise les identifiants de documents déclarés dans `SyncCodex.js`, mais construit ses métadonnées à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script.
+
 Ne pas considérer les fichiers `.js` Apps Script comme des modules ES isolés : ils partagent le namespace global.
