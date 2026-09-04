@@ -45,6 +45,9 @@ sont regroupés en groupes trans-corps à la fin de la page.
 
 - GARDE et OFFICIER peuvent consulter / créer.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
+- Seul un OFFICIER peut modifier `Reversé aux trésoriers`.
+- Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.
+- Couleurs des lignes : rouge si non payée, gris si payée mais non reversée, vert si payée et reversée.
 - OFFICIER peut supprimer une entrée.
 - La suppression applicative efface le contenu de l'entrée mais doit préserver la structure de la feuille.
 - `Payé` et `Reversé` sont liés : conserver la logique actuelle lors de toute refonte.

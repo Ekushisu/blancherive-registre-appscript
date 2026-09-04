@@ -273,13 +273,13 @@ button {
   text-align: center !important;
 }
 .fine-unpaid {
-  background: #fff2cc;
+  background: #f4cccc;
 }
 .fine-paid {
-  background: #e2f0d9;
+  background: #e5e5e5;
 }
 .fine-reversed {
-  background: #e5e5e5;
+  background: #e2f0d9;
 }
 .prison-table {
   min-width: 1650px;
@@ -871,6 +871,12 @@ button {
   .page-header .primary-button {
     width: 100%;
   }
+}
+.fine-recipient {
+  margin-top: 4px;
+  color: #666;
+  font-size: 11px;
+  line-height: 1.35;
 }
 .effectifs-tabs {
   display: flex;
@@ -2375,13 +2381,13 @@ ${item.infraction}`)) return;
       } catch (e) {
         setError(e.message);
       }
-    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", null, i.date), /* @__PURE__ */ React.createElement("td", null, i.garde), /* @__PURE__ */ React.createElement("td", null, i.contrevenant), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", null, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", null, i.date), /* @__PURE__ */ React.createElement("td", null, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", null, i.contrevenant), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", null, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
       try {
         setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
       } catch (x) {
         setError(x.message);
       }
-    } })), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.reverse, onChange: async (e) => {
+    } })), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.reverse, disabled: !canDelete, onChange: async (e) => {
       try {
         setData(await serverCall("modifierAmendeCheckbox", token, i.row, 7, e.target.checked));
       } catch (x) {

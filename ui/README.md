@@ -20,4 +20,4 @@ npm run push
 
 Les mêmes actions sont disponibles dans VS Code via **Terminal > Run Task**, avec les tâches préfixées par un emoji.
 
-La tâche `📦 Déployer une nouvelle version Web App` pousse le code, puis met à jour le déploiement Web App existant. Elle ne crée jamais un nouveau déploiement.
+Clasp ne permet pas de garantir l'accès public d'une Web App lors d'un redéploiement. Après le push, utiliser la tâche `🌐 Ouvrir Apps Script — déploiement public`, puis dans l'éditeur Apps Script : **Déployer > Gérer les déploiements > Modifier** le déploiement existant, conserver **Exécuter en tant que : Moi** et choisir **Qui a accès : Tout le monde**, puis déployer.

@@ -37,6 +37,10 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 - Suppression OFFICIER.
 - Liste des gardes lue depuis `Données!O2:O`.
 - Formulaires verrouillés pendant l'enregistrement pour empêcher les doubles soumissions.
+- Statut `Reversé` des Amendes modifiable par les OFFICIER uniquement.
+- Destinataire du reversement affiché dynamiquement depuis les collecteurs actifs du corps du garde, avec repli État-Major.
+- Les amendes des corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major regroupent les collecteurs de Cité et d'État-Major ; leurs grades sont affichés.
+- Couleurs des amendes : rouge (non payée), gris (payée non reversée), vert (payée reversée).
 
 ## Changements intégrés
 

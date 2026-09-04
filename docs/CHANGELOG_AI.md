@@ -35,3 +35,15 @@
 
 - Les métadonnées de `Codex.js` ne sont plus construites lors de l'évaluation globale.
 - Elles sont désormais créées à l'appel pour éviter une dépendance à l'ordre de chargement de `SyncCodex.js`.
+
+## 2026-09-04 — Contrôle du statut Reversé des Amendes
+
+- Seuls les OFFICIER peuvent modifier `Reversé aux trésoriers`.
+- La règle est imposée côté serveur et la case est désactivée pour les GARDE dans l'interface.
+
+## 2026-09-04 — Destinataires dynamiques des amendes
+
+- Chaque amende affiche les collecteurs actifs de son corps de garde.
+- En l'absence de collecteur local, l'interface utilise les collecteurs actifs d'État-Major.
+- Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major mutualisent les collecteurs de Cité et d'État-Major ; les grades sont affichés.
+- Couleurs des lignes ajustées : rouge non payée, gris payée non reversée, vert payée reversée.

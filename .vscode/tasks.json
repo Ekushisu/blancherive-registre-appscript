@@ -63,15 +63,13 @@
       }
     },
     {
-      "label": "📦 Déployer une nouvelle version Web App",
+      "label": "🌐 Ouvrir Apps Script — déploiement public",
       "type": "shell",
       "command": "npm",
-      "args": ["run", "deploy:webapp"],
+      "args": ["run", "open"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "dependsOn": ["🚀 Build + push Apps Script"],
-      "dependsOrder": "sequence",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

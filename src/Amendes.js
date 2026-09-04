@@ -29,6 +29,11 @@
 const AMENDES_SHEET_NAME = "Amendes";
 const AMENDES_SYNC_CODEX_SHEET_NAME = "SyncCodex";
 const AMENDES_DONNEES_SHEET_NAME = "Données";
+const AMENDES_EFFECTIFS_SHEET_NAME = "Effectifs";
+const AMENDES_COLLECTEUR_SPECIALITE = "Collecteur de la garde";
+const AMENDES_STATUT_ACTIF = "En service actif";
+const AMENDES_CORPS_REVERSEMENT_MUTUALISES = ["Cité de Blancherive", "Éclaireur", "Hird du Jarl", "État-Major"];
+const AMENDES_CORPS_COLLECTEURS_MUTUALISES = ["Cité de Blancherive", "État-Major"];
 const AMENDES_TIMEZONE = "Europe/Stockholm";
 
 
@@ -55,6 +60,7 @@ function getAmendes(token) {
   const range = sheet.getRange(2, 1, lastRow - 1, 7);
   const values = range.getValues();
   const display = range.getDisplayValues();
+  const reversementsParGarde = lireReversementsAmendes_(ss);
 
   const rows = [];
 
@@ -72,6 +78,7 @@ function getAmendes(token) {
     }
 
     const montantRaw = valueRow[4];
+    const reversement = reversementsParGarde.get(normaliserReferenceAmendes_(garde)) || { collecteurs: [], fallbackEtatMajor: false };
 
     rows.push({
       row: i + 2,
@@ -90,6 +97,9 @@ function getAmendes(token) {
           ? null
           : Number(montantRaw),
 
+      collecteurs: reversement.collecteurs,
+      fallbackEtatMajor: reversement.fallbackEtatMajor,
+
       paye: valueRow[5] === true,
       reverse: valueRow[6] === true
     });
@@ -99,6 +109,58 @@ function getAmendes(token) {
 
   return { rows };
 }
+
+function lireReversementsAmendes_(ss) {
+  const sheet = ss.getSheetByName(AMENDES_EFFECTIFS_SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2 || sheet.getLastColumn() < 1) return new Map();
+  const width = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, width).getDisplayValues()[0].map(normaliserReferenceAmendes_);
+  const prenom = trouverColonneAmendes_(headers, ["prenom", "prénom"]);
+  const nom = trouverColonneAmendes_(headers, ["nom"]);
+  const grade = trouverColonneAmendes_(headers, ["grade"]);
+  const corps = trouverColonneAmendes_(headers, ["corps", "corps de garde", "garnison"]);
+  const specialite = trouverColonneAmendes_(headers, ["specialite", "spécialité"]);
+  const statut = trouverColonneAmendes_(headers, ["status", "statut"]);
+  if ([prenom, nom, grade, corps, specialite, statut].some(index => index < 0)) return new Map();
+  const corpsParGarde = new Map(), collecteursParCorps = new Map();
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, width).getDisplayValues();
+  for (const row of rows) {
+    const nomComplet = nettoyerSaisieUtilisateur(`${row[prenom] || ""} ${row[nom] || ""}`);
+    const corpsGarde = normaliserReferenceAmendes_(row[corps]);
+    if (!nomComplet || !corpsGarde) continue;
+    const cleGarde = normaliserReferenceAmendes_(nomComplet);
+    if (!corpsParGarde.has(cleGarde)) corpsParGarde.set(cleGarde, new Set());
+    corpsParGarde.get(cleGarde).add(corpsGarde);
+    const estCollecteur = contientSpecialiteAmendes_(row[specialite], AMENDES_COLLECTEUR_SPECIALITE);
+    const estActif = normaliserReferenceAmendes_(row[statut]) === normaliserReferenceAmendes_(AMENDES_STATUT_ACTIF);
+    if (!estCollecteur || !estActif) continue;
+    if (!collecteursParCorps.has(corpsGarde)) collecteursParCorps.set(corpsGarde, []);
+    const gradeCollecteur = nettoyerSaisieUtilisateur(row[grade]);
+    collecteursParCorps.get(corpsGarde).push(gradeCollecteur ? `${gradeCollecteur} ${nomComplet}` : nomComplet);
+  }
+  const collecteursEtatMajor = [];
+  for (const [corpsGarde, collecteurs] of collecteursParCorps) if (estEtatMajorAmendes_(corpsGarde)) collecteursEtatMajor.push(...collecteurs);
+  const result = new Map();
+  for (const [cleGarde, corpsGardes] of corpsParGarde) {
+    const collecteurs = [];
+    for (const corpsGarde of corpsGardes) {
+      const corpsCollecteurs = estCorpsReversementMutualiseAmendes_(corpsGarde)
+        ? AMENDES_CORPS_COLLECTEURS_MUTUALISES.map(normaliserReferenceAmendes_)
+        : [corpsGarde];
+      for (const corpsCollecteur of corpsCollecteurs) collecteurs.push(...(collecteursParCorps.get(corpsCollecteur) || []));
+    }
+    const noms = listeUniqueAmendes_(collecteurs);
+    const fallbackEtatMajor = noms.length === 0 && collecteursEtatMajor.length > 0;
+    result.set(cleGarde, { collecteurs: fallbackEtatMajor ? listeUniqueAmendes_(collecteursEtatMajor) : noms, fallbackEtatMajor });
+  }
+  return result;
+}
+
+function trouverColonneAmendes_(headers, aliases) { const normalizedAliases = aliases.map(normaliserReferenceAmendes_); return headers.findIndex(header => normalizedAliases.includes(header)); }
+function estEtatMajorAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return value === "etat-major" || value === "etat major"; }
+function estCorpsReversementMutualiseAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return AMENDES_CORPS_REVERSEMENT_MUTUALISES.map(normaliserReferenceAmendes_).includes(value) || value === "hird"; }
+function listeUniqueAmendes_(values) { const result = [], seen = new Set(); for (const value of values) { const cleaned = nettoyerSaisieUtilisateur(value), key = normaliserReferenceAmendes_(cleaned); if (!cleaned || seen.has(key)) continue; seen.add(key); result.push(cleaned); } return result; }
+function contientSpecialiteAmendes_(specialites, specialiteRecherchee) { const recherchee = normaliserReferenceAmendes_(specialiteRecherchee); return String(specialites || "").split(/[,;\n]/).some(specialite => normaliserReferenceAmendes_(specialite) === recherchee); }
 
 
 // ============================================================
@@ -261,7 +323,8 @@ function modifierAmendeCheckbox(
   column,
   checked
 ) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth =
+    requireRole(token, ["GARDE", "OFFICIER"]);
 
   row = Number(row);
   column = Number(column);
@@ -272,6 +335,12 @@ function modifierAmendeCheckbox(
 
   if (column !== 6 && column !== 7) {
     throw new Error("Colonne d'amende non autorisée.");
+  }
+
+  if (column === 7 && auth.role !== "OFFICIER") {
+    throw new Error(
+      "Seuls les officiers peuvent modifier le statut Reversé."
+    );
   }
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -535,6 +604,8 @@ function nettoyerSaisieUtilisateur(value) {
     .replace(/\u00A0/g, " ")
     .trim();
 }
+
+function normaliserReferenceAmendes_(value) { return nettoyerSaisieUtilisateur(value).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
 
 
 function parseDateInput(value) {

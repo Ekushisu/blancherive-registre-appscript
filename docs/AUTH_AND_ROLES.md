@@ -34,7 +34,7 @@ Règles connues :
 - Organigramme
 - Présences en lecture seule
 - Codex
-- Amendes
+- Amendes (création et statut `Payé`)
 - Prison
 
 ### OFFICIER
@@ -43,6 +43,7 @@ Règles connues :
 - édition Présences ;
 - tableau de bord officier ;
 - suppression Amendes ;
+- modification du statut `Reversé` des Amendes ;
 - suppression Prison.
 
 Un contrôle uniquement côté React n'est jamais suffisant.

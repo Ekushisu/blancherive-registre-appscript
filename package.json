@@ -8,8 +8,7 @@
     "status": "cd src && clasp status",
     "open": "cd src && clasp open",
     "versions": "cd src && clasp versions",
-    "deployments": "cd src && clasp deployments",
-    "deploy:webapp": "cd src && clasp update-deployment AKfycbxq_kQoJoYBawCwiK3cf19ZQ2MED202kaoOy7QeUqPJJsUGhapHVVaWRpKULOxjFXSqjQ --description \"Mise à jour Web App\""
+    "deployments": "cd src && clasp deployments"
   },
   "devDependencies": {
     "@google/clasp": "^3.3.0",
