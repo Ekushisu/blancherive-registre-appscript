@@ -45,6 +45,7 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 ### Présences
 
 - Le Hird du Jarl est exclu du tableau, des calculs de solde et des alertes d'inactivité, sans suppression des lignes historiques.
+- Les semaines sont affichées en accordéons ; seule la semaine courante est ouverte par défaut et un filtre permet de sélectionner une semaine.
 
 ### Effectifs
 

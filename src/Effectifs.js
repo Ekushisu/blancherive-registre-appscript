@@ -481,21 +481,18 @@ function ajouterEffectif(token, data) {
   }
 
   if (templateRow) {
+    const targetRange =
+      sheet.getRange(targetRow, 1, 1, lastColumn);
+
     sheet
       .getRange(templateRow, 1, 1, lastColumn)
       .copyTo(
-        sheet.getRange(targetRow, 1, 1, lastColumn),
-        SpreadsheetApp.CopyPasteType.PASTE_FORMAT,
+        targetRange,
+        SpreadsheetApp.CopyPasteType.PASTE_NORMAL,
         false
       );
 
-    const validations = sheet
-      .getRange(templateRow, 1, 1, lastColumn)
-      .getDataValidations();
-
-    sheet
-      .getRange(targetRow, 1, 1, lastColumn)
-      .setDataValidations(validations);
+    targetRange.clearContent();
   } else {
     const validations = [Array(lastColumn).fill(null)];
     for (const column of [

@@ -895,6 +895,33 @@ button {
   font-size: 11px;
   line-height: 1.35;
 }
+.presence-week-filter {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 16px;
+}
+.presence-week-filter label {
+  font-size: 13px;
+  font-weight: 700;
+}
+.presence-week-filter select {
+  min-height: 38px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 7px 10px;
+  background: #fff;
+}
+.week-toggle {
+  width: 100%;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.week-toggle:hover {
+  filter: brightness(.97);
+}
 .effectifs-tabs {
   display: flex;
   gap: 7px;
@@ -2515,7 +2542,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState(null), [error, setError] = useState("");
+    const [data, setData] = useState(null), [error, setError] = useState(""), [weekFilter, setWeekFilter] = useState("");
     useEffect(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -2526,17 +2553,18 @@ ${item.infraction}`)) return;
       if (!weeks.has(r.semaine)) weeks.set(r.semaine, []);
       weeks.get(r.semaine).push(r);
     });
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), [...weeks.entries()].sort((a, b) => b[0] - a[0]).map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData })));
+    const weekEntries = [...weeks.entries()].sort((a, b) => b[0] - a[0]);
+    const filteredWeeks = weekFilter ? weekEntries.filter(([week]) => String(week) === weekFilter) : weekEntries;
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, "Semaine ", week)))), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData })));
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh }) {
-    const groups = /* @__PURE__ */ new Map();
+    const groups = /* @__PURE__ */ new Map(), current = Number(week) === Number(currentWeek), [open, setOpen] = useState(current);
     rows.forEach((r) => {
       const k = r.corps || "Sans corps";
       if (!groups.has(k)) groups.set(k, []);
       groups.get(k).push(r);
     });
-    const current = Number(week) === Number(currentWeek);
-    return /* @__PURE__ */ React.createElement("section", { className: `week-section ${current ? "week-current" : "week-old"}` }, /* @__PURE__ */ React.createElement("div", { className: "week-header" }, /* @__PURE__ */ React.createElement("span", null, "Semaine ", week), current && /* @__PURE__ */ React.createElement("span", null, "Semaine courante")), [...groups.entries()].map(([corps, soldiers]) => /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title" }, corps), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked)) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked)) }))))))))));
+    return /* @__PURE__ */ React.createElement("section", { className: `week-section ${current ? "week-current" : "week-old"}` }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "week-header week-toggle", onClick: () => setOpen(!open), "aria-expanded": open }, /* @__PURE__ */ React.createElement("span", null, "Semaine ", week), /* @__PURE__ */ React.createElement("span", null, current ? "Semaine courante \xB7 " : "", open ? "\u25BE" : "\u25B8")), open && [...groups.entries()].map(([corps, soldiers]) => /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title" }, corps), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked)) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked)) }))))))))));
   }
 
   // ui/src/main.jsx

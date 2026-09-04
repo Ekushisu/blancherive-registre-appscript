@@ -56,9 +56,14 @@
 ## 2026-09-04 — Positionnement des nouveaux effectifs
 
 - Les nouveaux membres ne suivent plus la dernière cellule utilisée de la feuille.
-- Ils sont ajoutés à la première ligne libre et récupèrent les validations d'une ligne Effectifs valide.
+- Ils sont ajoutés à la première ligne libre et récupèrent l'intégralité du modèle (dont validations et chips) d'une ligne Effectifs valide, sans en reprendre les données.
 
 ## 2026-09-04 — Synchronisation Effectifs / Présences
 
 - L'ajout d'un effectif et toute modification de statut régénèrent la semaine courante de Présences.
 - Les autres modifications d'effectif n'entraînent pas de régénération.
+
+## 2026-09-04 — Consultation des Présences
+
+- Les semaines sont repliables, avec ouverture initiale de la semaine courante.
+- Un filtre permet de limiter l'affichage à une semaine donnée.

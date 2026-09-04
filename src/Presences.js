@@ -28,6 +28,9 @@
 const PRESENCE_ACTIVE_STATUS =
   "En service actif";
 
+const PRESENCES_EFFECTIFS_SHEET_NAME =
+  "Effectifs";
+
 const PRESENCE_EXCLUDED_CORPS =
   "Hird du Jarl";
 
@@ -60,7 +63,7 @@ function genererPresencesSemaineCourante() {
 
     const effectifsSheet =
       ss.getSheetByName(
-        EFFECTIFS_SHEET_NAME
+        PRESENCES_EFFECTIFS_SHEET_NAME
       );
 
 
@@ -550,10 +553,6 @@ function lirePresencesExistantes(
       row[0] === ""
       ||
       row[0] === null
-      ||
-      estCorpsExcluDesPresences_(
-        displayValues[i][1]
-      )
     ) {
 
       continue;
@@ -982,6 +981,10 @@ function getPresences(
       row[0] === ""
       ||
       row[0] === null
+      ||
+      estCorpsExcluDesPresences_(
+        displayValues[i][1]
+      )
     ) {
 
       continue;
