@@ -1,2185 +1,2523 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Généré par npm run build depuis ui/. Ne pas modifier src/Index.html à la main. -->
   <base target="_top">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f3f3f3;color:#222}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh}
-    .login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:24px;background:linear-gradient(135deg,#ded7c5,#f3efe4)}.login-card{width:100%;max-width:420px;background:#fff;border-radius:14px;padding:28px;box-shadow:0 10px 35px rgba(0,0,0,.12)}.login-card input{width:100%;padding:12px;margin-bottom:12px;border:1px solid #bbb;border-radius:7px}
-    .primary-button,.secondary-button,.danger-button{border-radius:7px;padding:9px 12px}.primary-button{border:0;background:#333;color:#fff;padding:11px 16px}.secondary-button{border:1px solid #aaa;background:#fff;color:#333}.danger-button{border:1px solid #c98282;background:#fff4f4;color:#a62d2d;font-size:12px;font-weight:700}.primary-button:disabled,.secondary-button:disabled,.danger-button:disabled{opacity:.5;cursor:default}
-    .topbar{min-height:64px;background:#242424;color:#fff;display:flex;align-items:center;padding:0 22px;gap:22px;position:sticky;top:0;z-index:50}.brand{font-weight:700;white-space:nowrap}.nav{display:flex;gap:6px;flex:1}.nav button{border:0;background:transparent;color:#ccc;padding:10px 12px;border-radius:6px;white-space:nowrap}.nav button:hover,.nav button.active{background:#444;color:#fff}.role-badge{font-size:12px;padding:5px 8px;border-radius:20px;background:#555}.logout{background:transparent;color:#ddd;border:1px solid #777;border-radius:6px;padding:7px 10px}
-    .content{max-width:1800px;margin:auto;padding:24px}.page-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}.page-title{margin:0}.page-subtitle{margin:5px 0 0;color:#777;font-size:14px}.loading{padding:40px;text-align:center}.error,.success,.info-notice,.readonly-notice{padding:10px 12px;border-radius:7px;margin-bottom:16px}.error{background:#f4cccc;color:#8a0000}.success{background:#e2f0d9;color:#35652f}.info-notice,.readonly-notice{background:#e8eef5;border:1px solid #bcc9d8;color:#41566f;font-size:13px}
-    .form-card{background:#fff;border:1px solid #ccc;border-radius:12px;padding:18px;margin-bottom:24px}.form-fieldset{border:0;padding:0;margin:0;min-width:0}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.field-wide{grid-column:span 2}.field-full{grid-column:1/-1}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;min-height:40px;border:1px solid #aaa;border-radius:7px;background:#fff;padding:8px 10px}.field textarea{min-height:85px;resize:vertical}.form-actions{display:flex;gap:10px;margin-top:16px}
-    .registry{background:#fff;border:1px solid #ccc;border-radius:12px;overflow:hidden}.registry-table-wrap,.presence-table-wrap{overflow-x:auto}.registry-table,.presence-table{width:100%;border-collapse:collapse;min-width:1050px}.registry-table{table-layout:fixed;min-width:1100px}.registry-table th,.registry-table td,.presence-table th,.presence-table td{padding:9px;border-bottom:1px solid #ececec;vertical-align:middle}.registry-table th,.presence-table th{background:#f6f6f6;font-size:12px;text-align:left}.cell-center{text-align:center!important}.actions-column{width:90px;text-align:center!important}.fine-unpaid{background:#fff2cc}.fine-paid{background:#e2f0d9}.fine-reversed{background:#e5e5e5}.prison-table{min-width:1650px}.prison-active{background:#f4cccc}.prison-released{background:#e5e5e5}
-    .law-link{border:0;background:transparent;color:#315d8a;padding:0;text-align:left;text-decoration:underline dotted;text-underline-offset:3px}.law-info-row{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap}.law-info-button{border:1px solid #b7c4d0;background:#eef3f7;color:#35546d;border-radius:7px;padding:6px 9px;font-size:12px}
-    .modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}.law-modal{width:min(820px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,.35)}.law-modal-header{padding:18px 20px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:18px}.law-modal-number{color:#666;font-size:13px}.law-modal-title{margin:0;font-size:21px}.law-modal-close{border:0;background:transparent;font-size:27px;color:#777}.law-modal-body{padding:20px}.law-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.law-chip{display:inline-flex;border-radius:30px;padding:5px 9px;background:#ececec;color:#555;font-size:12px}.law-chip-local{background:#e6f0e6;color:#3f6542}.law-source-info{border:1px solid #ddd;background:#fafafa;border-radius:9px;padding:12px 14px;margin-bottom:18px;font-size:13px;line-height:1.6}.law-text{white-space:pre-wrap;line-height:1.6;margin-bottom:20px}.law-sanction-box{background:#f6f6f6;border-left:4px solid #555;border-radius:6px;padding:13px 15px;margin-top:14px}.law-warning{margin-top:16px;padding:11px 13px;background:#fff2cc;border:1px solid #e0cc80;border-radius:7px;color:#6c5810}
-    .codex-library{display:grid;gap:16px;margin-bottom:20px}.codex-family{background:#fff;border:1px solid #ccc;border-radius:12px;padding:15px}.codex-family-title{margin:0 0 12px;font-size:16px}.codex-source-list{display:flex;flex-wrap:wrap;gap:8px}.codex-source-button{border:1px solid #bbb;background:#f7f7f7;border-radius:8px;padding:8px 11px;text-align:left}.codex-source-button.active{background:#333;border-color:#333;color:#fff}.codex-source-button small{display:block;opacity:.7;margin-top:2px}.codex-controls{background:#fff;border:1px solid #ccc;border-radius:12px;padding:16px;margin-bottom:18px;display:grid;grid-template-columns:minmax(280px,1fr) 210px 210px;gap:12px}.codex-controls input,.codex-controls select{width:100%;min-height:42px;border:1px solid #aaa;border-radius:7px;padding:8px 10px;background:#fff}.codex-count{margin-bottom:12px;color:#777;font-size:13px}.codex-list{display:grid;gap:12px}.codex-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:15px;cursor:pointer}.codex-card-top{display:flex;justify-content:space-between;gap:15px}.codex-card-number{color:#777;font-size:12px;font-weight:700;text-transform:uppercase}.codex-card-title{margin:3px 0 6px;font-size:17px}.codex-card-source{color:#888;font-size:11px;text-align:right}.codex-card-text{margin-top:10px;color:#555;font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.codex-card-sanction{margin-top:10px;color:#555;font-size:12px;font-weight:700}
-    .org-person{background:#fff;border:1px solid #cfcfcf;border-radius:9px;padding:10px 12px}.org-person.center{text-align:center}.org-person-name{font-weight:700}.org-person-grade{margin-top:3px;color:#666;font-size:12px}.org-jarl-row{display:flex;justify-content:center;margin-top:26px}.org-jarl-down{width:2px;height:28px;background:#999;margin:auto}.org-branch-row{display:grid;grid-template-columns:1fr 1fr;gap:90px;width:min(1150px,100%);margin:auto}.org-hird,.org-independent-block{background:#ededed;border:1px solid #ccc;border-radius:12px;padding:12px}.org-block-title,.org-independent-title{text-align:center}.org-command-chain{display:flex;flex-direction:column;align-items:center;gap:14px}.org-command-card{width:100%;max-width:340px}.org-garrisons-title{text-align:center;margin:35px 0 20px}.org-garrisons{display:grid;grid-template-columns:repeat(6,minmax(185px,1fr));gap:14px}.org-garrison{background:#fff;border:1px solid #ccc;border-radius:11px}.org-garrison-header{padding:13px 10px;background:#333;color:#fff;text-align:center;font-weight:700;border-radius:10px 10px 0 0}.org-garrison-body{padding:11px}.org-rank-group{margin-bottom:14px}.org-rank-title{margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid #ddd;color:#777;font-size:10px;font-weight:700;text-transform:uppercase}.org-rank-members{display:grid;gap:6px}.org-rank-members .org-person-grade{display:none}.org-independent-area{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}.org-empty{padding:15px;color:#888;text-align:center;font-style:italic}
-    .presence-dashboard-cards{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px;margin-bottom:16px}.presence-stat-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:15px}.presence-stat-warning{background:#fff8e6}.presence-stat-danger{background:#fff0f0}.presence-stat-label{color:#666;font-size:12px;margin-bottom:7px}.presence-stat-value{font-size:25px;font-weight:700}.presence-stat-sub{margin-top:7px;color:#888;font-size:11px}.presence-inactive-panel{background:#fff;border:1px solid #ccc;border-radius:11px;overflow:hidden;margin-bottom:28px}.presence-inactive-header{display:flex;justify-content:space-between;padding:12px 15px;background:#f5f5f5;border-bottom:1px solid #ddd}.presence-inactive-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}.presence-inactive-person{padding:11px 14px;border-right:1px solid #eee;border-bottom:1px solid #eee}.presence-inactive-name{font-weight:700}.presence-inactive-meta{color:#777;font-size:12px}.presence-inactive-alert{color:#995b19;font-size:12px;font-weight:700}.week-section{margin-bottom:34px;border-radius:12px;overflow:hidden;border:1px solid #ccc;background:#fff}.week-header{padding:13px 18px;font-weight:700;display:flex;justify-content:space-between}.week-current .week-header{background:#fff2cc}.week-old .week-header{background:#e8e8e8}.corps-title{padding:9px 14px;font-weight:700;background:#f6f6f6}.presence-table th,.presence-table td{text-align:center}.presence-table th:first-child,.presence-table td:first-child{text-align:left}.row-current{background:#fff2cc!important}.row-unpaid{background:#f4cccc!important}.row-paid{background:#e1e1e1!important}.grade{font-size:12px;opacity:.68}
-    .effectifs-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}.effectifs-search{flex:1;min-width:260px;min-height:42px;border:1px solid #aaa;border-radius:7px;padding:8px 11px;background:#fff}.effectifs-count{color:#777;font-size:13px}.effectifs-grid{display:grid;gap:10px}.effectif-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:14px}.effectif-card-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px}.effectif-name{font-weight:700;font-size:17px}.effectif-meta{color:#777;font-size:12px;margin-top:3px}.effectif-state{font-size:11px;border-radius:20px;padding:5px 8px;background:#eee;white-space:nowrap}.effectif-state.active{background:#e2f0d9;color:#35652f}.effectif-edit-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto auto;gap:10px;align-items:end}.effectif-check{min-height:40px;display:flex;align-items:center;gap:8px;white-space:nowrap}.effectif-check input{width:18px;height:18px}.effectif-save{min-height:40px}
-    @media(max-width:1450px){.org-garrisons{grid-template-columns:repeat(3,1fr)}}@media(max-width:1000px){.presence-dashboard-cards{grid-template-columns:1fr 1fr}.effectif-edit-grid{grid-template-columns:1fr 1fr}}@media(max-width:900px){.codex-controls{grid-template-columns:1fr}}@media(max-width:800px){.topbar{flex-wrap:wrap;padding:10px 14px}.brand{width:100%}.nav{width:100%;overflow-x:auto}.content{padding:12px}.form-grid{grid-template-columns:1fr}.field-wide,.field-full{grid-column:auto}.org-branch-row,.org-independent-area{grid-template-columns:1fr}.org-garrisons{grid-template-columns:1fr}}@media(max-width:620px){.presence-dashboard-cards,.effectif-edit-grid{grid-template-columns:1fr}.page-header{align-items:stretch;flex-direction:column}.page-header .primary-button{width:100%}}
-  
-    /* EFFECTIFS V2 : onglets par corps + édition complète */
-    .effectifs-tabs{
-      display:flex;
-      gap:7px;
-      overflow-x:auto;
-      padding:2px 0 12px;
-      margin-bottom:12px;
-      scrollbar-width:thin;
-    }
-    .effectifs-tab{
-      border:1px solid #bbb;
-      background:#fff;
-      color:#444;
-      border-radius:999px;
-      padding:8px 11px;
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      white-space:nowrap;
-    }
-    .effectifs-tab:hover{background:#f4f4f4}
-    .effectifs-tab.active{
-      background:#333;
-      border-color:#333;
-      color:#fff;
-    }
-    .effectifs-tab-count{
-      min-width:22px;
-      padding:2px 6px;
-      border-radius:999px;
-      background:rgba(0,0,0,.08);
-      font-size:11px;
-      text-align:center;
-    }
-    .effectifs-tab.active .effectifs-tab-count{
-      background:rgba(255,255,255,.16);
-    }
-    .effectifs-empty{
-      background:#fff;
-      border:1px dashed #bbb;
-      border-radius:11px;
-      padding:24px;
-      text-align:center;
-      color:#777;
-    }
-    .effectif-edit-grid{
-      display:grid;
-      grid-template-columns:
-        minmax(150px,.9fr)
-        minmax(190px,1.15fr)
-        minmax(180px,1fr)
-        minmax(170px,1fr)
-        auto
-        auto;
-      gap:10px;
-      align-items:end;
-    }
-
-  
-    /* ======================================================
-       EFFECTIFS V3 - lisibilité / regroupement / couleurs
-       ====================================================== */
-
-    .effectifs-tabs {
-      display: flex;
-      gap: 7px;
-      overflow-x: auto;
-      padding: 2px 0 12px;
-      margin-bottom: 10px;
-      scrollbar-width: thin;
-    }
-
-    .effectifs-tab {
-      border: 1px solid #bbb;
-      background: white;
-      color: #444;
-      border-radius: 999px;
-      padding: 8px 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      white-space: nowrap;
-      min-height: 40px;
-    }
-
-    .effectifs-tab:hover {
-      background: #f3f3f3;
-    }
-
-    .effectifs-tab.active {
-      border-color: #444;
-      background: #eee;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-    }
-
-    .effectifs-tab-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,.14);
-      background: #ddd;
-      flex: 0 0 auto;
-    }
-
-    .effectifs-tab-count {
-      min-width: 22px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.08);
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .effectifs-toolbar-v3 {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 11px 13px;
-      margin-bottom: 16px;
-    }
-
-    .effectifs-total {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      white-space: nowrap;
-    }
-
-    .effectifs-total span {
-      color: #777;
-      font-size: 12px;
-    }
-
-    .effectifs-search {
-      width: min(460px,100%);
-      min-height: 40px;
-      border: 1px solid #aaa;
-      border-radius: 7px;
-      padding: 8px 10px;
-      background: white;
-    }
-
-    .effectifs-corps-groups {
-      display: grid;
-      gap: 24px;
-    }
-
-    .effectifs-corps-group {
-      display: grid;
-      gap: 10px;
-    }
-
-    .effectifs-corps-heading {
-      border-left: 5px solid #777;
-      padding: 4px 0 4px 12px;
-    }
-
-    .effectifs-corps-title {
-      font-size: 20px;
-      font-weight: 800;
-      line-height: 1.15;
-    }
-
-    .effectifs-corps-subtitle {
-      margin-top: 3px;
-      color: #777;
-      font-size: 12px;
-    }
-
-    .effectifs-grade-groups {
-      display: grid;
-      gap: 12px;
-    }
-
-    .effectifs-grade-group {
-      background: white;
-      border: 1px solid #cfcfcf;
-      border-radius: 11px;
-      overflow: hidden;
-    }
-
-    .effectifs-grade-heading {
-      min-height: 39px;
-      padding: 8px 13px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid rgba(0,0,0,.10);
-      font-weight: 800;
-    }
-
-    .effectifs-grade-count {
-      min-width: 25px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.34);
-      border: 1px solid rgba(0,0,0,.12);
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .effectifs-member-list {
-      display: grid;
-    }
-
-    .effectif-row {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      align-items: center;
-      gap: 14px;
-      padding: 11px 13px;
-      border-bottom: 1px solid #ededed;
-    }
-
-    .effectif-row:last-child {
-      border-bottom: 0;
-    }
-
-    .effectif-row:hover {
-      background: #fafafa;
-    }
-
-    .effectif-identity {
-      min-width: 0;
-    }
-
-    .effectif-name {
-      font-size: 15px;
-      font-weight: 750;
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-
-    .effectif-badges {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .effectif-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.12);
-      background: #eee;
-      color: #555;
-      font-size: 11px;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    .effectif-badge-sworn {
-      background: #e2f0d9;
-      color: #35652f;
-      border-color: #b7d4ad;
-    }
-
-    .effectif-badge-muted {
-      background: #f1f1f1;
-      color: #888;
-      border-color: #ddd;
-    }
-
-    .effectif-edit-button {
-      min-width: 90px;
-    }
-
-    .effectif-editor {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns:
-        minmax(140px,.8fr)
-        minmax(185px,1.05fr)
-        minmax(170px,1fr)
-        minmax(170px,1fr)
-        auto
-        auto;
-      gap: 10px;
-      align-items: end;
-      margin-top: 3px;
-      padding-top: 12px;
-      border-top: 1px dashed #ddd;
-    }
-
-    .effectif-editor select,
-    .effectif-editor input {
-      width: 100%;
-      min-height: 40px;
-      border: 1px solid #aaa;
-      border-radius: 7px;
-      padding: 7px 9px;
-    }
-
-    .effectif-editor-check {
-      min-height: 40px;
-      margin: 0;
-    }
-
-    .effectif-editor-actions {
-      display: flex;
-      gap: 7px;
-      align-items: center;
-    }
-
-    .effectifs-empty {
-      background: white;
-      border: 1px dashed #bbb;
-      border-radius: 11px;
-      padding: 24px;
-      text-align: center;
-      color: #777;
-    }
-
-    @media(max-width:1200px) {
-      .effectif-editor {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-    }
-
-    @media(max-width:760px) {
-      .effectifs-toolbar-v3 {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .effectifs-search {
-        width: 100%;
-      }
-
-      .effectifs-tabs {
-        margin-left: -12px;
-        margin-right: -12px;
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
-      .effectif-row {
-        grid-template-columns: 1fr;
-      }
-
-      .effectif-edit-button {
-        width: 100%;
-      }
-
-      .effectif-editor {
-        grid-template-columns: 1fr;
-      }
-
-      .effectif-editor-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-  
-    .effectifs-reserve-group {
-      border-style: dashed;
-      background: #fafafa;
-    }
-
-    .effectifs-reserve-group .effectifs-grade-heading {
-      letter-spacing: .02em;
-    }
-
-  
-    .effectifs-archives {
-      margin-top: 34px;
-      padding-top: 22px;
-      border-top: 2px solid #ccc;
-    }
-
-    .effectifs-archives-heading {
-      margin-bottom: 12px;
-      border-left: 5px solid #555;
-      padding: 4px 0 4px 12px;
-    }
-
-    .effectifs-archives-title {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .effectifs-archives-subtitle {
-      margin-top: 3px;
-      color: #777;
-      font-size: 12px;
-    }
-
-    .effectifs-terminal-groups {
-      display: grid;
-      gap: 12px;
-    }
-
-    .effectifs-terminal-group {
-      border-style: solid;
-      background: #fafafa;
-    }
-
-    .effectifs-terminal-heading {
-      min-height: 39px;
-      padding: 8px 13px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid rgba(0,0,0,.1);
-      background: #e7e7e7;
-      color: #444;
-      font-weight: 800;
-    }
-
-    .effectifs-terminal-morts .effectifs-terminal-heading {
-      background: #d9d9d9;
-      color: #333;
-    }
-
-    .effectifs-terminal-radies .effectifs-terminal-heading {
-      background: #ead1dc;
-      color: #741b47;
-    }
-
-    .effectifs-terminal-demissionnaires .effectifs-terminal-heading {
-      background: #fff2cc;
-      color: #7f6000;
-    }
-
-    .effectifs-terminal-deserteurs .effectifs-terminal-heading {
-      background: #f4cccc;
-      color: #990000;
-    }
-
-  </style>
-
-  <style>
-    @media(max-width:1150px){
-      .effectif-edit-grid{grid-template-columns:1fr 1fr 1fr}
-    }
-    @media(max-width:760px){
-      .effectif-edit-grid{grid-template-columns:1fr}
-      .effectifs-tabs{
-        margin-left:-12px;
-        margin-right:-12px;
-        padding-left:12px;
-        padding-right:12px;
-      }
-      .effectif-card-head{align-items:flex-start}
-    }
-  </style>
-
+  <style>/* ui/src/styles.css */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    Arial,
+    sans-serif;
+  background: #f3f3f3;
+  color: #222;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+.app {
+  min-height: 100vh;
+}
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      #ded7c5,
+      #f3efe4);
+}
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .12);
+}
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #bbb;
+  border-radius: 7px;
+}
+.primary-button,
+.secondary-button,
+.danger-button {
+  border-radius: 7px;
+  padding: 9px 12px;
+}
+.primary-button {
+  border: 0;
+  background: #333;
+  color: #fff;
+  padding: 11px 16px;
+}
+.secondary-button {
+  border: 1px solid #aaa;
+  background: #fff;
+  color: #333;
+}
+.danger-button {
+  border: 1px solid #c98282;
+  background: #fff4f4;
+  color: #a62d2d;
+  font-size: 12px;
+  font-weight: 700;
+}
+.primary-button:disabled,
+.secondary-button:disabled,
+.danger-button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+.topbar {
+  min-height: 64px;
+  background: #242424;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  gap: 22px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.brand {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nav {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.nav button {
+  border: 0;
+  background: transparent;
+  color: #ccc;
+  padding: 10px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.nav button:hover,
+.nav button.active {
+  background: #444;
+  color: #fff;
+}
+.role-badge {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: #555;
+}
+.logout {
+  background: transparent;
+  color: #ddd;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+.content {
+  max-width: 1800px;
+  margin: auto;
+  padding: 24px;
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.page-title {
+  margin: 0;
+}
+.page-subtitle {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+.loading {
+  padding: 40px;
+  text-align: center;
+}
+.error,
+.success,
+.info-notice,
+.readonly-notice {
+  padding: 10px 12px;
+  border-radius: 7px;
+  margin-bottom: 16px;
+}
+.error {
+  background: #f4cccc;
+  color: #8a0000;
+}
+.success {
+  background: #e2f0d9;
+  color: #35652f;
+}
+.info-notice,
+.readonly-notice {
+  background: #e8eef5;
+  border: 1px solid #bcc9d8;
+  color: #41566f;
+  font-size: 13px;
+}
+.form-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+}
+.form-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.field-wide {
+  grid-column: span 2;
+}
+.field-full {
+  grid-column: 1/-1;
+}
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  background: #fff;
+  padding: 8px 10px;
+}
+.field textarea {
+  min-height: 85px;
+  resize: vertical;
+}
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.registry {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.registry-table-wrap,
+.presence-table-wrap {
+  overflow-x: auto;
+}
+.registry-table,
+.presence-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1050px;
+}
+.registry-table {
+  table-layout: fixed;
+  min-width: 1100px;
+}
+.registry-table th,
+.registry-table td,
+.presence-table th,
+.presence-table td {
+  padding: 9px;
+  border-bottom: 1px solid #ececec;
+  vertical-align: middle;
+}
+.registry-table th,
+.presence-table th {
+  background: #f6f6f6;
+  font-size: 12px;
+  text-align: left;
+}
+.cell-center {
+  text-align: center !important;
+}
+.actions-column {
+  width: 90px;
+  text-align: center !important;
+}
+.fine-unpaid {
+  background: #fff2cc;
+}
+.fine-paid {
+  background: #e2f0d9;
+}
+.fine-reversed {
+  background: #e5e5e5;
+}
+.prison-table {
+  min-width: 1650px;
+}
+.prison-active {
+  background: #f4cccc;
+}
+.prison-released {
+  background: #e5e5e5;
+}
+.law-link {
+  border: 0;
+  background: transparent;
+  color: #315d8a;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+.law-info-row {
+  margin-top: 7px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.law-info-button {
+  border: 1px solid #b7c4d0;
+  background: #eef3f7;
+  color: #35546d;
+  border-radius: 7px;
+  padding: 6px 9px;
+  font-size: 12px;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.law-modal {
+  width: min(820px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .35);
+}
+.law-modal-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+.law-modal-number {
+  color: #666;
+  font-size: 13px;
+}
+.law-modal-title {
+  margin: 0;
+  font-size: 21px;
+}
+.law-modal-close {
+  border: 0;
+  background: transparent;
+  font-size: 27px;
+  color: #777;
+}
+.law-modal-body {
+  padding: 20px;
+}
+.law-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.law-chip {
+  display: inline-flex;
+  border-radius: 30px;
+  padding: 5px 9px;
+  background: #ececec;
+  color: #555;
+  font-size: 12px;
+}
+.law-chip-local {
+  background: #e6f0e6;
+  color: #3f6542;
+}
+.law-source-info {
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 9px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.law-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.law-sanction-box {
+  background: #f6f6f6;
+  border-left: 4px solid #555;
+  border-radius: 6px;
+  padding: 13px 15px;
+  margin-top: 14px;
+}
+.law-warning {
+  margin-top: 16px;
+  padding: 11px 13px;
+  background: #fff2cc;
+  border: 1px solid #e0cc80;
+  border-radius: 7px;
+  color: #6c5810;
+}
+.codex-library {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.codex-family {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+}
+.codex-family-title {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+.codex-source-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.codex-source-button {
+  border: 1px solid #bbb;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 8px 11px;
+  text-align: left;
+}
+.codex-source-button.active {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+.codex-source-button small {
+  display: block;
+  opacity: .7;
+  margin-top: 2px;
+}
+.codex-controls {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 210px 210px;
+  gap: 12px;
+}
+.codex-controls input,
+.codex-controls select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 8px 10px;
+  background: #fff;
+}
+.codex-count {
+  margin-bottom: 12px;
+  color: #777;
+  font-size: 13px;
+}
+.codex-list {
+  display: grid;
+  gap: 12px;
+}
+.codex-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+  padding: 15px;
+  cursor: pointer;
+}
+.codex-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+.codex-card-number {
+  color: #777;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.codex-card-title {
+  margin: 3px 0 6px;
+  font-size: 17px;
+}
+.codex-card-source {
+  color: #888;
+  font-size: 11px;
+  text-align: right;
+}
+.codex-card-text {
+  margin-top: 10px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.codex-card-sanction {
+  margin-top: 10px;
+  color: #555;
+  font-size: 12px;
+  font-weight: 700;
+}
+.org-person {
+  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 9px;
+  padding: 10px 12px;
+}
+.org-person.center {
+  text-align: center;
+}
+.org-person-name {
+  font-weight: 700;
+}
+.org-person-grade {
+  margin-top: 3px;
+  color: #666;
+  font-size: 12px;
+}
+.org-jarl-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+.org-jarl-down {
+  width: 2px;
+  height: 28px;
+  background: #999;
+  margin: auto;
+}
+.org-branch-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  width: min(1150px, 100%);
+  margin: auto;
+}
+.org-hird,
+.org-independent-block {
+  background: #ededed;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 12px;
+}
+.org-block-title,
+.org-independent-title {
+  text-align: center;
+}
+.org-command-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.org-command-card {
+  width: 100%;
+  max-width: 340px;
+}
+.org-garrisons-title {
+  text-align: center;
+  margin: 35px 0 20px;
+}
+.org-garrisons {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(185px, 1fr));
+  gap: 14px;
+}
+.org-garrison {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+}
+.org-garrison-header {
+  padding: 13px 10px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  border-radius: 10px 10px 0 0;
+}
+.org-garrison-body {
+  padding: 11px;
+}
+.org-rank-group {
+  margin-bottom: 14px;
+}
+.org-rank-title {
+  margin-bottom: 7px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+  color: #777;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.org-rank-members {
+  display: grid;
+  gap: 6px;
+}
+.org-rank-members .org-person-grade {
+  display: none;
+}
+.org-independent-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 52px;
+}
+.org-empty {
+  padding: 15px;
+  color: #888;
+  text-align: center;
+  font-style: italic;
+}
+.presence-dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.presence-stat-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+  padding: 15px;
+}
+.presence-stat-warning {
+  background: #fff8e6;
+}
+.presence-stat-danger {
+  background: #fff0f0;
+}
+.presence-stat-label {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+.presence-stat-value {
+  font-size: 25px;
+  font-weight: 700;
+}
+.presence-stat-sub {
+  margin-top: 7px;
+  color: #888;
+  font-size: 11px;
+}
+.presence-inactive-panel {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.presence-inactive-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+.presence-inactive-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+}
+.presence-inactive-person {
+  padding: 11px 14px;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.presence-inactive-name {
+  font-weight: 700;
+}
+.presence-inactive-meta {
+  color: #777;
+  font-size: 12px;
+}
+.presence-inactive-alert {
+  color: #995b19;
+  font-size: 12px;
+  font-weight: 700;
+}
+.week-section {
+  margin-bottom: 34px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+.week-header {
+  padding: 13px 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+}
+.week-current .week-header {
+  background: #fff2cc;
+}
+.week-old .week-header {
+  background: #e8e8e8;
+}
+.corps-title {
+  padding: 9px 14px;
+  font-weight: 700;
+  background: #f6f6f6;
+}
+.presence-table th,
+.presence-table td {
+  text-align: center;
+}
+.presence-table th:first-child,
+.presence-table td:first-child {
+  text-align: left;
+}
+.row-current {
+  background: #fff2cc !important;
+}
+.row-unpaid {
+  background: #f4cccc !important;
+}
+.row-paid {
+  background: #e1e1e1 !important;
+}
+.grade {
+  font-size: 12px;
+  opacity: .68;
+}
+.effectifs-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.effectifs-search {
+  flex: 1;
+  min-width: 260px;
+  min-height: 42px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 8px 11px;
+  background: #fff;
+}
+.effectifs-count {
+  color: #777;
+  font-size: 13px;
+}
+.effectifs-grid {
+  display: grid;
+  gap: 10px;
+}
+.effectif-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+  padding: 14px;
+}
+.effectif-card-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.effectif-name {
+  font-weight: 700;
+  font-size: 17px;
+}
+.effectif-meta {
+  color: #777;
+  font-size: 12px;
+  margin-top: 3px;
+}
+.effectif-state {
+  font-size: 11px;
+  border-radius: 20px;
+  padding: 5px 8px;
+  background: #eee;
+  white-space: nowrap;
+}
+.effectif-state.active {
+  background: #e2f0d9;
+  color: #35652f;
+}
+.effectif-edit-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto auto;
+  gap: 10px;
+  align-items: end;
+}
+.effectif-check {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.effectif-check input {
+  width: 18px;
+  height: 18px;
+}
+.effectif-save {
+  min-height: 40px;
+}
+@media (max-width: 1450px) {
+  .org-garrisons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 1000px) {
+  .presence-dashboard-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  .effectif-edit-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 900px) {
+  .codex-controls {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 800px) {
+  .topbar {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+  }
+  .brand {
+    width: 100%;
+  }
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .content {
+    padding: 12px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .field-wide,
+  .field-full {
+    grid-column: auto;
+  }
+  .org-branch-row,
+  .org-independent-area {
+    grid-template-columns: 1fr;
+  }
+  .org-garrisons {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 620px) {
+  .presence-dashboard-cards,
+  .effectif-edit-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .page-header .primary-button {
+    width: 100%;
+  }
+}
+.effectifs-tabs {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 2px 0 12px;
+  margin-bottom: 12px;
+  scrollbar-width: thin;
+}
+.effectifs-tab {
+  border: 1px solid #bbb;
+  background: #fff;
+  color: #444;
+  border-radius: 999px;
+  padding: 8px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.effectifs-tab:hover {
+  background: #f4f4f4;
+}
+.effectifs-tab.active {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+.effectifs-tab-count {
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .08);
+  font-size: 11px;
+  text-align: center;
+}
+.effectifs-tab.active .effectifs-tab-count {
+  background: rgba(255, 255, 255, .16);
+}
+.effectifs-empty {
+  background: #fff;
+  border: 1px dashed #bbb;
+  border-radius: 11px;
+  padding: 24px;
+  text-align: center;
+  color: #777;
+}
+.effectif-edit-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, .9fr) minmax(190px, 1.15fr) minmax(180px, 1fr) minmax(170px, 1fr) auto auto;
+  gap: 10px;
+  align-items: end;
+}
+.effectifs-tabs {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 2px 0 12px;
+  margin-bottom: 10px;
+  scrollbar-width: thin;
+}
+.effectifs-tab {
+  border: 1px solid #bbb;
+  background: white;
+  color: #444;
+  border-radius: 999px;
+  padding: 8px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  min-height: 40px;
+}
+.effectifs-tab:hover {
+  background: #f3f3f3;
+}
+.effectifs-tab.active {
+  border-color: #444;
+  background: #eee;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+.effectifs-tab-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, .14);
+  background: #ddd;
+  flex: 0 0 auto;
+}
+.effectifs-tab-count {
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .08);
+  font-size: 11px;
+  text-align: center;
+}
+.effectifs-toolbar-v3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+}
+.effectifs-total {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+.effectifs-total span {
+  color: #777;
+  font-size: 12px;
+}
+.effectifs-search {
+  width: min(460px, 100%);
+  min-height: 40px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 8px 10px;
+  background: white;
+}
+.effectifs-corps-groups {
+  display: grid;
+  gap: 24px;
+}
+.effectifs-corps-group {
+  display: grid;
+  gap: 10px;
+}
+.effectifs-corps-heading {
+  border-left: 5px solid #777;
+  padding: 4px 0 4px 12px;
+}
+.effectifs-corps-title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.effectifs-corps-subtitle {
+  margin-top: 3px;
+  color: #777;
+  font-size: 12px;
+}
+.effectifs-grade-groups {
+  display: grid;
+  gap: 12px;
+}
+.effectifs-grade-group {
+  background: white;
+  border: 1px solid #cfcfcf;
+  border-radius: 11px;
+  overflow: hidden;
+}
+.effectifs-grade-heading {
+  min-height: 39px;
+  padding: 8px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, .10);
+  font-weight: 800;
+}
+.effectifs-grade-count {
+  min-width: 25px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .34);
+  border: 1px solid rgba(0, 0, 0, .12);
+  font-size: 11px;
+  text-align: center;
+}
+.effectifs-member-list {
+  display: grid;
+}
+.effectif-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 13px;
+  border-bottom: 1px solid #ededed;
+}
+.effectif-row:last-child {
+  border-bottom: 0;
+}
+.effectif-row:hover {
+  background: #fafafa;
+}
+.effectif-identity {
+  min-width: 0;
+}
+.effectif-name {
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.effectif-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+.effectif-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, .12);
+  background: #eee;
+  color: #555;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.effectif-badge-sworn {
+  background: #e2f0d9;
+  color: #35652f;
+  border-color: #b7d4ad;
+}
+.effectif-badge-muted {
+  background: #f1f1f1;
+  color: #888;
+  border-color: #ddd;
+}
+.effectif-edit-button {
+  min-width: 90px;
+}
+.effectif-editor {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(140px, .8fr) minmax(185px, 1.05fr) minmax(170px, 1fr) minmax(170px, 1fr) auto auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 3px;
+  padding-top: 12px;
+  border-top: 1px dashed #ddd;
+}
+.effectif-editor select,
+.effectif-editor input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  padding: 7px 9px;
+}
+.effectif-editor-check {
+  min-height: 40px;
+  margin: 0;
+}
+.effectif-editor-actions {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.effectifs-empty {
+  background: white;
+  border: 1px dashed #bbb;
+  border-radius: 11px;
+  padding: 24px;
+  text-align: center;
+  color: #777;
+}
+@media (max-width: 1200px) {
+  .effectif-editor {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .effectifs-toolbar-v3 {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .effectifs-search {
+    width: 100%;
+  }
+  .effectifs-tabs {
+    margin-left: -12px;
+    margin-right: -12px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .effectif-row {
+    grid-template-columns: 1fr;
+  }
+  .effectif-edit-button {
+    width: 100%;
+  }
+  .effectif-editor {
+    grid-template-columns: 1fr;
+  }
+  .effectif-editor-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.effectifs-reserve-group {
+  border-style: dashed;
+  background: #fafafa;
+}
+.effectifs-reserve-group .effectifs-grade-heading {
+  letter-spacing: .02em;
+}
+.effectifs-archives {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 2px solid #ccc;
+}
+.effectifs-archives-heading {
+  margin-bottom: 12px;
+  border-left: 5px solid #555;
+  padding: 4px 0 4px 12px;
+}
+.effectifs-archives-title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.effectifs-archives-subtitle {
+  margin-top: 3px;
+  color: #777;
+  font-size: 12px;
+}
+.effectifs-terminal-groups {
+  display: grid;
+  gap: 12px;
+}
+.effectifs-terminal-group {
+  border-style: solid;
+  background: #fafafa;
+}
+.effectifs-terminal-heading {
+  min-height: 39px;
+  padding: 8px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  background: #e7e7e7;
+  color: #444;
+  font-weight: 800;
+}
+.effectifs-terminal-morts .effectifs-terminal-heading {
+  background: #d9d9d9;
+  color: #333;
+}
+.effectifs-terminal-radies .effectifs-terminal-heading {
+  background: #ead1dc;
+  color: #741b47;
+}
+.effectifs-terminal-demissionnaires .effectifs-terminal-heading {
+  background: #fff2cc;
+  color: #7f6000;
+}
+.effectifs-terminal-deserteurs .effectifs-terminal-heading {
+  background: #f4cccc;
+  color: #990000;
+}</style>
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const {useEffect,useMemo,useRef,useState}=React;
-
-function serverCall(name,...args){return new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(resolve).withFailureHandler(error=>reject(new Error(error?.message||String(error))))[name](...args);});}
-function normalizeSearchText(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
-function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
-function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n)>1?"s":""}`;}
-function findCodexArticle(articles,label){if(!articles||!label)return null;const exact=articles.find(a=>a.label===label);if(exact)return exact;const m=String(label).match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);if(!m)return null;return articles.find(a=>String(a.article).toLowerCase()===String(m[1]).toLowerCase()&&a.source==="Codex Judiciaire de Blancherive")||null;}
-
-function App(){
-  const[token,setToken]=useState(sessionStorage.getItem("guardAuthToken"));
-  const[role,setRole]=useState(null);const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
-  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>setRole(i.role)).catch(logout);},[token]);
-  function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setPage("organigramme");}
-  if(!token)return <Login onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
-  if(!role)return <div className="loading">Chargement...</div>;
-  return <div className="app"><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content">
-    {page==="organigramme"&&<OrganigrammePage token={token}/>} 
-    {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>} 
-    {page==="presences"&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>} 
-    {page==="codex"&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>} 
-    {page==="amendes"&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
-    {page==="prison"&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
-  </main></div>;
-}
-
-function Login({onLogin}){const[password,setPassword]=useState("");const[error,setError]=useState("");async function submit(e){e.preventDefault();try{setError("");onLogin(await serverCall("login",password));}catch(e){setError(e.message);}}return <div className="login-page"><form className="login-card" onSubmit={submit}><h1>Registre de la Garde</h1><p>Garde de Blancherive</p><input type="password" placeholder="Mot de passe" value={password} onChange={e=>setPassword(e.target.value)}/><button className="primary-button">Entrer</button>{error&&<div className="error">{error}</div>}</form></div>;}
-function Header({role,page,onPage,onLogout}){const pages=[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];return <header className="topbar"><div className="brand">Garde de Blancherive</div><nav className="nav">{pages.map(([k,l])=><button key={k} className={page===k?"active":""} onClick={()=>onPage(k)}>{l}</button>)}</nav><span className="role-badge">{role}</span><button className="logout" onClick={onLogout}>Déconnexion</button></header>;}
-
-function effectifsStyle(style,fallback={}){
-  if(!style)return fallback;
-
-  return {
-    ...fallback,
-    ...(style.background
-      ?{backgroundColor:style.background}
-      :{}),
-    ...(style.color
-      ?{color:style.color}
-      :{}),
-    ...(style.fontWeight
-      ?{fontWeight:style.fontWeight}
-      :{})
-  };
-}
-
-function EffectifsPage({token}){
-  const[data,setData]=useState(null);
-  const[search,setSearch]=useState("");
-  const[activeCorps,setActiveCorps]=useState("ALL");
-  const[showForm,setShowForm]=useState(false);
-  const[error,setError]=useState("");
-  const[success,setSuccess]=useState("");
-
-  useEffect(()=>{
-    serverCall(
-      "getEffectifs",
-      token
-    )
-      .then(setData)
-      .catch(e=>
-        setError(
+<script>(() => {
+  // ui/src/app.jsx
+  var { useEffect, useMemo, useRef, useState } = React;
+  function serverCall(name, ...args) {
+    return new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
+    });
+  }
+  function normalizeSearchText(value) {
+    return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function formatHours(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "";
+    if (n < 1) return `${Math.round(n * 60)} min`;
+    if (Number.isInteger(n)) return `${n} h`;
+    const h = Math.floor(n), m = Math.round((n - h) * 60);
+    return `${h} h ${m} min`;
+  }
+  function formatSeptims(value) {
+    const n = Number(value) || 0;
+    return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
+  }
+  function findCodexArticle(articles, label) {
+    if (!articles || !label) return null;
+    const exact = articles.find((a) => a.label === label);
+    if (exact) return exact;
+    const m = String(label).match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);
+    if (!m) return null;
+    return articles.find((a) => String(a.article).toLowerCase() === String(m[1]).toLowerCase() && a.source === "Codex Judiciaire de Blancherive") || null;
+  }
+  function App() {
+    const [token, setToken] = useState(sessionStorage.getItem("guardAuthToken"));
+    const [role, setRole] = useState(null);
+    const [page, setPage] = useState("organigramme");
+    const [codexFocus, setCodexFocus] = useState(null);
+    useEffect(() => {
+      if (!token) return;
+      serverCall("getSessionInfo", token).then((i) => setRole(i.role)).catch(logout);
+    }, [token]);
+    function logout() {
+      sessionStorage.removeItem("guardAuthToken");
+      setToken(null);
+      setRole(null);
+      setPage("organigramme");
+    }
+    if (!token) return /* @__PURE__ */ React.createElement(Login, { onLogin: (t) => {
+      sessionStorage.setItem("guardAuthToken", t);
+      setToken(t);
+    } });
+    if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
+    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement(Header, { role, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content" }, page === "organigramme" && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "codex" && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null) }), page === "amendes" && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
+      setCodexFocus(a);
+      setPage("codex");
+    } }), page === "prison" && /* @__PURE__ */ React.createElement(PrisonPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
+      setCodexFocus(a);
+      setPage("codex");
+    } })));
+  }
+  function Login({ onLogin }) {
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    async function submit(e) {
+      e.preventDefault();
+      try {
+        setError("");
+        onLogin(await serverCall("login", password));
+      } catch (e2) {
+        setError(e2.message);
+      }
+    }
+    return /* @__PURE__ */ React.createElement("div", { className: "login-page" }, /* @__PURE__ */ React.createElement("form", { className: "login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("h1", null, "Registre de la Garde"), /* @__PURE__ */ React.createElement("p", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("input", { type: "password", placeholder: "Mot de passe", value: password, onChange: (e) => setPassword(e.target.value) }), /* @__PURE__ */ React.createElement("button", { className: "primary-button" }, "Entrer"), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error)));
+  }
+  function Header({ role, page, onPage, onLogout }) {
+    const pages = [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ["codex", "Codex"], ["amendes", "Amendes"], ["prison", "Prison"]];
+    return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("nav", { className: "nav" }, pages.map(([k, l]) => /* @__PURE__ */ React.createElement("button", { key: k, className: page === k ? "active" : "", onClick: () => onPage(k) }, l))), /* @__PURE__ */ React.createElement("span", { className: "role-badge" }, role), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout }, "D\xE9connexion"));
+  }
+  function effectifsStyle(style, fallback = {}) {
+    if (!style) return fallback;
+    return {
+      ...fallback,
+      ...style.background ? { backgroundColor: style.background } : {},
+      ...style.color ? { color: style.color } : {},
+      ...style.fontWeight ? { fontWeight: style.fontWeight } : {}
+    };
+  }
+  function EffectifsPage({ token }) {
+    const [data, setData] = useState(null);
+    const [search, setSearch] = useState("");
+    const [activeCorps, setActiveCorps] = useState("ALL");
+    const [showForm, setShowForm] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    useEffect(() => {
+      serverCall(
+        "getEffectifs",
+        token
+      ).then(setData).catch(
+        (e) => setError(
           e.message
         )
       );
-  },[]);
-
-  /*
-    Les quatre groupes de sortie définitive sont trans-corps :
-    ils ne participent pas aux onglets de corps.
-  */
-  const activeRows=useMemo(()=>{
-    if(!data){
-      return[];
-    }
-
-    return data.rows.filter(
-      member=>
-        !member.terminalGroup
-    );
-  },[data]);
-
-  const terminalRows=useMemo(()=>{
-    if(!data){
-      return[];
-    }
-
-    return data.rows.filter(
-      member=>
-        Boolean(
+    }, []);
+    const activeRows = useMemo(() => {
+      if (!data) {
+        return [];
+      }
+      return data.rows.filter(
+        (member) => !member.terminalGroup
+      );
+    }, [data]);
+    const terminalRows = useMemo(() => {
+      if (!data) {
+        return [];
+      }
+      return data.rows.filter(
+        (member) => Boolean(
           member.terminalGroup
         )
-    );
-  },[data]);
-
-  const corpsTabs=useMemo(()=>{
-    if(!data){
-      return[];
-    }
-
-    const values=[
-      ...data.options.corps
-    ];
-
-    activeRows.forEach(member=>{
-      if(
-        member.corps &&
-        !values.includes(
-          member.corps
-        )
-      ){
-        values.push(
-          member.corps
-        );
+      );
+    }, [data]);
+    const corpsTabs = useMemo(() => {
+      if (!data) {
+        return [];
       }
-    });
-
-    return values;
-  },[
-    data,
-    activeRows
-  ]);
-
-  const filteredActive=useMemo(()=>{
-    const q=
-      normalizeSearchText(
+      const values = [
+        ...data.options.corps
+      ];
+      activeRows.forEach((member) => {
+        if (member.corps && !values.includes(
+          member.corps
+        )) {
+          values.push(
+            member.corps
+          );
+        }
+      });
+      return values;
+    }, [
+      data,
+      activeRows
+    ]);
+    const filteredActive = useMemo(() => {
+      const q = normalizeSearchText(
         search
       );
-
-    return activeRows.filter(member=>{
-      if(
-        activeCorps!=="ALL" &&
-        member.corps!==activeCorps
-      ){
-        return false;
-      }
-
-      if(!q){
-        return true;
-      }
-
-      return normalizeSearchText([
-        member.prenom,
-        member.nom,
-        member.grade,
-        member.corps,
-        member.specialite,
-        member.status,
-        member.assermente
-          ?"assermente"
-          :"non assermente",
-        member.reserve
-          ?"reserve"
-          :""
-      ].join(" "))
-        .includes(q);
-    });
-  },[
-    activeRows,
-    search,
-    activeCorps
-  ]);
-
-  /*
-    Les groupes Morts / Radiés / Démissionnaires / Déserteurs
-    restent toujours à la fin de la page, quel que soit l'onglet
-    de corps sélectionné. La recherche, elle, s'applique aussi à eux.
-  */
-  const filteredTerminal=useMemo(()=>{
-    const q=
-      normalizeSearchText(
+      return activeRows.filter((member) => {
+        if (activeCorps !== "ALL" && member.corps !== activeCorps) {
+          return false;
+        }
+        if (!q) {
+          return true;
+        }
+        return normalizeSearchText([
+          member.prenom,
+          member.nom,
+          member.grade,
+          member.corps,
+          member.specialite,
+          member.status,
+          member.assermente ? "assermente" : "non assermente",
+          member.reserve ? "reserve" : ""
+        ].join(" ")).includes(q);
+      });
+    }, [
+      activeRows,
+      search,
+      activeCorps
+    ]);
+    const filteredTerminal = useMemo(() => {
+      const q = normalizeSearchText(
         search
       );
-
-    if(!q){
-      return terminalRows;
-    }
-
-    return terminalRows.filter(member=>
-      normalizeSearchText([
-        member.prenom,
-        member.nom,
-        member.grade,
-        member.corps,
-        member.specialite,
-        member.status,
-        member.terminalGroup
-      ].join(" "))
-        .includes(q)
-    );
-  },[
-    terminalRows,
-    search
-  ]);
-
-  const groupedByCorps=useMemo(()=>{
-    if(!data){
-      return[];
-    }
-
-    const corpsMap=
-      new Map();
-
-    filteredActive.forEach(member=>{
-      const corps=
-        member.corps||
-        "Sans corps";
-
-      if(
-        !corpsMap.has(corps)
-      ){
-        corpsMap.set(
-          corps,
-          {
-            active:new Map(),
-            reserve:[]
-          }
-        );
+      if (!q) {
+        return terminalRows;
       }
-
-      const group=
-        corpsMap.get(corps);
-
-      if(member.reserve){
-        group.reserve.push(
-          member
-        );
-        return;
+      return terminalRows.filter(
+        (member) => normalizeSearchText([
+          member.prenom,
+          member.nom,
+          member.grade,
+          member.corps,
+          member.specialite,
+          member.status,
+          member.terminalGroup
+        ].join(" ")).includes(q)
+      );
+    }, [
+      terminalRows,
+      search
+    ]);
+    const groupedByCorps = useMemo(() => {
+      if (!data) {
+        return [];
       }
-
-      const grade=
-        member.grade||
-        "Sans grade";
-
-      if(
-        !group.active.has(
+      const corpsMap = /* @__PURE__ */ new Map();
+      filteredActive.forEach((member) => {
+        const corps = member.corps || "Sans corps";
+        if (!corpsMap.has(corps)) {
+          corpsMap.set(
+            corps,
+            {
+              active: /* @__PURE__ */ new Map(),
+              reserve: []
+            }
+          );
+        }
+        const group = corpsMap.get(corps);
+        if (member.reserve) {
+          group.reserve.push(
+            member
+          );
+          return;
+        }
+        const grade = member.grade || "Sans grade";
+        if (!group.active.has(
           grade
-        )
-      ){
-        group.active.set(
-          grade,
-          []
-        );
-      }
-
-      group.active
-        .get(grade)
-        .push(member);
-    });
-
-    const gradeOrder=
-      data.gradeOrder||[];
-
-    function sortMembers(members){
-      return members.sort(
-        (a,b)=>
-          a.nomComplet.localeCompare(
+        )) {
+          group.active.set(
+            grade,
+            []
+          );
+        }
+        group.active.get(grade).push(member);
+      });
+      const gradeOrder = data.gradeOrder || [];
+      function sortMembers(members) {
+        return members.sort(
+          (a, b) => a.nomComplet.localeCompare(
             b.nomComplet,
             "fr"
           )
-      );
-    }
-
-    return [...corpsMap.entries()]
-      .sort(
-        ([a],[b])=>
-          a.localeCompare(
-            b,
-            "fr"
-          )
-      )
-      .map(([corps,group])=>{
-        const normalGroups=
-          [...group.active.entries()]
-            .sort(
-              ([gradeA],[gradeB])=>{
-                const a=
-                  gradeOrder.indexOf(
-                    gradeA
-                  );
-
-                const b=
-                  gradeOrder.indexOf(
-                    gradeB
-                  );
-
-                if(
-                  a>=0 &&
-                  b>=0
-                ){
-                  return a-b;
-                }
-
-                if(a>=0){
-                  return -1;
-                }
-
-                if(b>=0){
-                  return 1;
-                }
-
-                return gradeA.localeCompare(
-                  gradeB,
-                  "fr"
-                );
-              }
-            )
-            .map(
-              ([grade,members])=>({
-                type:"grade",
-                grade,
-                members:
-                  sortMembers(
-                    members
-                  )
-              })
+        );
+      }
+      return [...corpsMap.entries()].sort(
+        ([a], [b]) => a.localeCompare(
+          b,
+          "fr"
+        )
+      ).map(([corps, group]) => {
+        const normalGroups = [...group.active.entries()].sort(
+          ([gradeA], [gradeB]) => {
+            const a = gradeOrder.indexOf(
+              gradeA
             );
-
-        /*
-          Réserve vient désormais APRÈS TOUS les grades,
-          y compris après Aspirant-Garde / Recrue.
-        */
-        if(
-          group.reserve.length
-        ){
+            const b = gradeOrder.indexOf(
+              gradeB
+            );
+            if (a >= 0 && b >= 0) {
+              return a - b;
+            }
+            if (a >= 0) {
+              return -1;
+            }
+            if (b >= 0) {
+              return 1;
+            }
+            return gradeA.localeCompare(
+              gradeB,
+              "fr"
+            );
+          }
+        ).map(
+          ([grade, members]) => ({
+            type: "grade",
+            grade,
+            members: sortMembers(
+              members
+            )
+          })
+        );
+        if (group.reserve.length) {
           normalGroups.push({
-            type:"reserve",
-            grade:"Réserve",
-            members:
-              sortMembers(
-                group.reserve
-              )
+            type: "reserve",
+            grade: "R\xE9serve",
+            members: sortMembers(
+              group.reserve
+            )
           });
         }
-
-        return{
+        return {
           corps,
-          groups:
-            normalGroups
+          groups: normalGroups
         };
       });
-  },[
-    data,
-    filteredActive
-  ]);
-
-  const terminalGroups=useMemo(()=>{
-    if(!data){
-      return[];
-    }
-
-    const order=[
-      "Morts",
-      "Radiés",
-      "Démissionnaires",
-      "Déserteurs"
-    ];
-
-    const gradeOrder=
-      data.gradeOrder||[];
-
-    return order
-      .map(label=>{
-        const members=
-          filteredTerminal
-            .filter(
-              member=>
-                member.terminalGroup===label
-            )
-            .sort((a,b)=>{
-              const gradeA=
-                gradeOrder.indexOf(
-                  a.grade
-                );
-
-              const gradeB=
-                gradeOrder.indexOf(
-                  b.grade
-                );
-
-              if(
-                gradeA>=0 &&
-                gradeB>=0 &&
-                gradeA!==gradeB
-              ){
-                return gradeA-gradeB;
-              }
-
-              if(gradeA>=0){
-                return -1;
-              }
-
-              if(gradeB>=0){
-                return 1;
-              }
-
-              return a.nomComplet.localeCompare(
-                b.nomComplet,
-                "fr"
-              );
-            });
-
-        return{
+    }, [
+      data,
+      filteredActive
+    ]);
+    const terminalGroups = useMemo(() => {
+      if (!data) {
+        return [];
+      }
+      const order = [
+        "Morts",
+        "Radi\xE9s",
+        "D\xE9missionnaires",
+        "D\xE9serteurs"
+      ];
+      const gradeOrder = data.gradeOrder || [];
+      return order.map((label) => {
+        const members = filteredTerminal.filter(
+          (member) => member.terminalGroup === label
+        ).sort((a, b) => {
+          const gradeA = gradeOrder.indexOf(
+            a.grade
+          );
+          const gradeB = gradeOrder.indexOf(
+            b.grade
+          );
+          if (gradeA >= 0 && gradeB >= 0 && gradeA !== gradeB) {
+            return gradeA - gradeB;
+          }
+          if (gradeA >= 0) {
+            return -1;
+          }
+          if (gradeB >= 0) {
+            return 1;
+          }
+          return a.nomComplet.localeCompare(
+            b.nomComplet,
+            "fr"
+          );
+        });
+        return {
           label,
           members
         };
-      })
-      .filter(
-        group=>
-          group.members.length>0
+      }).filter(
+        (group) => group.members.length > 0
       );
-  },[
-    data,
-    filteredTerminal
-  ]);
-
-  if(
-    error &&
-    !data
-  ){
-    return(
-      <div className="error">
-        Erreur Effectifs : {error}
-      </div>
-    );
-  }
-
-  if(!data){
-    return(
-      <div className="loading">
-        Chargement des effectifs...
-      </div>
-    );
-  }
-
-  const countForCorps=corps=>
-    corps==="ALL"
-      ?activeRows.length
-      :activeRows.filter(
-        member=>
-          member.corps===corps
-      ).length;
-
-  return(
-    <>
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">
-            Effectifs
-          </h1>
-
-          <p className="page-subtitle">
-            Gestion des membres de la Garde — officiers uniquement.
-          </p>
-        </div>
-
-        <button
-          className="primary-button"
-          onClick={()=>{
-            setShowForm(
-              !showForm
-            );
-            setError("");
-            setSuccess("");
-          }}
-        >
-          {showForm
-            ?"Fermer"
-            :"+ Nouveau membre"
-          }
-        </button>
-      </div>
-
-      <div className="info-notice">
-        Les membres courants sont regroupés par corps puis par grade.
-        La Réserve apparaît à la fin de chaque corps, après tous les grades.
-        Les morts, radiés, démissionnaires et déserteurs sont regroupés
-        séparément tout en bas de la page, indépendamment de leur corps.
-      </div>
-
-      {error&&
-        <div className="error">
-          {error}
-        </div>
-      }
-
-      {success&&
-        <div className="success">
-          {success}
-        </div>
-      }
-
-      {showForm&&
-        <NouvelEffectifForm
-          options={data.options}
-          initialCorps={
-            activeCorps==="ALL"
-              ?""
-              :activeCorps
-          }
-          onSubmit={async form=>{
-            try{
-              setError("");
-
-              const refreshed=
-                await serverCall(
-                  "ajouterEffectif",
-                  token,
-                  form
-                );
-
-              setData(
-                refreshed
-              );
-
-              setShowForm(
-                false
-              );
-
-              if(form.corps){
-                setActiveCorps(
-                  form.corps
-                );
-              }
-
-              setSuccess(
-                `${`${form.prenom} ${form.nom}`.trim()} a été ajouté aux effectifs.`
-              );
-            }catch(e){
-              setError(
-                e.message
-              );
-            }
-          }}
-        />
-      }
-
-      <div
-        className="effectifs-tabs"
-        role="tablist"
-        aria-label="Corps de garde"
-      >
-        <button
-          type="button"
-          className={
-            `effectifs-tab ${
-              activeCorps==="ALL"
-                ?"active"
-                :""
-            }`
-          }
-          onClick={()=>
-            setActiveCorps(
-              "ALL"
-            )
-          }
-        >
-          Tous
-
-          <span className="effectifs-tab-count">
-            {countForCorps(
-              "ALL"
-            )}
-          </span>
-        </button>
-
-        {corpsTabs.map(corps=>{
-          const style=
-            data.options
-              .styles
-              ?.corps
-              ?.[corps];
-
-          return(
-            <button
-              type="button"
-              key={corps}
-              className={
-                `effectifs-tab ${
-                  activeCorps===corps
-                    ?"active"
-                    :""
-                }`
-              }
-              onClick={()=>
-                setActiveCorps(
-                  corps
-                )
-              }
-            >
-              <span
-                className="effectifs-tab-dot"
-                style={
-                  style?.background
-                    ?{
-                        backgroundColor:
-                          style.background
-                      }
-                    :undefined
-                }
-              />
-
-              {corps}
-
-              <span className="effectifs-tab-count">
-                {countForCorps(
-                  corps
-                )}
-              </span>
-            </button>
+    }, [
+      data,
+      filteredTerminal
+    ]);
+    if (error && !data) {
+      return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur Effectifs : ", error);
+    }
+    if (!data) {
+      return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des effectifs...");
+    }
+    const countForCorps = (corps) => corps === "ALL" ? activeRows.length : activeRows.filter(
+      (member) => member.corps === corps
+    ).length;
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Effectifs"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Gestion des membres de la Garde \u2014 officiers uniquement.")), /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        className: "primary-button",
+        onClick: () => {
+          setShowForm(
+            !showForm
           );
-        })}
-      </div>
-
-      <div className="effectifs-toolbar-v3">
-        <div className="effectifs-total">
-          <strong>
-            {activeCorps==="ALL"
-              ?"Tous les corps"
-              :activeCorps
-            }
-          </strong>
-
-          <span>
-            {filteredActive.length} membre
-            {filteredActive.length!==1
-              ?"s"
-              :""
-            }
-          </span>
-        </div>
-
-        <input
-          className="effectifs-search"
-          type="search"
-          placeholder="Rechercher nom, grade, spécialité, statut..."
-          value={search}
-          onChange={e=>
-            setSearch(
-              e.target.value
-            )
-          }
-        />
-      </div>
-
-      <div className="effectifs-corps-groups">
-        {groupedByCorps.length===0&&
-          <div className="effectifs-empty">
-            Aucun membre avec les filtres actuels.
-          </div>
+          setError("");
+          setSuccess("");
         }
-
-        {groupedByCorps.map(corpsGroup=>{
-          const corpsStyle=
-            data.options
-              .styles
-              ?.corps
-              ?.[corpsGroup.corps];
-
-          const total=
-            corpsGroup.groups.reduce(
-              (sum,group)=>
-                sum+
-                group.members.length,
-              0
+      },
+      showForm ? "Fermer" : "+ Nouveau membre"
+    )), /* @__PURE__ */ React.createElement("div", { className: "info-notice" }, "Les membres courants sont regroup\xE9s par corps puis par grade. La R\xE9serve appara\xEEt \xE0 la fin de chaque corps, apr\xE8s tous les grades. Les morts, radi\xE9s, d\xE9missionnaires et d\xE9serteurs sont regroup\xE9s s\xE9par\xE9ment tout en bas de la page, ind\xE9pendamment de leur corps."), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), success && /* @__PURE__ */ React.createElement("div", { className: "success" }, success), showForm && /* @__PURE__ */ React.createElement(
+      NouvelEffectifForm,
+      {
+        options: data.options,
+        initialCorps: activeCorps === "ALL" ? "" : activeCorps,
+        onSubmit: async (form) => {
+          try {
+            setError("");
+            const refreshed = await serverCall(
+              "ajouterEffectif",
+              token,
+              form
             );
-
-          return(
-            <section
-              className="effectifs-corps-group"
-              key={
-                corpsGroup.corps
-              }
-            >
-              <div
-                className="effectifs-corps-heading"
-                style={
-                  corpsStyle?.background
-                    ?{
-                        borderLeftColor:
-                          corpsStyle.background
-                      }
-                    :undefined
-                }
-              >
-                <div>
-                  <div className="effectifs-corps-title">
-                    {corpsGroup.corps}
-                  </div>
-
-                  <div className="effectifs-corps-subtitle">
-                    {total} membre
-                    {total!==1?"s":""}
-                  </div>
-                </div>
-              </div>
-
-              <div className="effectifs-grade-groups">
-                {corpsGroup.groups.map(group=>{
-                  const gradeStyle=
-                    group.type==="reserve"
-                      ?{
-                          background:"#e6e6e6",
-                          color:"#555555",
-                          fontWeight:"700"
-                        }
-                      :data.options
-                        .styles
-                        ?.grades
-                        ?.[group.grade];
-
-                  return(
-                    <section
-                      className={
-                        `effectifs-grade-group ${
-                          group.type==="reserve"
-                            ?"effectifs-reserve-group"
-                            :""
-                        }`
-                      }
-                      key={
-                        `${group.type}-${group.grade}`
-                      }
-                    >
-                      <div
-                        className="effectifs-grade-heading"
-                        style={
-                          effectifsStyle(
-                            gradeStyle,
-                            {}
-                          )
-                        }
-                      >
-                        <span>
-                          {group.type==="reserve"
-                            ?"Réserve"
-                            :group.grade
-                          }
-                        </span>
-
-                        <span className="effectifs-grade-count">
-                          {group.members.length}
-                        </span>
-                      </div>
-
-                      <div className="effectifs-member-list">
-                        {group.members.map(member=>
-                          <EffectifCard
-                            key={
-                              `${member.row}-${member.prenom}-${member.nom}`
-                            }
-                            member={
-                              member
-                            }
-                            options={
-                              data.options
-                            }
-                            onSave={
-                              async values=>{
-                                try{
-                                  setError("");
-                                  setSuccess("");
-
-                                  const refreshed=
-                                    await serverCall(
-                                      "modifierEffectif",
-                                      token,
-                                      {
-                                        row:
-                                          member.row,
-
-                                        expectedPrenom:
-                                          member.prenom,
-
-                                        expectedNom:
-                                          member.nom,
-
-                                        grade:
-                                          values.grade,
-
-                                        corps:
-                                          values.corps,
-
-                                        specialite:
-                                          values.specialite,
-
-                                        status:
-                                          values.status,
-
-                                        assermente:
-                                          values.assermente
-                                      }
-                                    );
-
-                                  setData(
-                                    refreshed
-                                  );
-
-                                  setSuccess(
-                                    `${member.nomComplet} a été mis à jour.`
-                                  );
-                                }catch(e){
-                                  setError(
-                                    e.message
-                                  );
-                                }
-                              }
-                            }
-                          />
-                        )}
-                      </div>
-                    </section>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
-      </div>
-
-      {terminalGroups.length>0&&
-        <section className="effectifs-archives">
-          <div className="effectifs-archives-heading">
-            <div>
-              <div className="effectifs-archives-title">
-                Anciens membres
-              </div>
-
-              <div className="effectifs-archives-subtitle">
-                Groupes trans-corps — conservés au registre
-              </div>
-            </div>
-          </div>
-
-          <div className="effectifs-terminal-groups">
-            {terminalGroups.map(group=>
-              <section
-                className={
-                  `effectifs-grade-group effectifs-terminal-group effectifs-terminal-${normalizeSearchText(group.label)}`
-                }
-                key={group.label}
-              >
-                <div className="effectifs-terminal-heading">
-                  <span>
-                    {group.label}
-                  </span>
-
-                  <span className="effectifs-grade-count">
-                    {group.members.length}
-                  </span>
-                </div>
-
-                <div className="effectifs-member-list">
-                  {group.members.map(member=>
-                    <EffectifCard
-                      key={
-                        `terminal-${member.row}-${member.prenom}-${member.nom}`
-                      }
-                      member={
-                        member
-                      }
-                      options={
-                        data.options
-                      }
-                      showCorps
-                      onSave={
-                        async values=>{
-                          try{
-                            setError("");
-                            setSuccess("");
-
-                            const refreshed=
-                              await serverCall(
-                                "modifierEffectif",
-                                token,
-                                {
-                                  row:
-                                    member.row,
-
-                                  expectedPrenom:
-                                    member.prenom,
-
-                                  expectedNom:
-                                    member.nom,
-
-                                  grade:
-                                    values.grade,
-
-                                  corps:
-                                    values.corps,
-
-                                  specialite:
-                                    values.specialite,
-
-                                  status:
-                                    values.status,
-
-                                  assermente:
-                                    values.assermente
-                                }
-                              );
-
-                            setData(
-                              refreshed
-                            );
-
-                            setSuccess(
-                              `${member.nomComplet} a été mis à jour.`
-                            );
-                          }catch(e){
-                            setError(
-                              e.message
-                            );
-                          }
-                        }
-                      }
-                    />
-                  )}
-                </div>
-              </section>
-            )}
-          </div>
-        </section>
+            setData(
+              refreshed
+            );
+            setShowForm(
+              false
+            );
+            if (form.corps) {
+              setActiveCorps(
+                form.corps
+              );
+            }
+            setSuccess(
+              `${`${form.prenom} ${form.nom}`.trim()} a \xE9t\xE9 ajout\xE9 aux effectifs.`
+            );
+          } catch (e) {
+            setError(
+              e.message
+            );
+          }
+        }
       }
-    </>
-  );
-}
-
-
-function NouvelEffectifForm({
-  options,
-  initialCorps,
-  onSubmit
-}){
-  const active=
-    options.statuses.find(
-      value=>
-        normalizeSearchText(value)===
-        normalizeSearchText(
-          "En service actif"
+    ), /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        className: "effectifs-tabs",
+        role: "tablist",
+        "aria-label": "Corps de garde"
+      },
+      /* @__PURE__ */ React.createElement(
+        "button",
+        {
+          type: "button",
+          className: `effectifs-tab ${activeCorps === "ALL" ? "active" : ""}`,
+          onClick: () => setActiveCorps(
+            "ALL"
+          )
+        },
+        "Tous",
+        /* @__PURE__ */ React.createElement("span", { className: "effectifs-tab-count" }, countForCorps(
+          "ALL"
+        ))
+      ),
+      corpsTabs.map((corps) => {
+        var _a, _b;
+        const style = (_b = (_a = data.options.styles) == null ? void 0 : _a.corps) == null ? void 0 : _b[corps];
+        return /* @__PURE__ */ React.createElement(
+          "button",
+          {
+            type: "button",
+            key: corps,
+            className: `effectifs-tab ${activeCorps === corps ? "active" : ""}`,
+            onClick: () => setActiveCorps(
+              corps
+            )
+          },
+          /* @__PURE__ */ React.createElement(
+            "span",
+            {
+              className: "effectifs-tab-dot",
+              style: (style == null ? void 0 : style.background) ? {
+                backgroundColor: style.background
+              } : void 0
+            }
+          ),
+          corps,
+          /* @__PURE__ */ React.createElement("span", { className: "effectifs-tab-count" }, countForCorps(
+            corps
+          ))
+        );
+      })
+    ), /* @__PURE__ */ React.createElement("div", { className: "effectifs-toolbar-v3" }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-total" }, /* @__PURE__ */ React.createElement("strong", null, activeCorps === "ALL" ? "Tous les corps" : activeCorps), /* @__PURE__ */ React.createElement("span", null, filteredActive.length, " membre", filteredActive.length !== 1 ? "s" : "")), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        className: "effectifs-search",
+        type: "search",
+        placeholder: "Rechercher nom, grade, sp\xE9cialit\xE9, statut...",
+        value: search,
+        onChange: (e) => setSearch(
+          e.target.value
         )
-    );
-
-  const[form,setForm]=useState({
-    prenom:"",
-    nom:"",
-    grade:
-      options.grades[0]||"",
-    corps:
-      initialCorps||
-      options.corps[0]||"",
-    specialite:"",
-    status:
-      active||
-      options.statuses[0]||"",
-    assermente:false
-  });
-
-  const[saving,setSaving]=
-    useState(false);
-
-  async function submit(e){
-    e.preventDefault();
-
-    try{
-      setSaving(true);
-      await onSubmit(form);
-    }finally{
-      setSaving(false);
-    }
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-groups" }, groupedByCorps.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "effectifs-empty" }, "Aucun membre avec les filtres actuels."), groupedByCorps.map((corpsGroup) => {
+      var _a, _b;
+      const corpsStyle = (_b = (_a = data.options.styles) == null ? void 0 : _a.corps) == null ? void 0 : _b[corpsGroup.corps];
+      const total = corpsGroup.groups.reduce(
+        (sum, group) => sum + group.members.length,
+        0
+      );
+      return /* @__PURE__ */ React.createElement(
+        "section",
+        {
+          className: "effectifs-corps-group",
+          key: corpsGroup.corps
+        },
+        /* @__PURE__ */ React.createElement(
+          "div",
+          {
+            className: "effectifs-corps-heading",
+            style: (corpsStyle == null ? void 0 : corpsStyle.background) ? {
+              borderLeftColor: corpsStyle.background
+            } : void 0
+          },
+          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-title" }, corpsGroup.corps), /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-subtitle" }, total, " membre", total !== 1 ? "s" : ""))
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "effectifs-grade-groups" }, corpsGroup.groups.map((group) => {
+          var _a2, _b2;
+          const gradeStyle = group.type === "reserve" ? {
+            background: "#e6e6e6",
+            color: "#555555",
+            fontWeight: "700"
+          } : (_b2 = (_a2 = data.options.styles) == null ? void 0 : _a2.grades) == null ? void 0 : _b2[group.grade];
+          return /* @__PURE__ */ React.createElement(
+            "section",
+            {
+              className: `effectifs-grade-group ${group.type === "reserve" ? "effectifs-reserve-group" : ""}`,
+              key: `${group.type}-${group.grade}`
+            },
+            /* @__PURE__ */ React.createElement(
+              "div",
+              {
+                className: "effectifs-grade-heading",
+                style: effectifsStyle(
+                  gradeStyle,
+                  {}
+                )
+              },
+              /* @__PURE__ */ React.createElement("span", null, group.type === "reserve" ? "R\xE9serve" : group.grade),
+              /* @__PURE__ */ React.createElement("span", { className: "effectifs-grade-count" }, group.members.length)
+            ),
+            /* @__PURE__ */ React.createElement("div", { className: "effectifs-member-list" }, group.members.map(
+              (member) => /* @__PURE__ */ React.createElement(
+                EffectifCard,
+                {
+                  key: `${member.row}-${member.prenom}-${member.nom}`,
+                  member,
+                  options: data.options,
+                  onSave: async (values) => {
+                    try {
+                      setError("");
+                      setSuccess("");
+                      const refreshed = await serverCall(
+                        "modifierEffectif",
+                        token,
+                        {
+                          row: member.row,
+                          expectedPrenom: member.prenom,
+                          expectedNom: member.nom,
+                          grade: values.grade,
+                          corps: values.corps,
+                          specialite: values.specialite,
+                          status: values.status,
+                          assermente: values.assermente
+                        }
+                      );
+                      setData(
+                        refreshed
+                      );
+                      setSuccess(
+                        `${member.nomComplet} a \xE9t\xE9 mis \xE0 jour.`
+                      );
+                    } catch (e) {
+                      setError(
+                        e.message
+                      );
+                    }
+                  }
+                }
+              )
+            ))
+          );
+        }))
+      );
+    })), terminalGroups.length > 0 && /* @__PURE__ */ React.createElement("section", { className: "effectifs-archives" }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-archives-heading" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "effectifs-archives-title" }, "Anciens membres"), /* @__PURE__ */ React.createElement("div", { className: "effectifs-archives-subtitle" }, "Groupes trans-corps \u2014 conserv\xE9s au registre"))), /* @__PURE__ */ React.createElement("div", { className: "effectifs-terminal-groups" }, terminalGroups.map(
+      (group) => /* @__PURE__ */ React.createElement(
+        "section",
+        {
+          className: `effectifs-grade-group effectifs-terminal-group effectifs-terminal-${normalizeSearchText(group.label)}`,
+          key: group.label
+        },
+        /* @__PURE__ */ React.createElement("div", { className: "effectifs-terminal-heading" }, /* @__PURE__ */ React.createElement("span", null, group.label), /* @__PURE__ */ React.createElement("span", { className: "effectifs-grade-count" }, group.members.length)),
+        /* @__PURE__ */ React.createElement("div", { className: "effectifs-member-list" }, group.members.map(
+          (member) => /* @__PURE__ */ React.createElement(
+            EffectifCard,
+            {
+              key: `terminal-${member.row}-${member.prenom}-${member.nom}`,
+              member,
+              options: data.options,
+              showCorps: true,
+              onSave: async (values) => {
+                try {
+                  setError("");
+                  setSuccess("");
+                  const refreshed = await serverCall(
+                    "modifierEffectif",
+                    token,
+                    {
+                      row: member.row,
+                      expectedPrenom: member.prenom,
+                      expectedNom: member.nom,
+                      grade: values.grade,
+                      corps: values.corps,
+                      specialite: values.specialite,
+                      status: values.status,
+                      assermente: values.assermente
+                    }
+                  );
+                  setData(
+                    refreshed
+                  );
+                  setSuccess(
+                    `${member.nomComplet} a \xE9t\xE9 mis \xE0 jour.`
+                  );
+                } catch (e) {
+                  setError(
+                    e.message
+                  );
+                }
+              }
+            }
+          )
+        ))
+      )
+    ))));
   }
-
-  return(
-    <form
-      className="form-card"
-      onSubmit={submit}
-    >
-      <h2>
-        Nouveau membre
-      </h2>
-
-      <div className="form-grid">
-        <Field label="Prénom">
-          <input
-            value={form.prenom}
-            onChange={e=>
-              setForm({
-                ...form,
-                prenom:e.target.value
-              })
-            }
-          />
-        </Field>
-
-        <Field label="Nom">
-          <input
-            value={form.nom}
-            onChange={e=>
-              setForm({
-                ...form,
-                nom:e.target.value
-              })
-            }
-          />
-        </Field>
-
-        <Field label="Grade">
-          <select
-            required
-            value={form.grade}
-            style={
-              effectifsStyle(
-                options
-                  .styles
-                  ?.grades
-                  ?.[form.grade],
-                {}
-              )
-            }
-            onChange={e=>
-              setForm({
-                ...form,
-                grade:e.target.value
-              })
-            }
-          >
-            <option value="">
-              Sélectionner…
-            </option>
-
-            {options.grades.map(
-              value=>
-                <option
-                  key={value}
-                  value={value}
-                >
-                  {value}
-                </option>
-            )}
-          </select>
-        </Field>
-
-        <Field label="Corps de garde">
-          <select
-            required
-            value={form.corps}
-            style={
-              effectifsStyle(
-                options
-                  .styles
-                  ?.corps
-                  ?.[form.corps],
-                {}
-              )
-            }
-            onChange={e=>
-              setForm({
-                ...form,
-                corps:e.target.value
-              })
-            }
-          >
-            <option value="">
-              Sélectionner…
-            </option>
-
-            {options.corps.map(
-              value=>
-                <option
-                  key={value}
-                  value={value}
-                >
-                  {value}
-                </option>
-            )}
-          </select>
-        </Field>
-
-        <Field label="Spécialité">
-          {options.specialites.length>0
-            ?(
-              <select
-                value={form.specialite}
-                style={
-                  effectifsStyle(
-                    options
-                      .styles
-                      ?.specialites
-                      ?.[form.specialite],
-                    {}
-                  )
-                }
-                onChange={e=>
-                  setForm({
-                    ...form,
-                    specialite:
-                      e.target.value
-                  })
-                }
-              >
-                <option value="">
-                  Aucune / non renseignée
-                </option>
-
-                {options.specialites.map(
-                  value=>
-                    <option
-                      key={value}
-                      value={value}
-                    >
-                      {value}
-                    </option>
-                )}
-              </select>
-            )
-            :(
-              <input
-                value={form.specialite}
-                onChange={e=>
-                  setForm({
-                    ...form,
-                    specialite:
-                      e.target.value
-                  })
-                }
-                placeholder="Spécialité"
-              />
-            )
-          }
-        </Field>
-
-        <Field label="Statut">
-          <select
-            required
-            value={form.status}
-            style={
-              effectifsStyle(
-                options
-                  .styles
-                  ?.statuses
-                  ?.[form.status],
-                {}
-              )
-            }
-            onChange={e=>
-              setForm({
-                ...form,
-                status:e.target.value
-              })
-            }
-          >
-            <option value="">
-              Sélectionner…
-            </option>
-
-            {options.statuses.map(
-              value=>
-                <option
-                  key={value}
-                  value={value}
-                >
-                  {value}
-                </option>
-            )}
-          </select>
-        </Field>
-
-        <div className="field">
-          <label>
-            Assermentation
-          </label>
-
-          <label className="effectif-check">
-            <input
-              type="checkbox"
-              checked={
-                form.assermente
-              }
-              onChange={e=>
-                setForm({
-                  ...form,
-                  assermente:
-                    e.target.checked
-                })
-              }
-            />
-
-            Assermenté
-          </label>
-        </div>
-      </div>
-
-      <div className="form-actions">
-        <button
-          className="primary-button"
-          disabled={saving}
-        >
-          {saving
-            ?"Enregistrement..."
-            :"Ajouter le membre"
-          }
-        </button>
-      </div>
-    </form>
-  );
-}
-
-
-function EffectifCard({
-  member,
-  options,
-  onSave,
-  showCorps=false
-}){
-  const[editing,setEditing]=
-    useState(false);
-
-  const[grade,setGrade]=
-    useState(member.grade);
-
-  const[corps,setCorps]=
-    useState(member.corps);
-
-  const[specialite,setSpecialite]=
-    useState(
-      member.specialite||""
+  function NouvelEffectifForm({
+    options,
+    initialCorps,
+    onSubmit
+  }) {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+    const active = options.statuses.find(
+      (value) => normalizeSearchText(value) === normalizeSearchText(
+        "En service actif"
+      )
     );
-
-  const[status,setStatus]=
-    useState(member.status);
-
-  const[assermente,setAssermente]=
-    useState(
+    const [form, setForm] = useState({
+      prenom: "",
+      nom: "",
+      grade: options.grades[0] || "",
+      corps: initialCorps || options.corps[0] || "",
+      specialite: "",
+      status: active || options.statuses[0] || "",
+      assermente: false
+    });
+    const [saving, setSaving] = useState(false);
+    async function submit(e) {
+      e.preventDefault();
+      try {
+        setSaving(true);
+        await onSubmit(form);
+      } finally {
+        setSaving(false);
+      }
+    }
+    return /* @__PURE__ */ React.createElement(
+      "form",
+      {
+        className: "form-card",
+        onSubmit: submit
+      },
+      /* @__PURE__ */ React.createElement("h2", null, "Nouveau membre"),
+      /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Pr\xE9nom" }, /* @__PURE__ */ React.createElement(
+        "input",
+        {
+          value: form.prenom,
+          onChange: (e) => setForm({
+            ...form,
+            prenom: e.target.value
+          })
+        }
+      )), /* @__PURE__ */ React.createElement(Field, { label: "Nom" }, /* @__PURE__ */ React.createElement(
+        "input",
+        {
+          value: form.nom,
+          onChange: (e) => setForm({
+            ...form,
+            nom: e.target.value
+          })
+        }
+      )), /* @__PURE__ */ React.createElement(Field, { label: "Grade" }, /* @__PURE__ */ React.createElement(
+        "select",
+        {
+          required: true,
+          value: form.grade,
+          style: effectifsStyle(
+            (_b = (_a = options.styles) == null ? void 0 : _a.grades) == null ? void 0 : _b[form.grade],
+            {}
+          ),
+          onChange: (e) => setForm({
+            ...form,
+            grade: e.target.value
+          })
+        },
+        /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"),
+        options.grades.map(
+          (value) => /* @__PURE__ */ React.createElement(
+            "option",
+            {
+              key: value,
+              value
+            },
+            value
+          )
+        )
+      )), /* @__PURE__ */ React.createElement(Field, { label: "Corps de garde" }, /* @__PURE__ */ React.createElement(
+        "select",
+        {
+          required: true,
+          value: form.corps,
+          style: effectifsStyle(
+            (_d = (_c = options.styles) == null ? void 0 : _c.corps) == null ? void 0 : _d[form.corps],
+            {}
+          ),
+          onChange: (e) => setForm({
+            ...form,
+            corps: e.target.value
+          })
+        },
+        /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"),
+        options.corps.map(
+          (value) => /* @__PURE__ */ React.createElement(
+            "option",
+            {
+              key: value,
+              value
+            },
+            value
+          )
+        )
+      )), /* @__PURE__ */ React.createElement(Field, { label: "Sp\xE9cialit\xE9" }, options.specialites.length > 0 ? /* @__PURE__ */ React.createElement(
+        "select",
+        {
+          value: form.specialite,
+          style: effectifsStyle(
+            (_f = (_e = options.styles) == null ? void 0 : _e.specialites) == null ? void 0 : _f[form.specialite],
+            {}
+          ),
+          onChange: (e) => setForm({
+            ...form,
+            specialite: e.target.value
+          })
+        },
+        /* @__PURE__ */ React.createElement("option", { value: "" }, "Aucune / non renseign\xE9e"),
+        options.specialites.map(
+          (value) => /* @__PURE__ */ React.createElement(
+            "option",
+            {
+              key: value,
+              value
+            },
+            value
+          )
+        )
+      ) : /* @__PURE__ */ React.createElement(
+        "input",
+        {
+          value: form.specialite,
+          onChange: (e) => setForm({
+            ...form,
+            specialite: e.target.value
+          }),
+          placeholder: "Sp\xE9cialit\xE9"
+        }
+      )), /* @__PURE__ */ React.createElement(Field, { label: "Statut" }, /* @__PURE__ */ React.createElement(
+        "select",
+        {
+          required: true,
+          value: form.status,
+          style: effectifsStyle(
+            (_h = (_g = options.styles) == null ? void 0 : _g.statuses) == null ? void 0 : _h[form.status],
+            {}
+          ),
+          onChange: (e) => setForm({
+            ...form,
+            status: e.target.value
+          })
+        },
+        /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"),
+        options.statuses.map(
+          (value) => /* @__PURE__ */ React.createElement(
+            "option",
+            {
+              key: value,
+              value
+            },
+            value
+          )
+        )
+      )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Assermentation"), /* @__PURE__ */ React.createElement("label", { className: "effectif-check" }, /* @__PURE__ */ React.createElement(
+        "input",
+        {
+          type: "checkbox",
+          checked: form.assermente,
+          onChange: (e) => setForm({
+            ...form,
+            assermente: e.target.checked
+          })
+        }
+      ), "Asserment\xE9"))),
+      /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement(
+        "button",
+        {
+          className: "primary-button",
+          disabled: saving
+        },
+        saving ? "Enregistrement..." : "Ajouter le membre"
+      ))
+    );
+  }
+  function EffectifCard({
+    member,
+    options,
+    onSave,
+    showCorps = false
+  }) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
+    const [editing, setEditing] = useState(false);
+    const [grade, setGrade] = useState(member.grade);
+    const [corps, setCorps] = useState(member.corps);
+    const [specialite, setSpecialite] = useState(
+      member.specialite || ""
+    );
+    const [status, setStatus] = useState(member.status);
+    const [assermente, setAssermente] = useState(
       member.assermente
     );
-
-  const[saving,setSaving]=
-    useState(false);
-
-  useEffect(()=>{
-    setGrade(
-      member.grade
-    );
-
-    setCorps(
-      member.corps
-    );
-
-    setSpecialite(
-      member.specialite||""
-    );
-
-    setStatus(
-      member.status
-    );
-
-    setAssermente(
+    const [saving, setSaving] = useState(false);
+    useEffect(() => {
+      setGrade(
+        member.grade
+      );
+      setCorps(
+        member.corps
+      );
+      setSpecialite(
+        member.specialite || ""
+      );
+      setStatus(
+        member.status
+      );
+      setAssermente(
+        member.assermente
+      );
+    }, [
+      member.grade,
+      member.corps,
+      member.specialite,
+      member.status,
       member.assermente
-    );
-  },[
-    member.grade,
-    member.corps,
-    member.specialite,
-    member.status,
-    member.assermente
-  ]);
-
-  const changed=
-    grade!==member.grade||
-    corps!==member.corps||
-    specialite!==(member.specialite||"")||
-    status!==member.status||
-    assermente!==member.assermente;
-
-  async function save(){
-    try{
-      setSaving(true);
-
-      await onSave({
-        grade,
-        corps,
-        specialite,
-        status,
-        assermente
-      });
-
+    ]);
+    const changed = grade !== member.grade || corps !== member.corps || specialite !== (member.specialite || "") || status !== member.status || assermente !== member.assermente;
+    async function save() {
+      try {
+        setSaving(true);
+        await onSave({
+          grade,
+          corps,
+          specialite,
+          status,
+          assermente
+        });
+        setEditing(false);
+      } finally {
+        setSaving(false);
+      }
+    }
+    function cancel() {
+      setGrade(
+        member.grade
+      );
+      setCorps(
+        member.corps
+      );
+      setSpecialite(
+        member.specialite || ""
+      );
+      setStatus(
+        member.status
+      );
+      setAssermente(
+        member.assermente
+      );
       setEditing(false);
-    }finally{
-      setSaving(false);
     }
-  }
-
-  function cancel(){
-    setGrade(
-      member.grade
-    );
-
-    setCorps(
+    return /* @__PURE__ */ React.createElement("article", { className: "effectif-row" }, /* @__PURE__ */ React.createElement("div", { className: "effectif-identity" }, /* @__PURE__ */ React.createElement("div", { className: "effectif-name" }, member.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "effectif-badges" }, showCorps && member.corps && /* @__PURE__ */ React.createElement(
+      "span",
+      {
+        className: "effectif-badge",
+        style: effectifsStyle(
+          (_a = member.styles) == null ? void 0 : _a.corps,
+          {}
+        )
+      },
       member.corps
-    );
-
-    setSpecialite(
-      member.specialite||""
-    );
-
-    setStatus(
-      member.status
-    );
-
-    setAssermente(
-      member.assermente
-    );
-
-    setEditing(false);
-  }
-
-  return(
-    <article className="effectif-row">
-      <div className="effectif-identity">
-        <div className="effectif-name">
-          {member.nomComplet}
-        </div>
-
-        <div className="effectif-badges">
-          {showCorps&&member.corps&&
-            <span
-              className="effectif-badge"
-              style={
-                effectifsStyle(
-                  member
-                    .styles
-                    ?.corps,
-                  {}
-                )
-              }
-            >
-              {member.corps}
-            </span>
-          }
-
-          {member.specialite&&
-            <span
-              className="effectif-badge"
-              style={
-                effectifsStyle(
-                  member
-                    .styles
-                    ?.specialite,
-                  {}
-                )
-              }
-            >
-              {member.specialite}
-            </span>
-          }
-
-          <span
-            className="effectif-badge"
-            style={
-              effectifsStyle(
-                member
-                  .styles
-                  ?.status,
-                {}
-              )
-            }
-          >
-            {member.status||
-              "Sans statut"
-            }
-          </span>
-
-          <span
-            className={
-              `effectif-badge ${
-                member.assermente
-                  ?"effectif-badge-sworn"
-                  :"effectif-badge-muted"
-              }`
-            }
-          >
-            {member.assermente
-              ?"✓ Assermenté"
-              :"Non assermenté"
-            }
-          </span>
-        </div>
-      </div>
-
-      {!editing&&
-        <button
-          type="button"
-          className="secondary-button effectif-edit-button"
-          onClick={()=>
-            setEditing(true)
-          }
-        >
-          Modifier
-        </button>
+    ), member.specialite && /* @__PURE__ */ React.createElement(
+      "span",
+      {
+        className: "effectif-badge",
+        style: effectifsStyle(
+          (_b = member.styles) == null ? void 0 : _b.specialite,
+          {}
+        )
+      },
+      member.specialite
+    ), /* @__PURE__ */ React.createElement(
+      "span",
+      {
+        className: "effectif-badge",
+        style: effectifsStyle(
+          (_c = member.styles) == null ? void 0 : _c.status,
+          {}
+        )
+      },
+      member.status || "Sans statut"
+    ), /* @__PURE__ */ React.createElement(
+      "span",
+      {
+        className: `effectif-badge ${member.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}`
+      },
+      member.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"
+    ))), !editing && /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "secondary-button effectif-edit-button",
+        onClick: () => setEditing(true)
+      },
+      "Modifier"
+    ), editing && /* @__PURE__ */ React.createElement("div", { className: "effectif-editor" }, /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Grade"), /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: grade,
+        style: effectifsStyle(
+          (_e = (_d = options.styles) == null ? void 0 : _d.grades) == null ? void 0 : _e[grade],
+          {}
+        ),
+        onChange: (e) => setGrade(
+          e.target.value
+        )
+      },
+      options.grades.map(
+        (value) => /* @__PURE__ */ React.createElement(
+          "option",
+          {
+            key: value,
+            value
+          },
+          value
+        )
+      )
+    )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Corps"), /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: corps,
+        style: effectifsStyle(
+          (_g = (_f = options.styles) == null ? void 0 : _f.corps) == null ? void 0 : _g[corps],
+          {}
+        ),
+        onChange: (e) => setCorps(
+          e.target.value
+        )
+      },
+      options.corps.map(
+        (value) => /* @__PURE__ */ React.createElement(
+          "option",
+          {
+            key: value,
+            value
+          },
+          value
+        )
+      )
+    )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Sp\xE9cialit\xE9"), options.specialites.length > 0 ? /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: specialite,
+        style: effectifsStyle(
+          (_i = (_h = options.styles) == null ? void 0 : _h.specialites) == null ? void 0 : _i[specialite],
+          {}
+        ),
+        onChange: (e) => setSpecialite(
+          e.target.value
+        )
+      },
+      /* @__PURE__ */ React.createElement("option", { value: "" }, "Aucune"),
+      specialite && !options.specialites.includes(
+        specialite
+      ) && /* @__PURE__ */ React.createElement(
+        "option",
+        {
+          value: specialite
+        },
+        specialite
+      ),
+      options.specialites.map(
+        (value) => /* @__PURE__ */ React.createElement(
+          "option",
+          {
+            key: value,
+            value
+          },
+          value
+        )
+      )
+    ) : /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: specialite,
+        onChange: (e) => setSpecialite(
+          e.target.value
+        )
       }
-
-      {editing&&
-        <div className="effectif-editor">
-          <div className="field">
-            <label>
-              Grade
-            </label>
-
-            <select
-              value={grade}
-              style={
-                effectifsStyle(
-                  options
-                    .styles
-                    ?.grades
-                    ?.[grade],
-                  {}
-                )
-              }
-              onChange={e=>
-                setGrade(
-                  e.target.value
-                )
-              }
-            >
-              {options.grades.map(
-                value=>
-                  <option
-                    key={value}
-                    value={value}
-                  >
-                    {value}
-                  </option>
-              )}
-            </select>
-          </div>
-
-          <div className="field">
-            <label>
-              Corps
-            </label>
-
-            <select
-              value={corps}
-              style={
-                effectifsStyle(
-                  options
-                    .styles
-                    ?.corps
-                    ?.[corps],
-                  {}
-                )
-              }
-              onChange={e=>
-                setCorps(
-                  e.target.value
-                )
-              }
-            >
-              {options.corps.map(
-                value=>
-                  <option
-                    key={value}
-                    value={value}
-                  >
-                    {value}
-                  </option>
-              )}
-            </select>
-          </div>
-
-          <div className="field">
-            <label>
-              Spécialité
-            </label>
-
-            {options.specialites.length>0
-              ?(
-                <select
-                  value={
-                    specialite
-                  }
-                  style={
-                    effectifsStyle(
-                      options
-                        .styles
-                        ?.specialites
-                        ?.[specialite],
-                      {}
-                    )
-                  }
-                  onChange={e=>
-                    setSpecialite(
-                      e.target.value
-                    )
-                  }
-                >
-                  <option value="">
-                    Aucune
-                  </option>
-
-                  {specialite &&
-                    !options
-                      .specialites
-                      .includes(
-                        specialite
-                      ) &&
-                    <option
-                      value={
-                        specialite
-                      }
-                    >
-                      {specialite}
-                    </option>
-                  }
-
-                  {options.specialites.map(
-                    value=>
-                      <option
-                        key={value}
-                        value={value}
-                      >
-                        {value}
-                      </option>
-                  )}
-                </select>
-              )
-              :(
-                <input
-                  value={
-                    specialite
-                  }
-                  onChange={e=>
-                    setSpecialite(
-                      e.target.value
-                    )
-                  }
-                />
-              )
-            }
-          </div>
-
-          <div className="field">
-            <label>
-              Statut
-            </label>
-
-            <select
-              value={status}
-              style={
-                effectifsStyle(
-                  options
-                    .styles
-                    ?.statuses
-                    ?.[status],
-                  {}
-                )
-              }
-              onChange={e=>
-                setStatus(
-                  e.target.value
-                )
-              }
-            >
-              {options.statuses.map(
-                value=>
-                  <option
-                    key={value}
-                    value={value}
-                  >
-                    {value}
-                  </option>
-              )}
-            </select>
-          </div>
-
-          <label className="effectif-check effectif-editor-check">
-            <input
-              type="checkbox"
-              checked={
-                assermente
-              }
-              onChange={e=>
-                setAssermente(
-                  e.target.checked
-                )
-              }
-            />
-
-            Assermenté
-          </label>
-
-          <div className="effectif-editor-actions">
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={cancel}
-              disabled={saving}
-            >
-              Annuler
-            </button>
-
-            <button
-              type="button"
-              className="primary-button"
-              disabled={
-                !changed||
-                saving
-              }
-              onClick={save}
-            >
-              {saving
-                ?"Enregistrement..."
-                :"Enregistrer"
-              }
-            </button>
-          </div>
-        </div>
+    )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Statut"), /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: status,
+        style: effectifsStyle(
+          (_k = (_j = options.styles) == null ? void 0 : _j.statuses) == null ? void 0 : _k[status],
+          {}
+        ),
+        onChange: (e) => setStatus(
+          e.target.value
+        )
+      },
+      options.statuses.map(
+        (value) => /* @__PURE__ */ React.createElement(
+          "option",
+          {
+            key: value,
+            value
+          },
+          value
+        )
+      )
+    )), /* @__PURE__ */ React.createElement("label", { className: "effectif-check effectif-editor-check" }, /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        type: "checkbox",
+        checked: assermente,
+        onChange: (e) => setAssermente(
+          e.target.checked
+        )
       }
-    </article>
-  );
-}
+    ), "Asserment\xE9"), /* @__PURE__ */ React.createElement("div", { className: "effectif-editor-actions" }, /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "secondary-button",
+        onClick: cancel,
+        disabled: saving
+      },
+      "Annuler"
+    ), /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "primary-button",
+        disabled: !changed || saving,
+        onClick: save
+      },
+      saving ? "Enregistrement..." : "Enregistrer"
+    ))));
+  }
+  function LawModal({ article, onClose, onOpenCodex }) {
+    if (!article) return null;
+    return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop", onMouseDown: (e) => {
+      if (e.target === e.currentTarget) onClose();
+    } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, article.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${article.article}`), /* @__PURE__ */ React.createElement("h2", { className: "law-modal-title" }, article.titre)), /* @__PURE__ */ React.createElement("button", { className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, article.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.famille), /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.source), article.local && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-local" }, "Applicable localement"), article.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.classification), article.amende !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", article.amende, " septims"), article.cachot !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", formatHours(article.cachot)), article.travaux !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u2692 ", formatHours(article.travaux))), (article.autorite || article.applicabilite) && /* @__PURE__ */ React.createElement("div", { className: "law-source-info" }, article.autorite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Autorit\xE9 :"), " ", article.autorite), article.applicabilite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Domaine :"), " ", article.applicabilite)), article.texte && /* @__PURE__ */ React.createElement("div", { className: "law-text" }, article.texte), article.sanction && /* @__PURE__ */ React.createElement("div", { className: "law-sanction-box" }, /* @__PURE__ */ React.createElement("strong", null, "\u2696 Sanction"), /* @__PURE__ */ React.createElement("div", null, article.sanction)), article.alerte && /* @__PURE__ */ React.createElement("div", { className: "law-warning" }, "\u26A0 ", /* @__PURE__ */ React.createElement("strong", null, "V\xE9rification n\xE9cessaire :"), " ", article.alerte), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, article.url && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => window.open(article.url, "_blank") }, "Ouvrir le document source \u2197"), onOpenCodex && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => onOpenCodex(article) }, "Voir dans le Codex")))));
+  }
+  function CodexPage({ token, focusArticle, onFocusConsumed }) {
+    const [data, setData] = useState(null), [search, setSearch] = useState(""), [family, setFamily] = useState(""), [source, setSource] = useState(""), [classification, setClassification] = useState(""), [selected, setSelected] = useState(null), [error, setError] = useState("");
+    useEffect(() => {
+      serverCall("getCodex", token).then((r) => {
+        setData(r);
+        if (focusArticle) {
+          setSelected(r.articles.find((a) => a.source === focusArticle.source && a.article === focusArticle.article) || focusArticle);
+          onFocusConsumed();
+        }
+      }).catch((e) => setError(e.message));
+    }, []);
+    const families = useMemo(() => data ? [...new Set(data.sources.map((s) => s.famille))] : [], [data]);
+    const classes = useMemo(() => data ? [...new Set(data.articles.map((a) => a.classification).filter(Boolean))].sort() : [], [data]);
+    const filtered = useMemo(() => {
+      if (!data) return [];
+      const q = normalizeSearchText(search);
+      return data.articles.filter((a) => (!family || a.famille === family) && (!source || a.source === source) && (!classification || a.classification === classification) && (!q || normalizeSearchText([a.article, a.titre, a.source, a.famille, a.classification, a.autorite, a.applicabilite, a.texte, a.sanction].join(" ")).includes(q)));
+    }, [data, search, family, source, classification]);
+    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du Codex...");
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Biblioth\xE8que juridique de la Garde de Blancherive."))), /* @__PURE__ */ React.createElement("div", { className: "codex-library" }, families.map((f) => /* @__PURE__ */ React.createElement("section", { className: "codex-family", key: f }, /* @__PURE__ */ React.createElement("h2", { className: "codex-family-title" }, f), /* @__PURE__ */ React.createElement("div", { className: "codex-source-list" }, data.sources.filter((s) => s.famille === f).map((s) => /* @__PURE__ */ React.createElement("button", { key: s.nom, className: `codex-source-button ${source === s.nom ? "active" : ""}`, onClick: () => {
+      setFamily(f);
+      setSource(source === s.nom ? "" : s.nom);
+    } }, s.nom, /* @__PURE__ */ React.createElement("small", null, s.applicabilite))))))), /* @__PURE__ */ React.createElement("div", { className: "codex-controls" }, /* @__PURE__ */ React.createElement("input", { type: "search", placeholder: "Rechercher une loi, un article, un mot...", value: search, onChange: (e) => setSearch(e.target.value) }), /* @__PURE__ */ React.createElement("select", { value: family, onChange: (e) => {
+      setFamily(e.target.value);
+      setSource("");
+    } }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les familles"), families.map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v))), /* @__PURE__ */ React.createElement("select", { value: classification, onChange: (e) => setClassification(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes classifications"), classes.map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "codex-count" }, filtered.length, " r\xE9sultat", filtered.length !== 1 ? "s" : ""), /* @__PURE__ */ React.createElement("div", { className: "codex-list" }, filtered.map((a, i) => /* @__PURE__ */ React.createElement("article", { className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), a.amende !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", a.amende), a.cachot !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", formatHours(a.cachot)))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction)))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null) }));
+  }
+  function OrganigrammePage({ token }) {
+    const [data, setData] = useState(null), [error, setError] = useState("");
+    useEffect(() => {
+      serverCall("getOrganigramme", token).then(setData).catch((e) => setError(e.message));
+    }, []);
+    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de l'organigramme...");
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Organisation actuelle de la Garde de Blancherive"))), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-row" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: data.jarl, center: true })), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-down" }), /* @__PURE__ */ React.createElement("div", { className: "org-branch-row" }, /* @__PURE__ */ React.createElement("section", { className: "org-hird" }, /* @__PURE__ */ React.createElement("h2", { className: "org-block-title" }, "Hird du Jarl"), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: data.hird })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commandant" }))), /* @__PURE__ */ React.createElement("h2", { className: "org-garrisons-title" }, "Garnisons et corps de garde"), /* @__PURE__ */ React.createElement("div", { className: "org-garrisons" }, data.garnisons.map((g) => /* @__PURE__ */ React.createElement("article", { className: "org-garrison", key: g.key }, /* @__PURE__ */ React.createElement("div", { className: "org-garrison-header" }, g.nom), /* @__PURE__ */ React.createElement("div", { className: "org-garrison-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: g.membres }))))), /* @__PURE__ */ React.createElement("div", { className: "org-independent-area" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", people: data.reserve })));
+  }
+  function PersonCard({ personne, center = false }) {
+    if (!personne) return null;
+    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "org-person-grade" }, personne.grade));
+  }
+  function CentralGroup({ personnes, grade }) {
+    if (!(personnes == null ? void 0 : personnes.length)) return /* @__PURE__ */ React.createElement("div", { className: "org-person org-command-card center" }, /* @__PURE__ */ React.createElement("strong", null, "Poste vacant"), /* @__PURE__ */ React.createElement("div", { className: "org-person-grade" }, grade));
+    return personnes.map((p, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "org-command-card" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: p, center: true })));
+  }
+  function RankedPeople({ personnes }) {
+    if (!(personnes == null ? void 0 : personnes.length)) return /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Aucun personnel.");
+    const groups = [];
+    personnes.forEach((p) => {
+      let g = groups.find((x) => x.grade === p.grade);
+      if (!g) {
+        g = { grade: p.grade, people: [] };
+        groups.push(g);
+      }
+      g.people.push(p);
+    });
+    return groups.map((g) => /* @__PURE__ */ React.createElement("div", { className: "org-rank-group", key: g.grade }, /* @__PURE__ */ React.createElement("div", { className: "org-rank-title" }, g.grade), /* @__PURE__ */ React.createElement("div", { className: "org-rank-members" }, g.people.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p })))));
+  }
+  function Independent({ title, people }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("h2", { className: "org-independent-title" }, title), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people }));
+  }
+  function AmendesPage({ token, canDelete, onOpenCodex }) {
+    const [data, setData] = useState(null), [formData, setFormData] = useState(null), [codex, setCodex] = useState(null), [selected, setSelected] = useState(null), [showForm, setShowForm] = useState(false), [error, setError] = useState(""), [deletingRow, setDeletingRow] = useState(null);
+    useEffect(() => {
+      Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
+        setData(r);
+        setFormData(f);
+        setCodex(c.articles);
+      }).catch((e) => setError(e.message));
+    }, []);
+    if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+    if (!data || !formData || !codex) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des amendes...");
+    const openLaw = (l) => {
+      const a = findCodexArticle(codex, l);
+      if (a) setSelected(a);
+    };
+    async function del(item) {
+      if (!canDelete || !confirm(`Supprimer d\xE9finitivement cette amende ?
 
-
-function LawModal({article,onClose,onOpenCodex}){if(!article)return null;return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="law-modal"><div className="law-modal-header"><div><div className="law-modal-number">{article.article==="Préambule"?"Préambule":`Article ${article.article}`}</div><h2 className="law-modal-title">{article.titre}</h2></div><button className="law-modal-close" onClick={onClose}>×</button></div><div className="law-modal-body"><div className="law-meta">{article.famille&&<span className="law-chip">{article.famille}</span>}<span className="law-chip">{article.source}</span>{article.local&&<span className="law-chip law-chip-local">Applicable localement</span>}{article.classification&&<span className="law-chip">{article.classification}</span>}{article.amende!==""&&<span className="law-chip">💰 {article.amende} septims</span>}{article.cachot!==""&&<span className="law-chip">🔒 {formatHours(article.cachot)}</span>}{article.travaux!==""&&<span className="law-chip">⚒ {formatHours(article.travaux)}</span>}</div>{(article.autorite||article.applicabilite)&&<div className="law-source-info">{article.autorite&&<div><strong>Autorité :</strong> {article.autorite}</div>}{article.applicabilite&&<div><strong>Domaine :</strong> {article.applicabilite}</div>}</div>}{article.texte&&<div className="law-text">{article.texte}</div>}{article.sanction&&<div className="law-sanction-box"><strong>⚖ Sanction</strong><div>{article.sanction}</div></div>}{article.alerte&&<div className="law-warning">⚠ <strong>Vérification nécessaire :</strong> {article.alerte}</div>}<div className="form-actions">{article.url&&<button className="secondary-button" onClick={()=>window.open(article.url,"_blank")}>Ouvrir le document source ↗</button>}{onOpenCodex&&<button className="secondary-button" onClick={()=>onOpenCodex(article)}>Voir dans le Codex</button>}</div></div></div></div>;}
-
-function CodexPage({token,focusArticle,onFocusConsumed}){const[data,setData]=useState(null),[search,setSearch]=useState(""),[family,setFamily]=useState(""),[source,setSource]=useState(""),[classification,setClassification]=useState(""),[selected,setSelected]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getCodex",token).then(r=>{setData(r);if(focusArticle){setSelected(r.articles.find(a=>a.source===focusArticle.source&&a.article===focusArticle.article)||focusArticle);onFocusConsumed();}}).catch(e=>setError(e.message));},[]);const families=useMemo(()=>data?[...new Set(data.sources.map(s=>s.famille))]:[],[data]);const classes=useMemo(()=>data?[...new Set(data.articles.map(a=>a.classification).filter(Boolean))].sort():[],[data]);const filtered=useMemo(()=>{if(!data)return[];const q=normalizeSearchText(search);return data.articles.filter(a=>(!family||a.famille===family)&&(!source||a.source===source)&&(!classification||a.classification===classification)&&(!q||normalizeSearchText([a.article,a.titre,a.source,a.famille,a.classification,a.autorite,a.applicabilite,a.texte,a.sanction].join(" ")).includes(q)));},[data,search,family,source,classification]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du Codex...</div>;return <><div className="page-header"><div><h1 className="page-title">Codex & Droit impérial</h1><p className="page-subtitle">Bibliothèque juridique de la Garde de Blancherive.</p></div></div><div className="codex-library">{families.map(f=><section className="codex-family" key={f}><h2 className="codex-family-title">{f}</h2><div className="codex-source-list">{data.sources.filter(s=>s.famille===f).map(s=><button key={s.nom} className={`codex-source-button ${source===s.nom?"active":""}`} onClick={()=>{setFamily(f);setSource(source===s.nom?"":s.nom);}}>{s.nom}<small>{s.applicabilite}</small></button>)}</div></section>)}</div><div className="codex-controls"><input type="search" placeholder="Rechercher une loi, un article, un mot..." value={search} onChange={e=>setSearch(e.target.value)}/><select value={family} onChange={e=>{setFamily(e.target.value);setSource("");}}><option value="">Toutes les familles</option>{families.map(v=><option key={v}>{v}</option>)}</select><select value={classification} onChange={e=>setClassification(e.target.value)}><option value="">Toutes classifications</option>{classes.map(v=><option key={v}>{v}</option>)}</select></div><div className="codex-count">{filtered.length} résultat{filtered.length!==1?"s":""}</div><div className="codex-list">{filtered.map((a,i)=><article className="codex-card" key={`${a.source}-${a.article}-${i}`} onClick={()=>setSelected(a)}><div className="codex-card-top"><div><div className="codex-card-number">{a.article==="Préambule"?"Préambule":`Article ${a.article}`}</div><h2 className="codex-card-title">{a.titre}</h2><div className="law-meta">{a.famille&&<span className="law-chip">{a.famille}</span>}{a.classification&&<span className="law-chip">{a.classification}</span>}{a.amende!==""&&<span className="law-chip">💰 {a.amende}</span>}{a.cachot!==""&&<span className="law-chip">🔒 {formatHours(a.cachot)}</span>}</div></div><div className="codex-card-source">{a.source}<br/>{a.autorite}</div></div>{a.texte&&<div className="codex-card-text">{a.texte}</div>}{a.sanction&&<div className="codex-card-sanction">⚖ {a.sanction}</div>}</article>)}</div><LawModal article={selected} onClose={()=>setSelected(null)}/></>}
-
-function OrganigrammePage({token}){const[data,setData]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getOrganigramme",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement de l'organigramme...</div>;return <div><div className="page-header"><div><h1 className="page-title">Organigramme</h1><p className="page-subtitle">Organisation actuelle de la Garde de Blancherive</p></div></div><div className="org-jarl-row"><PersonCard personne={data.jarl} center/></div><div className="org-jarl-down"/><div className="org-branch-row"><section className="org-hird"><h2 className="org-block-title">Hird du Jarl</h2><RankedPeople personnes={data.hird}/></section><div className="org-command-chain"><CentralGroup personnes={data.marechaux} grade="Maréchal"/><CentralGroup personnes={data.commandants} grade="Commandant"/></div></div><h2 className="org-garrisons-title">Garnisons et corps de garde</h2><div className="org-garrisons">{data.garnisons.map(g=><article className="org-garrison" key={g.key}><div className="org-garrison-header">{g.nom}</div><div className="org-garrison-body"><RankedPeople personnes={g.membres}/></div></article>)}</div><div className="org-independent-area"><Independent title="Majors" people={data.majors}/><Independent title="Réserve" people={data.reserve}/></div></div>;}
-function PersonCard({personne,center=false}){if(!personne)return null;return <div className={`org-person ${center?"center":""}`}><div className="org-person-name">{personne.nomComplet}</div><div className="org-person-grade">{personne.grade}</div></div>;}
-function CentralGroup({personnes,grade}){if(!personnes?.length)return<div className="org-person org-command-card center"><strong>Poste vacant</strong><div className="org-person-grade">{grade}</div></div>;return personnes.map((p,i)=><div key={i} className="org-command-card"><PersonCard personne={p} center/></div>);}
-function RankedPeople({personnes}){if(!personnes?.length)return<div className="org-empty">Aucun personnel.</div>;const groups=[];personnes.forEach(p=>{let g=groups.find(x=>x.grade===p.grade);if(!g){g={grade:p.grade,people:[]};groups.push(g);}g.people.push(p);});return groups.map(g=><div className="org-rank-group" key={g.grade}><div className="org-rank-title">{g.grade}</div><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p}/>)}</div></div>);}
-function Independent({title,people}){return<section className="org-independent-block"><h2 className="org-independent-title">{title}</h2><RankedPeople personnes={people}/></section>;}
-
-function AmendesPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);useEffect(()=>{Promise.all([serverCall("getAmendes",token),serverCall("getAmendeFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement des amendes...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette amende ?\n\n${item.contrevenant}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerAmende",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Amendes</h1><button className="primary-button" onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle amende"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<AmendeForm data={formData} onOpenLaw={openLaw} onSubmit={async f=>{try{setData(await serverCall("ajouterAmende",token,f));setShowForm(false);}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table"><thead><tr><th>Date</th><th>Garde</th><th>Contrevenant</th><th>Infraction</th><th>Montant</th><th>Payé</th><th>Reversé</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.reverse?"fine-reversed":i.paye?"fine-paid":"fine-unpaid"}><td>{i.date}</td><td>{i.garde}</td><td>{i.contrevenant}</td><td><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td>{i.montant||"À déterminer"}</td><td className="cell-center"><input type="checkbox" checked={i.paye} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,6,e.target.checked));}catch(x){setError(x.message);}}}/></td><td className="cell-center"><input type="checkbox" checked={i.reverse} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,7,e.target.checked));}catch(x){setError(x.message);}}}/></td>{canDelete&&<td><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
-function AmendeForm({data,onSubmit,onOpenLaw}){
-  const[form,setForm]=useState({date:new Date().toISOString().slice(0,10),garde:"",contrevenant:"",infraction:""});
-  const[submitting,setSubmitting]=useState(false);
-  const submittingRef=useRef(false);
-  const selected=data.infractions.find(i=>i.label===form.infraction);
-
-  async function submit(e){
-    e.preventDefault();
-
-    if(submittingRef.current){
-      return;
+${item.contrevenant}
+${item.infraction}`)) return;
+      try {
+        setDeletingRow(item.row);
+        setData(await serverCall("supprimerAmende", token, item.row));
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setDeletingRow(null);
+      }
     }
-
-    submittingRef.current=true;
-    setSubmitting(true);
-
-    try{
-      await onSubmit(form);
-    }finally{
-      submittingRef.current=false;
-      setSubmitting(false);
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Amendes"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle amende")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(AmendeForm, { data: formData, onOpenLaw: openLaw, onSubmit: async (f) => {
+      try {
+        setData(await serverCall("ajouterAmende", token, f));
+        setShowForm(false);
+      } catch (e) {
+        setError(e.message);
+      }
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", null, i.date), /* @__PURE__ */ React.createElement("td", null, i.garde), /* @__PURE__ */ React.createElement("td", null, i.contrevenant), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", null, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
+      try {
+        setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
+      } catch (x) {
+        setError(x.message);
+      }
+    } })), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.reverse, onChange: async (e) => {
+      try {
+        setData(await serverCall("modifierAmendeCheckbox", token, i.row, 7, e.target.checked));
+      } catch (x) {
+        setError(x.message);
+      }
+    } })), canDelete && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
+  }
+  function AmendeForm({ data, onSubmit, onOpenLaw }) {
+    const [form, setForm] = useState({ date: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), garde: "", contrevenant: "", infraction: "" });
+    const [submitting, setSubmitting] = useState(false);
+    const submittingRef = useRef(false);
+    const selected = data.infractions.find((i) => i.label === form.infraction);
+    async function submit(e) {
+      e.preventDefault();
+      if (submittingRef.current) {
+        return;
+      }
+      submittingRef.current = true;
+      setSubmitting(true);
+      try {
+        await onSubmit(form);
+      } finally {
+        submittingRef.current = false;
+        setSubmitting(false);
+      }
     }
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle amende"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, "Infraction"), /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => setForm({ ...form, infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.infractions.map((i) => /* @__PURE__ */ React.createElement("option", { key: i.label, value: i.label }, i.label))), form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article"))), /* @__PURE__ */ React.createElement(Field, { label: "Montant pr\xE9vu" }, /* @__PURE__ */ React.createElement("input", { readOnly: true, value: !selected ? "" : selected.montant === "" ? "\xC0 d\xE9terminer" : `${selected.montant} septims` }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
+  }
+  function PrisonPage({ token, canDelete, onOpenCodex }) {
+    const [data, setData] = useState(null), [formData, setFormData] = useState(null), [codex, setCodex] = useState(null), [selected, setSelected] = useState(null), [showForm, setShowForm] = useState(false), [error, setError] = useState(""), [deletingRow, setDeletingRow] = useState(null);
+    useEffect(() => {
+      Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
+        setData(r);
+        setFormData(f);
+        setCodex(c.articles);
+      }).catch((e) => setError(e.message));
+    }, []);
+    if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+    if (!data || !formData || !codex) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de la prison...");
+    const openLaw = (l) => {
+      const a = findCodexArticle(codex, l);
+      if (a) setSelected(a);
+    };
+    async function del(item) {
+      if (!canDelete || !confirm(`Supprimer d\xE9finitivement cette incarc\xE9ration ?
+
+${item.detenu}
+${item.infraction}`)) return;
+      try {
+        setDeletingRow(item.row);
+        setData(await serverCall("supprimerPrison", token, item.row));
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setDeletingRow(null);
+      }
+    }
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Prison"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle incarc\xE9ration")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(PrisonForm, { data: formData, onOpenLaw: openLaw, onSubmit: async (f) => {
+      try {
+        setData(await serverCall("ajouterPrison", token, f));
+        setShowForm(false);
+      } catch (e) {
+        setError(e.message);
+      }
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", null, i.date), /* @__PURE__ */ React.createElement("td", null, i.garde), /* @__PURE__ */ React.createElement("td", null, i.detenu), /* @__PURE__ */ React.createElement("td", null, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", null, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", null, i.entree), /* @__PURE__ */ React.createElement("td", null, i.sortie || "\u2014"), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
+      try {
+        setData(await serverCall("modifierPrisonLibere", token, i.row, e.target.checked));
+      } catch (x) {
+        setError(x.message);
+      }
+    } })), /* @__PURE__ */ React.createElement("td", null, i.saisies || "\u2014"), /* @__PURE__ */ React.createElement("td", null, i.notes || "\u2014"), canDelete && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
+  }
+  function PrisonForm({ data, onSubmit, onOpenLaw }) {
+    const now = /* @__PURE__ */ new Date(), local = new Date(now.getTime() - now.getTimezoneOffset() * 6e4);
+    const [form, setForm] = useState({ date: local.toISOString().slice(0, 10), garde: "", detenu: "", cellule: "", infraction: "", entree: local.toISOString().slice(0, 16), saisies: "", notes: "" });
+    const [submitting, setSubmitting] = useState(false);
+    const submittingRef = useRef(false);
+    const selected = data.infractions.find((i) => i.label === form.infraction);
+    async function submit(e) {
+      e.preventDefault();
+      if (submittingRef.current) {
+        return;
+      }
+      submittingRef.current = true;
+      setSubmitting(true);
+      try {
+        await onSubmit(form);
+      } finally {
+        submittingRef.current = false;
+        setSubmitting(false);
+      }
+    }
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle incarc\xE9ration"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, "Infraction"), /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => setForm({ ...form, infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.infractions.map((i) => /* @__PURE__ */ React.createElement("option", { key: i.label, value: i.label }, i.label))), form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article"))), /* @__PURE__ */ React.createElement(Field, { label: "Dur\xE9e pr\xE9vue" }, /* @__PURE__ */ React.createElement("input", { readOnly: true, value: !selected ? "" : selected.duree === "" ? "\xC0 d\xE9terminer" : formatHours(selected.duree) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Saisies sur la personne"), /* @__PURE__ */ React.createElement("textarea", { value: form.saisies, onChange: (e) => setForm({ ...form, saisies: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Motif / Notes"), /* @__PURE__ */ React.createElement("textarea", { value: form.notes, onChange: (e) => setForm({ ...form, notes: e.target.value }) }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
+  }
+  function Field({ label, children }) {
+    return /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, label), children);
+  }
+  function PresenceOfficerDashboard({ token }) {
+    const [data, setData] = useState(null), [error, setError] = useState("");
+    useEffect(() => {
+      serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
+    }, []);
+    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du tableau de bord...");
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 semaine ${data.currentWeek}`, value: formatSeptims(data.currentWeekTotal) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims(data.currentWeekPaid), sub: `Reste : ${formatSeptims(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims(data.pastUnpaidAmount), danger: true })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, g.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [g.grade, g.corps].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : `Derni\xE8re pr\xE9sence : ${g.dernierePresence} (${g.joursDepuis} jours)`))))));
+  }
+  function Stat({ label, value, sub, warning, danger }) {
+    return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
+  }
+  function PresencesPage({ token, canEdit }) {
+    const [data, setData] = useState(null), [error, setError] = useState("");
+    useEffect(() => {
+      serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
+    }, []);
+    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement des pr\xE9sences : ", error);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des pr\xE9sences...");
+    const weeks = /* @__PURE__ */ new Map();
+    data.rows.forEach((r) => {
+      if (!weeks.has(r.semaine)) weeks.set(r.semaine, []);
+      weeks.get(r.semaine).push(r);
+    });
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), [...weeks.entries()].sort((a, b) => b[0] - a[0]).map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData })));
+  }
+  function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh }) {
+    const groups = /* @__PURE__ */ new Map();
+    rows.forEach((r) => {
+      const k = r.corps || "Sans corps";
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(r);
+    });
+    const current = Number(week) === Number(currentWeek);
+    return /* @__PURE__ */ React.createElement("section", { className: `week-section ${current ? "week-current" : "week-old"}` }, /* @__PURE__ */ React.createElement("div", { className: "week-header" }, /* @__PURE__ */ React.createElement("span", null, "Semaine ", week), current && /* @__PURE__ */ React.createElement("span", null, "Semaine courante")), [...groups.entries()].map(([corps, soldiers]) => /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title" }, corps), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked)) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked)) }))))))))));
   }
 
-  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>Nouvelle amende</h2><div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}</select></Field><Field label="Contrevenant"><input required value={form.contrevenant} onChange={e=>setForm({...form,contrevenant:e.target.value})}/></Field><div className="field field-wide"><label>Infraction</label><select required value={form.infraction} onChange={e=>setForm({...form,infraction:e.target.value})}><option value="">Sélectionner…</option>{data.infractions.map(i=><option key={i.label} value={i.label}>{i.label}</option>)}</select>{form.infraction&&<div className="law-info-row"><button type="button" className="law-info-button" onClick={()=>onOpenLaw(form.infraction)}>ⓘ Consulter cet article</button></div>}</div><Field label="Montant prévu"><input readOnly value={!selected?"":selected.montant===""?"À déterminer":`${selected.montant} septims`}/></Field></div><div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":"Enregistrer"}</button></div></fieldset></form>;
-}
-
-function PrisonPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);useEffect(()=>{Promise.all([serverCall("getPrison",token),serverCall("getPrisonFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement de la prison...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette incarcération ?\n\n${item.detenu}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerPrison",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Prison</h1><button className="primary-button" onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle incarcération"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<PrisonForm data={formData} onOpenLaw={openLaw} onSubmit={async f=>{try{setData(await serverCall("ajouterPrison",token,f));setShowForm(false);}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table prison-table"><thead><tr><th>Date</th><th>Garde</th><th>Détenu</th><th>Cellule</th><th>Infraction</th><th>Durée</th><th>Entrée</th><th>Sortie prévue</th><th>Libéré</th><th>Saisies</th><th>Notes</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.libere?"prison-released":"prison-active"}><td>{i.date}</td><td>{i.garde}</td><td>{i.detenu}</td><td>{i.cellule||"—"}</td><td><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td>{i.duree||"À déterminer"}</td><td>{i.entree}</td><td>{i.sortie||"—"}</td><td className="cell-center"><input type="checkbox" checked={i.libere} onChange={async e=>{try{setData(await serverCall("modifierPrisonLibere",token,i.row,e.target.checked));}catch(x){setError(x.message);}}}/></td><td>{i.saisies||"—"}</td><td>{i.notes||"—"}</td>{canDelete&&<td><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
-function PrisonForm({data,onSubmit,onOpenLaw}){
-  const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);
-  const[form,setForm]=useState({date:local.toISOString().slice(0,10),garde:"",detenu:"",cellule:"",infraction:"",entree:local.toISOString().slice(0,16),saisies:"",notes:""});
-  const[submitting,setSubmitting]=useState(false);
-  const submittingRef=useRef(false);
-  const selected=data.infractions.find(i=>i.label===form.infraction);
-
-  async function submit(e){
-    e.preventDefault();
-
-    if(submittingRef.current){
-      return;
-    }
-
-    submittingRef.current=true;
-    setSubmitting(true);
-
-    try{
-      await onSubmit(form);
-    }finally{
-      submittingRef.current=false;
-      setSubmitting(false);
-    }
-  }
-
-  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>Nouvelle incarcération</h2><div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}</select></Field><Field label="Détenu"><input required value={form.detenu} onChange={e=>setForm({...form,detenu:e.target.value})}/></Field><Field label="Cellule"><input value={form.cellule} onChange={e=>setForm({...form,cellule:e.target.value})}/></Field><div className="field field-wide"><label>Infraction</label><select required value={form.infraction} onChange={e=>setForm({...form,infraction:e.target.value})}><option value="">Sélectionner…</option>{data.infractions.map(i=><option key={i.label} value={i.label}>{i.label}</option>)}</select>{form.infraction&&<div className="law-info-row"><button type="button" className="law-info-button" onClick={()=>onOpenLaw(form.infraction)}>ⓘ Consulter cet article</button></div>}</div><Field label="Durée prévue"><input readOnly value={!selected?"":selected.duree===""?"À déterminer":formatHours(selected.duree)}/></Field><Field label="Heure d'entrée"><input type="datetime-local" required value={form.entree} onChange={e=>setForm({...form,entree:e.target.value})}/></Field><div className="field field-full"><label>Saisies sur la personne</label><textarea value={form.saisies} onChange={e=>setForm({...form,saisies:e.target.value})}/></div><div className="field field-full"><label>Motif / Notes</label><textarea value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/></div></div><div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":"Enregistrer"}</button></div></fieldset></form>;
-}
-function Field({label,children}){return<div className="field"><label>{label}</label>{children}</div>;}
-
-function PresenceOfficerDashboard({token}){const[data,setData]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getPresenceOfficerDashboard",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du tableau de bord...</div>;return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — semaine ${data.currentWeek}`} value={formatSeptims(data.currentWeekTotal)}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,g.corps].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":`Dernière présence : ${g.dernierePresence} (${g.joursDepuis} jours)`}</div></div>)}</div></div></>}
-function Stat({label,value,sub,warning,danger}){return<div className={`presence-stat-card ${warning?"presence-stat-warning":""} ${danger?"presence-stat-danger":""}`}><div className="presence-stat-label">{label}</div><div className="presence-stat-value">{value}</div>{sub&&<div className="presence-stat-sub">{sub}</div>}</div>;}
-function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.semaine))weeks.set(r.semaine,[]);weeks.get(r.semaine).push(r);});return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}{[...weeks.entries()].sort((a,b)=>b[0]-a[0]).map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.currentWeek} canEdit={canEdit} token={token} onRefresh={setData}/>)}</>}
-function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh}){const groups=new Map();rows.forEach(r=>{const k=r.corps||"Sans corps";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});const current=Number(week)===Number(currentWeek);return<section className={`week-section ${current?"week-current":"week-old"}`}><div className="week-header"><span>Semaine {week}</span>{current&&<span>Semaine courante</span>}</div>{[...groups.entries()].map(([corps,soldiers])=><div key={corps}><div className="corps-title">{corps}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked))}/></td></tr>)}</tbody></table></div></div>)}</section>}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-</script>
+  // ui/src/main.jsx
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+})();</script>
 </body>
 </html>

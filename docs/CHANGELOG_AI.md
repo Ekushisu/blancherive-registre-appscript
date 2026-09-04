@@ -24,3 +24,9 @@
 - Désactivation de tous les contrôles pendant l'enregistrement.
 - Affichage du libellé `Enregistrement…` jusqu'à la fin de l'appel serveur.
 - Aucun changement des API ni des règles métier côté serveur.
+
+## 2026-09-04 — Frontend buildé depuis `ui/`
+
+- Extraction du CSS et du code React hors de `src/Index.html`.
+- Ajout d'un build esbuild qui génère l'artefact `src/Index.html` sans Babel côté navigateur.
+- Mise à jour des scripts npm pour construire avant un `clasp push`.

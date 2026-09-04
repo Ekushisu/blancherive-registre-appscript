@@ -49,11 +49,13 @@ Principaux modules :
 
 ## Frontend
 
-`src/Index.html` contient :
-- CSS ;
-- React ;
-- toute l'interface ;
-- appels serveur via `google.script.run`.
+Le source frontend est dans `ui/` :
+- `ui/src/main.jsx` : point d'entrée React ;
+- `ui/src/app.jsx` : composants de l'interface ;
+- `ui/src/styles.css` : styles ;
+- `ui/index.template.html` : squelette HTML Apps Script.
+
+`src/Index.html` est l'artefact généré par `npm run build`. Il est le seul fichier frontend envoyé par clasp et ne doit pas être modifié à la main.
 
 Fonction utilitaire centrale :
 

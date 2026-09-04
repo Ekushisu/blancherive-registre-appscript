@@ -40,8 +40,9 @@ Feuilles métier connues :
 
 Le développement doit désormais se faire localement :
 1. Git / VS Code / Codex.
-2. Vérification du diff.
-3. `clasp push`.
-4. Mise à jour du déploiement Web App si nécessaire.
+2. `npm run build` pour régénérer `src/Index.html` depuis `ui/`.
+3. Vérification du diff.
+4. `npm run push`.
+5. Mise à jour du déploiement Web App si nécessaire.
 
 Éviter autant que possible l'édition manuelle dans l'éditeur Apps Script.

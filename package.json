@@ -2,14 +2,16 @@
   "name": "garde-blancherive-appscript",
   "private": true,
   "scripts": {
-    "pull": "clasp pull",
-    "push": "clasp push",
-    "status": "clasp status",
-    "open": "clasp open",
-    "versions": "clasp versions",
-    "deployments": "clasp deployments"
+    "build": "node scripts/build-ui.mjs",
+    "pull": "cd src && clasp pull",
+    "push": "npm run build && cd src && clasp push",
+    "status": "cd src && clasp status",
+    "open": "cd src && clasp open",
+    "versions": "cd src && clasp versions",
+    "deployments": "cd src && clasp deployments"
   },
   "devDependencies": {
-    "@google/clasp": "^3.3.0"
+    "@google/clasp": "^3.3.0",
+    "esbuild": "^0.28.2"
   }
 }

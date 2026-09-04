@@ -1,4 +1,5 @@
 node_modules/
+ui/.build/
 .clasprc.json
 .env
 .env.*
