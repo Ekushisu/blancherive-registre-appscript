@@ -1,0 +1,15 @@
+{
+  "name": "garde-blancherive-appscript",
+  "private": true,
+  "scripts": {
+    "pull": "clasp pull",
+    "push": "clasp push",
+    "status": "clasp status",
+    "open": "clasp open",
+    "versions": "clasp versions",
+    "deployments": "clasp deployments"
+  },
+  "devDependencies": {
+    "@google/clasp": "^3.3.0"
+  }
+}
