@@ -17,3 +17,5 @@ npm run push
 ```
 
 `npm run build` génère `src/Index.html`. Ce dernier est un artefact déployé par clasp : ne pas le modifier à la main.
+
+Les mêmes actions sont disponibles dans VS Code via **Terminal > Run Task**, avec les tâches préfixées par un emoji.
