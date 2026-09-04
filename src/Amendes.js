@@ -18,13 +18,17 @@
 // M  Montant
 // N  Dropdown Prison
 // O  Cachot (heures)
-// P  Dropdown Garde
+//
+// Données :
+//
+// O  Liste calculée des gardes (Prénom + Nom)
 //
 // Plusieurs helpers de ce fichier sont utilisés par Prison.gs.
 // ============================================================
 
 const AMENDES_SHEET_NAME = "Amendes";
 const AMENDES_SYNC_CODEX_SHEET_NAME = "SyncCodex";
+const AMENDES_DONNEES_SHEET_NAME = "Données";
 const AMENDES_TIMEZONE = "Europe/Stockholm";
 
 
@@ -106,11 +110,16 @@ function getAmendeFormData(token) {
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const syncSheet = ss.getSheetByName(AMENDES_SYNC_CODEX_SHEET_NAME);
+  const donneesSheet = ss.getSheetByName(AMENDES_DONNEES_SHEET_NAME);
 
   if (!syncSheet) {
     throw new Error(
       "Feuille SyncCodex introuvable. Lancez synchroniserCodex()."
     );
+  }
+
+  if (!donneesSheet) {
+    throw new Error("Feuille Données introuvable.");
   }
 
   const infractions = lireListeTechnique(
@@ -122,7 +131,7 @@ function getAmendeFormData(token) {
     montant: item.value
   }));
 
-  const gardes = lireColonneTechnique(syncSheet, 16);
+  const gardes = lireColonneTechnique(donneesSheet, 15);
 
   return {
     infractions,
@@ -166,6 +175,7 @@ function ajouterAmende(token, data) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName(AMENDES_SHEET_NAME);
   const syncSheet = ss.getSheetByName(AMENDES_SYNC_CODEX_SHEET_NAME);
+  const donneesSheet = ss.getSheetByName(AMENDES_DONNEES_SHEET_NAME);
 
   if (!sheet) {
     throw new Error("Feuille Amendes introuvable.");
@@ -175,7 +185,11 @@ function ajouterAmende(token, data) {
     throw new Error("Feuille SyncCodex introuvable.");
   }
 
-  const gardes = lireColonneTechnique(syncSheet, 16);
+  if (!donneesSheet) {
+    throw new Error("Feuille Données introuvable.");
+  }
+
+  const gardes = lireColonneTechnique(donneesSheet, 15);
 
   if (!gardes.includes(garde)) {
     throw new Error("Le garde sélectionné n'est pas reconnu.");

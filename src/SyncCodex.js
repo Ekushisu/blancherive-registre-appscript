@@ -20,7 +20,6 @@
 // M  Montant
 // N  Dropdown Prison
 // O  Cachot (heures)
-// P  Dropdown Garde
 //
 // IMPORTANT :
 // SPREADSHEET_ID existe déjà ailleurs dans le projet.
@@ -64,8 +63,6 @@ const CODEX_PAENITUS_DOC_ID =
 // ============================================================
 
 const SYNC_CODEX_SHEET_NAME = "SyncCodex";
-const SYNC_CODEX_EFFECTIFS_SHEET_NAME = "Effectifs";
-const SYNC_CODEX_ACTIVE_STATUS = "En service actif";
 
 const SYNC_CODEX_DOCUMENTS = [
   {
@@ -148,14 +145,9 @@ function synchroniserCodex() {
 
     ecrireSyncCodex_(sheet, articles);
 
-    const effectifsSheet = ss.getSheetByName(
-      SYNC_CODEX_EFFECTIFS_SHEET_NAME
-    );
-
     ecrireCachesTechniquesCodex_(
       sheet,
-      articles,
-      effectifsSheet
+      articles
     );
 
     SpreadsheetApp.flush();
@@ -715,15 +707,13 @@ function ecrireSyncCodex_(sheet, articles) {
 
 function ecrireCachesTechniquesCodex_(
   sheet,
-  articles,
-  effectifsSheet
+  articles
 ) {
   const headers = [
     "Dropdown Amende",
     "Montant",
     "Dropdown Prison",
-    "Cachot (heures)",
-    "Dropdown Garde"
+    "Cachot (heures)"
   ];
 
   const judicialSource =
@@ -776,15 +766,9 @@ function ecrireCachesTechniquesCodex_(
     }
   }
 
-  const gardes =
-    lireGardesActifsSyncCodex_(
-      effectifsSheet
-    );
-
   const maxLength = Math.max(
     amendes.length,
     prisons.length,
-    gardes.length,
     1
   );
 
@@ -795,8 +779,7 @@ function ecrireCachesTechniquesCodex_(
       amendes[i]?.[0] || "",
       amendes[i]?.[1] ?? "",
       prisons[i]?.[0] || "",
-      prisons[i]?.[1] ?? "",
-      gardes[i] || ""
+      prisons[i]?.[1] ?? ""
     ]);
   }
 
@@ -811,72 +794,22 @@ function ecrireCachesTechniquesCodex_(
     .clearContent();
 
   sheet
-    .getRange(1, 12, 1, 5)
+    .getRange(1, 16, clearRows, 1)
+    .clearDataValidations();
+
+  sheet
+    .getRange(1, 12, 1, 4)
     .setValues([headers])
     .setFontWeight("bold");
 
   sheet
-    .getRange(2, 12, rows.length, 5)
+    .getRange(2, 12, rows.length, 4)
     .setValues(rows);
 
   sheet.setColumnWidth(12, 350);
   sheet.setColumnWidth(13, 100);
   sheet.setColumnWidth(14, 350);
   sheet.setColumnWidth(15, 120);
-  sheet.setColumnWidth(16, 250);
-}
-
-
-// ============================================================
-// GARDES ACTIFS
-// ============================================================
-
-function lireGardesActifsSyncCodex_(sheet) {
-  if (!sheet || sheet.getLastRow() < 2) {
-    return [];
-  }
-
-  /*
-    Effectifs :
-    C Prénom
-    D Nom
-    E Grade
-    F Corps
-    G Statut
-  */
-  const rows = sheet
-    .getRange(
-      2,
-      3,
-      sheet.getLastRow() - 1,
-      5
-    )
-    .getDisplayValues();
-
-  const gardes = [];
-
-  for (const row of rows) {
-    const prenom = String(row[0] || "").trim();
-    const nom = String(row[1] || "").trim();
-    const statut = String(row[4] || "").trim();
-
-    if (statut !== SYNC_CODEX_ACTIVE_STATUS) {
-      continue;
-    }
-
-    if (!prenom && !nom) {
-      continue;
-    }
-
-    gardes.push(
-      `${prenom} ${nom}`.trim()
-    );
-  }
-
-  return [...new Set(gardes)]
-    .sort((a, b) =>
-      a.localeCompare(b, "fr")
-    );
 }
 
 

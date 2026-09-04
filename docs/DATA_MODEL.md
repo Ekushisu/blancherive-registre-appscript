@@ -17,6 +17,12 @@ Le code Web détecte les colonnes par en-tête et reconnaît notamment :
 - l'ordre hiérarchique des grades ;
 - le style/couleur associé aux grades dans la Web App.
 
+`Données!O2:O` contient la liste triée des gardes actifs utilisée par les formulaires Amendes et Prison. Cette liste est produite dans la feuille par la formule :
+
+```gs
+=SORT(FILTER(Effectifs!C2:C&" "&Effectifs!D2:D;Effectifs!C2:C<>"";Effectifs!G2:G="En service actif"))
+```
+
 Statut actif :
 - `En service actif`
 
@@ -95,6 +101,5 @@ Le snapshot courant documente encore les colonnes techniques :
 | M | Montant |
 | N | Dropdown Prison |
 | O | Cachot (heures) |
-| P | Dropdown Garde |
 
-Important : la feuille a récemment été modifiée manuellement pour que les validations de données des gardes puissent provenir d'une concaténation Prénom + Nom des Effectifs. Cependant, **le code du snapshot continue de lire `SyncCodex!P` pour alimenter les formulaires Amende et Prison**. Cette divergence est à traiter explicitement lors d'une prochaine modification ; ne pas supposer qu'elle est déjà corrigée côté code.
+La colonne P n'est plus utilisée pour les gardes. Une synchronisation du Codex efface l'ancien cache `SyncCodex!P` et ses validations éventuelles.

@@ -38,7 +38,7 @@ Principaux modules :
 
 - `SyncCodex.js`
   - extraction des documents juridiques
-  - alimentation du cache `SyncCodex`
+  - alimentation du cache juridique `SyncCodex!A:J` et des listes d'infractions `SyncCodex!L:O`
 
 - `Amendes.js`
   - registre des amendes
@@ -79,5 +79,9 @@ Pages :
 - `lireListeTechnique`
 - `nettoyerSaisieUtilisateur`
 - `parseDateInput`
+
+`Amendes.js` et `Prison.js` utilisent :
+- `SyncCodex!L:O` pour les infractions et leurs sanctions ;
+- `Données!O2:O` pour la liste des gardes actifs.
 
 Ne pas considérer les fichiers `.js` Apps Script comme des modules ES isolés : ils partagent le namespace global.

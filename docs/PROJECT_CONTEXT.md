@@ -31,6 +31,7 @@ Feuilles métier connues :
 
 - Les documents juridiques sont la source juridique de vérité.
 - `SyncCodex` est un cache généré / technique.
+- La liste des gardes utilisée par Amendes et Prison provient de `Données!O2:O`, pas de `SyncCodex`.
 - Les effectifs sont administrables par les officiers depuis la Web App, sauf suppression physique.
 - Les présences historiques doivent rester stables.
 - Les lignes de présence de la semaine courante ne doivent pas être brutalement reconstruites à chaque changement d'effectif.

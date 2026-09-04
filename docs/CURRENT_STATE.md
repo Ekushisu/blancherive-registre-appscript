@@ -35,41 +35,27 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 - Ajout.
 - Modification des cases d'état.
 - Suppression OFFICIER.
+- Liste des gardes lue depuis `Données!O2:O`.
+- Formulaires verrouillés pendant l'enregistrement pour empêcher les doubles soumissions.
+
+## Changements intégrés
+
+### Source de la liste des gardes dans Amendes / Prison
+
+- `SyncCodex!P` n'est plus généré ni consommé par le code.
+- `getAmendeFormData()` et `getPrisonFormData()` lisent désormais `Données!O2:O`.
+- Les validations serveur lors des ajouts utilisent également `Données!O2:O`.
+- La liste reste dérivée d'`Effectifs` par la formule présente dans la feuille `Données`.
+
+### Double soumission des formulaires Amende et Prison
+
+- Un verrou synchrone empêche tout second submit pendant l'appel serveur.
+- Les champs et le bouton sont désactivés et le bouton affiche `Enregistrement…`.
+- Le formulaire est réactivé à la fin de l'appel lorsqu'il reste affiché, notamment après une erreur.
 
 ## Problèmes / travaux immédiats connus
 
-### 1. Double soumission des formulaires Amende et Prison
-
-Le snapshot montre que `AmendeForm` et `PrisonForm` appellent `onSubmit(form)` sans état `submitting`.
-
-Conséquence observée :
-- après clic sur Enregistrer, le formulaire reste interactif pendant l'appel Apps Script ;
-- l'utilisateur peut cliquer à nouveau ;
-- plusieurs requêtes peuvent créer des doublons.
-
-Correction attendue :
-- état `submitting` ;
-- garde anti-double-submit ;
-- désactivation des champs / bouton pendant la requête ;
-- libellé visible du type `Enregistrement…` ;
-- réactivation en cas d'erreur.
-
-Ne pas corriger ce problème sans repartir du code du snapshot présent dans le repo.
-
-### 2. Source de la liste des gardes dans Amendes / Prison
-
-Le snapshot courant lit encore :
-- `SyncCodex!P` dans `getAmendeFormData()`;
-- `SyncCodex!P` dans `getPrisonFormData()`;
-- `SyncCodex!P` dans les validations serveur lors des ajouts.
-
-Une validation de données Sheet a été réorganisée récemment pour utiliser une concaténation Prénom + Nom issue des Effectifs, mais cette évolution n'est pas encore reflétée dans le code du snapshot.
-
-Décision architecturale souhaitée :
-- les identités des gardes ne devraient pas dépendre du cache juridique `SyncCodex`;
-- utiliser une liste de référence dédiée dérivée d'`Effectifs`.
-
-### 3. Présences / Effectifs
+### 1. Présences / Effectifs
 
 Un décalage a été signalé visuellement / métier entre Effectifs et la liste des Présences.
 Aucune correction ne doit être faite avant d'identifier précisément le cas et la règle métier souhaitée.

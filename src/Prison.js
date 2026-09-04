@@ -27,6 +27,7 @@
 
 const PRISON_SHEET_NAME = "Prison";
 const PRISON_SYNC_CODEX_SHEET_NAME = "SyncCodex";
+const PRISON_DONNEES_SHEET_NAME = "Données";
 const PRISON_TIMEZONE = "Europe/Stockholm";
 
 
@@ -152,9 +153,19 @@ function getPrisonFormData(token) {
     PRISON_SYNC_CODEX_SHEET_NAME
   );
 
+  const donneesSheet = ss.getSheetByName(
+    PRISON_DONNEES_SHEET_NAME
+  );
+
   if (!syncSheet) {
     throw new Error(
       "Feuille SyncCodex introuvable. Lancez synchroniserCodex()."
+    );
+  }
+
+  if (!donneesSheet) {
+    throw new Error(
+      "Feuille Données introuvable."
     );
   }
 
@@ -172,11 +183,11 @@ function getPrisonFormData(token) {
   }));
 
   /*
-    P = Gardes
+    Données!O = Gardes
   */
   const gardes = lireColonneTechnique(
-    syncSheet,
-    16
+    donneesSheet,
+    15
   );
 
   return {
@@ -257,6 +268,11 @@ function ajouterPrison(token, data) {
       PRISON_SYNC_CODEX_SHEET_NAME
     );
 
+  const donneesSheet =
+    ss.getSheetByName(
+      PRISON_DONNEES_SHEET_NAME
+    );
+
   if (!sheet) {
     throw new Error(
       "Feuille Prison introuvable."
@@ -269,13 +285,19 @@ function ajouterPrison(token, data) {
     );
   }
 
+  if (!donneesSheet) {
+    throw new Error(
+      "Feuille Données introuvable."
+    );
+  }
+
   // ==========================================================
   // GARDE
   // ==========================================================
 
   const gardes = lireColonneTechnique(
-    syncSheet,
-    16
+    donneesSheet,
+    15
   );
 
   if (!gardes.includes(garde)) {

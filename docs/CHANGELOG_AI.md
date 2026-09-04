@@ -10,3 +10,17 @@
   - verrouillage des formulaires Amende / Prison pendant l'envoi ;
   - retrait de la dépendance des gardes à `SyncCodex!P`.
 - Un problème Présences / Effectifs signalé reste à diagnostiquer avant modification.
+
+## 2026-09-04 — Découplage de la liste des gardes
+
+- Suppression de la génération du cache `SyncCodex!P`.
+- Suppression du rafraîchissement de cette colonne depuis l'API Effectifs.
+- Les formulaires Amendes et Prison ainsi que leurs validations serveur utilisent désormais `Données!O2:O`.
+- Documentation du rôle de la formule de concaténation présente dans `Données!O`.
+
+## 2026-09-04 — Verrouillage des formulaires Amendes / Prison
+
+- Ajout d'un verrou synchrone anti-double-submit dans `AmendeForm` et `PrisonForm`.
+- Désactivation de tous les contrôles pendant l'enregistrement.
+- Affichage du libellé `Enregistrement…` jusqu'à la fin de l'appel serveur.
+- Aucun changement des API ni des règles métier côté serveur.

@@ -44,6 +44,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 ## Amendes
 
 - GARDE et OFFICIER peuvent consulter / créer.
+- La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - OFFICIER peut supprimer une entrée.
 - La suppression applicative efface le contenu de l'entrée mais doit préserver la structure de la feuille.
 - `Payé` et `Reversé` sont liés : conserver la logique actuelle lors de toute refonte.
@@ -51,6 +52,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 ## Prison
 
 - GARDE et OFFICIER peuvent consulter / créer.
+- La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - OFFICIER peut supprimer une entrée.
 - `Libéré` est modifiable depuis le registre.
 
@@ -59,4 +61,4 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - Les documents juridiques restent la source de vérité.
 - `SyncCodex` est un cache technique généré.
 - Les listes d'infractions d'Amendes / Prison sont dérivées du cache du Codex.
-- Ne pas mélanger les données métier d'Effectifs avec le cache juridique sans nécessité.
+- Les identités des gardes ne doivent pas être stockées dans `SyncCodex`.

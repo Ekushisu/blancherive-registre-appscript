@@ -24,7 +24,6 @@
 
 const EFFECTIFS_WEB_SHEET_NAME = "Effectifs";
 const EFFECTIFS_WEB_DONNEES_SHEET_NAME = "Données";
-const EFFECTIFS_WEB_SYNC_CODEX_SHEET_NAME = "SyncCodex";
 const EFFECTIFS_WEB_ACTIVE_STATUS = "En service actif";
 const EFFECTIFS_WEB_RESERVE_STATUS = "Réserve";
 
@@ -514,8 +513,6 @@ function ajouterEffectif(token, data) {
 
   assermenteCell.setValue(assermente);
 
-  rafraichirListeGardesTechniquesEffectifs_(ss);
-
   SpreadsheetApp.flush();
 
   return getEffectifs(token);
@@ -679,8 +676,6 @@ function modifierEffectif(token, data) {
   }
 
   assermenteCell.setValue(assermente);
-
-  rafraichirListeGardesTechniquesEffectifs_(ss);
 
   SpreadsheetApp.flush();
 
@@ -893,94 +888,6 @@ function validerOptionEffectifsWeb_(
     throw new Error(
       `Valeur "${value}" non autorisée pour ${type}.`
     );
-  }
-}
-
-
-// ============================================================
-// RAFRAÎCHISSEMENT DE SyncCodex!P
-// ============================================================
-
-function rafraichirListeGardesTechniquesEffectifs_(ss) {
-  const effectifs =
-    ss.getSheetByName(EFFECTIFS_WEB_SHEET_NAME);
-
-  const sync =
-    ss.getSheetByName(EFFECTIFS_WEB_SYNC_CODEX_SHEET_NAME);
-
-  if (!effectifs || !sync) return;
-
-  const schema = lireSchemaEffectifsWeb_(effectifs);
-  const lastRow = effectifs.getLastRow();
-  const lastColumn = effectifs.getLastColumn();
-  const guards = [];
-
-  if (lastRow >= 2) {
-    const display = effectifs
-      .getRange(
-        2,
-        1,
-        lastRow - 1,
-        lastColumn
-      )
-      .getDisplayValues();
-
-    for (const row of display) {
-      const prenom =
-        nettoyerEffectifsWeb_(row[schema.prenom]);
-
-      const nom =
-        nettoyerEffectifsWeb_(row[schema.nom]);
-
-      const status =
-        nettoyerEffectifsWeb_(row[schema.status]);
-
-      if (!prenom && !nom) continue;
-
-      if (
-        normaliserEffectifsWeb_(status) !==
-        normaliserEffectifsWeb_(
-          EFFECTIFS_WEB_ACTIVE_STATUS
-        )
-      ) {
-        continue;
-      }
-
-      guards.push(
-        `${prenom} ${nom}`.trim()
-      );
-    }
-  }
-
-  const uniqueGuards =
-    listeUniqueEffectifsWeb_(guards)
-      .sort((a, b) =>
-        a.localeCompare(b, "fr")
-      );
-
-  const clearRows =
-    Math.max(sync.getLastRow(), 2);
-
-  sync
-    .getRange(1, 16, clearRows, 1)
-    .clearContent();
-
-  sync
-    .getRange(1, 16)
-    .setValue("Dropdown Garde")
-    .setFontWeight("bold");
-
-  if (uniqueGuards.length) {
-    sync
-      .getRange(
-        2,
-        16,
-        uniqueGuards.length,
-        1
-      )
-      .setValues(
-        uniqueGuards.map(value => [value])
-      );
   }
 }
 
