@@ -439,6 +439,18 @@ function ajouterEffectif(token, data) {
 
   const lastRow = sheet.getLastRow();
   const lastColumn = sheet.getLastColumn();
+  const targetRow = trouverLigneAjoutEffectifsWeb_(
+    sheet,
+    schema,
+    lastRow
+  );
+  const templateRow = trouverLigneModeleEffectifsWeb_(
+    sheet,
+    schema,
+    lastRow,
+    lastColumn,
+    targetRow
+  );
 
   if (lastRow >= 2) {
     const existing = sheet
@@ -461,8 +473,6 @@ function ajouterEffectif(token, data) {
     }
   }
 
-  const targetRow = Math.max(2, lastRow + 1);
-
   if (sheet.getMaxRows() < targetRow) {
     sheet.insertRowsAfter(
       sheet.getMaxRows(),
@@ -470,9 +480,9 @@ function ajouterEffectif(token, data) {
     );
   }
 
-  if (lastRow >= 2) {
+  if (templateRow) {
     sheet
-      .getRange(lastRow, 1, 1, lastColumn)
+      .getRange(templateRow, 1, 1, lastColumn)
       .copyTo(
         sheet.getRange(targetRow, 1, 1, lastColumn),
         SpreadsheetApp.CopyPasteType.PASTE_FORMAT,
@@ -480,8 +490,25 @@ function ajouterEffectif(token, data) {
       );
 
     const validations = sheet
-      .getRange(lastRow, 1, 1, lastColumn)
+      .getRange(templateRow, 1, 1, lastColumn)
       .getDataValidations();
+
+    sheet
+      .getRange(targetRow, 1, 1, lastColumn)
+      .setDataValidations(validations);
+  } else {
+    const validations = [Array(lastColumn).fill(null)];
+    for (const column of [
+      schema.grade,
+      schema.corps,
+      schema.specialite,
+      schema.status
+    ]) {
+      validations[0][column] = trouverValidationEffectifsWeb_(
+        sheet,
+        column + 1
+      );
+    }
 
     sheet
       .getRange(targetRow, 1, 1, lastColumn)
@@ -514,8 +541,52 @@ function ajouterEffectif(token, data) {
   assermenteCell.setValue(assermente);
 
   SpreadsheetApp.flush();
+  genererPresencesSemaineCourante();
 
   return getEffectifs(token);
+}
+
+function trouverLigneAjoutEffectifsWeb_(sheet, schema, lastRow) {
+  const lastInspectedRow = Math.max(2, lastRow);
+  const width = Math.max(schema.prenom, schema.nom) + 1;
+  const values = sheet
+    .getRange(2, 1, lastInspectedRow - 1, width)
+    .getDisplayValues();
+
+  for (let index = 0; index < values.length; index++) {
+    const prenom = nettoyerEffectifsWeb_(values[index][schema.prenom]);
+    const nom = nettoyerEffectifsWeb_(values[index][schema.nom]);
+    if (!prenom && !nom) return index + 2;
+  }
+
+  return lastInspectedRow + 1;
+}
+
+function trouverLigneModeleEffectifsWeb_(sheet, schema, lastRow, lastColumn, targetRow) {
+  if (lastRow < 2) return 0;
+
+  const validations = sheet
+    .getRange(2, 1, lastRow - 1, lastColumn)
+    .getDataValidations();
+  const colonnesValidees = [
+    schema.assermente,
+    schema.grade,
+    schema.corps,
+    schema.specialite,
+    schema.status
+  ];
+  const estModele = index =>
+    colonnesValidees.every(column => Boolean(validations[index][column]));
+
+  for (let row = Math.min(targetRow - 1, lastRow); row >= 2; row--) {
+    if (estModele(row - 2)) return row;
+  }
+
+  for (let row = targetRow + 1; row <= lastRow; row++) {
+    if (estModele(row - 2)) return row;
+  }
+
+  return 0;
 }
 
 
@@ -587,6 +658,12 @@ function modifierEffectif(token, data) {
   const currentNom = nettoyerEffectifsWeb_(
     sheet
       .getRange(row, schema.nom + 1)
+      .getDisplayValue()
+  );
+
+  const currentStatus = nettoyerEffectifsWeb_(
+    sheet
+      .getRange(row, schema.status + 1)
       .getDisplayValue()
   );
 
@@ -678,6 +755,10 @@ function modifierEffectif(token, data) {
   assermenteCell.setValue(assermente);
 
   SpreadsheetApp.flush();
+
+  if (currentStatus !== status) {
+    genererPresencesSemaineCourante();
+  }
 
   return getEffectifs(token);
 }

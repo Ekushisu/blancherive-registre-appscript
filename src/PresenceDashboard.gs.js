@@ -93,6 +93,10 @@ function getPresenceOfficerDashboard(token) {
       continue;
     }
 
+    if (presenceDashboardIsExcludedCorps_(row[1])) {
+      continue;
+    }
+
     // ========================================================
     // SEMAINE COURANTE
     // ========================================================
@@ -427,7 +431,17 @@ function presenceDashboardReadActiveGuards_(
         ""
       ).trim();
 
-    if (!prenom && !nom) {
+    const corps =
+      String(
+        row[corpsIndex] ||
+        ""
+      ).trim();
+
+    if (
+      (!prenom && !nom)
+      ||
+      presenceDashboardIsExcludedCorps_(corps)
+    ) {
       continue;
     }
 
@@ -442,14 +456,16 @@ function presenceDashboardReadActiveGuards_(
           ""
         ).trim(),
       corps:
-        String(
-          row[corpsIndex] ||
-          ""
-        ).trim()
+        corps
     });
   }
 
   return guards;
+}
+
+function presenceDashboardIsExcludedCorps_(corps) {
+  const value = presenceDashboardNormalize_(corps);
+  return value === "hird du jarl" || value === "hird";
 }
 
 

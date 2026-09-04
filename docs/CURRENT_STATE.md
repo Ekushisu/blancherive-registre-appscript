@@ -42,6 +42,15 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 - Les amendes des corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major regroupent les collecteurs de Cité et d'État-Major ; leurs grades sont affichés.
 - Couleurs des amendes : rouge (non payée), gris (payée non reversée), vert (payée reversée).
 
+### Présences
+
+- Le Hird du Jarl est exclu du tableau, des calculs de solde et des alertes d'inactivité, sans suppression des lignes historiques.
+
+### Effectifs
+
+- Les ajouts remplissent la première ligne disponible de la liste et héritent format et validations d'une ligne modèle valide.
+- Un ajout ou un changement de statut régénère la semaine courante de Présences.
+
 ## Changements intégrés
 
 ### Source de la liste des gardes dans Amendes / Prison

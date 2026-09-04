@@ -47,3 +47,18 @@
 - En l'absence de collecteur local, l'interface utilise les collecteurs actifs d'État-Major.
 - Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major mutualisent les collecteurs de Cité et d'État-Major ; les grades sont affichés.
 - Couleurs des lignes ajustées : rouge non payée, gris payée non reversée, vert payée reversée.
+
+## 2026-09-04 — Exclusion du Hird des présences
+
+- Le Hird du Jarl est exclu de la génération et de l'affichage des présences.
+- Il est également exclu des agrégats de solde et des alertes d'inactivité, sans suppression de l'historique.
+
+## 2026-09-04 — Positionnement des nouveaux effectifs
+
+- Les nouveaux membres ne suivent plus la dernière cellule utilisée de la feuille.
+- Ils sont ajoutés à la première ligne libre et récupèrent les validations d'une ligne Effectifs valide.
+
+## 2026-09-04 — Synchronisation Effectifs / Présences
+
+- L'ajout d'un effectif et toute modification de statut régénèrent la semaine courante de Présences.
+- Les autres modifications d'effectif n'entraînent pas de régénération.

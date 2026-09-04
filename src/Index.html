@@ -122,6 +122,19 @@ button {
   background: #444;
   color: #fff;
 }
+.external-link {
+  color: #ddd;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 7px 10px;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 13px;
+}
+.external-link:hover {
+  background: #444;
+  color: #fff;
+}
 .role-badge {
   font-size: 12px;
   padding: 5px 8px;
@@ -713,12 +726,16 @@ button {
   font-weight: 700;
   background: #f6f6f6;
 }
+.presence-table {
+  table-layout: fixed;
+}
 .presence-table th,
 .presence-table td {
   text-align: center;
 }
 .presence-table th:first-child,
 .presence-table td:first-child {
+  width: 240px;
   text-align: left;
 }
 .row-current {
@@ -1320,7 +1337,7 @@ button {
   }
   function Header({ role, page, onPage, onLogout }) {
     const pages = [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ["codex", "Codex"], ["amendes", "Amendes"], ["prison", "Prison"]];
-    return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("nav", { className: "nav" }, pages.map(([k, l]) => /* @__PURE__ */ React.createElement("button", { key: k, className: page === k ? "active" : "", onClick: () => onPage(k) }, l))), /* @__PURE__ */ React.createElement("span", { className: "role-badge" }, role), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout }, "D\xE9connexion"));
+    return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("nav", { className: "nav" }, pages.map(([k, l]) => /* @__PURE__ */ React.createElement("button", { key: k, className: page === k ? "active" : "", onClick: () => onPage(k) }, l))), /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197"), /* @__PURE__ */ React.createElement("span", { className: "role-badge" }, role), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout }, "D\xE9connexion"));
   }
   function effectifsStyle(style, fallback = {}) {
     if (!style) return fallback;
@@ -2319,7 +2336,7 @@ button {
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de l'organigramme...");
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Organisation actuelle de la Garde de Blancherive"))), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-row" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: data.jarl, center: true })), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-down" }), /* @__PURE__ */ React.createElement("div", { className: "org-branch-row" }, /* @__PURE__ */ React.createElement("section", { className: "org-hird" }, /* @__PURE__ */ React.createElement("h2", { className: "org-block-title" }, "Hird du Jarl"), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: data.hird })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commandant" }))), /* @__PURE__ */ React.createElement("h2", { className: "org-garrisons-title" }, "Garnisons et corps de garde"), /* @__PURE__ */ React.createElement("div", { className: "org-garrisons" }, data.garnisons.map((g) => /* @__PURE__ */ React.createElement("article", { className: "org-garrison", key: g.key }, /* @__PURE__ */ React.createElement("div", { className: "org-garrison-header" }, g.nom), /* @__PURE__ */ React.createElement("div", { className: "org-garrison-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: g.membres }))))), /* @__PURE__ */ React.createElement("div", { className: "org-independent-area" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", people: data.reserve })));
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Organisation actuelle de la Garde de Blancherive"))), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-row" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: data.jarl, center: true })), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-down" }), /* @__PURE__ */ React.createElement("div", { className: "org-branch-row" }, /* @__PURE__ */ React.createElement("section", { className: "org-hird" }, /* @__PURE__ */ React.createElement("h2", { className: "org-block-title" }, "Hird du Jarl"), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: data.hird })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }))), /* @__PURE__ */ React.createElement("h2", { className: "org-garrisons-title" }, "Garnisons et corps de garde"), /* @__PURE__ */ React.createElement("div", { className: "org-garrisons" }, data.garnisons.map((g) => /* @__PURE__ */ React.createElement("article", { className: "org-garrison", key: g.key }, /* @__PURE__ */ React.createElement("div", { className: "org-garrison-header" }, g.nom), /* @__PURE__ */ React.createElement("div", { className: "org-garrison-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: g.membres }))))), /* @__PURE__ */ React.createElement("div", { className: "org-independent-area" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", people: data.reserve })));
   }
   function PersonCard({ personne, center = false }) {
     if (!personne) return null;

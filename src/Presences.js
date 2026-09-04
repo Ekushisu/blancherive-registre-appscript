@@ -28,6 +28,9 @@
 const PRESENCE_ACTIVE_STATUS =
   "En service actif";
 
+const PRESENCE_EXCLUDED_CORPS =
+  "Hird du Jarl";
+
 const PRESENCE_TIMEZONE =
   "Europe/Stockholm";
 
@@ -90,7 +93,13 @@ function genererPresencesSemaineCourante() {
     const effectifs =
       lireEffectifsActifsPourPresences(
         effectifsSheet
-      );
+      )
+        .filter(
+          garde =>
+            !estCorpsExcluDesPresences_(
+              garde.corps
+            )
+        );
 
 
     const existing =
@@ -373,13 +382,32 @@ function lireEffectifsActifsPourPresences(
       G statut
   */
 
+  const lastColumn =
+    sheet.getLastColumn();
+
+  const headers =
+    sheet
+      .getRange(1, 1, 1, lastColumn)
+      .getDisplayValues()[0]
+      .map(normaliserEntetePresence_);
+
+  const prenomIndex = trouverEntetePresence_(headers, ["Prenom"]);
+  const nomIndex = trouverEntetePresence_(headers, ["Nom"]);
+  const gradeIndex = trouverEntetePresence_(headers, ["Grade"]);
+  const corpsIndex = trouverEntetePresence_(headers, ["Corps", "Corps de garde", "Garnison"]);
+  const statusIndex = trouverEntetePresence_(headers, ["Status", "Statut"]);
+
+  if ([prenomIndex, nomIndex, gradeIndex, corpsIndex, statusIndex].some(index => index < 0)) {
+    throw new Error("Colonnes obligatoires introuvables dans Effectifs.");
+  }
+
   const values =
     sheet
       .getRange(
         2,
-        3,
+        1,
         lastRow - 1,
-        5
+        lastColumn
       )
       .getDisplayValues();
 
@@ -390,19 +418,24 @@ function lireEffectifsActifsPourPresences(
 
         const prenom =
           String(
-            row[0] || ""
+            row[prenomIndex] || ""
           ).trim();
 
 
         const nom =
           String(
-            row[1] || ""
+            row[nomIndex] || ""
           ).trim();
 
 
         const status =
           String(
-            row[4] || ""
+            row[statusIndex] || ""
+          ).trim();
+
+        const corps =
+          String(
+            row[corpsIndex] || ""
           ).trim();
 
 
@@ -415,6 +448,10 @@ function lireEffectifsActifsPourPresences(
           &&
           status ===
             PRESENCE_ACTIVE_STATUS
+          &&
+          !estCorpsExcluDesPresences_(
+            corps
+          )
         );
       }
     )
@@ -423,22 +460,22 @@ function lireEffectifsActifsPourPresences(
 
         prenom:
           String(
-            row[0] || ""
+            row[prenomIndex] || ""
           ).trim(),
 
         nom:
           String(
-            row[1] || ""
+            row[nomIndex] || ""
           ).trim(),
 
         grade:
           String(
-            row[2] || ""
+            row[gradeIndex] || ""
           ).trim(),
 
         corps:
           String(
-            row[3] || ""
+            row[corpsIndex] || ""
           ).trim()
 
       })
@@ -449,6 +486,19 @@ function lireEffectifsActifsPourPresences(
 // ============================================================
 // LECTURE DE L'EXISTANT
 // ============================================================
+
+function trouverEntetePresence_(headers, aliases) {
+  const aliasesNormalises = aliases.map(normaliserEntetePresence_);
+  return headers.findIndex(header => aliasesNormalises.includes(header));
+}
+
+function normaliserEntetePresence_(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
 function lirePresencesExistantes(
   sheet
@@ -500,6 +550,10 @@ function lirePresencesExistantes(
       row[0] === ""
       ||
       row[0] === null
+      ||
+      estCorpsExcluDesPresences_(
+        displayValues[i][1]
+      )
     ) {
 
       continue;
@@ -526,6 +580,21 @@ function lirePresencesExistantes(
 
 
   return result;
+}
+
+function estCorpsExcluDesPresences_(corps) {
+  const valeur = String(corps || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  const corpsExclu = PRESENCE_EXCLUDED_CORPS
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  return valeur === corpsExclu || valeur === "hird";
 }
 
 
