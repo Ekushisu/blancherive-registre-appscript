@@ -261,6 +261,9 @@ function getPresenceOfficerDashboard(token) {
   return {
     currentWeek: currentWeek,
 
+    currentWeekRecoveredFines:
+      presenceDashboardRecoveredFines_(ss, now),
+
     currentWeekTotal:
       currentWeekTotal,
 
@@ -286,6 +289,37 @@ function getPresenceOfficerDashboard(token) {
     inactive:
       inactive
   };
+}
+
+// Amendes datées de la semaine courante et déjà reversées.
+// La date de l'amende est utilisée, pas une date de reversement.
+function presenceDashboardRecoveredFines_(ss, now) {
+  const sheet = ss.getSheetByName("Amendes");
+  if (!sheet) {
+    throw new Error("Feuille Amendes introuvable.");
+  }
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+
+  // Dates civiles du fuseau métier, comparées en UTC pour éviter
+  // les décalages liés aux changements d'heure et d'année ISO.
+  const localDate = Utilities.formatDate(now, PRESENCE_DASHBOARD_TIMEZONE, "yyyy-MM-dd");
+  const monday = new Date(localDate + "T00:00:00Z");
+  monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7);
+  const nextMonday = new Date(monday.getTime());
+  nextMonday.setUTCDate(nextMonday.getUTCDate() + 7);
+  const start = monday.toISOString().slice(0, 10);
+  const end = nextMonday.toISOString().slice(0, 10);
+  const rows = sheet.getRange(2, 1, lastRow - 1, 7).getValues();
+
+  return rows.reduce((total, row) => {
+    if (row[5] !== true || row[6] !== true ||
+        !(row[0] instanceof Date) || !Number.isFinite(row[0].getTime())) return total;
+    const date = Utilities.formatDate(row[0], PRESENCE_DASHBOARD_TIMEZONE, "yyyy-MM-dd");
+    return date >= start && date < end
+      ? total + presenceDashboardNumber_(row[4])
+      : total;
+  }, 0);
 }
 
 

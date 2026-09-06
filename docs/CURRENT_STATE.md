@@ -83,3 +83,11 @@ Aucune correction ne doit être faite avant d'identifier précisément le cas et
 
 Aucune pagination/lazy loading n'est jugée nécessaire pour Effectifs à l'échelle actuelle.
 Le premier axe d'optimisation, si besoin, est plutôt la réduction / mise en cache des accès Sheets.
+
+### Présences — recherche et coût par corps (6 septembre 2026)
+
+- Recherche par prénom et nom, insensible aux accents et à la casse, combinable avec le filtre de semaine. Les semaines correspondantes sont ouvertes au lancement de la recherche.
+- Chaque corps affiche, pour les OFFICIER uniquement, la somme des soldes de la semaine, courante ou passée, paiements inclus. Le total porte sur tout le corps même pendant une recherche et se recalcule après modification des présences.
+- Les agrégats `corpsTotals` sont calculés côté serveur dans `getPresences` après contrôle du rôle et ne sont pas renvoyés aux GARDE. Les soldes individuelles existantes restent consultables ; aucune modification des données historiques.
+- Le tableau de bord OFFICIER affiche le cumul des amendes datées de la semaine courante (lundi à dimanche, fuseau métier Europe/Stockholm), payées et déjà reversées. Ce cumul utilise la date de l'amende, pas la date de reversement, qui n'est pas enregistrée.
+- Vérifications locales : `node scripts/test-presence-finances.mjs` (permissions, totaux courants/passés, exclusion Hird, bornes de semaine et changement d'année).

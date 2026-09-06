@@ -566,3 +566,6 @@
 .org-local-corps > .org-unit:before{left:-13px;top:27px;width:12px;height:1px}
 .org-corps-heading p{line-height:1.6}
 }
+    .presence-week-filter{flex-wrap:wrap}.presence-week-filter input{min-height:38px;min-width:220px;border:1px solid #aaa;border-radius:7px;padding:7px 10px;background:#fff}.presence-corps-title{display:flex;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
+
+    .presence-dashboard-cards{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}

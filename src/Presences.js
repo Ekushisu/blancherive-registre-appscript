@@ -892,7 +892,7 @@ function getPresences(
   token
 ) {
 
-  requireRole(
+  const auth = requireRole(
     token,
     [
       "GARDE",
@@ -1047,15 +1047,26 @@ function getPresences(
   }
 
 
-  return {
-
-    currentWeek:
-      getCurrentIsoWeekWebApp(),
-
-    rows:
-      rows
-
+  const result = {
+    currentWeek: getCurrentIsoWeekWebApp(),
+    rows: rows
   };
+
+  // Les agrégats financiers sont réservés aux officiers.
+  if (auth.role === "OFFICIER") {
+    const totals = new Map();
+    rows.forEach(row => {
+      const corps = row.corps || "Sans corps";
+      const key = JSON.stringify([row.semaine, corps]);
+      if (!totals.has(key)) {
+        totals.set(key, { semaine: row.semaine, corps: corps, total: 0 });
+      }
+      totals.get(key).total += row.soldeRaw;
+    });
+    result.corpsTotals = Array.from(totals.values());
+  }
+
+  return result;
 }
 
 

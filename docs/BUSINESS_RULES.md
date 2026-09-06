@@ -46,6 +46,8 @@ sont regroupés en groupes trans-corps à la fin de la page.
 
 - GARDE : lecture seule.
 - OFFICIER : modification des jours et du paiement.
+- Les coûts estimés par corps et semaine sont affichés uniquement aux OFFICIER ; ils incluent toutes les soldes du corps, déjà payées ou non, indépendamment de la recherche.
+- Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
 - Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
 - Les données historiques de présence ne doivent pas être détruites par une synchronisation d'effectifs.
 - L'ajout d'un effectif et toute modification de son statut régénèrent la semaine courante de Présences.
