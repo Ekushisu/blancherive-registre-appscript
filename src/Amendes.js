@@ -251,9 +251,13 @@ function ajouterAmende(token, data) {
     throw new Error("Feuille Données introuvable.");
   }
 
-  const gardes = lireColonneTechnique(donneesSheet, 15);
+  const gardePourFeuille = trouverValeurTechniqueBrute(
+    donneesSheet,
+    15,
+    garde
+  );
 
-  if (!gardes.includes(garde)) {
+  if (gardePourFeuille === null) {
     throw new Error("Le garde sélectionné n'est pas reconnu.");
   }
 
@@ -287,11 +291,13 @@ function ajouterAmende(token, data) {
   const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
   const targetRow = Math.max(2, lastRow + 1);
 
-  sheet
-    .getRange(targetRow, 1, 1, 7)
-    .setValues([[
+  const targetRange = sheet.getRange(targetRow, 1, 1, 7);
+  const previousValues = targetRange.getValues();
+
+  try {
+    targetRange.setValues([[
       date,
-      garde,
+      gardePourFeuille,
       contrevenant,
       infraction,
       montant,
@@ -299,15 +305,28 @@ function ajouterAmende(token, data) {
       false
     ]]);
 
-  sheet
-    .getRange(targetRow, 6, 1, 2)
-    .insertCheckboxes();
+    sheet
+      .getRange(targetRow, 6, 1, 2)
+      .insertCheckboxes();
 
-  sheet
-    .getRange(targetRow, 1)
-    .setNumberFormat("dd/MM/yyyy");
+    sheet
+      .getRange(targetRow, 1)
+      .setNumberFormat("dd/MM/yyyy");
 
-  SpreadsheetApp.flush();
+    SpreadsheetApp.flush();
+  } catch (error) {
+    try {
+      targetRange.setValues(previousValues);
+      SpreadsheetApp.flush();
+    } catch (rollbackError) {
+      console.error(
+        "Impossible de restaurer la ligne d'amende après un échec d'écriture.",
+        rollbackError
+      );
+    }
+
+    throw error;
+  }
 
   return getAmendes(token);
 }
@@ -501,6 +520,45 @@ function lireColonneTechnique(sheet, column) {
   }
 
   return [...new Set(result)];
+}
+
+
+function trouverValeurTechniqueBrute(sheet, column, value) {
+  if (!sheet) {
+    return null;
+  }
+
+  const valueToFind = nettoyerSaisieUtilisateur(value);
+
+  if (!valueToFind) {
+    return null;
+  }
+
+  const lastRow = getLastNonEmptyRowInColumn(
+    sheet,
+    column
+  );
+
+  if (lastRow < 2) {
+    return null;
+  }
+
+  const values = sheet
+    .getRange(2, column, lastRow - 1, 1)
+    .getValues();
+
+  for (const row of values) {
+    const rawValue = row[0];
+
+    if (
+      nettoyerSaisieUtilisateur(rawValue) ===
+      valueToFind
+    ) {
+      return rawValue;
+    }
+  }
+
+  return null;
 }
 
 

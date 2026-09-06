@@ -1,5 +1,11 @@
 # Journal de passation IA
 
+## 2026-09-04 — Validation des gardes sans nom de famille
+
+- Les ajouts Amendes et Prison résolvent désormais le libellé nettoyé du formulaire vers la valeur brute de `Données!O` avant l'écriture.
+- Les espaces finaux produits par la formule pour les gardes sans nom de famille ne provoquent plus d'erreur de validation Sheets.
+- En cas d'échec d'écriture, les valeurs précédentes de la ligne cible sont restaurées afin d'éviter les entrées fantômes.
+
 ## 2026-09-04 — Snapshot de référence
 
 - Snapshot complet du projet local reçu.

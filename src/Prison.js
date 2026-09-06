@@ -20,6 +20,7 @@
 //
 // getLastNonEmptyRowInColumn()
 // lireColonneTechnique()
+// trouverValeurTechniqueBrute()
 // lireListeTechnique()
 // nettoyerSaisieUtilisateur()
 // parseDateInput()
@@ -295,12 +296,13 @@ function ajouterPrison(token, data) {
   // GARDE
   // ==========================================================
 
-  const gardes = lireColonneTechnique(
+  const gardePourFeuille = trouverValeurTechniqueBrute(
     donneesSheet,
-    15
+    15,
+    garde
   );
 
-  if (!gardes.includes(garde)) {
+  if (gardePourFeuille === null) {
     throw new Error(
       "Le garde sélectionné n'est pas reconnu."
     );
@@ -381,16 +383,19 @@ function ajouterPrison(token, data) {
     J Saisies
     K Notes
   */
-  sheet
-    .getRange(
-      targetRow,
-      1,
-      1,
-      11
-    )
-    .setValues([[
+  const targetRange = sheet.getRange(
+    targetRow,
+    1,
+    1,
+    11
+  );
+
+  const previousValues = targetRange.getValues();
+
+  try {
+    targetRange.setValues([[
       date,
-      garde,
+      gardePourFeuille,
       detenu,
       cellule,
       infraction,
@@ -402,21 +407,34 @@ function ajouterPrison(token, data) {
       notes
     ]]);
 
-  sheet
-    .getRange(targetRow, 9)
-    .insertCheckboxes();
+    sheet
+      .getRange(targetRow, 9)
+      .insertCheckboxes();
 
-  sheet
-    .getRange(targetRow, 1)
-    .setNumberFormat("dd/MM/yyyy");
+    sheet
+      .getRange(targetRow, 1)
+      .setNumberFormat("dd/MM/yyyy");
 
-  sheet
-    .getRange(targetRow, 7, 1, 2)
-    .setNumberFormat(
-      "dd/MM/yyyy HH:mm"
-    );
+    sheet
+      .getRange(targetRow, 7, 1, 2)
+      .setNumberFormat(
+        "dd/MM/yyyy HH:mm"
+      );
 
-  SpreadsheetApp.flush();
+    SpreadsheetApp.flush();
+  } catch (error) {
+    try {
+      targetRange.setValues(previousValues);
+      SpreadsheetApp.flush();
+    } catch (rollbackError) {
+      console.error(
+        "Impossible de restaurer la ligne de prison après un échec d'écriture.",
+        rollbackError
+      );
+    }
+
+    throw error;
+  }
 
   return getPrison(token);
 }

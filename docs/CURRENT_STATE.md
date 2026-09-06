@@ -10,6 +10,9 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 
 ### Organigramme
 - Implémenté dans `Organigramme.js`.
+- Refonte locale du 5 septembre 2026 : chaîne centrale jusqu'aux Majors de l'État-Major, Hird relié uniquement au Jarl, Capitaines mis en avant et personnel repliable par corps. Hird replié initialement ; garnisons ouvertes.
+- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous l'État-Major central ; les deux garnisons sont rattachées à ce groupe. Les quatre autres corps restent directement sous l'État-Major.
+- Autres Majors actifs hors commandement et Réserve commune dans deux blocs en bas. Répartition vérifiée par `node scripts/test-organigramme.mjs`, notamment les variantes de nom de Bois-de-Chêne, les réservistes et les postes vacants. Version Web déployée non mise à jour par cette refonte locale.
 
 ### Effectifs
 - Page OFFICIER.
@@ -37,6 +40,8 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 - Suppression OFFICIER.
 - Liste des gardes lue depuis `Données!O2:O`.
 - Formulaires verrouillés pendant l'enregistrement pour empêcher les doubles soumissions.
+- Les gardes sans nom de famille sont écrits avec la valeur brute de `Données!O`, espaces invisibles compris, afin de respecter les validations Sheets.
+- Une écriture Amendes / Prison qui échoue restaure les valeurs précédentes de la ligne cible pour ne pas laisser d'entrée fantôme.
 - Statut `Reversé` des Amendes modifiable par les OFFICIER uniquement.
 - Destinataire du reversement affiché dynamiquement depuis les collecteurs actifs du corps du garde, avec repli État-Major.
 - Les amendes des corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major regroupent les collecteurs de Cité et d'État-Major ; leurs grades sont affichés.

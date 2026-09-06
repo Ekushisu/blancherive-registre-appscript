@@ -23,6 +23,8 @@ Le code Web détecte les colonnes par en-tête et reconnaît notamment :
 =SORT(FILTER(Effectifs!C2:C&" "&Effectifs!D2:D;Effectifs!C2:C<>"";Effectifs!G2:G="En service actif"))
 ```
 
+Pour un garde sans nom de famille, cette formule conserve un espace final invisible. Les formulaires affichent un libellé nettoyé, mais le backend résout et écrit la valeur brute de `Données!O` afin de respecter exactement la validation de données des feuilles `Amendes` et `Prison`.
+
 Statut actif :
 - `En service actif`
 

@@ -255,10 +255,9 @@ function getOrganigramme(
   // ==========================================================
   // MAJORS
   //
-  // Bloc complètement indépendant.
-  //
-  // Le corps renseigné dans Effectifs
-  // n'a aucune influence sur leur affichage.
+  // Les Majors de l'État-Major prolongent la chaîne centrale.
+  // Rivebois et Bois-de-Chêne ont un commandement commun intermédiaire.
+  // Les autres Majors actifs restent dans un bloc indépendant.
   // ==========================================================
 
   const majors =
@@ -272,6 +271,18 @@ function getOrganigramme(
       .sort(
         comparerNomsOrganigramme
       );
+
+  const majorsEtatMajor = majors.filter(personne => estEtatMajor(personne.corps));
+  const garnisonsCommandementLocal = ORGANIGRAMME_GARNISONS.filter(
+    garnison => garnison.key === "rivebois" || garnison.key === "bois-de-chene"
+  );
+  const estMajorLocal = personne => garnisonsCommandementLocal.some(
+    garnison => correspondAGarnison(personne.corps, garnison)
+  );
+  const majorsCommandementLocal = majors.filter(estMajorLocal);
+  const majorsIndependants = majors.filter(
+    personne => !estEtatMajor(personne.corps) && !estMajorLocal(personne)
+  );
 
 
   // ==========================================================
@@ -389,7 +400,16 @@ function getOrganigramme(
       commandants,
 
     majors:
-      majors,
+      majorsIndependants,
+
+    majorsEtatMajor:
+      majorsEtatMajor,
+
+    commandementLocal: {
+      nom: "Commandement de Rivebois et Bois-de-Chêne",
+      majors: majorsCommandementLocal,
+      garnisonKeys: garnisonsCommandementLocal.map(garnison => garnison.key)
+    },
 
     garnisons:
       garnisons,

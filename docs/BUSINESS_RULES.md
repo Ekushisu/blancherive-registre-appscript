@@ -1,5 +1,14 @@
 # Règles métier
 
+## Organigramme
+
+- Chaîne verticale : Jarl → Maréchal → Commander → Majors du corps État-Major.
+- Le Hird répond uniquement au Jarl, par une branche directe indépendante du reste de la garde.
+- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
+- Cité de Blancherive, Faubourgs, Éclaireurs et Cap Granite répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
+- Les autres Majors actifs hors État-Major et hors commandement de Rivebois / Bois-de-Chêne sont regroupés à part en bas, à côté de la Réserve.
+- Tous les réservistes, quel que soit leur grade ou corps, apparaissent uniquement dans la Réserve commune.
+
 ## Effectifs
 
 - Page accessible uniquement aux OFFICIER.

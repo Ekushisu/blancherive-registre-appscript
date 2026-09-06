@@ -8,10 +8,10 @@
     .law-link{border:0;background:transparent;color:#315d8a;padding:0;text-align:left;text-decoration:underline dotted;text-underline-offset:3px}.law-info-row{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap}.law-info-button{border:1px solid #b7c4d0;background:#eef3f7;color:#35546d;border-radius:7px;padding:6px 9px;font-size:12px}
     .modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}.law-modal{width:min(820px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,.35)}.law-modal-header{padding:18px 20px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:18px}.law-modal-number{color:#666;font-size:13px}.law-modal-title{margin:0;font-size:21px}.law-modal-close{border:0;background:transparent;font-size:27px;color:#777}.law-modal-body{padding:20px}.law-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.law-chip{display:inline-flex;border-radius:30px;padding:5px 9px;background:#ececec;color:#555;font-size:12px}.law-chip-local{background:#e6f0e6;color:#3f6542}.law-source-info{border:1px solid #ddd;background:#fafafa;border-radius:9px;padding:12px 14px;margin-bottom:18px;font-size:13px;line-height:1.6}.law-text{white-space:pre-wrap;line-height:1.6;margin-bottom:20px}.law-sanction-box{background:#f6f6f6;border-left:4px solid #555;border-radius:6px;padding:13px 15px;margin-top:14px}.law-warning{margin-top:16px;padding:11px 13px;background:#fff2cc;border:1px solid #e0cc80;border-radius:7px;color:#6c5810}
     .codex-library{display:grid;gap:16px;margin-bottom:20px}.codex-family{background:#fff;border:1px solid #ccc;border-radius:12px;padding:15px}.codex-family-title{margin:0 0 12px;font-size:16px}.codex-source-list{display:flex;flex-wrap:wrap;gap:8px}.codex-source-button{border:1px solid #bbb;background:#f7f7f7;border-radius:8px;padding:8px 11px;text-align:left}.codex-source-button.active{background:#333;border-color:#333;color:#fff}.codex-source-button small{display:block;opacity:.7;margin-top:2px}.codex-controls{background:#fff;border:1px solid #ccc;border-radius:12px;padding:16px;margin-bottom:18px;display:grid;grid-template-columns:minmax(280px,1fr) 210px 210px;gap:12px}.codex-controls input,.codex-controls select{width:100%;min-height:42px;border:1px solid #aaa;border-radius:7px;padding:8px 10px;background:#fff}.codex-count{margin-bottom:12px;color:#777;font-size:13px}.codex-list{display:grid;gap:12px}.codex-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:15px;cursor:pointer}.codex-card-top{display:flex;justify-content:space-between;gap:15px}.codex-card-number{color:#777;font-size:12px;font-weight:700;text-transform:uppercase}.codex-card-title{margin:3px 0 6px;font-size:17px}.codex-card-source{color:#888;font-size:11px;text-align:right}.codex-card-text{margin-top:10px;color:#555;font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.codex-card-sanction{margin-top:10px;color:#555;font-size:12px;font-weight:700}
-    .org-person{background:#fff;border:1px solid #cfcfcf;border-radius:9px;padding:10px 12px}.org-person.center{text-align:center}.org-person-name{font-weight:700}.org-person-grade{margin-top:3px;color:#666;font-size:12px}.org-jarl-row{display:flex;justify-content:center;margin-top:26px}.org-jarl-down{width:2px;height:28px;background:#999;margin:auto}.org-branch-row{display:grid;grid-template-columns:1fr 1fr;gap:90px;width:min(1150px,100%);margin:auto}.org-hird,.org-independent-block{background:#ededed;border:1px solid #ccc;border-radius:12px;padding:12px}.org-block-title,.org-independent-title{text-align:center}.org-command-chain{display:flex;flex-direction:column;align-items:center;gap:14px}.org-command-card{width:100%;max-width:340px}.org-garrisons-title{text-align:center;margin:35px 0 20px}.org-garrisons{display:grid;grid-template-columns:repeat(6,minmax(185px,1fr));gap:14px}.org-garrison{background:#fff;border:1px solid #ccc;border-radius:11px}.org-garrison-header{padding:13px 10px;background:#333;color:#fff;text-align:center;font-weight:700;border-radius:10px 10px 0 0}.org-garrison-body{padding:11px}.org-rank-group{margin-bottom:14px}.org-rank-title{margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid #ddd;color:#777;font-size:10px;font-weight:700;text-transform:uppercase}.org-rank-members{display:grid;gap:6px}.org-rank-members .org-person-grade{display:none}.org-independent-area{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}.org-empty{padding:15px;color:#888;text-align:center;font-style:italic}
+
     .presence-dashboard-cards{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px;margin-bottom:16px}.presence-stat-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:15px}.presence-stat-warning{background:#fff8e6}.presence-stat-danger{background:#fff0f0}.presence-stat-label{color:#666;font-size:12px;margin-bottom:7px}.presence-stat-value{font-size:25px;font-weight:700}.presence-stat-sub{margin-top:7px;color:#888;font-size:11px}.presence-inactive-panel{background:#fff;border:1px solid #ccc;border-radius:11px;overflow:hidden;margin-bottom:28px}.presence-inactive-header{display:flex;justify-content:space-between;padding:12px 15px;background:#f5f5f5;border-bottom:1px solid #ddd}.presence-inactive-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}.presence-inactive-person{padding:11px 14px;border-right:1px solid #eee;border-bottom:1px solid #eee}.presence-inactive-name{font-weight:700}.presence-inactive-meta{color:#777;font-size:12px}.presence-inactive-alert{color:#995b19;font-size:12px;font-weight:700}.week-section{margin-bottom:34px;border-radius:12px;overflow:hidden;border:1px solid #ccc;background:#fff}.week-header{padding:13px 18px;font-weight:700;display:flex;justify-content:space-between}.week-current .week-header{background:#fff2cc}.week-old .week-header{background:#e8e8e8}.corps-title{padding:9px 14px;font-weight:700;background:#f6f6f6}.presence-table{table-layout:fixed}.presence-table th,.presence-table td{text-align:center}.presence-table th:first-child,.presence-table td:first-child{width:240px;text-align:left}.row-current{background:#fff2cc!important}.row-unpaid{background:#f4cccc!important}.row-paid{background:#e1e1e1!important}.grade{font-size:12px;opacity:.68}
     .effectifs-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}.effectifs-search{flex:1;min-width:260px;min-height:42px;border:1px solid #aaa;border-radius:7px;padding:8px 11px;background:#fff}.effectifs-count{color:#777;font-size:13px}.effectifs-grid{display:grid;gap:10px}.effectif-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:14px}.effectif-card-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px}.effectif-name{font-weight:700;font-size:17px}.effectif-meta{color:#777;font-size:12px;margin-top:3px}.effectif-state{font-size:11px;border-radius:20px;padding:5px 8px;background:#eee;white-space:nowrap}.effectif-state.active{background:#e2f0d9;color:#35652f}.effectif-edit-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto auto;gap:10px;align-items:end}.effectif-check{min-height:40px;display:flex;align-items:center;gap:8px;white-space:nowrap}.effectif-check input{width:18px;height:18px}.effectif-save{min-height:40px}
-    @media(max-width:1450px){.org-garrisons{grid-template-columns:repeat(3,1fr)}}@media(max-width:1000px){.presence-dashboard-cards{grid-template-columns:1fr 1fr}.effectif-edit-grid{grid-template-columns:1fr 1fr}}@media(max-width:900px){.codex-controls{grid-template-columns:1fr}}@media(max-width:800px){.topbar{flex-wrap:wrap;padding:10px 14px}.brand{width:100%}.nav{width:100%;overflow-x:auto}.content{padding:12px}.form-grid{grid-template-columns:1fr}.field-wide,.field-full{grid-column:auto}.org-branch-row,.org-independent-area{grid-template-columns:1fr}.org-garrisons{grid-template-columns:1fr}}@media(max-width:620px){.presence-dashboard-cards,.effectif-edit-grid{grid-template-columns:1fr}.page-header{align-items:stretch;flex-direction:column}.page-header .primary-button{width:100%}}
+    @media(max-width:1000px){.presence-dashboard-cards{grid-template-columns:1fr 1fr}.effectif-edit-grid{grid-template-columns:1fr 1fr}}@media(max-width:900px){.codex-controls{grid-template-columns:1fr}}@media(max-width:800px){.topbar{flex-wrap:wrap;padding:10px 14px}.brand{width:100%}.nav{width:100%;overflow-x:auto}.content{padding:12px}.form-grid{grid-template-columns:1fr}.field-wide,.field-full{grid-column:auto}}@media(max-width:620px){.presence-dashboard-cards,.effectif-edit-grid{grid-template-columns:1fr}.page-header{align-items:stretch;flex-direction:column}.page-header .primary-button{width:100%}}
   
     .fine-recipient{margin-top:4px;color:#666;font-size:11px;line-height:1.35}
 
@@ -455,3 +455,114 @@
       background: #f4cccc;
       color: #990000;
     }
+
+/* Organigramme : État-Major central, Hird rattaché au Jarl. */
+.org-page{--org-ink:#283a36;--org-gold:#9a7943;--org-line:#b5aa94;--org-muted:#68685e;max-width:1600px;margin:auto}
+.org-seal{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#77603b;border:1px solid #d9cbb3;padding:10px 14px;border-radius:30px}
+.org-hierarchy{display:grid;grid-template-columns:1fr minmax(240px,320px) 1fr;grid-template-rows:auto auto 1fr;column-gap:48px;max-width:1100px;margin:32px auto 0;position:relative}
+.org-command-heading{grid-column:2;text-align:center;text-transform:uppercase;letter-spacing:.2em;font-size:11px;font-weight:700;color:#76613d;padding-bottom:14px}
+.org-sovereign{grid-column:2;grid-row:2;position:relative}
+.org-command-node{position:relative;background:var(--org-ink);color:#fff;border:1px solid #40534a;border-radius:10px;padding:14px 18px;text-align:center;box-shadow:0 5px 14px #283a3610}
+.org-command-node h3{margin:0 0 8px;color:#e7cca0;font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+.org-command-node h3 span{display:block;font-size:9px;letter-spacing:.08em;margin-top:5px;color:#d0d8d2}
+.org-person{padding:7px 0;overflow-wrap:anywhere}
+.org-person-name{font-size:13px;font-weight:600;line-height:1.45}
+.org-person.center{text-align:center;padding:2px 0}
+.org-command-node .org-person-name{font-size:16px}
+.org-person-corps{font-size:11px;color:var(--org-muted);margin-top:2px}
+.org-vacant{font-size:13px;color:#d0d8d2;font-style:italic}
+.org-command-chain{grid-column:2;grid-row:3;display:grid;align-content:start;gap:24px;padding-top:24px;position:relative;background:linear-gradient(var(--org-line),var(--org-line)) center / 1px 100% no-repeat}
+.org-command-chain .org-command-node:before{content:"";position:absolute;width:1px;height:25px;background:var(--org-line);left:50%;top:-25px}
+.org-hird-branch{grid-column:3;grid-row:2 / 4;align-self:start;position:relative;min-width:0}
+.org-hird-branch:before{content:"";position:absolute;left:-48px;width:48px;height:1px;top:38px;background:var(--org-gold)}
+.org-direct-label{font-size:10px;color:#79613a;margin:0 0 8px;line-height:1.4}
+.org-unit{background:#fff;border:1px solid #deded5;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 3px 10px #283a3605}
+.org-unit-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:17px 16px;background:#e9ede8;border-bottom:1px solid #d9dfd6}
+.org-unit-header h3{font-size:14px;color:var(--org-ink);margin:0;line-height:1.4}
+.org-count{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:#fff9;border:1px solid #d3d7cb;color:#546050;font-size:11px;flex-shrink:0}
+.org-unit-hird{border-color:#d7c7a9}
+.org-unit-hird .org-unit-header{background:#eee6d6;border-color:#ded0b6}
+.org-captains{padding:14px 16px;background:#fafbf8;border-bottom:1px solid #e8e9e1}
+.org-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6f664f}
+.org-captains .org-person-name{font-size:14px}
+.org-roster summary{padding:13px 16px;cursor:pointer;color:#596452;font-size:12px;font-weight:600}
+.org-roster summary span{float:right;color:#71776c;font-weight:400}
+.org-roster summary:hover{background:#f5f6f1}
+.org-roster summary:focus-visible{outline:2px solid var(--org-gold);outline-offset:-3px}
+.org-roster-body{padding:0 16px 12px}
+.org-rank-group{margin:8px 0 14px}
+.org-rank-group:last-child{margin-bottom:0}
+.org-rank-title{display:flex;align-items:center;gap:10px;margin:0 0 3px;border-bottom:1px solid #ecece5;padding-bottom:6px;color:#707467;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.org-rank-title span{margin-left:auto;font-weight:400}
+.org-rank-members .org-person + .org-person{border-top:1px solid #f1f1eb}
+.org-empty{padding:8px 0;color:var(--org-muted);font-size:12px;font-style:italic}
+.org-corps-section{position:relative;padding-top:36px}
+.org-corps-section:before{content:"";position:absolute;left:50%;top:0;width:1px;height:30px;background:var(--org-line)}
+.org-corps-heading{text-align:center;margin-bottom:26px}
+.org-corps-heading h2{font-size:22px;color:var(--org-ink);margin:7px 0}
+.org-corps-heading p{font-size:12px;color:var(--org-muted);margin:0}
+.org-corps-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;position:relative;padding-top:22px;align-items:start}
+.org-corps-grid:before{content:"";position:absolute;top:0;left:calc((100% - 80px)/6 + 8px);right:calc((100% - 80px)/12);height:1px;background:var(--org-line)}
+.org-corps-grid:after{content:"";position:absolute;left:50%;top:-20px;height:20px;width:1px;background:var(--org-line)}
+.org-corps-grid > .org-unit{position:relative;overflow:visible}
+.org-corps-grid > .org-unit:before{content:"";position:absolute;top:-23px;left:50%;width:1px;height:22px;background:var(--org-line)}
+.org-corps-grid > .org-unit-header{border-radius:11px 11px 0 0;min-height:75px}
+.org-detached{margin-top:36px;padding-top:28px;border-top:1px solid #d9d9cf;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.org-independent-block{padding:20px;background:#eeeee8;border:1px solid #dcdcd2;border-radius:12px}
+.org-independent-block header{display:flex;justify-content:space-between;gap:15px;margin-bottom:20px}
+.org-independent-block h2{font-size:16px;color:#424c40;margin:0 0 5px}
+.org-independent-block p{font-size:12px;color:var(--org-muted);margin:0}
+.org-independent-block .org-rank-members{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+@media(max-width:1250px){
+.org-corps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.org-corps-grid:before{left:calc((100% - 32px)/6);right:calc((100% - 32px)/6)}
+.org-corps-grid > .org-unit:nth-child(n+4):before{display:none}
+.org-unit-header{min-height:0!important}
+}
+@media(max-width:760px){
+.org-seal{display:none}
+.org-hierarchy{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px;margin-top:24px}
+.org-command-heading,.org-sovereign,.org-command-chain{grid-column:1}
+.org-hird-branch{grid-column:2}
+.org-hird-branch:before{left:-24px;width:24px}
+.org-command-node{padding:13px 10px}
+.org-command-node .org-person-name{font-size:14px}
+.org-corps-section:before{left:calc((100% - 24px)/4)}
+.org-corps-heading h2{font-size:19px}
+.org-corps-grid{grid-template-columns:1fr;padding:0 0 0 16px;border-left:1px solid var(--org-line);gap:16px;margin-left:6px}
+.org-corps-grid:before,.org-corps-grid:after{display:none}
+.org-corps-grid > .org-unit:before,.org-corps-grid > .org-unit:nth-child(n+4):before{display:block;left:-17px;top:27px;width:16px;height:1px}
+.org-detached{grid-template-columns:1fr}
+.org-independent-block .org-rank-members{grid-template-columns:1fr}
+.org-unit-header,.org-captains{padding:12px}
+.org-direct-label{font-size:9px}
+}
+
+/* Commandement intermédiaire commun à Rivebois et Bois-de-Chêne. */
+.org-local-command{grid-column:span 2;position:relative;min-width:0;border:1px solid #c8d1c3;border-radius:12px;background:#eef1e9;padding:18px 14px}
+.org-local-command:before{content:"";position:absolute;left:50%;top:-23px;height:22px;width:1px;background:var(--org-line)}
+.org-local-heading{text-align:center;margin-bottom:14px}
+.org-local-heading h3{margin:0;color:var(--org-ink);font-size:15px;line-height:1.4}
+.org-local-heading p{margin:6px 0 0;color:var(--org-muted);font-size:11px;line-height:1.5}
+.org-local-command > .org-command-node{max-width:320px;margin:auto}
+.org-local-corps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-top:36px;position:relative;align-items:start}
+.org-local-corps:before{content:"";position:absolute;left:50%;top:0;height:18px;width:1px;background:var(--org-line)}
+.org-local-corps:after{content:"";position:absolute;left:calc((100% - 12px)/4);right:calc((100% - 12px)/4);top:18px;height:1px;background:var(--org-line)}
+.org-local-corps > .org-unit{position:relative;overflow:visible}
+.org-local-corps > .org-unit:before{content:"";position:absolute;left:50%;top:-19px;height:18px;width:1px;background:var(--org-line)}
+.org-local-corps .org-unit-header{border-radius:11px 11px 0 0}
+@media(min-width:761px) and (max-width:1250px){
+.org-corps-grid{border-left:1px solid var(--org-line);margin-left:6px;padding-left:16px;padding-top:0}
+.org-corps-grid:before,.org-corps-grid:after{display:none}
+.org-local-command{grid-column:1/-1}
+.org-local-command:before{left:-17px;top:30px;height:1px;width:16px}
+.org-corps-grid > .org-unit:before,.org-corps-grid > .org-unit:nth-child(n+4):before{display:none}
+}
+@media(max-width:760px){
+.org-local-command{grid-column:auto;padding:14px 10px}
+.org-local-command:before{left:-17px;top:30px;height:1px;width:16px}
+.org-local-corps{grid-template-columns:1fr;border-left:1px solid var(--org-line);padding:0 0 0 12px;margin:24px 0 0 4px}
+.org-local-corps:before,.org-local-corps:after{display:none}
+.org-local-corps > .org-unit:before{left:-13px;top:27px;width:12px;height:1px}
+.org-corps-heading p{line-height:1.6}
+}

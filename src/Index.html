@@ -523,118 +523,6 @@ button {
   font-size: 12px;
   font-weight: 700;
 }
-.org-person {
-  background: #fff;
-  border: 1px solid #cfcfcf;
-  border-radius: 9px;
-  padding: 10px 12px;
-}
-.org-person.center {
-  text-align: center;
-}
-.org-person-name {
-  font-weight: 700;
-}
-.org-person-grade {
-  margin-top: 3px;
-  color: #666;
-  font-size: 12px;
-}
-.org-jarl-row {
-  display: flex;
-  justify-content: center;
-  margin-top: 26px;
-}
-.org-jarl-down {
-  width: 2px;
-  height: 28px;
-  background: #999;
-  margin: auto;
-}
-.org-branch-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 90px;
-  width: min(1150px, 100%);
-  margin: auto;
-}
-.org-hird,
-.org-independent-block {
-  background: #ededed;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 12px;
-}
-.org-block-title,
-.org-independent-title {
-  text-align: center;
-}
-.org-command-chain {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-.org-command-card {
-  width: 100%;
-  max-width: 340px;
-}
-.org-garrisons-title {
-  text-align: center;
-  margin: 35px 0 20px;
-}
-.org-garrisons {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(185px, 1fr));
-  gap: 14px;
-}
-.org-garrison {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 11px;
-}
-.org-garrison-header {
-  padding: 13px 10px;
-  background: #333;
-  color: #fff;
-  text-align: center;
-  font-weight: 700;
-  border-radius: 10px 10px 0 0;
-}
-.org-garrison-body {
-  padding: 11px;
-}
-.org-rank-group {
-  margin-bottom: 14px;
-}
-.org-rank-title {
-  margin-bottom: 7px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
-  color: #777;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.org-rank-members {
-  display: grid;
-  gap: 6px;
-}
-.org-rank-members .org-person-grade {
-  display: none;
-}
-.org-independent-area {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 52px;
-}
-.org-empty {
-  padding: 15px;
-  color: #888;
-  text-align: center;
-  font-style: italic;
-}
 .presence-dashboard-cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(180px, 1fr));
@@ -828,11 +716,6 @@ button {
 .effectif-save {
   min-height: 40px;
 }
-@media (max-width: 1450px) {
-  .org-garrisons {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 @media (max-width: 1000px) {
   .presence-dashboard-cards {
     grid-template-columns: 1fr 1fr;
@@ -867,13 +750,6 @@ button {
   .field-wide,
   .field-full {
     grid-column: auto;
-  }
-  .org-branch-row,
-  .org-independent-area {
-    grid-template-columns: 1fr;
-  }
-  .org-garrisons {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 620px) {
@@ -1285,6 +1161,573 @@ button {
 .effectifs-terminal-deserteurs .effectifs-terminal-heading {
   background: #f4cccc;
   color: #990000;
+}
+.org-page {
+  --org-ink:#283a36;
+  --org-gold:#9a7943;
+  --org-line:#b5aa94;
+  --org-muted:#68685e;
+  max-width: 1600px;
+  margin: auto;
+}
+.org-seal {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #77603b;
+  border: 1px solid #d9cbb3;
+  padding: 10px 14px;
+  border-radius: 30px;
+}
+.org-hierarchy {
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 320px) 1fr;
+  grid-template-rows: auto auto 1fr;
+  column-gap: 48px;
+  max-width: 1100px;
+  margin: 32px auto 0;
+  position: relative;
+}
+.org-command-heading {
+  grid-column: 2;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-size: 11px;
+  font-weight: 700;
+  color: #76613d;
+  padding-bottom: 14px;
+}
+.org-sovereign {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+}
+.org-command-node {
+  position: relative;
+  background: var(--org-ink);
+  color: #fff;
+  border: 1px solid #40534a;
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: center;
+  box-shadow: 0 5px 14px #283a3610;
+}
+.org-command-node h3 {
+  margin: 0 0 8px;
+  color: #e7cca0;
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.org-command-node h3 span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .08em;
+  margin-top: 5px;
+  color: #d0d8d2;
+}
+.org-person {
+  padding: 7px 0;
+  overflow-wrap: anywhere;
+}
+.org-person-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.org-person.center {
+  text-align: center;
+  padding: 2px 0;
+}
+.org-command-node .org-person-name {
+  font-size: 16px;
+}
+.org-person-corps {
+  font-size: 11px;
+  color: var(--org-muted);
+  margin-top: 2px;
+}
+.org-vacant {
+  font-size: 13px;
+  color: #d0d8d2;
+  font-style: italic;
+}
+.org-command-chain {
+  grid-column: 2;
+  grid-row: 3;
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding-top: 24px;
+  position: relative;
+  background: linear-gradient(var(--org-line), var(--org-line)) center / 1px 100% no-repeat;
+}
+.org-command-chain .org-command-node:before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 25px;
+  background: var(--org-line);
+  left: 50%;
+  top: -25px;
+}
+.org-hird-branch {
+  grid-column: 3;
+  grid-row: 2 / 4;
+  align-self: start;
+  position: relative;
+  min-width: 0;
+}
+.org-hird-branch:before {
+  content: "";
+  position: absolute;
+  left: -48px;
+  width: 48px;
+  height: 1px;
+  top: 38px;
+  background: var(--org-gold);
+}
+.org-direct-label {
+  font-size: 10px;
+  color: #79613a;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+.org-unit {
+  background: #fff;
+  border: 1px solid #deded5;
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 0;
+  box-shadow: 0 3px 10px #283a3605;
+}
+.org-unit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 17px 16px;
+  background: #e9ede8;
+  border-bottom: 1px solid #d9dfd6;
+}
+.org-unit-header h3 {
+  font-size: 14px;
+  color: var(--org-ink);
+  margin: 0;
+  line-height: 1.4;
+}
+.org-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #fff9;
+  border: 1px solid #d3d7cb;
+  color: #546050;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.org-unit-hird {
+  border-color: #d7c7a9;
+}
+.org-unit-hird .org-unit-header {
+  background: #eee6d6;
+  border-color: #ded0b6;
+}
+.org-captains {
+  padding: 14px 16px;
+  background: #fafbf8;
+  border-bottom: 1px solid #e8e9e1;
+}
+.org-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #6f664f;
+}
+.org-captains .org-person-name {
+  font-size: 14px;
+}
+.org-roster summary {
+  padding: 13px 16px;
+  cursor: pointer;
+  color: #596452;
+  font-size: 12px;
+  font-weight: 600;
+}
+.org-roster summary span {
+  float: right;
+  color: #71776c;
+  font-weight: 400;
+}
+.org-roster summary:hover {
+  background: #f5f6f1;
+}
+.org-roster summary:focus-visible {
+  outline: 2px solid var(--org-gold);
+  outline-offset: -3px;
+}
+.org-roster-body {
+  padding: 0 16px 12px;
+}
+.org-rank-group {
+  margin: 8px 0 14px;
+}
+.org-rank-group:last-child {
+  margin-bottom: 0;
+}
+.org-rank-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 3px;
+  border-bottom: 1px solid #ecece5;
+  padding-bottom: 6px;
+  color: #707467;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.org-rank-title span {
+  margin-left: auto;
+  font-weight: 400;
+}
+.org-rank-members .org-person + .org-person {
+  border-top: 1px solid #f1f1eb;
+}
+.org-empty {
+  padding: 8px 0;
+  color: var(--org-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+.org-corps-section {
+  position: relative;
+  padding-top: 36px;
+}
+.org-corps-section:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 30px;
+  background: var(--org-line);
+}
+.org-corps-heading {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.org-corps-heading h2 {
+  font-size: 22px;
+  color: var(--org-ink);
+  margin: 7px 0;
+}
+.org-corps-heading p {
+  font-size: 12px;
+  color: var(--org-muted);
+  margin: 0;
+}
+.org-corps-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  position: relative;
+  padding-top: 22px;
+  align-items: start;
+}
+.org-corps-grid:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((100% - 80px)/6 + 8px);
+  right: calc((100% - 80px)/12);
+  height: 1px;
+  background: var(--org-line);
+}
+.org-corps-grid:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  height: 20px;
+  width: 1px;
+  background: var(--org-line);
+}
+.org-corps-grid > .org-unit {
+  position: relative;
+  overflow: visible;
+}
+.org-corps-grid > .org-unit:before {
+  content: "";
+  position: absolute;
+  top: -23px;
+  left: 50%;
+  width: 1px;
+  height: 22px;
+  background: var(--org-line);
+}
+.org-corps-grid > .org-unit-header {
+  border-radius: 11px 11px 0 0;
+  min-height: 75px;
+}
+.org-detached {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid #d9d9cf;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.org-independent-block {
+  padding: 20px;
+  background: #eeeee8;
+  border: 1px solid #dcdcd2;
+  border-radius: 12px;
+}
+.org-independent-block header {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.org-independent-block h2 {
+  font-size: 16px;
+  color: #424c40;
+  margin: 0 0 5px;
+}
+.org-independent-block p {
+  font-size: 12px;
+  color: var(--org-muted);
+  margin: 0;
+}
+.org-independent-block .org-rank-members {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+}
+@media (max-width: 1250px) {
+  .org-corps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
+  }
+  .org-corps-grid:before {
+    left: calc((100% - 32px)/6);
+    right: calc((100% - 32px)/6);
+  }
+  .org-corps-grid > .org-unit:nth-child(n+4):before {
+    display: none;
+  }
+  .org-unit-header {
+    min-height: 0 !important;
+  }
+}
+@media (max-width: 760px) {
+  .org-seal {
+    display: none;
+  }
+  .org-hierarchy {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 24px;
+    margin-top: 24px;
+  }
+  .org-command-heading,
+  .org-sovereign,
+  .org-command-chain {
+    grid-column: 1;
+  }
+  .org-hird-branch {
+    grid-column: 2;
+  }
+  .org-hird-branch:before {
+    left: -24px;
+    width: 24px;
+  }
+  .org-command-node {
+    padding: 13px 10px;
+  }
+  .org-command-node .org-person-name {
+    font-size: 14px;
+  }
+  .org-corps-section:before {
+    left: calc((100% - 24px)/4);
+  }
+  .org-corps-heading h2 {
+    font-size: 19px;
+  }
+  .org-corps-grid {
+    grid-template-columns: 1fr;
+    padding: 0 0 0 16px;
+    border-left: 1px solid var(--org-line);
+    gap: 16px;
+    margin-left: 6px;
+  }
+  .org-corps-grid:before,
+  .org-corps-grid:after {
+    display: none;
+  }
+  .org-corps-grid > .org-unit:before,
+  .org-corps-grid > .org-unit:nth-child(n+4):before {
+    display: block;
+    left: -17px;
+    top: 27px;
+    width: 16px;
+    height: 1px;
+  }
+  .org-detached {
+    grid-template-columns: 1fr;
+  }
+  .org-independent-block .org-rank-members {
+    grid-template-columns: 1fr;
+  }
+  .org-unit-header,
+  .org-captains {
+    padding: 12px;
+  }
+  .org-direct-label {
+    font-size: 9px;
+  }
+}
+.org-local-command {
+  grid-column: span 2;
+  position: relative;
+  min-width: 0;
+  border: 1px solid #c8d1c3;
+  border-radius: 12px;
+  background: #eef1e9;
+  padding: 18px 14px;
+}
+.org-local-command:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -23px;
+  height: 22px;
+  width: 1px;
+  background: var(--org-line);
+}
+.org-local-heading {
+  text-align: center;
+  margin-bottom: 14px;
+}
+.org-local-heading h3 {
+  margin: 0;
+  color: var(--org-ink);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.org-local-heading p {
+  margin: 6px 0 0;
+  color: var(--org-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.org-local-command > .org-command-node {
+  max-width: 320px;
+  margin: auto;
+}
+.org-local-corps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 36px;
+  position: relative;
+  align-items: start;
+}
+.org-local-corps:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 18px;
+  width: 1px;
+  background: var(--org-line);
+}
+.org-local-corps:after {
+  content: "";
+  position: absolute;
+  left: calc((100% - 12px)/4);
+  right: calc((100% - 12px)/4);
+  top: 18px;
+  height: 1px;
+  background: var(--org-line);
+}
+.org-local-corps > .org-unit {
+  position: relative;
+  overflow: visible;
+}
+.org-local-corps > .org-unit:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -19px;
+  height: 18px;
+  width: 1px;
+  background: var(--org-line);
+}
+.org-local-corps .org-unit-header {
+  border-radius: 11px 11px 0 0;
+}
+@media (min-width: 761px) and (max-width: 1250px) {
+  .org-corps-grid {
+    border-left: 1px solid var(--org-line);
+    margin-left: 6px;
+    padding-left: 16px;
+    padding-top: 0;
+  }
+  .org-corps-grid:before,
+  .org-corps-grid:after {
+    display: none;
+  }
+  .org-local-command {
+    grid-column: 1/-1;
+  }
+  .org-local-command:before {
+    left: -17px;
+    top: 30px;
+    height: 1px;
+    width: 16px;
+  }
+  .org-corps-grid > .org-unit:before,
+  .org-corps-grid > .org-unit:nth-child(n+4):before {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .org-local-command {
+    grid-column: auto;
+    padding: 14px 10px;
+  }
+  .org-local-command:before {
+    left: -17px;
+    top: 30px;
+    height: 1px;
+    width: 16px;
+  }
+  .org-local-corps {
+    grid-template-columns: 1fr;
+    border-left: 1px solid var(--org-line);
+    padding: 0 0 0 12px;
+    margin: 24px 0 0 4px;
+  }
+  .org-local-corps:before,
+  .org-local-corps:after {
+    display: none;
+  }
+  .org-local-corps > .org-unit:before {
+    left: -13px;
+    top: 27px;
+    width: 12px;
+    height: 1px;
+  }
+  .org-corps-heading p {
+    line-height: 1.6;
+  }
 }</style>
 </head>
 <body>
@@ -2359,22 +2802,33 @@ button {
   function OrganigrammePage({ token }) {
     const [data, setData] = useState(null), [error, setError] = useState("");
     useEffect(() => {
-      serverCall("getOrganigramme", token).then(setData).catch((e) => setError(e.message));
-    }, []);
+      let active = true;
+      serverCall("getOrganigramme", token).then((r) => {
+        if (active) setData(r);
+      }).catch((e) => {
+        if (active) setError(e.message);
+      });
+      return () => {
+        active = false;
+      };
+    }, [token]);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de l'organigramme...");
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Organisation actuelle de la Garde de Blancherive"))), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-row" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: data.jarl, center: true })), /* @__PURE__ */ React.createElement("div", { className: "org-jarl-down" }), /* @__PURE__ */ React.createElement("div", { className: "org-branch-row" }, /* @__PURE__ */ React.createElement("section", { className: "org-hird" }, /* @__PURE__ */ React.createElement("h2", { className: "org-block-title" }, "Hird du Jarl"), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: data.hird })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }))), /* @__PURE__ */ React.createElement("h2", { className: "org-garrisons-title" }, "Garnisons et corps de garde"), /* @__PURE__ */ React.createElement("div", { className: "org-garrisons" }, data.garnisons.map((g) => /* @__PURE__ */ React.createElement("article", { className: "org-garrison", key: g.key }, /* @__PURE__ */ React.createElement("div", { className: "org-garrison-header" }, g.nom), /* @__PURE__ */ React.createElement("div", { className: "org-garrison-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: g.membres }))))), /* @__PURE__ */ React.createElement("div", { className: "org-independent-area" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", people: data.reserve })));
+    const local = data.commandementLocal;
+    const localKeys = (local == null ? void 0 : local.garnisonKeys) || [];
+    const directCorps = data.garnisons.filter((g) => !localKeys.includes(g.key));
+    const localCorps = data.garnisons.filter((g) => localKeys.includes(g.key));
+    return /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Hird du Jarl" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.jarl ? [data.jarl] : [], grade: "Jarl" })), /* @__PURE__ */ React.createElement("aside", { className: "org-hird-branch" }, /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(OrgCorps, { title: "Hird du Jarl", people: data.hird, compact: true })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve })));
   }
-  function PersonCard({ personne, center = false }) {
+  function PersonCard({ personne, center = false, showCorps = false }) {
     if (!personne) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "org-person-grade" }, personne.grade));
+    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, personne.corps));
   }
-  function CentralGroup({ personnes, grade }) {
-    if (!(personnes == null ? void 0 : personnes.length)) return /* @__PURE__ */ React.createElement("div", { className: "org-person org-command-card center" }, /* @__PURE__ */ React.createElement("strong", null, "Poste vacant"), /* @__PURE__ */ React.createElement("div", { className: "org-person-grade" }, grade));
-    return personnes.map((p, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "org-command-card" }, /* @__PURE__ */ React.createElement(PersonCard, { personne: p, center: true })));
+  function CentralGroup({ personnes = [], grade, note }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "org-command-node", "aria-label": note ? `${grade} \u2014 ${note}` : grade }, /* @__PURE__ */ React.createElement("h3", null, grade, note && /* @__PURE__ */ React.createElement("span", null, note)), personnes.length ? personnes.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, center: true })) : /* @__PURE__ */ React.createElement("div", { className: "org-vacant" }, "Poste vacant"));
   }
-  function RankedPeople({ personnes }) {
-    if (!(personnes == null ? void 0 : personnes.length)) return /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Aucun personnel.");
+  function RankedPeople({ personnes = [], showCorps = false }) {
+    if (!personnes.length) return /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Aucun personnel.");
     const groups = [];
     personnes.forEach((p) => {
       let g = groups.find((x) => x.grade === p.grade);
@@ -2384,10 +2838,15 @@ button {
       }
       g.people.push(p);
     });
-    return groups.map((g) => /* @__PURE__ */ React.createElement("div", { className: "org-rank-group", key: g.grade }, /* @__PURE__ */ React.createElement("div", { className: "org-rank-title" }, g.grade), /* @__PURE__ */ React.createElement("div", { className: "org-rank-members" }, g.people.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p })))));
+    return groups.map((g) => /* @__PURE__ */ React.createElement("section", { className: "org-rank-group", key: g.grade }, /* @__PURE__ */ React.createElement("h4", { className: "org-rank-title" }, g.grade, /* @__PURE__ */ React.createElement("span", null, g.people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-rank-members" }, g.people.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, showCorps })))));
   }
-  function Independent({ title, people }) {
-    return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("h2", { className: "org-independent-title" }, title), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people }));
+  function OrgCorps({ title, people = [], compact = false }) {
+    const captains = people.filter((p) => normalizeSearchText(p.grade).trim() === "capitaine");
+    const others = people.filter((p) => normalizeSearchText(p.grade).trim() !== "capitaine");
+    return /* @__PURE__ */ React.createElement("article", { className: `org-unit ${compact ? "org-unit-hird" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "org-unit-header" }, /* @__PURE__ */ React.createElement("h3", null, title), /* @__PURE__ */ React.createElement("span", { className: "org-count", title: "Personnel en service actif" }, people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-captains" }, /* @__PURE__ */ React.createElement("div", { className: "org-eyebrow" }, "Capitaine", captains.length > 1 ? "s" : ""), captains.length ? captains.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p })) : /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Poste vacant")), /* @__PURE__ */ React.createElement("details", { className: "org-roster", open: compact ? void 0 : true }, /* @__PURE__ */ React.createElement("summary", null, "Personnel ", /* @__PURE__ */ React.createElement("span", null, others.length)), /* @__PURE__ */ React.createElement("div", { className: "org-roster-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: others }))));
+  }
+  function Independent({ title, subtitle, people = [] }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, title), /* @__PURE__ */ React.createElement("p", null, subtitle)), /* @__PURE__ */ React.createElement("span", { className: "org-count" }, people.length)), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people, showCorps: true }));
   }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
     const [data, setData] = useState(null), [formData, setFormData] = useState(null), [codex, setCodex] = useState(null), [selected, setSelected] = useState(null), [showForm, setShowForm] = useState(false), [error, setError] = useState(""), [deletingRow, setDeletingRow] = useState(null);

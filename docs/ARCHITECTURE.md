@@ -78,6 +78,7 @@ Pages :
 `Prison.js` utilise des helpers déclarés dans `Amendes.js` :
 - `getLastNonEmptyRowInColumn`
 - `lireColonneTechnique`
+- `trouverValeurTechniqueBrute`
 - `lireListeTechnique`
 - `nettoyerSaisieUtilisateur`
 - `parseDateInput`
