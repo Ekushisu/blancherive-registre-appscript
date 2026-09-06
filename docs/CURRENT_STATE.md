@@ -91,3 +91,12 @@ Le premier axe d'optimisation, si besoin, est plutôt la réduction / mise en ca
 - Les agrégats `corpsTotals` sont calculés côté serveur dans `getPresences` après contrôle du rôle et ne sont pas renvoyés aux GARDE. Les soldes individuelles existantes restent consultables ; aucune modification des données historiques.
 - Le tableau de bord OFFICIER affiche le cumul des amendes datées de la semaine courante (lundi à dimanche, fuseau métier Europe/Stockholm), payées et déjà reversées. Ce cumul utilise la date de l'amende, pas la date de reversement, qui n'est pas enregistrée.
 - Vérifications locales : `node scripts/test-presence-finances.mjs` (permissions, totaux courants/passés, exclusion Hird, bornes de semaine et changement d'année).
+
+### Nouveautés des Effectifs et de l'Organigramme (6 septembre 2026)
+
+- Badge « Nouveau » / « Vu » pendant 14 jours, survol de 800 ms, clavier ou appui, détails datés des arrivées et changements de grade/corps. État de lecture partagé entre pages et conservé dans le navigateur ; repli en mémoire si le stockage est bloqué.
+- Panneau des changements récents : filtres par type, personne/corps et non vus, actualisation, tout marquer comme vu. Compteurs de membres avec nouveautés dans les onglets Effectifs et les corps/personnels repliés de l'Organigramme.
+- Feuille `HistoriqueEffectifs` et colonne `ID membre` créées automatiquement au premier chargement. La structure est documentée dans `DATA_MODEL.md`. Les membres déjà présents sont initialisés sans fausses nouveautés.
+- Journalisation des modifications applicatives sous verrou ; déclencheur d'édition Sheets installé automatiquement à la première consultation OFFICIER d'une des deux pages. Comparaison de repli à chaque chargement.
+- Le déploiement doit inclure `HistoriqueEffectifs.js` et le nouvel `Index.html`. Les autorisations Apps Script doivent permettre la création du déclencheur. L'installation effective et les écritures Sheets n'ont pas été exécutées pendant le développement local.
+- Vérifications : `node scripts/test-historique-effectifs.mjs`, `node scripts/test-changes-ui.mjs`, tests existants Organigramme et finances des Présences, puis `npm run build`.

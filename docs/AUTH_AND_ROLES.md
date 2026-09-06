@@ -47,3 +47,9 @@ Règles connues :
 - suppression Prison.
 
 Un contrôle uniquement côté React n'est jamais suffisant.
+
+## Nouveautés des Effectifs
+
+- `getEffectifs` reste OFFICIER ; `getOrganigramme` reste GARDE / OFFICIER. Leurs réponses incluent les événements récents filtrés côté serveur selon le rôle.
+- La synchronisation et le déclencheur sont des helpers privés suffixés `_`, non appelables via `google.script.run`. Les mutations publiques vérifient OFFICIER avant tout accès au journal.
+- Le journal est commun ; les ID événements vus sont enregistrés dans le navigateur, pas dans le token ni sous une identité Google supposée.

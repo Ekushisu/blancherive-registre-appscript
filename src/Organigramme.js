@@ -86,7 +86,7 @@ function getOrganigramme(
   token
 ) {
 
-  requireRole(
+  const auth = requireRole(
     token,
     [
       "GARDE",
@@ -121,6 +121,8 @@ function getOrganigramme(
   }
 
 
+  const history = synchroniserHistoriqueEffectifs_(ss);
+  if (auth.role === "OFFICIER") installerDeclencheurHistoriqueEffectifs_(ss);
   const personnes =
     lireEffectifsOrganigramme(
       effectifsSheet
@@ -387,6 +389,8 @@ function getOrganigramme(
 
   return {
 
+    changes: historiqueEffectifsPourRole_(history, auth.role),
+
     jarl:
       jarl,
 
@@ -469,6 +473,8 @@ function lireEffectifsOrganigramme(
         "prénom"
       ]
     );
+
+  const indexId = headers.indexOf("id membre");
 
 
   const indexNom =
@@ -573,6 +579,8 @@ function lireEffectifsOrganigramme(
 
 
     personnes.push({
+
+      memberId: indexId >= 0 ? row[indexId] : "",
 
       prenom:
         prenom,

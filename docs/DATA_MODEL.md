@@ -37,6 +37,14 @@ Groupes terminaux reconnus :
 - Démissionnaires
 - Déserteurs
 
+## Suivi des changements d'Effectifs
+
+- `Effectifs` : colonne technique `ID membre` ajoutée après la dernière colonne utilisée, sans déplacer de colonne. UUID attribué aux membres et conservé lors des tris de lignes complètes. Ne pas modifier cette colonne ; inclure celle-ci dans les tris et déplacements manuels. Un UUID dupliqué est réattribué aux occurrences suivantes.
+- `HistoriqueEffectifs` : feuille créée automatiquement. Colonnes A:H : `ID événement`, `Date ISO`, `ID membre`, `Type`, `Nom`, `Changements JSON`, `État JSON`, `Source`.
+- `État JSON` conserve prénom, nom, grade, corps et statut pour comparer les états successifs. `Changements JSON` conserve les valeurs avant/après des arrivées, grades et corps. Les événements `reference` ne produisent pas de notification ; ils initialisent l'état ou suivent une modification non notifiée. Une ligne `initialisation` est écrite même si les effectifs sont vides.
+- Journal ajouté par blocs, jamais purgé automatiquement. Seuls les événements des 14 derniers jours des membres encore présents sont transmis à l'interface. Le rôle GARDE ne reçoit que ceux des membres actifs ou réservistes, comme l'organigramme.
+- Les états « Vu » sont conservés par ID événement dans le stockage local du navigateur, avec une durée de 14 jours. Ils ne sont ni communs à tous les officiers ni synchronisés entre appareils.
+
 ## Présences
 
 Colonnes A:O :

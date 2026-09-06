@@ -81,6 +81,8 @@ function getEffectifs(token) {
     throw new Error('Feuille "Effectifs" introuvable.');
   }
 
+  const history = synchroniserHistoriqueEffectifs_(ss);
+  installerDeclencheurHistoriqueEffectifs_(ss);
   const schema = lireSchemaEffectifsWeb_(sheet);
   const lastRow = sheet.getLastRow();
   const lastColumn = sheet.getLastColumn();
@@ -203,6 +205,7 @@ function getEffectifs(token) {
 
       rows.push({
         row: i + 2,
+        memberId: String(values[i][history.idIndex] || ""),
 
         prenom,
         nom,
@@ -322,6 +325,7 @@ function getEffectifs(token) {
 
   return {
     rows,
+    changes: historiqueEffectifsPourRole_(history, "OFFICIER"),
     gradeOrder,
 
     options: {
@@ -364,6 +368,10 @@ function getEffectifs(token) {
 // ============================================================
 
 function ajouterEffectif(token, data) {
+  return executerMutationHistoriqueEffectifs_(token, data, ajouterEffectifInterne_);
+}
+
+function ajouterEffectifInterne_(token, data) {
   requireRole(token, ["OFFICIER"]);
 
   if (!data) {
@@ -540,7 +548,7 @@ function ajouterEffectif(token, data) {
   SpreadsheetApp.flush();
   genererPresencesSemaineCourante();
 
-  return getEffectifs(token);
+  return true;
 }
 
 function trouverLigneAjoutEffectifsWeb_(sheet, schema, lastRow) {
@@ -603,6 +611,10 @@ function trouverLigneModeleEffectifsWeb_(sheet, schema, lastRow, lastColumn, tar
 // ============================================================
 
 function modifierEffectif(token, data) {
+  return executerMutationHistoriqueEffectifs_(token, data, modifierEffectifInterne_);
+}
+
+function modifierEffectifInterne_(token, data) {
   requireRole(token, ["OFFICIER"]);
 
   if (!data) {
@@ -757,7 +769,7 @@ function modifierEffectif(token, data) {
     genererPresencesSemaineCourante();
   }
 
-  return getEffectifs(token);
+  return true;
 }
 
 

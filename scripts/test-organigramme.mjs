@@ -30,6 +30,7 @@ const context = vm.createContext({
     assert.equal(token, 'test-token');
     assert.deepEqual(Array.from(roles), ['GARDE', 'OFFICIER']);
     authorized = true;
+    return { role: 'OFFICIER' };
   },
   SpreadsheetApp: { openById() {
     assert.ok(authorized, 'Autorisation avant lecture des données');
@@ -37,6 +38,16 @@ const context = vm.createContext({
   } }
 });
 vm.runInContext(readFileSync('src/Organigramme.js', 'utf8'), context);
+context.synchroniserHistoriqueEffectifs_ = () => ({ members: [], events: [], days: 14 });
+context.historiqueEffectifsPourRole_ = () => ({ events: [], days: 14 });
+context.installerDeclencheurHistoriqueEffectifs_ = () => {};
+const withIds = context.lireEffectifsOrganigramme({
+  getLastRow: () => 2, getLastColumn: () => 6,
+  getRange: row => ({ getDisplayValues: () => row === 1
+    ? [['Prénom', 'Nom', 'Grade', 'Corps', 'Statut', 'ID membre']]
+    : [['Alice', 'Nord', 'Garde', 'Rivebois', 'En service actif', 'stable-uuid']] })
+});
+assert.equal(withIds[0].memberId, 'stable-uuid');
 context.lireEffectifsOrganigramme = () => people;
 context.lireOrdreGradesOrganigramme = () => new Map([['capitaine', 0], ['garde', 1]]);
 const data = context.getOrganigramme('test-token');

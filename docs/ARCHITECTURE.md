@@ -25,6 +25,12 @@ Principaux modules :
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
   - aucune suppression
 
+- `HistoriqueEffectifs.js`
+  - identifiants stables dans `Effectifs!ID membre` et journal append-only `HistoriqueEffectifs`
+  - comparaison des états à la consultation et avant/après les mutations applicatives, sous verrou de script
+  - déclencheur installable `surModificationHistoriqueEffectifs_` pour les éditions manuelles Sheets, installé à la première consultation OFFICIER d'Effectifs ou de l'Organigramme
+  - pas de modification des Présences ; les appels existants de génération restent dans `Effectifs.js`
+
 - `Presences.js`
   - lecture Web des présences
   - génération / synchronisation
@@ -53,6 +59,8 @@ Le source frontend est dans `ui/` :
 - `ui/src/main.jsx` : point d'entrée React ;
 - `ui/src/app.jsx` : composants de l'interface ;
 - `ui/src/styles.css` : styles ;
+- `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
+- `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 
 `src/Index.html` est l'artefact généré par `npm run build`. Il est le seul fichier frontend envoyé par clasp et ne doit pas être modifié à la main.

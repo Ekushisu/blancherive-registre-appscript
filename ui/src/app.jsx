@@ -1,4 +1,5 @@
 import "./styles.css";
+import { ChangesProvider, RecentChanges, ChangeBadge, ChangesCount, useMemberChanges } from "./changes.jsx";
 
 const {useEffect,useMemo,useRef,useState}=React;
 
@@ -443,7 +444,7 @@ function EffectifsPage({token}){
       ).length;
 
   return(
-    <>
+    <ChangesProvider data={data.changes}>
       <div className="page-header">
         <div>
           <h1 className="page-title">
@@ -478,6 +479,8 @@ function EffectifsPage({token}){
         Les morts, radiés, démissionnaires et déserteurs sont regroupés
         séparément tout en bas de la page, indépendamment de leur corps.
       </div>
+
+      <RecentChanges onRefresh={async()=>setData(await serverCall("getEffectifs",token))}/>
 
       {error&&
         <div className="error">
@@ -557,6 +560,7 @@ function EffectifsPage({token}){
           }
         >
           Tous
+          <ChangesCount people={activeRows}/>
 
           <span className="effectifs-tab-count">
             {countForCorps(
@@ -602,6 +606,7 @@ function EffectifsPage({token}){
               />
 
               {corps}
+              <ChangesCount people={activeRows} corps={corps}/>
 
               <span className="effectifs-tab-count">
                 {countForCorps(
@@ -923,7 +928,7 @@ function EffectifsPage({token}){
           </div>
         </section>
       }
-    </>
+    </ChangesProvider>
   );
 }
 
@@ -1213,6 +1218,7 @@ function EffectifCard({
   onSave,
   showCorps=false
 }){
+  const memberChanges=useMemberChanges(member.memberId);
   const[editing,setEditing]=
     useState(false);
 
@@ -1316,10 +1322,11 @@ function EffectifCard({
   }
 
   return(
-    <article className="effectif-row">
+    <article className="effectif-row" {...memberChanges.hoverProps}>
       <div className="effectif-identity">
         <div className="effectif-name">
           {member.nomComplet}
+          <ChangeBadge change={memberChanges}/>
         </div>
 
         <div className="effectif-badges">
@@ -1636,8 +1643,9 @@ function OrganigrammePage({token}) {
   const localKeys = local?.garnisonKeys || [];
   const directCorps = data.garnisons.filter(g => !localKeys.includes(g.key));
   const localCorps = data.garnisons.filter(g => localKeys.includes(g.key));
-  return <div className="org-page">
+  return <ChangesProvider data={data.changes}><div className="org-page">
     <div className="page-header"><div><h1 className="page-title">Organigramme</h1><p className="page-subtitle">Garde de Blancherive · Chaîne de commandement</p></div><span className="org-seal">Au service de la châtellerie</span></div>
+    <RecentChanges onRefresh={async()=>setData(await serverCall("getOrganigramme",token))}/>
     <section className="org-hierarchy" aria-label="État-Major et Hird du Jarl">
       <div className="org-command-heading">État-Major</div>
       <div className="org-sovereign"><CentralGroup personnes={data.jarl?[data.jarl]:[]} grade="Jarl"/></div>
@@ -1655,11 +1663,12 @@ function OrganigrammePage({token}) {
         {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
     </section>
     <div className="org-detached"><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve}/></div>
-  </div>;
+  </div></ChangesProvider>;
 }
 function PersonCard({personne,center=false,showCorps=false}) {
+  const memberChanges=useMemberChanges(personne?.memberId);
   if(!personne)return null;
-  return <div className={`org-person ${center?"center":""}`}><div className="org-person-name">{personne.nomComplet}</div>{showCorps&&personne.corps&&<div className="org-person-corps">{personne.corps}</div>}</div>;
+  return <div className={`org-person ${center?"center":""}`} {...memberChanges.hoverProps}><div className="org-person-name">{personne.nomComplet}<ChangeBadge change={memberChanges}/></div>{showCorps&&personne.corps&&<div className="org-person-corps">{personne.corps}</div>}</div>;
 }
 function CentralGroup({personnes=[],grade,note}) {
   return <section className="org-command-node" aria-label={note?`${grade} — ${note}`:grade}><h3>{grade}{note&&<span>{note}</span>}</h3>{personnes.length?personnes.map((p,i)=><PersonCard key={i} personne={p} center/>):<div className="org-vacant">Poste vacant</div>}</section>;
@@ -1674,9 +1683,9 @@ function OrgCorps({title,people=[],compact=false}) {
   const captains=people.filter(p=>normalizeSearchText(p.grade).trim()==="capitaine");
   const others=people.filter(p=>normalizeSearchText(p.grade).trim()!=="capitaine");
   return <article className={`org-unit ${compact?"org-unit-hird":""}`}>
-    <header className="org-unit-header"><h3>{title}</h3><span className="org-count" title="Personnel en service actif">{people.length}</span></header>
+    <header className="org-unit-header"><h3>{title} <ChangesCount people={people}/></h3><span className="org-count" title="Personnel en service actif">{people.length}</span></header>
     <div className="org-captains"><div className="org-eyebrow">Capitaine{captains.length>1?"s":""}</div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
-    <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span></summary><div className="org-roster-body"><RankedPeople personnes={others}/></div></details>
+    <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others}/></div></details>
   </article>;
 }
 function Independent({title,subtitle,people=[]}) {
