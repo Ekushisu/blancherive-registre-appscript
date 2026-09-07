@@ -39,6 +39,11 @@ Principaux modules :
 - `PresenceDashboard.gs.js`
   - synthèse financière et inactivité, OFFICIER
 
+- `SoldesGrades.js`
+  - barème journalier dans la feuille `SoldesGrades`, initialisé depuis `Données!A2:A` et l'ancienne base `Vue globale!L2`
+  - application à la semaine courante, gel des anciennes références à la base commune et conservation des tarifs historiques
+  - formules de solde communes aux deux chemins de génération (`Code.js` et `Presences.js`) et aux lectures Web
+
 - `Codex.js`
   - lecture du cache `SyncCodex` pour la Web App
 

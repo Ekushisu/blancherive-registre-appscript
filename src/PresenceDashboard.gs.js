@@ -39,6 +39,9 @@ function getPresenceOfficerDashboard(token) {
     throw new Error("Feuille Effectifs introuvable.");
   }
 
+  mettreAJourSoldesPresences_(ss, presenceSheet);
+  SpreadsheetApp.flush();
+
   const now = new Date();
 
   const currentWeek = presenceDashboardGetIsoWeek_(now);

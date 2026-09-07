@@ -30,6 +30,8 @@ const context = vm.createContext({
 });
 vm.runInContext(readFileSync('src/Presences.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/PresenceDashboard.gs.js', 'utf8'), context);
+// Le barème et sa migration sont couverts par test-soldes-grades.mjs.
+context.mettreAJourSoldesPresences_ = () => {};
 context.getLastPresenceRowWebApp = () => presenceRows.length + 1;
 context.getCurrentIsoWeekWebApp = () => 36;
 context.estCorpsExcluDesPresences_ = corps => corps === 'Hird';

@@ -59,6 +59,9 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - Les coûts estimés par corps et semaine sont affichés uniquement aux OFFICIER ; ils incluent toutes les soldes du corps, déjà payées ou non, indépendamment de la recherche.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
 - Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
+- Le barème journalier est défini par grade dans `SoldesGrades`. Initialisation : Commander (alias Commandant) à 100 septims ; autres grades à l'ancienne base `Vue globale!L2` (50 actuellement), sauf Recrue à 0 et Aspirant-Garde à la moitié (25 actuellement). Le Hird reste à 0 quel que soit le tarif du grade.
+- Les changements de barème s'appliquent à toute la semaine courante et aux suivantes, selon le grade enregistré dans Présences. Les semaines passées gardent leur tarif, même après régénération/réparation. Corriger un pointage historique utilise sa formule historique lorsqu'elle existe ; un montant saisi manuellement reste inchangé.
+- Le tarif journalier est figé numériquement dans la formule de solde. La migration remplace les références historiques à `Vue globale!L2` par sa valeur initiale ; modifier ensuite cette ancienne cellule ne modifie plus les semaines migrées.
 - Les données historiques de présence ne doivent pas être détruites par une synchronisation d'effectifs.
 - L'ajout d'un effectif et toute modification de son statut régénèrent la semaine courante de Présences.
 - Les autres modifications d'Effectifs ne régénèrent pas automatiquement les Présences.

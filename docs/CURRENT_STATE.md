@@ -100,3 +100,12 @@ Le premier axe d'optimisation, si besoin, est plutôt la réduction / mise en ca
 - Journalisation des modifications applicatives sous verrou ; déclencheur d'édition Sheets installé automatiquement à la première consultation OFFICIER d'une des deux pages. Comparaison de repli à chaque chargement.
 - Le déploiement doit inclure `HistoriqueEffectifs.js` et le nouvel `Index.html`. Les autorisations Apps Script doivent permettre la création du déclencheur. L'installation effective et les écritures Sheets n'ont pas été exécutées pendant le développement local.
 - Vérifications : `node scripts/test-historique-effectifs.mjs`, `node scripts/test-changes-ui.mjs`, tests existants Organigramme et finances des Présences, puis `npm run build`.
+
+### Soldes journalières par grade (6 septembre 2026)
+
+- La base commune a été identifiée dans `Vue globale!L2`. Une feuille `SoldesGrades` est créée automatiquement au premier chargement des Présences/du tableau de bord ou à une génération/réparation de formules.
+- Commander à 100 septims/jour pour la semaine courante et les suivantes. Le barème initial des autres grades reprend la base existante ; exceptions Recrue 0 et Aspirant-Garde moitié de la base. Hird toujours exclu.
+- Le barème est modifiable directement dans `SoldesGrades`, puis appliqué au prochain chargement des Présences. Les anciennes soldes sont préservées en fixant l'ancienne base dans leurs formules, et en restaurant les formules R1C1 lors des reconstructions.
+- La pose des validations de cases dans `appliquerStructurePresences` conserve désormais les valeurs des pointages et paiements restaurés.
+- Tests : `node scripts/test-soldes-grades.mjs` (migration, barème, historique, modifications des jours, régénération, paiements, colonnes techniques et validations), `node scripts/test-presence-finances.mjs`.
+- Code local uniquement : aucun déploiement ni modification du classeur distant pendant cette intervention.

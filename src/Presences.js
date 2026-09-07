@@ -105,6 +105,8 @@ function genererPresencesSemaineCourante() {
         );
 
 
+    // Migrer les anciennes références avant de déplacer les lignes.
+    mettreAJourSoldesPresences_(ss, presencesSheet);
     const existing =
       lirePresencesExistantes(
         presencesSheet
@@ -113,6 +115,8 @@ function genererPresencesSemaineCourante() {
 
     const nouvellesLignes =
       [];
+
+    const formulesHistoriques = new Map();
 
 
     /*
@@ -140,6 +144,7 @@ function genererPresencesSemaineCourante() {
       nouvellesLignes.push(
         item.row
       );
+      if (item.formuleSolde) formulesHistoriques.set(item.row, item.formuleSolde);
     }
 
 
@@ -332,6 +337,10 @@ function genererPresencesSemaineCourante() {
         nouvellesLignes
       );
 
+
+    ecrireFormulesSoldeParBlocs_(presencesSheet,
+      nouvellesLignes.map((row, index) => ({ row: index + 2, formula: formulesHistoriques.get(row) }))
+        .filter(item => item.formula), true);
 
     appliquerStructurePresences(
       presencesSheet,
@@ -538,6 +547,8 @@ function lirePresencesExistantes(
   const result =
     [];
 
+  const formulesSolde = sheet.getRange(2, 14, lastRow - 1, 1).getFormulasR1C1();
+
 
   for (
     let i = 0;
@@ -560,6 +571,8 @@ function lirePresencesExistantes(
 
 
     result.push({
+
+      formuleSolde: formulesSolde[i][0],
 
       semaine:
         row[0],
@@ -692,6 +705,9 @@ function appliquerStructurePresences(
   const dataRows =
     lastRow - 1;
 
+  // Poser la validation sans remettre à faux les pointages et paiements sauvegardés.
+  const checkboxRule = SpreadsheetApp.newDataValidation().requireCheckbox().build();
+
 
   // ==========================================================
   // CHECKBOXES F:L
@@ -704,7 +720,7 @@ function appliquerStructurePresences(
       dataRows,
       7
     )
-    .insertCheckboxes();
+    .setDataValidation(checkboxRule);
 
 
   // ==========================================================
@@ -718,7 +734,7 @@ function appliquerStructurePresences(
       dataRows,
       1
     )
-    .insertCheckboxes();
+    .setDataValidation(checkboxRule);
 
 
   // ==========================================================
@@ -729,8 +745,6 @@ function appliquerStructurePresences(
     [];
 
 
-  const soldeFormulas =
-    [];
 
 
   for (
@@ -744,9 +758,6 @@ function appliquerStructurePresences(
     ]);
 
 
-    soldeFormulas.push([
-      `=IF(OR(B${row}="Hird du Jarl";C${row}="Recrue");0;IF(C${row}="Aspirant-Garde";M${row}*'Vue globale'!$L$2/2;M${row}*'Vue globale'!$L$2))`
-    ]);
   }
 
 
@@ -762,16 +773,7 @@ function appliquerStructurePresences(
     );
 
 
-  sheet
-    .getRange(
-      2,
-      14,
-      dataRows,
-      1
-    )
-    .setFormulas(
-      soldeFormulas
-    );
+  mettreAJourSoldesPresences_(sheet.getParent(), sheet);
 
 
   // ==========================================================
@@ -921,6 +923,7 @@ function getPresences(
   }
 
 
+  mettreAJourSoldesPresences_(ss, sheet);
   SpreadsheetApp.flush();
 
 

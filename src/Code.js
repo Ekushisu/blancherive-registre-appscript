@@ -698,7 +698,6 @@ function reparerFormulesPresence() {
 
 
   const presenceFormulas = [];
-  const salaryFormulas = [];
 
 
   for (
@@ -717,7 +716,6 @@ function reparerFormulesPresence() {
     ) {
 
       presenceFormulas.push([""]);
-      salaryFormulas.push([""]);
 
       continue;
     }
@@ -729,21 +727,6 @@ function reparerFormulesPresence() {
     ]);
 
 
-    // N = Solde
-    salaryFormulas.push([
-      `=IF(` +
-        `OR(` +
-          `B${row}="Hird du Jarl";` +
-          `C${row}="Recrue"` +
-        `);` +
-        `0;` +
-        `IF(` +
-          `C${row}="Aspirant-Garde";` +
-          `M${row}*'Vue globale'!$L$2/2;` +
-          `M${row}*'Vue globale'!$L$2` +
-        `)` +
-      `)`
-    ]);
   }
 
 
@@ -759,16 +742,7 @@ function reparerFormulesPresence() {
     );
 
 
-  presences
-    .getRange(
-      2,
-      14,
-      salaryFormulas.length,
-      1
-    )
-    .setFormulas(
-      salaryFormulas
-    );
+  mettreAJourSoldesPresences_(spreadsheet, presences);
 
 
   SpreadsheetApp.flush();
