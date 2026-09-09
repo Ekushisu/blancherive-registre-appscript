@@ -2,7 +2,7 @@
   "name": "garde-blancherive-appscript",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-ui.mjs",
+    "build": "node scripts/prepare-catalogue-objets.mjs && node scripts/build-ui.mjs",
     "pull": "cd src && clasp pull",
     "push": "npm run build && cd src && clasp push",
     "status": "cd src && clasp status",

@@ -38,3 +38,11 @@ Avant toute modification, lire :
 ## Déploiement
 
 Le repo représente le code source. Un `clasp push` met à jour le projet Apps Script, mais la Web App déployée peut nécessiter une nouvelle version / mise à jour de déploiement.
+
+Incident du 7 septembre 2026 : un déploiement par clasp a été suivi d'un refus
+d'accès en navigation privée, malgré `ANYONE_ANONYMOUS` dans l'API. Tant que cet
+incident n'est pas résolu, privilégier le push du code et la publication finale
+par le propriétaire depuis l'interface Apps Script ; ne pas relancer de mise à
+jour automatique du déploiement sans demande explicite. Conserver le lien existant.
+Un HTTP 403 ou une demande de connexion en accès anonyme interdit de considérer
+la mise en ligne comme validée, même si la version et les fichiers concordent.

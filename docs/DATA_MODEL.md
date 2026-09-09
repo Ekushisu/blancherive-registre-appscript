@@ -93,6 +93,14 @@ Colonnes A:G :
 
 ## Prison
 
+La colonne J conserve les anciennes saisies en texte libre. Les nouvelles saisies
+sont une chaîne JSON : `[{"id":"skyrim.esm|00000F","nom":"Or","quantite":9000}]`.
+Le nom est un instantané lu dans Objets à l'enregistrement ; il reste inchangé si
+le catalogue est renommé. Une liste vide est stockée sous la forme `[]`.
+Les listes structurées sont affichées en lignes « Nom × quantité » dans la Web App.
+Les cellules historiques ou non reconnues comme liste structurée restent affichées
+en texte. Aucun déplacement de colonne et aucune conversion des anciennes lignes.
+
 Colonnes A:K :
 
 | Colonne | Contenu |
@@ -108,6 +116,22 @@ Colonnes A:K :
 | I | Libéré |
 | J | Saisies sur la personne |
 | K | Motif / Notes |
+
+## Objets
+
+Feuille créée automatiquement à la première recherche d'au moins trois caractères,
+uniquement si elle n'existe pas. A:C : `ID objet`, `Nom`, `Type` ; valeurs textuelles,
+10 131 fiches initiales. L'ID complet contient le plugin et l'identifiant local,
+par exemple `skyrim.esm|013989` ; ne pas utiliser uniquement la partie numérique.
+Les IDs doivent rester uniques sans distinction de casse. Les en-têtes et leur
+ordre sont contrôlés. Une feuille existante n'est jamais remplacée ni réimportée,
+même si elle est vide ; les noms et types peuvent être modifiés dans Sheets.
+
+`docs/catalogue-objets/Objets.csv` est l'export à trois colonnes.
+`src/CatalogueObjets.html` est la ressource JSON générée pour initialiser la feuille,
+chargée côté serveur uniquement à sa création ; elle n'est pas incluse dans Index.
+Le catalogue initial reste un catalogue technique candidat, sans certification de
+disponibilité des objets sur le serveur de jeu.
 
 ## SyncCodex
 

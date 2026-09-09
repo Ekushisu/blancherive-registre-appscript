@@ -2,6 +2,43 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Catalogue des objets et saisies Prison (7 septembre 2026)
+
+- Catalogue initial de 10 131 fiches en trois colonnes ID objet, Nom, Type. Feuille
+  Objets créée à la première recherche si absente, sous verrou et par écriture en bloc.
+  Une feuille existante reste la source de vérité ; aucune réimportation automatique.
+- Autocomplétion dès trois caractères, attente de 300 ms, quinze suggestions maximum,
+  recherche par nom sans accents ou par ID (avec tolérance aux zéros initiaux).
+  Navigation clavier, indication de chargement et d'erreur, réponses obsolètes ignorées.
+- Ajouts de plusieurs objets, quantités cumulées par ID, retrait avant enregistrement,
+  brouillon non ajouté bloquant la soumission. Champs et fermeture du formulaire
+  désactivés pendant l'enregistrement.
+- Validation serveur des objets et quantités, noms historiques dans le JSON Prison!J,
+  affichage lisible et prise en charge des anciennes saisies en texte libre.
+- Aucune lecture du catalogue au chargement du registre, du formulaire ou des autres
+  pages. Lecture de A:C en bloc lors de la recherche ; pas de cache tant qu'aucune
+  mesure distante ne justifie sa complexité. Ajout sans saisie : aucune lecture Objets.
+- Tests : `node scripts/test-prison-objets.mjs`, `node scripts/test-saisies-ui.mjs`,
+  et les six suites existantes réussis. Génération : `npm run build` réussie.
+- Code envoyé par clasp (16 fichiers), déploiement Web App existant mis à jour en
+  version **52** le 7 septembre 2026. L'initialisation réelle d'Objets reste déclenchée
+  par la première recherche ; aucun enregistrement d'incarcération de test n'a été
+  créé en production. Les tests locaux ne remplacent pas un essai utilisateur connecté.
+- Vérification par l'API Apps Script : les 16 fichiers de la version 52 concordent
+  avec le dépôt ; accès Web App `ANYONE_ANONYMOUS` conservé. La lecture HTTP directe
+  de l'URL depuis l'environnement de développement a retourné 403, donc aucun test
+  du formulaire connecté en production n'a été effectué pendant cette intervention.
+- Incident confirmé par le propriétaire : le lien demande un accès en navigation
+  privée après la publication par clasp. Un diagnostic HTTP anonyme reproduit une
+  page Google Drive « accès refusé » (403), malgré `ANYONE_ANONYMOUS` et
+  `USER_DEPLOYING`. Les manifestes des versions 51 et 52 sont identiques. Un retour
+  temporaire à 51 n'a pas corrigé l'accès ; la version 52 a ensuite été remise sur
+  le même déploiement. Cause exacte non établie, accès public **non rétabli**.
+  Prochaine action : vérifier et revalider le déploiement existant dans l'interface
+  Apps Script du propriétaire (exécuter en tant que Moi, accès Tout le monde), puis
+  tester sans connexion Google. Ne pas confondre le partage du classeur/source
+  avec l'accès à la Web App.
+
 ## Fonctionnel
 
 ### Auth

@@ -31,6 +31,98 @@ button {
 .app {
   min-height: 100vh;
 }
+.saisies-field h3 {
+  font-size: 15px;
+  margin: 4px 0 12px;
+}
+.saisie-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.saisie-search {
+  position: relative;
+  flex: 1 1 300px;
+  min-width: 0;
+}
+.saisie-quantity {
+  flex: 0 1 140px;
+}
+.saisie-controls button {
+  min-height: 40px;
+}
+.saisie-suggestions {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: 100%;
+  max-height: 300px;
+  overflow: auto;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid #999;
+  border-radius: 7px;
+  background: white;
+  box-shadow: 0 8px 20px #0002;
+}
+.saisie-suggestions li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  overflow-wrap: anywhere;
+}
+.saisie-suggestions li:hover,
+.saisie-suggestions li.active {
+  background: #e8eef5;
+}
+.saisie-suggestions span,
+.saisies-list small {
+  display: block;
+  margin-top: 4px;
+  color: #555;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.saisie-help {
+  font-size: 12px;
+  color: #555;
+  margin: 8px 0;
+}
+.saisies-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.saisies-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 7px;
+  padding: 9px 12px;
+}
+.saisies-cell {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .saisie-search {
+    flex-basis: 100%;
+  }
+  .saisie-quantity {
+    flex: 1;
+  }
+  .saisies-list li {
+    align-items: flex-start;
+  }
+}
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -1894,6 +1986,201 @@ button {
 <body>
 <div id="root"></div>
 <script>(() => {
+  // ui/src/saisies.jsx
+  var { useEffect, useRef, useState } = React;
+  function ajouterObjetSaisi(items, objet, quantite) {
+    if (!objet || !Number.isSafeInteger(quantite) || quantite <= 0) {
+      throw new Error("S\xE9lectionnez un objet et indiquez une quantit\xE9 enti\xE8re strictement positive.");
+    }
+    const existing = items.find((item) => item.id === objet.id);
+    if (!existing && items.length >= 100) throw new Error("La limite de 100 objets diff\xE9rents est atteinte.");
+    const total = ((existing == null ? void 0 : existing.quantite) || 0) + quantite;
+    if (!Number.isSafeInteger(total)) throw new Error("Quantit\xE9 totale trop \xE9lev\xE9e.");
+    return existing ? items.map((item) => item.id === objet.id ? { ...item, quantite: total } : item) : [...items, { id: objet.id, nom: objet.nom, quantite }];
+  }
+  function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall: serverCall2 }) {
+    const [query, setQuery] = useState("");
+    const [selected, setSelected] = useState(null);
+    const [quantity, setQuantity] = useState("1");
+    const [results, setResults] = useState([]);
+    const [truncated, setTruncated] = useState(false);
+    const [status, setStatus] = useState("");
+    const [error, setError] = useState("");
+    const [open, setOpen] = useState(false);
+    const [active, setActive] = useState(-1);
+    const version = useRef(0);
+    const input = useRef(null);
+    const quantityInput = useRef(null);
+    useEffect(() => {
+      const current = ++version.current;
+      setResults([]);
+      setActive(-1);
+      setTruncated(false);
+      if (disabled || selected || query.trim().length < 3) {
+        setStatus("");
+        return;
+      }
+      setStatus("attente");
+      const timer = setTimeout(async () => {
+        setStatus("chargement");
+        try {
+          const response = await serverCall2("rechercherObjets", token, query.trim());
+          if (version.current !== current) return;
+          setResults(response.objets);
+          setTruncated(response.tronque);
+          setStatus("termine");
+        } catch (e) {
+          if (version.current !== current) return;
+          setError(e.message || "La recherche a \xE9chou\xE9.");
+          setStatus("erreur");
+        }
+      }, 300);
+      return () => {
+        clearTimeout(timer);
+        version.current++;
+      };
+    }, [query, selected, token, disabled, serverCall2]);
+    function edit(text) {
+      version.current++;
+      setQuery(text);
+      setSelected(null);
+      setResults([]);
+      setActive(-1);
+      setError("");
+      setOpen(true);
+      setStatus(text.trim().length >= 3 ? "attente" : "");
+      onPendingChange(Boolean(text.trim()));
+    }
+    function choose(objet) {
+      if (disabled) return;
+      version.current++;
+      setSelected(objet);
+      setQuery(objet.nom);
+      setResults([]);
+      setOpen(false);
+      setActive(-1);
+      setError("");
+      setStatus("");
+      onPendingChange(true);
+    }
+    function clear() {
+      var _a;
+      version.current++;
+      setQuery("");
+      setSelected(null);
+      setQuantity("1");
+      setResults([]);
+      setOpen(false);
+      setActive(-1);
+      setError("");
+      setStatus("");
+      onPendingChange(false);
+      (_a = input.current) == null ? void 0 : _a.focus();
+    }
+    function add() {
+      if (disabled) return;
+      try {
+        onChange(ajouterObjetSaisi(value, selected, Number(quantity)));
+        clear();
+      } catch (e) {
+        setError(e.message);
+      }
+    }
+    function keyDown(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        setActive(-1);
+      }
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        setOpen(true);
+        if (results.length) setActive((index) => event.key === "ArrowDown" ? (index + 1) % results.length : index <= 0 ? results.length - 1 : index - 1);
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (open && active >= 0 && results[active]) choose(results[active]);
+        else if (selected) add();
+      }
+    }
+    useEffect(() => {
+      var _a, _b, _c;
+      if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`saisie-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
+    }, [active, open]);
+    useEffect(() => {
+      var _a;
+      if (selected) (_a = quantityInput.current) == null ? void 0 : _a.focus();
+    }, [selected]);
+    return /* @__PURE__ */ React.createElement("div", { className: "field field-full saisies-field" }, /* @__PURE__ */ React.createElement("h3", null, "Saisies sur la personne"), /* @__PURE__ */ React.createElement("div", { className: "saisie-controls" }, /* @__PURE__ */ React.createElement("div", { className: "saisie-search", onBlur: (event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) {
+        setOpen(false);
+        setActive(-1);
+      }
+    } }, /* @__PURE__ */ React.createElement("label", { htmlFor: "saisie-objet" }, "Objet"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: "saisie-objet",
+        ref: input,
+        role: "combobox",
+        autoComplete: "off",
+        maxLength: selected ? 300 : 100,
+        "aria-autocomplete": "list",
+        "aria-expanded": open && results.length > 0,
+        "aria-controls": "saisie-suggestions",
+        "aria-describedby": "saisie-aide",
+        "aria-activedescendant": open && active >= 0 ? `saisie-option-${active}` : void 0,
+        placeholder: "Nom ou ID \u2014 3 caract\xE8res minimum",
+        value: query,
+        disabled,
+        onChange: (e) => edit(e.target.value),
+        onFocus: () => setOpen(true),
+        onKeyDown: keyDown
+      }
+    ), /* @__PURE__ */ React.createElement("ul", { id: "saisie-suggestions", role: "listbox", "aria-label": "Objets propos\xE9s", className: "saisie-suggestions", hidden: !open || !results.length }, results.map((objet, index) => /* @__PURE__ */ React.createElement(
+      "li",
+      {
+        id: `saisie-option-${index}`,
+        key: objet.id,
+        role: "option",
+        "aria-selected": index === active,
+        className: index === active ? "active" : "",
+        onMouseDown: (e) => e.preventDefault(),
+        onClick: () => choose(objet)
+      },
+      /* @__PURE__ */ React.createElement("strong", null, objet.nom),
+      /* @__PURE__ */ React.createElement("span", null, objet.type, " \xB7 ", objet.id)
+    )))), /* @__PURE__ */ React.createElement("div", { className: "saisie-quantity" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "saisie-quantite" }, "Quantit\xE9"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: "saisie-quantite",
+        ref: quantityInput,
+        type: "number",
+        min: "1",
+        step: "1",
+        max: Number.MAX_SAFE_INTEGER,
+        value: quantity,
+        disabled: disabled || !selected,
+        onChange: (e) => setQuantity(e.target.value),
+        onKeyDown: (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            add();
+          }
+        }
+      }
+    )), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: disabled || !selected, onClick: add }, "Ajouter l\u2019objet"), query && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled, onClick: clear }, "Effacer")), /* @__PURE__ */ React.createElement("p", { id: "saisie-aide", className: "saisie-help", role: "status" }, selected ? `${selected.nom} s\xE9lectionn\xE9 \xB7 ${selected.id}` : status === "chargement" || status === "attente" ? "Recherche\u2026" : status === "termine" ? results.length ? `${results.length} suggestion${results.length > 1 ? "s" : ""}${truncated ? " \u2014 pr\xE9cisez la recherche pour en voir d\u2019autres." : "."}` : "Aucun objet trouv\xE9. Essayez un autre nom ou son ID." : "Saisissez au moins 3 caract\xE8res, puis s\xE9lectionnez un objet."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), value.length ? /* @__PURE__ */ React.createElement("ul", { className: "saisies-list" }, value.map((item) => /* @__PURE__ */ React.createElement("li", { key: item.id }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, item.nom), " \xD7 ", item.quantite.toLocaleString("fr-FR"), /* @__PURE__ */ React.createElement("small", null, item.id)), /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "danger-button",
+        disabled,
+        "aria-label": `Retirer ${item.nom}`,
+        onClick: () => onChange(value.filter((other) => other.id !== item.id))
+      },
+      "Retirer"
+    )))) : /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Aucun objet ajout\xE9."));
+  }
+
   // ui/src/change-state.js
   var CHANGE_SEEN_KEY = "blancherive.effectifs.vus.v1";
   var CHANGE_MAX_AGE = 14 * 864e5;
@@ -1918,7 +2205,7 @@ button {
   }
 
   // ui/src/changes.jsx
-  var { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
+  var { createContext, useContext, useEffect: useEffect2, useMemo, useRef: useRef2, useState: useState2 } = React;
   var ChangesContext = createContext({ events: [], seen: {}, mark: () => {
   } });
   var sessionSeen = {};
@@ -1933,17 +2220,17 @@ button {
     return `${labels[change.type]} : ${change.avant || "Sans affectation"} \u2192 ${change.apres || "Sans affectation"}`;
   }
   function ChangesProvider({ data, children }) {
-    const [seen, setSeen] = useState(() => {
+    const [seen, setSeen] = useState2(() => {
       try {
         return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) };
       } catch (e) {
         return sessionSeen;
       }
     });
-    const [storageFailed, setStorageFailed] = useState(false);
-    const [now, setNow] = useState(Date.now());
+    const [storageFailed, setStorageFailed] = useState2(false);
+    const [now, setNow] = useState2(Date.now());
     const events = useMemo(() => recentChanges(data == null ? void 0 : data.events, now), [data, now]);
-    useEffect(() => {
+    useEffect2(() => {
       const timer = setInterval(() => setNow(Date.now()), 6e4);
       const sync = (e) => {
         if (e.key === CHANGE_SEEN_KEY) {
@@ -1979,14 +2266,14 @@ button {
     const { events, seen, mark } = useContext(ChangesContext);
     const items = events.filter((e) => e.memberId === memberId);
     const unread = items.filter((e) => !seen[e.id]);
-    const [open, setOpen] = useState(false);
-    const timer = useRef(null);
+    const [open, setOpen] = useState2(false);
+    const timer = useRef2(null);
     const signature = items.map((e) => e.id).join("|");
     function cancel() {
       clearTimeout(timer.current);
       timer.current = null;
     }
-    useEffect(() => {
+    useEffect2(() => {
       cancel();
       setOpen(false);
       return cancel;
@@ -2051,11 +2338,11 @@ button {
   }
   function RecentChanges({ onRefresh }) {
     const { events, seen, mark } = useContext(ChangesContext);
-    const [type, setType] = useState("");
-    const [onlyUnread, setOnlyUnread] = useState(false);
-    const [search, setSearch] = useState("");
-    const [refreshing, setRefreshing] = useState(false);
-    const [error, setError] = useState("");
+    const [type, setType] = useState2("");
+    const [onlyUnread, setOnlyUnread] = useState2(false);
+    const [search, setSearch] = useState2("");
+    const [refreshing, setRefreshing] = useState2(false);
+    const [error, setError] = useState2("");
     const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps}`).includes(normalize(search.trim())));
     const unread = events.filter((e) => !seen[e.id]);
@@ -2082,7 +2369,7 @@ button {
   }
 
   // ui/src/app.jsx
-  var { useEffect: useEffect2, useMemo: useMemo2, useRef: useRef2, useState: useState2 } = React;
+  var { useEffect: useEffect3, useMemo: useMemo2, useRef: useRef3, useState: useState3 } = React;
   function serverCall(name, ...args) {
     return new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
@@ -2112,11 +2399,11 @@ button {
     return articles.find((a) => String(a.article).toLowerCase() === String(m[1]).toLowerCase() && a.source === "Codex Judiciaire de Blancherive") || null;
   }
   function App() {
-    const [token, setToken] = useState2(sessionStorage.getItem("guardAuthToken"));
-    const [role, setRole] = useState2(null);
-    const [page, setPage] = useState2("organigramme");
-    const [codexFocus, setCodexFocus] = useState2(null);
-    useEffect2(() => {
+    const [token, setToken] = useState3(sessionStorage.getItem("guardAuthToken"));
+    const [role, setRole] = useState3(null);
+    const [page, setPage] = useState3("organigramme");
+    const [codexFocus, setCodexFocus] = useState3(null);
+    useEffect3(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => setRole(i.role)).catch(logout);
     }, [token]);
@@ -2140,8 +2427,8 @@ button {
     } })));
   }
   function Login({ onLogin }) {
-    const [password, setPassword] = useState2("");
-    const [error, setError] = useState2("");
+    const [password, setPassword] = useState3("");
+    const [error, setError] = useState3("");
     async function submit(e) {
       e.preventDefault();
       try {
@@ -2167,13 +2454,13 @@ button {
     };
   }
   function EffectifsPage({ token }) {
-    const [data, setData] = useState2(null);
-    const [search, setSearch] = useState2("");
-    const [activeCorps, setActiveCorps] = useState2("ALL");
-    const [showForm, setShowForm] = useState2(false);
-    const [error, setError] = useState2("");
-    const [success, setSuccess] = useState2("");
-    useEffect2(() => {
+    const [data, setData] = useState3(null);
+    const [search, setSearch] = useState3("");
+    const [activeCorps, setActiveCorps] = useState3("ALL");
+    const [showForm, setShowForm] = useState3(false);
+    const [error, setError] = useState3("");
+    const [success, setSuccess] = useState3("");
+    useEffect3(() => {
       serverCall(
         "getEffectifs",
         token
@@ -2687,7 +2974,7 @@ button {
         "En service actif"
       )
     );
-    const [form, setForm] = useState2({
+    const [form, setForm] = useState3({
       prenom: "",
       nom: "",
       grade: options.grades[0] || "",
@@ -2696,7 +2983,7 @@ button {
       status: active || options.statuses[0] || "",
       assermente: false
     });
-    const [saving, setSaving] = useState2(false);
+    const [saving, setSaving] = useState3(false);
     async function submit(e) {
       e.preventDefault();
       try {
@@ -2869,18 +3156,18 @@ button {
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     const memberChanges = useMemberChanges(member.memberId);
-    const [editing, setEditing] = useState2(false);
-    const [grade, setGrade] = useState2(member.grade);
-    const [corps, setCorps] = useState2(member.corps);
-    const [specialite, setSpecialite] = useState2(
+    const [editing, setEditing] = useState3(false);
+    const [grade, setGrade] = useState3(member.grade);
+    const [corps, setCorps] = useState3(member.corps);
+    const [specialite, setSpecialite] = useState3(
       member.specialite || ""
     );
-    const [status, setStatus] = useState2(member.status);
-    const [assermente, setAssermente] = useState2(
+    const [status, setStatus] = useState3(member.status);
+    const [assermente, setAssermente] = useState3(
       member.assermente
     );
-    const [saving, setSaving] = useState2(false);
-    useEffect2(() => {
+    const [saving, setSaving] = useState3(false);
+    useEffect3(() => {
       setGrade(
         member.grade
       );
@@ -3123,8 +3410,8 @@ button {
     } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, article.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${article.article}`), /* @__PURE__ */ React.createElement("h2", { className: "law-modal-title" }, article.titre)), /* @__PURE__ */ React.createElement("button", { className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, article.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.famille), /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.source), article.local && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-local" }, "Applicable localement"), article.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.classification), article.amende !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", article.amende, " septims"), article.cachot !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", formatHours(article.cachot)), article.travaux !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u2692 ", formatHours(article.travaux))), (article.autorite || article.applicabilite) && /* @__PURE__ */ React.createElement("div", { className: "law-source-info" }, article.autorite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Autorit\xE9 :"), " ", article.autorite), article.applicabilite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Domaine :"), " ", article.applicabilite)), article.texte && /* @__PURE__ */ React.createElement("div", { className: "law-text" }, article.texte), article.sanction && /* @__PURE__ */ React.createElement("div", { className: "law-sanction-box" }, /* @__PURE__ */ React.createElement("strong", null, "\u2696 Sanction"), /* @__PURE__ */ React.createElement("div", null, article.sanction)), article.alerte && /* @__PURE__ */ React.createElement("div", { className: "law-warning" }, "\u26A0 ", /* @__PURE__ */ React.createElement("strong", null, "V\xE9rification n\xE9cessaire :"), " ", article.alerte), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, article.url && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => window.open(article.url, "_blank") }, "Ouvrir le document source \u2197"), onOpenCodex && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => onOpenCodex(article) }, "Voir dans le Codex")))));
   }
   function CodexPage({ token, focusArticle, onFocusConsumed }) {
-    const [data, setData] = useState2(null), [search, setSearch] = useState2(""), [family, setFamily] = useState2(""), [source, setSource] = useState2(""), [classification, setClassification] = useState2(""), [selected, setSelected] = useState2(null), [error, setError] = useState2("");
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [search, setSearch] = useState3(""), [family, setFamily] = useState3(""), [source, setSource] = useState3(""), [classification, setClassification] = useState3(""), [selected, setSelected] = useState3(null), [error, setError] = useState3("");
+    useEffect3(() => {
       serverCall("getCodex", token).then((r) => {
         setData(r);
         if (focusArticle) {
@@ -3151,8 +3438,8 @@ button {
     } }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les familles"), families.map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v))), /* @__PURE__ */ React.createElement("select", { value: classification, onChange: (e) => setClassification(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes classifications"), classes.map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "codex-count" }, filtered.length, " r\xE9sultat", filtered.length !== 1 ? "s" : ""), /* @__PURE__ */ React.createElement("div", { className: "codex-list" }, filtered.map((a, i) => /* @__PURE__ */ React.createElement("article", { className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), a.amende !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", a.amende), a.cachot !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", formatHours(a.cachot)))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction)))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null) }));
   }
   function OrganigrammePage({ token }) {
-    const [data, setData] = useState2(null), [error, setError] = useState2("");
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [error, setError] = useState3("");
+    useEffect3(() => {
       let active = true;
       serverCall("getOrganigramme", token).then((r) => {
         if (active) setData(r);
@@ -3201,8 +3488,8 @@ button {
     return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, title), /* @__PURE__ */ React.createElement("p", null, subtitle)), /* @__PURE__ */ React.createElement("span", { className: "org-count" }, people.length)), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people, showCorps: true }));
   }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState2(null), [formData, setFormData] = useState2(null), [codex, setCodex] = useState2(null), [selected, setSelected] = useState2(null), [showForm, setShowForm] = useState2(false), [error, setError] = useState2(""), [deletingRow, setDeletingRow] = useState2(null);
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [formData, setFormData] = useState3(null), [codex, setCodex] = useState3(null), [selected, setSelected] = useState3(null), [showForm, setShowForm] = useState3(false), [error, setError] = useState3(""), [deletingRow, setDeletingRow] = useState3(null);
+    useEffect3(() => {
       Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
         setData(r);
         setFormData(f);
@@ -3251,9 +3538,9 @@ ${item.infraction}`)) return;
     } })), canDelete && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
   }
   function AmendeForm({ data, onSubmit, onOpenLaw }) {
-    const [form, setForm] = useState2({ date: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), garde: "", contrevenant: "", infraction: "" });
-    const [submitting, setSubmitting] = useState2(false);
-    const submittingRef = useRef2(false);
+    const [form, setForm] = useState3({ date: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), garde: "", contrevenant: "", infraction: "" });
+    const [submitting, setSubmitting] = useState3(false);
+    const submittingRef = useRef3(false);
     const selected = data.infractions.find((i) => i.label === form.infraction);
     async function submit(e) {
       e.preventDefault();
@@ -3272,8 +3559,8 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle amende"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, "Infraction"), /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => setForm({ ...form, infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.infractions.map((i) => /* @__PURE__ */ React.createElement("option", { key: i.label, value: i.label }, i.label))), form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article"))), /* @__PURE__ */ React.createElement(Field, { label: "Montant pr\xE9vu" }, /* @__PURE__ */ React.createElement("input", { readOnly: true, value: !selected ? "" : selected.montant === "" ? "\xC0 d\xE9terminer" : `${selected.montant} septims` }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
   }
   function PrisonPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState2(null), [formData, setFormData] = useState2(null), [codex, setCodex] = useState2(null), [selected, setSelected] = useState2(null), [showForm, setShowForm] = useState2(false), [error, setError] = useState2(""), [deletingRow, setDeletingRow] = useState2(null);
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [formData, setFormData] = useState3(null), [codex, setCodex] = useState3(null), [selected, setSelected] = useState3(null), [showForm, setShowForm] = useState3(false), [error, setError] = useState3(""), [deletingRow, setDeletingRow] = useState3(null), [saving, setSaving] = useState3(false);
+    useEffect3(() => {
       Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
         setData(r);
         setFormData(f);
@@ -3300,12 +3587,16 @@ ${item.infraction}`)) return;
         setDeletingRow(null);
       }
     }
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Prison"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle incarc\xE9ration")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(PrisonForm, { data: formData, onOpenLaw: openLaw, onSubmit: async (f) => {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Prison"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", disabled: saving, onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle incarc\xE9ration")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(PrisonForm, { token, data: formData, onOpenLaw: openLaw, onSubmit: async (f) => {
+      setSaving(true);
+      setError("");
       try {
         setData(await serverCall("ajouterPrison", token, f));
         setShowForm(false);
       } catch (e) {
         setError(e.message);
+      } finally {
+        setSaving(false);
       }
     } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", null, i.date), /* @__PURE__ */ React.createElement("td", null, i.garde), /* @__PURE__ */ React.createElement("td", null, i.detenu), /* @__PURE__ */ React.createElement("td", null, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", null, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", null, i.entree), /* @__PURE__ */ React.createElement("td", null, i.sortie || "\u2014"), /* @__PURE__ */ React.createElement("td", { className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
       try {
@@ -3313,19 +3604,26 @@ ${item.infraction}`)) return;
       } catch (x) {
         setError(x.message);
       }
-    } })), /* @__PURE__ */ React.createElement("td", null, i.saisies || "\u2014"), /* @__PURE__ */ React.createElement("td", null, i.notes || "\u2014"), canDelete && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
+    } })), /* @__PURE__ */ React.createElement("td", { className: "saisies-cell" }, i.saisies || "\u2014"), /* @__PURE__ */ React.createElement("td", null, i.notes || "\u2014"), canDelete && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
   }
-  function PrisonForm({ data, onSubmit, onOpenLaw }) {
+  function PrisonForm({ token, data, onSubmit, onOpenLaw }) {
     const now = /* @__PURE__ */ new Date(), local = new Date(now.getTime() - now.getTimezoneOffset() * 6e4);
-    const [form, setForm] = useState2({ date: local.toISOString().slice(0, 10), garde: "", detenu: "", cellule: "", infraction: "", entree: local.toISOString().slice(0, 16), saisies: "", notes: "" });
-    const [submitting, setSubmitting] = useState2(false);
-    const submittingRef = useRef2(false);
+    const [form, setForm] = useState3({ date: local.toISOString().slice(0, 10), garde: "", detenu: "", cellule: "", infraction: "", entree: local.toISOString().slice(0, 16), saisies: [], notes: "" });
+    const [submitting, setSubmitting] = useState3(false);
+    const [saisieEnCours, setSaisieEnCours] = useState3(false);
+    const [saisieError, setSaisieError] = useState3("");
+    const submittingRef = useRef3(false);
     const selected = data.infractions.find((i) => i.label === form.infraction);
     async function submit(e) {
       e.preventDefault();
       if (submittingRef.current) {
         return;
       }
+      if (saisieEnCours) {
+        setSaisieError("Ajoutez l\u2019objet en cours \xE0 la liste ou effacez la recherche avant d\u2019enregistrer.");
+        return;
+      }
+      setSaisieError("");
       submittingRef.current = true;
       setSubmitting(true);
       try {
@@ -3335,14 +3633,17 @@ ${item.infraction}`)) return;
         setSubmitting(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle incarc\xE9ration"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, "Infraction"), /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => setForm({ ...form, infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.infractions.map((i) => /* @__PURE__ */ React.createElement("option", { key: i.label, value: i.label }, i.label))), form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article"))), /* @__PURE__ */ React.createElement(Field, { label: "Dur\xE9e pr\xE9vue" }, /* @__PURE__ */ React.createElement("input", { readOnly: true, value: !selected ? "" : selected.duree === "" ? "\xC0 d\xE9terminer" : formatHours(selected.duree) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Saisies sur la personne"), /* @__PURE__ */ React.createElement("textarea", { value: form.saisies, onChange: (e) => setForm({ ...form, saisies: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Motif / Notes"), /* @__PURE__ */ React.createElement("textarea", { value: form.notes, onChange: (e) => setForm({ ...form, notes: e.target.value }) }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle incarc\xE9ration"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, "Infraction"), /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => setForm({ ...form, infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.infractions.map((i) => /* @__PURE__ */ React.createElement("option", { key: i.label, value: i.label }, i.label))), form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article"))), /* @__PURE__ */ React.createElement(Field, { label: "Dur\xE9e pr\xE9vue" }, /* @__PURE__ */ React.createElement("input", { readOnly: true, value: !selected ? "" : selected.duree === "" ? "\xC0 d\xE9terminer" : formatHours(selected.duree) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement(SaisiesField, { token, value: form.saisies, disabled: submitting, serverCall, onPendingChange: (pending) => {
+      setSaisieEnCours(pending);
+      setSaisieError("");
+    }, onChange: (saisies) => setForm((previous) => ({ ...previous, saisies })) }), saisieError && /* @__PURE__ */ React.createElement("div", { className: "field-full error", role: "alert" }, saisieError), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Motif / Notes"), /* @__PURE__ */ React.createElement("textarea", { value: form.notes, onChange: (e) => setForm({ ...form, notes: e.target.value }) }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
   }
   function Field({ label, children }) {
     return /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, label), children);
   }
   function PresenceOfficerDashboard({ token }) {
-    const [data, setData] = useState2(null), [error, setError] = useState2("");
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [error, setError] = useState3("");
+    useEffect3(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
@@ -3353,8 +3654,8 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState2(null), [error, setError] = useState2(""), [weekFilter, setWeekFilter] = useState2(""), [search, setSearch] = useState2("");
-    useEffect2(() => {
+    const [data, setData] = useState3(null), [error, setError] = useState3(""), [weekFilter, setWeekFilter] = useState3(""), [search, setSearch] = useState3("");
+    useEffect3(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement des pr\xE9sences : ", error);
@@ -3371,8 +3672,8 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, "Semaine ", week))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-search" }, "Rechercher une personne"), /* @__PURE__ */ React.createElement("input", { id: "presence-search", type: "search", placeholder: "Pr\xE9nom ou nom\u2026", value: search, onChange: (e) => setSearch(e.target.value) })), canEdit && /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Co\xFBt total estim\xE9 : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les pr\xE9sences enregistr\xE9es."), filteredWeeks.length === 0 && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucune pr\xE9sence ne correspond aux filtres s\xE9lectionn\xE9s."), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData, corpsTotals: data.corpsTotals || [], matchesPerson, searching: searchTerms.length > 0 })));
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, searching }) {
-    const groups = /* @__PURE__ */ new Map(), current = Number(week) === Number(currentWeek), [open, setOpen] = useState2(current);
-    useEffect2(() => {
+    const groups = /* @__PURE__ */ new Map(), current = Number(week) === Number(currentWeek), [open, setOpen] = useState3(current);
+    useEffect3(() => {
       if (searching) setOpen(true);
     }, [searching]);
     rows.forEach((r) => {

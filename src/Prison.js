@@ -125,7 +125,7 @@ function getPrison(token) {
         valueRow[8] === true,
 
       saisies:
-        nettoyerSaisieUtilisateur(
+        afficherSaisiesPrison_(
           displayRow[9]
         ),
 
@@ -204,6 +204,18 @@ function getPrisonFormData(token) {
 
 function ajouterPrison(token, data) {
   requireRole(token, ["GARDE", "OFFICIER"]);
+  if (!data) throw new Error("Données d'incarcération manquantes.");
+  const saisies = preparerSaisiesPrison_(data.saisies);
+  // La première recherche peut créer Objets sous son propre verrou.
+  // La validation est donc terminée avant le verrou d'écriture de Prison.
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try { return ajouterPrisonVerrouille_(token, data, saisies); }
+  finally { lock.releaseLock(); }
+}
+
+function ajouterPrisonVerrouille_(token, data, saisies) {
+  requireRole(token, ["GARDE", "OFFICIER"]);
 
   if (!data) {
     throw new Error(
@@ -228,9 +240,6 @@ function ajouterPrison(token, data) {
 
   const entreeInput =
     nettoyerSaisieUtilisateur(data.entree);
-
-  const saisies =
-    nettoyerSaisieUtilisateur(data.saisies);
 
   const notes =
     nettoyerSaisieUtilisateur(data.notes);

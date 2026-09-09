@@ -1,0 +1,807 @@
+{
+  "generatedAt": "2026-09-07T06:10:25.249Z",
+  "order": [
+    "Skyrim.esm",
+    "Update.esm",
+    "Dawnguard.esm",
+    "HearthFires.esm",
+    "Dragonborn.esm",
+    "Sentinel - Master Plugin.esp",
+    "SkyUI_SE.esp",
+    "Keizaal.esp",
+    "CommonClothes.esp",
+    "JK's Whiterun's Outskirts.esp",
+    "Cloaks&Capes.esp",
+    "JKs Whiterun.esp",
+    "MoreCraftableEquipment.esp",
+    "DIS_Heavy_Legion.esp",
+    "Sentinel.esp",
+    "Sentinel - Priests and Acolytes.esp",
+    "evgnnsmpaccessories.esp",
+    "JK's Riverwood.esp",
+    "Kad_MoonMonkRobes.esp",
+    "Sentinel - More Craftable Equipment.esp",
+    "KzlOnlineMods.esp",
+    "MCMHelper.esp",
+    "MoreCraftableEquipment_CloaksandCapes.esp",
+    "Sentinel - City Guards.esp",
+    "The Great Cities - Minor Cities and Towns.esp",
+    "The Great City of Solitude.esp",
+    "WindhelmSSE.esp",
+    "Mage Clothing Expansion.esp",
+    "Common Clothing Expanded.esp",
+    "Arena - Markarth Side.esp",
+    "KzlHorses.esp",
+    "aaaGraniteHill.esp",
+    "AnotherOakwood.esp",
+    "North Keep.esp",
+    "OarsRest.esp",
+    "KeizaalStart.esp",
+    "KeizaalInteriors.esp"
+  ],
+  "plugins": [
+    {
+      "plugin": "Skyrim.esm",
+      "masters": [],
+      "localized": true,
+      "light": false,
+      "objectsRead": 7790,
+      "sha256": "2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107"
+    },
+    {
+      "plugin": "Update.esm",
+      "masters": [
+        "Skyrim.esm"
+      ],
+      "localized": true,
+      "light": false,
+      "objectsRead": 224,
+      "sha256": "c1795e0a1218da45dbfd523f064f1857b42805c49714c46091e75277e525aed9"
+    },
+    {
+      "plugin": "Dawnguard.esm",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": true,
+      "light": false,
+      "objectsRead": 466,
+      "sha256": "1bda804009a21228acf6b30aa6aa7a692b247ff8a0313fe9aa69b3617ed4a6c4"
+    },
+    {
+      "plugin": "HearthFires.esm",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": true,
+      "light": false,
+      "objectsRead": 611,
+      "sha256": "ad4ca9f32c81e7ddd3e39ec95e03b07841f20712989e598778442ea69b6e6a97"
+    },
+    {
+      "plugin": "Dragonborn.esm",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": true,
+      "light": false,
+      "objectsRead": 1727,
+      "sha256": "5f44f343552688c04f73bf83de58b90f70c7376b133fbbcb56b6fe33acf8778b"
+    },
+    {
+      "plugin": "Sentinel - Master Plugin.esp",
+      "masters": [
+        "Dragonborn.esm",
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 0,
+      "sha256": "efc1e46a3828aa819a9e9480c72d5576ff60f8278426e9bacc16bcdbdec2b3ac"
+    },
+    {
+      "plugin": "SkyUI_SE.esp",
+      "masters": [
+        "Skyrim.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 0,
+      "sha256": "61eb77164ed3632344ac2ccac4c8a4e69c62397999e7d8d558c162fd205616cf"
+    },
+    {
+      "plugin": "Keizaal.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 155,
+      "sha256": "2bf457647bdeea4941a6839558c369099b4fb02d0150a325410b491a1eb6ad72"
+    },
+    {
+      "plugin": "CommonClothes.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 95,
+      "sha256": "f3f30b811401f4839a05b0e3a3164775cb57e074e179b68caf2806648de8a413"
+    },
+    {
+      "plugin": "JK's Whiterun's Outskirts.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "c5cf1d6649be524627917fa5ebdcb64a082a16da150605e6387dd478f1512c04"
+    },
+    {
+      "plugin": "Cloaks&Capes.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 25,
+      "sha256": "dbc1aa28ba652c01d7be983473c2c95cd0e0a1203b11212824a39cc2c6b1cbfe"
+    },
+    {
+      "plugin": "JKs Whiterun.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "HearthFires.esm",
+        "Dawnguard.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "ad642b720688836b802920b0d38948c09abdc2fcbb025f5d1ce5be3466694917"
+    },
+    {
+      "plugin": "MoreCraftableEquipment.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 141,
+      "sha256": "1ef6e240fcd9c87d63e3e021bccd67afc96b5e263ee811a790978ffb36a1c81e"
+    },
+    {
+      "plugin": "DIS_Heavy_Legion.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 51,
+      "sha256": "728a6a6ea1dd369469068f19db97f14fee07d2e72864d7acdc3343f29a6a0d37"
+    },
+    {
+      "plugin": "Sentinel.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "Dragonborn.esm",
+        "Sentinel - Master Plugin.esp"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 291,
+      "sha256": "d7e2ebc505005a455fea366961c5e2243c2db4d239d39390352d4890ba5c64fd"
+    },
+    {
+      "plugin": "Sentinel - Priests and Acolytes.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "Dragonborn.esm",
+        "Sentinel.esp"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 40,
+      "sha256": "f82b1cddec3bc5a1028feb7565cbf2ce2a2058774b2d1d12306267d4d097a02c"
+    },
+    {
+      "plugin": "evgnnsmpaccessories.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 67,
+      "sha256": "94f72b681bcf84e0f725fae3b6bde88e611dc71251933a4fa5af4adbf8e6fed2"
+    },
+    {
+      "plugin": "JK's Riverwood.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "ddc9648a9d45f89d16a0f4c179191ee98f237220e1a667e9df1d102c04dd4dc4"
+    },
+    {
+      "plugin": "Kad_MoonMonkRobes.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 80,
+      "sha256": "8d9d7489f7ffd683c9e4a904e8f01b5f5d2b4128f87e76cf743b0652f6761026"
+    },
+    {
+      "plugin": "Sentinel - More Craftable Equipment.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Dawnguard.esm",
+        "MoreCraftableEquipment.esp",
+        "Sentinel.esp"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 0,
+      "sha256": "93f98d7a2514a41bf7f9436e400150f7f974d881cfd78dc3830f614ac1435520"
+    },
+    {
+      "plugin": "KzlOnlineMods.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm",
+        "Sentinel - Master Plugin.esp",
+        "evgnnsmpaccessories.esp",
+        "MoreCraftableEquipment.esp",
+        "Sentinel.esp",
+        "Cloaks&Capes.esp",
+        "Sentinel - Priests and Acolytes.esp",
+        "CommonClothes.esp",
+        "Keizaal.esp",
+        "DIS_Heavy_Legion.esp",
+        "JKs Whiterun.esp"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 110,
+      "sha256": "4cf32cbc80fa75a10c679f51585c29418d275b51977ed3cbe2f0294f2597bfa1"
+    },
+    {
+      "plugin": "MCMHelper.esp",
+      "masters": [
+        "SkyUI_SE.esp"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "366cb9706471fd4f4ee752d3504a9b9627bd39c3b079d3a4ae00aedc49c2856f"
+    },
+    {
+      "plugin": "MoreCraftableEquipment_CloaksandCapes.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "Cloaks&Capes.esp"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 1,
+      "sha256": "d75366385d6be8a69877cdc19473f06091ac27178bb28dcdd288a5e56d561363"
+    },
+    {
+      "plugin": "Sentinel - City Guards.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "Dragonborn.esm",
+        "Sentinel.esp"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 88,
+      "sha256": "6474b70ab7f5d10d45256586ebcbbf13d01860d4204f0e20fb837c3df87b603b"
+    },
+    {
+      "plugin": "The Great Cities - Minor Cities and Towns.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 5,
+      "sha256": "d4d9ff040d708a2843a3679690fb74cc0f76204e979e2a62fb082566903d2534"
+    },
+    {
+      "plugin": "The Great City of Solitude.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 11,
+      "sha256": "8b52ce2fa6d21d95d16db3b4d630e05bae87eaaea1439a0b0bbdba0ef867af4e"
+    },
+    {
+      "plugin": "WindhelmSSE.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 192,
+      "sha256": "77ff48032f6479209e911e123ab5ecaf4c4dbf056e67eba0ef2f65a090c3d3e6"
+    },
+    {
+      "plugin": "Mage Clothing Expansion.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 18,
+      "sha256": "1f7c1ba5bd1df64db3c93a448f38dc676d6f532ad892ab74ddd7b8fba3c38173"
+    },
+    {
+      "plugin": "Common Clothing Expanded.esp",
+      "masters": [
+        "Skyrim.esm"
+      ],
+      "localized": false,
+      "light": true,
+      "objectsRead": 5,
+      "sha256": "b4e361c74b3d10fa5acde82af7b36aecb0917450c00832c6ae15681c1959642b"
+    },
+    {
+      "plugin": "Arena - Markarth Side.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 11,
+      "sha256": "07a234e56d7c3e05b8ab976e5bc8e5f92642b9b8566be6f5e946fcec5d0ac395"
+    },
+    {
+      "plugin": "KzlHorses.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm",
+        "Sentinel - Master Plugin.esp",
+        "Keizaal.esp",
+        "Mage Clothing Expansion.esp",
+        "Common Clothing Expanded.esp"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 6,
+      "sha256": "19a477dbb6129d981791153e6ad6e2c891e888f230239eadf52bfc3aee981faa"
+    },
+    {
+      "plugin": "aaaGraniteHill.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 15,
+      "sha256": "84e95cd443bd6611b61ce2a0b0d3da1390737658d70b332c3ba82ec37463ee6f"
+    },
+    {
+      "plugin": "AnotherOakwood.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 12,
+      "sha256": "e29668024dc76c1dfb8e3724448522ae1b8853815cc221c5f0024e433d2b2264"
+    },
+    {
+      "plugin": "North Keep.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 6,
+      "sha256": "f3cf4a95e722fb04d86546fadffb7d094cc9106c56e410d4773be88747a3621d"
+    },
+    {
+      "plugin": "OarsRest.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 10,
+      "sha256": "9b46a0882e34f4ee2bff4e87afa747d9a5aca141e032b46bd90776d043d77aaf"
+    },
+    {
+      "plugin": "KeizaalStart.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm",
+        "Keizaal.esp",
+        "The Great Cities - Minor Cities and Towns.esp"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "2d165b93587a5fd42ca46c60aaf66b03d0cbf77f4cbe4e420c0a7d46cddbc951"
+    },
+    {
+      "plugin": "KeizaalInteriors.esp",
+      "masters": [
+        "Skyrim.esm",
+        "Update.esm",
+        "Dawnguard.esm",
+        "HearthFires.esm",
+        "Dragonborn.esm",
+        "Sentinel - Master Plugin.esp",
+        "CommonClothes.esp",
+        "Keizaal.esp",
+        "MoreCraftableEquipment.esp",
+        "DIS_Heavy_Legion.esp",
+        "Cloaks&Capes.esp",
+        "JKs Whiterun.esp",
+        "Sentinel.esp",
+        "Sentinel - Priests and Acolytes.esp",
+        "evgnnsmpaccessories.esp",
+        "KzlOnlineMods.esp"
+      ],
+      "localized": false,
+      "light": false,
+      "objectsRead": 0,
+      "sha256": "4d4e6510fc0c7a4b1a855361447aa7f303ff5d9e6e432cfd6d447cc42b03fd6e"
+    }
+  ],
+  "strings": [
+    {
+      "table": "strings\\dawnguard_english.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_german.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_spanish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_japanese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_spanish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_german.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_english.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_italian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_traditional.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_italian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_polish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_spanish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_chinese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_polish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_chinese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_italian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_french.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_chinese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_japanese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_chinese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_french.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_chinese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_german.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_polish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_russian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_german.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_russian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_polish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_french.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_russian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_japanese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_polish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_russian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_english.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dawnguard_japanese.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_russian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_german.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_english.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_spanish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_french.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_spanish.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_french.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\dragonborn_italian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\hearthfires_english.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\update_italian.strings",
+      "source": "Skyrim - Interface.bsa"
+    },
+    {
+      "table": "strings\\skyrim_japanese.strings",
+      "source": "Skyrim - Interface.bsa"
+    }
+  ],
+  "duplicateStringTables": [],
+  "total": 11771,
+  "candidates": 10131,
+  "excluded": 1640,
+  "byCategory": {
+    "Arme": 3190,
+    "Armure / vêtement": 4134,
+    "Clé": 451,
+    "Gemme spirituelle": 17,
+    "Ingrédient": 117,
+    "Livre / sort": 1160,
+    "Lumière / torche": 4,
+    "Munition": 32,
+    "Objet divers": 494,
+    "Parchemin": 96,
+    "Potion / nourriture": 436
+  },
+  "byOrigin": {
+    "Dragonborn.esm": 1570,
+    "WindhelmSSE.esp": 186,
+    "aaaGraniteHill.esp": 15,
+    "Skyrim.esm": 7032,
+    "Dawnguard.esm": 299,
+    "Sentinel.esp": 291,
+    "Sentinel - City Guards.esp": 88,
+    "HearthFires.esm": 52,
+    "DIS_Heavy_Legion.esp": 32,
+    "Keizaal.esp": 80,
+    "Arena - Markarth Side.esp": 11,
+    "MoreCraftableEquipment.esp": 66,
+    "Sentinel - Priests and Acolytes.esp": 38,
+    "Common Clothing Expanded.esp": 5,
+    "Mage Clothing Expansion.esp": 18,
+    "CommonClothes.esp": 95,
+    "OarsRest.esp": 9,
+    "Cloaks&Capes.esp": 25,
+    "evgnnsmpaccessories.esp": 61,
+    "KzlOnlineMods.esp": 35,
+    "Kad_MoonMonkRobes.esp": 80,
+    "KzlHorses.esp": 2,
+    "North Keep.esp": 6,
+    "AnotherOakwood.esp": 12,
+    "The Great City of Solitude.esp": 11,
+    "The Great Cities - Minor Cities and Towns.esp": 5,
+    "Update.esm": 7
+  },
+  "byFinalPlugin": {
+    "Dragonborn.esm": 1548,
+    "WindhelmSSE.esp": 186,
+    "aaaGraniteHill.esp": 15,
+    "Skyrim.esm": 6693,
+    "Dawnguard.esm": 295,
+    "Update.esm": 180,
+    "Sentinel.esp": 291,
+    "KzlOnlineMods.esp": 106,
+    "Sentinel - City Guards.esp": 88,
+    "HearthFires.esm": 58,
+    "DIS_Heavy_Legion.esp": 51,
+    "Keizaal.esp": 130,
+    "KzlHorses.esp": 6,
+    "Arena - Markarth Side.esp": 11,
+    "MoreCraftableEquipment.esp": 134,
+    "Sentinel - Priests and Acolytes.esp": 38,
+    "Common Clothing Expanded.esp": 5,
+    "Mage Clothing Expansion.esp": 18,
+    "CommonClothes.esp": 95,
+    "OarsRest.esp": 9,
+    "Cloaks&Capes.esp": 25,
+    "evgnnsmpaccessories.esp": 34,
+    "Kad_MoonMonkRobes.esp": 80,
+    "North Keep.esp": 6,
+    "AnotherOakwood.esp": 12,
+    "The Great City of Solitude.esp": 11,
+    "The Great Cities - Minor Cities and Towns.esp": 5,
+    "MoreCraftableEquipment_CloaksandCapes.esp": 1
+  },
+  "byNameStatus": {
+    "Sans nom": 819,
+    "Table française": 9578,
+    "Nom intégré au plugin": 1374
+  },
+  "exclusions": {
+    "Sans nom": 819,
+    "Non jouable (drapeau)": 739,
+    "Non jouable (données objet)": 82
+  }
+}

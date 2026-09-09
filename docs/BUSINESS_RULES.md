@@ -84,6 +84,17 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - OFFICIER peut supprimer une entrée.
 - `Libéré` est modifiable depuis le registre.
+- Les objets saisis sont sélectionnés dans le catalogue, avec une quantité entière
+  strictement positive. Plusieurs ajouts du même ID cumulent les quantités.
+- Maximum 100 objets différents ; quantités et sommes doivent être des entiers
+  JavaScript sûrs, JSON limité à 45 000 caractères pour tenir dans une cellule.
+- Les objets et noms sont revalidés côté serveur à chaque création. Un objet retiré
+  du catalogue ne peut plus être ajouté ; les saisies historiques restent lisibles.
+- Une recherche ou sélection encore en cours doit être ajoutée ou effacée avant
+  de soumettre le formulaire. Aucun objet n'est ajouté implicitement.
+- Les anciennes saisies textuelles sont conservées. Un ancien formulaire ouvert
+  envoyant encore du texte non vide doit être actualisé.
+- Pas de registre séparé ni de suivi de restitution dans cette version.
 
 ## Codex
 

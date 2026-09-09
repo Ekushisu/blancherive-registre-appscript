@@ -57,18 +57,25 @@ Principaux modules :
 
 - `Prison.js`
   - registre des incarcérations
+  - ajouts sous verrou et saisies structurées dans la colonne J
+
+- `Objets.js`
+  - recherche GARDE / OFFICIER dans `Objets!A:C`, trois caractères minimum, quinze suggestions maximum
+  - initialisation de la feuille absente à partir de la ressource serveur `CatalogueObjets.html`
+  - validation des saisies et affichage compatible avec les textes historiques
 
 ## Frontend
 
 Le source frontend est dans `ui/` :
 - `ui/src/main.jsx` : point d'entrée React ;
 - `ui/src/app.jsx` : composants de l'interface ;
+- `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
 - `ui/src/styles.css` : styles ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 
-`src/Index.html` est l'artefact généré par `npm run build`. Il est le seul fichier frontend envoyé par clasp et ne doit pas être modifié à la main.
+`src/Index.html` est l'artefact frontend généré par `npm run build` et ne doit pas être modifié à la main. Le build prépare aussi `src/CatalogueObjets.html`, une ressource JSON serveur initialisant Objets, et `docs/catalogue-objets/Objets.csv` depuis l'extraction locale. Le catalogue n'est jamais incorporé au frontend.
 
 Fonction utilitaire centrale :
 

@@ -48,6 +48,13 @@ Règles connues :
 
 Un contrôle uniquement côté React n'est jamais suffisant.
 
+### Catalogue des objets
+
+`rechercherObjets` autorise GARDE et OFFICIER après `requireRole()`, avant toute
+lecture ou initialisation Sheets. `ajouterPrison` vérifie le même rôle avant la
+validation des objets. L'initialisation d'une feuille Objets absente est un helper
+privé, sous verrou ; aucune API Web de remplacement ou d'import libre du catalogue.
+
 ## Nouveautés des Effectifs
 
 - `getEffectifs` reste OFFICIER ; `getOrganigramme` reste GARDE / OFFICIER. Leurs réponses incluent les événements récents filtrés côté serveur selon le rôle.
