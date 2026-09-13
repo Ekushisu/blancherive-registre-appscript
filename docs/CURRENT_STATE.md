@@ -2,6 +2,19 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Choix de sanctions et motifs personnalisés (9 septembre 2026)
+
+- Codex judiciaire configuré sur `1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk`.
+- Extraction excluant les intertitres numérotés et distinguant les durées de cachot
+  des travaux forcés. Choix contextualisés d’amende/cachot dans les caches M/O.
+- Formulaires Amendes/Prison : choix chiffrés, saisie libre sur appréciation explicite,
+  et motif personnalisé pour décrets/décisions. Validation serveur, sortie calculée,
+  anciennes lignes préservées. Composants communs dans `ui/src/sanctions.jsx`.
+- Après push et publication de l’interface, relancer `synchroniserCodex()` pour
+  régénérer les caches, puis recharger le registre. Aucun push ni changement distant
+  effectué pendant cette correction.
+- Tests dédiés : `test-sync-codex.mjs`, `test-sanctions.mjs`, `test-sanctions-ui.mjs`.
+
 ### Catalogue des objets et saisies Prison (7 septembre 2026)
 
 - Catalogue initial de 10 131 fiches en trois colonnes ID objet, Nom, Type. Feuille

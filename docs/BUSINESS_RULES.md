@@ -69,6 +69,20 @@ sont regroupés en groupes trans-corps à la fin de la page.
 
 ## Amendes
 
+- Les formulaires Amendes et Prison proposent les valeurs chiffrées identifiées
+  dans le texte de sanction avec leur contexte ; plusieurs valeurs nécessitent un
+  choix explicite. La saisie libre est disponible lorsque la sanction est
+  explicitement laissée à l’appréciation ou à la fixation de l’autorité.
+- Un mode « Motif personnalisé » permet aux GARDE et OFFICIER de saisir une
+  référence de décret/décision absente du Codex (1 à 1 000 caractères) et une
+  sanction positive : montant entier en septims ou durée en heures, fraction admise.
+- Les choix du Codex sont revalidés côté serveur. Une alerte de parsing ou une
+  peine non numérique n’autorise pas à elle seule la saisie libre. Les articles
+  sans valeur exploitable ni appréciation explicite ne sont plus proposés.
+- Les montants et durées enregistrés sont des instantanés conservés après une
+  modification du Codex. Les conditions de récidive et les autres conditions
+  restent appréciées par l’utilisateur à la lecture du texte affiché.
+
 - GARDE et OFFICIER peuvent consulter / créer.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - Seul un OFFICIER peut modifier `Reversé aux trésoriers`.

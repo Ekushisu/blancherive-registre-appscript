@@ -17,9 +17,9 @@
 // J  Alerte parsing
 //
 // L  Dropdown Amende
-// M  Montant
+// M  Choix d'amende JSON version 1
 // N  Dropdown Prison
-// O  Cachot (heures)
+// O  Choix de cachot JSON version 1 (heures)
 //
 // IMPORTANT :
 // SPREADSHEET_ID existe déjà ailleurs dans le projet.
@@ -32,7 +32,7 @@
 // ============================================================
 
 const CODEX_JUDICIAIRE_DOC_ID =
-  "1AePJ7_9kO1d1dn1xhpJcI-GBzwEpKB5QoyBkGnY_kS0";
+  "1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk";
 
 const CODEX_PROCEDURAL_DOC_ID =
   "17Y3GBQBp_fwLhvkppf9BqRasAYQmF957qwCZXPSO54s";
@@ -206,6 +206,11 @@ function extraireArticlesCodex_(document, config) {
       continue;
     }
 
+    // Les intertitres du document ne font partie ni du texte ni des sanctions.
+    if (estIntertitreCodex_(paragraph)) {
+      continue;
+    }
+
     const heading = reconnaitreArticleCodex_(paragraph);
 
     if (heading) {
@@ -271,6 +276,11 @@ function extraireArticlesCodex_(document, config) {
 // ============================================================
 // RECONNAISSANCE DES ARTICLES
 // ============================================================
+
+function estIntertitreCodex_(text) {
+  return /^(?:titre|chapitre|section|livre|partie)\s+(?:[IVXLCDM]+|\d+|préliminaire|preliminaire)(?:\s*[—–:\-]\s*\S.*)?$/i.test(String(text || "").trim());
+}
+
 
 function reconnaitreArticleCodex_(text) {
   const patterns = [
@@ -431,19 +441,7 @@ function analyserSanctionCodex_(text) {
   const alertes = [];
 
   const amendes = extraireMontantsAmendeCodex_(source);
-  const cachots = extraireDureesCodex_(
-    source,
-    [
-      "cachot",
-      "prison",
-      "incarcération",
-      "incarceration",
-      "détention",
-      "detention",
-      "geôle",
-      "geole"
-    ]
-  );
+  const cachots = extraireDureesChoixCodex_(source, "cachot|prison|incarcération|incarceration|détention|detention|geôle|geole");
 
   const travaux = extraireDureesCodex_(
     source,
@@ -745,23 +743,24 @@ function ecrireCachesTechniquesCodex_(
       continue;
     }
 
+    const choixAmende = construireChoixSanctionCodex_(article.sanction || article.texte, "amende");
+    const choixPrison = construireChoixSanctionCodex_(article.sanction || article.texte, "cachot");
+
     if (
-      article.amende !== "" ||
-      article.alerte
+      choixAmende.options.length || choixAmende.libre
     ) {
       amendes.push([
         label,
-        article.amende
+        JSON.stringify(choixAmende)
       ]);
     }
 
     if (
-      article.cachot !== "" ||
-      article.alerte
+      choixPrison.options.length || choixPrison.libre
     ) {
       prisons.push([
         label,
-        article.cachot
+        JSON.stringify(choixPrison)
       ]);
     }
   }
@@ -816,6 +815,75 @@ function ecrireCachesTechniquesCodex_(
 // ============================================================
 // HELPERS
 // ============================================================
+
+// Cache versionné des choix : les libellés conservent les conditions du texte.
+// Seules les quantités accompagnées de leur unité sont proposées.
+function construireChoixSanctionCodex_(text, type) {
+  const texte = String(text || "").trim();
+  const options = [];
+  const clauses = texte.split(/\n|;/).map(line => line.trim()).filter(Boolean);
+  const blocSanction = /^(?:sanctions?|peines?)\s*[—–:\-]/i.test(texte);
+  const unite = type === "amende" ? "septims" : "h de cachot";
+  for (const clause of clauses) {
+    const values = type === "amende"
+      ? (blocSanction || /\bamende\b|\[(?:contravention|délit|crime)/i.test(clause) ? extraireMontantsChoixCodex_(clause) : [])
+      : extraireDureesChoixCodex_(clause, "cachot|prison|détention|incarcération");
+    for (const value of values) {
+      if (!Number.isFinite(value) || value <= 0) continue;
+      const label = `${value} ${unite} — ${clause.replace(/^[*•]\s*/, "")}`;
+      if (!options.some(option => option.value === value && option.label === label)) {
+        options.push({ value, label });
+      }
+    }
+  }
+  // Une mesure non numérique (mort, saisie…) n'autorise pas une saisie libre.
+  const libre = /(?:à|a) l['’]appréciation|appréciation (?:du|de la|de l['’])|sanction(?:s)? (?:déterminée?s?|fixée?s?) (?:par|selon)|peine(?:s)? (?:déterminée?s?|fixée?s?) (?:par|selon)/i.test(texte);
+  return { version: 1, options, libre, texte };
+}
+
+
+function extraireMontantsChoixCodex_(text) {
+  const values = [];
+  const pattern = /(\d[\d\s.,]*)\s*(?:septims?|pièces?\s+d['’]or|pieces?\s+d['’]or)/gi;
+  let match, previousEnd = 0;
+  while ((match = pattern.exec(text)) !== null) {
+    const prefix = text.slice(previousEnd, match.index);
+    previousEnd = pattern.lastIndex;
+    // Les seuils de dommage/préjudice ne sont pas des montants d'amende.
+    if (/(?:dommage|préjudice|valeur)[^.;\n]{0,100}$/i.test(prefix) && !/amende[^.;\n]*$/i.test(prefix)) continue;
+    const value = parseNombreCodex_(match[1]);
+    if (Number.isFinite(value)) values.push(value);
+  }
+  // Ancienne syntaxe « amende de 100 », sans unité explicite.
+  const explicit = /amende\s+(?:de|d['’])?\s*(\d[\d\s.,]*)/gi;
+  while ((match = explicit.exec(text)) !== null) {
+    const value = parseNombreCodex_(match[1]);
+    if (Number.isFinite(value)) values.push(value);
+  }
+  return [...new Set(values)];
+}
+
+
+function extraireDureesChoixCodex_(text, keywords) {
+  // Ne pas prendre les heures de travaux forcés précédant une durée de cachot.
+  const unit = "(minutes?|min|heures?|h|jours?)";
+  const number = "(\\d+(?:[.,]\\d+)?)";
+  const patterns = [
+    new RegExp(`${number}\\s*${unit}\\s*(?:de\\s+|d['’])?(?:${keywords})`, "gi"),
+    new RegExp(`(?:${keywords})\\s*(?::|de|d['’]|pour)?\\s*${number}\\s*${unit}`, "gi")
+  ];
+  const values = [];
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const value = Number(match[1].replace(",", "."));
+      const unitName = match[2].toLowerCase();
+      values.push(unitName.startsWith("m") ? value / 60 : unitName.startsWith("j") ? value * 24 : value);
+    }
+  }
+  return [...new Set(values)];
+}
+
 
 function construireLabelArticleSyncCodex_(
   article,

@@ -190,7 +190,8 @@ function getAmendeFormData(token) {
     13
   ).map(item => ({
     label: item.label,
-    montant: item.value
+    montant: valeurUniqueSanction_(item.value),
+    sanction: lireChoixSanction_(item.value)
   }));
 
   const gardes = lireColonneTechnique(donneesSheet, 15);
@@ -216,7 +217,7 @@ function ajouterAmende(token, data) {
   const dateInput = nettoyerSaisieUtilisateur(data.date);
   const garde = nettoyerSaisieUtilisateur(data.garde);
   const contrevenant = nettoyerSaisieUtilisateur(data.contrevenant);
-  const infraction = nettoyerSaisieUtilisateur(data.infraction);
+  const infraction = preparerMotifSanction_(data);
 
   if (!dateInput) {
     throw new Error("La date est obligatoire.");
@@ -263,7 +264,7 @@ function ajouterAmende(token, data) {
 
   const infractions = lireListeTechnique(syncSheet, 12, 13);
 
-  const article = infractions.find(
+  const article = data.personnalisee === true ? { value: { version: 1, options: [], libre: true, texte: "Motif personnalisé" } } : infractions.find(
     item => item.label === infraction
   );
 
@@ -273,18 +274,7 @@ function ajouterAmende(token, data) {
     );
   }
 
-  const montant =
-    article.value === "" ||
-    article.value === null ||
-    typeof article.value === "undefined"
-      ? ""
-      : Number(article.value);
-
-  if (montant !== "" && !Number.isFinite(montant)) {
-    throw new Error(
-      "Le montant associé à cette infraction est invalide."
-    );
-  }
+  const montant = validerChoixSanction_(article.value, data.montant, "amende");
 
   const date = parseDateInput(dateInput);
 
@@ -293,8 +283,11 @@ function ajouterAmende(token, data) {
 
   const targetRange = sheet.getRange(targetRow, 1, 1, 7);
   const previousValues = targetRange.getValues();
+  const motifCell = data.personnalisee === true ? sheet.getRange(targetRow, 4) : null;
+  const previousValidation = motifCell ? motifCell.getDataValidation() : null;
 
   try {
+    if (motifCell) motifCell.clearDataValidations();
     targetRange.setValues([[
       date,
       gardePourFeuille,
@@ -317,6 +310,7 @@ function ajouterAmende(token, data) {
   } catch (error) {
     try {
       targetRange.setValues(previousValues);
+      if (motifCell) motifCell.setDataValidation(previousValidation);
       SpreadsheetApp.flush();
     } catch (rollbackError) {
       console.error(
@@ -649,6 +643,67 @@ function lireListeTechnique(
   }
 
   return result;
+}
+
+
+function preparerMotifSanction_(data) {
+  const motif = nettoyerSaisieUtilisateur(data.infraction);
+  if (data.personnalisee !== undefined && typeof data.personnalisee !== "boolean") {
+    throw new Error("Type de motif invalide.");
+  }
+  if (!data.personnalisee) return motif;
+  if (!motif || motif.length > 1000) throw new Error("Renseignez un motif personnalisé de 1 à 1 000 caractères.");
+  return `Motif personnalisé — ${motif}`;
+}
+
+
+function lireChoixSanction_(raw) {
+  if (raw === "" || raw === null || raw === undefined) {
+    // Un ancien cache vide n'autorise jamais une saisie libre implicite.
+    return { version: 0, options: [], libre: false, texte: "À déterminer : actualisez le Codex." };
+  }
+  if (typeof raw === "number" || (typeof raw === "string" && raw.trim() && Number.isFinite(Number(raw)))) {
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < 0) throw new Error("Sanction du Codex invalide.");
+    return { version: 0, options: [{ value, label: String(value) }], libre: false, texte: "" };
+  }
+  let parsed;
+  try { parsed = typeof raw === "string" ? JSON.parse(raw) : raw; }
+  catch (error) { throw new Error("Cache des sanctions invalide. Relancez synchroniserCodex()."); }
+  if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.options) ||
+      typeof parsed.libre !== "boolean" || typeof parsed.texte !== "string" ||
+      parsed.options.some(option => !option || typeof option.value !== "number" ||
+        !Number.isFinite(option.value) || option.value <= 0 || typeof option.label !== "string")) {
+    throw new Error("Cache des sanctions invalide. Relancez synchroniserCodex().");
+  }
+  return parsed;
+}
+
+
+function valeurUniqueSanction_(raw) {
+  const choix = lireChoixSanction_(raw);
+  return choix.options.length === 1 && !choix.libre ? choix.options[0].value : "";
+}
+
+
+function validerChoixSanction_(raw, submitted, type) {
+  const choix = lireChoixSanction_(raw);
+  const absent = submitted === undefined || submitted === null || submitted === "";
+  // Compatibilité des formulaires ouverts avant la mise à jour : seulement les cas fixes.
+  if (absent && choix.options.length === 1 && !choix.libre) return choix.options[0].value;
+  if (absent && choix.version === 0 && !choix.options.length) return "";
+  if (absent) throw new Error("Choisissez un montant ou une durée avant d'enregistrer.");
+  if ((typeof submitted !== "number" && typeof submitted !== "string") ||
+      (typeof submitted === "string" && !submitted.trim())) throw new Error("Sanction invalide.");
+  const value = Number(submitted);
+  if (!Number.isFinite(value) || value <= 0 || value > Number.MAX_SAFE_INTEGER ||
+      (type === "amende" && !Number.isSafeInteger(value))) {
+    throw new Error(type === "amende" ? "Le montant doit être un entier strictement positif." : "La durée doit être strictement positive.");
+  }
+  if (!choix.libre && !choix.options.some(option => option.value === value)) {
+    throw new Error("Cette sanction n'est plus proposée par le Codex. Actualisez le formulaire.");
+  }
+  return value;
 }
 
 

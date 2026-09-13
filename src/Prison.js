@@ -180,7 +180,8 @@ function getPrisonFormData(token) {
     15
   ).map(item => ({
     label: item.label,
-    duree: item.value
+    duree: valeurUniqueSanction_(item.value),
+    sanction: lireChoixSanction_(item.value)
   }));
 
   /*
@@ -235,8 +236,7 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
   const cellule =
     nettoyerSaisieUtilisateur(data.cellule);
 
-  const infraction =
-    nettoyerSaisieUtilisateur(data.infraction);
+  const infraction = preparerMotifSanction_(data);
 
   const entreeInput =
     nettoyerSaisieUtilisateur(data.entree);
@@ -327,7 +327,7 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
     15
   );
 
-  const article = infractions.find(
+  const article = data.personnalisee === true ? { value: { version: 1, options: [], libre: true, texte: "Motif personnalisé" } } : infractions.find(
     item => item.label === infraction
   );
 
@@ -337,21 +337,7 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
     );
   }
 
-  const duree =
-    article.value === "" ||
-    article.value === null ||
-    typeof article.value === "undefined"
-      ? ""
-      : Number(article.value);
-
-  if (
-    duree !== "" &&
-    !Number.isFinite(duree)
-  ) {
-    throw new Error(
-      "La durée associée à cette infraction est invalide."
-    );
-  }
+  const duree = validerChoixSanction_(article.value, data.duree, "cachot");
 
   const date = parseDateInput(dateInput);
   const entree = parseDateTimeLocalPrison_(
@@ -365,6 +351,7 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
       entree.getTime() +
       duree * 60 * 60 * 1000
     );
+    if (!Number.isFinite(sortie.getTime())) throw new Error("La date de sortie calculée est invalide.");
   }
 
   const lastRow =
@@ -400,8 +387,11 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
   );
 
   const previousValues = targetRange.getValues();
+  const motifCell = data.personnalisee === true ? sheet.getRange(targetRow, 5) : null;
+  const previousValidation = motifCell ? motifCell.getDataValidation() : null;
 
   try {
+    if (motifCell) motifCell.clearDataValidations();
     targetRange.setValues([[
       date,
       gardePourFeuille,
@@ -434,6 +424,7 @@ function ajouterPrisonVerrouille_(token, data, saisies) {
   } catch (error) {
     try {
       targetRange.setValues(previousValues);
+      if (motifCell) motifCell.setDataValidation(previousValidation);
       SpreadsheetApp.flush();
     } catch (rollbackError) {
       console.error(

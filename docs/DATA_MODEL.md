@@ -140,8 +140,23 @@ Le snapshot courant documente encore les colonnes techniques :
 | Colonne | Contenu |
 |---|---|
 | L | Dropdown Amende |
-| M | Montant |
+| M | Choix d’amende JSON version 1 (ancien montant numérique encore lisible) |
 | N | Dropdown Prison |
-| O | Cachot (heures) |
+| O | Choix de cachot JSON version 1 (ancienne durée numérique encore lisible) |
 
 La colonne P n'est plus utilisée pour les gardes. Une synchronisation du Codex efface l'ancien cache `SyncCodex!P` et ses validations éventuelles.
+
+Les cellules M et O contiennent désormais `{version:1, options:[{value,label}], libre, texte}`.
+`value` est un montant en septims ou une durée de cachot en heures ; `label` conserve
+le contexte de la sanction. `libre` n’est activé que sur une mention explicite
+d’appréciation ou de fixation par une autorité dans le texte de sanction.
+Les colonnes A:J conservent leur structure et leur texte complet ; les nombres
+uniques restent numériques. L’API Codex expose aussi `montants` et `dureesCachot`.
+Les titres de sections numérotés sont exclus du texte et des sanctions des articles.
+
+Les valeurs choisies sont enregistrées dans Amendes!E et Prison!F ; Prison!H est
+calculée depuis cette durée. Aucune réécriture des entrées historiques.
+Les motifs hors Codex sont enregistrés avec le préfixe `Motif personnalisé —`
+dans Amendes!D ou Prison!E. Seule la validation de cette cellule est retirée pour
+l’entrée personnalisée ; elle est restaurée avec les valeurs en cas d’échec.
+Aucune colonne déplacée ou ajoutée.

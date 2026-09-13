@@ -50,6 +50,7 @@ Principaux modules :
 - `SyncCodex.js`
   - extraction des documents juridiques
   - alimentation du cache juridique `SyncCodex!A:J` et des listes d'infractions `SyncCodex!L:O`
+  - choix de sanctions contextualisés en JSON dans M/O, exposés aux formulaires et revalidés à l’ajout par les helpers privés d’`Amendes.js` partagés avec `Prison.js`
 
 - `Amendes.js`
   - registre des amendes
@@ -70,6 +71,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/main.jsx` : point d'entrée React ;
 - `ui/src/app.jsx` : composants de l'interface ;
 - `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
+- `ui/src/sanctions.jsx` : choix de sanction et motif personnalisé communs aux formulaires Amendes/Prison ;
 - `ui/src/styles.css` : styles ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;

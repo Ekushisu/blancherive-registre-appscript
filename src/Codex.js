@@ -194,6 +194,8 @@ function getCodex(token) {
       };
 
     articles.push({
+      montants: construireChoixSanctionCodex_(display[i][7] || display[i][8], "amende").options.map(option => option.value).filter((value, index, values) => values.indexOf(value) === index),
+      dureesCachot: construireChoixSanctionCodex_(display[i][7] || display[i][8], "cachot").options.map(option => option.value).filter((value, index, values) => values.indexOf(value) === index),
       source: source,
 
       article: article,
