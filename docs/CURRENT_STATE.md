@@ -2,6 +2,24 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Refonte visuelle inspirée du manuel (13 septembre 2026)
+
+- Papier, sceau au cheval et illustrations du manuel fourni ; palette sépia,
+  cuir brun et or patiné, titres à empattements. Assets légers embarqués au build.
+- Nouvelle connexion, navigation latérale sur ordinateur et navigation inférieure
+  jusqu’à 900 px. Page Effectifs toujours réservée à OFFICIER.
+- À 600 px et moins, les tableaux Amendes/Prison deviennent des fiches avec libellés
+  de cellules ; mêmes données et contrôles. Présences avec défilement interne et
+  première colonne fixe. Formulaires, filtres, modales, Effectifs et Codex adaptés.
+- Codex utilisable au clavier ; focus retenu dans la modale, fermeture Échap,
+  restauration du focus et défilement de fond bloqué pendant sa consultation.
+- `doGet()` définit le viewport via `HtmlOutput.addMetaTag`, nécessaire à Apps Script.
+- Aperçus sous `docs/apercus/`, données simulées uniquement. Tests UI sanctions,
+  saisies, changements et test Organigramme réussis. Build frontend reconstruit.
+- Aucun push ni déploiement effectué. Publier le nouvel Index et Code.js depuis
+  le déploiement existant selon la procédure habituelle ; aucune resynchronisation
+  du Codex nécessaire pour cette refonte graphique seule.
+
 ### Choix de sanctions et motifs personnalisés (9 septembre 2026)
 
 - Codex judiciaire configuré sur `1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk`.

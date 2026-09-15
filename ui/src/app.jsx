@@ -1,4 +1,6 @@
 import "./styles.css";
+import "./theme.css";
+import { Header, Login, PageIllustration } from "./navigation.jsx";
 import { MotifSanction, ChoixSanction } from "./sanctions.jsx";
 import { SaisiesField } from "./saisies.jsx";
 import { ChangesProvider, RecentChanges, ChangeBadge, ChangesCount, useMemberChanges } from "./changes.jsx";
@@ -16,20 +18,19 @@ function App(){
   const[role,setRole]=useState(null);const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
   useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>setRole(i.role)).catch(logout);},[token]);
   function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setPage("organigramme");}
-  if(!token)return <Login onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
+  if(!token)return <Login serverCall={serverCall} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
-  return <div className="app"><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content">
+  return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}><PageIllustration/>
     {page==="organigramme"&&<OrganigrammePage token={token}/>} 
     {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>} 
     {page==="presences"&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>} 
     {page==="codex"&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>} 
     {page==="amendes"&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
     {page==="prison"&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
-  </main></div>;
+  <footer className="registry-footer"><span>Garde de Blancherive</span><a href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial ↗</a></footer></main></div>;
 }
 
-function Login({onLogin}){const[password,setPassword]=useState("");const[error,setError]=useState("");async function submit(e){e.preventDefault();try{setError("");onLogin(await serverCall("login",password));}catch(e){setError(e.message);}}return <div className="login-page"><form className="login-card" onSubmit={submit}><h1>Registre de la Garde</h1><p>Garde de Blancherive</p><input type="password" placeholder="Mot de passe" value={password} onChange={e=>setPassword(e.target.value)}/><button className="primary-button">Entrer</button>{error&&<div className="error">{error}</div>}</form></div>;}
-function Header({role,page,onPage,onLogout}){const pages=[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];return <header className="topbar"><div className="brand">Garde de Blancherive</div><nav className="nav">{pages.map(([k,l])=><button key={k} className={page===k?"active":""} onClick={()=>onPage(k)}>{l}</button>)}</nav><a className="external-link" href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial ↗</a><span className="role-badge">{role}</span><button className="logout" onClick={onLogout}>Déconnexion</button></header>;}
+function effectifsAccent(style){return {"--member-accent":style?.background||"#ae8a4a"};}
 
 function effectifsStyle(style,fallback={}){
   if(!style)return fallback;
@@ -446,7 +447,7 @@ function EffectifsPage({token}){
       ).length;
 
   return(
-    <ChangesProvider data={data.changes}>
+    <ChangesProvider data={data.changes}><div className="effectifs-page">
       <div className="page-header">
         <div>
           <h1 className="page-title">
@@ -475,11 +476,10 @@ function EffectifsPage({token}){
         </button>
       </div>
 
-      <div className="info-notice">
-        Les membres courants sont regroupés par corps puis par grade.
-        La Réserve apparaît à la fin de chaque corps, après tous les grades.
-        Les morts, radiés, démissionnaires et déserteurs sont regroupés
-        séparément tout en bas de la page, indépendamment de leur corps.
+      <div className="effectifs-overview" aria-label="Vue d'ensemble des effectifs">
+        <div><span>Membres courants</span><strong>{activeRows.length}</strong><small>Tous corps confondus</small></div>
+        <div><span>En réserve</span><strong>{activeRows.filter(member=>member.reserve).length}</strong><small>Rattachés à leur corps</small></div>
+        <div><span>Assermentés</span><strong>{activeRows.filter(member=>member.assermente).length}</strong><small>Parmi les membres courants</small></div>
       </div>
 
       <RecentChanges onRefresh={async()=>setData(await serverCall("getEffectifs",token))}/>
@@ -543,7 +543,7 @@ function EffectifsPage({token}){
 
       <div
         className="effectifs-tabs"
-        role="tablist"
+        role="group"
         aria-label="Corps de garde"
       >
         <button
@@ -640,6 +640,7 @@ function EffectifsPage({token}){
 
         <input
           className="effectifs-search"
+          aria-label="Rechercher dans les effectifs"
           type="search"
           placeholder="Rechercher nom, grade, spécialité, statut..."
           value={search}
@@ -733,10 +734,7 @@ function EffectifsPage({token}){
                       <div
                         className="effectifs-grade-heading"
                         style={
-                          effectifsStyle(
-                            gradeStyle,
-                            {}
-                          )
+                          effectifsAccent(gradeStyle)
                         }
                       >
                         <span>
@@ -930,7 +928,7 @@ function EffectifsPage({token}){
           </div>
         </section>
       }
-    </ChangesProvider>
+    </div></ChangesProvider>
   );
 }
 
@@ -1017,7 +1015,7 @@ function NouvelEffectifForm({
             required
             value={form.grade}
             style={
-              effectifsStyle(
+              effectifsAccent(
                 options
                   .styles
                   ?.grades
@@ -1053,7 +1051,7 @@ function NouvelEffectifForm({
             required
             value={form.corps}
             style={
-              effectifsStyle(
+              effectifsAccent(
                 options
                   .styles
                   ?.corps
@@ -1090,7 +1088,7 @@ function NouvelEffectifForm({
               <select
                 value={form.specialite}
                 style={
-                  effectifsStyle(
+                  effectifsAccent(
                     options
                       .styles
                       ?.specialites
@@ -1142,7 +1140,7 @@ function NouvelEffectifForm({
             required
             value={form.status}
             style={
-              effectifsStyle(
+              effectifsAccent(
                 options
                   .styles
                   ?.statuses
@@ -1324,7 +1322,7 @@ function EffectifCard({
   }
 
   return(
-    <article className="effectif-row" {...memberChanges.hoverProps}>
+    <article className={`effectif-row ${editing?"is-editing":""}`} {...memberChanges.hoverProps}><div className="effectif-monogram" aria-hidden="true">{[member.prenom,member.nom].filter(Boolean).map(value=>String(value).trim().charAt(0)).join("").toLocaleUpperCase("fr")||"G"}</div>
       <div className="effectif-identity">
         <div className="effectif-name">
           {member.nomComplet}
@@ -1336,7 +1334,7 @@ function EffectifCard({
             <span
               className="effectif-badge"
               style={
-                effectifsStyle(
+                effectifsAccent(
                   member
                     .styles
                     ?.corps,
@@ -1352,7 +1350,7 @@ function EffectifCard({
             <span
               className="effectif-badge"
               style={
-                effectifsStyle(
+                effectifsAccent(
                   member
                     .styles
                     ?.specialite,
@@ -1367,7 +1365,7 @@ function EffectifCard({
           <span
             className="effectif-badge"
             style={
-              effectifsStyle(
+              effectifsAccent(
                 member
                   .styles
                   ?.status,
@@ -1401,6 +1399,8 @@ function EffectifCard({
         <button
           type="button"
           className="secondary-button effectif-edit-button"
+          aria-label={`Modifier la fiche de ${member.nomComplet}`}
+          aria-expanded={editing}
           onClick={()=>
             setEditing(true)
           }
@@ -1419,7 +1419,7 @@ function EffectifCard({
             <select
               value={grade}
               style={
-                effectifsStyle(
+                effectifsAccent(
                   options
                     .styles
                     ?.grades
@@ -1453,7 +1453,7 @@ function EffectifCard({
             <select
               value={corps}
               style={
-                effectifsStyle(
+                effectifsAccent(
                   options
                     .styles
                     ?.corps
@@ -1491,7 +1491,7 @@ function EffectifCard({
                     specialite
                   }
                   style={
-                    effectifsStyle(
+                    effectifsAccent(
                       options
                         .styles
                         ?.specialites
@@ -1558,7 +1558,7 @@ function EffectifCard({
             <select
               value={status}
               style={
-                effectifsStyle(
+                effectifsAccent(
                   options
                     .styles
                     ?.statuses
@@ -1632,9 +1632,28 @@ function EffectifCard({
 }
 
 
-function LawModal({article,onClose,onOpenCodex}){if(!article)return null;return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="law-modal"><div className="law-modal-header"><div><div className="law-modal-number">{article.article==="Préambule"?"Préambule":`Article ${article.article}`}</div><h2 className="law-modal-title">{article.titre}</h2></div><button className="law-modal-close" onClick={onClose}>×</button></div><div className="law-modal-body"><div className="law-meta">{article.famille&&<span className="law-chip">{article.famille}</span>}<span className="law-chip">{article.source}</span>{article.local&&<span className="law-chip law-chip-local">Applicable localement</span>}{article.classification&&<span className="law-chip">{article.classification}</span>}{(article.montants?.length>0||article.amende!=="")&&<span className="law-chip">💰 {article.amende} septims</span>}{(article.dureesCachot?.length>0||article.cachot!=="")&&<span className="law-chip">🔒 {article.dureesCachot?.length?article.dureesCachot.map(formatHours).join(" / "):formatHours(article.cachot)}</span>}{article.travaux!==""&&<span className="law-chip">⚒ {formatHours(article.travaux)}</span>}</div>{(article.autorite||article.applicabilite)&&<div className="law-source-info">{article.autorite&&<div><strong>Autorité :</strong> {article.autorite}</div>}{article.applicabilite&&<div><strong>Domaine :</strong> {article.applicabilite}</div>}</div>}{article.texte&&<div className="law-text">{article.texte}</div>}{article.sanction&&<div className="law-sanction-box"><strong>⚖ Sanction</strong><div>{article.sanction}</div></div>}{article.alerte&&<div className="law-warning">⚠ <strong>Vérification nécessaire :</strong> {article.alerte}</div>}<div className="form-actions">{article.url&&<button className="secondary-button" onClick={()=>window.open(article.url,"_blank")}>Ouvrir le document source ↗</button>}{onOpenCodex&&<button className="secondary-button" onClick={()=>onOpenCodex(article)}>Voir dans le Codex</button>}</div></div></div></div>;}
+function LawModal({article,onClose,onOpenCodex}){
+  const closeRef=useRef(onClose);closeRef.current=onClose;
+  useEffect(()=>{
+    if(!article)return;
+    const previous=document.activeElement,overflow=document.body.style.overflow;
+    document.body.style.overflow="hidden";
+    const dialog=document.querySelector(".law-modal");
+    dialog?.querySelector("button")?.focus();
+    function keys(event){
+      if(event.key==="Escape"){event.preventDefault();closeRef.current();}
+      if(event.key!=="Tab"||!dialog)return;
+      const controls=[...dialog.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')];
+      const first=controls[0],last=controls[controls.length-1];
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+    }
+    document.addEventListener("keydown",keys);
+    return()=>{document.body.style.overflow=overflow;document.removeEventListener("keydown",keys);previous?.focus();};
+  },[article]);
+  if(!article)return null;return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="law-modal" role="dialog" aria-modal="true" aria-labelledby="law-title"><div className="law-modal-header"><div><div className="law-modal-number">{article.article==="Préambule"?"Préambule":`Article ${article.article}`}</div><h2 id="law-title" className="law-modal-title">{article.titre}</h2></div><button aria-label="Fermer l’article" className="law-modal-close" onClick={onClose}>×</button></div><div className="law-modal-body"><div className="law-meta">{article.famille&&<span className="law-chip">{article.famille}</span>}<span className="law-chip">{article.source}</span>{article.local&&<span className="law-chip law-chip-local">Applicable localement</span>}{article.classification&&<span className="law-chip">{article.classification}</span>}{(article.montants?.length>0||article.amende!=="")&&<span className="law-chip">💰 {article.amende} septims</span>}{(article.dureesCachot?.length>0||article.cachot!=="")&&<span className="law-chip">🔒 {article.dureesCachot?.length?article.dureesCachot.map(formatHours).join(" / "):formatHours(article.cachot)}</span>}{article.travaux!==""&&<span className="law-chip">⚒ {formatHours(article.travaux)}</span>}</div>{(article.autorite||article.applicabilite)&&<div className="law-source-info">{article.autorite&&<div><strong>Autorité :</strong> {article.autorite}</div>}{article.applicabilite&&<div><strong>Domaine :</strong> {article.applicabilite}</div>}</div>}{article.texte&&<div className="law-text">{article.texte}</div>}{article.sanction&&<div className="law-sanction-box"><strong>⚖ Sanction</strong><div>{article.sanction}</div></div>}{article.alerte&&<div className="law-warning">⚠ <strong>Vérification nécessaire :</strong> {article.alerte}</div>}<div className="form-actions">{article.url&&<button className="secondary-button" onClick={()=>window.open(article.url,"_blank")}>Ouvrir le document source ↗</button>}{onOpenCodex&&<button className="secondary-button" onClick={()=>onOpenCodex(article)}>Voir dans le Codex</button>}</div></div></div></div>;}
 
-function CodexPage({token,focusArticle,onFocusConsumed}){const[data,setData]=useState(null),[search,setSearch]=useState(""),[family,setFamily]=useState(""),[source,setSource]=useState(""),[classification,setClassification]=useState(""),[selected,setSelected]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getCodex",token).then(r=>{setData(r);if(focusArticle){setSelected(r.articles.find(a=>a.source===focusArticle.source&&a.article===focusArticle.article)||focusArticle);onFocusConsumed();}}).catch(e=>setError(e.message));},[]);const families=useMemo(()=>data?[...new Set(data.sources.map(s=>s.famille))]:[],[data]);const classes=useMemo(()=>data?[...new Set(data.articles.map(a=>a.classification).filter(Boolean))].sort():[],[data]);const filtered=useMemo(()=>{if(!data)return[];const q=normalizeSearchText(search);return data.articles.filter(a=>(!family||a.famille===family)&&(!source||a.source===source)&&(!classification||a.classification===classification)&&(!q||normalizeSearchText([a.article,a.titre,a.source,a.famille,a.classification,a.autorite,a.applicabilite,a.texte,a.sanction].join(" ")).includes(q)));},[data,search,family,source,classification]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du Codex...</div>;return <><div className="page-header"><div><h1 className="page-title">Codex & Droit impérial</h1><p className="page-subtitle">Bibliothèque juridique de la Garde de Blancherive.</p></div></div><div className="codex-library">{families.map(f=><section className="codex-family" key={f}><h2 className="codex-family-title">{f}</h2><div className="codex-source-list">{data.sources.filter(s=>s.famille===f).map(s=><button key={s.nom} className={`codex-source-button ${source===s.nom?"active":""}`} onClick={()=>{setFamily(f);setSource(source===s.nom?"":s.nom);}}>{s.nom}<small>{s.applicabilite}</small></button>)}</div></section>)}</div><div className="codex-controls"><input type="search" placeholder="Rechercher une loi, un article, un mot..." value={search} onChange={e=>setSearch(e.target.value)}/><select value={family} onChange={e=>{setFamily(e.target.value);setSource("");}}><option value="">Toutes les familles</option>{families.map(v=><option key={v}>{v}</option>)}</select><select value={classification} onChange={e=>setClassification(e.target.value)}><option value="">Toutes classifications</option>{classes.map(v=><option key={v}>{v}</option>)}</select></div><div className="codex-count">{filtered.length} résultat{filtered.length!==1?"s":""}</div><div className="codex-list">{filtered.map((a,i)=><article className="codex-card" key={`${a.source}-${a.article}-${i}`} onClick={()=>setSelected(a)}><div className="codex-card-top"><div><div className="codex-card-number">{a.article==="Préambule"?"Préambule":`Article ${a.article}`}</div><h2 className="codex-card-title">{a.titre}</h2><div className="law-meta">{a.famille&&<span className="law-chip">{a.famille}</span>}{a.classification&&<span className="law-chip">{a.classification}</span>}{(a.montants?.length>0||a.amende!=="")&&<span className="law-chip">💰 {a.montants?.length?a.montants.join(" / "):a.amende}</span>}{(a.dureesCachot?.length>0||a.cachot!=="")&&<span className="law-chip">🔒 {a.dureesCachot?.length?a.dureesCachot.map(formatHours).join(" / "):formatHours(a.cachot)}</span>}</div></div><div className="codex-card-source">{a.source}<br/>{a.autorite}</div></div>{a.texte&&<div className="codex-card-text">{a.texte}</div>}{a.sanction&&<div className="codex-card-sanction">⚖ {a.sanction}</div>}</article>)}</div><LawModal article={selected} onClose={()=>setSelected(null)}/></>}
+function CodexPage({token,focusArticle,onFocusConsumed}){const[data,setData]=useState(null),[search,setSearch]=useState(""),[family,setFamily]=useState(""),[source,setSource]=useState(""),[classification,setClassification]=useState(""),[selected,setSelected]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getCodex",token).then(r=>{setData(r);if(focusArticle){setSelected(r.articles.find(a=>a.source===focusArticle.source&&a.article===focusArticle.article)||focusArticle);onFocusConsumed();}}).catch(e=>setError(e.message));},[]);const families=useMemo(()=>data?[...new Set(data.sources.map(s=>s.famille))]:[],[data]);const classes=useMemo(()=>data?[...new Set(data.articles.map(a=>a.classification).filter(Boolean))].sort():[],[data]);const filtered=useMemo(()=>{if(!data)return[];const q=normalizeSearchText(search);return data.articles.filter(a=>(!family||a.famille===family)&&(!source||a.source===source)&&(!classification||a.classification===classification)&&(!q||normalizeSearchText([a.article,a.titre,a.source,a.famille,a.classification,a.autorite,a.applicabilite,a.texte,a.sanction].join(" ")).includes(q)));},[data,search,family,source,classification]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du Codex...</div>;return <><div className="page-header"><div><h1 className="page-title">Codex & Droit impérial</h1><p className="page-subtitle">Bibliothèque juridique de la Garde de Blancherive.</p></div></div><div className="codex-library">{families.map(f=><section className="codex-family" key={f}><h2 className="codex-family-title">{f}</h2><div className="codex-source-list">{data.sources.filter(s=>s.famille===f).map(s=><button key={s.nom} className={`codex-source-button ${source===s.nom?"active":""}`} onClick={()=>{setFamily(f);setSource(source===s.nom?"":s.nom);}}>{s.nom}<small>{s.applicabilite}</small></button>)}</div></section>)}</div><div className="codex-controls"><input type="search" placeholder="Rechercher une loi, un article, un mot..." value={search} onChange={e=>setSearch(e.target.value)}/><select value={family} onChange={e=>{setFamily(e.target.value);setSource("");}}><option value="">Toutes les familles</option>{families.map(v=><option key={v}>{v}</option>)}</select><select value={classification} onChange={e=>setClassification(e.target.value)}><option value="">Toutes classifications</option>{classes.map(v=><option key={v}>{v}</option>)}</select></div><div className="codex-count">{filtered.length} résultat{filtered.length!==1?"s":""}</div><div className="codex-list">{filtered.map((a,i)=><article role="button" tabIndex={0} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(a);}}} className="codex-card" key={`${a.source}-${a.article}-${i}`} onClick={()=>setSelected(a)}><div className="codex-card-top"><div><div className="codex-card-number">{a.article==="Préambule"?"Préambule":`Article ${a.article}`}</div><h2 className="codex-card-title">{a.titre}</h2><div className="law-meta">{a.famille&&<span className="law-chip">{a.famille}</span>}{a.classification&&<span className="law-chip">{a.classification}</span>}{(a.montants?.length>0||a.amende!=="")&&<span className="law-chip">💰 {a.montants?.length?a.montants.join(" / "):a.amende}</span>}{(a.dureesCachot?.length>0||a.cachot!=="")&&<span className="law-chip">🔒 {a.dureesCachot?.length?a.dureesCachot.map(formatHours).join(" / "):formatHours(a.cachot)}</span>}</div></div><div className="codex-card-source">{a.source}<br/>{a.autorite}</div></div>{a.texte&&<div className="codex-card-text">{a.texte}</div>}{a.sanction&&<div className="codex-card-sanction">⚖ {a.sanction}</div>}</article>)}</div><LawModal article={selected} onClose={()=>setSelected(null)}/></>}
 
 function OrganigrammePage({token}) {
   const [data,setData]=useState(null), [error,setError]=useState("");
@@ -1693,7 +1712,7 @@ function OrgCorps({title,people=[],compact=false}) {
 function Independent({title,subtitle,people=[]}) {
   return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} showCorps/></section>;
 }
-function AmendesPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);useEffect(()=>{Promise.all([serverCall("getAmendes",token),serverCall("getAmendeFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement des amendes...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette amende ?\n\n${item.contrevenant}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerAmende",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Amendes</h1><button className="primary-button" onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle amende"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<AmendeForm data={formData} onOpenLaw={openLaw} onSubmit={async f=>{try{setData(await serverCall("ajouterAmende",token,f));setShowForm(false);}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table"><thead><tr><th>Date</th><th>Garde</th><th>Contrevenant</th><th>Infraction</th><th>Montant</th><th>Payé</th><th>Reversé</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.paye&&i.reverse?"fine-reversed":i.paye?"fine-paid":"fine-unpaid"}><td>{i.date}</td><td>{i.garde}<div className="fine-recipient">{i.collecteurs.length?<>↳ À reverser à : {i.collecteurs.join(" ou ")}{i.fallbackEtatMajor?" (État-Major)":""}</>:"↳ Aucun collecteur désigné"}</div></td><td>{i.contrevenant}</td><td><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td>{i.montant||"À déterminer"}</td><td className="cell-center"><input type="checkbox" checked={i.paye} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,6,e.target.checked));}catch(x){setError(x.message);}}}/></td><td className="cell-center"><input type="checkbox" checked={i.reverse} disabled={!canDelete} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,7,e.target.checked));}catch(x){setError(x.message);}}}/></td>{canDelete&&<td><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
+function AmendesPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);useEffect(()=>{Promise.all([serverCall("getAmendes",token),serverCall("getAmendeFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement des amendes...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette amende ?\n\n${item.contrevenant}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerAmende",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Amendes</h1><button className="primary-button" onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle amende"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<AmendeForm data={formData} onOpenLaw={openLaw} onSubmit={async f=>{try{setData(await serverCall("ajouterAmende",token,f));setShowForm(false);}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table"><thead><tr><th>Date</th><th>Garde</th><th>Contrevenant</th><th>Infraction</th><th>Montant</th><th>Payé</th><th>Reversé</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.paye&&i.reverse?"fine-reversed":i.paye?"fine-paid":"fine-unpaid"}><td data-label="Date">{i.date}</td><td data-label="Garde">{i.garde}<div className="fine-recipient">{i.collecteurs.length?<>↳ À reverser à : {i.collecteurs.join(" ou ")}{i.fallbackEtatMajor?" (État-Major)":""}</>:"↳ Aucun collecteur désigné"}</div></td><td data-label="Contrevenant">{i.contrevenant}</td><td data-label="Infraction"><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td data-label="Montant">{i.montant||"À déterminer"}</td><td data-label="Payé" className="cell-center"><input type="checkbox" checked={i.paye} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,6,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Reversé" className="cell-center"><input type="checkbox" checked={i.reverse} disabled={!canDelete} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,7,e.target.checked));}catch(x){setError(x.message);}}}/></td>{canDelete&&<td data-label="Actions"><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
 function AmendeForm({data,onSubmit,onOpenLaw}){
   const[form,setForm]=useState({date:new Date().toISOString().slice(0,10),garde:"",contrevenant:"",infraction:""});
   const[submitting,setSubmitting]=useState(false);
@@ -1722,7 +1741,7 @@ function AmendeForm({data,onSubmit,onOpenLaw}){
   return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>Nouvelle amende</h2><div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}</select></Field><Field label="Contrevenant"><input required value={form.contrevenant} onChange={e=>setForm({...form,contrevenant:e.target.value})}/></Field><MotifSanction form={form} setForm={setForm} infractions={data.infractions} onOpenLaw={onOpenLaw} valueKey="montant"/><ChoixSanction key={String(Boolean(form.personnalisee))+(form.personnalisee?"":form.infraction)} selected={selected} personnalisee={form.personnalisee} value={form.montant} onChange={value=>setForm(previous=>({...previous,montant:value}))} type="amende"/></div><div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":"Enregistrer"}</button></div></fieldset></form>;
 }
 
-function PrisonPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null),[saving,setSaving]=useState(false);useEffect(()=>{Promise.all([serverCall("getPrison",token),serverCall("getPrisonFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement de la prison...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette incarcération ?\n\n${item.detenu}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerPrison",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Prison</h1><button className="primary-button" disabled={saving} onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle incarcération"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<PrisonForm token={token} data={formData} onOpenLaw={openLaw} onSubmit={async f=>{setSaving(true);setError("");try{setData(await serverCall("ajouterPrison",token,f));setShowForm(false);}catch(e){setError(e.message);}finally{setSaving(false);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table prison-table"><thead><tr><th>Date</th><th>Garde</th><th>Détenu</th><th>Cellule</th><th>Infraction</th><th>Durée</th><th>Entrée</th><th>Sortie prévue</th><th>Libéré</th><th>Saisies</th><th>Notes</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.libere?"prison-released":"prison-active"}><td>{i.date}</td><td>{i.garde}</td><td>{i.detenu}</td><td>{i.cellule||"—"}</td><td><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td>{i.duree||"À déterminer"}</td><td>{i.entree}</td><td>{i.sortie||"—"}</td><td className="cell-center"><input type="checkbox" checked={i.libere} onChange={async e=>{try{setData(await serverCall("modifierPrisonLibere",token,i.row,e.target.checked));}catch(x){setError(x.message);}}}/></td><td className="saisies-cell">{i.saisies||"—"}</td><td>{i.notes||"—"}</td>{canDelete&&<td><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
+function PrisonPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null),[saving,setSaving]=useState(false);useEffect(()=>{Promise.all([serverCall("getPrison",token),serverCall("getPrisonFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement de la prison...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette incarcération ?\n\n${item.detenu}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerPrison",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Prison</h1><button className="primary-button" disabled={saving} onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle incarcération"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<PrisonForm token={token} data={formData} onOpenLaw={openLaw} onSubmit={async f=>{setSaving(true);setError("");try{setData(await serverCall("ajouterPrison",token,f));setShowForm(false);}catch(e){setError(e.message);}finally{setSaving(false);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table prison-table"><thead><tr><th>Date</th><th>Garde</th><th>Détenu</th><th>Cellule</th><th>Infraction</th><th>Durée</th><th>Entrée</th><th>Sortie prévue</th><th>Libéré</th><th>Saisies</th><th>Notes</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.libere?"prison-released":"prison-active"}><td data-label="Date">{i.date}</td><td data-label="Garde">{i.garde}</td><td data-label="Détenu">{i.detenu}</td><td data-label="Cellule">{i.cellule||"—"}</td><td data-label="Infraction"><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td data-label="Durée">{i.duree||"À déterminer"}</td><td data-label="Entrée">{i.entree}</td><td data-label="Sortie prévue">{i.sortie||"—"}</td><td data-label="Libéré" className="cell-center"><input type="checkbox" checked={i.libere} onChange={async e=>{try{setData(await serverCall("modifierPrisonLibere",token,i.row,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Saisies" className="saisies-cell">{i.saisies||"—"}</td><td data-label="Notes">{i.notes||"—"}</td>{canDelete&&<td data-label="Actions"><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
 function PrisonForm({token,data,onSubmit,onOpenLaw}){
   const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);
   const[form,setForm]=useState({date:local.toISOString().slice(0,10),garde:"",detenu:"",cellule:"",infraction:"",entree:local.toISOString().slice(0,16),saisies:[],notes:""});

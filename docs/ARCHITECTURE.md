@@ -73,6 +73,9 @@ Le source frontend est dans `ui/` :
 - `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
 - `ui/src/sanctions.jsx` : choix de sanction et motif personnalisé communs aux formulaires Amendes/Prison ;
 - `ui/src/styles.css` : styles ;
+- `ui/src/theme.css` : thème parchemin/sépia et adaptations mobiles, chargé après les styles structurels ;
+- `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
+- `ui/assets/` : copies web des illustrations/papier du manuel, incorporées au build ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.

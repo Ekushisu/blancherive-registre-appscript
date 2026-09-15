@@ -23,7 +23,8 @@ const result = await build({
   legalComments: "none",
   loader: {
     ".jsx": "jsx",
-    ".css": "css"
+    ".css": "css",
+    ".jpg": "dataurl"
   }
 });
 
