@@ -1,0 +1,826 @@
+﻿CHÂTELLERIE DE BLANCHERIVE
+
+
+CODEX JUDICIAIRE
+DE BLANCHERIVE
+Code pénal de la Châtellerie de Blancherive
+
+
+Par l’autorité du Jarl Lucius Haldor, Seigneur des terres de Blancherive,
+Sous l’autorité de l’Empereur de Tamriel et dans le respect des prérogatives de l’Empire,
+Conformément au Corpus Juriscivilis Imperialis, au Corpus Proceduralis Imperialis, au Codex Penitus Imperialis et au De Re Nobilitatis,
+Considérant que :
+* le Jarl est Seigneur des terres de la Châtellerie, protecteur du peuple et gardien des serments prêtés sous son autorité ;
+* la paix, la justice et la prospérité du domaine reposent sur des lois connues de tous, claires dans leur énoncé et prévisibles dans leur application ;
+* le droit propre de la Châtellerie s’est constitué par sédimentation successive, au prix de redites, de renvois incertains et de dispositions divergentes qu’il convient d’unifier ;
+* le Corpus Juriscivilis Imperialis autorise les châtelleries à promulguer des lois supplémentaires conformes à leurs coutumes, dans le respect de ses dispositions ;
+* nulle coutume locale ne saurait prévaloir sur le droit impérial, ni sur les compétences réservées aux juridictions de l’Empire ;
+* il convient de refondre en un texte unique l’ensemble des incriminations applicables sur le territoire de la Châtellerie ;
+Le Jarl de Blancherive décrète ce qui suit :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre préliminaire — Dispositions générales
+Article 1 — De l’autorité du Jarl
+Le Jarl est Seigneur des terres de la Châtellerie, protecteur du peuple et gardien des serments prêtés sous son autorité. Il veille à la paix, à la justice et à la prospérité de son domaine.
+Il est la plus haute autorité civile, militaire et judiciaire de la Châtellerie. Les serments prêtés en son nom possèdent valeur juridique et morale.
+Cette autorité s’exerce dans le respect du droit impérial et des compétences réservées à l’Empire.
+Article 2 — Du champ d’application
+Le présent Codex s’applique à l’ensemble des habitants, résidents, passants et visiteurs se trouvant sur le territoire de la Châtellerie de Blancherive.
+L’ignorance des présentes dispositions ne saurait constituer un moyen de défense.
+Article 3 — De la constitution d’une infraction
+Une infraction n’est constituée que si trois éléments sont réunis :
+* un élément légal : un texte prévoit et interdit le comportement en cause ;
+* un élément matériel : un acte ou un fait concret a été commis ou tenté ;
+* un élément moral : l’auteur a agi volontairement ou en connaissance de cause.
+À défaut de l’un de ces éléments, aucune infraction ne peut être retenue.
+Article 4 — De la classification des infractions
+Les infractions sont classées selon leur gravité, conformément au Corpus Juriscivilis Imperialis :
+* contraventions : infractions mineures, jusqu’à cinq cents (500) septims ;
+* délits : infractions de gravité moyenne, de cinq cents (500) à deux mille cinq cents (2500) septims ;
+* crimes : infractions les plus graves, au-delà de deux mille cinq cents (2500) septims.
+Lorsque la valeur du préjudice détermine la qualification, celle-ci est appréciée selon les seuils ci-dessus.
+Article 5 — De la présomption de culpabilité
+La culpabilité d’une personne est établie conformément aux règles prévues par le Corpus Proceduralis Imperialis et par le présent Codex.
+
+La Cour apprécie l’ensemble des éléments constitutifs de l’infraction, notamment ses éléments légal, matériel et moral, tels que définis à l’article 3.
+
+Aucun de ces éléments ne saurait, sauf disposition expresse du présent Codex, être considéré comme prépondérant sur les autres.
+
+La culpabilité ne peut être retenue qu’au terme de l’examen des faits et des preuves selon la procédure applicable.
+
+
+
+
+
+
+Article 6 — Des sanctions
+Peuvent être prononcées, selon les circonstances et la gravité des faits : l’amende, la réparation ou la restitution, les travaux forcés, les travaux d’intérêt général, le cachot, la saisie ou confiscation de biens, le bannissement du territoire de la Châtellerie et, dans les cas expressément prévus, la peine de mort.
+La peine de mort ne peut être prononcée qu’à l’issue d’un verdict public et motivé du magistrat, conformément à l’article 11 du Corpus Proceduralis Imperialis.
+En cas d’insolvabilité réelle, l’amende peut être convertie en travaux forcés, en travaux d’intérêt général ou en saisie de biens.
+Article 7 — De la récidive
+En cas de récidive, la peine encourue est multipliée par deux. La récidive se compte à partir du jour de la dernière condamnation, constatée au registre judiciaire de la Cour.
+Article 8 — De la tentative et de la complicité
+La tentative est constituée dès lors que, manifestée par un commencement d’exécution, elle n’a pas été suspendue volontairement ou a manqué son effet. Elle est sanctionnée comme l’infraction consommée.
+Est complice quiconque, sciemment, par aide, assistance, don, promesse, menace, ordre ou abus d’autorité, a facilité la préparation ou la consommation d’une infraction, ou a omis de dénoncer ce dont il a été témoin. La complicité est sanctionnée comme le fait de l’auteur.
+Article 9 — Des circonstances aggravantes générales
+Constituent des circonstances aggravantes, lorsque l’article applicable le prévoit ou lorsque le magistrat les retient expressément :
+* la commission à main armée ou avec usage de magie ;
+* la commission en réunion, soit par deux auteurs ou plus ;
+* la commission à l’encontre d’un représentant de l’Empire, d’un membre de la Garde ou d’un dépositaire de l’autorité dans l’exercice de ses fonctions ;
+* la commission à l’encontre d’une personne vulnérable, d’un enfant ou d’un prêtre des Huit Divins ;
+* la préméditation ;
+* la mutilation ou l’atteinte durable à l’intégrité de la victime ;
+* la commission dans l’enceinte du Temple de Kynareth ou de tout lieu consacré.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre I — Des garanties fondamentales
+Article 10 — Du droit à un procès équitable
+Toute personne accusée d’une infraction a le droit d’être entendue devant une autorité compétente et de présenter sa défense, en produisant témoins et preuves lorsque ceux-ci existent.
+Nul ne peut être condamné sans avoir eu la possibilité de répondre aux accusations portées contre lui.
+Article 11 — Du serment devant les Divins
+Toute personne prêtant serment devant les Divins est tenue de dire la vérité. Le serment possède une valeur sacrée : le trompeur offense les hommes et les Divins.
+Le faux témoignage ou le mensonge sous serment est réprimé au titre du parjure, prévu à l’article 80 du présent Codex.
+Article 12 — Du duel judiciaire
+Les crimes de sang peuvent, avec l’autorisation du Jarl ou du juge compétent, être soumis à un duel judiciaire lorsque les preuves sont insuffisantes ou que les deux parties en acceptent le principe.
+Cette ancienne coutume nordique ne constitue pas un droit et demeure une procédure exceptionnelle.
+Article 13 — Du droit d’asile religieux
+Les prêtres des temples reconnus par la Châtellerie peuvent accorder un asile temporaire aux personnes poursuivies injustement, dans l’attente d’une décision des autorités compétentes.
+Cet asile ne constitue pas une immunité. Il ne fait obstacle ni à une arrestation en cas de flagrant délit, ni aux infractions relevant de la compétence exclusive des juridictions impériales.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre II — Des atteintes aux personnes
+Article 14 — De l’usurpation d’identité
+Constitue une usurpation d’identité le fait de se faire passer pour autrui afin d’obtenir un avantage ou d’échapper à ses obligations. [Contravention]
+L’infraction devient un délit lorsqu’elle porte sur une qualité noble ou une fonction officielle.
+Sanction — appréciation de la Cour ; niveau délictuel en cas d’usurpation d’une qualité noble ou d’une fonction officielle. 
+Article 15 — Des menaces
+Constitue une menace toute parole, écrit ou geste annonçant à autrui un mal à venir. [Contravention]
+Sanction — 250 septims et 1 heure de travaux forcés.
+Article 16 — Des menaces aggravées
+La menace est aggravée lorsqu’elle vise la famille de la victime, une personne vulnérable, une personne en raison de sa race ou de sa foi envers les Huit Divins, un dépositaire de l’autorité ou un prêtre, ou lorsqu’elle est proférée à main armée ou avec usage de magie. [Délit]
+Sanction — 500 septims, 3 heures de travaux forcés et, si l’auteur exerce une fonction publique, radiation de celle-ci.
+Article 17 — De la rébellion
+Constitue une rébellion le refus opposé à une injonction d’un garde ou d’un dépositaire de la loi. Le refus non violent constitue une contravention ; le refus violent ou actif constitue un délit.
+Sanction — 100 septims et 1 heure de travaux forcés ; qualification délictuelle et sanction aggravée en cas de refus violent ou actif.
+Article 18 — Du chantage
+Constitue un chantage la pression exercée sur autrui en vue d’obtenir un avantage. [Contravention]
+Sanction — 250 septims et 1 heure de travaux forcés.
+Article 19 — De la diffamation
+Constitue une diffamation l’atteinte portée à la réputation d’autrui par des propos mensongers ou dommageables. [Contravention]
+Sanction — réparation du dommage et 1 heure de travaux forcés.
+Article 20 — Du harcèlement
+Constitue un harcèlement tout comportement répété portant atteinte à une personne. [Contravention]
+Sanction — réparation du dommage et 1 heure de travaux forcés.
+Article 21 — De la mise en danger de la vie d’autrui
+Constitue une mise en danger le fait d’exposer autrui à un risque sérieux pour sa vie ou son intégrité. [Délit]
+Sanction — 500 septims et 1 heure de travaux forcés.
+
+
+Article 22 — Des violences et agressions simples
+Constituent des violences ou agressions tous actes portant atteinte à l’intégrité physique d’une personne et ayant entraîné blessures, contusions ou incapacité, sans circonstance aggravante. [Délit]
+Sanction — réparation, 550 septims et 3 heures de travaux forcés.
+Article 23 — Des violences et agressions aggravées
+Les violences sont aggravées lorsqu’elles sont commises dans l’une des circonstances prévues à l’article 9. [Crime]
+Sanction — réparation, 2 heures de travaux forcés et 1 heure de cachot ; amende de niveau criminel à l’appréciation du magistrat.
+Article 24 — De la séquestration, de l’enlèvement et de la prise d’otage
+Constitue une séquestration, un enlèvement ou une prise d’otage le fait de priver autrui de sa liberté d’aller et venir sans droit. [Crime]
+Sanction — 650 septims, 3 heures de travaux forcés et 1 heure de cachot.
+Article 25 — De la séquestration aggravée
+L’infraction est aggravée lorsqu’elle est commise en réunion, avec violence, ou lorsqu’elle se prolonge dans la durée. [Crime]
+L’aggravation s’apprécie selon le nombre d’auteurs, la violence employée et la durée de la privation de liberté, et non selon le nombre de victimes.
+Sanction — 800 septims, 3 heures de travaux forcés et 1 heure de cachot.
+Article 26 — De l’homicide involontaire
+Constitue un homicide involontaire le décès d’autrui causé par imprudence, négligence ou manquement caractérisé à une obligation de prudence. [Crime]
+Sanction — à l’appréciation du magistrat. Barème indicatif : 800 septims, réparation à la famille et 5 heures de travaux forcés.
+Article 27 — De l’homicide volontaire
+Constitue un homicide volontaire tout acte ayant entraîné volontairement la mort d’autrui. [Crime]
+Ne peuvent être qualifiés d’homicide les décès résultant d’une guerre déclarée, d’un usage légitime et proportionné de la force par les autorités, d’une exécution judiciaire régulière ou d’un duel légal consenti.
+Sanction — à l’appréciation du magistrat. Barème indicatif : 1000 septims, réparation à la famille, 3 heures de travaux forcés et 2 heures de cachot.
+Article 28 — De l’assassinat
+Constitue un assassinat l’homicide volontaire commis avec préméditation. La préméditation suppose une préparation et une réflexion préalables. [Crime]
+Sont également aggravants les faits commis contre la famille, une personne vulnérable, un représentant de l’autorité, ou en raison de la race ou de la foi de la victime, ainsi que ceux commis en bande organisée ou à des fins d’intimidation.
+Sanction — à l’appréciation du magistrat. Barème indicatif : 1200 septims, 5 heures de travaux forcés et 3 heures de cachot.
+Article 29 — De la torture, de la mutilation et de la barbarie
+Constitue un acte de torture tout acte de barbarie, mutilation, violence extrême ou souffrance délibérément infligée. [Crime]
+Sanction — à l’appréciation du magistrat. Barème indicatif : réparation, 800 septims, 5 heures de travaux forcés et 1 heure de cachot.
+Article 30 — De la torture aggravée
+L’infraction est aggravée dans les circonstances prévues à l’article 9. [Crime]
+Sanction — à l’appréciation du magistrat. Barème indicatif : réparation, 1000 septims, 5 heures de travaux forcés et 3 heures de cachot.
+Article 31 — Du viol et des atteintes sexuelles sur enfant
+Le viol et les atteintes sexuelles commises sur un enfant constituent les crimes les plus graves contre la personne. [Crime]
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé du magistrat.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre III — Des atteintes aux biens
+Article 32 — De la destruction ou dégradation de bien public
+Constitue une infraction la destruction ou la dégradation volontaire d’un bien appartenant à la Châtellerie ou affecté à l’usage public. La qualification suit la valeur du dommage selon l’article 4.
+Sanction — 100 septims, réparation et 1 heure de travaux forcés lorsque le dommage n’excède pas 500 septims ; requalification en délit ou en crime au-delà.
+Article 33 — De la destruction ou dégradation de bien privé
+Constitue une infraction la destruction ou la dégradation volontaire du bien d’autrui. La qualification suit la valeur du dommage selon l’article 4.
+Sanction — 100 septims, réparation et 1 heure de travaux forcés lorsque le dommage n’excède pas 500 septims ; requalification en délit ou en crime au-delà.
+Article 34 — De l’intrusion en propriété privée extérieure
+Constitue une intrusion le fait de pénétrer ou de se maintenir sans autorisation sur un terrain, un enclos ou une dépendance appartenant à autrui. [Contravention]
+Chacun peut défendre ses terres et ses propriétés, dans les conditions autorisées par la Châtellerie.
+Sanction — 50 septims et 30 minutes de cachot.
+Article 35 — De l’intrusion en propriété privée intérieure
+Constitue une intrusion aggravée par le lieu le fait de pénétrer ou de se maintenir sans autorisation à l’intérieur de la demeure d’autrui. [Délit]
+Le propriétaire est déclaré en état de légitime défense après trois sommations demeurées sans effet.
+Sanction — 500 septims et 1 heure de cachot.
+Article 36 — De l’intrusion aggravée
+L’intrusion est aggravée lorsqu’elle est commise par force, à main armée, ou contre une personne vulnérable ou un dépositaire de l’autorité. Elle constitue un délit lorsqu’elle porte sur une propriété publique.
+Sanction — 70 septims et 1 heure de cachot ; qualification délictuelle en propriété publique.
+Article 37 — Du vol simple
+Constitue un vol toute appropriation frauduleuse d’un bien appartenant à autrui. [Délit]
+Les faits d’une valeur infime peuvent être traités en contravention sur appréciation du magistrat. Le vol devient un crime lorsque le bien est d’une valeur particulièrement élevée ou qu’il s’agit d’un objet sous licence.
+Sanction — réparation, amende de 50 septims au minimum ajustée à la valeur du bien, et 1 heure de travaux forcés.
+Article 38 — Du vol aggravé
+Le vol est aggravé lorsqu’il est commis contre une personne vulnérable ou un dépositaire de l’autorité, en raison de la race ou de la foi de la victime, à main armée, avec préméditation ou en bande organisée. [Délit]
+Sanction — réparation, 70 septims et 2 heures de travaux forcés.
+Article 39 — Du vol de bétail
+Le bétail constitue une richesse essentielle des fermes et villages de la Châtellerie. Quiconque en est reconnu coupable doit restituer ou rembourser au triple du préjudice subi.
+Cette réparation civile s’ajoute à la peine principale, déterminée selon la gravité des faits.
+Sanction — restitution ou remboursement au triple, cumulé avec la peine prévue aux articles 37 et 38.
+Article 40 — De la récidive en matière de vol
+Toute récidive en matière de vol peut entraîner une aggravation de la peine conformément aux dispositions relatives à la récidive prévues par le présent Codex.
+
+Lorsque les faits sont répétés, graves ou démontrent une volonté manifeste de persister dans une activité criminelle, la Cour peut prononcer des sanctions complémentaires.
+
+La perte du droit de cité ou le bannissement ne peuvent être prononcés que par décision motivée de la Cour, lorsque les sanctions ordinaires apparaissent manifestement insuffisantes au regard du nombre de récidives, de leur gravité et du comportement du condamné.
+
+Ces mesures ne peuvent résulter automatiquement de la seule existence d’une récidive.
+Sanction — perte du droit de cité et bannissement, sur décision motivée.
+Article 41 — Du recel
+Constitue un recel le fait de transporter, détenir, commercialiser, transformer ou dissimuler un bien provenant d’une infraction, en ne pouvant raisonnablement en ignorer l’origine illicite. [Délit]
+Sanction — 100 septims par bien, en sus de la valeur estimée du bien, et 2 heures de travaux forcés.
+Article 42 — Du recel en bande organisée
+Le recel commis de manière organisée ou concertée est aggravé. [Délit]
+Sanction — 150 septims par bien, en sus de la valeur estimée du bien, et 2 heures de travaux forcés.
+Article 43 — Du pillage
+Le pillage des terres alliées, des villages protégés par le Jarl ou des biens des sujets fidèles de la Châtellerie est interdit, y compris en temps de guerre.
+Sanction — restitution ; sanction déterminée selon la classification de l’article 4 d’après la gravité et la valeur du dommage.
+Article 44 — Des ouvrages publics
+Les moulins, ponts, puits et tout ouvrage d’utilité publique sont placés sous la protection de la loi. Toute dégradation, sabotage ou destruction volontaire constitue une infraction grave.
+Sanction — réparation et 50 septims ; 200 septims en cas de récidive ; requalification selon la valeur du dommage.
+
+
+
+
+Titre IV — Des atteintes aux services de la Châtellerie
+Article 45 — Des recours abusifs
+Constitue un recours abusif l’usage manifestement injustifié des procédures ou demandes adressées aux services de la Châtellerie. [Contravention]
+Sanction — 200 septims.
+Article 46 — De la violation de la propriété de la Châtellerie
+Constitue un délit l’intrusion ou le maintien sans droit dans une propriété de la Châtellerie.
+Sanction — amende de niveau délictuel, 100 septims au minimum.
+Article 47 — De la corruption passive
+Commet une corruption passive l’agent qui sollicite ou accepte un avantage indu en vue d’influencer une décision, une action ou une omission relevant de ses fonctions. [Crime]
+Sanction — 1000 septims, 3 heures de cachot et bannissement des offices publics à titre de mesure accessoire.
+Article 48 — De la corruption active
+Commet une corruption active quiconque offre ou promet un avantage indu à une personne investie d’une autorité ou d’une fonction. [Crime]
+Sanction — 2000 septims, 2 heures de travaux forcés, 2 heures de cachot et bannissement des offices publics à titre de mesure accessoire.
+Article 49 — De l’abus de pouvoir public
+Commet un abus de pouvoir toute personne investie d’une fonction publique locale qui en use de manière détournée, excessive ou illégitime. [Crime]
+Sanction — 500 septims, 2 heures de travaux forcés, 2 heures de cachot et bannissement des offices publics à titre de mesure accessoire.
+Article 50 — De l’abus de pouvoir lié à un statut
+Le présent article vise les abus commis au titre d’un statut nobiliaire, corporatif ou de guilde, à l’exclusion des fonctions publiques locales régies par l’article 49. [Crime]
+Sanction — 500 septims et 3 heures de travaux forcés.
+Article 51 — De l’usurpation de fonction
+Commet une usurpation de fonction quiconque se prétend titulaire d’une charge ou d’une fonction sans en avoir le titre. [Délit]
+Sanction — 500 septims et 3 heures de travaux forcés.
+Article 52 — De l’usage non autorisé de matériel de la Châtellerie
+Constitue une infraction l’utilisation sans droit d’un équipement appartenant à la Châtellerie. [Contravention]
+Sanction — saisie des biens, 150 septims par équipement et 30 minutes de travaux forcés.
+
+
+Article 53 — De la divulgation d’information secrète de la Châtellerie
+Constitue une infraction la divulgation volontaire, sans autorisation légitime, d’une information officiellement tenue secrète par la Châtellerie lorsque cette divulgation est susceptible de porter atteinte à ses intérêts, à son administration, à sa sécurité ou à celle de ses habitants.
+
+Le présent article ne s’applique qu’aux informations relevant de la compétence propre de la Châtellerie.
+
+Lorsque les informations concernées touchent également à la sécurité de l’Empire, à la Légion impériale, au renseignement impérial ou à toute matière relevant du Codex Penitus Imperialis, la compétence des autorités impériales prévaut.
+
+Dans ce cas, la Cour de Blancherive se dessaisit de l’affaire et transmet aux autorités impériales compétentes les informations et éléments recueillis.
+Sanction — 1000 septims et 5 heures de travaux forcés.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre V — Des atteintes à l’ordre public et à la société
+Article 54 — De la dissimulation du visage
+Le fait de dissimuler son visage en violation des dispositions prévues à l’article 115 du présent Codex constitue une infraction.
+
+Les interdictions, exceptions éventuelles et limites territoriales applicables à la dissimulation du visage sont celles définies à l’article 115.
+
+Toute dissimulation volontaire destinée à empêcher l’identification d’une personne par la Garde ou par une autre autorité légitime peut être retenue comme circonstance aggravante.
+
+Le refus de découvrir son visage après une injonction légitime d’une autorité peut également donner lieu à l’application des dispositions relatives au refus d’obtempérer.
+Sanction — 20 septims.
+Article 55 — De l’exhibition
+Constitue une exhibition tout dénuement ou comportement indécent exposé au regard du public. [Contravention]
+Sanction — 50 septims et 1 heure de cachot.
+Article 56 — De l’ivresse manifeste sur la voie publique
+L’état d’ivresse manifeste sur la voie publique constitue une contravention.
+Sanction — à l’appréciation des forces de l’ordre.
+Article 57 — Du trouble à l’ordre public
+Constitue un trouble à l’ordre public tout comportement perturbant la tranquillité ou la sécurité publique. [Contravention]
+Sanction — à l’appréciation des forces de l’ordre.
+Article 58 — Des rixes et bagarres
+Toute bagarre, rixe ou altercation violente sur la voie publique est interdite sur l’ensemble du territoire de la Châtellerie, hormis dans les tavernes et avec l’accord du tenancier.
+Le trouble sans blessure constitue une contravention ; l’altercation ayant causé des blessures constitue un délit relevant de l’article 22, aggravé le cas échéant selon l’article 9.
+Sanction — 35 septims et 20 minutes de cachot ; qualification supérieure en cas de blessures.
+Article 59 — Du rassemblement illégal
+Constitue un rassemblement illégal tout regroupement interdit ou tenu sans autorisation. [Contravention]
+Sanction — 25 septims et 1 heure de travaux forcés.
+
+
+
+
+
+
+
+
+Article 60 — De l’association de malfaiteurs
+Constitue une association de malfaiteurs tout groupement formé en vue de commettre des infractions. [Délit]
+Cette qualification peut également être retenue à titre de circonstance aggravante.
+Sanction — 100 septims et 2 heures de travaux forcés.
+Article 61 — De l’exercice illégal d’une profession réglementée
+Sont réglementés notamment le commerce, l’alchimie, la guérison et la chasse. Leur exercice sans droit constitue une contravention. [Contravention]
+Sanction — selon les régimes spéciaux applicables et l’appréciation de la Cour.
+Article 62 — De la divulgation d’un secret professionnel
+Constitue une infraction la divulgation d’informations couvertes par un secret professionnel, commercial, industriel, religieux ou médical. [Contravention]
+Sanction — 500 septims et 3 heures de travaux forcés.
+Article 63 — Du refus d’obtempérer
+Constitue un refus d’obtempérer le fait de se soustraire volontairement à un contrôle ou à une injonction d’une autorité légitime. [Contravention]
+L’infraction devient un délit en cas d’usage de violence, de magie ou de potions.
+Sanction — 50 septims et 1 heure de travaux forcés ; mise en état de travail ou retrait de charrette possible.
+Article 64 — De la fabrication et de la vente de substances illégales
+Sont prohibés la fabrication et le commerce de poisons, de skooma et de sucre-lune. [Délit]
+En cas de trafic de grande ampleur, notamment lorsque le cumul excède 2500 septims, l’infraction est requalifiée en crime.
+Sanction — 250 septims par unité et 3 heures de travaux forcés.
+Article 65 — De la fausse alerte
+Constitue une fausse alerte toute alerte mensongère ou abusive donnée à la Garde ou aux autorités. [Contravention]
+Sanction — 100 septims et 1 heure de travaux forcés.
+Article 66 — Des horaires des tavernes
+Les tavernes, auberges et établissements servant des boissons ferment au troisième appel de cloche, sauf autorisation exceptionnelle du Jarl ou de son représentant.
+Sanction — à l’appréciation des forces de l’ordre ; fermeture administrative possible en cas de récidive.
+
+
+
+
+
+
+Titre VI — Des atteintes à la Châtellerie
+Les infractions du présent titre s’appliquent sans préjudice de la compétence exclusive des juridictions impériales lorsque les faits portent également atteinte à l’autorité impériale directe, à la Légion ou aux services de renseignement impériaux, au sens du Codex Penitus Imperialis.
+Article 67 — De la trahison envers la Châtellerie
+Commet un acte de haute trahison quiconque : 
+* apporte volontairement aide, assistance, refuge, renseignements ou ravitaillement à toute organisation cherchant à nuire à la Châtellerie. [Crime]
+* prends les armes contre la Châtellerie
+* divulgue des secrets ou collabore avec des organisations extérieures dans le but de nuire à la Châtellerie.
+Le présent article vise exclusivement les atteintes portées à la Châtellerie elle-même.
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 68 — Du terrorisme
+Constitue un acte de terrorisme toute entreprise visant à répandre la terreur au sein de la population ou à contraindre les autorités par la violence. [Crime]
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 69 — De la conspiration
+Constitue une conspiration tout projet concerté dirigé contre la Châtellerie ou ses institutions. [Crime]
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 70 — De l’espionnage
+Constitue un espionnage la collecte ou la transmission d’informations au profit d’une puissance ou d’une organisation extérieure à la Châtellerie. [Crime]
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 71 — De la désertion
+Est coupable de désertion quiconque abandonne volontairement son poste durant une bataille ou fuit devant l’ennemi sans ordre de son commandement. [Crime]
+La peine de mort ne peut être prononcée que par une autorité judiciaire compétente, à l’issue d’une procédure régulière, et non par simple décision de commandement — sans préjudice du droit de tout chef militaire de faire cesser sur-le-champ un péril immédiat par la force.
+Sanction — exil ; peine de mort encourue sur verdict public et motivé lorsque les circonstances l’exigent.
+Article 72 — De l’obligation militaire
+Chaque foyer est tenu de fournir au moins un combattant lorsque le Cor de Guerre est sonné. Lorsqu’aucun membre du foyer n’est en mesure de servir pour un motif légitime, une compensation financière est versée au trésor de la Châtellerie.
+Sanction — fourniture d’un combattant ou compensation financière fixée par l’Intendance.
+Article 73 — Des Compagnons
+Les Compagnons de Jorrvaskr demeurent une confrérie libre et conservent leur indépendance dans leurs affaires quotidiennes.
+Titre VII — Des atteintes au gouvernement et à la justice
+Article 74 — De l’outrage
+Constitue un outrage toute atteinte verbale ou symbolique portée à une autorité de la Châtellerie. L’outrage se gradue comme suit :
+* Outrage à la Garde — 100 septims ; le contrevenant peut être retenu jusqu’à comparution devant une autorité. [Contravention]
+* Outrage à la Châtellerie — 200 septims et 1 heure de travaux forcés. [Contravention]
+* outrage ou à la Cour — 500 septims et 3 heures de travaux forcés. [Délit]
+* Outrage au Jarl — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé..
+L’outrage commis à l’audience relève de la police de l’audience et du Codex Procédural de Blancherive.
+Article 75 — Du non-acquittement d’une peine pécuniaire
+Le refus délibéré d’acquitter une amende constitue un délit. L’insolvabilité réelle donne lieu à conversion et non à aggravation.
+Sanction — refus délibéré : doublement de l’amende et 1 heure de travaux forcés ; insolvabilité réelle : conversion en travaux forcés, travaux d’intérêt général ou saisie de biens.
+Article 76 — Du non-respect d’une décision de justice
+Constitue un délit la violation d’une décision rendue par la Cour de la Châtellerie.
+Sanction — à l’appréciation du juge.
+Article 77 — De l’entrave à la justice
+Constitue une entrave, tout obstacle volontaire au fonctionnement de la justice de la Châtellerie. [Contravention]
+Sanction — 50 septims et 1 heure de cachot.
+Article 78 — Du faux
+Constitue un faux la fabrication ou la falsification d’un document, d’un registre, d’un sceau ou de tout élément destiné à faire foi. [Contravention]
+L’infraction est requalifiée en délit ou en crime selon la gravité de ses conséquences, notamment l’usurpation d’une fonction officielle ou un préjudice financier important.
+Sanction — 500 septims et 2 heures de cachot.
+Article 79 — De l’usage de faux
+Constitue un usage de faux l’utilisation d’un élément dont le caractère falsifié ne pouvait être ignoré. [Contravention]
+L’infraction est requalifiée selon la gravité de ses conséquences.
+Sanction — 250 septims et 2 heures de cachot.
+
+
+
+
+Article 80 — Du parjure
+Constitue un parjure le mensonge ou le faux témoignage, oral ou écrit, produit devant la Cour ou sous serment. [Délit]
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 81 — De l’évasion
+Constitue une évasion le fait, pour une personne placée sous garde ou sous contrainte judiciaire, de se soustraire à la surveillance ou à la mesure qui lui est imposée. [Crime]
+Sanction — 2000 septims et 4 heures de travaux forcés.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre VIII — De l’armement
+Article 82 — Du port d’arme
+Le port d'armes est autorisé sur le territoire de la Châtellerie, sous réserve des interdictions prévues à l’article 83 et des restrictions particulières décidées par le Jarl ou la Cour. [Contravention en cas de méconnaissance]
+Article 83 — Des armes interdites
+Toute arme daedrique, maudite, nécromantique ou présentant un danger particulier pour la population doit être déclarée aux autorités compétentes.
+La mise sous surveillance provisoire peut être ordonnée à titre conservatoire. La confiscation ou la destruction définitive n’intervient qu’après décision de la Cour.
+Sanction — déclaration obligatoire ; surveillance conservatoire, confiscation ou destruction sur décision de la Cour.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre IX — Du culte
+Article 84 — De la religion officielle
+Le culte des Huit Divins est reconnu par la Châtellerie de Blancherive.
+La pratique d’un culte non reconnu par l’Empire constitue un délit, conformément à l’article 9 du Corpus Juriscivilis Imperialis, sous réserve du régime de tolérance conditionnelle prévu à l’article 85.
+Sanction — 30 minutes de travaux forcés, ajustables au niveau délictuel par le magistrat.
+Article 85 — De la tolérance conditionnelle
+Les cultes autres que celui des Huit Divins peuvent faire l’objet d’une tolérance conditionnelle. Sont tolérées les pratiques qui :
+* n’impliquent aucune violence, contrainte ou atteinte à l’intégrité physique ou mentale d’autrui ;
+* n’encouragent ni meurtre, ni sacrifice, ni crime, ni rébellion contre l’autorité ;
+* ne font usage d’aucune magie interdite, coercitive ou de rituel occulte dangereux ;
+* ne troublent pas la paix publique.
+La pratique respectant ces conditions ne constitue pas une infraction. Sa méconnaissance constitue un délit.
+Article 86 — Du culte daedrique
+Le culte daedrique relève du régime de tolérance conditionnelle prévu à l’article 85. Seul le culte daedrique méconnaissant ces conditions constitue un crime.
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 87 — De la possession d’artefact daedrique
+La simple possession d’objets, symboles ou reliques liés à un culte toléré ne constitue pas une infraction.
+Constitue un crime la possession d’artefacts liés à une pratique non tolérée, ou d’objets dont la dangerosité intrinsèque est démontrée.
+Sanction — saisie de l’artefact, 500 septims et 2 heures de travaux forcés.
+Article 88 — De la profanation de lieu saint
+Constitue une profanation toute atteinte portée au caractère sacré d’un lieu, d’un objet, d’un office religieux ou d’une personne en raison de son appartenance religieuse. [Délit]
+Sanction — 500 septims et 3 heures de travaux forcés ; qualification criminelle lorsque le motif est daedrique.
+Article 89 — Du Temple de Kynareth
+Le Temple de Kynareth est reconnu terre sacrée et bénéficie de la protection permanente de la Châtellerie. Les fidèles doivent pouvoir y prier en paix sous la protection du Jarl.
+Toute violence, profanation, vol ou trouble commis dans son enceinte constitue une circonstance aggravante.
+
+
+
+
+Article 90 — De la protection des sépultures
+Il est interdit de profaner tombes, tertres funéraires, cairns, pierres runiques et tout lieu consacré aux morts. [Délit]
+Sanction — sanction déterminée selon l’article 88 ; qualification criminelle lorsque le motif est daedrique.
+Article 91 — Des rites funéraires
+Tout défunt doit recevoir des funérailles dignes selon ses croyances, qu’il s’agisse d’un bûcher, d’une inhumation ou de tout autre rite reconnu.
+Les familles ou, à défaut, la Châtellerie veillent à ce qu’aucun défunt ne demeure sans sépulture.
+Article 92 — Des engagements diplomatiques de l’Empire
+La Châtellerie prend acte des traités et engagements diplomatiques conclus par l’Empire, dont l’application et l’interprétation relèvent exclusivement des autorités impériales et des parties signataires.
+La Châtellerie ne dispose d’aucune compétence pour connaître de leur méconnaissance. Lorsqu’un fait porté à sa connaissance paraît susceptible de méconnaître un tel engagement, la Cour en avise immédiatement l’autorité impériale compétente ainsi que l’ambassade concernée, et se dessaisit à leur profit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre X — De l’occulte et de la magie
+Article 93 — De la corruption magique
+Le fait d’utiliser volontairement la magie sur une personne, sans son consentement, afin d’altérer son jugement, ses perceptions, ses émotions ou son comportement constitue un délit.
+
+L’infraction est requalifiée en crime lorsque la magie employée entraîne une suppression totale ou durable du libre arbitre de la victime, son asservissement, sa soumission forcée ou l’oblige à accomplir des actes qu’elle n’aurait raisonnablement pas accomplis sans cette influence.
+
+La gravité de l’atteinte, sa durée, les conséquences subies par la victime et l’intention de l’auteur sont prises en considération lors de la détermination de la peine.
+En cas de preuve avéré de corruption magique, il est nécessaire de se référer à la loi impérial (Codex Juriscilivis Impérialis) pour l’application de la peine finale.
+Sanction — à l’appréciation du magistrat, selon la classification retenue.
+Article 94 — De la nécromancie
+La pratique de la nécromancie est interdite sur l’ensemble des terres de la Châtellerie : arts nécromantiques, animation des morts, expérimentation sur cadavres, invocation d’esprits, détention de biens liés, sorts, recherches et rituels. [Crime]
+La nécromancie trouble le repos des défunts, met en danger les vivants et menace la sécurité publique.
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+Article 95 — Collaboration Profane
+La collaboration profane est le fait de travailler, d’échanger, d’aider les creatures (vampire, loup-garou) et force daédrique (cultes) de manière consciente et que les faits soient avérés (Se référer à l’article 3 du Codex Judiciaire de Blancherive). Il est considéré comme un crime au sein de la châtellerie et juger par les autorités compétente de la cour et de l’empire en vertue de l’article 9 et 16 du Corpus Juriscivilis Imperialis.
+
+
+Sanction — peine maximale encourue : mort et saisie des biens, sur verdict public et motivé.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre XI — Des terres, du commerce et de la fiscalité
+Article 97 — De la propriété des terres cultivées
+Les terres cultivées appartiennent de plein droit à ceux qui les exploitent loyalement, les entretiennent avec diligence et en assurent la mise en valeur au profit de la Châtellerie.
+Le droit de propriété repose non seulement sur la possession, mais aussi sur l’entretien.
+Article 98 — Des terres abandonnées
+Toute ferme, exploitation ou domaine abandonné durant une période prolongée, sans motif légitime ni représentant désigné, revient de plein droit au Jarl et peut être attribué à un exploitant capable d’en assurer la production.
+Article 99 — Du tribut des récoltes
+Les récoltes de la saison froide contribuent à l’approvisionnement des greniers de la cité, selon les quantités fixées par le Jarl ou son Intendant.
+Ce tribut constitue une contribution collective destinée à préserver la sécurité alimentaire de la Châtellerie.
+Article 100 — Des taxes commerciales
+Des taxes d’entrée, d’installation ou de commerce peuvent être imposées aux marchands exerçant une activité sur le territoire de la Châtellerie.
+
+Le montant, les modalités et les lieux de perception de ces taxes sont fixés par décision du Jarl et rendus publics avant leur application.
+
+Les taxes sont perçues aux postes, marchés ou bureaux désignés à cet effet par des agents dûment mandatés par le Jarl.
+
+Tout paiement donne lieu, lorsque cela est nécessaire, à la délivrance d’un reçu, d’un registre ou de toute autre preuve permettant au marchand de démontrer qu’il s’est acquitté de son obligation.
+
+Aucune différence de taxation ne peut être appliquée entre marchands placés dans une situation identique en raison de leur race, de leur origine ou de leur provenance.
+
+Toute dissimulation volontaire de marchandises ou toute manœuvre destinée à échapper à la taxe peut être poursuivie au titre de la fraude commerciale.
+Article 101 — De la taxe citoyenne
+Tout citoyen soumis à la taxe citoyenne est tenu de l’acquitter selon le montant, la périodicité et les modalités fixés par décision du Jarl et rendus publics.
+
+La perception est assurée par les agents expressément mandatés à cet effet.
+
+Le paiement est inscrit au registre compétent ou donne lieu à la délivrance d’une preuve de paiement.
+
+En cas de défaut de paiement, le citoyen doit être informé de la somme due et disposer d’une possibilité raisonnable de régulariser sa situation.
+
+Le défaut persistant de paiement peut entraîner une amende ou toute autre mesure prévue par le présent Codex.
+
+La perte du droit de cité ne peut intervenir qu’en cas de refus volontaire, persistant et répété de satisfaire à l’obligation fiscale et ne peut être prononcée que par une décision motivée de l’autorité compétente, après que l’intéressé a été mis en mesure de régulariser sa situation.
+
+L’insolvabilité réelle ne peut être assimilée, à elle seule, à un refus volontaire de paiement.
+Sanction — 50 septims par semaine de retard jusqu’à régularisation ; perte de la citoyenneté après deux semaines.
+Article 102 — Des caravanes khajiites
+Les caravanes khajiites sont autorisées à commercer sur les terres de la Châtellerie sous la surveillance de la Garde. Elles demeurent soumises aux mêmes lois, taxes et obligations que tout autre marchand étranger.
+Cette surveillance vise la sécurité des échanges et la prévention de la contrebande, sans constituer une discrimination.
+Article 103 — De la fraude commerciale
+Constitue une fraude commerciale toute tromperie portant sur les poids, les mesures, la qualité des marchandises ou les prix volontairement falsifiés. [Délit]
+Sanction — confiscation possible des marchandises, réparation, et amende de niveau délictuel ; qualification criminelle si la valeur est particulièrement élevée.
+Article 104 — De la vente de gros et des étals
+La vente de gros dans les rues est interdite, hormis aux étals autorisés. L’acquisition d’un étal se fait auprès de l’Intendance pour cinquante (50) septims. [Contravention]
+Sanction — 65 septims.
+Article 105 — De la vente à la criée
+Toute vente à la criée, annonce publique de marchandises, sollicitation bruyante ou appel commercial répété sur la voie publique est interdite sans autorisation préalable des autorités compétentes. [Contravention]
+Sanction — 100 septims à la première infraction ; 200 septims en cas de récidive, sans préjudice d’une saisie temporaire des marchandises ou d’une interdiction provisoire d’exercer.
+Article 106 — De la contrebande
+La vente de skooma, de sucre-lune et de marchandises de contrebande est interdite. [Délit]
+Sanction — 100 septims, 20 minutes de cachot et confiscation, la valeur de la marchandise saisie s’ajoutant à la peine ; sanction aggravée selon l’article 64 en cas de trafic.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre XII — De la faune, de la chasse et des terres sauvages
+Article 107 — Du permis de chasse
+La chasse sur le territoire de Blancherive est encadrée par les Gardes-Chasse attitrés par l’autorité du Jarl et de la Cour. Un permis est obligatoire, délivré pour cinquante (50) septims auprès des Gardes-Chasse.
+La légitime défense face à un animal sauvage et agressif demeure un droit absolu.
+Article 108 — De la chasse sans permis
+Il est interdit de tuer et de dépecer un animal sauvage sans permis. [Contravention]
+Sanction — 100 septims.
+Article 109 — De la cruauté envers les bêtes
+Il est interdit de tuer un animal sauvage par plaisir sadique. La cruauté gratuite aggrave l’infraction. [Contravention]
+Sanction — 150 septims.
+Article 110 — De la chasse au mammouth
+La chasse au mammouth est soumise à l’autorisation préalable du Jarl ou de son représentant. Les mammouths constituent une ressource précieuse mais limitée, dont la préservation évite les conflits avec les géants. [Contravention]
+Sanction — 200 septims.
+Article 111 — De la protection des géants
+Les géants sont des êtres historiquement respectés dans la Châtellerie et bénéficient d’une protection spécifique. Il est interdit de les approcher, déranger, voler, provoquer ou attaquer sans motif légitime ni autorisation de la Cour.
+La légitime défense demeure admise lorsque le géant menace directement la vie ou les biens.
+Sanction — vol : 100 septims ; provocation ou harcèlement : 150 septims ; mise à mort hors légitime défense : délit, jugement obligatoire, peine déterminée par le juge selon l’article 4, amende de niveau délictuel et cachot possible.
+Article 112 — Du signalement des dragons
+Toute personne apercevant un dragon ou constatant des traces récentes de son passage est tenue d’en informer immédiatement la Garde ou toute autorité compétente.
+Sanction — manquement apprécié par les forces de l’ordre ; sanction au titre de l’article 57 en cas de négligence caractérisée.
+Article 113 — De la défense des habitants
+Tout homme ou femme libre est autorisé à combattre et à abattre toute créature représentant une menace immédiate pour les habitants, les routes, les fermes ou les biens de la Châtellerie.
+Lorsque cela est possible, la Garde doit en être avertie dans les meilleurs délais afin de constater les faits et de prévenir tout abus de ce droit.
+
+
+Titre XIII — Des règlements de police
+Article 114 — De la marche obligatoire
+La course est interdite à l’intérieur de la ville de Blancherive, une fois la Grande Porte franchie.
+
+Cette interdiction ne s’applique pas aux personnes se trouvant à l’extérieur des remparts ou avant le franchissement de la Grande Porte.
+
+Les membres de la Garde, les autorités compétentes et toute personne agissant dans le cadre d’une urgence légitime peuvent déroger à cette interdiction lorsque les circonstances l’exigent. [Contravention]
+Sanction — 15 septims.
+Article 115 — Du visage découvert
+Le port d’un masque dissimulant le visage est strictement interdit sur l’ensemble du territoire de la Châtellerie de Blancherive.
+
+Dans les faubourgs ainsi que dans l’enceinte de la ville de Blancherive, il est également interdit de porter tout casque, capuche ou autre couvre-chef dissimulant ou couvrant le visage.
+
+Cette interdiction s’applique à toute personne présente dans ces zones, sans distinction.
+
+Toute personne concernée doit être en mesure de présenter son visage lorsqu’une autorité légitime l’exige aux fins de son identification.
+
+Toute violation du présent article est poursuivie conformément à l’article 54 relatif à la dissimulation du visage. [Contravention]
+Sanction — 15 septims, sans préjudice de l’article 54.
+Article 116 — Du saut des murailles
+Il est interdit de sauter des murailles, notamment devant la porte de la ville, afin de prévenir troubles, accidents et infiltrations. [Contravention]
+Sanction — 55 septims.
+Article 117 — Du vol dans les fermes
+Le vol de miel, d’œufs ou l’abattage non autorisé de poules, vaches et autres bêtes de ferme est interdit. [Contravention]
+Sanction — 40 septims, sans préjudice du remboursement au triple prévu à l’article 39.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Titre XIV — Dispositions finales
+Article 118 — De l’articulation avec le droit impérial
+Le présent Codex s’applique sans préjudice de la primauté du droit impérial.
+Les infractions relevant des Leges Imperiales demeurent de la compétence prioritaire des juridictions impériales. Celles relevant du Codex Penitus Imperialis sont de leur compétence exclusive, et la Cour s’en dessaisit de plein droit.
+Article 119 — De l’interprétation
+Lorsque le présent Codex n’est pas clair, il est interprété dans l’ordre de priorité fixé par le Corpus Proceduralis Imperialis : interprétation stricte, téléologique, historique et jurisprudentielle, systématique, puis analogique.
+Les dispositions prévoyant une peine sont d’interprétation stricte.
+Article 120 — De l’abrogation
+Sont abrogés le Code de la Châtellerie de Blancherive, les Dispositions pénales générales de Blancherive, les Règlements et amendes de la Châtellerie, ainsi que toute disposition antérieure contraire au présent Codex.
+Article 121 — De l’entrée en vigueur et de la publication
+Le présent Codex entre en vigueur à compter de sa publication officielle.
+
+Il est affiché à Fort-Dragon et consigné au registre de la Cour de Blancherive afin que chacun puisse en prendre connaissance.
+
+Toute modification ultérieure du présent Codex est soumise aux mêmes formalités de publication avant son entrée en vigueur.
+
+La conservation, l’affichage et l’enregistrement du Codex sont placés sous l’autorité de la Cour et du Jarl.

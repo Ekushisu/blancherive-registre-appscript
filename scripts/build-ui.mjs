@@ -24,7 +24,9 @@ const result = await build({
   loader: {
     ".jsx": "jsx",
     ".css": "css",
-    ".jpg": "dataurl"
+    ".jpg": "dataurl",
+    // Les décors détourés ont besoin de la transparence, donc du PNG.
+    ".png": "dataurl"
   }
 });
 

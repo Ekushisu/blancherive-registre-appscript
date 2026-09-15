@@ -26,6 +26,12 @@ un message explicite plutôt que de laisser un écran de chargement muet.
 
 Générées par le script, donc rejouables à l’identique :
 
+- `effectifs-1440.png`, `effectifs-390.png` : onglets par corps, vue d'ensemble
+  et fiches de service. Le jeu de démonstration couvre les six corps, densité à
+  laquelle les défauts d'affichage mobile apparaissent.
+- `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement,
+  corps et garnisons, avec les descriptions de grades.
+- `organigramme-grade-1440.png` : un encart de description de grade déplié.
 - `presences-1440.png`, `presences-390.png` : tableau de bord OFFICIER,
   accordéons de semaines, coût total par corps.
 - `prison-1440.png`, `prison-390.png` : registre et fiches mobiles.
@@ -38,7 +44,6 @@ restent valables comme référence visuelle mais ne se régénèrent pas avec la
 commande ci-dessus.
 
 - `connexion-ordinateur.png`, `connexion-mobile.png` : entrée dans le registre.
-- `organigramme-1440.png`, `organigramme-390.png` : navigation et commandement.
 - `amendes-1440.png`, `amendes-390.png` : tableau et fiches mobiles.
 - `codex-1440.png`, `codex-390.png` : lecture du Codex.
 - `effectifs-1440.png`, `effectifs-390.png`, `effectifs-edition-mobile.png`.

@@ -1,0 +1,75 @@
+﻿DE ARGENTARIA
+Décret relatif aux établissements bancaires de Bordeciel
+ 
+PRÉAMBULE
+L'Empereur, soucieux d'établir les fondements d'une organisation bancaire sûre, prévisible et pérenne, légifère par le présent décret, en l'an 226 de la IVe ère, le statut des banques de Bordeciel. Ce, en définissant officiellement ses missions, son organisation, ses prérogatives ainsi que les règles régissant son fonctionnement.
+L'application du présent texte vaut pour le futur, sans que nul établissement ne puisse y déroger par opposition d'un quelconque usage passé.
+En conséquence, par l'autorité de l'Empire et de ses lois, il est établi ce qui suit :
+I. DE CERTIFICATIONE
+De la détermination et de la certification des établissements bancaires
+■ Article I — Définition et certification
+Est reconnue comme activité de garde de fonds l’entreposage à but lucratif non généralisé de septims pour le compte d’autrui, dans un lieu réputé sécurisé. La dénomination de ce service, exercé en un lieu par une personne physique ou morale, est celle de « bureau financier », régi par le titre IV du présent décret.
+Est qualifié d'activité bancaire tout service lucratif et généralisé consistant en la détention de septims pour le compte d'autrui, dans un lieu réputé sécurisé. La dénomination des établissements proposant ce service, exercé en un lieu par une personne physique ou morale, est qualifié, par effet de la loi, de « banque », régie par les titres I, II et III du présent décret.
+Toute organisation exerçant avant la promulgation du présent décret, ainsi que toute organisation souhaitant exercer à l’avenir, est tenue de prendre contact avec la BCIB afin d’engager la procédure de certification de l’établissement en tant que banque.
+Ladite certification est délivrée par la BCIB dès lors que l’organisation candidate a communiqué l’ensemble des informations relatives à son projet et qu’elle satisfait à l’ensemble des normes encadrantes édictées par la BCIB.
+■ Article II — Du registre bancaire et de la transparence
+La BCIB tient le registre des établissements bancaires certifiés. Elle précise l'identité des responsables, le siège de l'établissement, ainsi que son statut devant la BCIB. Ce registre est tenu publique pour libre consultation.
+Tout établissement certifié est tenu à une transparence entière envers la BCIB. En vertu de celle-ci, les banques sont tenues de présenter à échéance l'état complet de toutes informations exigées par l’institution; ce, également, sur demande ponctuelle des administrations impériales dûment habilitées par la BCIB.
+■ Article III — De la coopération
+Dans la continuité de leurs obligations de transparence, les banques sont tenues à un devoir de coopération avec la BCIB. Dissimuler un registre ou produire une déclaration volontairement inexacte constitue une atteinte à ce devoir sur le fondement des articles 6 et 7 du CORPUS JURISCIVILIS IMPERIALIS, de surcroît nécessairement aggravée au sens de son article 8, caractérisant par là un crime. 
+■ Article IV — De la régulation
+Les banques sont tenues de respecter les décisions émises par la BCIB pour la stabilité du marché bancaire provincial.
+En cas de doute sur la conformité d'une décision au regard des lois impériales, la Chancellerie peut être saisie pour son contrôle. L'abus de ce droit engage néanmoins la responsabilité du demandeur.
+
+
+II. IURA ARGENTARIARUM
+Des droits des établissements bancaires
+■ Article V — Du droit à l'assistance
+Toute banque peut demander l'assistance de la BCIB lorsqu'une difficulté menace son activité, ses déposants ou la continuité de ses opérations.
+■ Article VI — Du droit à la représentation
+Toute banque peut demander à être accompagnée ou représentée par la BCIB lors d'une entrevue, d'une médiation ou d'une négociation intéressant le marché bancaire.
+■ Article VII — Du droit de proposition
+Les banques peuvent soumettre à la BCIB toute proposition de règlement ou de délibération destinée à améliorer l'organisation bancaire en Bordeciel.
+III. DE BANCA CENTRALI
+De la Banque centrale impériale de Bordeciel
+■ Article VIII — Du secret des affaires
+La BCIB préserve le secret des informations qui lui sont transmises. Elle ne peut les communiquer qu'aux autorités impériales compétentes, lorsque la justice, la protection des déposants ou la sûreté économique de la province l'exigent.
+■ Article IX — De l'assistance aux banques
+La BCIB porte assistance, dans la mesure de ses capacités, aux banques. Cette assistance peut prendre la forme d'un conseil, d'une médiation, d'une surveillance temporaire ou d'un plan de redressement.
+■ Article X — De la représentation
+La BCIB représente les banques de Bordeciel auprès des institutions et acteurs provinciaux ; elle exerce néanmoins cette représentation dans le respect de l'intérêt commun du marché bancaire, et non au profit exclusif d'un établissement.
+■ Article XI — De l’encadrement du marché bancaire
+La BCIB régule par la publication d’indicateur à respecter, la transmission de rapport d’évolution et par le maintien de la surveillance du respect de ses directives auprès des établissements bancaires.
+IV. DE OFFICIIS PECUNIARIIS
+Des bureaux financiers
+■ Article XII — De la dénomination trompeuse des bureaux financiers
+L'activité des établissements non certifiées doit obligatoirement être désignée sous l'appellation de « bureau financier », limité aux opérations de garde de fonds. L'emploi du titre de banque, ou de toute autre formulation susceptible de provoquer une confusion dans l'esprit des citoyens sur la qualité du service, est constitutif d'une infraction de tromperie encadré et puni par l’article 1 du CORPUS JURISCIVILIS IMPERIALIS, nécessairement aggravé en délit. 
+■ Article XIII — Des opérations permises
+Les bureaux financiers peuvent recevoir des dépôts, procéder à leur restitution et exercer une activité de change, sous réserve de tenir un registre fidèle de leurs opérations.
+■ Article XIV — Des opérations interdites
+Les bureaux financiers ne peuvent servir d'intérêts sur l'épargne de leurs clients, accorder de prêts bancaires, émettre de titres bancaires, ni garantir leurs opérations au nom de la BCIB ou de l'Empire.
+■ Article XV — Des réseaux bancaires
+Les bureaux financiers ne peuvent être intégrés aux systèmes Tessera et Universalis. Cette intégration demeure réservée aux établissements certifiés par la BCIB.
+V. DE INSPECTIONE ET POENIS
+Du contrôle et des manquements
+■ Article XVI — Du contrôle
+La BCIB peut convoquer les responsables d'un établissement, consulter ses registres et ordonner toute mesure nécessaire à sa mise en conformité, sous réserve, pour toute mesure contraignante, d'une autorisation délivrée par un magistrat sur demande motivée.
+■ Article XVII — Des mesures disciplinaires
+Selon la gravité du manquement, la BCIB peut prononcer un avertissement, une injonction de régularisation, une restriction d'activité, une suspension ou le retrait de la certification, ainsi que l'exclusion des systèmes Tessera et Universalis.
+■ Article XVIII — Des manquements graves
+Sont notamment tenus pour graves : la violation du devoir de coopération, la tromperie sur la qualité de banque, le refus d'un contrôle, la falsification des registres, la dissimulation d'une insolvabilité et le détournement des dépôts. Ces mesures se cumulent, de surcroît, avec les sanctions pénales prévues aux articles III et XII du présent décret.
+■ Article XIX — Du Codex Penitus Civilis
+Les mesures de la BCIB sont prononcées sans préjud-ice des poursuites prévues par le Codex Penitus Civilis. En sus des infractions spéciales prévues au présent décret, les faits délictueux peuvent être poursuivis pour d’autres chefs d’accusation, dans le respect du principe Non bis in idem. Les faits sont systématiquement transmis à la Chancellerie, qui les qualifie.
+■ Article XX — De l'urgence
+Lorsqu'un établissement menace directement les intérêts de ses déposants ou la stabilité du marché, la BCIB peut suspendre provisoirement ses opérations et placer ses registres sous contrôle, dans l'attente d'une décision de l'autorité compétente.
+VI. DISPOSITIONES FINALES
+Dispositions finales
+■ Article XXI — De la mise en conformité
+Les établissements exerçant déjà au jour de la promulgation du décret disposent du délai d’une semaine après la publication de ce décret pour solliciter leur certification. Passé ce délai, ils devront cesser toute opération réservée aux banques et seront officialisés comme bureaux financiers aux yeux de la loi.
+■ Article XXII — De l'application
+La Banque centrale impériale de Bordeciel et l’Administration impériale sont chargées de l'application du présent décret.
+■ Article XXIII — De l'entrée en vigueur
+Le présent décret entrera en vigueur au jour de sa promulgation et pour l'avenir, sauf exceptions précisées au décret.
+Rédigé à Mornefort, par Suryn Vothren | Intendant de l'Intendance impériale, 
+Sous l'autorité de Conturus Valelliun | Grand Argentier de l'Empire en Bordeciel,
+Après correction et validation de Roland Charmiel, Juriste à la Cour, sous mandat du Grand Chancelier de Bordeciel Cassian Varo.

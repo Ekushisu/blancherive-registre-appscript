@@ -1,3 +1,30 @@
+/*
+  Rôle public, obtenu sans mot de passe.
+
+  ATTENTION — la Web App s'exécute avec le compte du propriétaire et en accès
+  anonyme : toute personne qui charge la page peut appeler n'importe quelle
+  fonction serveur. Le seul rempart est `requireRole()`. Jusqu'ici, ne pas
+  connaître de mot de passe suffisait à bloquer l'accès ; ce n'est plus vrai dès
+  lors qu'un jeton s'obtient sans condition.
+
+  Conséquence : `VISITEUR` ne doit figurer que dans la liste de rôles de
+  `getCodex`. L'ajouter ailleurs rendrait la fonction concernée entièrement
+  publique, sans que rien ne le signale. `scripts/test-acces-public.mjs` échoue
+  si ce rôle apparaît dans une autre fonction.
+*/
+const ROLE_PUBLIC = "VISITEUR";
+
+/*
+  Session de consultation du Codex, sans authentification.
+
+  La durée est volontairement plus courte que celle d'une session de service :
+  un visiteur consulte, il ne prend pas son service.
+*/
+function ouvrirSessionPublique() {
+  return createAuthToken(ROLE_PUBLIC, 2 * 60 * 60 * 1000);
+}
+
+
 function login(password) {
 
   const props =
@@ -40,7 +67,7 @@ function login(password) {
 }
 
 
-function createAuthToken(role) {
+function createAuthToken(role, dureeMs) {
 
   const secret =
     PropertiesService
@@ -62,7 +89,7 @@ function createAuthToken(role) {
 
     exp:
       Date.now() +
-      8 * 60 * 60 * 1000
+      (dureeMs || 8 * 60 * 60 * 1000)
 
   };
 

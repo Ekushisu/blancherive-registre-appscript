@@ -10,90 +10,67 @@ const CODEX_SYNC_SHEET_NAME = "SyncCodex";
 // ============================================================
 
 /*
-  Les identifiants de documents sont déclarés dans SyncCodex.js.
-  On construit ces métadonnées à l'appel, plutôt qu'au chargement
-  du fichier, afin de ne pas dépendre de l'ordre d'évaluation des
+  Les documents sont déclarés une seule fois, dans `SYNC_CODEX_DOCUMENTS` de
+  `SyncCodex.js`. Ces métadonnées en sont dérivées à l'appel, et non au
+  chargement du fichier, afin de ne pas dépendre de l'ordre d'évaluation des
   fichiers Apps Script.
+
+  Un article dont la source n'est plus au registre reste affiché : `getCodex()`
+  lui applique une métadonnée de repli. C'est le cas des articles laissés dans
+  le cache par un document retiré, tant que la synchronisation n'a pas tourné.
 */
-function getCodexDocumentMetadata_() {
-  return {
-  "Codex Judiciaire de Blancherive": {
-    famille: "Droit de Blancherive",
-    autorite: "Châtellerie de Blancherive",
-    applicabilite: "Justice et sanctions de la Garde",
-    local: true,
-    url:
-      "https://docs.google.com/document/d/" +
-      CODEX_JUDICIAIRE_DOC_ID +
-      "/edit"
-  },
+function getCodexDocumentMetadata_(sheet) {
+  const metadata = {};
 
-  "Codex Procédural de Blancherive": {
-    famille: "Droit de Blancherive",
-    autorite: "Châtellerie de Blancherive",
-    applicabilite: "Procédure judiciaire locale",
-    local: true,
-    url:
-      "https://docs.google.com/document/d/" +
-      CODEX_PROCEDURAL_DOC_ID +
-      "/edit"
-  },
+  SYNC_CODEX_DOCUMENTS.forEach(function (document) {
+    metadata[document.source] = {
+      famille: document.famille,
+      autorite: document.autorite || "",
+      applicabilite: document.applicabilite || "",
+      local: Boolean(document.local),
+      url:
+        "https://docs.google.com/document/d/" +
+        document.id +
+        "/edit"
+    };
+  });
 
-  "Corpus Juriscivilis Imperialis": {
-    famille: "Droit impérial",
-    autorite: "Empire de Tamriel",
-    applicabilite: "Droit pénal impérial général",
-    local: false,
-    url:
-      "https://docs.google.com/document/d/" +
-      CORPUS_JURISCIVILIS_DOC_ID +
-      "/edit"
-  },
+  /*
+    Les décrets déposés dans un dossier Drive ne figurent dans aucune
+    déclaration. La synchronisation inscrit leurs métadonnées en R:W ; on les
+    relit ici plutôt que de lister le dossier à chaque consultation du Codex.
 
-  "Code de la Noblesse en Bordeciel": {
-    famille: "Droit impérial",
-    autorite: "Empire de Tamriel",
-    applicabilite: "Droit et statut de la noblesse",
-    local: false,
-    url:
-      "https://docs.google.com/document/d/" +
-      CODE_NOBLESSE_DOC_ID +
-      "/edit"
-  },
+    Le cache complète le registre sans l'écraser : un document déclaré garde ses
+    métadonnées même si une ligne du cache porte le même nom.
+  */
+  if (sheet) {
+    const dernierLigne = sheet.getLastRow();
 
-  "Corpus Proceduralis Imperialis": {
-    famille: "Droit impérial",
-    autorite: "Empire de Tamriel",
-    applicabilite: "Procédure pénale impériale",
-    local: false,
-    url:
-      "https://docs.google.com/document/d/" +
-      CORPUS_PROCEDURALIS_DOC_ID +
-      "/edit"
-  },
+    if (dernierLigne >= 2) {
+      const lignes =
+        sheet
+          .getRange(2, SYNC_CODEX_DOCUMENTS_COLUMN, dernierLigne - 1, 6)
+          .getDisplayValues();
 
-  "Justicia Militaris": {
-    famille: "Droit spécial",
-    autorite: "Empire de Tamriel",
-    applicabilite: "Justice militaire et Légion impériale",
-    local: false,
-    url:
-      "https://docs.google.com/document/d/" +
-      JUSTICIA_MILITARIS_DOC_ID +
-      "/edit"
-  },
+      lignes.forEach(function (ligne) {
+        const source = String(ligne[0] || "").trim();
 
-  "Codex Pænitus Imperialis": {
-    famille: "Droit spécial",
-    autorite: "Empire de Tamriel",
-    applicabilite: "Protection de l'autorité impériale",
-    local: false,
-    url:
-      "https://docs.google.com/document/d/" +
-      CODEX_PAENITUS_DOC_ID +
-      "/edit"
+        if (!source || metadata[source]) {
+          return;
+        }
+
+        metadata[source] = {
+          famille: String(ligne[1] || "").trim() || "Autres textes",
+          autorite: String(ligne[2] || "").trim(),
+          applicabilite: String(ligne[3] || "").trim(),
+          local: String(ligne[4] || "").trim() !== "",
+          url: String(ligne[5] || "").trim()
+        };
+      });
+    }
   }
-  };
+
+  return metadata;
 }
 
 
@@ -102,13 +79,14 @@ function getCodexDocumentMetadata_() {
 // ============================================================
 
 function getCodex(token) {
+  /*
+    Seule fonction ouverte au rôle public. Voir l'avertissement en tête
+    d'`Auth.js` avant d'ajouter `ROLE_PUBLIC` à une autre liste de rôles.
+  */
   requireRole(
     token,
-    ["GARDE", "OFFICIER"]
+    [ROLE_PUBLIC, "GARDE", "OFFICIER"]
   );
-
-  const documentMetadata =
-    getCodexDocumentMetadata_();
 
   const ss =
     SpreadsheetApp.openById(
@@ -125,6 +103,10 @@ function getCodex(token) {
       "Feuille SyncCodex introuvable."
     );
   }
+
+  // Construit après l'ouverture de la feuille : le cache R:W y est relu.
+  const documentMetadata =
+    getCodexDocumentMetadata_(sheet);
 
   const lastRow =
     sheet.getLastRow();

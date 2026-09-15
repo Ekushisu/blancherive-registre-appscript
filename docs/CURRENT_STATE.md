@@ -2,6 +2,141 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Extraction des articles en listes et onglets (15 septembre 2026)
+
+- `extraireArticlesCodex_()` lisait `getBody().getParagraphs()`, qui ne retourne
+  pas les `ListItem`. Tout article rédigé en liste à puces était ignoré sans
+  erreur ni article produit. La lecture passe désormais par `getText()`, qui rend
+  paragraphes, listes et tableaux, et parcourt les onglets via `getTabs()`
+  lorsque l'exécution les expose.
+- Mesuré sur les textes réels : les décrets « De Argentaria », « Armes éthérées »
+  et « Successions des châtelleries » passent de 0 article à 24, 7 et 5.
+  Les codes déjà en service sont inchangés.
+- Vérifié par `node scripts/test-sync-codex.mjs`, étendu aux listes, aux onglets
+  et aux sous-onglets. Aucun changement du classeur ni des documents.
+- Copies locales des textes sous `docs/codex/`, avec la correspondance
+  identifiant → document. Les documents Google restent la source de vérité.
+
+### Repérage des soldes impayées par semaine (15 septembre 2026)
+
+- Chaque accordéon de semaine, courante comme passée, porte un badge « N impayés »
+  dans son en-tête. Il reste lisible accordéon replié, ce qui est l'intérêt :
+  repérer une semaine ancienne encore en souffrance sans l'ouvrir.
+- Un bouton « Impayés » filtre la semaine sur les seules soldes dues et non
+  réglées, et ouvre l'accordéon. Il n'apparaît pas quand la semaine n'a aucun
+  impayé, et se retire tout seul si le dernier impayé est réglé.
+- Le filtre se combine avec la recherche par personne. Le compte du badge porte
+  en revanche sur toute la semaine, indépendamment de la recherche : il répond à
+  « cette semaine a-t-elle des impayés ? ».
+- Définition retenue : solde strictement positive et non réglée. Une solde nulle
+  — Recrue, ou semaine sans présence — n'est pas un impayé. C'est la distinction
+  que faisaient déjà les couleurs de lignes.
+- Vérifié par `node scripts/test-presences-impayes.mjs` et l'aperçu
+  `presences-impayes-1440`.
+
+### Consultation publique du Codex (15 septembre 2026)
+
+- `ouvrirSessionPublique()` délivre un jeton `VISITEUR` sans mot de passe, valable
+  deux heures. Bouton « Consulter le Codex » sur l'écran de connexion.
+- Le visiteur accède à la page Codex entière — codes, décrets, recherche et
+  filtres — et à rien d'autre. Navigation réduite à cet onglet.
+- `VISITEUR` ne figure que dans la liste de rôles de `getCodex`.
+  `scripts/test-acces-public.mjs` échoue si ce rôle apparaît ailleurs dans `src/`.
+  C'est le garde-fou central : la Web App s'exécutant en anonyme avec le compte
+  du propriétaire, une liste de rôles trop large ouvrirait tout.
+- Vérification après publication : ouvrir le lien en navigation privée, cliquer
+  « Consulter le Codex », contrôler que seul l'onglet Codex apparaît.
+
+### Correctifs mobiles et décor de fond (15 septembre 2026)
+
+- Onglets par corps des Effectifs : sous 600 px ils passaient en `nowrap` avec
+  défilement horizontal, sans barre visible ni indice, et la coupure tombait au
+  bord du gabarit. Ils passent désormais à la ligne ; les six corps sont
+  atteignables.
+- Tuiles du tableau de bord des Présences : `styles.css` passait bien à une
+  colonne sous 620 px, mais la règle `repeat(2, …)` de `theme.css` jusqu'à
+  1200 px l'emportait, `theme.css` étant chargé après. Corrigé dans le bloc
+  `max-width:600px`. La règle mobile était morte depuis la refonte.
+- Bandeau d'en-tête illustré supprimé, à la demande du propriétaire :
+  `PageIllustration`, ses styles et l'import de `releve.jpg` ont été retirés.
+- Nouveau décor : `pilier-nordique.png` en filigrane derrière le contenu, calé
+  sur le bord droit de la barre latérale, fixe au défilement, non cliquable,
+  masqué sous 900 px. Opacité 0,3, à réajuster si le texte en souffre.
+- Aperçus Effectifs rejouables, avec six corps et quatorze membres : c'est à
+  cette densité que les défauts d'affichage apparaissent.
+- `src/Index.html` passe de 657 à 757 Ko, les assets étant incorporés en data URL.
+
+### Décrets du Jarl par dossier Drive (15 septembre 2026)
+
+- Le Jarl de Blancherive promulgue ses décrets au fil de l'eau, sous forme de
+  posts de forum Discord. Les inscrire un par un dans le registre imposerait une
+  modification de code et un push à chaque décret.
+- `SYNC_CODEX_FOLDERS` déclare des dossiers Drive dont chaque Google Doc natif
+  est lu comme un texte juridique. Le nom du fichier devient le nom de la source.
+  Déposer un document suffit ; aucun push n'est nécessaire.
+- **Le dossier fait autorité.** Les caches sont réécrits sur toute leur hauteur
+  précédente à chaque synchronisation : un décret retiré du dossier disparaît du
+  Codex et des listes d'infractions, sans intervention. C'est le mécanisme
+  d'abrogation. Les lignes d'Amendes et de Prison déjà enregistrées ne sont pas
+  touchées, leurs libellés ne portant pas le nom de la source.
+- **Le dossier reste à créer.** L'identifiant est vide dans le registre, et la
+  lecture est alors simplement sautée. À renseigner quand le dossier existera.
+- Les décrets du Jarl sont marqués `sanctions: true` : leurs articles entrent
+  dans les listes d'infractions d'Amendes et Prison, mais uniquement ceux qui
+  portent réellement une amende ou une durée de cachot. Un décret purement
+  réglementaire reste consultable sans encombrer les formulaires. C'est ce que
+  le propriétaire a décrit par « les deux selon le décret ».
+- Le droit impérial reste hors des formulaires : la Garde sanctionne sur le
+  fondement du droit de la châtellerie.
+- La synchronisation inscrit les métadonnées des documents en `SyncCodex!R:W`.
+  `Codex.js` les y relit, plutôt que de lister le dossier Drive à chaque
+  consultation du Codex. Un document déclaré l'emporte sur un homonyme du
+  dossier.
+- Limite connue de l'analyse des sanctions : un montant nu tel que
+  « 50 septims. » n'est pas reconnu, alors qu'une phrase comme « Sanction —
+  50 septims. » l'est. Les décrets du Jarl devront suivre la rédaction du Codex
+  Judiciaire pour que leurs sanctions alimentent les formulaires.
+
+### Registre juridique renouvelé et décrets intégrés (15 septembre 2026)
+
+- `SYNC_CODEX_DOCUMENTS` devient le registre unique des documents. `Codex.js`
+  n'a plus sa propre table : `getCodexDocumentMetadata_()` dérive familles,
+  autorités et liens du registre. Ajouter un texte ne demande qu'une entrée.
+- Les cinq codes impériaux pointent sur les versions à jour fournies par le
+  propriétaire. Le Codex Penitus passe de 15 à 24 articles ; les autres varient
+  peu. Le Codex Judiciaire de Blancherive est inchangé.
+- Douze décrets ajoutés sous la famille « Décrets impériaux » : fiscalité,
+  imposition, banques, Avocatus, administrateurs, successions, chevalerie,
+  ordres militaires religieux, équipements orsimer et dwemers, armes éthérées,
+  restitution des biens de l'Empire.
+- Les listes d'infractions d'Amendes et Prison restent issues du seul Codex
+  Judiciaire : le filtre existait déjà dans `ecrireCachesTechniquesCodex_()`.
+  Les décrets sont consultables sans encombrer les formulaires.
+- Écartés volontairement : le Codex Procédural de Blancherive, abandonné et dont
+  le document ne répond plus ; la Constitution cléricale et le Registre de la
+  Chevalerie, qui sont de la documentation de contexte ; deux décrets de la
+  Chancellerie au format Word, que `DocumentApp.openById()` ne sait pas ouvrir ;
+  un décret non partagé. Les identifiants sont commentés dans le registre.
+- Mesuré sur les copies locales : 18 documents, 381 articles, aucun document
+  muet. `synchroniserCodex()` passe de 7 à 18 ouvertures de document ; la marge
+  reste confortable sous la limite de six minutes, mais le temps d'exécution
+  n'a pas été mesuré en conditions réelles.
+- Vérifié par `node scripts/test-sync-codex.mjs`, étendu au registre et aux
+  métadonnées dérivées. Aucune synchronisation lancée sur le classeur.
+
+**Après publication, relancer `synchroniserCodex()`** pour régénérer le cache,
+sans quoi l'interface continue d'afficher l'ancien droit.
+
+### Descriptions des grades dans l'Organigramme (15 septembre 2026)
+
+- Chaque grade porte une description de son rôle. Permanente sous les libellés de
+  la chaîne de commandement, dépliable par un ⓘ pour les grades de corps.
+- Textes dans `ui/src/grades.jsx`, sans dépendance au classeur. Les quinze grades
+  en service sont couverts ; un grade absent de la table s'affiche sans
+  description et sans erreur.
+- Vérifié par `node scripts/test-grades.mjs` et l'aperçu `organigramme-grade-1440`.
+- Code local uniquement : aucun push ni mise à jour de déploiement.
+
 ### Refonte visuelle inspirée du manuel (13 septembre 2026)
 
 - Papier, sceau au cheval et illustrations du manuel fourni ; palette sépia,
@@ -64,11 +199,14 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
   page Google Drive « accès refusé » (403), malgré `ANYONE_ANONYMOUS` et
   `USER_DEPLOYING`. Les manifestes des versions 51 et 52 sont identiques. Un retour
   temporaire à 51 n'a pas corrigé l'accès ; la version 52 a ensuite été remise sur
-  le même déploiement. Cause exacte non établie, accès public **non rétabli**.
-  Prochaine action : vérifier et revalider le déploiement existant dans l'interface
-  Apps Script du propriétaire (exécuter en tant que Moi, accès Tout le monde), puis
-  tester sans connexion Google. Ne pas confondre le partage du classeur/source
-  avec l'accès à la Web App.
+  le même déploiement.
+- **Résolu — précision du propriétaire, 15 septembre 2026.** Le 403 ne survient
+  que lorsque le déploiement est mis à jour par clasp. Publié à la main depuis
+  l'interface Apps Script, l'accès anonyme fonctionne, navigation privée
+  comprise. Ce n'est donc pas un défaut de l'application et ce n'est pas un
+  blocage ouvert : c'est la raison pour laquelle la publication reste manuelle.
+  Ne pas confondre le partage du classeur ou du code source avec l'accès à la
+  Web App.
 
 ## Fonctionnel
 

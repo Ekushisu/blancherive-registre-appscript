@@ -1,0 +1,124 @@
+﻿CORPUS PROCEDURALIS IMPERIALIS
+Code de Procédure Pénale de la Province de Bordeciel
+ 
+________________
+
+
+PRÉAMBULE
+Promulgué par l'autorité de l'Empereur de Tamriel,
+Sur avis du Conseil des Anciens et de  la Chancellerie Impérial de Bordeciel sous délégation du Gouverneur de Bordeciel,
+Le présent Corpus fixe les principes communs applicables aux procédures pénales en Bordeciel, dans le respect des prérogatives des châtelleries et de l'autorité impériale.
+Toute juridiction habilitée à rendre la justice peut, selon les circonstances, la gravité des faits et la personnalité de l'auteur, prononcer : une amende ; une peine privative de liberté ; des travaux forcés ; la peine de mort, dans les limites et conditions fixées par le présent Code.
+ 
+DÉFINITIONS
+ 
+Tentative
+La tentative est constituée dès lors que, manifestée par un commencement d'exécution, elle n’ a pas été suspendue ou a manqué son effet. La tentative est sanctionnée pareillement que la commission.
+Complicité
+Est complice quiconque sciemment, par aide ou assistance, a facilité la préparation ou la consommation d'une infraction. Est également complice quiconque par don, promesse, menace, ordre, abus d'autorité ou de pouvoir aura provoqué une infraction ou omis de dénoncer ce dont il a pu être témoin. La complicité est sanctionnée pareillement que l’auteur.
+Récidive
+En cas de récidive, la peine encourue est multipliée par deux. La récidive est comptabilisée à compter du jour de la dernière condamnation.
+Présomption de culpabilité
+Sauf décision contraire du Gouverneur ou d'un magistrat impérial, la présomption de culpabilité s'applique à l'ensemble des infractions prévues au présent Code. Il appartient à l'auteur présumé de démontrer l'absence d'éléments constitutifs de l'infraction.
+De la constitution d’une infraction
+Une infraction ne peut être retenue que si trois éléments sont réunis : 
+Un élément légal : un texte de loi prévoit et interdit le comportement en cause.  
+Un élément matériel : un acte ou un fait concret a été commis. 
+Un élément moral : l’auteur a agi volontairement ou en connaissance de cause.
+À défaut de l’un de ces éléments, aucune infraction ne peut être constituée.
+ 
+I – PRINCIPES GÉNÉRAUX
+________________
+
+
+Art. 1 – Répartition des compétences
+Les infractions aux Leges Imperiales relèvent prioritairement de l'autorité impériale.
+Les infractions aux lois locales relèvent des juridictions des châtelleries. Les autorités locales peuvent juger les infractions impériales, sous réserve du droit pour une autorité impériale de se saisir de la procédure si nécessaire.
+Art. 2 – Autonomie des châtelleries
+Chaque châtellerie conserve la liberté d'organiser ses procédures locales, sous réserve du respect des principes du présent corpus et de la primauté du droit impérial.
+Art. 3 – Autorités compétentes
+Sont habilités à agir : les gardes, magistrats, Jarls, membres de la Légion, autorités impériales et toute personne dûment mandatée.
+Art. 4 – Droits fondamentaux
+Tout prévenu dispose :
+   •  du droit de se défendre;
+   •  du droit de demander un procès ;
+   •  du droit de présenter des témoins.
+En cas d’abus de ses droits, notamment dans le cas de procès fantasques, de témoin imaginaire ou de procédure dilatoire, la peine prévue pourra être majorée. Cette décision est laissée à l’appréciation du magistrat, elle devra être motivée.
+
+
+II – DE L'ARRESTATION
+________________
+
+
+Art. 5 – Flagrance
+Toute autorité peut procéder à une arrestation immédiate en cas de flagrant délit ou de suspicion sérieuse.
+Art. 6 – Obligation d'obtempérer
+Toute personne doit se soumettre aux injonctions d'une autorité légitime.
+III – DE LA PROCÉDURE SIMPLIFIÉE
+________________
+
+
+Art. 7 – Traitement immédiat
+Pour les infractions mineures, l'autorité peut prononcer directement une sanction sans procès. Le prévenu conserve le droit d'exiger la tenue d'un procès, sans méconnaitre l’abus visé à l’article 4.
+Art. 7-1 – Mesure conservatoire
+Dans le cas où le prévenu demande un procès, l’autorité peut placer le prévenu en geôle durant une période ne pouvant excéder vingt-quatre  (24) heures le temps de prévenir un magistrat pour organiser le procès. En lieu et place ou à l'issue des 48h un cautionnement peut être mis en place jusqu’au procès.
+ 
+ 
+IV – DU PROCÈS
+________________
+
+
+Art. 8 – Déroulement
+Le magistrat dirige librement les débats. Les charges sont exposées, le prévenu répond, et les parties présentent leurs arguments et témoignages. Le jugement est public, mais il peut être tenue à huis clos exceptionnellement si le magistrat a des raisons de le motiver.
+Art. 9 – Parole finale
+Le prévenu ou son représentant a toujours la parole en dernier.
+V – DES PREUVES
+________________
+
+
+Art. 10 – Liberté de la preuve
+La preuve est libre. Le magistrat apprécie la valeur des éléments présentés selon leur cohérence, leur crédibilité et les circonstances.
+Art. 10-1 – Crédibilité des témoins
+Le magistrat doit tenir compte de la crédibilité des témoins & de leurs nombres. Dans cet ordre décroissant : un noble (selons son rang), un prêtre des 8 divins, un membre de l’empire, un membre de la cour ou le capitaine de la garde local, un marchand établi connu, un citoyen, un voyageur, un condamné, un banni. Il doit être tenu compte de leurs rang, de leurs intérêts personnels dans l’affaire, de la cohérence de leurs propos.
+Art. 10-2 – La valeur des preuves
+L’aveu spontané est une preuve absolue ; le flagrant délit est une preuve très forte ; deux témoins concordant est une preuve pleine ; la réputation publique ou un seul témoin fiable ou une preuve materiel constitue une demi-preuve ; l’ouie dire constitue un quart de preuve.
+VI – DU JUGEMENT
+________________
+
+
+Art. 11 – Appréciation
+Le magistrat statue selon son intime conviction. Dans le cas d’une peine criminelle, le magistrat doit rédiger un verdict public avec ses motivations.
+Art. 12 – Exécution
+La peine peut être exécutée immédiatement ou après un délai fixé par le magistrat.
+VII – GARANTIES ET ÉQUILIBRE
+________________
+
+
+Art. 13 – Loyauté
+Toute procédure doit être conduite avec impartialité et dans le respect des lois.
+Art. 14 – Mesures exceptionnelles
+Toute mesure exceptionnelle doit être justifiée par la nécessité de prévenir un trouble grave à l'ordre public.
+ 
+
+
+
+
+VIII – DISPOSITIONS FINALES
+________________
+
+
+Art. 15 – Esprit du corpus
+Le présent code fixe un cadre commun destiné à garantir :
+   •  l'autorité de l'Empire ;
+   •  le respect des juridictions locales ;
+   •  une justice accessible et efficace pour les justiciables.
+Il peut être complété par des dispositions propres à chaque châtellerie, dans le respect de ces principes.
+Art. 16 – Interprétation
+Lorsque la loi n’est pas claire, les magistrats impériaux veillent à l'interprétation cohérente de l’ensemble des textes de loi. Il doivent interpréter dans cette ordre de priorité :
+interprétation stricto sensu, interprétation téléologique,  interprétation historique et jurisprudentielle, interprétation systématique, interprétation analogique.
+
+
+________________
+
+
+Corpus Proceduralis Imperialis — Code de Procécdure Penal de Bordeciel

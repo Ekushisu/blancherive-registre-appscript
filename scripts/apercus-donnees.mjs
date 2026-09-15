@@ -35,7 +35,7 @@ export const presences = {
     presence(12, 37, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxx..", 500, false),
     presence(13, 37, "Garnison de Rivebois", "Sigrid", "Vent-du-Nord", "Capitaine", "xxxx.x.", 400, false),
     presence(14, 37, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xx.x...", 240, true),
-    presence(15, 37, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Aspirant-Garde", "xxx....", 120, false),
+    presence(15, 37, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx....", 120, false),
     presence(16, 37, "Garnison de Rivebois", "Halvar", "Sans-Nom", "Recrue", "x......", 0, false),
     presence(21, 37, "Cité de Blancherive", "Ingrid", "Main-Leste", "Major", "xxxxxx.", 600, false),
     presence(22, 37, "Cité de Blancherive", "Rolf", "Écu-Fendu", "Garde", "xxxx...", 320, true),
@@ -77,7 +77,7 @@ export const presenceDashboard = {
     },
     {
       nomComplet: "Runa Chante-Lame",
-      grade: "Aspirant-Garde",
+      grade: "Cadet",
       corps: "Éclaireur",
       jamaisPresent: false,
       dernierePresence: "21/08/2026",
@@ -282,6 +282,141 @@ export const codex = {
       dureesCachot: [6, 24],
       montants: []
     }
+  ]
+};
+
+/*
+  Organigramme : la forme suit `getOrganigramme()` de `src/Organigramme.js`.
+  Les grades couvrent volontairement toute l'échelle, du Jarl à la Recrue, afin
+  que les descriptions de grades soient visibles sur la capture.
+*/
+let idMembre = 0;
+const membre = (prenom, nom, grade, corps) => ({
+  memberId: `demo-${++idMembre}`,
+  nomComplet: `${prenom} ${nom}`,
+  prenom,
+  nom,
+  grade,
+  corps
+});
+
+export const organigramme = {
+  changes: { events: [] },
+  jarl: membre("Lucius", "Haldor", "Jarl", "État-Major"),
+  hird: [membre("Ulfgar", "Bouclier-Noir", "Lieutenant", "Hird du Jarl")],
+  marechaux: [],
+  commandants: [membre("Haldvar", "de Blancherive", "Commander", "État-Major")],
+  majorsEtatMajor: [membre("Ingrid", "Main-Leste", "Major", "État-Major")],
+  majors: [membre("Torsten", "Pierre-Grise", "Major", "Éclaireur")],
+  commandementLocal: {
+    nom: "Commandement de Rivebois et Bois-de-Chêne",
+    majors: [membre("Frida", "Val-Profond", "Major", "Garnison de Rivebois")],
+    garnisonKeys: ["rivebois", "bois-de-chene"]
+  },
+  garnisons: [
+    {
+      key: "rivebois",
+      nom: "Garnison de Rivebois",
+      membres: [
+        membre("Brynjar", "Poing-de-Fer", "Capitaine", "Garnison de Rivebois"),
+        membre("Sigrid", "Vent-du-Nord", "Lieutenant-Chef", "Garnison de Rivebois"),
+        membre("Torvald", "Hache-Vive", "Lieutenant", "Garnison de Rivebois"),
+        membre("Eydis", "la Silencieuse", "Sergent-Chef", "Garnison de Rivebois"),
+        membre("Halvar", "Sans-Nom", "Sergent", "Garnison de Rivebois"),
+        membre("Gerda", "Œil-Vif", "Caporal-Chef", "Garnison de Rivebois"),
+        membre("Bjorn", "Lame-Courte", "Caporal", "Garnison de Rivebois"),
+        membre("Runa", "Chante-Lame", "Garde", "Garnison de Rivebois"),
+        membre("Sven", "le Jeune", "Cadet", "Garnison de Rivebois"),
+        membre("Alva", "Pied-Léger", "Recrue", "Garnison de Rivebois")
+      ]
+    },
+    {
+      key: "bois-de-chene",
+      nom: "Garnison de Bois-de-Chêne",
+      membres: [
+        membre("Astrid", "Brise-Lame", "Capitaine", "Garnison de Bois-de-Chêne"),
+        membre("Rorik", "Marche-Hiver", "Lieutenant", "Garnison de Bois-de-Chêne")
+      ]
+    },
+    {
+      key: "cite",
+      nom: "Cité de Blancherive",
+      membres: [
+        membre("Rolf", "Écu-Fendu", "Capitaine", "Cité de Blancherive"),
+        membre("Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
+        membre("Eirik", "Barbe-Rousse", "Garde", "Cité de Blancherive")
+      ]
+    },
+    {
+      key: "faubourgs",
+      nom: "Garde des Faubourgs",
+      membres: [membre("Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs")]
+    }
+  ],
+  reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")]
+};
+
+/*
+  Effectifs : la forme suit `getEffectifs()` de `src/Effectifs.js`.
+  Les six corps sont représentés, afin que la bande d'onglets soit aussi chargée
+  qu'en production — c'est à cette densité que les défauts d'affichage mobile
+  apparaissent, pas avec deux corps.
+*/
+const CORPS = [
+  "Cité de Blancherive",
+  "Garnison de Rivebois",
+  "Garnison de Bois-de-Chêne",
+  "Garde des Faubourgs",
+  "Éclaireur",
+  "Hird du Jarl"
+];
+
+const GRADES = [
+  "Commander", "Major", "Capitaine", "Lieutenant-Chef", "Lieutenant",
+  "Sergent-Chef", "Sergent", "Caporal-Chef", "Caporal", "Garde", "Cadet", "Recrue"
+];
+
+const membreEffectif = (id, prenom, nom, grade, corps, options = {}) => ({
+  row: id + 1,
+  memberId: `demo-${id}`,
+  prenom,
+  nom,
+  nomComplet: `${prenom} ${nom}`,
+  grade,
+  corps,
+  specialite: options.specialite || "",
+  status: options.status || "En service actif",
+  reserve: Boolean(options.reserve),
+  terminalGroup: "",
+  assermente: options.assermente !== false,
+  styles: {}
+});
+
+export const effectifs = {
+  gradeOrder: GRADES,
+  changes: { events: [] },
+  options: {
+    grades: GRADES,
+    corps: CORPS,
+    specialites: ["Pisteuse", "Archer", "Cavalier"],
+    statuses: ["En service actif", "Réserve", "Congé"],
+    styles: { grades: {}, corps: {}, specialites: {}, statuses: {} }
+  },
+  rows: [
+    membreEffectif(1, "Haldvar", "de Blancherive", "Commander", "Cité de Blancherive", { collecteur: true }),
+    membreEffectif(2, "Astrid", "Brise-Lame", "Capitaine", "Cité de Blancherive", { collecteur: true }),
+    membreEffectif(3, "Rorik", "Marche-Hiver", "Lieutenant", "Cité de Blancherive"),
+    membreEffectif(4, "Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
+    membreEffectif(5, "Brynjar", "Poing-de-Fer", "Capitaine", "Garnison de Rivebois"),
+    membreEffectif(6, "Sigrid", "Vent-du-Nord", "Lieutenant-Chef", "Garnison de Rivebois"),
+    membreEffectif(7, "Eydis", "la Silencieuse", "Cadet", "Garnison de Rivebois", { assermente: false }),
+    membreEffectif(8, "Alva", "Pied-Léger", "Recrue", "Garnison de Rivebois", { assermente: false }),
+    membreEffectif(9, "Torsten", "Pierre-Grise", "Major", "Garnison de Bois-de-Chêne"),
+    membreEffectif(10, "Frida", "Val-Profond", "Garde", "Garnison de Bois-de-Chêne"),
+    membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs"),
+    membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse" }),
+    membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "Hird du Jarl"),
+    membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true })
   ]
 };
 

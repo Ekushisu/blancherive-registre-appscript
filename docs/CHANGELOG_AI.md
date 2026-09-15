@@ -1,5 +1,123 @@
 # Journal de passation IA
 
+## 2026-09-15 — Soldes impayées repérables semaine par semaine
+
+- Badge « N impayés » dans l'en-tête de chaque accordéon de Présences, visible
+  accordéon replié, et bouton de filtre sur les seuls impayés de la semaine.
+- Le bouton n'existe que si la semaine compte au moins un impayé, et disparaît
+  dès que le dernier est réglé.
+- L'en-tête était un `<button>` occupant toute la largeur ; il devient une barre
+  contenant le basculement et le bouton de filtre, pour éviter des boutons
+  imbriqués, invalides en HTML.
+- Règle retenue : solde strictement positive et non réglée, alignée sur les
+  couleurs de lignes existantes. Couverte par `scripts/test-presences-impayes.mjs`.
+- Harnais d'aperçus : les transitions et animations sont neutralisées avant
+  capture. Une capture prise juste après un clic figeait un bouton au milieu de
+  son changement de couleur et donnait l'illusion d'un défaut de style.
+
+## 2026-09-15 — Consultation publique du Codex
+
+- Rôle `VISITEUR` obtenu sans mot de passe par `ouvrirSessionPublique()`, jeton
+  signé comme les autres mais valable deux heures au lieu de huit.
+- Ajouté à la seule liste de rôles de `getCodex`. `createAuthToken()` accepte
+  désormais une durée, sans changement pour les appels existants.
+- Interface : bouton « Consulter le Codex » sous le formulaire de connexion,
+  navigation réduite au seul onglet Codex, badge de session « Visiteur ».
+- `scripts/test-acces-public.mjs` verrouille l'invariant de sécurité : le rôle
+  public ne doit apparaître dans aucune autre liste de rôles ni aucun autre
+  fichier de `src/`. Sans ce test, un ajout distrait ouvrirait Effectifs ou
+  Présences au monde entier, sans erreur ni signal.
+
+## 2026-09-15 — Correctifs mobiles et décor de fond
+
+- Onglets Effectifs : passage à la ligne sous 600 px au lieu d'un défilement
+  horizontal sans affordance, dont la coupure tombait au bord du gabarit.
+- Tuiles des Présences : la règle mobile de `styles.css` était écrasée par une
+  règle plus large de `theme.css`, chargé après. Morte depuis la refonte.
+- Bandeau d'en-tête illustré supprimé à la demande du propriétaire ; décor de
+  charpente ajouté en filigrane derrière le contenu.
+- `pilier-nordique.png` réduit de 2,8 Mo à 202 Ko avant incorporation : les
+  assets sont inclus en data URL dans `src/Index.html`, rechargé à chaque
+  ouverture de la Web App.
+
+## 2026-09-15 — Décrets du Jarl découverts par dossier Drive
+
+- `SYNC_CODEX_FOLDERS` déclare des dossiers dont chaque Google Doc natif devient
+  un texte juridique, le nom du fichier servant de nom de source. Déposer un
+  décret suffit : ni modification de code ni push.
+- Identifiant de dossier laissé vide, donc lecture sautée, pour livrer le code
+  avant que le dossier n'existe.
+- Le filtre des listes d'infractions ne repose plus sur le nom du Codex
+  Judiciaire en dur, mais sur un drapeau `sanctions` du registre. Un article
+  n'y entre que s'il porte réellement une amende ou une durée de cachot.
+- Métadonnées des documents mises en cache dans `SyncCodex!R:W`, relues par
+  `Codex.js` : les décrets d'un dossier sont inconnus du code, et lister le
+  dossier à chaque consultation du Codex coûterait un appel Drive par affichage.
+- Doublons, noms vides et fichiers non-Docs écartés ; un document déclaré
+  l'emporte sur un homonyme du dossier. Le tout couvert par le test.
+
+## 2026-09-15 — Registre juridique unique et intégration des décrets
+
+- Les documents étaient déclarés deux fois : identifiants et familles dans
+  `SYNC_CODEX_DOCUMENTS`, autorités et liens dans `getCodexDocumentMetadata_()`.
+  À vingt documents, deux tables parallèles divergent. `Codex.js` dérive
+  désormais ses métadonnées du registre, qui porte tous les champs.
+- Cinq identifiants de codes impériaux renouvelés, Codex Procédural de
+  Blancherive retiré, douze décrets ajoutés en famille « Décrets impériaux ».
+- Aucun changement nécessaire côté formulaires : `ecrireCachesTechniquesCodex_()`
+  restreignait déjà les listes d'infractions au Codex Judiciaire.
+- Les libellés d'infraction stockés dans Amendes et Prison sont de la forme
+  `Art. N — Titre` et ne portent pas le nom de la source ; renommer une source
+  impériale n'orpheline donc aucune ligne historique.
+- Test étendu : unicité des sources et des identifiants, longueur d'identifiant
+  de 44 caractères — un Word importé en fait 33 et serait illisible —, absence
+  des documents écartés, et concordance registre / métadonnées dérivées.
+
+## 2026-09-15 — Lecture des articles en listes et en onglets
+
+- `extraireArticlesCodex_()` lisait `getBody().getParagraphs()`, qui ne retourne
+  pas les `ListItem`. Les décrets rédigeant leurs articles en listes à puces
+  produisaient zéro article, sans erreur. La lecture passe par `getText()` et
+  parcourt les onglets via `getTabs()`.
+- « De Argentaria », « Armes éthérées » et « Successions des châtelleries »
+  passent de 0 article à 24, 7 et 5.
+- Copies locales des textes sous `docs/codex/`, avec index et correspondance
+  identifiant → document, pour travailler sans accès Drive.
+
+## 2026-09-15 — Renommage du grade Aspirant-Garde en Cadet
+
+- Le propriétaire a supprimé `Aspirant-Garde` de `Données` et introduit `Cadet`
+  au même tarif : Recrue à 0, Cadet à la moitié de la base. `SoldesGrades.js`
+  portait déjà le renommage ; le reste du dépôt a été aligné.
+- Alignés : fixtures et attentes de `test-soldes-grades.mjs`, commentaire de
+  `ui/src/app.jsx`, données d'aperçus, `BUSINESS_RULES.md` et `DATA_MODEL.md`.
+- Volontairement conservés sous l'ancien nom : la formule historique reproduite
+  par `oldFormula` dans le test, et la ligne de Présences de semaine passée qui
+  la porte. L'historique des Présences doit rester stable.
+- Point restant à traiter dans le classeur : `SoldesGrades` n'est initialisée que
+  si elle est vide. La feuille existante conserve sa ligne `Aspirant-Garde` ; il
+  faut y renommer ou y ajouter `Cadet`, sinon les Cadets sont payés au tarif
+  `Par défaut` au lieu de la moitié.
+
+## 2026-09-15 — Descriptions des grades dans l'Organigramme
+
+- Quinze descriptions doctrinales fournies par le propriétaire, réparties dans
+  `ui/src/grades.jsx`. Table statique : aucune lecture du classeur, aucune
+  fonction serveur ajoutée.
+- Design hybride retenu : texte permanent sous les libellés de la chaîne de
+  commandement (Jarl, Maréchal, Commander, Major), et bouton ⓘ dépliable pour
+  les grades de corps et de garnison, sur le modèle de `ChangeBadge`.
+- Les Majors du commandement de Rivebois et Bois-de-Chêne reçoivent une
+  description distincte de celle des Majors d'État-Major, via la variante
+  `commandementLocal` passée à `CentralGroup`.
+- « Commandant » et « Commander » partagent le même texte, comme le fait déjà
+  `estGradeCommandant()` dans `src/Organigramme.js`. Un grade absent de la table
+  s'affiche sans description et sans erreur.
+- Harnais d'aperçus complété pour l'Organigramme : réponse `getOrganigramme` et
+  jeu de démonstration couvrant toute l'échelle des grades.
+- Vérifications : `node scripts/test-grades.mjs` et les onze suites existantes,
+  puis `npm run build`. Aucun push ni déploiement.
+
 ## 2026-09-04 — Validation des gardes sans nom de famille
 
 - Les ajouts Amendes et Prison résolvent désormais le libellé nettoyé du formulaire vers la valeur brute de `Données!O` avant l'écriture.

@@ -1,0 +1,189 @@
+﻿CORPUS JURISCIVILIS IMPERIALIS  
+Code Pénal Impérial Bordeciel
+
+
+   
+        PRÉAMBULE
+Par l'autorité de l'Empereur de Tamriel, Seigneur de Cyrodiil et Souverain de tous les territoires impériaux, sur avis du Conseil des Anciens  et de  la Chancellerie Impérial de Bordeciel sous délégation du Gouverneur de Bordeciel: Qu'il soit connu dans toutes les provinces, tous les comtés et tous les territoires soumis à la juridiction impériale que le présent Corpus Juriscivilis constitue le code pénal de référence du Gouvernement Impérial pour la province de Bordeciel. Le présent Code s'applique à l'ensemble des citoyens, résidents, passants et sujets de l'Empire. Les châtelleries sont libres de promulguer des lois supplémentaires conformément à leurs coutumes, dans le respect des présentes dispositions. Aucune coutume locale, ordonnance de fief ou privilège personnel ne peut prévaloir sur les dispositions du présent Code, sauf lorsque celui-ci accorde expressément un pouvoir discrétionnaire aux autorités locales.
+L'ignorance de ces lois ne saurait constituer un moyen de défense devant aucun tribunal de l'Empire
+
+
+
+
+  
+
+              PRINCIPES GÉNÉRAUX
+
+
+
+
+
+
+
+
+Constitution d’une infraction
+Une infraction est constituée lorsque trois éléments sont réunis
+• élément légal : l’acte est interdit par la loi
+• élément matériel : l’acte a été commis ou tenté
+• élément moral : la personne avait l’intention de commettre l’acte
+ 
+Classification des infractions
+Les infractions sont classées en trois catégories selon leur gravité :
+• Contraventions : Infractions mineures. Amende simple ou travaux légers. Jusqu’à 500 septimes
+• Délits : infractions de gravité moyenne. Amende élevée ou travaux forcés. Entre 500 et 2500 septimes
+• Crimes : Infractions les plus graves. Amende forte, emprisonnement ou peine de mort.  Plus de 2500 septimes
+ 
+Des sanctions
+Toute juridiction impériale habilitée peut, selon les circonstances et la gravité des faits, prononcer les sanctions suivantes :
+• Une amende ;
+• Des travaux forcés ;
+• Une peine d'emprisonnement ;
+• La saisie des biens ;
+• La peine de mort, dans les cas prévus par le présent Code. 
+  
+
+        TITRE I - CONTRAVENTIONS
+
+
+
+
+
+
+
+
+          
+Article 1 — Usurpation d'identité [Contravention]
+Le fait de se faire passer pour autrui afin d'obtenir un avantage ou d'échapper à ses obligations.
+Sanction : devient un délit si il s’agit d’une usurpation d’une qualité noble ou d’une fonction officielle
+
+
+Article 2 — Refus d'obtempérer [Contravention]
+Le fait de se soustraire volontairement à un contrôle ou à une injonction d'un représentant de l'autorité publique.
+Sanction : devient un délit si usage de violence, de magie ou de potions
+
+
+Article 3 — Atteinte à la paix de l’Empereur  [Contravention]
+Tout comportement perturbant la tranquillité ou la sécurité publique.
+
+
+Article 4 — Intrusion [Contravention]
+Constitue une intrusion le fait de s’introduire ou de se maintenir dans une propriété privée, sans y avoir été invité ni autorisé par le propriétaire ou son représentant légal
+Sanction : devient un délit s’il s’agit d’une propriété publique (appartenant à l’Empire ou à une châtellenie)
+
+
+
+
+ TITRE II - DELITS  
+
+
+
+
+
+
+          
+Article 5 — Violences et agressions [Délit]
+Constituent des violences ou agressions tous actes portant atteinte à l’intégrité physique d’une personne et ayant entraîné des blessures, contusions, incapacités ou séquelles.
+ 
+Article 6 — Vol, escroquerie [Délit]
+Constitue un vol ou une escroquerie toute appropriation ou échange frauduleux d’un bien ou d’un service appartenant ou fourni par autrui.
+Sanction : Devient un crime si l’objet volé ou le service indu à une valeur particulièrement élevée, ou s’il s’agit d’un objet sous licence.
+ 
+Article 7 — Recel  [Délit]
+Constitue un recel le fait de transporter, détenir, commercialiser, transformer ou dissimuler un bien provenant d’une infraction, en ne pouvant ignorer raisonnablement son origine ou son statut illicite.
+Sanction : Devient un crime si l’objet en question à une valeur particulièrement élevée, ou s’il s’agit d’un objet sous licence.
+ 
+
+
+
+
+
+
+
+
+
+
+Article 8 — Circonstances aggravantes [Aggravation]
+Les infractions prévues aux articles 5, 6 et 7 constituent un crime  lorsqu’elles sont commises soit :
+•           À main armée ou avec usage de magie ;
+•           En réunion (deux personnes ou plus) ;
+•           À l’encontre d’un représentant de l’Empire (administrateur, légionnaire ou garde Local) dans l’exercice de ses fonctions.
+•           En cas de mutilation
+ 
+Article 9 — Pratique de culte non autorisé  [Délit]
+Le fait de pratiquer, organiser ou promouvoir un culte, un rituel ou une croyance religieuse non reconnue par l’Empire est interdit sur le territoire de Bordeciel.
+Toutefois, certains cultes, y compris daedriques, peuvent faire l’objet d’une tolérance conditionnelle, dès lors que leur pratique ne porte atteinte ni à l’ordre public, ni à la sécurité des personnes, ni aux lois impériales.
+Sont notamment tolérés les cultes dont les pratiques :
+• N’impliquent aucune violence, contrainte ou atteinte à l’intégrité physique ou mentale d’autrui ;
+• N’encouragent ni meurtre, ni sacrifice, ni crime, ni rébellion contre l’autorité impériale ;
+• Ne font pas usage de magie interdite, coercitive ou de rituels occultes dangereux (notamment pactes de sang ou invocations instables) ;
+• Ne troublent pas la paix publique ou ne provoquent pas de désordre manifeste.
+
+
+La simple possession d’objets, symboles ou reliques liés à un culte toléré ne constitue pas une infraction.
+En revanche, toute pratique cultuelle, devient illicite et constitue un délit dès lors qu’elle contrevient aux conditions ci-dessus.
+Sanction : Devient un crime si le culte est daedrique et qu’il ne respecte pas la tolérance conditionnelle
+
+
+Article 10  — Profanation  [Délit]
+Le fait de porter atteinte au caractère sacré d’un lieu, d’un objet, d’une sépulture, d’un office religieux ou d’une personne en raison de son 
+appartenance religieuse
+Sanction : Devient un crime si le motif est daedrique
+ 
+Article 11 — Usage de magie non autorisé  [Délit]
+Le fait d’user, de pratiquer ou de recourir à une forme de magie sans y être autorisé par les lois, règlements ou décrets impériaux en vigueur au 
+au sein de la province.  Sont notamment considérés comme relevant d’un usage non autorisé de la magie :
+* Possession et utilisation de gemmes spirituelles noires, lorsqu’elles sont destinées à contenir ou exploiter l’âme d’un être conscient ;
+* Capture de l’âme d’un individu dans une gemme spirituelle, qu’elle soit réalisée avant, pendant ou immédiatement après sa mort ;
+Sanction : Devient un crime en cas d’usage dangereux, offensif, coercitif ou ayant causé un trouble grave à l’ordre public, des blessures ou des
+dommages matériels.
+
+
+   
+         TITRE III — CRIMES
+
+
+Article 12 — Meurtre [Crime]
+Constitue un meurtre tout acte ayant entraîné la mort d’autrui.
+ Ne peuvent être qualifiés de meurtre les décès résultants :
+•           D’une guerre déclarée, d’une bataille légitime, d’une rébellion ;
+•           D’un usage légitime et proportionné de la force par les autorités ;
+•           D’une exécution judiciaire régulière ;
+•           D’une injonction impériale expresse.
+•           D'un duel légal consenti
+ 
+Article 13 — Assassinat  [Crime]
+Constitue un assassinat tout meurtre commis avec préméditation. La préméditation suppose une préparation et une réflexion préalable.
+L’assassinat est puni plus sévèrement que le meurtre simple.
+ 
+Article 14 — Torture, sequestration  [Crime]
+Constitue une séquestration le fait de retenir, détenir, conduire ou maintenr une personne contre son gré, sans base légale ni autorisation de l’autorité compétente.  
+Constitue un acte de torture tout acte de barbarie, mutilation, violence extrême ou souffrance délibérée infligé à une personne séquestrée.  
+
+
+
+
+Article 15 — Evasion  [Crime]
+Constitue une évasion le fait, pour une personne placée sous garde ou sous contrainte judiciaire, de se soustraire à la surveillance ou à la mesure qui lui est imposée.
+ 
+Article 16 — Créatures profanes et abominations [Crime]
+Est qualifiée de créature profane ou abomination toute entité dont la nature est issue, altérée ou corrompue par des forces daedriques, obscures ou contre-nature, notamment les vampires, les lycanthropes et toute créature assimilée.
+Le fait, pour une telle créature, de se maintenir parmi les populations civiles constitue une menace pour l’ordre public et la sécurité de l’Empire.
+
+
+Article 17 — Abus de pouvoir et corruption  [Crime]
+Le fait, pour toute personne investie d’une autorité publique, d’un pouvoir ou d’une fonction, d’en user de manière détournée, excessive ou illégitime à des fins personnelles, ou de solliciter, accepter ou offrir un avantage en vue d’influencer une décision, une action ou une omission relevant de ses fonctions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      Corpus Juriscivilis Imperialis — Code Pénal Impérial de Bordeciel

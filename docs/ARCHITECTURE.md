@@ -46,8 +46,13 @@ Principaux modules :
 
 - `Codex.js`
   - lecture du cache `SyncCodex` pour la Web App
+  - `getCodexDocumentMetadata_()` dérive familles, autorités et liens du registre
+    `SYNC_CODEX_DOCUMENTS` ; les documents ne sont déclarés qu'une fois
 
 - `SyncCodex.js`
+  - `SYNC_CODEX_DOCUMENTS` : registre unique des documents, codes et décrets
+  - lecture par `getText()`, qui couvre les listes à puces et les tableaux,
+    et parcours des onglets par `getTabs()` quand l'exécution les expose
   - extraction des documents juridiques
   - alimentation du cache juridique `SyncCodex!A:J` et des listes d'infractions `SyncCodex!L:O`
   - choix de sanctions contextualisés en JSON dans M/O, exposés aux formulaires et revalidés à l’ajout par les helpers privés d’`Amendes.js` partagés avec `Prison.js`
@@ -76,6 +81,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/theme.css` : thème parchemin/sépia et adaptations mobiles, chargé après les styles structurels ;
 - `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
 - `ui/assets/` : copies web des illustrations/papier du manuel, incorporées au build ;
+- `ui/src/grades.jsx` : descriptions doctrinales des grades affichées dans l'Organigramme, table statique sans fonction serveur associée ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.
@@ -114,6 +120,8 @@ Pages :
 - `SyncCodex!L:O` pour les infractions et leurs sanctions ;
 - `Données!O2:O` pour la liste des gardes actifs.
 
-`Codex.js` utilise les identifiants de documents déclarés dans `SyncCodex.js`, mais construit ses métadonnées à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script.
+`Codex.js` dérive ses métadonnées du registre `SYNC_CODEX_DOCUMENTS` de `SyncCodex.js`, et les construit à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script. Ajouter un texte juridique ne demande donc qu'une entrée dans ce registre.
+
+Le champ `source` d'un document sert de clé d'affichage dans le Codex. Les libellés d'infraction enregistrés dans Amendes et Prison sont de la forme `Art. N — Titre` et ne contiennent pas le nom de la source ; renommer une source impériale n'orpheline donc pas les lignes historiques. En revanche, ces libellés proviennent exclusivement du Codex Judiciaire de Blancherive, dont les titres d'articles ne doivent pas changer à la légère.
 
 Ne pas considérer les fichiers `.js` Apps Script comme des modules ES isolés : ils partagent le namespace global.

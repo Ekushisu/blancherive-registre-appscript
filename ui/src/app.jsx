@@ -1,9 +1,10 @@
 import "./styles.css";
 import "./theme.css";
-import { Header, Login, PageIllustration } from "./navigation.jsx";
+import { Header, Login, ROLE_PUBLIC } from "./navigation.jsx";
 import { MotifSanction, ChoixSanction } from "./sanctions.jsx";
 import { SaisiesField } from "./saisies.jsx";
 import { ChangesProvider, RecentChanges, ChangeBadge, ChangesCount, useMemberChanges } from "./changes.jsx";
+import { GradeDescription, GradeInfo } from "./grades.jsx";
 
 const {useEffect,useMemo,useRef,useState}=React;
 
@@ -16,17 +17,19 @@ function findCodexArticle(articles,label){if(!articles||!label||String(label).st
 function App(){
   const[token,setToken]=useState(sessionStorage.getItem("guardAuthToken"));
   const[role,setRole]=useState(null);const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
-  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>setRole(i.role)).catch(logout);},[token]);
+  // Le visiteur public n'a que le Codex : on l'y place d'emblée.
+  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{setRole(i.role);if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
+  const publicSeulement=role===ROLE_PUBLIC;
   function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setPage("organigramme");}
   if(!token)return <Login serverCall={serverCall} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
-  return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}><PageIllustration/>
-    {page==="organigramme"&&<OrganigrammePage token={token}/>} 
-    {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>} 
-    {page==="presences"&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>} 
-    {page==="codex"&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>} 
-    {page==="amendes"&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
-    {page==="prison"&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
+  return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
+    {page==="organigramme"&&!publicSeulement&&<OrganigrammePage token={token}/>}
+    {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>}
+    {page==="presences"&&!publicSeulement&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>}
+    {page==="codex"&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>}
+    {page==="amendes"&&!publicSeulement&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
+    {page==="prison"&&!publicSeulement&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
   <footer className="registry-footer"><span>Garde de Blancherive</span><a href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial ↗</a></footer></main></div>;
 }
 
@@ -323,7 +326,7 @@ function EffectifsPage({token}){
 
         /*
           Réserve vient désormais APRÈS TOUS les grades,
-          y compris après Aspirant-Garde / Recrue.
+          y compris après Cadet / Recrue.
         */
         if(
           group.reserve.length
@@ -1678,7 +1681,7 @@ function OrganigrammePage({token}) {
       <div className="org-corps-grid">
         {local && <section className="org-local-command" aria-label={local.nom}>
           <div className="org-local-heading"><h3>{local.nom}</h3><p>Sous les ordres directs de l’État-Major central</p></div>
-          <CentralGroup personnes={local.majors} grade="Majors" note="Rivebois · Bois-de-Chêne"/>
+          <CentralGroup personnes={local.majors} grade="Majors" note="Rivebois · Bois-de-Chêne" variante="commandementLocal"/>
           <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
         </section>}
         {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
@@ -1691,21 +1694,21 @@ function PersonCard({personne,center=false,showCorps=false}) {
   if(!personne)return null;
   return <div className={`org-person ${center?"center":""}`} {...memberChanges.hoverProps}><div className="org-person-name">{personne.nomComplet}<ChangeBadge change={memberChanges}/></div>{showCorps&&personne.corps&&<div className="org-person-corps">{personne.corps}</div>}</div>;
 }
-function CentralGroup({personnes=[],grade,note}) {
-  return <section className="org-command-node" aria-label={note?`${grade} — ${note}`:grade}><h3>{grade}{note&&<span>{note}</span>}</h3>{personnes.length?personnes.map((p,i)=><PersonCard key={i} personne={p} center/>):<div className="org-vacant">Poste vacant</div>}</section>;
+function CentralGroup({personnes=[],grade,note,variante}) {
+  return <section className="org-command-node" aria-label={note?`${grade} — ${note}`:grade}><h3>{grade}{note&&<span>{note}</span>}</h3><GradeDescription grade={grade} variante={variante}/>{personnes.length?personnes.map((p,i)=><PersonCard key={i} personne={p} center/>):<div className="org-vacant">Poste vacant</div>}</section>;
 }
 function RankedPeople({personnes=[],showCorps=false}) {
   if(!personnes.length)return <div className="org-empty">Aucun personnel.</div>;
   const groups=[];
   personnes.forEach(p=>{let g=groups.find(x=>x.grade===p.grade);if(!g){g={grade:p.grade,people:[]};groups.push(g);}g.people.push(p);});
-  return groups.map(g=><section className="org-rank-group" key={g.grade}><h4 className="org-rank-title">{g.grade}<span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
+  return groups.map(g=><section className="org-rank-group" key={g.grade}><h4 className="org-rank-title">{g.grade}<GradeInfo grade={g.grade}/><span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
 }
 function OrgCorps({title,people=[],compact=false}) {
   const captains=people.filter(p=>normalizeSearchText(p.grade).trim()==="capitaine");
   const others=people.filter(p=>normalizeSearchText(p.grade).trim()!=="capitaine");
   return <article className={`org-unit ${compact?"org-unit-hird":""}`}>
     <header className="org-unit-header"><h3>{title} <ChangesCount people={people}/></h3><span className="org-count" title="Personnel en service actif">{people.length}</span></header>
-    <div className="org-captains"><div className="org-eyebrow">Capitaine{captains.length>1?"s":""}</div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
+    <div className="org-captains"><div className="org-eyebrow">Capitaine{captains.length>1?"s":""}<GradeInfo grade="Capitaine"/></div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
     <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others}/></div></details>
   </article>;
 }
@@ -1779,6 +1782,34 @@ function Field({label,children}){return<div className="field"><label>{label}</la
 function PresenceOfficerDashboard({token}){const[data,setData]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getPresenceOfficerDashboard",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du tableau de bord...</div>;return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — semaine ${data.currentWeek}`} value={formatSeptims(data.currentWeekTotal)}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,g.corps].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":`Dernière présence : ${g.dernierePresence} (${g.joursDepuis} jours)`}</div></div>)}</div></div></>}
 function Stat({label,value,sub,warning,danger}){return<div className={`presence-stat-card ${warning?"presence-stat-warning":""} ${danger?"presence-stat-danger":""}`}><div className="presence-stat-label">{label}</div><div className="presence-stat-value">{value}</div>{sub&&<div className="presence-stat-sub">{sub}</div>}</div>;}
 function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.semaine))weeks.set(r.semaine,[]);weeks.get(r.semaine).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>b[0]-a[0]);const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||String(week)===weekFilter)&&rows.some(matchesPerson));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>Semaine {week}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.currentWeek} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} matchesPerson={matchesPerson} searching={searchTerms.length>0}/>)}</>}
-function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,searching}){const groups=new Map(),current=Number(week)===Number(currentWeek),[open,setOpen]=useState(current);useEffect(()=>{if(searching)setOpen(true);},[searching]);rows.forEach(r=>{const k=r.corps||"Sans corps";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});return<section className={`week-section ${current?"week-current":"week-old"}`}><button type="button" className="week-header week-toggle" onClick={()=>setOpen(!open)} aria-expanded={open}><span>Semaine {week}</span><span>{current?"Semaine courante · ":""}{open?"▾":"▸"}</span></button>{open&&[...groups.entries()].filter(([,soldiers])=>soldiers.some(matchesPerson)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{corps}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.semaine===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(matchesPerson).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked))}/></td></tr>)}</tbody></table></div></div>)}</section>}
+/*
+  Une solde est impayée si elle est due et non réglée. Une solde nulle — Recrue,
+  ou semaine sans présence — n'est pas un impayé : c'est déjà la distinction que
+  fait la couleur des lignes.
+*/
+export function estImpayePresence(s){return !s.paye&&Number(s.soldeRaw)>0;}
+
+function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,searching}){
+  const groups=new Map(),current=Number(week)===Number(currentWeek),[open,setOpen]=useState(current);
+  const[seulementImpayes,setSeulementImpayes]=useState(false);
+  useEffect(()=>{if(searching)setOpen(true);},[searching]);
+  /*
+    Le compte porte sur toute la semaine, indépendamment de la recherche en
+    cours : il répond à « cette semaine a-t-elle des impayés ? », pas à « parmi
+    les personnes affichées ». Il reste donc lisible accordéon replié.
+  */
+  const impayes=rows.filter(estImpayePresence).length;
+  useEffect(()=>{if(!impayes)setSeulementImpayes(false);},[impayes]);
+  const visible=r=>matchesPerson(r)&&(!seulementImpayes||estImpayePresence(r));
+  rows.forEach(r=>{const k=r.corps||"Sans corps";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
+  return<section className={`week-section ${current?"week-current":"week-old"}`}>
+    <div className="week-bar">
+      <button type="button" className="week-header week-toggle" onClick={()=>setOpen(!open)} aria-expanded={open}><span>Semaine {week}{impayes>0&&<span className="week-unpaid-badge">{impayes} impayé{impayes>1?"s":""}</span>}</span><span>{current?"Semaine courante · ":""}{open?"▾":"▸"}</span></button>
+      {impayes>0&&<button type="button" className={`week-unpaid-filter ${seulementImpayes?"active":""}`} aria-pressed={seulementImpayes} title={seulementImpayes?"Afficher toute la semaine":"N’afficher que les soldes impayées"} onClick={()=>{setSeulementImpayes(!seulementImpayes);setOpen(true);}}>{seulementImpayes?"Tout afficher":"Impayés"}</button>}
+    </div>
+    {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">Semaine {week} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.length}.</p>}
+    {open&&[...groups.entries()].filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{corps}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.semaine===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked))}/></td></tr>)}</tbody></table></div></div>)}
+  </section>;
+}
 
 export { App };

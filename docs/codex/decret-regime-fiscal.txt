@@ -1,0 +1,137 @@
+﻿PRÉAMBULE
+Par l’autorité de l’Empereur, garant de l’unité de l’Empire, ce décret instaure le régime fiscal de la province de Bordeciel. Afin d'assurer la sécurité, la reconstruction et le maintien de l’ordre, il est décrété ce qui suit :
+
+
+________________
+
+
+TITRE I — DISPOSITIONS GÉNÉRALES
+Article 1 — Objet
+Le présent décret fixe les règles applicables en Bordeciel concernant les redevables, l'assiette de l'impôt, les déductions, le paiement, les contrôles, les sanctions et les recours.
+Article 2 — Définitions 
+
+Autorité impériale : Services du Gouvernorat, de l’Intendance et Percepteurs chargés de la gestion fiscale.
+Période fiscale : Une semaine.
+Assiette Imposable : l'ensemble des revenus bruts perçus au cours d'une Période fiscale, diminués des déductions prévues au Titre IV.
+Article 3 — Champ d’application
+Le présent décret s’applique à toutes les Châtelleries de Bordeciel.
+________________
+
+
+TITRE II — ASSUJETTISSEMENT
+Article 4 — Entités imposables
+Sont assujettis à l'impôt impérial l'ensemble des Vassaux impériaux, et par conséquent l'ensemble des Châtelleries de Bordeciel
+                                                        
+________________
+TITRE III — CALCUL DE L’IMPÔT
+Article 5 — Base d'imposition
+L'impôt est assis sur le revenu brut hebdomadaire, après déductions autorisées. Pour les activités de frappe de monnaie, le revenu est imposable.
+Article 6 — Montant dû
+L'impôt dû par une Châtellerie correspond au montant le plus élevé entre :
+1. Le montant minimal de 2000 septims auquel on ajoute 1000 septims par villages possédés
+2. 35 % du revenu imposable.
+
+Le montant minimal est réévalué à chaque période fiscale en fonction du nombre de villages administrés par la Châtellerie. 
+Article 7 — Pouvoir de modification
+L'Autorité impériale peut ajuster les paramètres fiscaux. Toute modification doit être justifiée, publiée, et n'entre en vigueur qu'à la prochaine période fiscale.
+________________
+
+
+TITRE IV — DÉDUCTIONS AUTORISÉES
+Article 8 — Dépenses de garde
+Les Châtelleries peuvent déduire 50 % des dépenses de garde engagées en salaire et matériel, dans la limite de 3 000 septims par semaine, sur justificatifs.
+Article 9 — Limitation des déductions
+L'Autorité impériale peut suspendre la déduction pour gardes si les effectifs sont jugés excessifs ou contraires à l'ordre public. Le cumul des déductions ne peut rendre le revenu imposable inférieur à zéro.
+Article 10 — Allègement exceptionnel
+En cas de circonstances exceptionnelles (siège, catastrophe, guerre), l'Autorité impériale peut accorder une réduction temporaire d'impôt proportionnelle à la durée de la situation.
+________________
+
+
+TITRE V — DÎME ET INDULGENCE IMPÉRIALE
+Article 11 — Dîme
+Au titre de la dîme, les châtelleries doivent payer 500 septims minimum par semaine au culte des 8 divins.
+Le taux des dîmes peut être révisé dans les conditions de l'article 7.
+Article 11 bis — Indulgence
+L'Autorité impériale reverse au vigiles de Stendarr au titre de l’indulgence, une part égale à cinq pour cent (5 %) des produits de l'impôt effectivement recouvrés au cours de la Période fiscale. sous réserve du respect des lois impériales et de l’accomplissement de leur mission. 
+Le taux de l‘indulgence peut être révisé dans les conditions de l'article 7.
+________________
+TITRE VI — OBLIGATIONS DES ENTITÉS IMPOSABLES
+Article 12 — Obligations fiscales
+Toute Entité imposable doit :
+   1. transmettre ses comptes financiers aux Percepteurs impériaux à la fin de chaque Période fiscale ;
+   2. fournir ses comptes à l'Autorité impériale lorsqu'un contrôle est demandé ;
+   3. payer l'impôt demandé dans les délais prévus ;
+   4. coopérer avec les agents impériaux chargés du contrôle fiscal.
+Article 13 — Conservation des documents comptables
+Toute entité imposable est tenue de conserver, pour une durée minimale de huit périodes fiscales (soit huit semaines), l'ensemble de ses livres de comptes, registres de ventes et justificatifs de dépenses. Ces documents doivent être tenus à la disposition de l'Autorité impériale sur simple demande lors d'un contrôle fiscal.
+________________
+
+
+TITRE VII — DROITS DES ENTITÉS IMPOSABLES
+Article 14 — Droits et possibilités
+Une Entité imposable peut :
+   1. demander exceptionnellement un délai supplémentaire pour payer son impôt ;
+   2. proposer des biens ou des services à l'Empire en échange d'une réduction de son impôt, sous réserve de l’évaluation et l'accord de l'Autorité impériale ;
+   3. demander l'aide de l'administration impériale pour comprendre ou organiser ses obligations fiscales ;
+________________
+
+
+TITRE VIII — CONTRÔLE ET CONFIDENTIALITÉ
+Article 15 — Contrôle fiscal
+L'Autorité impériale peut contrôler toute déclaration ou compte. Ces contrôles sont effectués par les agents mandatés.
+Article 16 — Droit d’accès
+Les agents impériaux disposent d'un droit d'accès aux locaux et lieux de stockage pour vérifier la réalité des actifs, durant les heures d'activité.
+Article 17 — Rectification
+En cas d'erreur, d'omission ou de fraude, l'Autorité impériale peut rectifier l'impôt dû. La décision est notifiée par écrit et contestable sous sept jours.
+Article 18 — Confidentialité
+Les informations financières sont strictement confidentielles, sauf usage nécessaire au contrôle, au recouvrement ou sur ordre de l'autorité compétente
+TITRE IX — SANCTIONS ET RECOUVREMENT
+Article 19 — Mise en demeure
+En cas de défaut, une mise en demeure est notifiée. L'Entité dispose de trois jours pour régulariser avant recouvrement forcé.
+Article 20 — Taxation d’office
+À défaut de régularisation, l'Autorité impériale fixe l'impôt selon le potentiel économique connu de l'Entité.
+Article 21 — Majoration
+Tout retard après mise en demeure entraîne une majoration de 10 % du montant dû.
+Article 22 — Fraude
+La fraude intentionnelle est sanctionnée par une amende égale au double du montant fraudé, sans préjudice de poursuites pénales.
+
+Article 23 — Refus d’obtempérer lors d’un contrôle fiscal
+
+Toute entité imposable qui refuse de coopérer à un contrôle fiscal, notamment en refusant de fournir ses comptes, documents justificatifs ou l’accès prévu au Titre VII, est passible d’une amende d’un montant pouvant aller jusqu'à 2500 septims par refus.
+En cas de refus persistant après mise en demeure de l’Autorité impériale, l’amende peut être portée à un montant jusqu'à 5000 septims par refus, ainsi que procéder à une taxation d’office conformément à l’article 22.
+Cette sanction ne fait pas obstacle aux autres mesures prévues par le présent décret en cas de fraude ou de non-paiement de l’impôt
+Article 24 — Recouvrement forcé
+En cas de non-paiement persistant, l'Autorité impériale peut procéder à la saisie de trésorerie, de biens, ou à la réquisition de services équivalents.
+Article 25 — Limite des saisies
+Les saisies ne peuvent excéder le montant dû et les frais de recouvrement. Tout excédent doit être restitué.
+Article 26 — Modalités de paiement
+Le paiement est exigé en Septims. Le paiement en nature est proscrit sauf accord exceptionnel prévu au titre de l’article 14.
+
+
+________________
+TITRE X — CONTESTER UNE DÉCISION
+Article 27 — Premier recours
+Toute contestation d'une décision fiscale (Avis d'imposition, sanction, saisie) doit être adressée à l'Intendance impériale sous sept jours. La décision motivée rendue ne suspend pas le paiement, mais bloque toute mesure de recouvrement forcé sur la somme contestée jusqu'à la résolution du litige.
+Article 28 — Second recours
+En cas de désaccord persistant, l'entité peut saisir la Chancellerie impériale sous trois jours. Sa décision est définitive.
+________________
+
+
+TITRE XI — MODIFICATION ET ENTRÉE EN VIGUEUR
+Article 29 — Modification
+L'Autorité impériale peut ajuster ce décret. Toute modification est publiée officiellement et n’est pas rétroactive.
+Article 30 — Entrée en vigueur
+Ce décret entre en vigueur dès publication et annule toute disposition antérieure.
+
+
+________________
+
+
+
+
+Fait au nom de l’Empire et sous l’autorité du Gouverneur de Bordeciel, du Consul du Grand Argentier, et du Grand Chancelier, le 5 Atrefeu 4E226  
+
+
+
+
+L’Empire est Loi. La Loi est Sacrée.

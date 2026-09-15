@@ -33,16 +33,50 @@ const reponses = {
   getPrisonFormData: () => donnees.prisonForm,
   getAmendes: () => donnees.amendes,
   getAmendeFormData: () => donnees.amendeForm,
-  getCodex: () => donnees.codex
+  getCodex: () => donnees.codex,
+  getOrganigramme: () => donnees.organigramme,
+  getEffectifs: () => donnees.effectifs
 };
 
 // Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues et
 // une préparation facultative (ouvrir un formulaire, dérouler un panneau…).
 const apercus = {
+  organigramme: {
+    nav: "Organigramme",
+    attendre: ".org-hierarchy",
+    largeurs: [390, 1440]
+  },
+  "organigramme-grade": {
+    nav: "Organigramme",
+    attendre: ".org-hierarchy",
+    largeurs: [1440],
+    // Ouvre une description de grade repliée, pour la montrer sur la capture.
+    async preparer(page) {
+      // `:visible` écarte les grades du Hird, dont le personnel est replié.
+      await page.locator(".org-rank-title .grade-info-button:visible").first().click();
+      await page.waitForSelector(".grade-info-panel");
+    }
+  },
+  effectifs: {
+    nav: "Effectifs",
+    attendre: ".effectifs-tabs",
+    largeurs: [390, 1440]
+  },
   presences: {
     nav: "Présences",
     attendre: ".presence-table",
     largeurs: [390, 1440]
+  },
+  "presences-impayes": {
+    nav: "Présences",
+    attendre: ".presence-table",
+    largeurs: [1440],
+    // Filtre des impayés d'une semaine passée, accordéon replié au départ.
+    async preparer(page) {
+      const semainePassee = page.locator(".week-section.week-old").first();
+      await semainePassee.locator(".week-unpaid-filter").click();
+      await page.waitForSelector(".week-unpaid-notice");
+    }
   },
   prison: {
     nav: "Prison",
@@ -160,6 +194,15 @@ try {
       if (apercu.preparer) await apercu.preparer(page);
       // Laisse les images en data URL se peindre avant la capture.
       await page.waitForLoadState("networkidle");
+
+      /*
+        Sans cela, une capture prise juste après un clic fige un bouton au
+        milieu de sa transition de couleur et donne à croire à un défaut de
+        style. Les aperçus doivent montrer l'état final, et être reproductibles.
+      */
+      await page.addStyleTag({
+        content: "*,*:before,*:after{transition:none!important;animation:none!important}"
+      });
 
       if (erreurs.length) {
         throw new Error(`Erreurs JavaScript sur ${nom} : ${erreurs.join(" | ")}`);

@@ -32,6 +32,7 @@ class Sheet {
       const data = this.rows[row - 1];
       if (data[1] === 'Hird du Jarl' || data[2] === 'Recrue') return 0;
       const base = value.includes('Vue globale') ? globalBase : Number(value.match(/M\d+\*([\d.]+)/)[1]);
+      // « Aspirant-Garde » n'existe plus, mais les formules déjà écrites le nomment.
       return days * base / (data[2] === 'Aspirant-Garde' ? 2 : 1);
     }
     throw Error(`Formule non simulée : ${value}`);
@@ -69,7 +70,9 @@ const person = (week, grade, name, row, corps = 'Cité') =>
     `=COUNTIF(F${row}:L${row};TRUE)`, oldFormula(row), true];
 const presence = new Sheet('Présences', [Array(15).fill('En-tête'),
   person(36, 'Commander', 'Actuel', 2), person(35, 'Commander', 'Ancien', 3),
-  person(36, 'Garde', 'Garde', 4), person(36, 'Aspirant-Garde', 'Aspirant', 5),
+  person(36, 'Garde', 'Garde', 4), person(36, 'Cadet', 'Cadet', 5),
+  // Semaine passée : le grade « Aspirant-Garde », supprimé depuis, reste inscrit
+  // dans les lignes historiques et conserve son tarif d'origine.
   person(36, 'Recrue', 'Recrue', 6), person(35, 'Aspirant-Garde', 'Ancien aspirant', 7),
   person(36, 'Commander', 'Hird', 8, 'Hird du Jarl'), person(34, 'Commander', 'Manuel', 9)
 ]);
@@ -78,7 +81,7 @@ presence.rows[2][15] = 'Colonne technique préservée';
 const sheets = new Map([
   ['Présences', presence], ['Effectifs', new Sheet('Effectifs', [])],
   ['Vue globale', new Sheet('Vue globale', [])],
-  ['Données', new Sheet('Données', [['Grade'], ['Commander'], ['Garde'], ['Recrue'], ['Aspirant-Garde']])]
+  ['Données', new Sheet('Données', [['Grade'], ['Commander'], ['Garde'], ['Recrue'], ['Cadet']])]
 ]);
 const ss = { getSheetByName: name => sheets.get(name), insertSheet: name => {
   const sheet = new Sheet(name, []); sheets.set(name, sheet); return sheet;

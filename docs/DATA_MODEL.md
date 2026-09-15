@@ -49,8 +49,14 @@ Groupes terminaux reconnus :
 
 ### Barème des soldes
 
-- Ancienne base commune : `Vue globale!L2`, référencée par les formules de `Présences!N`. Recrue : 0 ; Aspirant-Garde : moitié de cette base ; Hird : 0.
-- Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Aspirant-Garde restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation.
+- Ancienne base commune : `Vue globale!L2`, référencée par les formules de `Présences!N`. Recrue : 0 ; Aspirant-Garde : moitié de cette base ; Hird : 0. `Aspirant-Garde` n'existe plus depuis le 15 septembre 2026, mais reste inscrit dans les formules et les lignes de Présences historiques.
+## SyncCodex — cache technique
+
+- `A:J` articles extraits ; `L:O` listes d'infractions des formulaires.
+- `R:W` métadonnées des documents synchronisés : Source, Famille, Autorité, Applicabilité, Local, Lien. Écrit par `ecrireCacheDocumentsCodex_()` et relu par `Codex.js`. Ce bloc existe pour les décrets déposés dans un dossier Drive, qui ne figurent dans aucune déclaration du code : sans lui, chaque consultation du Codex devrait lister le dossier.
+- L'ensemble est régénéré par `synchroniserCodex()` et ne doit pas être édité à la main.
+
+- Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Cadet restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation. L'initialisation n'a lieu que sur une feuille vide : une feuille existante n'acquiert pas de ligne `Cadet` toute seule.
 - Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird reste exclu indépendamment du barème. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
 - La formule N de la semaine courante contient le tarif journalier numérique du grade de la ligne, multiplié par M. Le barème est appliqué au chargement des Présences/du tableau de bord et lors des générations/réparations de formules.
 - Les anciennes références à `Vue globale!L2` des semaines passées sont remplacées par sa valeur au moment de la migration, sans modifier le résultat. Les autres formules et montants historiques sont conservés. Les formules sont restaurées en R1C1 lors des réordonnancements de lignes, pour conserver leurs références relatives.

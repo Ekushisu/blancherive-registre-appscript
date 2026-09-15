@@ -33,11 +33,11 @@ function lireBaremeSoldesGrades_(ss) {
       : [];
     const seen = new Set(["par defaut"]);
     const rows = [SOLDES_GRADES_HEADERS, ["Par défaut", base]];
-    grades.concat(["Commander", "Recrue", "Aspirant-Garde"]).forEach(grade => {
+    grades.concat(["Commander", "Recrue", "Cadet"]).forEach(grade => {
       const key = cleGradeSolde_(grade);
       if (!key || seen.has(key)) return;
       seen.add(key);
-      const rate = key === "commander" ? 100 : key === "recrue" ? 0 : key === "aspirant-garde" ? base / 2 : base;
+      const rate = key === "commander" ? 100 : key === "recrue" ? 0 : key === "cadet" ? base / 2 : base;
       rows.push([String(grade).trim(), rate]);
     });
     if (sheet.getMaxRows() < rows.length) sheet.insertRowsAfter(sheet.getMaxRows(), rows.length - sheet.getMaxRows());

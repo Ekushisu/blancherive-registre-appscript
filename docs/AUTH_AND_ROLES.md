@@ -1,5 +1,27 @@
 # Authentification et rôles
 
+## Rôle public VISITEUR
+
+`ouvrirSessionPublique()` délivre un jeton de rôle `VISITEUR` **sans mot de
+passe**, pour la consultation du Codex. Durée deux heures, contre huit pour une
+session de service.
+
+La Web App s'exécute avec le compte du propriétaire et en accès anonyme : toute
+personne qui charge la page peut appeler n'importe quelle fonction serveur.
+`requireRole()` est le seul rempart. Jusqu'à l'introduction de ce rôle, ne pas
+connaître de mot de passe suffisait à bloquer l'accès ; ce n'est plus vrai.
+
+**`VISITEUR` ne doit donc figurer que dans la liste de rôles de `getCodex`.**
+L'ajouter à une autre fonction la rendrait entièrement publique, sans erreur ni
+signal. `scripts/test-acces-public.mjs` échoue si ce rôle apparaît ailleurs dans
+`src/`, vérifie que le visiteur ne passe aucune autre liste de rôles, que son
+jeton est bien signé et qu'il expire avant celui d'un membre de la Garde.
+
+Côté interface, le visiteur ne voit que l'onglet Codex et les autres pages ne
+sont pas rendues. Ce n'est qu'un confort d'affichage : la protection réelle est
+côté serveur.
+
+
 ## Rôles UI
 
 Deux rôles :
