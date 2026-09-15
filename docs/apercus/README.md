@@ -3,18 +3,58 @@
 Captures locales de l’interface compilée, avec **données de démonstration** et
 appels Apps Script simulés. Aucun accès ni enregistrement dans le classeur réel.
 
+## Regénérer
+
+```
+npm run build      # si src/Index.html n'est pas à jour
+npm run apercus    # toutes les pages décrites par le script
+npm run apercus -- presences prison
+```
+
+`scripts/capture-apercus.mjs` sert `src/Index.html` sur un serveur HTTP local,
+remplace `google.script.run` par un stub qui répond avec
+`scripts/apercus-donnees.mjs`, puis capture chaque page avec Microsoft Edge via
+`playwright-core`. Le navigateur du système est utilisé tel quel : aucun
+téléchargement de navigateur, et rien n’est ajouté au bundle Apps Script.
+
+Pour ajouter une page, déclarer une entrée dans la table `apercus` du script et,
+si la page a besoin de nouvelles réponses serveur, les ajouter à `reponses` et
+aux données. Un nom de fonction serveur absent du stub fait échouer l’appel avec
+un message explicite plutôt que de laisser un écran de chargement muet.
+
+## Captures reproductibles
+
+Générées par le script, donc rejouables à l’identique :
+
+- `presences-1440.png`, `presences-390.png` : tableau de bord OFFICIER,
+  accordéons de semaines, coût total par corps.
+- `prison-1440.png`, `prison-390.png` : registre et fiches mobiles.
+- `prison-formulaire-390.png` : nouvelle incarcération, saisies sur la personne.
+
+## Captures antérieures
+
+Produites le 13 septembre 2026 par un harnais qui n’a pas été conservé. Elles
+restent valables comme référence visuelle mais ne se régénèrent pas avec la
+commande ci-dessus.
+
 - `connexion-ordinateur.png`, `connexion-mobile.png` : entrée dans le registre.
 - `organigramme-1440.png`, `organigramme-390.png` : navigation et commandement.
 - `amendes-1440.png`, `amendes-390.png` : tableau et fiches mobiles.
 - `codex-1440.png`, `codex-390.png` : lecture du Codex.
+- `effectifs-1440.png`, `effectifs-390.png`, `effectifs-edition-mobile.png`.
 - `formulaire-mobile.png` : saisie d’un motif personnalisé.
+
+## Lecture des captures mobiles
+
+Les captures en pleine hauteur montrent la barre de navigation fixe à la hauteur
+du bas de la fenêtre du navigateur, donc au milieu de l’image ; cette barre reste
+au bas de l’écran lors du défilement réel.
+
+Le tableau des Présences et les tableaux sur tablette conservent volontairement
+leur défilement interne : à 390 px, seules les premières colonnes de jours sont
+visibles, la première colonne restant figée.
 
 Vérification navigateur Edge/Chromium à 320, 390, 768 et 1 440 pixels : six pages,
 formulaires Amendes/Prison, absence de débordement horizontal du document.
-Le tableau des Présences et les tableaux sur tablette conservent volontairement
-leur défilement interne. Navigation GARDE/OFFICIER et ouverture clavier du Codex
-vérifiées ; fermeture Échap, retour du focus et blocage du défilement sous la modale.
-
-Les captures mobiles longues montrent la barre de navigation fixe à la hauteur
-du bas de la fenêtre du navigateur ; cette barre reste au bas de l’écran lors
-du défilement réel.
+Navigation GARDE/OFFICIER et ouverture clavier du Codex vérifiées ; fermeture
+Échap, retour du focus et blocage du défilement sous la modale.
