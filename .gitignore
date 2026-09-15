@@ -4,3 +4,6 @@ ui/.build/
 .env
 .env.*
 !.env.example
+
+# Dump complet de l'extraction loot, regénérable par scripts/export-skyrim-loot.mjs.
+docs/loot/lieux-loot.csv

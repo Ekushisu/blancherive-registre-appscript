@@ -9,7 +9,7 @@ Extraction locale du 8 septembre 2026, en lecture seule, des 37 plugins de `docs
 - **tables-loot.csv** : 56 876 entrées d'inventaires et de listes, tous plugins ; chercher un `cible_id` dans `source_id` pour descendre dans une sous-liste.
 - **tables-loot-keizaal.csv** : sous-ensemble des sources affectées par Keizaal ou référençant indirectement un objet affecté. Les sous-listes purement vanilla restent dans le fichier complet.
 - **lieux-modifies-keizaal.csv** : cellules et lieux dont la définition finale provient de Keizaal/Kzl.
-- `lieux-loot.csv`, `donnees-loot.json`, `rapport.json` : données complètes et compteurs par plugin.
+- `lieux-loot.csv`, `donnees-loot.json`, `rapport.json` : données complètes et compteurs par plugin. `lieux-loot.csv` (64 Mo) n'est plus versionné et reste local ; il se régénère par `scripts/export-skyrim-loot.mjs` sur une machine disposant des plugins de `docs/loadorder.txt`.
 
 CSV UTF-8 avec BOM et séparateur point-virgule, ouvrables dans Excel. Les noms anglais intégrés aux plugins sont conservés.
 
