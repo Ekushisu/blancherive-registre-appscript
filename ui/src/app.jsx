@@ -20,16 +20,18 @@ function App(){
   // Le visiteur public n'a que le Codex : on l'y place d'emblée.
   useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{setRole(i.role);if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
   const publicSeulement=role===ROLE_PUBLIC;
+  const intendantSeulement=role==="INTENDANT";
   function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setPage("organigramme");}
   if(!token)return <Login serverCall={serverCall} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
   return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
     {page==="organigramme"&&!publicSeulement&&<OrganigrammePage token={token}/>}
     {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>}
-    {page==="presences"&&!publicSeulement&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>}
-    {page==="codex"&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>}
-    {page==="amendes"&&!publicSeulement&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
-    {page==="prison"&&!publicSeulement&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
+    {page==="presences"&&!publicSeulement&&!intendantSeulement&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>}
+    {page==="paye"&&(role==="OFFICIER"||intendantSeulement)&&<PayePage token={token} canRegler={role==="OFFICIER"}/>}
+    {page==="codex"&&!intendantSeulement&&<CodexPage token={token} focusArticle={codexFocus} onFocusConsumed={()=>setCodexFocus(null)}/>}
+    {page==="amendes"&&!publicSeulement&&!intendantSeulement&&<AmendesPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
+    {page==="prison"&&!publicSeulement&&!intendantSeulement&&<PrisonPage token={token} canDelete={role==="OFFICIER"} onOpenCodex={a=>{setCodexFocus(a);setPage("codex");}}/>}
   <footer className="registry-footer"><span>Garde de Blancherive</span><a href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial ↗</a></footer></main></div>;
 }
 
@@ -1809,6 +1811,167 @@ function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,
     </div>
     {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">Semaine {week} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.length}.</p>}
     {open&&[...groups.entries()].filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{corps}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.semaine===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked))}/></td></tr>)}</tbody></table></div></div>)}
+  </section>;
+}
+
+// Récapitulatif en texte brut, à lire ou à recopier devant le financeur.
+// Il reprend l'ordre de l'écran : montant d'abord, justification ensuite.
+function payeRecapTexte(f,currentWeek){
+  const l=["Garde de Blancherive — demande de budget",f.libelle];
+  if(f.corps.length)l.push(f.corps.join(" · "));
+  l.push("");
+  if(f.total<=0){l.push("Aucune solde en attente. Rien à demander.");return l.join("\n");}
+  l.push(`À verser : ${formatSeptims(f.total)}, pour ${f.nbGardes} garde${f.nbGardes>1?"s":""}.`);
+  l.push(f.semaines.length>1?`Semaines ${f.semaines[0]} à ${f.semaines[f.semaines.length-1]}, non réglées.`:`Semaine ${f.semaines[0]}, non réglée.`);
+  l.push("");
+  f.groupes.forEach(g=>{
+    l.push(`${g.corps} — ${formatSeptims(g.total)}`);
+    g.gardes.forEach(p=>{
+      l.push(`  ${p.nomComplet}${p.grade?` (${p.grade})`:""} — ${formatSeptims(p.total)}`);
+      p.semaines.forEach(s=>l.push(`    semaine ${s.semaine} · ${s.joursPresents} j · ${formatSeptims(s.montant)}`));
+    });
+  });
+  l.push("");
+  l.push(`Établi en semaine ${currentWeek}. La semaine ${currentWeek}, encore en cours, n'est pas comprise.`);
+  return l.join("\n");
+}
+
+// La Web App tourne dans une iframe Apps Script : l'API presse-papiers peut être
+// refusée sans erreur explicite. On tente l'API, puis la sélection d'un champ
+// temporaire, et le texte reste affiché en clair si les deux échouent.
+async function payeCopier(texte){
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(texte);return true;}}catch(e){/* repli ci-dessous */}
+  try{
+    const champ=document.createElement("textarea");
+    champ.value=texte;champ.setAttribute("readonly","");
+    champ.style.position="fixed";champ.style.top="-1000px";champ.style.opacity="0";
+    document.body.appendChild(champ);champ.select();
+    const ok=document.execCommand("copy");
+    document.body.removeChild(champ);
+    return ok;
+  }catch(e){return false;}
+}
+
+function PayePage({token,canRegler}){
+  const[data,setData]=useState(null),[error,setError]=useState(""),[regles,setRegles]=useState([]),[busy,setBusy]=useState(null);
+  useEffect(()=>{serverCall("getPaye",token).then(setData).catch(e=>setError(e.message));},[]);
+  if(error&&!data)return<div className="error">Erreur de chargement de la paye : {error}</div>;
+  if(!data)return<div className="loading">Chargement de la paye...</div>;
+
+  // Une semaine réglée disparaît de la liste des impayés. On garde sa trace
+  // dans la session, pour que l'officier voie ce qu'il vient de cocher et
+  // puisse revenir en arrière sur une erreur de ligne.
+  async function basculer(entree,paye){
+    if(busy!==null)return;
+    setBusy(entree.row);setError("");
+    try{
+      const suite=await serverCall("reglerSemainePaye",token,entree.row,paye);
+      setData(suite);
+      setRegles(liste=>paye?[...liste.filter(e=>e.row!==entree.row),entree]:liste.filter(e=>e.row!==entree.row));
+    }catch(e){setError(e.message);}
+    finally{setBusy(null);}
+  }
+
+  // Un financeur dont on vient de solder la dernière semaine garde sa carte
+  // tant que la session dure : sans cela le règlement ferait disparaître le
+  // bouton d'annulation avec elle, juste après le clic qu'il faut rattraper.
+  const regle=new Set(regles.map(e=>e.financeur));
+  const dus=data.financeurs.filter(f=>f.total>0||regle.has(f.cle));
+  const ajour=data.financeurs.filter(f=>f.total<=0&&!regle.has(f.cle));
+  return <>
+    <div className="page-header"><div><h1 className="page-title">Paye</h1><p className="page-subtitle">Ce qu'il faut demander, et à qui, pour solder les semaines closes.</p></div></div>
+    {!canRegler&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent marquer une semaine réglée.</div>}
+    {error&&<div className="error" role="alert">{error}</div>}
+
+    <section className="paye-resume" aria-label="Total à demander">
+      <div className="paye-resume-principal">
+        <span className="paye-resume-label">Total à demander</span>
+        <strong className="paye-resume-montant">{formatSeptims(data.totalADemander)}</strong>
+        <span className="paye-resume-meta">{data.totalADemander>0?`${data.nbGardesDus} garde${data.nbGardesDus>1?"s":""} en attente · ${dus.length} financeur${dus.length>1?"s":""} à solliciter`:"Toutes les semaines closes sont réglées."}</span>
+      </div>
+      <div className="paye-resume-secondaire">
+        <span className="paye-resume-label">À prévoir — semaine {data.currentWeek} en cours</span>
+        <strong className="paye-resume-prevision">{formatSeptims(data.totalAPrevoir)}</strong>
+        <span className="paye-resume-meta">Non close : ce montant peut encore évoluer d'ici dimanche. Il n'entre pas dans le total à demander.</span>
+      </div>
+    </section>
+
+    {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.currentWeek} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
+    {ajour.length>0&&<section className="paye-ajour">
+      <h2 className="paye-ajour-titre">À jour — rien à demander</h2>
+      <ul className="paye-ajour-liste">{ajour.map(f=><li key={f.cle}><strong>{f.libelle}</strong><span>{f.corps.join(" · ")||"Aucun corps rattaché"}</span>{f.previsionTotal>0&&<em>{formatSeptims(f.previsionTotal)} à prévoir pour la semaine {data.currentWeek}</em>}</li>)}</ul>
+    </section>}
+  </>;
+}
+
+// Sans droit de règlement, la ligne n'est pas un contrôle : on n'affiche pas
+// une case à cocher morte à quelqu'un qui ne pourra jamais la cocher.
+function PayeSemaine({s,canRegler,busy,onRegler}){
+  const Ligne=canRegler?"label":"div";
+  return <li className={s.retard>=3?"paye-semaine-ancienne":""}>
+    <Ligne className={canRegler?undefined:"paye-semaine-lecture"}>
+      {canRegler&&<input type="checkbox" checked={false} disabled={busy!==null} onChange={onRegler}/>}
+      <span className="paye-semaine-numero">Semaine {s.semaine}</span>
+      <span className="paye-semaine-jours">{s.joursPresents} j</span>
+      <span className="paye-semaine-montant">{formatSeptims(s.montant)}</span>
+      {s.retard>=3&&<span className="paye-semaine-retard">{s.retard} semaines de retard</span>}
+    </Ligne>
+  </li>;
+}
+
+function PayeFinanceur({f,currentWeek,canRegler,busy,regles,onBasculer}){
+  const[ouvert,setOuvert]=useState(true),[copie,setCopie]=useState(""),[texteVisible,setTexteVisible]=useState(false);
+  const texte=useMemo(()=>payeRecapTexte(f,currentWeek),[f,currentWeek]);
+  const anomalie=f.role==="inconnu"&&f.total>0;
+  // La carte reste affichée après le règlement de la dernière semaine : le
+  // sous-titre doit alors dire que la dette est éteinte, pas nommer une période.
+  const periode=f.semaines.length===0?"plus rien en attente"
+    :f.semaines.length>1?`semaines ${f.semaines[0]} à ${f.semaines[f.semaines.length-1]}`
+    :`semaine ${f.semaines[0]}`;
+  async function copier(){const ok=await payeCopier(texte);setCopie(ok?"Récapitulatif copié.":"Copie impossible ici — le texte est affiché ci-dessous.");if(!ok)setTexteVisible(true);}
+  return <section className={`paye-card${anomalie?" paye-card-anomalie":""}`}>
+    <header className="paye-card-header">
+      <div className="paye-card-identite">
+        <h2 className="paye-financeur">{f.libelle}</h2>
+        <p className="paye-corps">{f.corps.join(" · ")||"Aucun corps rattaché"}</p>
+      </div>
+      <div className="paye-card-montant">
+        <span className="paye-montant-label">À demander</span>
+        <strong className="paye-montant">{formatSeptims(f.total)}</strong>
+        <span className="paye-montant-meta">{f.total>0?`${f.nbGardes} garde${f.nbGardes>1?"s":""} · ${periode}`:"Plus rien en attente"}</span>
+      </div>
+    </header>
+
+    {anomalie&&<p className="paye-alerte" role="alert">⚠ Ces corps ne correspondent à aucun financeur connu. Vérifiez leur libellé dans la feuille Présences avant de présenter la demande : le montant est bien dû, mais son payeur reste à établir.</p>}
+    {!anomalie&&f.retardMax>=3&&<p className="paye-alerte">⚠ La plus ancienne semaine due remonte à {f.retardMax} semaines.</p>}
+
+    <div className="paye-actions">
+      <button type="button" className="paye-bouton-copier" onClick={copier}>Copier le récapitulatif</button>
+      {f.groupes.length>0&&<button type="button" className="paye-bouton-detail" onClick={()=>setOuvert(!ouvert)} aria-expanded={ouvert}>{ouvert?"Masquer le détail":"Voir le détail"}</button>}
+      {copie&&<span className="paye-copie" role="status">{copie}</span>}
+    </div>
+    {texteVisible&&<textarea className="paye-texte" readOnly rows={10} value={texte} aria-label={`Récapitulatif pour ${f.libelle}`}/>}
+
+    {ouvert&&<div className="paye-detail">
+      {f.groupes.map(g=><div className="paye-groupe" key={g.corps}>
+        <div className="paye-groupe-titre"><span>{g.corps}</span><span>{formatSeptims(g.total)}</span></div>
+        {g.gardes.map(p=><div className="paye-garde" key={p.cle}>
+          <div className="paye-garde-identite"><strong>{p.nomComplet}</strong><span className="grade">{p.grade}</span></div>
+          <div className="paye-garde-total">{formatSeptims(p.total)}</div>
+          <ul className="paye-semaines">{p.semaines.map(s=><PayeSemaine key={s.row} s={s} canRegler={canRegler} busy={busy} onRegler={()=>onBasculer({row:s.row,financeur:f.cle,nomComplet:p.nomComplet,semaine:s.semaine,montant:s.montant},true)}/>)}</ul>
+        </div>)}
+      </div>)}
+    </div>}
+
+    {regles.length>0&&<div className="paye-regles">
+      <span className="paye-regles-titre">Réglé à l'instant</span>
+      <ul>{regles.map(e=><li key={e.row}>
+        <span>{e.nomComplet} — semaine {e.semaine} — {formatSeptims(e.montant)}</span>
+        <button type="button" disabled={busy!==null} onClick={()=>onBasculer(e,false)}>Annuler</button>
+      </li>)}</ul>
+    </div>}
+
+    {f.previsionTotal>0&&<p className="paye-prevision">À prévoir pour la semaine {currentWeek}, encore en cours : <strong>{formatSeptims(f.previsionTotal)}</strong> pour {f.previsionGardes} garde{f.previsionGardes>1?"s":""}. Non compris dans le montant à demander.</p>}
   </section>;
 }
 

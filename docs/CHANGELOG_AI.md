@@ -1,5 +1,29 @@
 # Journal de passation IA
 
+## 2026-09-17 — Page Paye et rôle INTENDANT
+
+- Nouvelle page **Paye**, qui répond à la question du jour de paye : combien
+  demander, et à qui. Les semaines closes impayées sont regroupées par financeur —
+  argentier de la cour pour Cité / Éclaireurs / État-Major, un Thane par garnison —
+  avec le détail par corps puis par garde, et un récapitulatif en texte brut à
+  remettre au financeur.
+- La semaine en cours n'entre jamais dans le montant à demander ; elle est chiffrée
+  à part, en prévision. Les soldes nulles ne comptent pas comme impayés.
+- Un corps non rattaché à un financeur connu apparaît sous « Financeur à
+  déterminer », en tête et compté au total, plutôt que d'être écarté.
+- Règlement une semaine et un garde à la fois. La ligne réglée reste visible dans
+  « Réglé à l'instant » le temps de la session, avec une annulation.
+- Nouveau rôle **INTENDANT** (`PASSWORD_INTENDANT`), distribué hors de la garde :
+  argentier, Thanes et cuisines de la cour. Organigramme et Paye en lecture seule,
+  rien d'autre. Sans cette Script Property, aucun code ne peut ouvrir la session.
+- `modifierPresence` conserve son nom et son comportement ; son écriture validée
+  est extraite dans `ecrirePresenceCellule_`, désormais partagée avec `Paye.js`.
+  Les deux chemins appliquent donc exactement les mêmes contrôles.
+- Aperçus `paye-1440`, `paye-390` et `paye-intendant-1440`. Les données de
+  démonstration de la paye sont calculées par le vrai `getPaye` dans un contexte
+  `vm`, et les lignes de présence servent de source unique aux deux pages.
+- Vérifications : `node scripts/test-paye.mjs` et les onze suites existantes,
+  `npm run build`, `npm run apercus`. Aucun push ni déploiement.
 ## 2026-09-15 — Soldes impayées repérables semaine par semaine
 
 - Badge « N impayés » dans l'en-tête de chaque accordéon de Présences, visible

@@ -35,9 +35,18 @@ Principaux modules :
   - lecture Web des présences
   - génération / synchronisation
   - modification des cases de présence et du statut Payé
+  - `ecrirePresenceCellule_` : écriture validée d'une case F:L ou O, partagée avec
+    `Paye.js` pour que les deux chemins appliquent les mêmes contrôles
 
 - `PresenceDashboard.gs.js`
   - synthèse financière et inactivité, OFFICIER
+
+- `Paye.js`
+  - regroupement des semaines closes impayées par financeur : argentier de la cour
+    pour Cité de Blancherive / Éclaireurs / État-Major, un Thane par garnison
+  - lecture OFFICIER et INTENDANT ; règlement d'une semaine par les seuls OFFICIER,
+    délégué à `ecrirePresenceCellule_` de `Presences.js`
+  - n'écrit rien de lui-même et ne touche à aucune colonne autre que `Présences!O`
 
 - `SoldesGrades.js`
   - barème journalier dans la feuille `SoldesGrades`, initialisé depuis `Données!A2:A` et l'ancienne base `Vue globale!L2`
@@ -102,11 +111,28 @@ Pages :
 - Organigramme
 - Effectifs (OFFICIER seulement)
 - Présences
+- Paye (OFFICIER et INTENDANT ; règlement réservé aux OFFICIER)
 - Codex
 - Amendes
 - Prison
 
+Le rôle INTENDANT ne se voit proposer que l'Organigramme et la Paye. La
+navigation, le routage de `App` et les contrôles serveur portent chacun cette
+restriction : aucun des trois ne suffit seul.
+
+Le routage de la page Paye désigne ses rôles au lieu d'en exclure. Depuis
+l'introduction de `VISITEUR`, une condition du genre `role!=="GARDE"` laisserait
+entrer le visiteur public ; la liste blanche `OFFICIER` / `INTENDANT` reste juste
+quel que soit le prochain rôle ajouté.
+
 ## Couplages importants
+
+`Paye.js` utilise des helpers déclarés dans `Presences.js` :
+- `ecrirePresenceCellule_`
+- `getLastPresenceRowWebApp`
+- `getCurrentIsoWeekWebApp`
+- `estCorpsExcluDesPresences_`
+- `mettreAJourSoldesPresences_`
 
 `Prison.js` utilise des helpers déclarés dans `Amendes.js` :
 - `getLastNonEmptyRowInColumn`

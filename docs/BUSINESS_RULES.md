@@ -56,6 +56,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 
 - GARDE : lecture seule.
 - OFFICIER : modification des jours et du paiement.
+- INTENDANT : aucun accès à cette page ; il ne voit que la synthèse de la Paye.
 - Les coûts estimés par corps et semaine sont affichés uniquement aux OFFICIER ; ils incluent toutes les soldes du corps, déjà payées ou non, indépendamment de la recherche.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
 - Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
@@ -70,6 +71,52 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - L'ajout d'un effectif et toute modification de son statut régénèrent la semaine courante de Présences.
 - Les autres modifications d'Effectifs ne régénèrent pas automatiquement les Présences.
 - Toute politique de traitement d'un changement de statut en cours de semaine doit être décidée explicitement avant implémentation.
+
+## Paye
+
+La page répond à une question précise : le jour de la paye, combien l'officier
+doit-il demander, et à qui. Le registre des Présences est organisé par semaine
+puis par corps ; l'argent, lui, vient d'un financeur par corps.
+
+- Financeurs. L'argentier de la cour couvre Cité de Blancherive, Éclaireurs et
+  État-Major ; un Thane couvre chacune des garnisons de Rivebois, Bois-de-Chêne,
+  Faubourgs et Cap Granite. C'est la même coupure centrale / locale que le
+  reversement des amendes.
+- Le rattachement se fait par jeton distinctif recherché dans le libellé du corps,
+  et non par égalité, afin d'accepter « Rivebois » comme « Garnison de Rivebois ».
+  Le jeton « blancherive » seul n'est jamais utilisé : la Cité et les Faubourgs le
+  portent tous les deux et ne dépendent pas du même financeur.
+- Un corps ne correspondant à aucun financeur connu n'est jamais écarté. Il est
+  regroupé sous « Financeur à déterminer », compté dans le total général et
+  affiché en tête comme une anomalie de libellé à corriger. Une solde ne doit pas
+  disparaître d'une demande de budget parce qu'un libellé a changé dans la feuille.
+- Périmètre du montant à demander : les semaines **closes** dont la solde est
+  strictement positive et la case Payé décochée. Une solde nulle n'est pas une
+  dette ; une recrue ou un garde sans jour pointé n'a rien à percevoir.
+- La semaine en cours n'entre jamais dans le montant à demander. Elle est chiffrée
+  à part, en prévision, parce que les pointages peuvent encore bouger d'ici
+  dimanche.
+- Les semaines postérieures à la semaine en cours ne sont pas des retards. La
+  colonne Semaine ne portant pas l'année, les semaines de l'année écoulée cessent
+  d'être comptées après le passage à la nouvelle année — même limite que le
+  tableau de bord OFFICIER.
+- Le détail est groupé par corps puis par garde, dettes les plus lourdes d'abord,
+  puis les plus anciennes. Le grade affiché est celui de la semaine due la plus
+  récente — il peut donc être un grade disparu, comme `Aspirant-Garde`, si la
+  semaine due est antérieure au renommage en `Cadet`. Le Hird du Jarl reste
+  exclu, comme des Présences.
+- La définition de l'impayé est la même que celle du registre des Présences,
+  `estImpayePresence` : solde due et non réglée. Les deux pages doivent rester
+  d'accord, sans quoi un badge de semaine et une demande de budget se
+  contrediraient.
+- Le règlement se fait une semaine et un garde à la fois : cocher une semaine
+  écrit `Présences!O` de cette ligne, rien d'autre. Il n'existe pas de règlement
+  en bloc. La ligne réglée quitte la liste des impayés ; elle reste visible dans
+  « Réglé à l'instant » le temps de la session, avec une annulation, afin qu'une
+  erreur de ligne se rattrape sans passer par la feuille.
+- Un récapitulatif en texte brut reprend l'ordre de l'écran, montant d'abord et
+  justification ensuite, pour être lu ou remis au financeur.
+- GARDE n'a pas accès à cette page. INTENDANT la consulte sans pouvoir cocher.
 
 ## Amendes
 

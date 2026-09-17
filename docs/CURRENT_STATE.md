@@ -2,6 +2,44 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Page Paye et rôle INTENDANT (17 septembre 2026)
+
+- Les impayés étaient jusqu'ici réduits à deux nombres du tableau de bord
+  (« 3 » et un montant), sans moyen de savoir qui ni de quelle semaine : l'état
+  « Payé » vivait dans la dernière colonne d'un tableau, imbriqué dans un corps,
+  lui-même dans un accordéon de semaine. La page **Paye** rassemble cela en une
+  demande de budget par financeur, montant d'abord et justification ensuite.
+- Financeurs déduits du corps, sans nom de personnage à tenir à jour : argentier
+  de la cour pour Cité de Blancherive, Éclaireurs et État-Major ; un Thane pour
+  chacune des quatre garnisons. Même coupure centrale / locale que le reversement
+  des amendes.
+- Le rattachement cherche un jeton distinctif dans le libellé du corps, donc
+  « Garnison de Rivebois » fonctionne comme « Rivebois ». Le jeton « blancherive »
+  seul n'est jamais employé : la Cité et les Faubourgs le portent tous les deux.
+- Un corps inconnu tombe dans « Financeur à déterminer », affiché en tête et compté
+  au total général. Une solde due ne disparaît jamais d'une demande de budget.
+- Périmètre : semaines closes, solde strictement positive, case Payé décochée. La
+  semaine en cours est chiffrée à part, en prévision, et n'entre pas dans le
+  montant à demander.
+- Règlement une semaine à la fois, avec annulation possible tant que la session
+  dure. Un récapitulatif en texte brut peut être copié ; l'API presse-papiers
+  pouvant être refusée dans l'iframe Apps Script, un repli affiche le texte en
+  clair.
+- Nouveau rôle **INTENDANT**, code distribué hors de la garde. Organigramme et
+  Paye en lecture seule. `reglerSemainePaye` passe par `ecrirePresenceCellule_`,
+  qui exige OFFICIER : un INTENDANT appelant l'API depuis la console est refusé.
+- **À faire par le propriétaire avant utilisation** : définir la Script Property
+  `PASSWORD_INTENDANT`. Tant qu'elle est absente, aucun code n'ouvre de session
+  INTENDANT — c'est le comportement voulu, pas une panne.
+- Le déploiement doit inclure `Paye.js`, `Auth.js`, `Presences.js`,
+  `Organigramme.js` et le nouvel `Index.html`. Aucune nouvelle feuille, aucune
+  nouvelle colonne, aucune synchronisation du Codex nécessaire.
+- Limite connue conservée : la colonne Semaine ne porte pas l'année. Après le
+  passage à la nouvelle année, les semaines de l'année écoulée cessent d'être
+  comptées comme impayées, exactement comme dans le tableau de bord OFFICIER.
+- Vérifications locales : `node scripts/test-paye.mjs`, les onze suites
+  existantes, `npm run build`, `npm run apercus`. Aucun push ni déploiement
+  pendant cette intervention.
 ### Extraction des articles en listes et onglets (15 septembre 2026)
 
 - `extraireArticlesCodex_()` lisait `getBody().getParagraphs()`, qui ne retourne
@@ -234,6 +272,11 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 - Modification OFFICIER.
 - Tableau de bord OFFICIER.
 - Génération / synchronisation historique présente dans le backend.
+
+### Paye
+- Consultation OFFICIER et INTENDANT.
+- Règlement d'une semaine par les OFFICIER uniquement.
+- Aucune écriture hors de `Présences!O`.
 
 ### Codex
 - Consultation dans la Web App.

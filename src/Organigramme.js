@@ -86,11 +86,21 @@ function getOrganigramme(
   token
 ) {
 
+  /*
+    INTENDANT lit l'organigramme comme un GARDE : les cuisines
+    de la cour en tirent l'effectif à nourrir. Le filtrage des
+    nouveautés par `historiqueEffectifsPourRole_` ne laisse
+    passer que les membres actifs ou réservistes pour tout rôle
+    autre qu'OFFICIER, et le déclencheur d'historique reste
+    installé par les seuls OFFICIER.
+  */
+
   const auth = requireRole(
     token,
     [
       "GARDE",
-      "OFFICIER"
+      "OFFICIER",
+      "INTENDANT"
     ]
   );
 

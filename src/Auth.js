@@ -35,9 +35,25 @@ function login(password) {
       props.getProperty("PASSWORD_GARDE"),
 
     OFFICIER:
-      props.getProperty("PASSWORD_OFFICIER")
+      props.getProperty("PASSWORD_OFFICIER"),
+
+    /*
+      INTENDANT : code distribué hors de la garde — argentier
+      de la cour, Thanes, cuisines. Lecture de l'organigramme
+      et de la paye, rien d'autre.
+    */
+
+    INTENDANT:
+      props.getProperty("PASSWORD_INTENDANT")
   };
 
+
+  /*
+    Rôles testés du plus au moins privilégié, afin que le
+    résultat reste déterministe si deux codes ont été réglés
+    à la même valeur par erreur. Une propriété absente ne
+    correspond jamais, y compris à un mot de passe vide.
+  */
 
   let role = null;
 
@@ -52,6 +68,12 @@ function login(password) {
     password === passwords.GARDE
   ) {
     role = "GARDE";
+  }
+  else if (
+    passwords.INTENDANT &&
+    password === passwords.INTENDANT
+  ) {
+    role = "INTENDANT";
   }
 
 

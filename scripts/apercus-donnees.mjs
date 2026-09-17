@@ -8,6 +8,9 @@
 // `src/`. Si une page d'aperçu se retrouve vide, c'est en général qu'un champ
 // attendu manque ici.
 
+import { readFileSync } from "node:fs";
+import vm from "node:vm";
+
 const SEMAINE_COURANTE = 37;
 
 const jours = motif => motif.split("").map(c => c === "x");
@@ -29,36 +32,68 @@ function presence(row, semaine, corps, prenom, nom, grade, motif, solde, paye) {
   };
 }
 
+// Source unique des aperçus Présences et Paye : les deux pages doivent
+// montrer le même registre, sinon les captures se contredisent.
+const lignesPresences = [
+  presence(12, 37, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxx..", 500, false),
+  presence(13, 37, "Garnison de Rivebois", "Sigrid", "Vent-du-Nord", "Capitaine", "xxxx.x.", 400, false),
+  presence(14, 37, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xx.x...", 240, true),
+  presence(15, 37, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx....", 120, false),
+  presence(16, 37, "Garnison de Rivebois", "Halvar", "Sans-Nom", "Recrue", "x......", 0, false),
+  presence(21, 37, "Cité de Blancherive", "Ingrid", "Main-Leste", "Major", "xxxxxx.", 600, false),
+  presence(22, 37, "Cité de Blancherive", "Rolf", "Écu-Fendu", "Garde", "xxxx...", 320, true),
+  presence(23, 37, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", ".xxxx..", 320, false),
+  presence(26, 37, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xxx....", 150, false),
+  presence(28, 37, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, false),
+
+  presence(31, 36, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxxxx", 700, true),
+  presence(32, 36, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xxxxx..", 400, false),
+  presence(33, 36, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx.x..", 160, false),
+  presence(34, 36, "Cité de Blancherive", "Ingrid", "Main-Leste", "Major", "xxxxx.x", 600, true),
+  presence(35, 36, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxxx.x.", 400, false),
+  presence(36, 36, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xx.....", 100, false),
+  presence(37, 36, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxxx.", 480, false),
+
+  presence(41, 35, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxxx...", 200, false),
+  presence(42, 35, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxx....", 240, false),
+  presence(43, 35, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, true),
+
+  presence(51, 34, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx....", 150, false),
+  presence(52, 34, "Faubourgs de Blancherive", "Sif", "Pied-Sûr", "Garde", "xxxx...", 320, false)
+];
+
+function totauxParCorps(lignes) {
+  const totaux = new Map();
+  for (const l of lignes) {
+    const cle = `${l.semaine}|${l.corps}`;
+    if (!totaux.has(cle)) totaux.set(cle, { semaine: l.semaine, corps: l.corps, total: 0 });
+    totaux.get(cle).total += l.soldeRaw;
+  }
+  return [...totaux.values()];
+}
+
 export const presences = {
   currentWeek: SEMAINE_COURANTE,
-  rows: [
-    presence(12, 37, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxx..", 500, false),
-    presence(13, 37, "Garnison de Rivebois", "Sigrid", "Vent-du-Nord", "Capitaine", "xxxx.x.", 400, false),
-    presence(14, 37, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xx.x...", 240, true),
-    presence(15, 37, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx....", 120, false),
-    presence(16, 37, "Garnison de Rivebois", "Halvar", "Sans-Nom", "Recrue", "x......", 0, false),
-    presence(21, 37, "Cité de Blancherive", "Ingrid", "Main-Leste", "Major", "xxxxxx.", 600, false),
-    presence(22, 37, "Cité de Blancherive", "Rolf", "Écu-Fendu", "Garde", "xxxx...", 320, true),
-    presence(23, 37, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", ".xxxx..", 320, false),
-    presence(31, 36, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxxxx", 700, true),
-    presence(32, 36, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xxxxx..", 400, false),
-    presence(33, 36, "Cité de Blancherive", "Ingrid", "Main-Leste", "Major", "xxxxx.x", 600, true)
-  ],
-  corpsTotals: [
-    { semaine: 37, corps: "Garnison de Rivebois", total: 1260 },
-    { semaine: 37, corps: "Cité de Blancherive", total: 1240 },
-    { semaine: 36, corps: "Garnison de Rivebois", total: 1100 },
-    { semaine: 36, corps: "Cité de Blancherive", total: 600 }
-  ]
+  rows: lignesPresences,
+  corpsTotals: totauxParCorps(lignesPresences)
 };
+
+const impayesPasses = lignesPresences.filter(
+  l => l.semaine < SEMAINE_COURANTE && l.soldeRaw > 0 && !l.paye
+);
+
+const semaineCourante = lignesPresences.filter(l => l.semaine === SEMAINE_COURANTE);
+
+const somme = (lignes, filtre = () => true) =>
+  lignes.filter(filtre).reduce((total, l) => total + l.soldeRaw, 0);
 
 export const presenceDashboard = {
   currentWeek: SEMAINE_COURANTE,
-  currentWeekTotal: 2500,
-  currentWeekPaid: 560,
-  currentWeekRemaining: 1940,
-  pastUnpaidCount: 3,
-  pastUnpaidAmount: 1320,
+  currentWeekTotal: somme(semaineCourante),
+  currentWeekPaid: somme(semaineCourante, l => l.paye),
+  currentWeekRemaining: somme(semaineCourante, l => !l.paye),
+  pastUnpaidCount: impayesPasses.length,
+  pastUnpaidAmount: somme(impayesPasses),
   currentWeekRecoveredFines: 850,
   inactive: [
     {
@@ -85,6 +120,46 @@ export const presenceDashboard = {
     }
   ]
 };
+
+// La paye est produite par le vrai `getPaye` de `src/Paye.js`, exécuté sur les
+// lignes ci-dessus dans un contexte vm avec des services Apps Script factices.
+// L'aperçu ne peut donc pas s'écarter de ce que renvoie le serveur : une
+// évolution du regroupement se voit à la capture suivante.
+function construirePaye() {
+  const contexte = vm.createContext({
+    Number, String, Math, Map, Set, Array, JSON,
+    SPREADSHEET_ID: "apercus",
+    PRESENCES_SHEET_NAME: "Présences",
+    requireRole: () => ({ role: "OFFICIER" }),
+    SpreadsheetApp: {
+      flush() {},
+      openById: () => ({ getSheetByName: () => ({ getRange: () => cellules }) })
+    }
+  });
+
+  const valeurs = lignesPresences.map(l => [
+    l.semaine, l.corps, l.grade, l.prenom, l.nom,
+    ...l.jours, l.joursPresents, l.soldeRaw, l.paye
+  ]);
+
+  const cellules = {
+    getValues: () => valeurs,
+    getDisplayValues: () => valeurs.map(l => l.map(String))
+  };
+
+  vm.runInContext(readFileSync(new URL("../src/Presences.js", import.meta.url), "utf8"), contexte);
+  vm.runInContext(readFileSync(new URL("../src/Paye.js", import.meta.url), "utf8"), contexte);
+
+  contexte.mettreAJourSoldesPresences_ = () => {};
+  contexte.getLastPresenceRowWebApp = () => valeurs.length + 1;
+  contexte.getCurrentIsoWeekWebApp = () => SEMAINE_COURANTE;
+  contexte.estCorpsExcluDesPresences_ = corps =>
+    String(corps).toLowerCase().includes("hird");
+
+  return JSON.parse(JSON.stringify(contexte.getPaye("OFFICIER")));
+}
+
+export const paye = construirePaye();
 
 export const prison = {
   rows: [

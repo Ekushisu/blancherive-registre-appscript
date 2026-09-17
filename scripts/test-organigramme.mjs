@@ -28,7 +28,10 @@ const context = vm.createContext({
   SPREADSHEET_ID: 'test',
   requireRole(token, roles) {
     assert.equal(token, 'test-token');
-    assert.deepEqual(Array.from(roles), ['GARDE', 'OFFICIER']);
+    // INTENDANT lit l'organigramme comme un GARDE : les cuisines de la cour en
+    // tirent l'effectif à nourrir. Le filtrage des nouveautés reste celui des
+    // rôles non-OFFICIER.
+    assert.deepEqual(Array.from(roles), ['GARDE', 'OFFICIER', 'INTENDANT']);
     authorized = true;
     return { role: 'OFFICIER' };
   },

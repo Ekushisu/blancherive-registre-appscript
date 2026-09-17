@@ -75,3 +75,39 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 .week-unpaid-filter{margin:0 14px 12px;width:calc(100% - 28px);min-height:44px}
 .week-unpaid-badge{display:block;margin:6px 0 0;width:max-content}
 }
+/* Paye : la demande de budget. Même encre et même papier que le reste du registre. */
+.paye-resume{border:1px solid #bea16b;border-top:3px double #ad894d;background:#f6ecd6;box-shadow:var(--shadow)}
+.paye-resume-principal{border-right:1px solid #d5c29c}
+.paye-resume-label,.paye-montant-label,.paye-ajour-titre,.paye-groupe-titre{color:#78603a}
+.paye-resume-montant,.paye-resume-prevision,.paye-montant,.paye-garde-total{font-family:Georgia,serif}
+.paye-resume-montant,.paye-montant,.paye-garde-total{color:#6b3f1d}
+.paye-resume-prevision{color:#7a6446}
+.paye-resume-meta,.paye-montant-meta,.paye-semaine-jours,.paye-prevision,.paye-ajour-liste span{color:var(--muted)}
+.paye-card{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);box-shadow:var(--shadow)}
+.paye-card-anomalie{background:#fbeee6;border-left-color:var(--seal)}
+.paye-financeur{font-family:Georgia,serif;color:#513a20}
+.paye-corps{color:var(--muted);text-transform:uppercase;letter-spacing:.09em}
+.paye-alerte{background:#f7e7c8;border:1px solid #d9b978;color:#6c5218}
+.paye-card-anomalie .paye-alerte{background:#f6ddd2;border-color:#d0a08e;color:#7a3524}
+.paye-bouton-copier{background:#634526;color:#fff7e6;border:1px solid #634526}
+.paye-bouton-copier:hover{background:#49321e}
+.paye-bouton-detail{background:#f5ecd8;color:#635032;border:1px solid var(--line)}
+.paye-bouton-detail:hover{background:#e8d8b6}
+.paye-copie{color:#4d6238}
+.paye-texte{background:#fffaef;border:1px solid var(--line);color:var(--ink)}
+.paye-groupe-titre{border-bottom:3px double #c3a36d}
+.paye-garde{border-top-color:#e0d0ab}
+.paye-garde-identite strong,.paye-semaine-numero,.paye-ajour-liste li strong{color:#4a3a26}
+.paye-semaines label,.paye-semaine-lecture{background:#f3e8d0;border:1px solid #ddcaa4}
+.paye-semaines label:hover{background:#ece0c2}
+.paye-semaine-ancienne label,.paye-semaine-ancienne .paye-semaine-lecture{background:#f7e2d8;border-color:#d8b19f}
+.paye-semaine-montant{color:#6b3f1d}
+.paye-semaine-retard{color:#8a4a30}
+.paye-regles{background:#eef0e0;border:1px solid #c3c79f}
+.paye-regles-titre{color:#5c6437}
+.paye-regles li{color:#4c5330}
+.paye-regles button{background:#fbf8ea;border:1px solid #b9be92;color:#555c32}
+.paye-prevision{border-top-color:#ddcaa4}
+.paye-prevision strong{color:#5d4423}
+.paye-ajour{background:#f3ecdb;border:1px solid var(--line)}
+.paye-ajour-liste em{color:#7a6446}

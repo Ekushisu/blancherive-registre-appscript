@@ -1087,6 +1087,42 @@ function modifierPresence(
   checked
 ) {
 
+  ecrirePresenceCellule_(
+    token,
+    row,
+    column,
+    checked
+  );
+
+
+  /*
+    Retour immédiat de l'état à jour.
+  */
+
+  return getPresences(
+    token
+  );
+}
+
+
+// ============================================================
+// ÉCRITURE VALIDÉE D'UNE CASE DE PRÉSENCE
+//
+// Partagée par `modifierPresence` et par la page Paye
+// (`Paye.js`), afin que les deux chemins d'écriture
+// appliquent exactement les mêmes contrôles.
+//
+// N'effectue aucune lecture de retour : l'appelant choisit
+// la vue qu'il renvoie à l'interface.
+// ============================================================
+
+function ecrirePresenceCellule_(
+  token,
+  row,
+  column,
+  checked
+) {
+
   /*
     IMPORTANT :
 
@@ -1236,15 +1272,6 @@ function modifierPresence(
 
 
   SpreadsheetApp.flush();
-
-
-  /*
-    Retour immédiat de l'état à jour.
-  */
-
-  return getPresences(
-    token
-  );
 }
 
 

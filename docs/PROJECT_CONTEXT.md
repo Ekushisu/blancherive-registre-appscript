@@ -8,6 +8,7 @@ Elle sert de registre opérationnel pour :
 - l'organigramme ;
 - les effectifs ;
 - les présences et soldes ;
+- la paye : ce qu'il reste à demander, et à quel financeur ;
 - le Codex juridique ;
 - les amendes ;
 - la prison.

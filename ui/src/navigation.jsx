@@ -5,6 +5,7 @@ const paths={
   organigramme:'M12 3v6M5 15v-4h14v4M3 15h4v5H3zM10 15h4v5h-4zM17 15h4v5h-4zM9 3h6v5H9z',
   effectifs:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3a4 4 0 0 1 0 8M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
   presences:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5',
+  paye:'M5 6c0-1.4 3.1-2.5 7-2.5S19 4.6 19 6s-3.1 2.5-7 2.5S5 7.4 5 6M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5',
   codex:'M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-2-1-6-2-10 1',
   amendes:'M6 3h12v18l-3-2-3 2-3-2-3 2V3M9 7h6M9 11h6M9 15h3',
   prison:'M4 21V5l8-3 8 3v16M2 21h20M8 8v13M12 8v13M16 8v13M4 12h16',
@@ -15,12 +16,17 @@ export function RegistreIcon({name}) {return <svg viewBox="0 0 24 24" fill="none
 
 // Le rôle public ne consulte que le Codex ; le serveur refuse tout le reste.
 export const ROLE_PUBLIC="VISITEUR";
-const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",[ROLE_PUBLIC]:"Visiteur"};
+const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",INTENDANT:"Intendant",[ROLE_PUBLIC]:"Visiteur"};
 
 export function Header({role,page,onPage,onLogout}) {
+  // VISITEUR ne consulte que le Codex. INTENDANT est un code remis hors de la
+  // garde — argentier, Thanes, cuisines — et n'a que l'effectif et la paye,
+  // toujours sans droit d'écriture.
   const pages=role===ROLE_PUBLIC
     ?[["codex","Codex"]]
-    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];
+    :role==="INTENDANT"
+    ?[["organigramme","Organigramme"],["paye","Paye"]]
+    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"]]:[]),["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];
   return <header className="topbar">
     <div className="brand"><span className="brand-seal"><img src={sceau} alt=""/></span><div><span className="brand-overline">Châtellerie de</span><strong>Blancherive</strong><span className="brand-caption">Registre de la Garde</span></div></div>
     <div className="nav-caption">Le registre</div>

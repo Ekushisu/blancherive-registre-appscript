@@ -29,6 +29,7 @@ const reponses = {
   getSessionInfo: () => donnees.sessionInfo,
   getPresences: () => donnees.presences,
   getPresenceOfficerDashboard: () => donnees.presenceDashboard,
+  getPaye: () => donnees.paye,
   getPrison: () => donnees.prison,
   getPrisonFormData: () => donnees.prisonForm,
   getAmendes: () => donnees.amendes,
@@ -38,8 +39,10 @@ const reponses = {
   getEffectifs: () => donnees.effectifs
 };
 
-// Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues et
-// une préparation facultative (ouvrir un formulaire, dérouler un panneau…).
+// Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues,
+// une préparation facultative (ouvrir un formulaire, dérouler un panneau…) et
+// des réponses serveur propres à la page, superposées aux réponses communes —
+// c'est ainsi que l'on capture une même page sous un autre rôle.
 const apercus = {
   organigramme: {
     nav: "Organigramme",
@@ -77,6 +80,17 @@ const apercus = {
       await semainePassee.locator(".week-unpaid-filter").click();
       await page.waitForSelector(".week-unpaid-notice");
     }
+  },
+  paye: {
+    nav: "Paye",
+    attendre: ".paye-card",
+    largeurs: [390, 1440]
+  },
+  "paye-intendant": {
+    nav: "Paye",
+    attendre: ".paye-card",
+    largeurs: [1440],
+    reponses: { getSessionInfo: () => ({ role: "INTENDANT" }) }
   },
   prison: {
     nav: "Prison",
@@ -179,7 +193,9 @@ try {
         },
         [
           Object.fromEntries(
-            Object.entries(reponses).map(([cle, valeur]) => [cle, valeur()])
+            Object.entries({ ...reponses, ...(apercu.reponses || {}) }).map(
+              ([cle, valeur]) => [cle, valeur()]
+            )
           ),
           "jeton-de-demonstration"
         ]

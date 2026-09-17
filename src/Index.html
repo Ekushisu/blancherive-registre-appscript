@@ -2072,6 +2072,301 @@ button {
     font-size: 12px;
   }
 }
+.paye-resume {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  margin-bottom: 26px;
+}
+.paye-resume > div {
+  padding: 22px 26px;
+}
+.paye-resume-label,
+.paye-montant-label,
+.paye-regles-titre {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  font-size: 10px;
+}
+.paye-resume-label {
+  margin-bottom: 10px;
+}
+.paye-resume-montant {
+  display: block;
+  font-size: 44px;
+  line-height: 1.05;
+}
+.paye-resume-prevision {
+  display: block;
+  font-size: 26px;
+  line-height: 1.1;
+}
+.paye-resume-meta {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.paye-card {
+  margin-bottom: 26px;
+  padding: 24px;
+  border-radius: 4px;
+}
+.paye-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+.paye-financeur {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+}
+.paye-corps {
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+.paye-card-montant {
+  text-align: right;
+  min-width: 210px;
+}
+.paye-montant {
+  display: block;
+  margin: 4px 0;
+  font-size: 38px;
+  line-height: 1.1;
+}
+.paye-montant-meta {
+  display: block;
+  font-size: 12px;
+}
+.paye-alerte {
+  margin: 16px 0 0;
+  padding: 11px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.paye-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.paye-actions button {
+  min-height: 44px;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.paye-copie {
+  font-size: 12px;
+}
+.paye-texte {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 4px;
+  font-family:
+    ui-monospace,
+    Consolas,
+    monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.paye-detail {
+  display: grid;
+  gap: 20px;
+  margin-top: 22px;
+}
+.paye-groupe-titre {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.paye-garde {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 18px;
+  padding: 14px 0;
+  border-top: 1px solid transparent;
+}
+.paye-garde-identite strong {
+  font-size: 15px;
+}
+.paye-garde-identite .grade {
+  display: block;
+  margin-top: 2px;
+}
+.paye-garde-total {
+  text-align: right;
+  font-size: 17px;
+  white-space: nowrap;
+}
+.paye-semaines {
+  grid-column: 1/-1;
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.paye-semaines label,
+.paye-semaine-lecture {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 3px;
+}
+.paye-semaines label {
+  cursor: pointer;
+}
+.paye-semaines input[type=checkbox] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.paye-semaines input:disabled {
+  cursor: not-allowed;
+}
+.paye-semaine-numero {
+  min-width: 104px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.paye-semaine-jours {
+  min-width: 44px;
+  font-size: 12px;
+}
+.paye-semaine-montant {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.paye-semaine-retard {
+  flex-basis: 100%;
+  font-size: 11px;
+}
+.paye-regles {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 4px;
+}
+.paye-regles-titre {
+  margin-bottom: 8px;
+}
+.paye-regles ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.paye-regles li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+.paye-regles button {
+  min-height: 36px;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.paye-prevision {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.paye-ajour {
+  margin-top: 8px;
+  padding: 20px 24px;
+  border-radius: 4px;
+}
+.paye-ajour-titre {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.paye-ajour-liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.paye-ajour-liste li {
+  display: grid;
+  gap: 3px;
+  font-size: 13px;
+}
+.paye-ajour-liste span,
+.paye-ajour-liste em {
+  font-size: 12px;
+  font-style: normal;
+}
+@media (max-width: 900px) {
+  .paye-resume {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .paye-card {
+    padding: 18px 16px;
+  }
+  .paye-card-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .paye-card-montant {
+    min-width: 0;
+    text-align: left;
+  }
+  .paye-resume > div {
+    padding: 18px 16px;
+  }
+  .paye-resume-montant {
+    font-size: 34px;
+  }
+  .paye-montant {
+    font-size: 30px;
+  }
+  .paye-garde {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .paye-garde-total {
+    text-align: left;
+  }
+  .paye-semaine-numero,
+  .paye-semaine-jours {
+    min-width: 0;
+  }
+  .paye-ajour {
+    padding: 16px;
+  }
+}
 
 /* ui/src/theme.css */
 :root {
@@ -4447,6 +4742,153 @@ body {
     margin: 6px 0 0;
     width: max-content;
   }
+}
+.paye-resume {
+  border: 1px solid #bea16b;
+  border-top: 3px double #ad894d;
+  background: #f6ecd6;
+  box-shadow: var(--shadow);
+}
+.paye-resume-principal {
+  border-right: 1px solid #d5c29c;
+}
+.paye-resume-label,
+.paye-montant-label,
+.paye-ajour-titre,
+.paye-groupe-titre {
+  color: #78603a;
+}
+.paye-resume-montant,
+.paye-resume-prevision,
+.paye-montant,
+.paye-garde-total {
+  font-family: Georgia, serif;
+}
+.paye-resume-montant,
+.paye-montant,
+.paye-garde-total {
+  color: #6b3f1d;
+}
+.paye-resume-prevision {
+  color: #7a6446;
+}
+.paye-resume-meta,
+.paye-montant-meta,
+.paye-semaine-jours,
+.paye-prevision,
+.paye-ajour-liste span {
+  color: var(--muted);
+}
+.paye-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  box-shadow: var(--shadow);
+}
+.paye-card-anomalie {
+  background: #fbeee6;
+  border-left-color: var(--seal);
+}
+.paye-financeur {
+  font-family: Georgia, serif;
+  color: #513a20;
+}
+.paye-corps {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+.paye-alerte {
+  background: #f7e7c8;
+  border: 1px solid #d9b978;
+  color: #6c5218;
+}
+.paye-card-anomalie .paye-alerte {
+  background: #f6ddd2;
+  border-color: #d0a08e;
+  color: #7a3524;
+}
+.paye-bouton-copier {
+  background: #634526;
+  color: #fff7e6;
+  border: 1px solid #634526;
+}
+.paye-bouton-copier:hover {
+  background: #49321e;
+}
+.paye-bouton-detail {
+  background: #f5ecd8;
+  color: #635032;
+  border: 1px solid var(--line);
+}
+.paye-bouton-detail:hover {
+  background: #e8d8b6;
+}
+.paye-copie {
+  color: #4d6238;
+}
+.paye-texte {
+  background: #fffaef;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.paye-groupe-titre {
+  border-bottom: 3px double #c3a36d;
+}
+.paye-garde {
+  border-top-color: #e0d0ab;
+}
+.paye-garde-identite strong,
+.paye-semaine-numero,
+.paye-ajour-liste li strong {
+  color: #4a3a26;
+}
+.paye-semaines label,
+.paye-semaine-lecture {
+  background: #f3e8d0;
+  border: 1px solid #ddcaa4;
+}
+.paye-semaines label:hover {
+  background: #ece0c2;
+}
+.paye-semaine-ancienne label,
+.paye-semaine-ancienne .paye-semaine-lecture {
+  background: #f7e2d8;
+  border-color: #d8b19f;
+}
+.paye-semaine-montant {
+  color: #6b3f1d;
+}
+.paye-semaine-retard {
+  color: #8a4a30;
+}
+.paye-regles {
+  background: #eef0e0;
+  border: 1px solid #c3c79f;
+}
+.paye-regles-titre {
+  color: #5c6437;
+}
+.paye-regles li {
+  color: #4c5330;
+}
+.paye-regles button {
+  background: #fbf8ea;
+  border: 1px solid #b9be92;
+  color: #555c32;
+}
+.paye-prevision {
+  border-top-color: #ddcaa4;
+}
+.paye-prevision strong {
+  color: #5d4423;
+}
+.paye-ajour {
+  background: #f3ecdb;
+  border: 1px solid var(--line);
+}
+.paye-ajour-liste em {
+  color: #7a6446;
 }</style>
 </head>
 <body>
@@ -4463,6 +4905,7 @@ body {
     organigramme: "M12 3v6M5 15v-4h14v4M3 15h4v5H3zM10 15h4v5h-4zM17 15h4v5h-4zM9 3h6v5H9z",
     effectifs: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3a4 4 0 0 1 0 8M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0",
     presences: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5",
+    paye: "M5 6c0-1.4 3.1-2.5 7-2.5S19 4.6 19 6s-3.1 2.5-7 2.5S5 7.4 5 6M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5",
     codex: "M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-2-1-6-2-10 1",
     amendes: "M6 3h12v18l-3-2-3 2-3-2-3 2V3M9 7h6M9 11h6M9 15h3",
     prison: "M4 21V5l8-3 8 3v16M2 21h20M8 8v13M12 8v13M16 8v13M4 12h16",
@@ -4473,9 +4916,9 @@ body {
     return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: paths[name] || paths.shield }));
   }
   var ROLE_PUBLIC = "VISITEUR";
-  var LIBELLES_ROLE = { OFFICIER: "Officier", GARDE: "Garde", [ROLE_PUBLIC]: "Visiteur" };
+  var LIBELLES_ROLE = { OFFICIER: "Officier", GARDE: "Garde", INTENDANT: "Intendant", [ROLE_PUBLIC]: "Visiteur" };
   function Header({ role, page, onPage, onLogout }) {
-    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ["codex", "Codex"], ["amendes", "Amendes"], ["prison", "Prison"]];
+    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"]] : [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"]] : [], ["codex", "Codex"], ["amendes", "Amendes"], ["prison", "Prison"]];
     return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-seal" }, /* @__PURE__ */ React.createElement("img", { src: sceau_default, alt: "" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "brand-overline" }, "Ch\xE2tellerie de"), /* @__PURE__ */ React.createElement("strong", null, "Blancherive"), /* @__PURE__ */ React.createElement("span", { className: "brand-caption" }, "Registre de la Garde"))), /* @__PURE__ */ React.createElement("div", { className: "nav-caption" }, "Le registre"), /* @__PURE__ */ React.createElement("nav", { className: "nav", "aria-label": "Navigation principale", style: { "--nav-count": pages.length } }, pages.map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, type: "button", "aria-label": label, "aria-current": page === key ? "page" : void 0, className: page === key ? "active" : "", onClick: () => {
       onPage(key);
       window.scrollTo(0, 0);
@@ -5086,6 +5529,7 @@ body {
       }).catch(logout);
     }, [token]);
     const publicSeulement = role === ROLE_PUBLIC;
+    const intendantSeulement = role === "INTENDANT";
     function logout() {
       sessionStorage.removeItem("guardAuthToken");
       setToken(null);
@@ -5097,10 +5541,10 @@ body {
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
-    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "codex" && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null) }), page === "amendes" && !publicSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
+    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "codex" && !intendantSeulement && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null) }), page === "amendes" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
-    } }), page === "prison" && !publicSeulement && /* @__PURE__ */ React.createElement(PrisonPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
+    } }), page === "prison" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PrisonPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
     } }), /* @__PURE__ */ React.createElement("footer", { className: "registry-footer" }, /* @__PURE__ */ React.createElement("span", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("a", { href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197"))));
@@ -6397,6 +6841,94 @@ ${item.infraction}`)) return;
       var _a;
       return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, corps), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims(((_a = corpsTotals.find((t) => t.semaine === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked)) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked)) }))))))));
     }));
+  }
+  function payeRecapTexte(f, currentWeek) {
+    const l = ["Garde de Blancherive \u2014 demande de budget", f.libelle];
+    if (f.corps.length) l.push(f.corps.join(" \xB7 "));
+    l.push("");
+    if (f.total <= 0) {
+      l.push("Aucune solde en attente. Rien \xE0 demander.");
+      return l.join("\n");
+    }
+    l.push(`\xC0 verser : ${formatSeptims(f.total)}, pour ${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""}.`);
+    l.push(f.semaines.length > 1 ? `Semaines ${f.semaines[0]} \xE0 ${f.semaines[f.semaines.length - 1]}, non r\xE9gl\xE9es.` : `Semaine ${f.semaines[0]}, non r\xE9gl\xE9e.`);
+    l.push("");
+    f.groupes.forEach((g) => {
+      l.push(`${g.corps} \u2014 ${formatSeptims(g.total)}`);
+      g.gardes.forEach((p) => {
+        l.push(`  ${p.nomComplet}${p.grade ? ` (${p.grade})` : ""} \u2014 ${formatSeptims(p.total)}`);
+        p.semaines.forEach((s) => l.push(`    semaine ${s.semaine} \xB7 ${s.joursPresents} j \xB7 ${formatSeptims(s.montant)}`));
+      });
+    });
+    l.push("");
+    l.push(`\xC9tabli en semaine ${currentWeek}. La semaine ${currentWeek}, encore en cours, n'est pas comprise.`);
+    return l.join("\n");
+  }
+  async function payeCopier(texte) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(texte);
+        return true;
+      }
+    } catch (e) {
+    }
+    try {
+      const champ = document.createElement("textarea");
+      champ.value = texte;
+      champ.setAttribute("readonly", "");
+      champ.style.position = "fixed";
+      champ.style.top = "-1000px";
+      champ.style.opacity = "0";
+      document.body.appendChild(champ);
+      champ.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(champ);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+  function PayePage({ token, canRegler }) {
+    const [data, setData] = useState4(null), [error, setError] = useState4(""), [regles, setRegles] = useState4([]), [busy, setBusy] = useState4(null);
+    useEffect4(() => {
+      serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
+    }, []);
+    if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement de la paye : ", error);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de la paye...");
+    async function basculer(entree, paye) {
+      if (busy !== null) return;
+      setBusy(entree.row);
+      setError("");
+      try {
+        const suite = await serverCall("reglerSemainePaye", token, entree.row, paye);
+        setData(suite);
+        setRegles((liste) => paye ? [...liste.filter((e) => e.row !== entree.row), entree] : liste.filter((e) => e.row !== entree.row));
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setBusy(null);
+      }
+    }
+    const regle = new Set(regles.map((e) => e.financeur));
+    const dus = data.financeurs.filter((f) => f.total > 0 || regle.has(f.cle));
+    const ajour = data.financeurs.filter((f) => f.total <= 0 && !regle.has(f.cle));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Paye"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce qu'il faut demander, et \xE0 qui, pour solder les semaines closes."))), !canRegler && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent marquer une semaine r\xE9gl\xE9e."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), /* @__PURE__ */ React.createElement("section", { className: "paye-resume", "aria-label": "Total \xE0 demander" }, /* @__PURE__ */ React.createElement("div", { className: "paye-resume-principal" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "Total \xE0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-montant" }, formatSeptims(data.totalADemander)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, data.totalADemander > 0 ? `${data.nbGardesDus} garde${data.nbGardesDus > 1 ? "s" : ""} en attente \xB7 ${dus.length} financeur${dus.length > 1 ? "s" : ""} \xE0 solliciter` : "Toutes les semaines closes sont r\xE9gl\xE9es.")), /* @__PURE__ */ React.createElement("div", { className: "paye-resume-secondaire" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "\xC0 pr\xE9voir \u2014 semaine ", data.currentWeek, " en cours"), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-prevision" }, formatSeptims(data.totalAPrevoir)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, "Non close : ce montant peut encore \xE9voluer d'ici dimanche. Il n'entre pas dans le total \xE0 demander."))), dus.map((f) => /* @__PURE__ */ React.createElement(PayeFinanceur, { key: f.cle, f, currentWeek: data.currentWeek, canRegler, busy, regles: regles.filter((e) => e.financeur === f.cle), onBasculer: basculer })), ajour.length > 0 && /* @__PURE__ */ React.createElement("section", { className: "paye-ajour" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-ajour-titre" }, "\xC0 jour \u2014 rien \xE0 demander"), /* @__PURE__ */ React.createElement("ul", { className: "paye-ajour-liste" }, ajour.map((f) => /* @__PURE__ */ React.createElement("li", { key: f.cle }, /* @__PURE__ */ React.createElement("strong", null, f.libelle), /* @__PURE__ */ React.createElement("span", null, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9"), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("em", null, formatSeptims(f.previsionTotal), " \xE0 pr\xE9voir pour la semaine ", data.currentWeek))))));
+  }
+  function PayeSemaine({ s, canRegler, busy, onRegler }) {
+    const Ligne = canRegler ? "label" : "div";
+    return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, "Semaine ", s.semaine), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
+  }
+  function PayeFinanceur({ f, currentWeek, canRegler, busy, regles, onBasculer }) {
+    const [ouvert, setOuvert] = useState4(true), [copie, setCopie] = useState4(""), [texteVisible, setTexteVisible] = useState4(false);
+    const texte = useMemo2(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
+    const anomalie = f.role === "inconnu" && f.total > 0;
+    const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${f.semaines[0]} \xE0 ${f.semaines[f.semaines.length - 1]}` : `semaine ${f.semaines[0]}`;
+    async function copier() {
+      const ok = await payeCopier(texte);
+      setCopie(ok ? "R\xE9capitulatif copi\xE9." : "Copie impossible ici \u2014 le texte est affich\xE9 ci-dessous.");
+      if (!ok) setTexteVisible(true);
+    }
+    return /* @__PURE__ */ React.createElement("section", { className: `paye-card${anomalie ? " paye-card-anomalie" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "paye-card-header" }, /* @__PURE__ */ React.createElement("div", { className: "paye-card-identite" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-financeur" }, f.libelle), /* @__PURE__ */ React.createElement("p", { className: "paye-corps" }, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9")), /* @__PURE__ */ React.createElement("div", { className: "paye-card-montant" }, /* @__PURE__ */ React.createElement("span", { className: "paye-montant-label" }, "\xC0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-montant" }, formatSeptims(f.total)), /* @__PURE__ */ React.createElement("span", { className: "paye-montant-meta" }, f.total > 0 ? `${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""} \xB7 ${periode}` : "Plus rien en attente"))), anomalie && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte", role: "alert" }, "\u26A0 Ces corps ne correspondent \xE0 aucun financeur connu. V\xE9rifiez leur libell\xE9 dans la feuille Pr\xE9sences avant de pr\xE9senter la demande : le montant est bien d\xFB, mais son payeur reste \xE0 \xE9tablir."), !anomalie && f.retardMax >= 3 && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte" }, "\u26A0 La plus ancienne semaine due remonte \xE0 ", f.retardMax, " semaines."), /* @__PURE__ */ React.createElement("div", { className: "paye-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-copier", onClick: copier }, "Copier le r\xE9capitulatif"), f.groupes.length > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-detail", onClick: () => setOuvert(!ouvert), "aria-expanded": ouvert }, ouvert ? "Masquer le d\xE9tail" : "Voir le d\xE9tail"), copie && /* @__PURE__ */ React.createElement("span", { className: "paye-copie", role: "status" }, copie)), texteVisible && /* @__PURE__ */ React.createElement("textarea", { className: "paye-texte", readOnly: true, rows: 10, value: texte, "aria-label": `R\xE9capitulatif pour ${f.libelle}` }), ouvert && /* @__PURE__ */ React.createElement("div", { className: "paye-detail" }, f.groupes.map((g) => /* @__PURE__ */ React.createElement("div", { className: "paye-groupe", key: g.corps }, /* @__PURE__ */ React.createElement("div", { className: "paye-groupe-titre" }, /* @__PURE__ */ React.createElement("span", null, g.corps), /* @__PURE__ */ React.createElement("span", null, formatSeptims(g.total))), g.gardes.map((p) => /* @__PURE__ */ React.createElement("div", { className: "paye-garde", key: p.cle }, /* @__PURE__ */ React.createElement("div", { className: "paye-garde-identite" }, /* @__PURE__ */ React.createElement("strong", null, p.nomComplet), /* @__PURE__ */ React.createElement("span", { className: "grade" }, p.grade)), /* @__PURE__ */ React.createElement("div", { className: "paye-garde-total" }, formatSeptims(p.total)), /* @__PURE__ */ React.createElement("ul", { className: "paye-semaines" }, p.semaines.map((s) => /* @__PURE__ */ React.createElement(PayeSemaine, { key: s.row, s, canRegler, busy, onRegler: () => onBasculer({ row: s.row, financeur: f.cle, nomComplet: p.nomComplet, semaine: s.semaine, montant: s.montant }, true) })))))))), regles.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "paye-regles" }, /* @__PURE__ */ React.createElement("span", { className: "paye-regles-titre" }, "R\xE9gl\xE9 \xE0 l'instant"), /* @__PURE__ */ React.createElement("ul", null, regles.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.row }, /* @__PURE__ */ React.createElement("span", null, e.nomComplet, " \u2014 semaine ", e.semaine, " \u2014 ", formatSeptims(e.montant)), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy !== null, onClick: () => onBasculer(e, false) }, "Annuler"))))), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("p", { className: "paye-prevision" }, "\xC0 pr\xE9voir pour la semaine ", currentWeek, ", encore en cours : ", /* @__PURE__ */ React.createElement("strong", null, formatSeptims(f.previsionTotal)), " pour ", f.previsionGardes, " garde", f.previsionGardes > 1 ? "s" : "", ". Non compris dans le montant \xE0 demander."));
   }
 
   // ui/src/main.jsx

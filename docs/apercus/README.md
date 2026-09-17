@@ -19,7 +19,16 @@ téléchargement de navigateur, et rien n’est ajouté au bundle Apps Script.
 
 Pour ajouter une page, déclarer une entrée dans la table `apercus` du script et,
 si la page a besoin de nouvelles réponses serveur, les ajouter à `reponses` et
-aux données. Un nom de fonction serveur absent du stub fait échouer l’appel avec
+aux données. Une entrée peut porter ses propres `reponses`, superposées aux
+réponses communes : c'est ainsi que l'on capture une même page sous un autre
+rôle, comme `paye-intendant`.
+
+Les lignes de présence de démonstration sont la source unique des aperçus
+Présences et Paye. Le tableau de bord et la paye en sont **calculés** — la paye
+en exécutant le vrai `getPaye` de `src/Paye.js` dans un contexte `vm` avec des
+services Apps Script factices. Un aperçu ne peut donc pas s'écarter de ce que
+renvoie le serveur, et une évolution du regroupement se voit à la capture
+suivante. Un nom de fonction serveur absent du stub fait échouer l’appel avec
 un message explicite plutôt que de laisser un écran de chargement muet.
 
 ## Captures reproductibles
@@ -34,6 +43,14 @@ Générées par le script, donc rejouables à l’identique :
 - `organigramme-grade-1440.png` : un encart de description de grade déplié.
 - `presences-1440.png`, `presences-390.png` : tableau de bord OFFICIER,
   accordéons de semaines, coût total par corps.
+- `paye-1440.png`, `paye-390.png` : demande de budget par financeur, détail par
+  corps puis par garde, cases de règlement.
+- `paye-intendant-1440.png` : la même page vue par un INTENDANT — navigation
+  réduite à deux entrées, aucune case à cocher.
+
+La table `apercus` et les données de démonstration sont communes : les captures
+Présences et Paye décrivent le même registre, donc les impayés repérés semaine
+par semaine sont exactement ceux que la Paye regroupe par financeur.
 - `prison-1440.png`, `prison-390.png` : registre et fiches mobiles.
 - `prison-formulaire-390.png` : nouvelle incarcération, saisies sur la personne.
 

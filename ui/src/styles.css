@@ -616,3 +616,52 @@
 .grade-info-button:focus-visible{outline:2px solid var(--org-gold);outline-offset:1px}
 .grade-info-panel{position:absolute;top:calc(100% + 6px);left:-8px;z-index:30;display:block;width:max-content;max-width:270px;padding:9px 11px;background:#fffdf3;border:1px solid #d9c9a4;border-left:3px solid #c59628;border-radius:4px;box-shadow:0 6px 18px #3b2a1226;font-size:11px;font-weight:400;line-height:1.55;letter-spacing:0;text-transform:none;color:#433b28;white-space:normal}
 @media(max-width:600px){.grade-info-panel{position:fixed;left:12px;right:12px;top:auto;bottom:calc(var(--mobile-nav-height, 64px) + 12px);width:auto;max-width:none;font-size:12px}}
+    /* PAYE : demande de budget par financeur.
+       Structure uniquement ; l'habillage parchemin est dans theme.css. */
+    .paye-resume{display:grid;grid-template-columns:2fr 1fr;margin-bottom:26px}
+    .paye-resume>div{padding:22px 26px}
+    .paye-resume-label,.paye-montant-label,.paye-regles-titre{display:block;text-transform:uppercase;letter-spacing:.13em;font-size:10px}
+    .paye-resume-label{margin-bottom:10px}
+    .paye-resume-montant{display:block;font-size:44px;line-height:1.05}
+    .paye-resume-prevision{display:block;font-size:26px;line-height:1.1}
+    .paye-resume-meta{display:block;margin-top:10px;font-size:12px;line-height:1.5}
+    .paye-card{margin-bottom:26px;padding:24px;border-radius:4px}
+    .paye-card-header{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:18px}
+    .paye-financeur{margin:0;font-size:24px;font-weight:400}
+    .paye-corps{margin:6px 0 0;font-size:11px}
+    .paye-card-montant{text-align:right;min-width:210px}
+    .paye-montant{display:block;margin:4px 0;font-size:38px;line-height:1.1}
+    .paye-montant-meta{display:block;font-size:12px}
+    .paye-alerte{margin:16px 0 0;padding:11px 14px;border-radius:4px;font-size:13px;line-height:1.5}
+    .paye-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}
+    .paye-actions button{min-height:44px;border-radius:4px;padding:10px 16px;font-size:13px;font-weight:600}
+    .paye-copie{font-size:12px}
+    .paye-texte{width:100%;margin-top:12px;padding:12px;border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.5;resize:vertical}
+    .paye-detail{display:grid;gap:20px;margin-top:22px}
+    .paye-groupe-titre{display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .paye-garde{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 18px;padding:14px 0;border-top:1px solid transparent}
+    .paye-garde-identite strong{font-size:15px}
+    .paye-garde-identite .grade{display:block;margin-top:2px}
+    .paye-garde-total{text-align:right;font-size:17px;white-space:nowrap}
+    .paye-semaines{grid-column:1/-1;display:grid;gap:6px;margin:8px 0 0;padding:0;list-style:none}
+    .paye-semaines label,.paye-semaine-lecture{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-height:40px;padding:6px 12px;border-radius:3px}
+    .paye-semaines label{cursor:pointer}
+    .paye-semaines input[type=checkbox]{flex:none;width:18px;height:18px}
+    .paye-semaines input:disabled{cursor:not-allowed}
+    .paye-semaine-numero{min-width:104px;font-size:13px;font-weight:600}
+    .paye-semaine-jours{min-width:44px;font-size:12px}
+    .paye-semaine-montant{margin-left:auto;font-size:14px;font-weight:600;white-space:nowrap}
+    .paye-semaine-retard{flex-basis:100%;font-size:11px}
+    .paye-regles{margin-top:20px;padding:14px 16px;border-radius:4px}
+    .paye-regles-titre{margin-bottom:8px}
+    .paye-regles ul{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+    .paye-regles li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+    .paye-regles button{min-height:36px;border-radius:3px;padding:6px 12px;font-size:12px}
+    .paye-prevision{margin:18px 0 0;padding-top:16px;border-top:1px solid transparent;font-size:13px;line-height:1.55}
+    .paye-ajour{margin-top:8px;padding:20px 24px;border-radius:4px}
+    .paye-ajour-titre{margin:0 0 14px;font-size:14px;font-weight:400;text-transform:uppercase;letter-spacing:.1em}
+    .paye-ajour-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:0;padding:0;list-style:none}
+    .paye-ajour-liste li{display:grid;gap:3px;font-size:13px}
+    .paye-ajour-liste span,.paye-ajour-liste em{font-size:12px;font-style:normal}
+    @media(max-width:900px){.paye-resume{grid-template-columns:1fr}}
+    @media(max-width:600px){.paye-card{padding:18px 16px}.paye-card-header{flex-direction:column;gap:12px}.paye-card-montant{min-width:0;text-align:left}.paye-resume>div{padding:18px 16px}.paye-resume-montant{font-size:34px}.paye-montant{font-size:30px}.paye-garde{grid-template-columns:minmax(0,1fr)}.paye-garde-total{text-align:left}.paye-semaine-numero,.paye-semaine-jours{min-width:0}.paye-ajour{padding:16px}}
