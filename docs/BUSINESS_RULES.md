@@ -114,6 +114,10 @@ puis par corps ; l'argent, lui, vient d'un financeur par corps.
   en bloc. La ligne réglée quitte la liste des impayés ; elle reste visible dans
   « Réglé à l'instant » le temps de la session, avec une annulation, afin qu'une
   erreur de ligne se rattrape sans passer par la feuille.
+- Un filtre par financeur, présenté en tags portant chacun son montant, sert
+  aussi de sommaire. Isoler un financeur recalcule le total en tête et le nomme :
+  annoncer le total de toute la garde à un seul Thane serait l'erreur exacte que
+  cette page doit empêcher.
 - Un récapitulatif en texte brut reprend l'ordre de l'écran, montant d'abord et
   justification ensuite, pour être lu ou remis au financeur.
 - GARDE n'a pas accès à cette page. INTENDANT la consulte sans pouvoir cocher.

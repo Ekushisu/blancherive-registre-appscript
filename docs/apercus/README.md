@@ -45,6 +45,8 @@ Générées par le script, donc rejouables à l’identique :
   accordéons de semaines, coût total par corps.
 - `paye-1440.png`, `paye-390.png` : demande de budget par financeur, détail par
   corps puis par garde, cases de règlement.
+- `paye-filtre-1440.png` : un seul financeur retenu — le total en tête suit le
+  filtre et porte son nom.
 - `paye-intendant-1440.png` : la même page vue par un INTENDANT — navigation
   réduite à deux entrées, aucune case à cocher.
 

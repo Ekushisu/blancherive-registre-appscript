@@ -11,6 +11,7 @@ const {useEffect,useMemo,useRef,useState}=React;
 function serverCall(name,...args){return new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(resolve).withFailureHandler(error=>reject(new Error(error?.message||String(error))))[name](...args);});}
 function normalizeSearchText(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
 function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
+function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(Number(value)||0);}
 function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n)>1?"s":""}`;}
 function findCodexArticle(articles,label){if(!articles||!label||String(label).startsWith("Motif personnalis"))return null;const exact=articles.find(a=>a.label===label);if(exact)return exact;const m=String(label).match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);if(!m)return null;return articles.find(a=>String(a.article).toLowerCase()===String(m[1]).toLowerCase()&&a.source==="Codex Judiciaire de Blancherive")||null;}
 
@@ -1853,7 +1854,7 @@ async function payeCopier(texte){
 }
 
 function PayePage({token,canRegler}){
-  const[data,setData]=useState(null),[error,setError]=useState(""),[regles,setRegles]=useState([]),[busy,setBusy]=useState(null);
+  const[data,setData]=useState(null),[error,setError]=useState(""),[regles,setRegles]=useState([]),[busy,setBusy]=useState(null),[filtre,setFiltre]=useState(null);
   useEffect(()=>{serverCall("getPaye",token).then(setData).catch(e=>setError(e.message));},[]);
   if(error&&!data)return<div className="error">Erreur de chargement de la paye : {error}</div>;
   if(!data)return<div className="loading">Chargement de la paye...</div>;
@@ -1876,28 +1877,43 @@ function PayePage({token,canRegler}){
   // tant que la session dure : sans cela le règlement ferait disparaître le
   // bouton d'annulation avec elle, juste après le clic qu'il faut rattraper.
   const regle=new Set(regles.map(e=>e.financeur));
-  const dus=data.financeurs.filter(f=>f.total>0||regle.has(f.cle));
-  const ajour=data.financeurs.filter(f=>f.total<=0&&!regle.has(f.cle));
+  const choisi=data.financeurs.find(f=>f.cle===filtre)||null;
+  const visibles=choisi?[choisi]:data.financeurs;
+  const dus=visibles.filter(f=>f.total>0||regle.has(f.cle));
+  const ajour=visibles.filter(f=>f.total<=0&&!regle.has(f.cle));
+  const aDemander=choisi?choisi.total:data.totalADemander;
+  const aPrevoir=choisi?choisi.previsionTotal:data.totalAPrevoir;
+  const gardesDus=choisi?choisi.nbGardes:data.nbGardesDus;
+
   return <>
     <div className="page-header"><div><h1 className="page-title">Paye</h1><p className="page-subtitle">Ce qu'il faut demander, et à qui, pour solder les semaines closes.</p></div></div>
     {!canRegler&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent marquer une semaine réglée.</div>}
     {error&&<div className="error" role="alert">{error}</div>}
 
+    {data.financeurs.length>1&&<div className="paye-filtres" role="group" aria-label="Filtrer par financeur">
+      <button type="button" className={`paye-filtre${filtre?"":" actif"}`} aria-pressed={!filtre} onClick={()=>setFiltre(null)}>
+        Tous<span className="paye-filtre-montant">{formatMontantCourt(data.totalADemander)}</span>
+      </button>
+      {data.financeurs.map(f=><button key={f.cle} type="button" className={`paye-filtre${filtre===f.cle?" actif":""}${f.role==="inconnu"&&f.total>0?" paye-filtre-anomalie":""}`} aria-pressed={filtre===f.cle} onClick={()=>setFiltre(filtre===f.cle?null:f.cle)}>
+        {f.libelle}<span className="paye-filtre-montant">{f.total>0?formatMontantCourt(f.total):"à jour"}</span>
+      </button>)}
+    </div>}
+
     <section className="paye-resume" aria-label="Total à demander">
       <div className="paye-resume-principal">
-        <span className="paye-resume-label">Total à demander</span>
-        <strong className="paye-resume-montant">{formatSeptims(data.totalADemander)}</strong>
-        <span className="paye-resume-meta">{data.totalADemander>0?`${data.nbGardesDus} garde${data.nbGardesDus>1?"s":""} en attente · ${dus.length} financeur${dus.length>1?"s":""} à solliciter`:"Toutes les semaines closes sont réglées."}</span>
+        <span className="paye-resume-label">Total à demander{choisi&&` — ${choisi.libelle}`}</span>
+        <strong className="paye-resume-montant">{formatSeptims(aDemander)}</strong>
+        <span className="paye-resume-meta">{aDemander>0?`${gardesDus} garde${gardesDus>1?"s":""} en attente${choisi?"":` · ${dus.length} financeur${dus.length>1?"s":""} à solliciter`}`:choisi?"Ce financeur est à jour.":"Toutes les semaines closes sont réglées."}</span>
       </div>
       <div className="paye-resume-secondaire">
         <span className="paye-resume-label">À prévoir — semaine {data.currentWeek} en cours</span>
-        <strong className="paye-resume-prevision">{formatSeptims(data.totalAPrevoir)}</strong>
+        <strong className="paye-resume-prevision">{formatSeptims(aPrevoir)}</strong>
         <span className="paye-resume-meta">Non close : ce montant peut encore évoluer d'ici dimanche. Il n'entre pas dans le total à demander.</span>
       </div>
     </section>
 
     {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.currentWeek} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
-    {ajour.length>0&&<section className="paye-ajour">
+    {ajour.length>0&&!choisi&&<section className="paye-ajour">
       <h2 className="paye-ajour-titre">À jour — rien à demander</h2>
       <ul className="paye-ajour-liste">{ajour.map(f=><li key={f.cle}><strong>{f.libelle}</strong><span>{f.corps.join(" · ")||"Aucun corps rattaché"}</span>{f.previsionTotal>0&&<em>{formatSeptims(f.previsionTotal)} à prévoir pour la semaine {data.currentWeek}</em>}</li>)}</ul>
     </section>}

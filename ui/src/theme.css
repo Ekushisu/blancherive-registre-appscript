@@ -111,3 +111,11 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 .paye-prevision strong{color:#5d4423}
 .paye-ajour{background:#f3ecdb;border:1px solid var(--line)}
 .paye-ajour-liste em{color:#7a6446}
+.paye-filtre{background:#f5ecd8;color:#635032;border:1px solid var(--line)}
+.paye-filtre:hover{background:#e8d8b6}
+.paye-filtre.actif{background:#654a2b;color:#fff1d1;border-color:#654a2b}
+.paye-filtre-montant{color:#8a7247}
+.paye-filtre.actif .paye-filtre-montant{color:#e3cfa4}
+.paye-filtre-anomalie{border-color:var(--seal);color:#7a3524}
+.paye-filtre-anomalie.actif{background:var(--seal);border-color:var(--seal);color:#fdeee8}
+.paye-filtres{scrollbar-color:#b69a65 #efe5ce}

@@ -86,6 +86,19 @@ const apercus = {
     attendre: ".paye-card",
     largeurs: [390, 1440]
   },
+  "paye-filtre": {
+    nav: "Paye",
+    attendre: ".paye-card",
+    largeurs: [1440],
+    // Un seul financeur retenu : le total en tête doit suivre le filtre, sans
+    // quoi l'officier citerait le montant de toute la garde à un seul Thane.
+    async preparer(page) {
+      await page.getByRole("button", { name: /^Thane de Rivebois/ }).first().click();
+      await page.waitForFunction(
+        () => document.querySelectorAll(".paye-card").length === 1
+      );
+    }
+  },
   "paye-intendant": {
     nav: "Paye",
     attendre: ".paye-card",

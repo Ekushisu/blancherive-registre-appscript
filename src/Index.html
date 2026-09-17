@@ -2367,6 +2367,42 @@ button {
     padding: 16px;
   }
 }
+.paye-filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.paye-filtre {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.paye-filtre-montant {
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .paye-filtres {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-left: -14px;
+    margin-right: -14px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .paye-filtre {
+    flex: none;
+  }
+}
 
 /* ui/src/theme.css */
 :root {
@@ -4889,6 +4925,37 @@ body {
 }
 .paye-ajour-liste em {
   color: #7a6446;
+}
+.paye-filtre {
+  background: #f5ecd8;
+  color: #635032;
+  border: 1px solid var(--line);
+}
+.paye-filtre:hover {
+  background: #e8d8b6;
+}
+.paye-filtre.actif {
+  background: #654a2b;
+  color: #fff1d1;
+  border-color: #654a2b;
+}
+.paye-filtre-montant {
+  color: #8a7247;
+}
+.paye-filtre.actif .paye-filtre-montant {
+  color: #e3cfa4;
+}
+.paye-filtre-anomalie {
+  border-color: var(--seal);
+  color: #7a3524;
+}
+.paye-filtre-anomalie.actif {
+  background: var(--seal);
+  border-color: var(--seal);
+  color: #fdeee8;
+}
+.paye-filtres {
+  scrollbar-color: #b69a65 #efe5ce;
 }</style>
 </head>
 <body>
@@ -5503,6 +5570,9 @@ body {
     if (Number.isInteger(n)) return `${n} h`;
     const h = Math.floor(n), m = Math.round((n - h) * 60);
     return `${h} h ${m} min`;
+  }
+  function formatMontantCourt(value) {
+    return new Intl.NumberFormat("fr-FR").format(Number(value) || 0);
   }
   function formatSeptims(value) {
     const n = Number(value) || 0;
@@ -6889,7 +6959,7 @@ ${item.infraction}`)) return;
     }
   }
   function PayePage({ token, canRegler }) {
-    const [data, setData] = useState4(null), [error, setError] = useState4(""), [regles, setRegles] = useState4([]), [busy, setBusy] = useState4(null);
+    const [data, setData] = useState4(null), [error, setError] = useState4(""), [regles, setRegles] = useState4([]), [busy, setBusy] = useState4(null), [filtre, setFiltre] = useState4(null);
     useEffect4(() => {
       serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -6910,9 +6980,14 @@ ${item.infraction}`)) return;
       }
     }
     const regle = new Set(regles.map((e) => e.financeur));
-    const dus = data.financeurs.filter((f) => f.total > 0 || regle.has(f.cle));
-    const ajour = data.financeurs.filter((f) => f.total <= 0 && !regle.has(f.cle));
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Paye"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce qu'il faut demander, et \xE0 qui, pour solder les semaines closes."))), !canRegler && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent marquer une semaine r\xE9gl\xE9e."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), /* @__PURE__ */ React.createElement("section", { className: "paye-resume", "aria-label": "Total \xE0 demander" }, /* @__PURE__ */ React.createElement("div", { className: "paye-resume-principal" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "Total \xE0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-montant" }, formatSeptims(data.totalADemander)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, data.totalADemander > 0 ? `${data.nbGardesDus} garde${data.nbGardesDus > 1 ? "s" : ""} en attente \xB7 ${dus.length} financeur${dus.length > 1 ? "s" : ""} \xE0 solliciter` : "Toutes les semaines closes sont r\xE9gl\xE9es.")), /* @__PURE__ */ React.createElement("div", { className: "paye-resume-secondaire" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "\xC0 pr\xE9voir \u2014 semaine ", data.currentWeek, " en cours"), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-prevision" }, formatSeptims(data.totalAPrevoir)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, "Non close : ce montant peut encore \xE9voluer d'ici dimanche. Il n'entre pas dans le total \xE0 demander."))), dus.map((f) => /* @__PURE__ */ React.createElement(PayeFinanceur, { key: f.cle, f, currentWeek: data.currentWeek, canRegler, busy, regles: regles.filter((e) => e.financeur === f.cle), onBasculer: basculer })), ajour.length > 0 && /* @__PURE__ */ React.createElement("section", { className: "paye-ajour" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-ajour-titre" }, "\xC0 jour \u2014 rien \xE0 demander"), /* @__PURE__ */ React.createElement("ul", { className: "paye-ajour-liste" }, ajour.map((f) => /* @__PURE__ */ React.createElement("li", { key: f.cle }, /* @__PURE__ */ React.createElement("strong", null, f.libelle), /* @__PURE__ */ React.createElement("span", null, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9"), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("em", null, formatSeptims(f.previsionTotal), " \xE0 pr\xE9voir pour la semaine ", data.currentWeek))))));
+    const choisi = data.financeurs.find((f) => f.cle === filtre) || null;
+    const visibles = choisi ? [choisi] : data.financeurs;
+    const dus = visibles.filter((f) => f.total > 0 || regle.has(f.cle));
+    const ajour = visibles.filter((f) => f.total <= 0 && !regle.has(f.cle));
+    const aDemander = choisi ? choisi.total : data.totalADemander;
+    const aPrevoir = choisi ? choisi.previsionTotal : data.totalAPrevoir;
+    const gardesDus = choisi ? choisi.nbGardes : data.nbGardesDus;
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Paye"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce qu'il faut demander, et \xE0 qui, pour solder les semaines closes."))), !canRegler && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent marquer une semaine r\xE9gl\xE9e."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), data.financeurs.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "paye-filtres", role: "group", "aria-label": "Filtrer par financeur" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: `paye-filtre${filtre ? "" : " actif"}`, "aria-pressed": !filtre, onClick: () => setFiltre(null) }, "Tous", /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, formatMontantCourt(data.totalADemander))), data.financeurs.map((f) => /* @__PURE__ */ React.createElement("button", { key: f.cle, type: "button", className: `paye-filtre${filtre === f.cle ? " actif" : ""}${f.role === "inconnu" && f.total > 0 ? " paye-filtre-anomalie" : ""}`, "aria-pressed": filtre === f.cle, onClick: () => setFiltre(filtre === f.cle ? null : f.cle) }, f.libelle, /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, f.total > 0 ? formatMontantCourt(f.total) : "\xE0 jour")))), /* @__PURE__ */ React.createElement("section", { className: "paye-resume", "aria-label": "Total \xE0 demander" }, /* @__PURE__ */ React.createElement("div", { className: "paye-resume-principal" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "Total \xE0 demander", choisi && ` \u2014 ${choisi.libelle}`), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-montant" }, formatSeptims(aDemander)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, aDemander > 0 ? `${gardesDus} garde${gardesDus > 1 ? "s" : ""} en attente${choisi ? "" : ` \xB7 ${dus.length} financeur${dus.length > 1 ? "s" : ""} \xE0 solliciter`}` : choisi ? "Ce financeur est \xE0 jour." : "Toutes les semaines closes sont r\xE9gl\xE9es.")), /* @__PURE__ */ React.createElement("div", { className: "paye-resume-secondaire" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "\xC0 pr\xE9voir \u2014 semaine ", data.currentWeek, " en cours"), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-prevision" }, formatSeptims(aPrevoir)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, "Non close : ce montant peut encore \xE9voluer d'ici dimanche. Il n'entre pas dans le total \xE0 demander."))), dus.map((f) => /* @__PURE__ */ React.createElement(PayeFinanceur, { key: f.cle, f, currentWeek: data.currentWeek, canRegler, busy, regles: regles.filter((e) => e.financeur === f.cle), onBasculer: basculer })), ajour.length > 0 && !choisi && /* @__PURE__ */ React.createElement("section", { className: "paye-ajour" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-ajour-titre" }, "\xC0 jour \u2014 rien \xE0 demander"), /* @__PURE__ */ React.createElement("ul", { className: "paye-ajour-liste" }, ajour.map((f) => /* @__PURE__ */ React.createElement("li", { key: f.cle }, /* @__PURE__ */ React.createElement("strong", null, f.libelle), /* @__PURE__ */ React.createElement("span", null, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9"), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("em", null, formatSeptims(f.previsionTotal), " \xE0 pr\xE9voir pour la semaine ", data.currentWeek))))));
   }
   function PayeSemaine({ s, canRegler, busy, onRegler }) {
     const Ligne = canRegler ? "label" : "div";
