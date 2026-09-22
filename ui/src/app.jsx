@@ -1782,9 +1782,60 @@ function PrisonForm({token,data,onSubmit,onOpenLaw}){
 }
 function Field({label,children}){return<div className="field"><label>{label}</label>{children}</div>;}
 
-function PresenceOfficerDashboard({token}){const[data,setData]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getPresenceOfficerDashboard",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du tableau de bord...</div>;return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — semaine ${data.currentWeek}`} value={formatSeptims(data.currentWeekTotal)}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,g.corps].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":`Dernière présence : ${g.dernierePresence} (${g.joursDepuis} jours)`}</div></div>)}</div></div></>}
+export const SYNTHESE_OUVERTE_KEY="blancherive.presences.synthese.v1";
+
+/*
+  La synthèse — tuiles financières et gardes à surveiller — répond à « où en est
+  la garde ? », quand le reste de la page répond à « qui était là cette
+  semaine ? ». Le travail courant d'un officier de corps étant le pointage, elle
+  est repliée par défaut : sur téléphone, elle occupait tout le premier écran
+  avant la première case à cocher.
+
+  Elle reste un panneau replié et non un onglet, pour que le nombre de gardes à
+  surveiller reste lisible en-tête fermée : cette alerte d'inactivité n'est
+  signalée nulle part ailleurs, et une navigation la ferait disparaître.
+*/
+export function lireSyntheseOuverte(brut){return brut==="1";}
+
+function chargerSyntheseOuverte(){
+  try{return lireSyntheseOuverte(localStorage.getItem(SYNTHESE_OUVERTE_KEY));}
+  catch{return false;}
+}
+
+function PresenceOfficerDashboard({token}){
+  const[data,setData]=useState(null),[error,setError]=useState("");
+  const[open,setOpen]=useState(chargerSyntheseOuverte);
+  /*
+    La synthèse se charge même repliée : le compte des gardes à surveiller est
+    justement ce que l'en-tête doit annoncer sans qu'on l'ouvre.
+  */
+  useEffect(()=>{serverCall("getPresenceOfficerDashboard",token).then(setData).catch(e=>setError(e.message));},[]);
+  function basculer(){
+    const suivant=!open;
+    setOpen(suivant);
+    // Un pli non retenu ne coûte qu'un clic à la prochaine visite : on n'alerte pas.
+    try{localStorage.setItem(SYNTHESE_OUVERTE_KEY,suivant?"1":"0");}catch{}
+  }
+  const aSurveiller=data?data.inactive.length:0;
+  return <section className="presence-synthese">
+    <button type="button" className="presence-synthese-toggle" onClick={basculer} aria-expanded={open} aria-controls="presence-synthese-corps">
+      <span>Synthèse de la garde</span>
+      <span className="presence-synthese-meta">{error?<span className="presence-synthese-alerte">Indisponible</span>:aSurveiller>0&&<span className="presence-synthese-alerte">⚠ {aSurveiller} à surveiller</span>}<span aria-hidden="true">{open?"▾":"▸"}</span></span>
+    </button>
+    {open&&<div id="presence-synthese-corps" className="presence-synthese-corps">{error?<div className="error">{error}</div>:!data?<div className="loading">Chargement du tableau de bord...</div>:<PresenceOfficerSynthese data={data}/>}</div>}
+  </section>;
+}
+
+function PresenceOfficerSynthese({data}){return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — semaine ${data.currentWeek}`} value={formatSeptims(data.currentWeekTotal)}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,g.corps].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":`Dernière présence : ${g.dernierePresence} (${g.joursDepuis} jours)`}</div></div>)}</div></div></>}
 function Stat({label,value,sub,warning,danger}){return<div className={`presence-stat-card ${warning?"presence-stat-warning":""} ${danger?"presence-stat-danger":""}`}><div className="presence-stat-label">{label}</div><div className="presence-stat-value">{value}</div>{sub&&<div className="presence-stat-sub">{sub}</div>}</div>;}
-function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.semaine))weeks.set(r.semaine,[]);weeks.get(r.semaine).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>b[0]-a[0]);const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||String(week)===weekFilter)&&rows.some(matchesPerson));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>Semaine {week}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.currentWeek} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} matchesPerson={matchesPerson} searching={searchTerms.length>0}/>)}</>}
+/*
+  Le corps d'appartenance sert d'identité de filtre : une ligne sans corps est
+  regroupée sous « Sans corps » partout, liste déroulante et sections de semaine
+  comprises, pour qu'un officier ne perde jamais un homme entre les deux vues.
+*/
+export function corpsPresence(r){return r.corps||"Sans corps";}
+
+function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[corpsFilter,setCorpsFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.semaine))weeks.set(r.semaine,[]);weeks.get(r.semaine).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>b[0]-a[0]);const corpsList=[...new Set(data.rows.map(corpsPresence))].sort((a,b)=>a.localeCompare(b,"fr"));const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const matchesCorps=r=>!corpsFilter||corpsPresence(r)===corpsFilter;const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||String(week)===weekFilter)&&rows.some(r=>matchesCorps(r)&&matchesPerson(r)));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>Semaine {week}</option>)}</select><label htmlFor="presence-corps-filter">Corps</label><select id="presence-corps-filter" value={corpsFilter} onChange={e=>setCorpsFilter(e.target.value)}><option value="">Tous les corps</option>{corpsList.map(corps=><option key={corps} value={corps}>{corps}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.currentWeek} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} matchesPerson={matchesPerson} matchesCorps={matchesCorps} searching={searchTerms.length>0||Boolean(corpsFilter)}/>)}</>}
 /*
   Une solde est impayée si elle est due et non réglée. Une solde nulle — Recrue,
   ou semaine sans présence — n'est pas un impayé : c'est déjà la distinction que
@@ -1792,25 +1843,38 @@ function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[erro
 */
 export function estImpayePresence(s){return !s.paye&&Number(s.soldeRaw)>0;}
 
-function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,searching}){
+/*
+  Le compte d'impayés d'une semaine. Il porte sur toute la semaine affichée,
+  indépendamment de la recherche en cours : il répond à « cette semaine a-t-elle
+  des impayés ? », pas à « parmi les personnes affichées ». Il reste donc lisible
+  accordéon replié. Le filtre par corps, lui, le restreint : l'officier qui n'a
+  demandé que son corps attend un compte qui parle de ses hommes.
+
+  La semaine courante en est exclue : la solde d'une semaine en cours n'est pas
+  encore due, la paye se fait le lundi pour la semaine précédente. La compter
+  ferait de chaque semaine une alerte permanente, et l'alerte cesserait d'être
+  lue. C'est la même exclusion que celle de la Paye et du tableau de bord.
+*/
+export function compteImpayesSemaine(rows,{current,matchesCorps}={}){
+  if(current)return 0;
+  const retenu=matchesCorps||(()=>true);
+  return rows.filter(r=>retenu(r)&&estImpayePresence(r)).length;
+}
+
+function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,matchesCorps,searching}){
   const groups=new Map(),current=Number(week)===Number(currentWeek),[open,setOpen]=useState(current);
   const[seulementImpayes,setSeulementImpayes]=useState(false);
   useEffect(()=>{if(searching)setOpen(true);},[searching]);
-  /*
-    Le compte porte sur toute la semaine, indépendamment de la recherche en
-    cours : il répond à « cette semaine a-t-elle des impayés ? », pas à « parmi
-    les personnes affichées ». Il reste donc lisible accordéon replié.
-  */
-  const impayes=rows.filter(estImpayePresence).length;
+  const impayes=compteImpayesSemaine(rows,{current,matchesCorps});
   useEffect(()=>{if(!impayes)setSeulementImpayes(false);},[impayes]);
-  const visible=r=>matchesPerson(r)&&(!seulementImpayes||estImpayePresence(r));
-  rows.forEach(r=>{const k=r.corps||"Sans corps";if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
+  const visible=r=>matchesCorps(r)&&matchesPerson(r)&&(!seulementImpayes||estImpayePresence(r));
+  rows.forEach(r=>{const k=corpsPresence(r);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
   return<section className={`week-section ${current?"week-current":"week-old"}`}>
     <div className="week-bar">
       <button type="button" className="week-header week-toggle" onClick={()=>setOpen(!open)} aria-expanded={open}><span>Semaine {week}{impayes>0&&<span className="week-unpaid-badge">{impayes} impayé{impayes>1?"s":""}</span>}</span><span>{current?"Semaine courante · ":""}{open?"▾":"▸"}</span></button>
       {impayes>0&&<button type="button" className={`week-unpaid-filter ${seulementImpayes?"active":""}`} aria-pressed={seulementImpayes} title={seulementImpayes?"Afficher toute la semaine":"N’afficher que les soldes impayées"} onClick={()=>{setSeulementImpayes(!seulementImpayes);setOpen(true);}}>{seulementImpayes?"Tout afficher":"Impayés"}</button>}
     </div>
-    {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">Semaine {week} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.length}.</p>}
+    {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">Semaine {week} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.filter(matchesCorps).length}.</p>}
     {open&&[...groups.entries()].filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{corps}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.semaine===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked))}/></td></tr>)}</tbody></table></div></div>)}
   </section>;
 }

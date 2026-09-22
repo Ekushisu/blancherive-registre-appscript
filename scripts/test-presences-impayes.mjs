@@ -30,8 +30,10 @@ const bundle = await build({
   loader: { '.jsx': 'jsx', '.css': 'text', '.jpg': 'text', '.png': 'text' }
 });
 vm.runInContext(bundle.outputFiles[0].text, ctx);
-const { estImpayePresence } = ctx.module.exports;
+const { estImpayePresence, compteImpayesSemaine, corpsPresence, lireSyntheseOuverte } = ctx.module.exports;
 assert.equal(typeof estImpayePresence, 'function');
+assert.equal(typeof compteImpayesSemaine, 'function');
+assert.equal(typeof corpsPresence, 'function');
 
 const solde = (soldeRaw, paye) => ({ soldeRaw, paye });
 
@@ -68,4 +70,47 @@ assert.equal(semaine.filter(estImpayePresence).length, 2);
 assert.equal([solde(400, true), solde(0, false)].filter(estImpayePresence).length, 0,
   'Sans impayé, le bouton de filtre ne doit pas être proposé');
 
-console.log('Présences : règle des soldes impayées, soldes nulles exclues, valeurs Sheets tolérées.');
+/*
+  La semaine courante n'est jamais comptée : on est payé le lundi pour la semaine
+  précédente, donc une semaine en cours est impayée par construction. La compter
+  ferait de chaque semaine une alerte permanente.
+*/
+assert.equal(compteImpayesSemaine(semaine, { current: false }), 2);
+assert.equal(compteImpayesSemaine(semaine, { current: true }), 0,
+  "La semaine courante n'est pas encore due : elle ne compte aucun impayé");
+
+/*
+  Le filtre par corps restreint le compte : un officier qui n'a demandé que son
+  corps attend un compte qui parle de ses hommes.
+*/
+const parCorps = [
+  { soldeRaw: 500, paye: false, corps: 'Garnison de Blancherive' },
+  { soldeRaw: 300, paye: false, corps: 'Éclaireurs' },
+  { soldeRaw: 200, paye: false, corps: '' }
+];
+assert.equal(compteImpayesSemaine(parCorps, { current: false }), 3);
+assert.equal(
+  compteImpayesSemaine(parCorps, { current: false, matchesCorps: r => corpsPresence(r) === 'Éclaireurs' }),
+  1);
+
+// Une ligne sans corps porte le même libellé dans la liste déroulante et dans
+// les sections de semaine : aucun homme ne se perd entre les deux vues.
+assert.equal(corpsPresence({ corps: '' }), 'Sans corps');
+assert.equal(corpsPresence({}), 'Sans corps');
+assert.equal(
+  compteImpayesSemaine(parCorps, { current: false, matchesCorps: r => corpsPresence(r) === 'Sans corps' }),
+  1);
+
+/*
+  La synthèse OFFICIER est repliée par défaut : le travail courant de la page est
+  le pointage, et sur téléphone les tuiles occupaient tout le premier écran. Seul
+  un pli explicitement enregistré la rouvre ; une mémoire locale vide, illisible
+  ou corrompue retombe donc sur « repliée ».
+*/
+assert.equal(lireSyntheseOuverte('1'), true);
+assert.equal(lireSyntheseOuverte('0'), false);
+assert.equal(lireSyntheseOuverte(null), false, 'Mémoire locale vide : synthèse repliée');
+assert.equal(lireSyntheseOuverte(''), false);
+assert.equal(lireSyntheseOuverte('true'), false, 'Une valeur inattendue ne déplie pas la synthèse');
+
+console.log('Présences : règle des soldes impayées, semaine courante exclue, filtre par corps, synthèse repliée par défaut.');

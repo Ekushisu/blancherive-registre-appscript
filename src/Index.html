@@ -700,6 +700,47 @@ button {
   font-size: 12px;
   font-weight: 700;
 }
+.presence-synthese {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+.presence-synthese-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 0;
+  background: #f5f5f5;
+  color: inherit;
+  text-align: left;
+  font-weight: 700;
+  padding: 13px 18px;
+  cursor: pointer;
+}
+.presence-synthese-toggle:hover {
+  filter: brightness(.97);
+}
+.presence-synthese-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 400;
+  font-size: 13px;
+}
+.presence-synthese-alerte {
+  color: #995b19;
+  font-weight: 700;
+}
+.presence-synthese-corps {
+  padding: 16px 18px;
+}
+.presence-synthese-corps .presence-inactive-panel {
+  margin-bottom: 0;
+}
 .week-section {
   margin-bottom: 34px;
   border-radius: 12px;
@@ -2995,6 +3036,23 @@ svg {
 }
 .presence-inactive-header {
   background: #eee2c8;
+}
+.presence-synthese {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+}
+.presence-synthese-toggle {
+  background: #e8dcc0;
+  color: #574128;
+  padding: 17px 20px;
+  min-height: 56px;
+  line-height: 1.5;
+}
+.presence-synthese-corps {
+  padding: 20px;
 }
 .codex-family {
   padding: 20px;
@@ -6855,20 +6913,45 @@ ${item.infraction}`)) return;
   function Field({ label, children }) {
     return /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, label), children);
   }
+  var SYNTHESE_OUVERTE_KEY = "blancherive.presences.synthese.v1";
+  function lireSyntheseOuverte(brut) {
+    return brut === "1";
+  }
+  function chargerSyntheseOuverte() {
+    try {
+      return lireSyntheseOuverte(localStorage.getItem(SYNTHESE_OUVERTE_KEY));
+    } catch (e) {
+      return false;
+    }
+  }
   function PresenceOfficerDashboard({ token }) {
     const [data, setData] = useState4(null), [error, setError] = useState4("");
+    const [open, setOpen] = useState4(chargerSyntheseOuverte);
     useEffect4(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
-    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
-    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du tableau de bord...");
+    function basculer() {
+      const suivant = !open;
+      setOpen(suivant);
+      try {
+        localStorage.setItem(SYNTHESE_OUVERTE_KEY, suivant ? "1" : "0");
+      } catch (e) {
+      }
+    }
+    const aSurveiller = data ? data.inactive.length : 0;
+    return /* @__PURE__ */ React.createElement("section", { className: "presence-synthese" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "presence-synthese-toggle", onClick: basculer, "aria-expanded": open, "aria-controls": "presence-synthese-corps" }, /* @__PURE__ */ React.createElement("span", null, "Synth\xE8se de la garde"), /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-meta" }, error ? /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "Indisponible") : aSurveiller > 0 && /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "\u26A0 ", aSurveiller, " \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, open ? "\u25BE" : "\u25B8"))), open && /* @__PURE__ */ React.createElement("div", { id: "presence-synthese-corps", className: "presence-synthese-corps" }, error ? /* @__PURE__ */ React.createElement("div", { className: "error" }, error) : !data ? /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du tableau de bord...") : /* @__PURE__ */ React.createElement(PresenceOfficerSynthese, { data })));
+  }
+  function PresenceOfficerSynthese({ data }) {
     return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 semaine ${data.currentWeek}`, value: formatSeptims(data.currentWeekTotal) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims(data.currentWeekPaid), sub: `Reste : ${formatSeptims(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims(data.pastUnpaidAmount), danger: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Amendes de la semaine d\xE9j\xE0 revers\xE9es", value: formatSeptims(data.currentWeekRecoveredFines), sub: "Amendes dat\xE9es du lundi au dimanche de la semaine courante." })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, g.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [g.grade, g.corps].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : `Derni\xE8re pr\xE9sence : ${g.dernierePresence} (${g.joursDepuis} jours)`))))));
   }
   function Stat({ label, value, sub, warning, danger }) {
     return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
   }
+  function corpsPresence(r) {
+    return r.corps || "Sans corps";
+  }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState4(null), [error, setError] = useState4(""), [weekFilter, setWeekFilter] = useState4(""), [search, setSearch] = useState4("");
+    const [data, setData] = useState4(null), [error, setError] = useState4(""), [weekFilter, setWeekFilter] = useState4(""), [corpsFilter, setCorpsFilter] = useState4(""), [search, setSearch] = useState4("");
     useEffect4(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -6880,34 +6963,41 @@ ${item.infraction}`)) return;
       weeks.get(r.semaine).push(r);
     });
     const weekEntries = [...weeks.entries()].sort((a, b) => b[0] - a[0]);
+    const corpsList = [...new Set(data.rows.map(corpsPresence))].sort((a, b) => a.localeCompare(b, "fr"));
     const searchTerms = normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);
     const matchesPerson = (r) => searchTerms.every((term) => normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));
-    const filteredWeeks = weekEntries.filter(([week, rows]) => (!weekFilter || String(week) === weekFilter) && rows.some(matchesPerson));
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, "Semaine ", week))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-search" }, "Rechercher une personne"), /* @__PURE__ */ React.createElement("input", { id: "presence-search", type: "search", placeholder: "Pr\xE9nom ou nom\u2026", value: search, onChange: (e) => setSearch(e.target.value) })), canEdit && /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Co\xFBt total estim\xE9 : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les pr\xE9sences enregistr\xE9es."), filteredWeeks.length === 0 && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucune pr\xE9sence ne correspond aux filtres s\xE9lectionn\xE9s."), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData, corpsTotals: data.corpsTotals || [], matchesPerson, searching: searchTerms.length > 0 })));
+    const matchesCorps = (r) => !corpsFilter || corpsPresence(r) === corpsFilter;
+    const filteredWeeks = weekEntries.filter(([week, rows]) => (!weekFilter || String(week) === weekFilter) && rows.some((r) => matchesCorps(r) && matchesPerson(r)));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, "Semaine ", week))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-corps-filter" }, "Corps"), /* @__PURE__ */ React.createElement("select", { id: "presence-corps-filter", value: corpsFilter, onChange: (e) => setCorpsFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les corps"), corpsList.map((corps) => /* @__PURE__ */ React.createElement("option", { key: corps, value: corps }, corps))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-search" }, "Rechercher une personne"), /* @__PURE__ */ React.createElement("input", { id: "presence-search", type: "search", placeholder: "Pr\xE9nom ou nom\u2026", value: search, onChange: (e) => setSearch(e.target.value) })), canEdit && /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Co\xFBt total estim\xE9 : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les pr\xE9sences enregistr\xE9es."), filteredWeeks.length === 0 && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucune pr\xE9sence ne correspond aux filtres s\xE9lectionn\xE9s."), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.currentWeek, canEdit, token, onRefresh: setData, corpsTotals: data.corpsTotals || [], matchesPerson, matchesCorps, searching: searchTerms.length > 0 || Boolean(corpsFilter) })));
   }
   function estImpayePresence(s) {
     return !s.paye && Number(s.soldeRaw) > 0;
   }
-  function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, searching }) {
+  function compteImpayesSemaine(rows, { current, matchesCorps } = {}) {
+    if (current) return 0;
+    const retenu = matchesCorps || (() => true);
+    return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
+  }
+  function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, matchesCorps, searching }) {
     const groups = /* @__PURE__ */ new Map(), current = Number(week) === Number(currentWeek), [open, setOpen] = useState4(current);
     const [seulementImpayes, setSeulementImpayes] = useState4(false);
     useEffect4(() => {
       if (searching) setOpen(true);
     }, [searching]);
-    const impayes = rows.filter(estImpayePresence).length;
+    const impayes = compteImpayesSemaine(rows, { current, matchesCorps });
     useEffect4(() => {
       if (!impayes) setSeulementImpayes(false);
     }, [impayes]);
-    const visible = (r) => matchesPerson(r) && (!seulementImpayes || estImpayePresence(r));
+    const visible = (r) => matchesCorps(r) && matchesPerson(r) && (!seulementImpayes || estImpayePresence(r));
     rows.forEach((r) => {
-      const k = r.corps || "Sans corps";
+      const k = corpsPresence(r);
       if (!groups.has(k)) groups.set(k, []);
       groups.get(k).push(r);
     });
     return /* @__PURE__ */ React.createElement("section", { className: `week-section ${current ? "week-current" : "week-old"}` }, /* @__PURE__ */ React.createElement("div", { className: "week-bar" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "week-header week-toggle", onClick: () => setOpen(!open), "aria-expanded": open }, /* @__PURE__ */ React.createElement("span", null, "Semaine ", week, impayes > 0 && /* @__PURE__ */ React.createElement("span", { className: "week-unpaid-badge" }, impayes, " impay\xE9", impayes > 1 ? "s" : "")), /* @__PURE__ */ React.createElement("span", null, current ? "Semaine courante \xB7 " : "", open ? "\u25BE" : "\u25B8")), impayes > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: `week-unpaid-filter ${seulementImpayes ? "active" : ""}`, "aria-pressed": seulementImpayes, title: seulementImpayes ? "Afficher toute la semaine" : "N\u2019afficher que les soldes impay\xE9es", onClick: () => {
       setSeulementImpayes(!seulementImpayes);
       setOpen(true);
-    } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, "Semaine ", week, " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.length, "."), open && [...groups.entries()].filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
+    } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, "Semaine ", week, " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.filter(matchesCorps).length, "."), open && [...groups.entries()].filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
       var _a;
       return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, corps), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims(((_a = corpsTotals.find((t) => t.semaine === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked)) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked)) }))))))));
     }));

@@ -1,5 +1,44 @@
 # Journal de passation IA
 
+## 2026-09-17 — Présences : filtre par corps, synthèse repliable, semaine courante hors impayés
+
+- Nouveau filtre **Corps** dans la barre de filtres des Présences, à côté du
+  filtre de semaine et de la recherche par personne. Il répond au besoin de
+  l'officier de corps, qui vient pointer ses seuls hommes dans une liste
+  hebdomadaire devenue très longue : les autres corps sont masqués dans chaque
+  semaine affichée, et les semaines sans aucune ligne du corps retenu
+  disparaissent. Comme la recherche, il ouvre les accordéons.
+- Les lignes sans corps sont regroupées sous « Sans corps » dans la liste
+  déroulante comme dans les sections de semaine : `corpsPresence` est désormais
+  la seule définition de ce libellé, afin qu'aucun garde ne se perde entre les
+  deux vues.
+- Le compte d'impayés d'une semaine suit le filtre par corps : le badge parle du
+  corps demandé, pas de toute la garde. Il reste indépendant de la recherche par
+  personne, pour rester lisible accordéon replié.
+- La **semaine courante n'affiche plus d'impayés** — ni badge ni bouton de
+  filtre. On est payé le lundi pour la semaine précédente : une semaine en cours
+  est impayée par construction, et la signaler faisait de chaque semaine une
+  alerte permanente. Le tableau de bord OFFICIER (`pastUnpaid*`) et la page Paye
+  appliquaient déjà cette exclusion ; le registre s'aligne sur elles.
+- Le compte est extrait dans `compteImpayesSemaine(rows, {current, matchesCorps})`,
+  exporté et testé, plutôt que calculé dans le rendu de `WeekSection`.
+- La partie OFFICIER — cinq tuiles financières et « Gardes à surveiller » —
+  devient un panneau **« Synthèse de la garde »** replié par défaut. Sur
+  téléphone, elle occupait tout le premier écran avant la première case à
+  cocher ; la page passe de 6 586 à 4 946 pixels de haut à 390 px de large.
+  Panneau et non onglet à dessein : l'en-tête reste visible et porte « ⚠ N à
+  surveiller », la seule alerte d'inactivité de l'application, qu'une navigation
+  aurait masquée. Le pli est mémorisé dans `localStorage`
+  (`blancherive.presences.synthese.v1`) ; toute valeur autre que `"1"`, mémoire
+  refusée comprise, laisse le panneau replié. La synthèse est chargée même
+  repliée, puisque l'en-tête doit annoncer le compte.
+- Nouvel aperçu `presences-synthese-1440`, panneau déroulé, pour que la
+  documentation continue de montrer les tuiles et les gardes à surveiller.
+- Vérifications : `node scripts/test-presences-impayes.mjs`, étendu à l'exclusion
+  de la semaine courante, au filtre par corps et au pli par défaut de la
+  synthèse ; les suites Présences/Paye/UI existantes ; `npm run build` et les
+  aperçus Présences. Aucun push ni déploiement.
+
 ## 2026-09-17 — Page Paye et rôle INTENDANT
 
 - Nouvelle page **Paye**, qui répond à la question du jour de paye : combien

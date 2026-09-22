@@ -70,6 +70,17 @@ const apercus = {
     attendre: ".presence-table",
     largeurs: [390, 1440]
   },
+  "presences-synthese": {
+    nav: "Présences",
+    attendre: ".presence-table",
+    largeurs: [1440],
+    // La synthèse OFFICIER est repliée par défaut : on la déroule, sans quoi
+    // aucun aperçu ne montrerait plus les tuiles ni les gardes à surveiller.
+    async preparer(page) {
+      await page.locator(".presence-synthese-toggle").click();
+      await page.waitForSelector(".presence-inactive-panel");
+    }
+  },
   "presences-impayes": {
     nav: "Présences",
     attendre: ".presence-table",

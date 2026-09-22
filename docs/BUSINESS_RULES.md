@@ -58,6 +58,9 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - OFFICIER : modification des jours et du paiement.
 - INTENDANT : aucun accès à cette page ; il ne voit que la synthèse de la Paye.
 - Les coûts estimés par corps et semaine sont affichés uniquement aux OFFICIER ; ils incluent toutes les soldes du corps, déjà payées ou non, indépendamment de la recherche.
+- La synthèse OFFICIER — tuiles financières et gardes à surveiller — est un panneau replié par défaut, en tête de page. Le travail courant de la page est le pointage ; la synthèse répond à une autre question et n'a pas à occuper le premier écran. Elle reste un panneau et non un onglet parce que son en-tête, toujours visible, annonce le nombre de gardes à surveiller : cette alerte d'inactivité n'est signalée nulle part ailleurs, et une navigation la ferait disparaître. Le pli choisi est mémorisé dans le navigateur ; à défaut, la synthèse est repliée.
+- La liste se filtre par semaine, par corps et par personne. Le filtre par corps existe pour l'officier de corps, qui vient pointer ses seuls hommes dans une liste hebdomadaire devenue longue : il masque les autres corps dans chaque semaine affichée et restreint le compte d'impayés de la semaine, afin que le badge parle bien du corps demandé. Une ligne sans corps est regroupée sous « Sans corps », dans la liste déroulante comme dans les sections de semaine, pour qu'aucun garde ne disparaisse entre les deux vues.
+- La semaine courante n'a jamais d'impayés : la solde se règle le lundi pour la semaine précédente, une semaine en cours est donc impayée par construction. Son badge et son filtre « Impayés » ne s'affichent pas. Le tableau de bord OFFICIER et la Paye appliquent déjà la même exclusion ; les trois doivent rester d'accord, sans quoi une alerte permanente cesserait d'être lue.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
 - Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
 - Les décrets de la châtellerie sont promulgués et abrogés par dépôt et retrait d'un Google Doc dans le dossier Drive déclaré par `SYNC_CODEX_FOLDERS`. Le dossier fait autorité : la synchronisation suivante reflète son contenu exact. Un décret retiré cesse d'apparaître au Codex et d'être proposé dans les formulaires ; les amendes et incarcérations déjà enregistrées sous ce décret restent inchangées.
@@ -106,7 +109,8 @@ puis par corps ; l'argent, lui, vient d'un financeur par corps.
   semaine due est antérieure au renommage en `Cadet`. Le Hird du Jarl reste
   exclu, comme des Présences.
 - La définition de l'impayé est la même que celle du registre des Présences,
-  `estImpayePresence` : solde due et non réglée. Les deux pages doivent rester
+  `estImpayePresence` : solde due et non réglée, semaine courante exclue. Les
+  deux pages doivent rester
   d'accord, sans quoi un badge de semaine et une demande de budget se
   contrediraient.
 - Le règlement se fait une semaine et un garde à la fois : cocher une semaine

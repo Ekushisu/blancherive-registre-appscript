@@ -2,6 +2,40 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Présences : filtre par corps, synthèse repliable, semaine courante hors impayés (17 septembre 2026)
+
+- La liste hebdomadaire des Présences était devenue très longue à parcourir. Un
+  filtre **Corps** a été ajouté dans la barre de filtres, entre le filtre de
+  semaine et la recherche par personne, pour que l'officier de corps ne pointe
+  que ses hommes : les autres corps sont masqués dans chaque semaine affichée,
+  les semaines sans ligne du corps retenu disparaissent, et les accordéons
+  s'ouvrent comme lors d'une recherche.
+- Les lignes sans corps sont regroupées sous « Sans corps » dans la liste
+  déroulante comme dans les sections de semaine, par `corpsPresence`.
+- Le compte d'impayés d'une semaine suit le filtre par corps — le badge parle du
+  corps demandé — et reste indépendant de la recherche par personne.
+- La semaine courante n'affiche plus ni badge d'impayés ni bouton « Impayés » :
+  la paye se fait le lundi pour la semaine précédente, donc une semaine en cours
+  est impayée par construction. Le tableau de bord OFFICIER et la page Paye
+  excluaient déjà la semaine courante ; le registre s'aligne sur elles.
+- Le compte vit dans `compteImpayesSemaine(rows, {current, matchesCorps})`,
+  exporté depuis `ui/src/app.jsx` et couvert par
+  `scripts/test-presences-impayes.mjs`.
+- La partie OFFICIER — tuiles financières et « Gardes à surveiller » — est
+  regroupée dans un panneau « Synthèse de la garde » replié par défaut, pour la
+  même raison : sur téléphone, elle occupait tout le premier écran avant la
+  première case à cocher (page de 6 586 à 4 946 px de haut à 390 px de large).
+  Un panneau plutôt qu'un onglet, afin que l'en-tête garde « ⚠ N à surveiller »
+  sous les yeux — c'est la seule alerte d'inactivité de l'application. Le pli est
+  mémorisé sous `blancherive.presences.synthese.v1` ; toute autre valeur que
+  `"1"`, mémoire locale refusée comprise, laisse le panneau replié. La synthèse
+  se charge même repliée, l'en-tête devant annoncer le compte.
+- Aperçu `presences-synthese-1440` : le panneau déroulé, pour que la
+  documentation montre encore les tuiles et les gardes à surveiller.
+- Vérifications : `node scripts/test-presences-impayes.mjs`, les suites
+  Présences / Paye / UI existantes, `npm run build` et les aperçus Présences.
+  Aucun push ni déploiement.
+
 ### Page Paye et rôle INTENDANT (17 septembre 2026)
 
 - Les impayés étaient jusqu'ici réduits à deux nombres du tableau de bord
@@ -57,9 +91,10 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 
 ### Repérage des soldes impayées par semaine (15 septembre 2026)
 
-- Chaque accordéon de semaine, courante comme passée, porte un badge « N impayés »
-  dans son en-tête. Il reste lisible accordéon replié, ce qui est l'intérêt :
-  repérer une semaine ancienne encore en souffrance sans l'ouvrir.
+- Chaque accordéon de semaine porte un badge « N impayés » dans son en-tête. Il
+  reste lisible accordéon replié, ce qui est l'intérêt : repérer une semaine
+  ancienne encore en souffrance sans l'ouvrir. *(Depuis le 17 septembre 2026, la
+  semaine courante en est exclue — voir la section du 17 septembre.)*
 - Un bouton « Impayés » filtre la semaine sur les seules soldes dues et non
   réglées, et ouvre l'accordéon. Il n'apparaît pas quand la semaine n'a aucun
   impayé, et se retire tout seul si le dernier impayé est réglé.
@@ -299,7 +334,7 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 ### Présences
 
 - Le Hird du Jarl est exclu du tableau, des calculs de solde et des alertes d'inactivité, sans suppression des lignes historiques.
-- Les semaines sont affichées en accordéons ; seule la semaine courante est ouverte par défaut et un filtre permet de sélectionner une semaine.
+- Les semaines sont affichées en accordéons ; seule la semaine courante est ouverte par défaut et trois filtres — semaine, corps, personne — restreignent la liste.
 
 ### Effectifs
 
