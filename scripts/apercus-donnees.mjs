@@ -233,6 +233,22 @@ const infractions = [
   }
 ];
 
+// Catalogue préchargé par les pages Prison et Inventaire, même forme que
+// `getCatalogueObjets` : tableau compact [id, nom, type].
+export const catalogueObjets = {
+  version: "demo",
+  total: 6,
+  alias: { "skyrim.esm|00000f": "or septim septims", "skyrim.esm|00000a": "crochet crochets", "skyrim.esm|01d4ec": "torche torches" },
+  objets: [
+    ["skyrim.esm|00000F", "Or", "Objet divers"],
+    ["skyrim.esm|00000A", "Crochet", "Objet divers"],
+    ["skyrim.esm|01D4EC", "Torche", "Objet divers"],
+    ["skyrim.esm|013989", "Épée d'acier", "Arme"],
+    ["skyrim.esm|012EB6", "Cuirasse d'acier", "Armure"],
+    ["skyrim.esm|013938", "Bouclier de fer", "Armure"]
+  ]
+};
+
 export const prisonForm = {
   gardes: [
     "Brynjar Poing-de-Fer",
@@ -493,6 +509,36 @@ export const effectifs = {
     membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "Hird du Jarl"),
     membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true })
   ]
+};
+
+// Inventaire des coffres : même forme que `getInventaire` de `src/Inventaire.js`.
+// Les identifiants de coffre sont techniques ; l'interface n'affiche que les noms.
+const coffresDemo = [
+  { id: "coffre-armurerie", nom: "Coffre de l’armurerie", position: "Fort-Dragon, salle des gardes, mur nord", description: "Armes et armures de service. Clef chez le Capitaine." },
+  { id: "coffre-intendance", nom: "Réserve de l’intendance", position: "Fort-Dragon, cellier", description: "Torches, vivres et fournitures du quotidien." },
+  { id: "coffre-greffe", nom: "Coffre du greffe", position: "Fort-Dragon, bureau du Commander", description: "Objets saisis en attente de restitution ou de vente." }
+];
+const objetsDemo = [
+  ["coffre-armurerie", "skyrim.esm|013989", "Épée d'acier", 6],
+  ["coffre-armurerie", "skyrim.esm|012EB6", "Cuirasse d'acier", 3],
+  ["coffre-armurerie", "skyrim.esm|013938", "Bouclier de fer", 8],
+  ["coffre-intendance", "skyrim.esm|01D4EC", "Torche", 40],
+  ["coffre-intendance", "skyrim.esm|00000F", "Or", 1250],
+  ["coffre-intendance", "", "Pain d’épeautre", 24],
+  ["coffre-greffe", "skyrim.esm|00000A", "Crochet", 15],
+  ["coffre-greffe", "", "Amulette de Talos (saisie)", 1]
+];
+export const inventaire = {
+  coffres: coffresDemo.map(c => {
+    const lignes = objetsDemo.filter(o => o[0] === c.id);
+    return { ...c, nbObjets: lignes.length, total: lignes.reduce((somme, o) => somme + o[3], 0) };
+  }),
+  objets: objetsDemo.map(([coffreId, id, nom, quantite]) => ({
+    cle: id ? `catalogue:${id.toLowerCase()}` : `libre:${nom.toLowerCase()}`,
+    coffreId,
+    coffreNom: coffresDemo.find(c => c.id === coffreId).nom,
+    id, nom, libre: !id, quantite
+  }))
 };
 
 export const sessionInfo = { role: "OFFICIER" };

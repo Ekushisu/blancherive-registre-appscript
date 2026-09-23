@@ -1,3 +1,5 @@
+import { rechercherObjetsLocal } from './catalogue.js';
+
 const { useEffect, useRef, useState } = React;
 
 const objetsCourants = [
@@ -29,7 +31,11 @@ export function ajouterObjetSaisi(items, objet, quantite) {
     : [...items, { ...entree, quantite }];
 }
 
-export function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall }) {
+// `titre`, `masquerListe` et `aideLibre` servent à l'Inventaire, qui réutilise la
+// recherche et la quantité mais enregistre chaque ajout aussitôt, sans liste locale.
+// `catalogue` : catalogue préchargé par la page (`useCatalogue`). Présent, la
+// recherche est locale et immédiate ; absent, on interroge le serveur comme avant.
+export function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall, catalogue = null, titre = 'Saisies sur la personne', masquerListe = false, aideLibre = 'Le nom saisi sera conservé avec cette incarcération, sans ajout au catalogue.' }) {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(null);
   const [quantity, setQuantity] = useState('1');
@@ -48,6 +54,13 @@ export function SaisiesField({ token, value, onChange, onPendingChange, disabled
     const current = ++version.current;
     setResults([]); setActive(-1); setTruncated(false);
     if (disabled || free || selected || query.trim().length < 3) { setStatus(''); return; }
+    if (catalogue) {
+      try {
+        const response = rechercherObjetsLocal(catalogue, query.trim());
+        setResults(response.objets); setTruncated(response.tronque); setStatus('termine');
+      } catch (e) { setError(e.message || 'La recherche a échoué.'); setStatus('erreur'); }
+      return;
+    }
     setStatus('attente');
     const timer = setTimeout(async () => {
       setStatus('chargement');
@@ -61,7 +74,7 @@ export function SaisiesField({ token, value, onChange, onPendingChange, disabled
       }
     }, 300);
     return () => { clearTimeout(timer); version.current++; };
-  }, [query, selected, token, disabled, free, serverCall]);
+  }, [query, selected, token, disabled, free, serverCall, catalogue]);
 
   function edit(text) {
     version.current++;
@@ -106,7 +119,7 @@ export function SaisiesField({ token, value, onChange, onPendingChange, disabled
   useEffect(() => { if (selected) quantityInput.current?.focus(); }, [selected]);
 
   return <div className="field field-full saisies-field">
-    <h3>Saisies sur la personne</h3>
+    <h3>{titre}</h3>
     <div className="saisie-shortcuts" aria-label="Objets courants">
       {objetsCourants.map(objet => <button key={objet.id} type="button" className="secondary-button"
         disabled={disabled} onClick={() => choose(objet)}>{objet.label}</button>)}
@@ -146,13 +159,14 @@ export function SaisiesField({ token, value, onChange, onPendingChange, disabled
       {query && <button type="button" className="secondary-button" disabled={disabled} onClick={clear}>Effacer</button>}
     </div>
     <p id="saisie-aide" className="saisie-help" role="status">
-      {free ? 'Le nom saisi sera conservé avec cette incarcération, sans ajout au catalogue.' : selected ? `${selected.nom} sélectionné · ${selected.id}` :
+      {free ? aideLibre : selected ? `${selected.nom} sélectionné · ${selected.id}` :
         status === 'chargement' || status === 'attente' ? 'Recherche…' :
         status === 'termine' ? (results.length ? `${results.length} suggestion${results.length > 1 ? 's' : ''}${truncated ? ' — précisez la recherche pour en voir d’autres.' : '.'}` : 'Aucun objet trouvé. Essayez un autre nom ou son ID.') :
+        catalogue ? `Catalogue en mémoire (${catalogue.total.toLocaleString('fr-FR')} objets) — saisissez au moins 3 caractères.` :
         'Saisissez au moins 3 caractères, puis sélectionnez un objet.'}
     </p>
     {error && <div className="error" role="alert">{error}</div>}
-    {value.length ? <ul className="saisies-list">{value.map(item => <li key={cleObjetSaisi(item)}>
+    {masquerListe ? null : value.length ? <ul className="saisies-list">{value.map(item => <li key={cleObjetSaisi(item)}>
       <div><strong>{item.nom}</strong> × {item.quantite.toLocaleString('fr-FR')}<small>{item.libre ? 'Saisie libre' : item.id}</small></div>
       <button type="button" className="danger-button" disabled={disabled} aria-label={`Retirer ${item.nom}`}
         onClick={() => onChange(value.filter(other => cleObjetSaisi(other) !== cleObjetSaisi(item)))}>Retirer</button>

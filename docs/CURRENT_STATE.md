@@ -2,6 +2,65 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Inventaire des coffres et décrets impériaux (22 septembre 2026)
+
+- Nouvelle page **Inventaire** : ce que contiennent les coffres de la garde à
+  Fort-Dragon. OFFICIER consulte et écrit ; INTENDANT consulte seulement ; GARDE
+  ne voit pas la page, ni en lecture ni en écriture. La navigation, le routage
+  de `App` et chaque fonction serveur portent la restriction.
+- Deux feuilles créées à la première consultation, avec leurs en-têtes :
+  `Coffres` (ID coffre, Nom, Position, Description) et `Inventaire` (ID coffre,
+  ID objet, Nom, Quantité). Une feuille existante n'est jamais réécrite ; des
+  en-têtes différents arrêtent la page.
+- Un objet n'apparaît qu'une fois par coffre. `ajusterInventaire` cumule ou
+  retire ; à zéro la ligne disparaît ; on ne descend jamais sous zéro. Le bloc
+  `Inventaire!A:D` est relu et réécrit en entier sous verrou de script, valeurs
+  restaurées en cas d'échec d'écriture.
+- Les objets viennent du catalogue `Objets` par la même recherche que les
+  saisies de la Prison ; `SaisiesField` reçoit trois props facultatives
+  (`titre`, `masquerListe`, `aideLibre`) et reste inchangé pour la Prison.
+  Le nom est figé à l'entrée en stock ; un objet déjà en stock réutilise son
+  instantané sans relire le catalogue.
+- Les coffres se créent et se modifient depuis la page (nom unique, position
+  dans le monde, description). Un objet se déplace d'un coffre à l'autre par la
+  liste déroulante de sa ligne, la pile entière, avec fusion à destination. Les
+  lignes dont le coffre a disparu de la feuille restent visibles sous « Coffre
+  inconnu » et peuvent être rattachées à un coffre réel.
+- **Cache local du catalogue des objets.** Les pages Prison et Inventaire
+  (officier) préchargent le catalogue complet à l'ouverture par
+  `getCatalogueObjets` — 10 131 fiches, 654 Ko en tableau compact — et le
+  gardent dans `localStorage` (`blancherive.catalogue-objets.v1`) avec une
+  empreinte de version ; le serveur ne renvoie les fiches que si elle a changé.
+  L'autocomplétion de `SaisiesField` cherche en mémoire dès que le catalogue est
+  disponible (`ui/src/catalogue.js`), sinon au serveur comme avant. La recherche
+  locale reproduit `rechercherObjets` ; `scripts/test-catalogue-local.mjs`
+  compare les deux sur dix-huit requêtes.
+- **Rangement groupé.** Le formulaire « Ranger un objet » devient une liste
+  d'attente : les objets s'ajoutent hors ligne, avec fusion des doublons et
+  plafond de cent, puis « Ranger » envoie la liste entière par
+  `rangerInventaire` en une requête et une écriture. `ajusterInventaire` et
+  `rangerInventaire` partagent `appliquerAjustementsInventaire_`.
+- **Boutons + / − cumulés.** Les clics d'une ligne d'inventaire sont cumulés et
+  envoyés en une requête après 600 ms sans clic (`SEUIL_AJUSTEMENT_MS`). La
+  quantité visée s'affiche tout de suite, grisée jusqu'à confirmation ; une
+  ligne en attente ne peut être ni déplacée ni retirée.
+- Codex : le décret sur les équipements dwemers pointe désormais sur sa
+  réécriture « Régulation des équipements stratégiques Dwemer »
+  (`1g9mqqedq0iUnzTN7CedVPvyNXLS4L2SiC_fvhbZQstQ`), fournie par le
+  propriétaire comme lien à jour ; l'ancien texte du Gouverneur
+  (`17Y36stT6…`) quitte le registre et reste en copie locale. Nouveau décret
+  « Régulation des recherches archéologiques, artefacts et archives »
+  (`1Fh_wqNvwbcpyYGCWYwq6hBOw8jdc8mKLBtkYszPnUno`). Le décret Orsimer fourni en
+  même temps était déjà référencé sous le même identifiant : rien à changer.
+  Aucun de ces textes ne porte de sanction chiffrée ; les formulaires Amendes et
+  Prison ne bougent pas. `synchroniserCodex()` reste à lancer pour que le cache
+  `SyncCodex` reflète les nouveaux textes.
+- Vérifications locales : `node scripts/test-inventaire.mjs` et
+  `node scripts/test-catalogue-local.mjs` (nouveaux), `test-saisies-ui`, `test-acces-public`, `test-prison-objets`,
+  `test-sync-codex` et les autres suites ; `npm run build` ; aperçus
+  `inventaire-1440`, `inventaire-390`, `inventaire-intendant-1440`. Aucun push
+  ni déploiement.
+
 ### Présences : filtre par corps, synthèse repliable, semaine courante hors impayés (17 septembre 2026)
 
 - La liste hebdomadaire des Présences était devenue très longue à parcourir. Un
@@ -181,7 +240,9 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
 - Douze décrets ajoutés sous la famille « Décrets impériaux » : fiscalité,
   imposition, banques, Avocatus, administrateurs, successions, chevalerie,
   ordres militaires religieux, équipements orsimer et dwemers, armes éthérées,
-  restitution des biens de l'Empire.
+  restitution des biens de l'Empire. (Le décret dwemer a changé d'identifiant et
+  un treizième décret, sur les recherches archéologiques, s'est ajouté le
+  22 septembre 2026 — voir plus haut.)
 - Les listes d'infractions d'Amendes et Prison restent issues du seul Codex
   Judiciaire : le filtre existait déjà dans `ecrireCachesTechniquesCodex_()`.
   Les décrets sont consultables sans encombrer les formulaires.

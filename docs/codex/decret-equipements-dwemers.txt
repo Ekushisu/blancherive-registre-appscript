@@ -1,17 +1,14 @@
-﻿DÉCRET IMPÉRIAL RELATIF AUX ÉQUIPEMENTS DWEMERS
-________________
+﻿DÉCRET  
+Régulation des équipements stratégiques Dwemer
 
 
- PRÉAMBULE
-Par l’autorité du Gouverneur impérial de Bordeciel, Maximus Tyrellius, 
-Sur avis de la Chancellerie impérial et garant de la légalité provinciale, 
-Le présent décret s’inscrit dans la volonté de rétablir pleinement le droit impérial hérité de la Troisième Ère, relatif à la propriété des artefacts dwemers. Au cours de la Troisième Ère, une charte impériale a établi que l’ensemble des artefacts dwemers présents sur le territoire de l’Empire de Tamriel incluant notamment armes, armures et dispositifs mécaniques relèvent de la propriété exclusive de l’Empereur. En vertu de cette charte, leur extraction, leur détention et leur commerce étaient strictement encadrés et soumis à autorisation. Toute exploitation légale nécessitait l’octroi d’une charte de commerce impériale, notamment dans les provinces historiquement liées à l’héritage dwemer, telles que Morrowind. Or, les troubles survenus en Bordeciel au cours des dernières décennies ont conduit à un relâchement de ce cadre juridique, favorisant la prolifération incontrôlée d’équipements dwemers. Il est, dès lors, nécessaire de réaffirmer la propriété impériale sur ces artefacts et de restaurer un régime strict de contrôle. À ce titre, et en sa qualité de délégataire économique de l’Empire, la Compagnie Orientale se voit reconnaître une compétence exclusive en matière d’exploitation, de commerce et de régulation des équipements dwemers en Bordeciel. 
-Elle est seule habilitée à :
--organiser leur extraction,
--en autoriser le commerce,
--délivrer les licences nécessaires à leur port et à leur détention. 
-________________
+   
+        PRÉAMBULE
 
+
+Considérant que les terres de Markarth et de la Crevasse constituent le cœur historique et culturel des peuples de culture crevassaise et dwemeri, et qu’elles recèlent de nombreux vestiges, ouvrages et équipements issus de la civilisation dwemeri.
+Considérant que les équipements dwemer constituent un patrimoine d’une valeur historique, culturelle et technologique exceptionnelle. Considérant que l’utilisation, l’extraction, la modification, la détention ou la mise en circulation de tels équipements peut présenter des risques pour la sécurité des populations, des territoires et de l’autorité impériale.
+Considérant enfin que la protection de ces équipements et des connaissances permettant leur fonctionnement relève tant de la préservation du patrimoine que de la sécurité des territoires relevant de l’autorité impériale.
 
 
 
@@ -20,50 +17,81 @@ ________________
 
 
 
+          
+Article 1 — De la reconnaissance de Markarth et de la Crevasse
+L’Empire reconnaît la Châtellerie de la Crevasse, dont le siège est établi à Markarth, comme l’institution provinciale compétente en matière de fabrication de l’armement Dwemer sur l’ensemble du territoire de Bordeciel. 
+À ce titre, la Châtellerie de la Crevasse dispose d’une compétence particulière sur les armes et les armures dwemers, de  leur identification, leur et de leur fabrication prévues par le présent traité. Elle demeure également gardienne de l’héritage culturel, technique et du savoir-faire dwemeri de Bordeciel. 
+La Compagnie de l’Empire Orientale est reconnue comme l’intermédiaire commercial chargé, dans les conditions fixées par le présent traité, de la réception, de la gestion et de la revente des équipements dwemers saisis ou remis à l’autorité impériale, ainsi que de l’importation des lingots de métal dwemer destinés à être travaillés et commercialisés à Markarth. 
+
+
+Article 2 — Relatif à la fabrication et au commerce des équipements Dwemers
+Le présent décret établit une distinction entre les armures Dwemers et les armes Dwemers.
+Sont considérés comme équipements Dwemer au sens du présent décret les équipements dont la conception, la fabrication ou les caractéristiques 
+
+
+sont traditionnellement ou manifestement rattachées aux traditions et à l'artisanat Dwemer.
+Sont notamment concernés :
+* Les plastrons ;
+* Les casques ;
+* Les jambières ;
+* Les gantelets ;
+* Les boucliers ;
+* Les glaives ;
+* Les haches de guerre ;
+* Les marteaux de guerre ;
+* Les flèches ;
+* Les arbalètes
+* Tout équipement reconnu comme étant de facture Dwemer par l'administration compétente.
+L’autorité impériale provinciale est désignée comme l’administration compétente pour l’encadrement, la surveillance et la réglementation du commerce, de la vente, de l’achat, de la détention et de la fabrication des équipements Dwemer.
+À ce titre, la Compagnie de l’Empire Orientale est habilitée à reconnaître la qualité d’équipement Dwemer d’un objet à en établir la classification et à tenir un registre des équipements ainsi identifiés. 
 
 
 
 
 
 
+L’autorité impériale provinciale veille à ce que la fabrication, la commercialisation et la circulation de ces équipements s’effectuent conformément aux dispositions du présent décret et aux autres règles applicables.
 
-IL EST DÉCRÉTÉ CE QUI SUIT
-Article I — Définition 
-* Sont désignés comme équipements dwemers l’ensemble des objets issus de la technologie dwemer, incluant notamment :
--les armures dwemers,
--les armes dwemers,
--les artefacts, métaux et dispositifs mécaniques d’origine dwemer.
-* *  Article II — Principe d’interdiction 
-* L’usage, le port, la détention, l’échange ou la mise en circulation d’équipements dwemers sont strictement interdits sur l’ensemble du territoire de Bordeciel, sauf autorisation expresse délivrée dans les conditions prévues par le présent décret. 
-* * Article III — Autorité compétente et régime de licence
-*  Par délégation expresse de l’Empire, la Compagnie Orientale est désignée comme autorité exclusive compétente pour : -instruire les demandes de licence,
--délivrer, refuser, suspendre ou retirer les licences,
--percevoir les redevances associées,
--un registre officiel des détenteurs d’équipements dwemers. La licence d’exploitation et de port :
--est personnelle ou collective selon les cas,
--est strictement encadrée,
--peut être retirée à tout moment sans préavis dans l’intérêt de l’Empire.
-* *  Article IV — Conditions d’obtention
-*  L’obtention d’une licence est subordonnée : -à l’identification complète du demandeur,
--à la déclaration exhaustive des équipements concernés,
--à une évaluation discrétionnaire du risque pour l’ordre public et la sécurité de l’Empire,
--au paiement des frais fixés par la Compagnie Orientale. L’autorité compétente se réserve le droit de refuser toute demande sans justification, notamment lorsque le demandeur est susceptible de représenter une menace directe ou indirecte pour l’Empire.
-* * Article V — Recensement et période de grâce
-*  À compter de la publication du présent décret, une période de grâce de sept (7) jours est instaurée. Durant ce délai, tout détenteur d’équipement dwemer est autorisé à en conserver la possession à condition impérative de : 
--se déclarer auprès de la Compagnie Orientale,
--engager une procédure de régularisation,
--s’acquitter des frais correspondants. À l’issue de ce délai, toute détention non déclarée sera réputée illégale. 
-* * Article VI — Sanctions 
-* Toute violation du présent décret peut entraîner la confiscation immédiate des équipements dwemers et constitue également le délit de recel prévu et sanctionné par le Corpus Iuris Civilis. Elle pourra, par conséquent, faire l’objet de poursuites devant les juridictions impériales compétentes. 
-* * * Article VII — Dispositions particulières 
-* Sont exemptés des obligations de licence :
-*  -les membres de la Légion impériale,
--les administrateurs impériaux,
--les membres de la Compagnie Orientale,
--toute organisation bénéficiant d’une licence collective dûment accordée. Ces dérogations s’exercent dans le strict cadre de leurs fonctions et peuvent être retirées à tout moment.
-* 
 
-Fait au nom de l’Empire, pour la sécurité de Bordeciel et la préservation de l’ordre public.
-Le 4e jour du Hautzénith, en l’an 226 de la Quatrième Ère 
-Cassian Varo, Chancelier Impérial de Bordeciel 
-Au service de l’Empire et de la Loi
+Article 3 — Relatif au port des armures Dwemers
+Le port des équipements Dwemers, tels que définis à l’article 2 du présent décret, est réservé aux nobles et chevaliers de Markarth dans l’exercice de leurs fonctions ou dans le cadre des cérémonies, manifestations et usages officiels auxquels ils sont autorisés à participer. 
+Le présent article ne fait pas obstacle à la conservation, à l’exposition ou à l’étude d’équipements Dwemers par les institutions, musées, artisans ou particuliers dûment autorisés, sous réserve que ces équipements ne soient pas portés dans l’espace public sans l’autorisation prévue au présent article. 
+
+
+Article 4 — Relatif au port des armes Dwemers
+Les personnes exerçant les fonctions de gardes de châtellenie, huscarls, thanes, jarls et légionnaires peuvent porter et utiliser les armes dwemers dans l’exercice de leurs fonctions. Cette autorisation ne constitue pas une nouvelle licence et ne peut être étendue à d’autres personnes ou usages.
+
+
+Par exception, une épée dwemer peut être offerte gratuitement à une personne anoblie. Cette exception doit être motivée auprès de l’Empire 
+
+
+par l’autorité délivrant l’épée. l’Empire valide ou non le don. Dans le cas où le don est validé,  l’autorité ayant délivré le don doit alors informer la châtellerie de la Crevasse afin que le registre puisse être mis à jour.
+
+
+Article 5 — Relatif aux sanctions concernant le port irrégulier d'une armure Dwemer et la fabrication irrégulière d'équipements 
+
+
+Les châtelleries sont responsables de contrôler la contrebande d’équipements dwemers sur leur territoire. Toute saisie est inventoriée et remise à la Compagnie Orientale dans un délai raisonnable. La Compagnie Orientale assure la revente des biens saisis et reverse cinquante pour cent (50 %) du produit de leur vente à la châtellenie sur le territoire de laquelle la saisie a été effectuée.
+Il est formellement interdit de faire fondre les artefacts, reliques, ustensiles et tout autre produit dwemer afin d'en faire des lingots. La Compagnie Orientale détient seule le droit d’importer des lingots Dwemer.
+Il est permis aux autorités compétentes de contrôler la provenance des équipements détenus par toute personne afin de déterminer s’ils ont été légalement acquis auprès d’une forge de Markarth, d’un ancien détenteur de licence ou dans le cadre d’une exception prévue au présent traité. Toute personne trouvant du dwemer doit le remettre à la Compagnie Orientale contre juste rétribution.
+Toute forge de Markarth autorisée à vendre des armes dwemers doit tenir un registre des ventes et des acquéreurs.
+
+
+
+
+Lorsqu’un revendeur n’a pas tenu ce registre, l’acquéreur ne peut être tenu responsable du seul fait de l’absence d’inscription, sauf preuve contraire.
+La forge qui omet volontairement de tenir ce registre peut être poursuivie pour recel aggravé, conformément à l’article 7 du Corpus Juriscivilis Imperialis.
+Les autorités locales contrôlent la contrebande sur leur territoire et transmettent les procédures relatives aux violations du présent traité à la Chancellerie Impériale. Tous les procès concernant les violations du présent traité ou le recel du Dwemer se tiennent à Markarth et sont des procès impériaux.
+Toute violation du présent traité peut entraîner la confiscation immédiate des équipements dwemers concernés. Les châtelleries qui refusent de contrôler la contrebande, de remettre les saisies ou de coopérer avec la Compagnie Orientale sont sanctionnées conformément à l’article 19 du Codex Penitus Imperialis, sans préjudice de toute autre qualification applicable.
+
+
+Article 6 — Relatif à l'entrée en vigueur du décret 
+Le présent décret entre en vigueur à compter de sa ratification. 
+Aucune nouvelle licence relative aux équipements dwemers ne peut être demandée, délivrée, renouvelée ou créée sous quelque forme que ce soit. Les seules licences reconnues sont les anciennes licences déjà détenues.
+
+
+Le registre impérial des anciennes licences demeure la propriété de l’Empire. Il conserve l’identité des anciens titulaires et les droits qui leur demeurent acquis conformément à l’article. Aucune nouvelle inscription ne peut y être créée.
+L’administration impériale de province et les châtelleries, sont tenus d'assurer l'application pleine et entière du présent décret dans leurs territoires respectifs.
+
+
+                                      Décret sur la régulation des équipements stratégiques Dwemer

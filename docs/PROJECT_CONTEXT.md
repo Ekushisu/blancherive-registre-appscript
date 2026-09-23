@@ -11,7 +11,8 @@ Elle sert de registre opérationnel pour :
 - la paye : ce qu'il reste à demander, et à quel financeur ;
 - le Codex juridique ;
 - les amendes ;
-- la prison.
+- la prison ;
+- l'inventaire des coffres de Fort-Dragon : quels objets, en quelle quantité, dans quel coffre.
 
 Le backend est Google Apps Script et le stockage principal est un Google Spreadsheet lié au projet.
 
@@ -27,6 +28,9 @@ Feuilles métier connues :
 - `Amendes`
 - `Prison`
 - `SyncCodex`
+- `Objets`
+- `Coffres`
+- `Inventaire`
 
 ## Principes
 

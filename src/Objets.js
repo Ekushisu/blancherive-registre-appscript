@@ -54,6 +54,45 @@ function lireCatalogueObjets_() {
   return validerLignesCatalogueObjets_(rows.slice(1));
 }
 
+/*
+  Alias de recherche : mots usuels qui ne figurent pas dans le nom du
+  catalogue. Partagés avec le cache local du navigateur par
+  `getCatalogueObjets`, pour qu'une recherche donne le même résultat des deux
+  côtés.
+*/
+const OBJETS_ALIAS_RECHERCHE = {
+  'skyrim.esm|00000f': 'or septim septims pieces d’or gold',
+  'skyrim.esm|00000a': 'crochet crochets lockpick lockpicks',
+  'skyrim.esm|01d4ec': 'torche torches torch torches'
+};
+
+/*
+  Catalogue complet pour le cache local du navigateur.
+
+  Chaque `rechercherObjets` relit toute la feuille : une autocomplétion au
+  serveur coûte plusieurs secondes par frappe. Les pages qui portent un
+  formulaire d'objets préchargent donc le catalogue à l'ouverture et cherchent
+  en mémoire (`ui/src/catalogue.js`). La version est une empreinte du contenu :
+  si le navigateur la connaît déjà, on ne renvoie pas les 10 000 fiches.
+
+  Le catalogue n'est pas confidentiel, mais la fonction garde les rôles de la
+  recherche : ni INTENDANT, qui n'a aucun formulaire d'objets, ni le public.
+*/
+function getCatalogueObjets(token, versionConnue) {
+  requireRole(token, ['GARDE', 'OFFICIER']);
+  const objets = lireCatalogueObjets_();
+  const empreinte = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5,
+    objets.map(o => `${o.id}\t${o.nom}\t${o.type}`).join('\n'),
+    Utilities.Charset.UTF_8
+  );
+  const version = Utilities.base64EncodeWebSafe(empreinte);
+  if (typeof versionConnue === 'string' && versionConnue && versionConnue === version) {
+    return { version, total: objets.length, alias: OBJETS_ALIAS_RECHERCHE, objets: null };
+  }
+  return { version, total: objets.length, alias: OBJETS_ALIAS_RECHERCHE, objets: objets.map(o => [o.id, o.nom, o.type]) };
+}
+
 function rechercherObjets(token, recherche) {
   requireRole(token, ['GARDE', 'OFFICIER']);
   if (typeof recherche !== 'string' || recherche.length > 100) throw new Error('Recherche d’objet invalide (100 caractères maximum).');
@@ -62,11 +101,7 @@ function rechercherObjets(token, recherche) {
   const terms = query.split(/\s+/);
   const numericId = /^[0-9a-f]{3,8}$/.test(query) ? query.replace(/^0+/, '') || '0' : null;
   const matches = [];
-  const aliases = {
-    'skyrim.esm|00000f': 'or septim septims pieces d’or gold',
-    'skyrim.esm|00000a': 'crochet crochets lockpick lockpicks',
-    'skyrim.esm|01d4ec': 'torche torches torch torches'
-  };
+  const aliases = OBJETS_ALIAS_RECHERCHE;
   lireCatalogueObjets_().forEach(objet => {
     const name = normaliserRechercheObjet_(objet.nom), id = objet.id.toLowerCase();
     const localId = id.split('|').pop().replace(/^0+/, '') || '0';

@@ -122,3 +122,22 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 .paye-filtre-anomalie{border-color:var(--seal);color:#7a3524}
 .paye-filtre-anomalie.actif{background:var(--seal);border-color:var(--seal);color:#fdeee8}
 .paye-filtres{scrollbar-color:#b69a65 #efe5ce}
+.inventaire-coffre{background:var(--surface);border:1px solid var(--line);border-top:3px double #b08d50;border-radius:5px;box-shadow:var(--shadow);color:var(--ink)}
+.inventaire-coffre:hover{background:#f6ecd6}
+.inventaire-coffre.actif{outline:2px solid var(--gold);outline-offset:2px}
+.inventaire-coffre-selection:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
+.inventaire-ajout-entete h2{font-size:24px;font-weight:400}
+.inventaire-compte{color:#7e6742}
+.inventaire-coffre-nom{font-family:Georgia,serif;font-weight:400;font-size:20px;color:#4d3821}
+.inventaire-coffre-position,.inventaire-coffre-compte{color:#7e6742}
+.inventaire-coffre-description{color:#6a583f}
+.inventaire-coffre-inconnu{border-top-color:var(--seal)}
+.inventaire-filtres label{color:#634f36}
+.inventaire-filtres select,.inventaire-filtres input,.inventaire-table select{min-height:44px;border:1px solid #c7b594;background:#fffaf0;border-radius:4px;color:var(--ink);padding:9px 12px;font-size:14px}
+.inventaire-quantite button{min-width:40px;min-height:40px;border-radius:4px;border:1px solid var(--line);background:#fbf5e7;color:#5e472a;font-weight:600}
+.inventaire-quantite button:hover{background:#eee1c5;border-color:#aa8954}
+.inventaire-quantite strong{font-family:Georgia,serif;font-size:19px;color:#4d3821;transition:opacity .16s}
+.inventaire-quantite-attente strong{color:#8a7247}
+.inventaire-objet-id{color:#8a7247}
+.inventaire-vide{background:#f8efdc;border:1px dashed #c3aa7d;border-radius:3px;color:#87704a;font-family:Georgia,serif}
+@media(max-width:600px){.registry-table td[data-label="Objet"]{font-weight:700}.registry-table td .inventaire-quantite{grid-column:2}.inventaire-filtres select,.inventaire-filtres input,.inventaire-table select{font-size:16px;min-height:48px}}

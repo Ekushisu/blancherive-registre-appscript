@@ -26,6 +26,8 @@ Avant toute modification, lire :
 - Les colonnes techniques / caches doivent être documentées avant d'être déplacées ou supprimées.
 - `Prison.js` dépend de helpers définis dans `Amendes.js`; ne pas les supprimer ou renommer sans vérifier les usages.
 - `Paye.js` dépend de helpers définis dans `Presences.js`, dont `ecrirePresenceCellule_` : c'est le seul chemin d'écriture d'une case de présence, et il porte le contrôle de rôle. Ne pas contourner ce helper depuis une nouvelle page.
+- `Inventaire.js` dépend de `nettoyerSaisieUtilisateur` (`Amendes.js`) et de `lireCatalogueObjets_` (`Objets.js`). Le bloc `Inventaire!A:D` est réécrit en entier sous verrou : ne pas y écrire cellule par cellule depuis une autre page.
+- La page Inventaire n'est pas visible du rôle GARDE, ni en lecture ni en écriture. Ne pas ajouter `GARDE` aux listes de rôles de `Inventaire.js` sans décision métier explicite.
 - La page Paye est une vue de lecture sur les Présences : elle ne doit jamais écrire ailleurs que dans `Présences!O`, ni modifier un pointage.
 - Un corps de garde non rattaché à un financeur connu doit rester visible et compté dans la Paye. Ne jamais filtrer silencieusement une solde due.
 - Toute modification sensible doit être relue avec un `git diff` avant `clasp push`.

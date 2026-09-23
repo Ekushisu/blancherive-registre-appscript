@@ -675,3 +675,36 @@
       .paye-filtres{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}
       .paye-filtre{flex:none}
     }
+
+    /* Inventaire des coffres. Les coffres sont des cartes en tête ; le tableau
+       réutilise .registry-table et devient donc des fiches sur téléphone. */
+    .inventaire-coffres{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:22px}
+    .inventaire-coffre{display:grid;gap:10px;padding:16px 18px;border:1px solid #ccc;border-radius:8px;background:#fff}
+    .inventaire-coffre-selection{display:grid;gap:6px;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+    .inventaire-coffre.actif{outline:2px solid #333}
+    .inventaire-ajout-entete{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .inventaire-ajout-entete h2{margin:0}
+    .inventaire-ajout .form-fieldset{margin-top:18px}
+    .inventaire-panier-actions{align-items:center}
+    .inventaire-panier-actions .primary-button{max-width:100%;overflow-wrap:anywhere}
+    .inventaire-compte{font-size:13px;color:#666;margin-left:auto}
+    .inventaire-coffre-nom{font-size:16px;font-weight:700}
+    .inventaire-coffre-position{font-size:12px;color:#666}
+    .inventaire-coffre-description{font-size:13px;line-height:1.5;color:#555;white-space:pre-wrap}
+    .inventaire-coffre-compte{font-size:12px;color:#666}
+    .inventaire-coffre-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .inventaire-filtres{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+    .inventaire-filtres label{font-size:13px;font-weight:700}
+    .inventaire-filtres select,.inventaire-filtres input{min-height:38px;border:1px solid #aaa;border-radius:7px;padding:7px 10px;background:#fff}
+    .inventaire-filtres input{flex:1;min-width:200px}
+    .inventaire-table{min-width:760px}
+    .inventaire-objet-id{display:block;margin-top:4px;font-size:11px;color:#666;overflow-wrap:anywhere}
+    .inventaire-quantite{display:inline-flex;align-items:center;gap:8px}
+    .inventaire-quantite strong{min-width:3ch;text-align:center;font-size:16px}
+    .inventaire-quantite button{min-width:36px;min-height:36px;border:1px solid #aaa;border-radius:7px;background:#fff;font-size:16px;line-height:1}
+    .inventaire-quantite button:disabled{opacity:.5}
+    .inventaire-quantite-attente strong{opacity:.65}
+    .inventaire-table select{min-height:36px;border:1px solid #aaa;border-radius:7px;padding:5px 8px;background:#fff;max-width:100%}
+    .inventaire-vide{padding:28px;text-align:center;color:#666}
+    .inventaire-ajout .form-grid{align-items:end}
+    @media(max-width:600px){.inventaire-filtres{display:grid;grid-template-columns:1fr;gap:8px}.inventaire-filtres input{min-width:0}.inventaire-coffres{grid-template-columns:1fr}}

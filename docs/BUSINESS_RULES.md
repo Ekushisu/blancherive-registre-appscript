@@ -168,6 +168,64 @@ puis par corps ; l'argent, lui, vient d'un financeur par corps.
 - Les anciennes saisies textuelles sont conservées. Un ancien formulaire ouvert
   envoyant encore du texte non vide doit être actualisé.
 - Pas de registre séparé ni de suivi de restitution dans cette version.
+- Le catalogue des objets est préchargé à l'ouverture de la page Prison et gardé
+  dans le navigateur avec sa version : l'autocomplétion cherche en mémoire et
+  répond immédiatement. Une recherche au serveur relit toute la feuille `Objets`
+  à chaque frappe, ce qui prenait plusieurs secondes. Le serveur ne renvoie les
+  fiches que si la version a changé ; tant que le cache n'est pas disponible,
+  la recherche retombe sur le serveur. Les objets restent revalidés côté
+  serveur à l'enregistrement : le cache n'est qu'un confort de saisie.
+
+## Inventaire
+
+La page répond à une question d'intendance : avons-nous encore des torches,
+et dans quel coffre ? Elle liste les objets présents dans les coffres de la
+garde à Fort-Dragon.
+
+- OFFICIER consulte et écrit. INTENDANT consulte seulement : c'est le rôle
+  remis à l'intendance de la cour, qui doit savoir ce que la garde possède sans
+  pouvoir le modifier. GARDE ne voit pas la page, ni en lecture ni en écriture :
+  la navigation ne la propose pas, le routage ne la rend pas, et chaque fonction
+  serveur refuse son rôle.
+- Un coffre porte un nom, une position dans le monde (texte libre) et une
+  description. Le nom est unique. Les officiers créent et modifient les coffres ;
+  aucune suppression de coffre par l'application.
+- Un objet n'apparaît qu'une fois par coffre. Ranger un objet déjà présent
+  augmente sa quantité ; retirer la diminue ; à zéro, la ligne disparaît. On ne
+  descend jamais sous zéro : le message indique la quantité disponible.
+- Le formulaire « Ranger un objet » constitue une liste d'attente hors ligne :
+  on y ajoute les objets l'un après l'autre sans appel serveur, puis « Ranger »
+  les envoie tous, dans un seul coffre, en une seule requête et une seule
+  écriture. Cent objets différents au plus par envoi ; les doublons de la liste
+  sont fusionnés ; un lot dont un seul objet est refusé n'écrit rien. Une
+  recherche ou une sélection encore en cours doit être ajoutée ou effacée avant
+  d'envoyer, comme dans le formulaire de la Prison.
+- Les objets viennent du même catalogue `Objets` que les saisies de la Prison,
+  par la même recherche (trois caractères, quinze suggestions), avec les mêmes
+  raccourcis (or, crochets, torches) et la même saisie libre pour un objet hors
+  catalogue. Le nom est figé à l'entrée en stock : renommer le catalogue ne
+  renomme pas les stocks existants. Le nom envoyé par le navigateur n'est jamais
+  pris pour un objet du catalogue ; la fiche fait foi.
+- Un objet se déplace d'un coffre à un autre par la liste déroulante de sa ligne.
+  Toute la pile est déplacée ; si le coffre de destination contient déjà cet
+  objet, les quantités s'additionnent.
+- Une ligne dont le coffre a disparu de la feuille reste visible sous « Coffre
+  inconnu » et se déplace comme les autres. Un stock ne disparaît pas de
+  l'inventaire parce qu'une ligne de `Coffres` a été effacée à la main.
+- Le tableau se filtre par coffre — en cliquant une carte de coffre ou par la
+  liste — et par recherche sur le nom ou l'ID. Le compte affiché suit le filtre.
+- Les boutons + / − d'une ligne cumulent les clics et n'envoient qu'une seule
+  variation après une pause de 600 ms : ajouter cinq torches se fait en cinq
+  clics rapides, sans attendre cinq réponses du serveur. La quantité affichée
+  est immédiatement la quantité visée, grisée tant qu'elle n'est pas confirmée ;
+  on ne peut pas descendre sous zéro. Pendant qu'une ligne a une variation en
+  attente ou en vol, son déplacement et son retrait sont désactivés.
+- Le catalogue des objets est préchargé à l'ouverture de la page pour l'officier
+  seulement — l'intendant n'a pas de formulaire — selon le même mécanisme que la
+  Prison.
+- Aucun lien automatique avec les saisies de la Prison : une saisie n'entre pas
+  d'elle-même dans un coffre, et une restitution n'en sort rien. Ce rattachement
+  serait une décision métier à prendre explicitement.
 
 ## Codex
 

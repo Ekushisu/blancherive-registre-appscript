@@ -32,15 +32,11 @@ Ledit décret est applicable à l’intégralité des provinces de l’Empire. N
 
 Article 2 — Relatif au port, à la fabrication et au commerce des équipements Orsimers 
 Le présent décret établit une distinction entre les armures Orsimers et les armes Orsimers.
-Le port des armures de facture Orsimer est strictement réservé aux individus de race Orsimer, sans distinction d’appartenance à un clan reconnu par l’Empire, de statut, d’origine ou de résidence.
-Tout Orsimer, qu’il soit membre d’un clan reconnu, d’un clan non reconnu ou qu’il soit indépendant de toute structure clanique, est autorisé à porter une armure Orsimer, sous réserve du respect des lois impériales et provinciales en vigueur.
+Le port des pièces d'armure de facture Orsimer est soumis à l'accomplissement préalable des rites traditionnels auprès d'un clan Orsimer reconnu. 
+Cette obligation s'applique à toute personne, Orsimer ou non-Orsimer, souhaitant porter une pièce d'armure concernée par le présent décret. L'appartenance à la race Orsimer ou à un clan Orsimer ne dispense pas, à elle seule, de l'accomplissement des rites lorsque ceux-ci sont requis. L'accomplissement des rites est constaté par une attestation délivrée par le clan habilité, laquelle peut être présentée aux autorités impériales. 
 
 
-
-
-
-
-Aucune licence délivrée par un clan Orsimer ne peut être exigée d’un Orsimer pour le simple port d’une armure Orsimer légalement acquise.
+Le port d'une armure Orsimer sans accomplissement préalable des rites constitue un port irrégulier. 
 La fabrication, l’achat et la vente des armures Orsimers sont autorisés conformément aux dispositions du présent décret et aux lois impériales applicables.
 Les armes de facture Orsimer, quant à elles, ne sont pas réservées aux Orsimers. Elles peuvent être achetées, vendues, possédées, portées et utilisées par toute personne, quelle que soit sa race ou son appartenance, sous réserve des lois générales relatives au port et à la détention des armes.
 
@@ -54,78 +50,51 @@ Sont notamment concernés :
 * Les gantelets ;
 * Les boucliers ;
 * Les glaives ;
+
+
 * Les haches de guerre ;
 * Les marteaux de guerre ;
 * Les flèches ;
 * Tout équipement reconnu comme étant de facture Orsimer par l'administration compétente.
 Toutefois, le présent décret distingue clairement les armures et équipements défensifs des armes Orsimers. Les armures et équipements défensifs Orsimers sont réservés au port des Orsimers.
-Les armes Orsimers sont, quant à elles, accessibles à l'ensemble des populations de l'Empire, sous réserve du respect des lois générales concernant la possession, le port et l'utilisation des armes.
+Les armes Orsimers sont, quant à elles, accessibles à l'ensemble des populations de l'Empire, sous réserve du respect des lois générales concernant la possession, le port et l'utilisation des armes. Toute personne peut, sous réserve des lois impériales générales relatives aux armes : acquérir ; posséder ; porter ; utiliser ; fabriquer ; acheter ou vendre une arme Orsimer. Aucun rite, aucune appartenance à un clan Orsimer et aucune autorisation clanique ne peuvent être exigés pour l'accès aux armes Orsimers. 
 Les équipements purement décoratifs, cérémoniels ou artisanaux ne présentant aucune finalité militaire peuvent être exemptés des dispositions relatives au port des armures.
 
 
+
+
+
+
+
+
+
+
 Article 4 — Relatif aux sanctions concernant le port irrégulier d'une armure Orsimer et la fabrication irrégulière d'équipements 
-Est considéré comme irrégulier le fait, pour un individu n'étant pas de race Orsimer, de porter une armure ou un équipement défensif Orsimer soumis aux dispositions du présent décret.
+Est considéré comme irrégulier le fait, pour un individu n'ayant pas accompli de rite auprès de clan orsimer reconnu, de porter une armure ou un équipement défensif Orsimer soumis aux dispositions du présent décret. 
+Est considéré comme une infraction au présent décret : le port d'une pièce d'armure Orsimer sans avoir accompli les rites requis ; la fabrication d'une pièce d'armure Orsimer sans habilitation ; la vente ou le commerce d'une pièce d'armure Orsimer sans habilitation ; la falsification ou l'utilisation frauduleuse d'une attestation rituelle. 
 L'armure concernée peut être saisie par les autorités compétentes conformément aux procédures impériales en vigueur.
-La présente interdiction ne s'applique pas aux armes Orsimers. La possession, le port, l'achat, la vente ou l'utilisation d'une arme Orsimer 
+La présente interdiction ne s'applique pas aux armes Orsimers. La possession, le port, l'achat, la vente ou l'utilisation d'une arme Orsimer  par un non-Orsimer ne constitue pas, en soi, une infraction au présent décret, sous réserve du respect des autres dispositions légales relatives aux armes.
+Toute personne fabriquant illicitement des équipements soumis à une réglementation particulière ou présentant une fausse attestation, un faux document ou une autorisation falsifiée pourra être poursuivie conformément aux dispositions du Corpus Juris Civilis Imperialis et aux lois impériales applicables.
 
 
-par un non-Orsimer ne constitue pas, en soi, une infraction au présent décret, sous réserve du respect des autres dispositions légales relatives aux armes.
-Toute personne fabriquant illicitement des équipements soumis à une réglementation particulière ou présentant une fausse licence, un faux document ou une autorisation falsifiée pourra être poursuivie conformément aux dispositions du Corpus Juris Civilis Imperialis et aux lois impériales applicables.
 
 
 Article 5 — Relatif aux conditions de port, la fabrication des équipements Orsimers 
-L'appartenance à un clan Orsimer ne constitue donc ni une condition d'accès, ni une condition de reconnaissance du droit de porter une armure Orsimer. Tout Orsimer indépendant, membre d'un clan reconnu ou non reconnu, est placé sur un pied d'égalité au regard du présent décret.
+L'appartenance à un clan Orsimer ne constitue donc ni une condition d'accès, ni une condition de reconnaissance du droit de porter une armure Orsimer, mais bien le rite et l’attestation reconnue par les autorités. 
 La fabrication d'armures et d'armes Orsimers est autorisée à toute personne disposant des compétences nécessaires et respectant les lois impériales applicables à l'artisanat, à la forge et au commerce. Aucune autorité clanique Orsimer ne peut exiger l'appartenance à un clan comme condition préalable à l'acquisition, au port ou à l'utilisation d'une arme Orsimer.
+Article 6 — Des clans Orsimers
+Tout clan Orsimer est, par le présent décret, officiellement naturellement reconnu comme tel, sous réserve de satisfaire conditions établies :
+* Un minimum de cinq individus de race Orsimer 
+* Une culture commune, fondée sur les traditions, coutumes et valeurs propres aux Orsimers 
+* Un chef ou représentant de clan reconnu, chargé de représenter officiellement le clan auprès des autres clans et autorités
+* Une volonté manifeste de constituer une communauté durable, et non un simple rassemblement temporaire d’individus. 
 
 
 
 
-
-
-
-
-Article 6 — Relatif à l'entrée en vigueur du décret 
+Article 7 — Relatif à l'entrée en vigueur du décret 
 Le présent décret entre en vigueur à compter de sa ratification. 
 L’administration impériale de province et les châtelleries, sont tenus d'assurer l'application pleine et entière du présent décret dans leurs territoires respectifs.
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                                       Décret sur la régulation des équipements stratégiques Orsimer

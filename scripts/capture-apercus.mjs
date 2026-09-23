@@ -30,8 +30,10 @@ const reponses = {
   getPresences: () => donnees.presences,
   getPresenceOfficerDashboard: () => donnees.presenceDashboard,
   getPaye: () => donnees.paye,
+  getInventaire: () => donnees.inventaire,
   getPrison: () => donnees.prison,
   getPrisonFormData: () => donnees.prisonForm,
+  getCatalogueObjets: () => donnees.catalogueObjets,
   getAmendes: () => donnees.amendes,
   getAmendeFormData: () => donnees.amendeForm,
   getCodex: () => donnees.codex,
@@ -120,6 +122,23 @@ const apercus = {
     nav: "Prison",
     attendre: ".prison-table",
     largeurs: [390, 1440]
+  },
+  inventaire: {
+    nav: "Inventaire",
+    attendre: ".inventaire-table",
+    largeurs: [390, 1440],
+    // Le formulaire « Ranger un objet » est replié par défaut : on le déplie,
+    // pour que l'aperçu montre la recherche au catalogue et le choix du coffre.
+    async preparer(page) {
+      await page.getByRole("button", { name: "Déplier" }).click();
+      await page.waitForSelector("#inventaire-coffre-ajout");
+    }
+  },
+  "inventaire-intendant": {
+    nav: "Inventaire",
+    attendre: ".inventaire-table",
+    largeurs: [1440],
+    reponses: { getSessionInfo: () => ({ role: "INTENDANT" }) }
   },
   "prison-formulaire": {
     nav: "Prison",

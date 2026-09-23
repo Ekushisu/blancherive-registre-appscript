@@ -1,6 +1,8 @@
 # Textes juridiques — copies locales
 
-Exports texte des documents Google Docs sources, récupérés le 15 septembre 2026.
+Exports texte des documents Google Docs sources, récupérés le 15 septembre 2026,
+complétés le 22 septembre 2026 pour les décrets sur les équipements dwemers,
+les équipements orsimer et les recherches archéologiques.
 
 **Ces copies ne sont pas la source de vérité.** Les Google Docs le restent, et
 `SyncCodex` reste le cache technique généré à partir d'eux. Ces fichiers servent
@@ -38,8 +40,9 @@ Le Codex Procédural de Blancherive (`17Y3GBQBp_…`) n'a pas pu être récupér
 
 ## Décrets et textes annexes
 
-Douze d'entre eux sont référencés dans `SYNC_CODEX_DOCUMENTS` sous la famille
-« Décrets impériaux » depuis le 15 septembre 2026. Les cinq autres en sont
+Treize d'entre eux sont référencés dans `SYNC_CODEX_DOCUMENTS` sous la famille
+« Décrets impériaux » — douze depuis le 15 septembre 2026, le décret sur les
+recherches archéologiques depuis le 22 septembre 2026. Les cinq autres en sont
 écartés, pour les raisons données plus bas.
 
 | Fichier | ID | Titre |
@@ -55,7 +58,9 @@ Douze d'entre eux sont référencés dans `SYNC_CODEX_DOCUMENTS` sous la famille
 | `decret-ordres-militaires-religieux.txt` | `105KB6YllsBgQr7m_gcOVj74vHQFy30e2ja0omh5BNfE` | Ordres Militaires Religieux |
 | `constitution-clericale-huit-divins.txt` | `1446YbBlsqc-q8tm5vzdK5vNSrfbo3wVx_cfYCJt9pSA` | Constitution cléricale du Conseil des Huit Divins |
 | `decret-equipements-orsimer.txt` | `19asrJHgFRAu3KDaHkXZjAAggqOI-gyFp5ZJl2jrepU8` | Équipements stratégiques Orsimer |
-| `decret-equipements-dwemers.txt` | `17Y36stT6oVpZARCc093XOrhHVCfHimRBwxmFLapq9lM` | Équipements dwemers |
+| `decret-equipements-dwemers.txt` | `1g9mqqedq0iUnzTN7CedVPvyNXLS4L2SiC_fvhbZQstQ` | Régulation des équipements stratégiques Dwemer — remplace `17Y36stT6…` depuis le 22 septembre 2026 |
+| `ancien-decret-equipements-dwemers.txt` | `17Y36stT6oVpZARCc093XOrhHVCfHimRBwxmFLapq9lM` | Ancien décret du Gouverneur sur les équipements dwemers, retiré du registre, conservé pour comparaison |
+| `decret-recherches-archeologiques.txt` | `1Fh_wqNvwbcpyYGCWYwq6hBOw8jdc8mKLBtkYszPnUno` | Régulation des recherches archéologiques, artefacts et archives — ajouté le 22 septembre 2026 |
 | `decret-armes-etherees.txt` | `1vvolhoVSss_EEI8cECbNrVdQAgBpjbUbfN_iiZJoYG8` | Armes éthérées |
 | `decret-restitution-biens-empire.txt` | `1x9jV2Ijc_4niwHQe4yK3PKmp28fqfWCN4FFuwRTTOzs` | Restitution des biens de l'Empire |
 | `decret-chancellerie-a.txt` | `1jP5L4_Y6Mn6AmQaofUDXcNxqLe8MPpLW` | Décret de la Chancellerie impériale |

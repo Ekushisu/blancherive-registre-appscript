@@ -55,6 +55,11 @@ Présences et Paye décrivent le même registre, donc les impayés repérés sem
 par semaine sont exactement ceux que la Paye regroupe par financeur.
 - `prison-1440.png`, `prison-390.png` : registre et fiches mobiles.
 - `prison-formulaire-390.png` : nouvelle incarcération, saisies sur la personne.
+- `inventaire-1440.png`, `inventaire-390.png` : coffres, formulaire « Ranger un
+  objet » déplié, tableau des stocks avec boutons + / −, coffre déroulant et
+  retrait.
+- `inventaire-intendant-1440.png` : la même page vue par un INTENDANT —
+  navigation à trois entrées, aucune commande.
 
 ## Captures antérieures
 

@@ -81,24 +81,29 @@ Règles connues :
 - suppression Amendes ;
 - modification du statut `Reversé` des Amendes ;
 - suppression Prison ;
-- règlement d'une semaine depuis la page Paye.
+- règlement d'une semaine depuis la page Paye ;
+- inventaire des coffres : création et modification des coffres, quantités,
+  rangement groupé, déplacements.
 
 ### INTENDANT
 - Organigramme en lecture, comme un GARDE : c'est de là que les cuisines de la
   cour tirent l'effectif à nourrir ;
-- page Paye en lecture seule.
+- page Paye en lecture seule ;
+- page Inventaire en lecture seule : l'intendance de la cour doit savoir ce que
+  la garde possède, sans pouvoir le modifier.
 
 Aucune autre page ne lui est accessible, ni Présences, ni Codex, ni Amendes,
 ni Prison, ni Effectifs. À la différence de `VISITEUR`, `INTENDANT` s'obtient
-par un mot de passe et n'ouvre aucune fonction au public. La navigation ne lui propose que ses deux pages, et
+par un mot de passe et n'ouvre aucune fonction au public. La navigation ne lui propose que ses trois pages, et
 chaque API refuse son rôle côté serveur.
 
 Un contrôle uniquement côté React n'est jamais suffisant.
 
 ### Catalogue des objets
 
-`rechercherObjets` autorise GARDE et OFFICIER après `requireRole()`, avant toute
-lecture ou initialisation Sheets. `ajouterPrison` vérifie le même rôle avant la
+`rechercherObjets` et `getCatalogueObjets` autorisent GARDE et OFFICIER après
+`requireRole()`, avant toute lecture ou initialisation Sheets. INTENDANT n'a
+aucun formulaire d'objets et ne reçoit pas le catalogue ; le rôle public non plus. `ajouterPrison` vérifie le même rôle avant la
 validation des objets. L'initialisation d'une feuille Objets absente est un helper
 privé, sous verrou ; aucune API Web de remplacement ou d'import libre du catalogue.
 
@@ -109,6 +114,16 @@ par lui-même : il délègue à `ecrirePresenceCellule_`, partagé avec la page
 Présences, qui exige `OFFICIER` avant toute ouverture du classeur. Un INTENDANT
 qui appellerait `reglerSemainePaye` depuis la console est donc refusé au même
 titre qu'un GARDE, indépendamment de ce que l'interface affiche.
+
+## Inventaire
+
+`getInventaire` autorise `OFFICIER` et `INTENDANT`. `ajouterCoffre`,
+`modifierCoffre`, `ajusterInventaire`, `rangerInventaire` et `deplacerInventaire`
+n'autorisent que `OFFICIER`, avant toute ouverture du classeur. `GARDE` n'apparaît dans aucune
+de ces listes : la page n'existe pas pour lui, ni en lecture ni en écriture.
+L'interface cache la page au GARDE et les commandes à l'INTENDANT, mais seul
+`requireRole()` protège réellement. `scripts/test-inventaire.mjs` vérifie que
+chaque refus précède toute lecture Sheets.
 
 ## Nouveautés des Effectifs
 

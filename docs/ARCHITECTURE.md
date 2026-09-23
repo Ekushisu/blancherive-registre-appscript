@@ -78,6 +78,14 @@ Principaux modules :
   - recherche GARDE / OFFICIER dans `Objets!A:C`, trois caractères minimum, quinze suggestions maximum
   - initialisation de la feuille absente à partir de la ressource serveur `CatalogueObjets.html`
   - validation des saisies et affichage compatible avec les textes historiques
+  - `getCatalogueObjets` : catalogue complet en tableau compact `[id, nom, type]` avec une empreinte MD5 du contenu ; renvoie `objets: null` si le navigateur connaît déjà cette version. Alimente le cache local de `ui/src/catalogue.js`
+
+- `Inventaire.js`
+  - feuilles `Coffres` et `Inventaire`, créées avec leurs en-têtes à la première consultation
+  - lecture OFFICIER et INTENDANT ; coffres, quantités et déplacements réservés aux OFFICIER
+  - un objet par coffre : `ajusterInventaire` (une variation) et `rangerInventaire` (une liste entière) passent par `appliquerAjustementsInventaire_`, qui cumule ou retire, fait disparaître la ligne à zéro et ne lit le catalogue qu'une fois par requête
+  - le bloc `Inventaire!A:D` est relu et réécrit en entier sous verrou de script
+  - les objets viennent du catalogue `Objets` par `lireCatalogueObjets_`, nom figé à l'entrée en stock comme dans `Prison!J`
 
 ## Frontend
 
@@ -91,6 +99,8 @@ Le source frontend est dans `ui/` :
 - `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
 - `ui/assets/` : copies web des illustrations/papier du manuel, incorporées au build ;
 - `ui/src/grades.jsx` : descriptions doctrinales des grades affichées dans l'Organigramme, table statique sans fonction serveur associée ;
+- `ui/src/catalogue.js` : cache local du catalogue des objets — préchargement à l'ouverture des pages Prison et Inventaire (officier), `localStorage` versionné, recherche en mémoire identique à `rechercherObjets` (parité vérifiée par `scripts/test-catalogue-local.mjs`), hook `useCatalogue` ;
+- `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.
@@ -115,8 +125,9 @@ Pages :
 - Codex
 - Amendes
 - Prison
+- Inventaire (OFFICIER et INTENDANT ; écriture réservée aux OFFICIER ; invisible pour GARDE)
 
-Le rôle INTENDANT ne se voit proposer que l'Organigramme et la Paye. La
+Le rôle INTENDANT ne se voit proposer que l'Organigramme, la Paye et l'Inventaire. La
 navigation, le routage de `App` et les contrôles serveur portent chacun cette
 restriction : aucun des trois ne suffit seul.
 
@@ -133,6 +144,10 @@ quel que soit le prochain rôle ajouté.
 - `getCurrentIsoWeekWebApp`
 - `estCorpsExcluDesPresences_`
 - `mettreAJourSoldesPresences_`
+
+`Inventaire.js` utilise :
+- `nettoyerSaisieUtilisateur`, déclaré dans `Amendes.js` ;
+- `lireCatalogueObjets_`, déclaré dans `Objets.js`, pour résoudre un objet nouveau en stock. Un objet déjà en stock réutilise l'instantané de sa ligne sans relire le catalogue.
 
 `Prison.js` utilise des helpers déclarés dans `Amendes.js` :
 - `getLastNonEmptyRowInColumn`

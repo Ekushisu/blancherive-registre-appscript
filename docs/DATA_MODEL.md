@@ -139,6 +139,45 @@ chargée côté serveur uniquement à sa création ; elle n'est pas incluse dans
 Le catalogue initial reste un catalogue technique candidat, sans certification de
 disponibilité des objets sur le serveur de jeu.
 
+## Coffres
+
+Feuille créée automatiquement, avec ses en-têtes, à la première consultation de
+la page Inventaire si elle n'existe pas. Une feuille existante n'est jamais
+réécrite ; des en-têtes différents arrêtent la page avec un message explicite.
+
+| Colonne | Contenu |
+|---|---|
+| A | ID coffre — UUID technique, attribué à la création, jamais affiché |
+| B | Nom — unique sans distinction de casse ni d'accents, 100 caractères maximum |
+| C | Position — texte libre décrivant l'emplacement dans le monde, 200 caractères maximum |
+| D | Description — texte libre, 1 000 caractères maximum |
+
+Le coffre est référencé par son identifiant dans `Inventaire` : renommer un
+coffre ne touche pas à son contenu. Effacer une ligne de `Coffres` à la main
+n'efface pas ses objets ; ils apparaissent sous « Coffre inconnu » et peuvent
+être déplacés vers un coffre réel depuis la page. Aucune suppression de coffre
+par l'application dans cette version.
+
+## Inventaire
+
+Feuille créée automatiquement dans les mêmes conditions que `Coffres`.
+
+| Colonne | Contenu |
+|---|---|
+| A | ID coffre — référence à `Coffres!A` |
+| B | ID objet — ID complet du catalogue `Objets` (`skyrim.esm|01D4EC`), vide pour un objet hors catalogue |
+| C | Nom — instantané du nom au moment de l'entrée en stock, comme dans `Prison!J` |
+| D | Quantité — entier strictement positif |
+
+Un objet n'occupe qu'une ligne par coffre. La clé d'unicité est l'ID objet en
+minuscules pour le catalogue, ou le nom normalisé (casse, accents, espaces)
+pour un objet hors catalogue. Le bloc A:D est relu et réécrit en entier à chaque
+écriture, sous verrou de script : une quantité ramenée à zéro retire la ligne et
+le bloc est compacté, sans ligne fantôme. Colonnes A:C en format texte, D en
+nombre. Une ligne invalide — coffre ou nom vide, quantité non entière ou nulle —
+bloque la page en nommant sa ligne physique, plutôt que d'être ignorée en
+silence.
+
 ## SyncCodex
 
 Le snapshot courant documente encore les colonnes techniques :

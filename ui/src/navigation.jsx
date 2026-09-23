@@ -9,6 +9,7 @@ const paths={
   codex:'M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-2-1-6-2-10 1',
   amendes:'M6 3h12v18l-3-2-3 2-3-2-3 2V3M9 7h6M9 11h6M9 15h3',
   prison:'M4 21V5l8-3 8 3v16M2 21h20M8 8v13M12 8v13M16 8v13M4 12h16',
+  inventaire:'M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10H3zM3 12h18M12 10v3M10 12h4v4h-4z',
   shield:'M12 2l8 3v6c0 5-4 9-8 11-4-2-8-6-8-11V5l8-3zM8 12l3 3 5-6',
   exit:'M9 4H4v16h5M14 8l4 4-4 4M8 12h13'
 };
@@ -20,13 +21,14 @@ const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",INTENDANT:"Intendant",[RO
 
 export function Header({role,page,onPage,onLogout}) {
   // VISITEUR ne consulte que le Codex. INTENDANT est un code remis hors de la
-  // garde — argentier, Thanes, cuisines — et n'a que l'effectif et la paye,
-  // toujours sans droit d'écriture.
+  // garde — argentier, Thanes, cuisines — et n'a que l'effectif, la paye et
+  // l'inventaire, toujours sans droit d'écriture. L'inventaire des coffres est
+  // une affaire d'officiers et d'intendance : le GARDE ne le voit pas.
   const pages=role===ROLE_PUBLIC
     ?[["codex","Codex"]]
     :role==="INTENDANT"
-    ?[["organigramme","Organigramme"],["paye","Paye"]]
-    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"]]:[]),["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];
+    ?[["organigramme","Organigramme"],["paye","Paye"],["inventaire","Inventaire"]]
+    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];
   return <header className="topbar">
     <div className="brand"><span className="brand-seal"><img src={sceau} alt=""/></span><div><span className="brand-overline">Châtellerie de</span><strong>Blancherive</strong><span className="brand-caption">Registre de la Garde</span></div></div>
     <div className="nav-caption">Le registre</div>

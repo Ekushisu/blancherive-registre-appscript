@@ -209,11 +209,20 @@ const SYNC_CODEX_DOCUMENTS = [
     local: false,
     garde: true
   },
+  /*
+    Réécrit le 22 septembre 2026 : « Régulation des équipements stratégiques
+    Dwemer », six articles numérotés, compétence de la Châtellerie de la
+    Crevasse et de la Compagnie de l'Empire Orientale. Remplace l'ancien décret
+    du Gouverneur (`17Y36stT6oVpZARCc093XOrhHVCfHimRBwxmFLapq9lM`, sept articles
+    en chiffres romains), conservé en copie locale sous
+    `docs/codex/ancien-decret-equipements-dwemers.txt`. Le nom de source est
+    conservé pour ne pas dépayser la bibliothèque.
+  */
   {
-    id: "17Y36stT6oVpZARCc093XOrhHVCfHimRBwxmFLapq9lM",
+    id: "1g9mqqedq0iUnzTN7CedVPvyNXLS4L2SiC_fvhbZQstQ",
     source: "Décret sur les équipements dwemers",
     famille: "Décrets impériaux",
-    autorite: "Gouverneur impérial de Bordeciel",
+    autorite: "Empire de Tamriel",
     applicabilite: "Armes et équipements prohibés",
     local: false,
     garde: true
@@ -233,6 +242,22 @@ const SYNC_CODEX_DOCUMENTS = [
     famille: "Décrets impériaux",
     autorite: "Empire de Tamriel",
     applicabilite: "Restitution des biens de l'Empire",
+    local: false,
+    garde: true
+  },
+
+  /*
+    Ajouté le 22 septembre 2026. Onze articles ; les autorités locales doivent
+    signaler les découvertes et préserver les objets jusqu'à leur prise en
+    charge (art. 10) : texte de référence directe pour la Garde, sans sanction
+    chiffrée.
+  */
+  {
+    id: "1Fh_wqNvwbcpyYGCWYwq6hBOw8jdc8mKLBtkYszPnUno",
+    source: "Décret sur les recherches archéologiques et les artefacts",
+    famille: "Décrets impériaux",
+    autorite: "Conseil des Anciens",
+    applicabilite: "Fouilles, artefacts et archives historiques",
     local: false,
     garde: true
   }

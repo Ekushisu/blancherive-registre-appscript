@@ -1,5 +1,63 @@
 # Journal de passation IA
 
+## 2026-09-22 — Inventaire des coffres, rôle INTENDANT en lecture, deux décrets
+
+- Nouvelle page **Inventaire** et module `src/Inventaire.js` : liste des objets
+  présents dans les coffres de Fort-Dragon, avec nom, quantité et coffre. La
+  page répond à une question d'intendance — avons-nous encore des torches, et
+  dans quel coffre ? — d'où ses droits : OFFICIER écrit, INTENDANT lit, GARDE
+  n'y accède pas du tout.
+- Feuilles `Coffres` et `Inventaire` créées à la première consultation ; le
+  coffre est référencé par un UUID pour qu'un coffre renommé garde son contenu.
+  Un objet par coffre : les ajouts cumulent, les retraits décrémentent, zéro
+  efface la ligne. Écriture du bloc entier sous verrou, avec restauration en cas
+  d'échec.
+- Même catalogue et même recherche que les saisies de la Prison, par
+  `SaisiesField` rendu paramétrable (`titre`, `masquerListe`, `aideLibre`) sans
+  changement pour le formulaire Prison. Un objet déjà en stock ne relit pas le
+  catalogue : les boutons + / − ne coûtent qu'une lecture d'`Inventaire`.
+- Coffres : création et modification (nom unique, position dans le monde,
+  description), pas de suppression applicative. Déplacement d'un objet entre
+  coffres par liste déroulante, avec fusion. Les lignes orphelines d'un coffre
+  effacé à la main restent visibles et se rattachent depuis la page.
+- Navigation : entrée « Inventaire » après « Paye » pour OFFICIER, troisième
+  entrée pour INTENDANT. Nouvelle icône de coffre.
+- **Catalogue des objets préchargé.** L'autocomplétion des saisies appelait le
+  serveur à chaque frappe, et chaque appel relit les 10 131 lignes d'`Objets` :
+  plusieurs secondes par lettre. Nouvelle fonction `getCatalogueObjets` (GARDE,
+  OFFICIER) qui renvoie le catalogue compact avec une empreinte MD5, ou rien si
+  le navigateur connaît la version. `ui/src/catalogue.js` précharge à
+  l'ouverture des pages Prison et Inventaire (officier), stocke dans
+  `localStorage`, et cherche en mémoire avec le même classement que le serveur ;
+  `SaisiesField` reçoit le catalogue en prop et retombe sur le serveur sans lui.
+  Les alias de recherche (or, crochets, torches) ne sont définis qu'une fois,
+  côté serveur, et transmis avec le catalogue.
+- **Rangement groupé dans l'Inventaire.** Chaque objet ajouté au formulaire
+  partait aussitôt au serveur, et il fallait attendre la réponse pour ajouter
+  le suivant. Le formulaire garde désormais une liste d'attente — la même liste
+  que les saisies de la Prison, avec retrait par ligne — et un bouton « Ranger »
+  envoie tout par `rangerInventaire` : une requête, une lecture du catalogue au
+  plus, une écriture. Le chemin unitaire des boutons + / − et le chemin groupé
+  sont le même code serveur.
+- **+ / − cumulés dans l'Inventaire.** Il fallait attendre chaque réponse pour
+  cliquer à nouveau. Les clics sont désormais cumulés par ligne et envoyés en
+  une seule variation après 600 ms de pause ; la quantité visée s'affiche
+  aussitôt, grisée jusqu'à confirmation. Une variation partie et non confirmée
+  bloque la suivante sur la même ligne jusqu'au retour du serveur.
+- Codex : trois liens de décrets fournis. Le décret Orsimer était déjà
+  référencé sous le même identifiant. Le décret dwemer est une réécriture de
+  l'ancien texte du Gouverneur — même sujet, nouvelles institutions, articles
+  renumérotés — et remplace l'ancien identifiant dans `SYNC_CODEX_DOCUMENTS`,
+  le lien fourni faisant foi ; le nom de source est conservé. Le décret sur les
+  recherches archéologiques est ajouté. Copies locales dans `docs/codex/`.
+- Vérifications : `node scripts/test-catalogue-local.mjs` (nouveau : droits,
+  version, parité stricte serveur/local sur dix-huit requêtes, stockage,
+  requête partagée, replis) ; `node scripts/test-inventaire.mjs` (nouveau, 60 assertions :
+  droits refusés avant toute lecture Sheets, en-têtes, coffres, cumul, zéro,
+  déplacement, rollback, lignes orphelines), suites existantes, `npm run build`,
+  aperçus Inventaire. Aucun push ni déploiement ; `synchroniserCodex()` à lancer
+  après publication pour rafraîchir le cache.
+
 ## 2026-09-17 — Présences : filtre par corps, synthèse repliable, semaine courante hors impayés
 
 - Nouveau filtre **Corps** dans la barre de filtres des Présences, à côté du
