@@ -5,10 +5,11 @@ import vm from 'node:vm';
 let reads = 0;
 let fineRows = [];
 const presenceRows = [
-  [36, 'Rivebois', 'Garde', 'Alice', '', ...Array(7).fill(false), 0, 100, true],
-  [36, 'Rivebois', 'Garde', 'Bob', '', ...Array(7).fill(false), 0, 200, false],
-  [35, 'Rivebois', 'Garde', 'Alice', '', ...Array(7).fill(false), 0, 50, false],
-  [36, 'Hird', 'Garde', 'Hird', '', ...Array(7).fill(false), 0, 999, false]
+  // Présences!A porte le lundi ISO : semaine 36 de 2026 = 31 août.
+  ['2026-08-31', 'Rivebois', 'Garde', 'Alice', '', ...Array(7).fill(false), 0, 100, true],
+  ['2026-08-31', 'Rivebois', 'Garde', 'Bob', '', ...Array(7).fill(false), 0, 200, false],
+  ['2026-08-24', 'Rivebois', 'Garde', 'Alice', '', ...Array(7).fill(false), 0, 50, false],
+  ['2026-08-31', 'Hird', 'Garde', 'Hird', '', ...Array(7).fill(false), 0, 999, false]
 ];
 const sheet = {
   getRange: () => ({ getValues: () => presenceRows, getDisplayValues: () => presenceRows.map(r => r.map(String)) })
@@ -33,7 +34,7 @@ vm.runInContext(readFileSync('src/PresenceDashboard.gs.js', 'utf8'), context);
 // Le barème et sa migration sont couverts par test-soldes-grades.mjs.
 context.mettreAJourSoldesPresences_ = () => {};
 context.getLastPresenceRowWebApp = () => presenceRows.length + 1;
-context.getCurrentIsoWeekWebApp = () => 36;
+context.lundiCourantPresence_ = () => '2026-08-31';
 context.estCorpsExcluDesPresences_ = corps => corps === 'Hird';
 assert.throws(() => context.getPresences('invalid'), /Accès refusé/);
 assert.throws(() => context.getPresenceOfficerDashboard('GARDE'), /Accès refusé/);
@@ -41,8 +42,8 @@ assert.equal(reads, 0, 'Refus avant lecture Sheets');
 assert.equal('corpsTotals' in context.getPresences('GARDE'), false);
 const totals = context.getPresences('OFFICIER').corpsTotals;
 assert.deepEqual(JSON.parse(JSON.stringify(totals)), [
-  { semaine: 36, corps: 'Rivebois', total: 300 },
-  { semaine: 35, corps: 'Rivebois', total: 50 }
+  { lundi: '2026-08-31', corps: 'Rivebois', total: 300 },
+  { lundi: '2026-08-24', corps: 'Rivebois', total: 50 }
 ]);
 presenceRows[1][13] = 250;
 assert.equal(context.getPresences('OFFICIER').corpsTotals[0].total, 350);

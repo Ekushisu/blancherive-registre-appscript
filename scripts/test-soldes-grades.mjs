@@ -57,24 +57,33 @@ class Sheet {
       setFormulasR1C1: values => range.setValues(values.map((r, i) => r.map((v, j) => toA1(v, row + i, col + j)))),
       clearContent: () => range.setValues(Array.from({ length: height }, () => Array(width).fill(''))),
       clearDataValidations: () => range, setDataValidation: () => range,
+      setNumberFormat: () => range, setBorder: () => range, setBackground: () => range,
       setFontWeight: () => range, setHorizontalAlignment: () => range,
       insertCheckboxes: () => { throw Error('Ne pas effacer les valeurs des cases existantes'); }
     };
     return range;
   }
+  setConditionalFormatRules() {}
 }
-let globalBase = 50, week = 36;
+const regleFactice = () => {
+  const r = { whenFormulaSatisfied: () => r, setBackground: () => r, setRanges: () => r, build: () => ({}) };
+  return r;
+};
+// Présences!A porte le lundi ISO ; les numéros de semaine ci-dessous ne
+// servent qu'à la lisibilité des lignes.
+const L = { 34: '2026-08-17', 35: '2026-08-24', 36: '2026-08-31', 37: '2026-09-07' };
+let globalBase = 50, lundi = L[36];
 const oldFormula = row => `=IF(OR(B${row}="Hird du Jarl";C${row}="Recrue");0;IF(C${row}="Aspirant-Garde";M${row}*'Vue globale'!$L$2/2;M${row}*'Vue globale'!$L$2))`;
 const person = (week, grade, name, row, corps = 'Cité') =>
   [week, corps, grade, name, '', true, true, true, false, false, false, false,
     `=COUNTIF(F${row}:L${row};TRUE)`, oldFormula(row), true];
 const presence = new Sheet('Présences', [Array(15).fill('En-tête'),
-  person(36, 'Commander', 'Actuel', 2), person(35, 'Commander', 'Ancien', 3),
-  person(36, 'Garde', 'Garde', 4), person(36, 'Cadet', 'Cadet', 5),
+  person(L[36], 'Commander', 'Actuel', 2), person(L[35], 'Commander', 'Ancien', 3),
+  person(L[36], 'Garde', 'Garde', 4), person(L[36], 'Cadet', 'Cadet', 5),
   // Semaine passée : le grade « Aspirant-Garde », supprimé depuis, reste inscrit
   // dans les lignes historiques et conserve son tarif d'origine.
-  person(36, 'Recrue', 'Recrue', 6), person(35, 'Aspirant-Garde', 'Ancien aspirant', 7),
-  person(36, 'Commander', 'Hird', 8, 'Hird du Jarl'), person(34, 'Commander', 'Manuel', 9)
+  person(L[36], 'Recrue', 'Recrue', 6), person(L[35], 'Aspirant-Garde', 'Ancien aspirant', 7),
+  person(L[36], 'Commander', 'Hird', 8, 'Hird du Jarl'), person(L[34], 'Commander', 'Manuel', 9)
 ]);
 presence.rows[8][13] = 77;
 presence.rows[2][15] = 'Colonne technique préservée';
@@ -88,15 +97,19 @@ const ss = { getSheetByName: name => sheets.get(name), insertSheet: name => {
 } };
 const context = vm.createContext({
   console, Date,
-  SpreadsheetApp: { openById: () => ss, flush() {}, newDataValidation: () => ({ requireCheckbox: () => ({ build: () => ({}) }) }) },
+  SpreadsheetApp: {
+    openById: () => ss, flush() {},
+    newDataValidation: () => ({ requireCheckbox: () => ({ build: () => ({}) }) }),
+    newConditionalFormatRule: regleFactice,
+    BorderStyle: { SOLID_MEDIUM: 'SOLID_MEDIUM', DASHED: 'DASHED' }
+  },
   LockService: { getDocumentLock: () => ({ waitLock() {}, releaseLock() {} }) }
 });
 vm.runInContext(readFileSync('src/Code.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/Presences.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/SoldesGrades.js', 'utf8'), context);
-context.getCurrentIsoWeekWebApp = () => week;
+context.lundiCourantPresence_ = () => lundi;
 context.getLastPresenceRowWebApp = sheet => sheet.getLastRow();
-context.getLastPresenceRow = sheet => sheet.getLastRow();
 const update = () => context.mettreAJourSoldesPresences_(ss, presence);
 const amounts = () => presence.getRange(2, 14, presence.getLastRow() - 1, 1).getValues().flat();
 update();
@@ -133,9 +146,8 @@ assert.equal(presence.value(byName('Actuel'), 15), true, 'Paiement courant conse
 assert.equal(presence.value(byName('Ancien'), 15), true, 'Paiement historique conservé');
 assert.equal(presence.value(byName('Nouveau'), 14), 0);
 assert.equal(presence.rows[2][15], 'Colonne technique préservée');
-context.reparerFormulesPresence();
-assert.equal(presence.value(byName('Ancien'), 14), 200, 'Réparation historique sans changement de tarif');
-week = 37;
+assert.equal(presence.rows[0][0], 'Lundi', 'En-tête de la colonne A');
+lundi = L[37];
 tariff.rows.find(r => r[0] === 'Commander')[1] = 200;
 update();
 assert.equal(presence.value(byName('Actuel'), 14), 360, 'La semaine clôturée garde son tarif de 120');

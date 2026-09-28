@@ -676,6 +676,18 @@ function modifierEffectifInterne_(token, data) {
       .getDisplayValue()
   );
 
+  const currentGrade = nettoyerEffectifsWeb_(
+    sheet
+      .getRange(row, schema.grade + 1)
+      .getDisplayValue()
+  );
+
+  const currentCorps = nettoyerEffectifsWeb_(
+    sheet
+      .getRange(row, schema.corps + 1)
+      .getDisplayValue()
+  );
+
   const expectedPrenom =
     nettoyerEffectifsWeb_(data.expectedPrenom);
 
@@ -765,7 +777,18 @@ function modifierEffectifInterne_(token, data) {
 
   SpreadsheetApp.flush();
 
-  if (currentStatus !== status) {
+  /*
+    Grade, corps et statut figurent dans la ligne de Présences de
+    la semaine courante : chacun de ces changements la régénère,
+    pointages conservés. Un membre sorti du service actif garde sa
+    ligne s'il a des jours pointés (voir Presences.js). Spécialité
+    et assermentation ne touchent pas aux Présences.
+  */
+  if (
+    currentStatus !== status ||
+    currentGrade !== grade ||
+    currentCorps !== corps
+  ) {
     genererPresencesSemaineCourante();
   }
 

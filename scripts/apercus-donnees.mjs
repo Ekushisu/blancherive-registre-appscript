@@ -11,7 +11,10 @@
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
-const SEMAINE_COURANTE = 37;
+// Présences!A porte le lundi ISO ; les numéros ci-dessous ne servent qu'à
+// la lisibilité des lignes d'aperçu.
+const LUNDI_COURANT = "2026-09-07";
+const LUNDIS = { 34: "2026-08-17", 37: "2026-09-07" };
 
 const jours = motif => motif.split("").map(c => c === "x");
 
@@ -19,7 +22,7 @@ function presence(row, semaine, corps, prenom, nom, grade, motif, solde, paye) {
   const j = jours(motif);
   return {
     row,
-    semaine,
+    lundi: LUNDIS[semaine],
     corps,
     prenom,
     nom,
@@ -65,30 +68,30 @@ const lignesPresences = [
 function totauxParCorps(lignes) {
   const totaux = new Map();
   for (const l of lignes) {
-    const cle = `${l.semaine}|${l.corps}`;
-    if (!totaux.has(cle)) totaux.set(cle, { semaine: l.semaine, corps: l.corps, total: 0 });
+    const cle = `${l.lundi}|${l.corps}`;
+    if (!totaux.has(cle)) totaux.set(cle, { lundi: l.lundi, corps: l.corps, total: 0 });
     totaux.get(cle).total += l.soldeRaw;
   }
   return [...totaux.values()];
 }
 
 export const presences = {
-  currentWeek: SEMAINE_COURANTE,
+  lundiCourant: LUNDI_COURANT,
   rows: lignesPresences,
   corpsTotals: totauxParCorps(lignesPresences)
 };
 
 const impayesPasses = lignesPresences.filter(
-  l => l.semaine < SEMAINE_COURANTE && l.soldeRaw > 0 && !l.paye
+  l => l.lundi < LUNDI_COURANT && l.soldeRaw > 0 && !l.paye
 );
 
-const semaineCourante = lignesPresences.filter(l => l.semaine === SEMAINE_COURANTE);
+const semaineCourante = lignesPresences.filter(l => l.lundi === LUNDI_COURANT);
 
 const somme = (lignes, filtre = () => true) =>
   lignes.filter(filtre).reduce((total, l) => total + l.soldeRaw, 0);
 
 export const presenceDashboard = {
-  currentWeek: SEMAINE_COURANTE,
+  lundiCourant: LUNDI_COURANT,
   currentWeekTotal: somme(semaineCourante),
   currentWeekPaid: somme(semaineCourante, l => l.paye),
   currentWeekRemaining: somme(semaineCourante, l => !l.paye),
@@ -138,7 +141,7 @@ function construirePaye() {
   });
 
   const valeurs = lignesPresences.map(l => [
-    l.semaine, l.corps, l.grade, l.prenom, l.nom,
+    l.lundi, l.corps, l.grade, l.prenom, l.nom,
     ...l.jours, l.joursPresents, l.soldeRaw, l.paye
   ]);
 
@@ -152,7 +155,7 @@ function construirePaye() {
 
   contexte.mettreAJourSoldesPresences_ = () => {};
   contexte.getLastPresenceRowWebApp = () => valeurs.length + 1;
-  contexte.getCurrentIsoWeekWebApp = () => SEMAINE_COURANTE;
+  contexte.lundiCourantPresence_ = () => LUNDI_COURANT;
   contexte.estCorpsExcluDesPresences_ = corps =>
     String(corps).toLowerCase().includes("hird");
 

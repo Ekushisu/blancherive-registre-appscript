@@ -9,8 +9,13 @@ Principaux modules :
 - `Code.js`
   - `SPREADSHEET_ID`
   - `doGet()`
-  - fonctions historiques de génération / réparation / mise en forme des Présences
-  - installation des triggers
+  - constante partagée `PRESENCES_SHEET_NAME`
+  - les anciennes fonctions de génération hebdomadaire des Présences, leurs
+    déclencheurs et la copie de mise en forme vers les feuilles de corps ont été
+    retirés le 28 septembre 2026 ; le seul chemin de génération est
+    `genererPresencesSemaineCourante()` dans `Presences.js`, et les sept
+    feuilles de corps (vues `QUERY` d'Effectifs) ont été supprimées du classeur,
+    l'Organigramme de l'application les remplaçant
 
 - `Auth.js`
   - login par mot de passe de rôle
@@ -37,6 +42,18 @@ Principaux modules :
   - modification des cases de présence et du statut Payé
   - `ecrirePresenceCellule_` : écriture validée d'une case F:L ou O, partagée avec
     `Paye.js` pour que les deux chemins appliquent les mêmes contrôles
+  - section LUNDI DE SEMAINE : `Présences!A` porte le lundi ISO en texte ;
+    `lundiCourantPresence_`, `normaliserLundiPresence_` (anciennes valeurs
+    ramenées au lundi), `estLundiPresence_`, `comparerLundisPresence_`,
+    `ecartSemainesPresence_`, `numeroSemaineIsoPresence_` ; utilisées par toutes
+    les lectures de la colonne, y compris `Paye.js`, `PresenceDashboard.gs.js` et
+    `SoldesGrades.js`. Le serveur ne manipule jamais de numéro de semaine ;
+    `getCurrentIsoWeekWebApp` subsiste, dérivée du lundi courant
+  - `inventorierReferencesSemainePresences` et `migrerPresencesVersLundis` :
+    fonctions manuelles de l'éditeur, inventaire des formules du classeur lisant
+    `Présences!A` puis conversion de la colonne A seule
+  - `ecrirePresenceCellule_` exige l'identité de la ligne (`lundi`, `prenom`,
+    `nom`) et écrit sous le verrou de document
 
 - `PresenceDashboard.gs.js`
   - synthèse financière et inactivité, OFFICIER
@@ -99,6 +116,8 @@ Le source frontend est dans `ui/` :
 - `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
 - `ui/assets/` : copies web des illustrations/papier du manuel, incorporées au build ;
 - `ui/src/grades.jsx` : descriptions doctrinales des grades affichées dans l'Organigramme, table statique sans fonction serveur associée ;
+- `ui/src/semaine.js` : libellés de semaine calculés depuis le lundi ISO renvoyé par le serveur (`libelleSemaine`, `dateLundi`, `titreSemaine`, `numeroSemaine`, `retardSemaines`, tri décroissant) ; seul endroit où un numéro de semaine est produit ;
+- `ui/src/calendrier.js` et `calendrier.jsx` : calendrier tamrielien pour l'affichage (`dateTamriel`, `dateReelle`, `lireDate`, composant `DateRP`). Lit les formats que le serveur renvoie (`yyyy-MM-dd`, ISO avec heure, `dd/MM/yyyy`, `dd/MM/yyyy HH:mm`) et rend « Loredas 26 Âtrefeu 4E 226 » avec la date réelle en info-bulle ; une valeur non reconnue est rendue telle quelle. Les données, l'API et les champs de saisie restent en calendrier réel ;
 - `ui/src/catalogue.js` : cache local du catalogue des objets — préchargement à l'ouverture des pages Prison et Inventaire (officier), `localStorage` versionné, recherche en mémoire identique à `rechercherObjets` (parité vérifiée par `scripts/test-catalogue-local.mjs`), hook `useCatalogue` ;
 - `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
@@ -141,9 +160,16 @@ quel que soit le prochain rôle ajouté.
 `Paye.js` utilise des helpers déclarés dans `Presences.js` :
 - `ecrirePresenceCellule_`
 - `getLastPresenceRowWebApp`
-- `getCurrentIsoWeekWebApp`
 - `estCorpsExcluDesPresences_`
 - `mettreAJourSoldesPresences_`
+- `lundiCourantPresence_`, `normaliserLundiPresence_`, `estLundiPresence_`,
+  `comparerLundisPresence_`, `ecartSemainesPresence_`
+
+`PresenceDashboard.gs.js` et `SoldesGrades.js` utilisent aussi
+`lundiCourantPresence_`, `normaliserLundiPresence_` et `estLundiPresence_` de
+`Presences.js` : toute lecture de `Présences!A` passe par ces helpers, sans quoi
+une ancienne valeur (numéro de semaine, cellule au format date) casse la détection
+de la semaine courante.
 
 `Inventaire.js` utilise :
 - `nettoyerSaisieUtilisateur`, déclaré dans `Amendes.js` ;
@@ -163,6 +189,8 @@ quel que soit le prochain rôle ajouté.
 
 `Codex.js` dérive ses métadonnées du registre `SYNC_CODEX_DOCUMENTS` de `SyncCodex.js`, et les construit à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script. Ajouter un texte juridique ne demande donc qu'une entrée dans ce registre.
 
-Le champ `source` d'un document sert de clé d'affichage dans le Codex. Les libellés d'infraction enregistrés dans Amendes et Prison sont de la forme `Art. N — Titre` et ne contiennent pas le nom de la source ; renommer une source impériale n'orpheline donc pas les lignes historiques. En revanche, ces libellés proviennent exclusivement du Codex Judiciaire de Blancherive, dont les titres d'articles ne doivent pas changer à la légère.
+Le champ `source` d'un document sert de clé d'affichage dans le Codex. Les libellés d'infraction enregistrés dans Amendes et Prison sont de la forme `Art. N — Titre` et ne contiennent pas le nom de la source ; renommer une source impériale n'orpheline donc pas les lignes historiques. Les titres d'articles des sources marquées `sanctions` ne doivent pas changer à la légère : un libellé enregistré se résout d'abord par égalité exacte, puis, à défaut, par numéro d'article dans l'ancien Codex Judiciaire de Blancherive (`findCodexArticle` dans `Index.html`), caduc depuis le 27 septembre 2026 mais seule source des libellés antérieurs.
+
+Le droit de la châtellerie est porté par quatre codes adoptés par la Cour de Blancherive : Loi fondamentale, Code pénal local, Code civil local et Code du commerce local. Le Code pénal qualifie chaque article dans son titre (« (délit) », « (crime) ») ; `separerClassificationTitreCodex_()` en fait la classification et l'ôte du titre. Aucun des quatre ne chiffre ses peines.
 
 Ne pas considérer les fichiers `.js` Apps Script comme des modules ES isolés : ils partagent le namespace global.

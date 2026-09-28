@@ -7,7 +7,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const SEMAINE_COURANTE = 37;
+// Semaine 37 de 2026 : lundi 7 septembre. Les lignes sont écrites avec
+// leur numéro de semaine pour rester lisibles, mais Présences!A porte le
+// lundi ISO, et c'est lui que le serveur manipule.
+const LUNDI_COURANT = '2026-09-07';
+const L = { 34: '2026-08-17', 35: '2026-08-24', 36: '2026-08-31', 37: '2026-09-07', 38: '2026-09-14' };
 
 let lectures = 0;
 let ecritures = [];
@@ -15,16 +19,19 @@ let lignes = [];
 
 // A Semaine, B Corps, C Grade, D Prénom, E Nom, F:L jours, M jours, N solde, O payé
 const ligne = (semaine, corps, grade, prenom, nom, jours, solde, paye) =>
-  [semaine, corps, grade, prenom, nom, ...Array(7).fill(false), jours, solde, paye];
+  [L[semaine], corps, grade, prenom, nom, ...Array(7).fill(false), jours, solde, paye];
 
 const feuille = {
-  getRange: (row, column) => ({
-    getValues: () => lignes,
-    getDisplayValues: () => lignes.map(l => l.map(v => (v === null ? '' : String(v)))),
-    // Contrôle de `ecrirePresenceCellule_` : la ligne doit porter une semaine.
-    getValue: () => (lignes[row - 2] ? lignes[row - 2][column - 1] : ''),
-    setValue: valeur => ecritures.push({ row, column, valeur })
-  })
+  // Lecture par bloc : le registre entier pour getPaye, l'en-tête A:E d'une
+  // ligne pour le contrôle d'identité de `ecrirePresenceCellule_`.
+  getRange: (row, column, height = lignes.length, width = 15) => {
+    const bloc = () => lignes.slice(row - 2, row - 2 + height).map(l => l.slice(column - 1, column - 1 + width));
+    return {
+      getValues: bloc,
+      getDisplayValues: () => bloc().map(l => l.map(v => (v === null ? '' : String(v)))),
+      setValue: valeur => ecritures.push({ row, column, valeur })
+    };
+  }
 };
 
 const context = vm.createContext({
@@ -48,7 +55,8 @@ const context = vm.createContext({
       lectures++;
       return { getSheetByName: () => feuille };
     }
-  }
+  },
+  LockService: { getDocumentLock: () => ({ waitLock() {}, releaseLock() {} }) }
 });
 
 vm.runInContext(readFileSync('src/Presences.js', 'utf8'), context);
@@ -58,7 +66,7 @@ vm.runInContext(readFileSync('src/Paye.js', 'utf8'), context);
 // bornes de semaine ISO (test-presence-finances).
 context.mettreAJourSoldesPresences_ = () => {};
 context.getLastPresenceRowWebApp = () => lignes.length + 1;
-context.getCurrentIsoWeekWebApp = () => SEMAINE_COURANTE;
+context.lundiCourantPresence_ = () => LUNDI_COURANT;
 context.estCorpsExcluDesPresences_ = corps => String(corps).toLowerCase().includes('hird');
 
 // Les valeurs naissent dans le contexte vm : un aller-retour JSON leur rend
@@ -83,11 +91,19 @@ assert.ok(context.getPaye('INTENDANT'), 'INTENDANT lit la paye');
 // partagé avec la page Présences, donc indépendant de l'interface.
 lignes = [ligne(36, 'Rivebois', 'Garde', 'Alice', 'Une', 5, 400, false)];
 ecritures = [];
-assert.throws(() => context.reglerSemainePaye('INTENDANT', 2, true), /Accès refusé/);
-assert.throws(() => context.reglerSemainePaye('GARDE', 2, true), /Accès refusé/);
+const alice36 = { lundi: L[36], prenom: 'Alice', nom: 'Une' };
+assert.throws(() => context.reglerSemainePaye('INTENDANT', 2, true, alice36), /Accès refusé/);
+assert.throws(() => context.reglerSemainePaye('GARDE', 2, true, alice36), /Accès refusé/);
 assert.equal(ecritures.length, 0, 'Aucune écriture sans le rôle OFFICIER');
 
-context.reglerSemainePaye('OFFICIER', 2, true);
+// L'identité de la ligne affichée est vérifiée : un numéro de ligne périmé
+// après un tri des Présences ne doit jamais cocher un autre garde.
+assert.throws(() => context.reglerSemainePaye('OFFICIER', 2, true), /Identité de la ligne manquante/);
+assert.throws(() => context.reglerSemainePaye('OFFICIER', 2, true, { lundi: L[35], prenom: 'Alice', nom: 'Une' }), /a changé/);
+assert.throws(() => context.reglerSemainePaye('OFFICIER', 2, true, { lundi: L[36], prenom: 'Bob', nom: 'Deux' }), /a changé/);
+assert.equal(ecritures.length, 0, 'Aucune écriture sur une identité qui ne correspond plus');
+
+context.reglerSemainePaye('OFFICIER', 2, true, alice36);
 assert.deepEqual(
   ecritures.map(e => [e.row, e.column, e.valeur]),
   [[2, 15, true]],
@@ -176,9 +192,10 @@ assert.equal(paye.totalAPrevoir, 320, 'La semaine en cours est chiffrée à part
 const rivebois = financeur(paye, 'thane-rivebois');
 assert.equal(rivebois.previsionTotal, 320);
 assert.equal(rivebois.previsionGardes, 1);
-assert.deepEqual(rivebois.semaines, [35, 36], 'Semaines dues, triées');
-assert.equal(rivebois.semainePlusAncienne, 35);
+assert.deepEqual(rivebois.semaines, [L[35], L[36]], 'Semaines dues, triées, en lundis ISO');
+assert.equal(rivebois.semainePlusAncienne, L[35]);
 assert.equal(rivebois.retardMax, 2);
+assert.equal(paye.lundiCourant, LUNDI_COURANT);
 
 
 // ============================================================
@@ -188,7 +205,7 @@ assert.equal(rivebois.retardMax, 2);
 const alice = rivebois.groupes[0].gardes[0];
 assert.equal(alice.nomComplet, 'Alice Une');
 assert.equal(alice.total, 640, 'Les semaines d’un même garde sont cumulées');
-assert.deepEqual(alice.semaines.map(s => s.semaine), [35, 36], 'De la plus ancienne à la plus récente');
+assert.deepEqual(alice.semaines.map(s => s.lundi), [L[35], L[36]], 'De la plus ancienne à la plus récente');
 assert.deepEqual(alice.semaines.map(s => s.retard), [2, 1]);
 assert.deepEqual(alice.semaines.map(s => s.row), [2, 3], 'La ligne Sheets permet de cocher');
 assert.equal(alice.semaines[1].joursPresents, 5);
@@ -241,6 +258,32 @@ assert.deepEqual(
   financeur(paye, 'thane-rivebois').groupes[0].gardes.map(g => g.nomComplet),
   ['Gros Montant', 'Petit Montant']
 );
+
+
+// ============================================================
+// PASSAGE D'ANNÉE
+//
+// Le lundi ISO porte l'année : la semaine 52 de 2025 reste due
+// en semaine 2 de 2026, avec un retard de deux semaines. Avec
+// un simple numéro de semaine, 52 > 2 la faisait passer pour
+// une semaine à venir.
+// ============================================================
+
+context.lundiCourantPresence_ = () => '2026-01-05';
+lignes = [
+  ['2025-12-22', 'Rivebois', 'Garde', 'Alice', 'Une', ...Array(7).fill(false), 5, 400, false],
+  ['2025-12-29', 'Rivebois', 'Garde', 'Alice', 'Une', ...Array(7).fill(false), 3, 240, false],
+  ['2026-01-05', 'Rivebois', 'Garde', 'Alice', 'Une', ...Array(7).fill(false), 2, 160, false]
+];
+paye = lirePaye('OFFICIER');
+assert.equal(paye.totalADemander, 640, 'Les semaines de l\'année écoulée restent dues');
+assert.equal(paye.totalAPrevoir, 160);
+assert.deepEqual(
+  financeur(paye, 'thane-rivebois').groupes[0].gardes[0].semaines.map(s => s.retard),
+  [2, 1]
+);
+assert.equal(financeur(paye, 'thane-rivebois').retardMax, 2);
+context.lundiCourantPresence_ = () => LUNDI_COURANT;
 
 
 // ============================================================

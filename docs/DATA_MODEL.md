@@ -49,7 +49,8 @@ Groupes terminaux reconnus :
 
 ### Barème des soldes
 
-- Ancienne base commune : `Vue globale!L2`, référencée par les formules de `Présences!N`. Recrue : 0 ; Aspirant-Garde : moitié de cette base ; Hird : 0. `Aspirant-Garde` n'existe plus depuis le 15 septembre 2026, mais reste inscrit dans les formules et les lignes de Présences historiques.
+- Ancienne base commune : `Vue globale!L2`, référencée autrefois par les formules de `Présences!N`. Recrue : 0 ; Aspirant-Garde : moitié de cette base ; Hird : 0. `Aspirant-Garde` n'existe plus depuis le 15 septembre 2026, mais reste inscrit dans les formules et les lignes de Présences historiques.
+- La feuille `Vue globale` date d'avant l'application : calculs manuels (coûts, impayés, absents) que l'application refait de son côté. Archivée par le propriétaire le 28 septembre 2026 : `SoldesGrades` est initialisée et plus aucune formule de `Présences!N` ne référence `L2`, donc le code ne la lit plus. Ne pas la recréer ni y référencer de nouvelles formules.
 ## SyncCodex — cache technique
 
 - `A:J` articles extraits ; `L:O` listes d'infractions des formulaires.
@@ -65,7 +66,7 @@ Colonnes A:O :
 
 | Colonne | Contenu |
 |---|---|
-| A | Semaine |
+| A | Lundi de la semaine ISO, texte `yyyy-MM-dd` |
 | B | Corps de garde |
 | C | Grade |
 | D | Prénom |
@@ -80,6 +81,10 @@ Colonnes A:O :
 | M | Jours présents |
 | N | Solde |
 | O | Payé |
+
+La colonne A (en-tête « Lundi ») porte le lundi de la semaine ISO en texte `yyyy-MM-dd`, fuseau Europe/Stockholm, colonne au format texte brut `@` posé sur toutes les lignes à chaque régénération. Le texte ne dépend ni du format de cellule ni du fuseau du classeur, et porte l'année. Jusqu'au 28 septembre 2026 la colonne contenait un numéro de semaine sans année ; toute lecture passe encore par `normaliserLundiPresence_` (Presences.js), qui ramène au lundi ISO un ancien numéro, une cellule au format date, un numéro de série ou un autre jour de la semaine, et conserve tel quel un texte non reconnu. `migrerPresencesVersLundis()` convertit explicitement la colonne A, après `inventorierReferencesSemainePresences()` pour les formules du classeur qui la lisent. Ne jamais écrire d'objet `Date` ni de nombre en colonne A.
+
+La mise en forme conditionnelle de A:O et les séparateurs de semaine sont posés par la génération, sur toute la hauteur de la feuille : orange pour la semaine courante, rouge pour une semaine passée impayée à solde due, gris pour une semaine passée réglée ou sans solde ; trait plein sous la dernière ligne de chaque semaine, pointillé à chaque changement de corps. Les règles conditionnelles de la feuille sont remplacées à chaque régénération : ne pas en poser à la main dans Présences.
 
 Ne pas déplacer ni réutiliser les colonnes à partir de P sans vérifier les notes / données existantes de la feuille.
 

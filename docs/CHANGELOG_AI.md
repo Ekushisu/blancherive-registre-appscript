@@ -1,5 +1,119 @@
 # Journal de passation IA
 
+## 2026-09-28 — Régénération sur grade, corps ou statut ; sortants conservés
+
+- Règles fixées par le propriétaire : la semaine courante se régénère à
+  l'ajout d'un membre et à tout changement de grade, corps ou statut
+  (`Effectifs.js`, avant : statut seul) ; un membre sorti du service actif
+  garde sa ligne de la semaine si elle porte un pointage ou un paiement
+  (`Presences.js`, avant : ligne perdue) ; les pointages sont toujours
+  conservés. Test étendu, doc BUSINESS_RULES mise à jour.
+
+## 2026-09-28 — Dates affichées en calendrier tamrielien
+
+- Sur demande du propriétaire, toutes les dates de l'interface sont rendues
+  en calendrier de Tamriel avec la date réelle en info-bulle : nouveau module
+  `ui/src/calendrier.js` (`lireDate`, `dateTamriel`, `dateReelle`) et
+  composant `DateRP` dans `calendrier.jsx`. Année réelle − 1 800 → « 4E 226 »,
+  jour de semaine Morndas…Sundas, mois Primétoile…Soirétoile (VF des jeux).
+- Branché sur Amendes, Prison, Présences, Paye, tableau de bord et panneau
+  des changements. Données, API et champs de saisie inchangés. Texte copié de
+  la Paye : les deux calendriers. Test `scripts/test-calendrier.mjs`.
+
+## 2026-09-28 — Présences : lundi ISO en colonne A, identité de ligne au pointage
+
+- Le propriétaire a signalé que l'ajout d'un membre réécrit la feuille
+  Présences, y met des dates de 1900 en colonne A et perd des pointages, même
+  après suppression des déclencheurs horaires. La régénération n'est pas
+  déclenchée par un CRON mais par `ajouterEffectif` et `modifierEffectif`.
+  Une cellule `Présences!A` au format date revenait de `getValues()` en
+  objet `Date` (39 → 7 février 1900) ; la ligne n'était plus reconnue comme
+  semaine courante, un doublon à blanc était créé, et la `Date` réécrite
+  posait le format date ailleurs à chaque tri, `clearContent()` gardant les
+  formats.
+- Décision du propriétaire : ne plus stocker de numéro de semaine. La
+  colonne A porte le lundi ISO en texte `yyyy-MM-dd`, format texte brut,
+  en-tête « Lundi ». Le serveur raisonne en lundis, l'interface calcule le
+  numéro de semaine (`ui/src/semaine.js`). Texte plutôt que cellule date :
+  aucune dépendance au format de cellule ni au fuseau du classeur, même
+  convention que `HistoriqueEffectifs`. L'année est enfin portée : la Paye
+  et le tableau de bord ne perdent plus les semaines de l'année écoulée en
+  janvier.
+- `Presences.js` : `normaliserLundiPresence_` ramène toute ancienne valeur
+  (numéro, date de 1900, numéro de série, texte) au lundi ISO, un numéro
+  supérieur à la semaine courante datant de l'année précédente ; la génération,
+  `getPresences`, `Paye.js`, `PresenceDashboard.gs.js` et
+  `mettreAJourSoldesPresences_` l'utilisent. Fusion des doublons de la semaine
+  courante, tri chronologique par lundi, format `@` sur toute la colonne A.
+  Nouvelles fonctions manuelles `inventorierReferencesSemainePresences()` et
+  `migrerPresencesVersLundis()` (colonne A seule ; les formules lisant A sont
+  rappelées dans le journal, sans bloquer, une formule adaptée les lisant
+  légitimement). La formule `Vue globale!N5` du propriétaire, seule concernée,
+  a été adaptée au lundi ISO.
+- `ecrirePresenceCellule_` exige l'identité de la ligne (`lundi`, `prenom`,
+  `nom`), prend le verrou de document et refuse un numéro de ligne périmé.
+  `modifierPresence` et `reglerSemainePaye` transmettent `identite` ;
+  `app.jsx` l'envoie depuis les pages Présences et Paye. Les champs d'API
+  `currentWeek` / `semaine` deviennent `lundiCourant` / `lundi`.
+- Mise en forme de Présences portée par la génération : trois règles
+  conditionnelles (semaine courante, impayé dû, semaine passée) sur toute la
+  hauteur de A:O, remplaçant les règles manuelles de la feuille, et séparateurs
+  de semaine redessinés. Motif : les règles manuelles ne couvraient pas les
+  lignes ajoutées et comparaient A à un numéro de semaine.
+- `Code.js` : retrait des fonctions historiques de génération hebdomadaire
+  par numéro de semaine (voir CURRENT_STATE). `getCurrentIsoWeekWebApp`
+  conservée, dérivée du lundi courant.
+- Vérifications : `node scripts/test-presences-lundi.mjs` (nouveau, remplace
+  `test-presences-semaine`), `test-paye` (étendu au passage d'année et à
+  l'identité de ligne), `test-presence-finances`, `test-soldes-grades`,
+  `test-presences-impayes` et les autres suites ; `npm run build`. Données
+  d'aperçu adaptées, aperçus non recapturés. Aucun push ni déploiement ;
+  ordre de mise en service dans CURRENT_STATE.
+
+## 2026-09-27 — Quatre codes de Blancherive, Codex Judiciaire caduc
+
+- Le propriétaire a fourni quatre Google Docs et déclaré caducs tous les
+  anciens codes de Blancherive : Loi fondamentale, Code pénal local, Code civil
+  local et Code du commerce local, tous adoptés par la Cour de Blancherive. Ils
+  entrent dans `SYNC_CODEX_DOCUMENTS` sous la famille « Droit de Blancherive »
+  et remplacent le Codex Judiciaire (`1_awmZGCcQ…`), retiré du registre et
+  conservé sous `docs/codex/ancien-code-judiciaire-blancherive.txt`. Aucun
+  doublon avec les textes déjà référencés : ce sont des textes nouveaux, pas
+  des réécritures.
+- **Les formulaires Amendes et Prison perdent leurs listes d'infractions.**
+  L'ancien Codex chiffrait 55 articles ; aucun des quatre nouveaux codes ne
+  porte de montant ni de durée. Le Code pénal qualifie chaque article
+  (contravention, délit, crime) et renvoie au barème impérial. Décision
+  provisoire du propriétaire, le 27 septembre 2026, en attendant l'avis du
+  nouveau magistrat : les gardes cochent « Motif personnalisé », citent
+  l'article et saisissent eux-mêmes le montant ou la durée. Les deux issues
+  restent ouvertes — chiffrer les peines dans le texte, ou fixer un barème par
+  qualification dans l'application. `sanctions: true` est posé sur le Code
+  pénal et le Code du commerce pour que leurs articles entrent dans les listes
+  dès qu'ils seront chiffrés.
+- Extraction : les sauts de ligne doux (Maj+Entrée) séparent désormais des
+  lignes. Les codes de Blancherive en usent entre le titre d'un article et son
+  corps ; sans ce découpage, 33 articles du Code pénal restaient sans texte.
+  La qualification portée par le titre, « (délit) », devient la classification
+  de l'article et quitte le titre ; « infraction délictuelle » dans le texte
+  vaut délit et non simple infraction. Les codes impériaux gardent leurs
+  classifications entre crochets.
+- Ces documents sont partagés en lecture sans téléchargement : la page de
+  lecture s'ouvre, l'export texte répond 401. Les copies locales ont été
+  reconstituées depuis la page de lecture. Si `synchroniserCodex()` n'arrive
+  pas à les ouvrir, demander au propriétaire des documents d'autoriser le
+  téléchargement pour les lecteurs.
+- `CODEX_JUDICIAIRE_SOURCE` reste défini : `findCodexArticle` dans `Index.html`
+  résout encore par numéro d'article, dans cette seule source, les libellés
+  des amendes et incarcérations antérieures. Les lignes historiques restent
+  lisibles ; seul le lien d'information vers l'ancien article cessera de se
+  résoudre après synchronisation.
+- Vérifications : `node scripts/test-sync-codex.mjs` (étendu aux sauts de ligne
+  doux, aux qualifications de titre et au nouveau registre), `test-sanctions`,
+  `test-sanctions-ui`, `test-acces-public`, `test-prison-objets`. Extracteur
+  passé sur les copies locales : 28, 97, 31 et 21 articles, aucun sans texte.
+  Aucun push ni déploiement ; `synchroniserCodex()` à lancer après publication.
+
 ## 2026-09-22 — Inventaire des coffres, rôle INTENDANT en lecture, deux décrets
 
 - Nouvelle page **Inventaire** et module `src/Inventaire.js` : liste des objets

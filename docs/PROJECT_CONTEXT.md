@@ -24,7 +24,6 @@ Feuilles métier connues :
 - `Effectifs`
 - `Données`
 - `Présences`
-- `Vue globale`
 - `Amendes`
 - `Prison`
 - `SyncCodex`

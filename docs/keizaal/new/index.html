@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEF App with Vite + React</title>
+  <script>
+    // Override navigator.permissions.query to prevent CEF input blocking
+    if (navigator.permissions && navigator.permissions.query) {
+      const originalQuery = navigator.permissions.query.bind(navigator.permissions);
+      navigator.permissions.query = function (permissionDesc) {
+        // For microphone/camera permissions, return a mock "granted" state
+        // to prevent blocking permission dialogs in CEF
+        if (permissionDesc.name === 'microphone' || permissionDesc.name === 'camera') {
+          return Promise.resolve({
+            state: 'granted',
+            onchange: null
+          });
+        }
+        // For other permissions, use original implementation
+        return originalQuery(permissionDesc);
+      };
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+
+  <!-- Conditional loading: dev server takes priority -->
+  <script type="module">
+    const DEV_SERVER = 'http://localhost:5173';
+
+    // Check if dev server is available
+    async function loadApp() {
+      try {
+        const response = await fetch(`${DEV_SERVER}/@vite/client`, { method: 'HEAD' });
+        if (response.ok) {
+          // Dev server is running - load dev scripts
+          console.log('Loading from Vite dev server...');
+
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.crossOrigin = 'anonymous';
+          link.href = './assets/app.css?t=' + Date.now();
+          document.head.appendChild(link);
+
+          // React Refresh Runtime
+          const RefreshRuntime = await import(`${DEV_SERVER}/@react-refresh`);
+          RefreshRuntime.default.injectIntoGlobalHook(window);
+          window.$RefreshReg$ = () => { };
+          window.$RefreshSig$ = () => (type) => type;
+          window.__vite_plugin_react_preamble_installed__ = true;
+
+          // Load Vite client and main
+          await import(`${DEV_SERVER}/@vite/client`);
+          await import(`${DEV_SERVER}/src/main.tsx`);
+        } else {
+          throw new Error('Dev server not available');
+        }
+      } catch (error) {
+        // Loading prod
+        try {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.crossOrigin = 'anonymous';
+          link.href = './assets/app.css?t=' + Date.now();
+          document.head.appendChild(link);
+          await import('./app.js')
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+
+    loadApp();
+  </script>
+</body>
+
+</html>

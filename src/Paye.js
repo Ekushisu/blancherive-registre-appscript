@@ -130,12 +130,12 @@ function getPaye(token) {
   mettreAJourSoldesPresences_(ss, sheet);
   SpreadsheetApp.flush();
 
-  const currentWeek = getCurrentIsoWeekWebApp();
+  const lundiCourant = lundiCourantPresence_();
 
   const lastRow = getLastPresenceRowWebApp(sheet);
 
   if (lastRow < 2) {
-    return construireResultatPaye_([], currentWeek);
+    return construireResultatPaye_([], lundiCourant);
   }
 
   const range = sheet.getRange(2, 1, lastRow - 1, 15);
@@ -150,9 +150,11 @@ function getPaye(token) {
 
     const row = values[i];
 
-    const semaine = Number(row[0]);
+    // Colonne A ramenée au lundi ISO, anciennes valeurs comprises
+    // (`normaliserLundiPresence_`, Presences.js).
+    const lundi = normaliserLundiPresence_(row[0], lundiCourant);
 
-    if (!Number.isFinite(semaine)) {
+    if (!estLundiPresence_(lundi)) {
       continue;
     }
 
@@ -164,7 +166,7 @@ function getPaye(token) {
 
     lignes.push({
       row: i + 2,
-      semaine: semaine,
+      lundi: lundi,
       corps: corps,
       grade: String(displayValues[i][2] || "").trim(),
       prenom: String(displayValues[i][3] || "").trim(),
@@ -175,7 +177,7 @@ function getPaye(token) {
     });
   }
 
-  return construireResultatPaye_(lignes, currentWeek);
+  return construireResultatPaye_(lignes, lundiCourant);
 }
 
 
@@ -190,12 +192,13 @@ function getPaye(token) {
 // contrôles de rôle et de cellule sont ceux de
 // `ecrirePresenceCellule_`, partagés avec la page Présences.
 // Un INTENDANT y est refusé côté serveur, indépendamment de
-// ce que l'interface affiche.
+// ce que l'interface affiche. `identite` = { lundi, prenom, nom }
+// de la ligne affichée, vérifiée avant l'écriture.
 // ============================================================
 
-function reglerSemainePaye(token, row, paye) {
+function reglerSemainePaye(token, row, paye, identite) {
 
-  ecrirePresenceCellule_(token, row, 15, paye);
+  ecrirePresenceCellule_(token, row, 15, paye, identite);
 
   return getPaye(token);
 }
@@ -205,7 +208,7 @@ function reglerSemainePaye(token, row, paye) {
 // REGROUPEMENT
 // ============================================================
 
-function construireResultatPaye_(lignes, currentWeek) {
+function construireResultatPaye_(lignes, lundiCourant) {
 
   const financeurs = new Map();
 
@@ -245,7 +248,7 @@ function construireResultatPaye_(lignes, currentWeek) {
       dimanche. Elle est renvoyée à part, en prévision.
     */
 
-    if (ligne.semaine === currentWeek) {
+    if (ligne.lundi === lundiCourant) {
 
       if (ligne.soldeRaw > 0 && !ligne.paye) {
         bloc.previsionTotal += ligne.soldeRaw;
@@ -263,13 +266,12 @@ function construireResultatPaye_(lignes, currentWeek) {
       le nombre d'impayés.
 
       Les semaines postérieures à la semaine en cours ne sont
-      pas des retards. La colonne Semaine ne porte pas l'année ;
-      après le passage à la nouvelle année, les semaines de
-      l'année écoulée cessent donc d'être comptées ici.
+      pas des retards. Les lundis ISO se comparent en texte ;
+      ils portent l'année, un passage d'année ne perd rien.
     */
 
     if (
-      ligne.semaine >= currentWeek ||
+      ligne.lundi >= lundiCourant ||
       ligne.soldeRaw <= 0 ||
       ligne.paye
     ) {
@@ -302,7 +304,7 @@ function construireResultatPaye_(lignes, currentWeek) {
       semaine courante à la liste.
     */
 
-    if (ligne.semaine > payeDerniereSemaine_(garde)) {
+    if (ligne.lundi > payeDerniereSemaine_(garde)) {
       garde.grade = ligne.grade;
       garde.corps = ligne.corps;
     }
@@ -311,17 +313,17 @@ function construireResultatPaye_(lignes, currentWeek) {
 
     garde.semaines.push({
       row: ligne.row,
-      semaine: ligne.semaine,
+      lundi: ligne.lundi,
       joursPresents: ligne.joursPresents,
       montant: ligne.soldeRaw,
-      retard: currentWeek - ligne.semaine
+      retard: ecartSemainesPresence_(ligne.lundi, lundiCourant)
     });
 
     bloc.total += ligne.soldeRaw;
     bloc.nbLignes++;
 
-    if (bloc.semaines.indexOf(ligne.semaine) === -1) {
-      bloc.semaines.push(ligne.semaine);
+    if (bloc.semaines.indexOf(ligne.lundi) === -1) {
+      bloc.semaines.push(ligne.lundi);
     }
 
     totalADemander += ligne.soldeRaw;
@@ -335,7 +337,7 @@ function construireResultatPaye_(lignes, currentWeek) {
     const gardes = Array.from(bloc.gardes.values());
 
     for (const garde of gardes) {
-      garde.semaines.sort((a, b) => a.semaine - b.semaine);
+      garde.semaines.sort((a, b) => comparerLundisPresence_(a.lundi, b.lundi));
     }
 
     /*
@@ -349,11 +351,11 @@ function construireResultatPaye_(lignes, currentWeek) {
         return b.total - a.total;
       }
 
-      const ancienneteA = a.semaines.length ? a.semaines[0].semaine : 0;
-      const ancienneteB = b.semaines.length ? b.semaines[0].semaine : 0;
+      const ancienneteA = a.semaines.length ? a.semaines[0].lundi : "";
+      const ancienneteB = b.semaines.length ? b.semaines[0].lundi : "";
 
       if (ancienneteA !== ancienneteB) {
-        return ancienneteA - ancienneteB;
+        return comparerLundisPresence_(ancienneteA, ancienneteB);
       }
 
       return String(a.nomComplet).localeCompare(
@@ -362,7 +364,7 @@ function construireResultatPaye_(lignes, currentWeek) {
       );
     });
 
-    bloc.semaines.sort((a, b) => a - b);
+    bloc.semaines.sort(comparerLundisPresence_);
 
     resultat.push({
       cle: bloc.cle,
@@ -374,7 +376,7 @@ function construireResultatPaye_(lignes, currentWeek) {
       nbLignes: bloc.nbLignes,
       semaines: bloc.semaines,
       semainePlusAncienne: bloc.semaines.length ? bloc.semaines[0] : null,
-      retardMax: bloc.semaines.length ? currentWeek - bloc.semaines[0] : 0,
+      retardMax: bloc.semaines.length ? ecartSemainesPresence_(bloc.semaines[0], lundiCourant) : 0,
       groupes: payeGrouperParCorps_(gardes),
       previsionTotal: bloc.previsionTotal,
       previsionGardes: bloc.previsionGardes.size
@@ -413,7 +415,7 @@ function construireResultatPaye_(lignes, currentWeek) {
   });
 
   return {
-    currentWeek: currentWeek,
+    lundiCourant: lundiCourant,
     totalADemander: totalADemander,
     totalAPrevoir: totalAPrevoir,
     nbGardesDus: gardesDus.size,
@@ -454,11 +456,11 @@ function payeGrouperParCorps_(gardes) {
 
 function payeDerniereSemaine_(garde) {
 
-  let derniere = 0;
+  let derniere = "";
 
   for (const semaine of garde.semaines) {
-    if (semaine.semaine > derniere) {
-      derniere = semaine.semaine;
+    if (comparerLundisPresence_(semaine.lundi, derniere) > 0) {
+      derniere = semaine.lundi;
     }
   }
 

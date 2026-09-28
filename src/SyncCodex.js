@@ -64,17 +64,72 @@
 
 const SYNC_CODEX_SHEET_NAME = "SyncCodex";
 
+/*
+  Nom historique de l'ancien Codex Judiciaire, caduc depuis le 27 septembre
+  2026. Il ne figure plus au registre, mais les amendes et incarcérations
+  enregistrées avant cette date portent des libellés `Art. N — Titre` que
+  l'interface résout encore vers cette source (`findCodexArticle` dans
+  `Index.html`). Ne pas réutiliser ce nom pour un autre document.
+*/
 const CODEX_JUDICIAIRE_SOURCE = "Codex Judiciaire de Blancherive";
 
 const SYNC_CODEX_DOCUMENTS = [
 
   // ----- Droit de la châtellerie -----
+  /*
+    Les quatre codes fournis par le propriétaire le 27 septembre 2026, tous
+    adoptés par la Cour de Blancherive, remplacent l'ancien Codex Judiciaire
+    (`1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk`), déclaré caduc et conservé
+    en copie locale sous `docs/codex/ancien-code-judiciaire-blancherive.txt`.
+
+    Aucun des quatre ne chiffre ses peines : le Code pénal local qualifie chaque
+    article (contravention, délit, crime) et renvoie au barème impérial. Tant
+    que le texte n'exprime pas d'amende en septims ni de durée de cachot, les
+    listes d'infractions d'Amendes et Prison restent vides et les gardes passent
+    par le motif personnalisé. `sanctions: true` sur le Code pénal et le Code du
+    commerce prépare le jour où leurs articles porteront un chiffre.
+
+    Le partage de ces documents interdit le téléchargement aux lecteurs : la
+    page de lecture s'ouvre, mais `export?format=txt` répond 401. Si
+    `synchroniserCodex()` échoue à les ouvrir, demander au propriétaire des
+    documents d'autoriser le téléchargement pour les lecteurs.
+  */
   {
-    id: "1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk",
-    source: CODEX_JUDICIAIRE_SOURCE,
+    id: "1AMAMjFDZ8dUAaAZ6ySE76ulSoByqOIB20SbtNVGZmWE",
+    source: "Loi fondamentale de Blancherive",
     famille: "Droit de Blancherive",
-    autorite: "Châtellerie de Blancherive",
-    applicabilite: "Justice et sanctions de la Garde",
+    autorite: "Cour de Blancherive",
+    applicabilite: "Jarl, Thing, administration et justice de la châtellerie",
+    local: true,
+    garde: true,
+    sanctions: false
+  },
+  {
+    id: "1QnltaOqtymMGWiQUtBOts1ltt15KQfNUhrKLaEn7MSw",
+    source: "Code pénal local de Blancherive",
+    famille: "Droit de Blancherive",
+    autorite: "Cour de Blancherive",
+    applicabilite: "Infractions locales et sanctions de la Garde",
+    local: true,
+    garde: true,
+    sanctions: true
+  },
+  {
+    id: "116FByPVeFenuLENmTqPnOP_MXu90RM2MVIEyub4eVnk",
+    source: "Code civil local de Blancherive",
+    famille: "Droit de Blancherive",
+    autorite: "Cour de Blancherive",
+    applicabilite: "Citoyenneté, obligations, propriété et litiges civils",
+    local: true,
+    garde: false,
+    sanctions: false
+  },
+  {
+    id: "1dtSQ_QhP7A6d6gAS7s21x3LAbbZxarmfxXoE4mlctB0",
+    source: "Code du commerce local de Blancherive",
+    famille: "Droit de Blancherive",
+    autorite: "Cour de Blancherive",
+    applicabilite: "Concessions, commerces et échoppes de la châtellerie",
     local: true,
     garde: true,
     sanctions: true
@@ -488,8 +543,15 @@ function lignesDocumentCodex_(document) {
       return;
     }
 
+    /*
+      Un saut de ligne « doux » (Maj+Entrée) reste dans le paragraphe : Google
+      Docs le stocke en tabulation verticale et Apps Script le rend en retour
+      chariot. Les codes de Blancherive en séparent le titre de l'article et son
+      corps ; sans ce découpage, le corps se fondait dans le titre et l'article
+      restait sans texte.
+    */
     String(body.getText() || "")
-      .split("\n")
+      .split(/\r\n|\r|\n|\u000b|\u2028/)
       .forEach(ligne => lignes.push(ligne.trim()));
   });
 
@@ -655,7 +717,11 @@ function finaliserArticleCodex_(article, config) {
     return null;
   }
 
+  const entete =
+    separerClassificationTitreCodex_(article.titre);
+
   const classification =
+    entete.classification ||
     extraireClassificationCodex_(texte);
 
   const sanction =
@@ -670,7 +736,7 @@ function finaliserArticleCodex_(article, config) {
     source: config.source,
     article: article.article,
     titre:
-      article.titre ||
+      entete.titre ||
       `Article ${article.article}`,
     classification: classification,
     amende: sanctions.amende,
@@ -687,27 +753,89 @@ function finaliserArticleCodex_(article, config) {
 // CLASSIFICATION
 // ============================================================
 
+/*
+  Le Code pénal local de Blancherive qualifie chaque article dans son titre :
+  « Article 4 — Refus d'obtempérer à une injonction locale (délit) ». La
+  qualification devient la classification de l'article et quitte le titre, où
+  elle encombrerait les libellés `Art. N — Titre` des formulaires. Une
+  parenthèse qui n'est pas une qualification connue, « (article 76) » par
+  exemple, reste dans le titre.
+*/
+function separerClassificationTitreCodex_(titre) {
+  const texte = String(titre || "").trim();
+  const match = texte.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+
+  if (!match) {
+    return { titre: texte, classification: "" };
+  }
+
+  const classification = normaliserClassificationCodex_(match[2]);
+
+  if (!classification) {
+    return { titre: texte, classification: "" };
+  }
+
+  return {
+    titre: match[1].trim() || texte,
+    classification: classification
+  };
+}
+
+
+function normaliserClassificationCodex_(valeur) {
+  const brut =
+    String(valeur || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/[’']/g, "'");
+
+  const table = {
+    "contravention": "Contravention",
+    "délit": "Délit",
+    "delit": "Délit",
+    "crime": "Crime",
+    "contravention ou délit": "Contravention ou délit",
+    "délit ou contravention": "Contravention ou délit",
+    "délit ou crime": "Délit ou crime",
+    "crime ou délit": "Délit ou crime",
+    "qualification variable": "Qualification variable",
+    "variable": "Qualification variable",
+    "disposition générale": "Disposition générale",
+    "dispositions générales": "Disposition générale",
+    "mesure accessoire": "Mesure accessoire"
+  };
+
+  return table[brut] || "";
+}
+
+
 function extraireClassificationCodex_(text) {
   const normalized = String(text || "");
 
+  /*
+    Les noms d'abord, comme dans les codes impériaux (« [Crime] »). Puis la
+    tournure des codes de Blancherive, « constitue une infraction délictuelle
+    locale », avant le mot « infraction » qui, seul, ne qualifie rien.
+    L'adjectif n'est reconnu qu'accolé à « infraction » : une « procédure
+    criminelle » ne fait pas un crime.
+  */
   const classifications = [
-    "Crime majeur",
-    "Crime",
-    "Délit majeur",
-    "Délit",
-    "Contravention",
-    "Infraction",
-    "Faute militaire",
-    "Faute",
-    "Trahison"
+    [/\bCrime majeur\b/i, "Crime majeur"],
+    [/\bCrime\b/i, "Crime"],
+    [/\bDélit majeur\b/i, "Délit majeur"],
+    [/\bDélit\b/i, "Délit"],
+    [/\bContravention\b/i, "Contravention"],
+    [/\binfractions?\s+criminelles?\b/i, "Crime"],
+    [/\binfractions?\s+d[ée]lictuelles?\b/i, "Délit"],
+    [/\binfractions?\s+contraventionnelles?\b/i, "Contravention"],
+    [/\bInfraction\b/i, "Infraction"],
+    [/\bFaute militaire\b/i, "Faute militaire"],
+    [/\bFaute\b/i, "Faute"],
+    [/\bTrahison\b/i, "Trahison"]
   ];
 
-  for (const classification of classifications) {
-    const regex = new RegExp(
-      `\\b${echapperRegexCodex_(classification)}\\b`,
-      "i"
-    );
-
+  for (const [regex, classification] of classifications) {
     if (regex.test(normalized)) {
       return classification;
     }

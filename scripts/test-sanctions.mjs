@@ -112,9 +112,10 @@ const cacheSheet={getLastRow:()=>2,setColumnWidth(){},getRange(r,c){
     setValues(rows){if(r===2&&c===12)cache=rows;return range;}};return range;
 }};
 ctx.ecrireCachesTechniquesCodex_(cacheSheet,[
-  {source:'Codex Judiciaire de Blancherive',article:'105',titre:'Vente',sanction:fine.texte},
-  {source:'Codex Judiciaire de Blancherive',article:'34',titre:'Intrusion',sanction:jail.texte},
-  {source:'Codex Judiciaire de Blancherive',article:'70',titre:'Espionnage',sanction:'Sanction — peine maximale encourue : mort et saisie des biens.'},
+  // Une source marquée `sanctions` du registre courant ; le Codex Judiciaire est caduc.
+  {source:'Code pénal local de Blancherive',article:'105',titre:'Vente',sanction:fine.texte},
+  {source:'Code pénal local de Blancherive',article:'34',titre:'Intrusion',sanction:jail.texte},
+  {source:'Code pénal local de Blancherive',article:'70',titre:'Espionnage',sanction:'Sanction — peine maximale encourue : mort et saisie des biens.'},
   {source:'Texte impérial',article:'1',titre:'Autre',sanction:'Sanction — 900 septims.'}
 ]);
 assert.equal(cache.length,1);

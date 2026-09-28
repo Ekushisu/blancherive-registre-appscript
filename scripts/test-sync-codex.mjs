@@ -87,7 +87,7 @@ assert.equal(extract(['Article 9 — Repli', 'Texte.']).length, 1);
 // le lire comme une propriété, contrairement aux déclarations de fonctions.
 const lire = expression => vm.runInContext(expression, context);
 const registre = Array.from(lire('SYNC_CODEX_DOCUMENTS'), d => ({
-  id: d.id, source: d.source, famille: d.famille, local: d.local
+  id: d.id, source: d.source, famille: d.famille, local: d.local, sanctions: d.sanctions
 }));
 const sources = registre.map(d => d.source);
 assert.ok(registre.length >= 18, 'Codes et décrets référencés');
@@ -102,9 +102,74 @@ registre.forEach(d => {
   assert.ok(!/\s/.test(d.id), `${d.source} : identifiant mal formé`);
 });
 
-// Le Codex Judiciaire est la seule source des listes d'infractions.
-assert.ok(sources.includes(lire('CODEX_JUDICIAIRE_SOURCE')));
-assert.equal(registre.filter(d => d.local).length, 1, 'Un seul texte de la châtellerie');
+/*
+  Droit de la châtellerie : les quatre codes du 27 septembre 2026. L'ancien
+  Codex Judiciaire est caduc et ne doit pas revenir au registre ; son nom reste
+  réservé à la résolution des libellés historiques.
+*/
+const CODE_PENAL_SOURCE = 'Code pénal local de Blancherive';
+const locaux = registre.filter(d => d.local).map(d => d.source).sort();
+assert.deepEqual(locaux, [
+  'Code civil local de Blancherive',
+  'Code du commerce local de Blancherive',
+  CODE_PENAL_SOURCE,
+  'Loi fondamentale de Blancherive'
+], 'Les quatre codes de Blancherive, et eux seuls, sont du droit local');
+assert.ok(!sources.includes(lire('CODEX_JUDICIAIRE_SOURCE')),
+  'Le Codex Judiciaire est caduc et ne doit plus être référencé');
+assert.ok(!registre.some(d => d.id === '1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk'),
+  'L’identifiant de l’ancien Codex Judiciaire ne doit plus être référencé');
+assert.ok(registre.find(d => d.source === CODE_PENAL_SOURCE).sanctions,
+  'Le Code pénal local alimente les formulaires dès qu’un article chiffre sa peine');
+assert.ok(!registre.find(d => d.source === 'Loi fondamentale de Blancherive').sanctions);
+assert.ok(!registre.find(d => d.source === 'Code civil local de Blancherive').sanctions);
+
+/*
+  Sauts de ligne doux (Maj+Entrée). Les codes de Blancherive en séparent le
+  titre de l'article et son corps ; Google Docs les stocke en tabulation
+  verticale (\u000b), Apps Script les rend en retour chariot (\r). Sans ce
+  découpage, l'article restait sans texte et le corps gonflait le titre.
+*/
+const doux = context.extraireArticlesCodex_(
+  { getBody: () => corps(['Article 9 — Propos irrespectueux (contravention)\u000bLe fait de tenir des propos.',
+    'Article 10 — Provocation (délit)\rLe fait d’inciter.\r\nSans préjudice.']) },
+  { source: CODE_PENAL_SOURCE }
+);
+assert.equal(doux.length, 2);
+assert.equal(doux[0].titre, 'Propos irrespectueux');
+assert.equal(doux[0].classification, 'Contravention');
+assert.equal(doux[0].texte, 'Le fait de tenir des propos.');
+assert.equal(doux[1].texte, 'Le fait d’inciter.\nSans préjudice.');
+
+/*
+  Qualification dans le titre. Elle devient la classification et quitte le
+  titre ; une parenthèse quelconque reste dans le titre ; à défaut, le texte
+  décide (« infraction délictuelle locale » vaut délit, pas simple infraction).
+*/
+const qualifies = extract([
+  'Article 4 — Refus d’obtempérer à une injonction locale (délit)',
+  'Constitue un refus d’obtempérer local le fait de refuser.',
+  'Article 8 — Usurpation d’une fonction locale (délit ou crime)',
+  'Le fait d’exercer sans titre.',
+  'Article 93 — Violation d’une mesure exceptionnelle locale (qualification variable)',
+  'Le fait de refuser une mesure (confinement, couvre-feu).',
+  'Article 95 — Non-respect d’une mise en demeure (article 76)',
+  'Le fait de ne pas se conformer constitue une infraction délictuelle locale.',
+  'Article 87 — Invocation dangereuse',
+  'Le fait d’invoquer constitue une infraction criminelle locale.',
+  'Article 96 — Dispositions finales',
+  'Le présent Code peut être révisé.'
+]);
+assert.deepEqual(Array.from(qualifies, a => [a.titre, a.classification]), [
+  ['Refus d’obtempérer à une injonction locale', 'Délit'],
+  ['Usurpation d’une fonction locale', 'Délit ou crime'],
+  ['Violation d’une mesure exceptionnelle locale', 'Qualification variable'],
+  ['Non-respect d’une mise en demeure (article 76)', 'Délit'],
+  ['Invocation dangereuse', 'Crime'],
+  ['Dispositions finales', '']
+]);
+// Les codes impériaux gardent leur classification entre crochets.
+assert.equal(extract(['Article 61 — Nécromancie', 'Sanction — 500 septims. [Crime]'])[0].classification, 'Crime');
 
 // Documents écartés : abandonnés, non partagés, ou documentation de contexte.
 [
@@ -159,7 +224,7 @@ context.DriveApp = { getFolderById: id => {
     fichier('doublon-id', '  Décret du couvre-feu  '),
     fichier('vide-id', '   '),
     // Un document homonyme d'une source déclarée ne doit pas la supplanter.
-    fichier('faux-codex-id', lire('CODEX_JUDICIAIRE_SOURCE'))
+    fichier('faux-codex-id', CODE_PENAL_SOURCE)
   ]); } };
 } };
 
@@ -176,8 +241,8 @@ assert.equal(couvreFeu.autorite, 'Jarl de Blancherive');
 assert.equal(couvreFeu.local, true);
 assert.equal(couvreFeu.sanctions, true);
 assert.equal(
-  avecDossier.filter(d => d.source === lire('CODEX_JUDICIAIRE_SOURCE'))[0].id,
-  registre[0].id,
+  avecDossier.filter(d => d.source === CODE_PENAL_SOURCE)[0].id,
+  registre.find(d => d.source === CODE_PENAL_SOURCE).id,
   'Le document déclaré l’emporte sur son homonyme du dossier'
 );
 
@@ -215,13 +280,13 @@ const feuilleMeta = {
   getRange: () => ({ getDisplayValues: () => [
     ['Décret du couvre-feu', 'Droit de Blancherive', 'Jarl de Blancherive',
      'Décrets de la châtellerie', 'oui', 'https://docs.google.com/document/d/decret-couvre-feu-id/edit'],
-    [lire('CODEX_JUDICIAIRE_SOURCE'), 'Famille usurpée', '', '', '', 'https://exemple.invalid']
+    [CODE_PENAL_SOURCE, 'Famille usurpée', '', '', '', 'https://exemple.invalid']
   ] })
 };
 const metaCache = context.getCodexDocumentMetadata_(feuilleMeta);
 assert.equal(metaCache['Décret du couvre-feu'].autorite, 'Jarl de Blancherive');
 assert.equal(metaCache['Décret du couvre-feu'].local, true);
-assert.equal(metaCache[lire('CODEX_JUDICIAIRE_SOURCE')].famille, 'Droit de Blancherive',
+assert.equal(metaCache[CODE_PENAL_SOURCE].famille, 'Droit de Blancherive',
   'Un document déclaré garde ses métadonnées face à une ligne de cache homonyme');
 
 /*

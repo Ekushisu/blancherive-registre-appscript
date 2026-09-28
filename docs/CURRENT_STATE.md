@@ -2,6 +2,172 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Régénération sur grade, corps ou statut ; lignes des sortants conservées (28 septembre 2026)
+
+- Décision du propriétaire. `modifierEffectif` régénère la semaine courante
+  dès que le grade, le corps ou le statut change (avant : le statut seul), en
+  plus de `ajouterEffectif` et du déclencheur du lundi.
+- Un membre sorti du service actif en cours de semaine garde sa ligne de la
+  semaine courante si elle porte un jour pointé ou un paiement ; les doublons
+  éventuels sont fusionnés, grade et corps de la ligne conservés, formule de
+  solde réappliquée. Sans pointage ni paiement, la ligne disparaît. Avant, la
+  ligne disparaissait dans tous les cas, pointages compris.
+- Vérifié par `scripts/test-presences-lundi.mjs` (cas « Parti » conservé,
+  « Fantome » retiré) et toutes les suites. Aucun push ni déploiement.
+
+### Dates affichées en calendrier tamrielien (28 septembre 2026)
+
+- Demande du propriétaire : toutes les dates de l'interface en calendrier de
+  Tamriel, la date réelle en info-bulle. `ui/src/calendrier.js` fait la
+  conversion (jour pour jour, année réelle − 1 800 → « 4E 226 »), avec les
+  noms de la version française vérifiés sur le wiki The Elder Scrolls et la
+  Grande Bibliothèque de Tamriel ; le composant `DateRP` (`calendrier.jsx`)
+  rend « Loredas 26 Âtrefeu 4E 226 » souligné en pointillé, l'attribut
+  `title` portant « Calendrier réel : 26/09/2026 ».
+- Branché sur : dates des Amendes ; date, entrée et sortie prévue de la
+  Prison ; lundis des semaines de Présences (en-têtes, filtre, synthèse) et de
+  la Paye ; dernière présence du tableau de bord ; dates du panneau des
+  changements d'effectifs. Le récapitulatif texte de la Paye, copié sans
+  survol possible, écrit les deux dates. Les champs de saisie des formulaires
+  restent en calendrier réel (`<input type="date">`).
+- Rien ne change côté serveur ni dans les feuilles ; une valeur que le
+  module ne reconnaît pas est affichée telle quelle. Vérifié par
+  `node scripts/test-calendrier.mjs` (nouveau) et les autres suites ;
+  `npm run build`. Aucun push ni déploiement.
+
+### Présences : lundi ISO en colonne A, identité de ligne au pointage (28 septembre 2026)
+
+- **Incident signalé par le propriétaire.** À l'ajout d'un membre dans
+  Effectifs, la feuille Présences était réécrite, des lignes affichaient une
+  date de 1900 en colonne A et des pointages disparaissaient, même après
+  suppression des déclencheurs horaires. Cause : `ajouterEffectif` et
+  `modifierEffectif` (changement de statut) appellent directement
+  `genererPresencesSemaineCourante()`, qui relit `Présences!A:O`, efface
+  le bloc et le réécrit trié. Une cellule A passée au format date revenait de
+  `getValues()` en objet `Date` (39 → 7 février 1900) : la ligne n'était
+  plus reconnue comme semaine courante, un doublon à blanc était créé, et la
+  `Date` réécrite posait le format date ailleurs à chaque tri.
+- **Nouveau modèle.** `Présences!A` porte désormais le lundi de la semaine
+  ISO, en texte `yyyy-MM-dd` (Europe/Stockholm), colonne au format texte
+  brut, en-tête « Lundi ». Le texte ne dépend ni du format de cellule ni du
+  fuseau du classeur, et porte l'année : la semaine 52 de 2025 ne passe plus
+  pour une semaine à venir en janvier 2026. Le serveur raisonne en lundis
+  (`lundiCourantPresence_`, `normaliserLundiPresence_`,
+  `comparerLundisPresence_`, `ecartSemainesPresence_` dans Presences.js) ;
+  le numéro de semaine n'est qu'un libellé calculé par l'interface
+  (`ui/src/semaine.js`). Les API renvoient `lundiCourant` et `lundi` à la
+  place de `currentWeek` et `semaine` ; la Paye renvoie ses `semaines` en
+  lundis. `getCurrentIsoWeekWebApp()` subsiste, dérivée du lundi courant.
+- **Compatibilité et conversion.** Toute lecture de la colonne A passe par
+  `normaliserLundiPresence_` : numéro de semaine, cellule au format date
+  (y compris les dates de 1900 de l'incident), numéro de série, texte ISO ou
+  autre jour de la semaine sont ramenés au lundi ISO ; un ancien numéro
+  supérieur à la semaine courante est daté de l'année précédente ; un texte
+  non reconnu est conservé tel quel, trié en tête, jamais perdu. La feuille se
+  convertit donc d'elle-même à la première régénération ; les doublons d'un
+  garde pour la semaine courante sont fusionnés (case cochée dans l'un ou
+  l'autre) au lieu d'être perdus.
+- **Pointage sous identité.** `ecrirePresenceCellule_` exige désormais
+  `identite = { lundi, prenom, nom }` de la ligne affichée, prend le verrou
+  de document (le même que la régénération) et refuse l'écriture si la ligne
+  ne correspond plus (« La liste des présences a changé… »). `modifierPresence`
+  et `reglerSemainePaye` reçoivent ce cinquième / quatrième argument ; les
+  pages Présences et Paye l'envoient (`identitePresence` dans `app.jsx`).
+  Sans cela, un tri des Présences faisait cocher un autre garde depuis une
+  page restée ouverte.
+- **Fonctions historiques retirées de Code.js** : `ajouterSemainePresence`,
+  `regenererSemaineCourante`, `reparerFormulesPresence`,
+  `reconstruireSeparateursPresence`, `writePresenceWeek`, les déplacements de
+  blocs, `installerTriggerPresenceHebdomadaire` / `supprimer…` et
+  `miseAJourComplete`. Elles raisonnaient en numéros de semaine et doublaient
+  le seul chemin de génération. `synchroniserMiseEnForme` est retirée aussi :
+  les sept feuilles de corps qu'elle mettait en forme (vues `QUERY` d'Effectifs,
+  triées par une colonne « Grade Order » supprimée depuis) sont supprimées du
+  classeur par le propriétaire, l'Organigramme de l'application les remplace.
+  Aucune formule ni aucun code ne les référençait.
+- **Mise en service, dans l'ordre.** 1. `npm run push`. 2. Dans l'éditeur
+  Apps Script, `inventorierReferencesSemainePresences()` : liste les formules
+  du classeur mentionnant Présences et signale celles qui lisent la colonne A
+  par numéro de semaine (`Vue globale` ou autres) ; les adapter d'abord.
+  3. `migrerPresencesVersLundis()` : colonne A seule, valeurs et format, sous
+  verrous ; elle rappelle dans le journal les formules lisant A, sans bloquer,
+  car une formule adaptée lit légitimement la colonne. 4. Publier le
+  déploiement à la main aussitôt : l'ancienne version déployée écrirait encore
+  des numéros de semaine, que le nouveau code sait relire mais qui
+  brouilleraient la feuille entre-temps. Les pointages déjà remis à blanc par
+  une régénération passée ne sont pas reconstituables par le code (historique
+  des versions du classeur). Les doublons de semaines passées sont conservés
+  et se nettoient à la main.
+- L'inventaire lancé par le propriétaire a trouvé une formule concernée :
+  `Vue globale!N5`, liste des gardes absents depuis plus de cinq jours ou
+  jamais présents, qui reconstruisait les dates par « lundi de la semaine 1
+  de l'année en cours + (semaine − 1) × 7 ». Version adaptée fournie le
+  28 septembre, puis décision du propriétaire : `Vue globale` date d'avant
+  l'application, qui refait tous ses calculs (coûts, impayés, gardes à
+  surveiller, paye). La feuille est archivée, la formule N5 n'est pas
+  reposée. Le code ne lisait plus que `Vue globale!L2`, et seulement à
+  l'initialisation de `SoldesGrades` ou pour figer une formule historique de
+  `Présences!N` : les deux conditions sont remplies, le classeur n'a plus
+  aucune formule référençant cette feuille. Rien ne la cherche plus.
+- **Mise en forme portée par la génération.** Les couleurs (orange semaine
+  courante, rouge impayé dû, gris semaine passée) et les séparateurs de semaine
+  étaient posés à la main sur une plage fixe et par l'ancienne fonction de
+  séparateurs : chaque ligne ajoutée en sortait, et les règles manuelles
+  comparaient A à un numéro de semaine. `appliquerCouleursPresences_` remplace
+  les règles conditionnelles de la feuille sur `A2:O` jusqu'à la dernière
+  ligne physique, fond de A:O remis à blanc avant la pose (les anciens
+  remplissages directs masquaient le résultat) ; `tracerSeparateursPresences_`
+  efface puis redessine les traits. Le propriétaire a retiré ses règles
+  manuelles : elles seraient écrasées de toute façon.
+- **Les formules des règles ne contiennent aucun séparateur d'arguments.**
+  Contrairement aux formules de cellules, celles des règles conditionnelles
+  posées par `whenFormulaSatisfied` sont stockées telles quelles, sans
+  traduction dans la locale du classeur : avec des virgules, un classeur à
+  point-virgule les tient pour invalides et la règle n'est jamais vraie. C'est
+  ce qui a fait échouer trois variantes successives (`TEXT(TODAY()…)`,
+  `DATE(LEFT;MID;RIGHT)`, `AND($A2<>""…)`) alors que la même formule saisie à
+  la main avec `;` fonctionnait, et que la seule règle sans séparateur,
+  `=$A2="2026-09-28"`, a toujours marché. Les règles sont donc écrites en
+  produits de booléens et fonctions à un argument :
+  `=NOT(NOT((LEN($A2)=10)*($A2<"2026-09-28")*($N2>0)*NOT($O2)))`.
+- **Le lundi courant est inscrit en dur dans les règles**, en texte ISO, par
+  la génération ; la feuille ne compare que des textes. Conséquence : les couleurs
+  changent de semaine quand la génération tourne, d'où l'importance du
+  déclencheur du lundi ; entre minuit et son passage, la semaine écoulée
+  reste affichée comme courante.
+- Vérifié par `node scripts/test-presences-lundi.mjs` (nouveau) et toutes les
+  suites `scripts/test-*.mjs` ; `npm run build`. Les aperçus de
+  `docs/apercus` n'ont pas été recapturés. Aucun push ni déploiement.
+
+### Quatre codes de Blancherive, Codex Judiciaire caduc (27 septembre 2026)
+
+- Le droit de la châtellerie est désormais porté par quatre codes adoptés par
+  la Cour de Blancherive et fournis par le propriétaire : Loi fondamentale
+  (`1AMAMjFDZ8…`), Code pénal local (`1QnltaOqty…`), Code civil local
+  (`116FByPVeF…`) et Code du commerce local (`1dtSQ_QhP7…`). L'ancien Codex
+  Judiciaire (`1_awmZGCcQ…`) est caduc, retiré du registre et conservé en copie
+  locale.
+- **Listes d'infractions vides jusqu'à décision.** Aucun des quatre codes ne
+  chiffre ses peines ; le Code pénal qualifie ses articles (contravention,
+  délit, crime) et renvoie au barème impérial. Les formulaires Amendes et
+  Prison ne proposent donc plus d'article. Décision provisoire du propriétaire,
+  en attendant l'avis du nouveau magistrat : les gardes cochent « Motif
+  personnalisé », citent l'article du Code pénal et saisissent eux-mêmes le
+  montant ou la durée. Reste à trancher avec le magistrat : chiffrer les peines
+  dans les textes, ou fixer dans l'application un barème par qualification.
+- Extraction : sauts de ligne doux découpés en lignes ; qualification du titre
+  (« (délit) ») convertie en classification et ôtée du titre ; « infraction
+  délictuelle / criminelle / contraventionnelle » reconnue dans le texte.
+- Les quatre documents sont partagés sans téléchargement pour les lecteurs
+  (export HTTP 401, page de lecture accessible). À vérifier à la première
+  synchronisation : si `DocumentApp.openById()` échoue, faire autoriser le
+  téléchargement pour les lecteurs.
+- Vérifié par `node scripts/test-sync-codex.mjs` et les suites sanctions,
+  accès public et prison. Aucun push ni déploiement.
+
+**Après publication, relancer `synchroniserCodex()`** : jusque-là, le cache
+`SyncCodex` et les formulaires continuent d'afficher l'ancien Codex Judiciaire.
+
 ### Inventaire des coffres et décrets impériaux (22 septembre 2026)
 
 - Nouvelle page **Inventaire** : ce que contiennent les coffres de la garde à
@@ -291,7 +457,8 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 
 ### Choix de sanctions et motifs personnalisés (9 septembre 2026)
 
-- Codex judiciaire configuré sur `1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk`.
+- Codex judiciaire configuré sur `1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk`
+  *(caduc depuis le 27 septembre 2026, voir la section du même jour)*.
 - Extraction excluant les intertitres numérotés et distinguant les durées de cachot
   des travaux forcés. Choix contextualisés d’amende/cachot dans les caches M/O.
 - Formulaires Amendes/Prison : choix chiffrés, saisie libre sur appréciation explicite,

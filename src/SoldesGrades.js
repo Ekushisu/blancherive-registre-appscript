@@ -91,13 +91,16 @@ function mettreAJourSoldesPresences_(ss, sheet) {
   SpreadsheetApp.flush();
   const values = sheet.getRange(2, 1, lastRow - 1, 15).getValues();
   const formulas = sheet.getRange(2, 14, lastRow - 1, 1).getFormulas();
-  const currentWeek = getCurrentIsoWeekWebApp();
+  const lundiCourant = lundiCourantPresence_();
   let oldBase;
   const updates = [];
   values.forEach((row, index) => {
-    if (row[0] === "" || row[0] === null) return;
+    // Colonne A ramenée au lundi ISO, anciennes valeurs comprises
+    // (Presences.js) : la semaine courante doit toujours être reconnue.
+    const lundi = normaliserLundiPresence_(row[0], lundiCourant);
+    if (lundi === "") return;
     let next = formulas[index][0];
-    if (Number(row[0]) === Number(currentWeek)) {
+    if (lundi === lundiCourant) {
       const rate = tarifSoldeGrade_(rates, row[2], row[1]);
       next = `=M${index + 2}*${nombreFormuleSolde_(rate)}`;
     } else if (next && /'Vue globale'!\$?L\$?2\b/i.test(next)) {

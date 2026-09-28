@@ -8,8 +8,8 @@ const PRESENCE_DASHBOARD_ACTIVE_STATUS = "En service actif";
 const PRESENCE_DASHBOARD_TIMEZONE = "Europe/Stockholm";
 
 /*
-  Même seuil que celui utilisé dans la Vue globale :
-  au-delà de 5 jours sans présence, le garde est signalé.
+  Au-delà de 5 jours sans présence, le garde est signalé.
+  Seuil hérité de l'ancienne feuille « Vue globale », archivée.
 */
 const PRESENCE_DASHBOARD_INACTIVITY_DAYS = 5;
 
@@ -44,15 +44,9 @@ function getPresenceOfficerDashboard(token) {
 
   const now = new Date();
 
-  const currentWeek = presenceDashboardGetIsoWeek_(now);
-
-  const currentYear = Number(
-    Utilities.formatDate(
-      now,
-      PRESENCE_DASHBOARD_TIMEZONE,
-      "yyyy"
-    )
-  );
+  // Lundi ISO de la semaine courante (Presences.js) : la colonne A
+  // porte le lundi, donc l'année, et se compare en texte.
+  const lundiCourant = lundiCourantPresence_();
 
   // ==========================================================
   // LECTURE PRÉSENCES
@@ -88,11 +82,11 @@ function getPresenceOfficerDashboard(token) {
   let pastUnpaidAmount = 0;
 
   for (const row of presenceRows) {
-    const week = Number(row[0]);
+    const lundi = normaliserLundiPresence_(row[0], lundiCourant);
     const salary = presenceDashboardNumber_(row[13]);
     const paid = row[14] === true;
 
-    if (!Number.isFinite(week)) {
+    if (!estLundiPresence_(lundi)) {
       continue;
     }
 
@@ -104,7 +98,7 @@ function getPresenceOfficerDashboard(token) {
     // SEMAINE COURANTE
     // ========================================================
 
-    if (week === currentWeek) {
+    if (lundi === lundiCourant) {
       currentWeekTotal += salary;
 
       if (paid) {
@@ -119,7 +113,7 @@ function getPresenceOfficerDashboard(token) {
     // ========================================================
 
     if (
-      week < currentWeek &&
+      lundi < lundiCourant &&
       salary > 0 &&
       !paid
     ) {
@@ -140,7 +134,7 @@ function getPresenceOfficerDashboard(token) {
   const lastPresences =
     presenceDashboardComputeLastPresences_(
       presenceRows,
-      currentYear
+      lundiCourant
     );
 
   const todayMidnight =
@@ -262,7 +256,7 @@ function getPresenceOfficerDashboard(token) {
   });
 
   return {
-    currentWeek: currentWeek,
+    lundiCourant: lundiCourant,
 
     currentWeekRecoveredFines:
       presenceDashboardRecoveredFines_(ss, now),
@@ -512,14 +506,14 @@ function presenceDashboardIsExcludedCorps_(corps) {
 
 function presenceDashboardComputeLastPresences_(
   rows,
-  year
+  lundiCourant
 ) {
   const result = new Map();
 
   for (const row of rows) {
-    const week = Number(row[0]);
+    const lundi = normaliserLundiPresence_(row[0], lundiCourant);
 
-    if (!Number.isFinite(week)) {
+    if (!estLundiPresence_(lundi)) {
       continue;
     }
 
@@ -545,11 +539,9 @@ function presenceDashboardComputeLastPresences_(
         nom
       );
 
-    const monday =
-      presenceDashboardIsoWeekMonday_(
-        year,
-        week
-      );
+    // Minuit local du lundi, comme presenceDashboardDateOnly_.
+    const parts = lundi.split("-").map(Number);
+    const monday = new Date(parts[0], parts[1] - 1, parts[2]);
 
     for (
       let day = 0;
@@ -587,122 +579,6 @@ function presenceDashboardComputeLastPresences_(
   }
 
   return result;
-}
-
-
-// ============================================================
-// ISO WEEK
-// ============================================================
-
-function presenceDashboardGetIsoWeek_(
-  date
-) {
-  const stockholmDate =
-    new Date(
-      Utilities.formatDate(
-        date,
-        PRESENCE_DASHBOARD_TIMEZONE,
-        "yyyy/MM/dd HH:mm:ss"
-      )
-    );
-
-  const tmp =
-    new Date(
-      stockholmDate.valueOf()
-    );
-
-  const day =
-    (
-      stockholmDate.getDay() +
-      6
-    ) %
-    7;
-
-  tmp.setDate(
-    tmp.getDate() -
-    day +
-    3
-  );
-
-  const firstThursday =
-    new Date(
-      tmp.getFullYear(),
-      0,
-      4
-    );
-
-  const firstDay =
-    (
-      firstThursday.getDay() +
-      6
-    ) %
-    7;
-
-  firstThursday.setDate(
-    firstThursday.getDate() -
-    firstDay +
-    3
-  );
-
-  return (
-    1 +
-    Math.round(
-      (
-        tmp -
-        firstThursday
-      ) /
-      604800000
-    )
-  );
-}
-
-
-// ============================================================
-// LUNDI D'UNE SEMAINE ISO
-// ============================================================
-
-function presenceDashboardIsoWeekMonday_(
-  year,
-  week
-) {
-  const januaryFourth =
-    new Date(
-      year,
-      0,
-      4
-    );
-
-  const day =
-    januaryFourth.getDay() ||
-    7;
-
-  const mondayWeekOne =
-    new Date(
-      januaryFourth
-    );
-
-  mondayWeekOne.setDate(
-    januaryFourth.getDate() -
-    day +
-    1
-  );
-
-  const result =
-    new Date(
-      mondayWeekOne
-    );
-
-  result.setDate(
-    result.getDate() +
-    (
-      week - 1
-    ) *
-    7
-  );
-
-  return presenceDashboardDateOnly_(
-    result
-  );
 }
 
 

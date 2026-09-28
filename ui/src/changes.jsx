@@ -1,12 +1,10 @@
 import { CHANGE_SEEN_KEY, parseSeenChanges, markChangesSeen, recentChanges } from "./change-state.js";
+import { DateRP } from "./calendrier.jsx";
 
 const { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
 const ChangesContext = createContext({ events: [], seen: {}, mark: () => {} });
 let sessionSeen = {};
 const labels = { arrivee: "Arrivée", grade: "Grade", corps: "Mutation" };
-const formatDate = date => new Intl.DateTimeFormat("fr-FR", {
-  dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Paris"
-}).format(new Date(date));
 
 function describe(change) {
   if (change.type === "arrivee") return "A rejoint les effectifs";
@@ -86,7 +84,7 @@ export function ChangeBadge({ change }) {
     {change.open && <span className="change-details">
       {change.items.map(event => <span className="change-detail" key={event.id}>
         <span>{event.changes.map(describe).join(" · ")}</span>
-        <small>{formatDate(event.date)}</small>
+        <small><DateRP value={event.date}/></small>
       </span>)}
     </span>}
   </span>;
@@ -132,7 +130,7 @@ export function RecentChanges({ onRefresh }) {
       {error && <p className="error" role="alert">{error}</p>}
       {!filtered.length && <p role="status">Aucun changement récent ne correspond à cette sélection.</p>}
       <ol className="changes-list">{filtered.map(event => <li key={event.id}>
-        <div><strong>{event.nom}</strong> <span>{event.corps}</span><small>{formatDate(event.date)}</small>
+        <div><strong>{event.nom}</strong> <span>{event.corps}</span><small><DateRP value={event.date}/></small>
           {event.changes.map((change, i) => <div key={i}>{describe(change)}</div>)}
         </div>
         <button type="button" className={`change-badge ${seen[event.id] ? "change-seen" : "change-new"}`}
