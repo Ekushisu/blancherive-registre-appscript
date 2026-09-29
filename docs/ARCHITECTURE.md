@@ -71,25 +71,28 @@ Principaux modules :
   - formules de solde communes aux deux chemins de génération (`Code.js` et `Presences.js`) et aux lectures Web
 
 - `Codex.js`
-  - lecture du cache `SyncCodex` pour la Web App
-  - `getCodexDocumentMetadata_()` dérive familles, autorités et liens du registre
-    `SYNC_CODEX_DOCUMENTS` ; les documents ne sont déclarés qu'une fois
+  - lecture du cache `SyncCodex` pour la Web App, versionnée par empreinte (`getCodex(token, versionConnue)`)
+  - `getCodexDocumentMetadata_()` dérive familles, autorités, liens, sigles et citabilité du registre
+    `SYNC_CODEX_DOCUMENTS` et du cache `R:Y` ; les documents ne sont déclarés qu'une fois
+  - `indexerArticlesCodex_()` et `cleArticleCodex_()` : index `source|article` servant à valider les chefs d'accusation d'`Amendes.js` et `Prison.js`
 
 - `SyncCodex.js`
   - `SYNC_CODEX_DOCUMENTS` : registre unique des documents, codes et décrets
   - lecture par `getText()`, qui couvre les listes à puces et les tableaux,
     et parcours des onglets par `getTabs()` quand l'exécution les expose
   - extraction des documents juridiques
-  - alimentation du cache juridique `SyncCodex!A:J` et des listes d'infractions `SyncCodex!L:O`
-  - choix de sanctions contextualisés en JSON dans M/O, exposés aux formulaires et revalidés à l’ajout par les helpers privés d’`Amendes.js` partagés avec `Prison.js`
+  - alimentation du cache juridique `SyncCodex!A:J`, des métadonnées `R:Y` (source, famille, autorité, applicabilité, local, lien, sigle, citable) et des anciennes listes d'infractions `SyncCodex!L:O`, que l'application ne lit plus
+  - choix de sanctions contextualisés en JSON dans M/O : n'alimentent plus que les suggestions de montant/durée du Codex et des formulaires, sans contrainte
+  - `abregerSourceCodex_` : sigle d'une source (déclaré ou dérivé du nom)
 
 - `Amendes.js`
-  - registre des amendes
+  - registre des amendes : lecture A:H, ajout et modification (OFFICIER) sous verrou de script, montant libre ou vide (« À déterminer »)
+  - chefs d'accusation : `validerChefsAccusation_` (références revalidées contre l'index du Codex, titres figés, JSON en colonne technique), `lireChefsAccusation_`, `garantirColonnesRegistre_`, identité de ligne `lireIdentiteAttendue_` / `verifierIdentiteRegistre_`
   - helpers partagés utilisés aussi par `Prison.js`
 
 - `Prison.js`
-  - registre des incarcérations
-  - ajouts sous verrou et saisies structurées dans la colonne J
+  - registre des incarcérations : lecture A:L, ajout et modification (OFFICIER) sous verrou, durée libre ou vide, sortie prévue recalculée
+  - saisies structurées dans la colonne J ; une modification qui n'envoie pas de saisies la laisse intacte (saisies historiques en texte)
 
 - `Objets.js`
   - recherche GARDE / OFFICIER dans `Objets!A:C`, trois caractères minimum, quinze suggestions maximum
@@ -110,7 +113,9 @@ Le source frontend est dans `ui/` :
 - `ui/src/main.jsx` : point d'entrée React ;
 - `ui/src/app.jsx` : composants de l'interface ;
 - `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
-- `ui/src/sanctions.jsx` : choix de sanction et motif personnalisé communs aux formulaires Amendes/Prison ;
+- `ui/src/codex.js` : cache local du Codex (`localStorage` versionné, hook `useCodex`), recherche en mémoire des articles citables (`rechercherArticlesLocal`), helpers de chefs d'accusation (`ajouterChef`, `chefsPourServeur`, `chefsDeLigne`, `chefsFrequents`, `qualificationMax`) et résolution des libellés antérieurs ;
+- `ui/src/chefs.jsx` : champ à jetons des chefs d'accusation (`ChefsField`), champ de sentence libre ou à déterminer (`SentenceField`), résumé de qualification et jetons du registre (`ChefsChips`), communs aux formulaires Amendes/Prison ;
+- `ui/src/brouillon.js` : brouillon `sessionStorage` des formulaires de création Amendes/Prison, effacé à l'enregistrement ;
 - `ui/src/styles.css` : styles ;
 - `ui/src/theme.css` : thème parchemin/sépia et adaptations mobiles, chargé après les styles structurels ;
 - `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
@@ -183,13 +188,28 @@ de la semaine courante.
 - `nettoyerSaisieUtilisateur`
 - `parseDateInput`
 
+`Prison.js` utilise aussi, déclarés dans `Amendes.js` depuis le 29 septembre 2026 :
+- `validerChefsAccusation_` et `lireChefsAccusation_` (chefs d'accusation) ;
+- `garantirColonnesRegistre_`, `lireIdentiteAttendue_`, `verifierIdentiteRegistre_`
+  (colonne technique et identité de ligne avant modification) ;
+
+et, déclaré dans `Objets.js`, `lireSaisiesPrisonStructurees_`.
+
 `Amendes.js` et `Prison.js` utilisent :
-- `SyncCodex!L:O` pour les infractions et leurs sanctions ;
+- `indexerArticlesCodex_` et `cleArticleCodex_` (`Codex.js`) pour valider chaque
+  chef d'accusation contre `SyncCodex!A:D` ; les anciennes listes `SyncCodex!L:O`
+  ne sont plus lues par l'application, mais encore régénérées une version ;
+- `abregerSourceCodex_` (`SyncCodex.js`) pour le sigle d'une source ;
 - `Données!O2:O` pour la liste des gardes actifs.
 
-`Codex.js` dérive ses métadonnées du registre `SYNC_CODEX_DOCUMENTS` de `SyncCodex.js`, et les construit à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script. Ajouter un texte juridique ne demande donc qu'une entrée dans ce registre.
+`Codex.js` dérive ses métadonnées du registre `SYNC_CODEX_DOCUMENTS` de `SyncCodex.js`, et les construit à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script. Ajouter un texte juridique ne demande donc qu'une entrée dans ce registre, avec au besoin son sigle `abrege` et `citable: false` pour un document de contexte.
 
-Le champ `source` d'un document sert de clé d'affichage dans le Codex. Les libellés d'infraction enregistrés dans Amendes et Prison sont de la forme `Art. N — Titre` et ne contiennent pas le nom de la source ; renommer une source impériale n'orpheline donc pas les lignes historiques. Les titres d'articles des sources marquées `sanctions` ne doivent pas changer à la légère : un libellé enregistré se résout d'abord par égalité exacte, puis, à défaut, par numéro d'article dans l'ancien Codex Judiciaire de Blancherive (`findCodexArticle` dans `Index.html`), caduc depuis le 27 septembre 2026 mais seule source des libellés antérieurs.
+`getCodex(token, versionConnue)` renvoie une empreinte MD5 du cache et ne renvoie
+`articles` et `sources` que si le navigateur ne la connaît pas. Le navigateur
+garde le Codex dans `localStorage` (`ui/src/codex.js`), comme le catalogue des
+objets, et y cherche les chefs d'accusation en mémoire.
+
+Le champ `source` d'un document sert de clé d'affichage dans le Codex. Un chef d'accusation est identifié par `source + numéro d'article` (`cleArticleCodex_`, `cleArticle`), jamais par le titre : le titre, la qualification et le sigle sont figés dans le JSON de la ligne. Les lignes antérieures au 29 septembre 2026 n'ont que leur libellé `Art. N — Titre` sans nom de source : il se résout par égalité exacte, puis, à défaut, par numéro d'article dans l'ancien Codex Judiciaire de Blancherive (`resoudreLibelleHistorique` dans `ui/src/codex.js`), caduc depuis le 27 septembre 2026 mais seule source des libellés antérieurs.
 
 Le droit de la châtellerie est porté par quatre codes adoptés par la Cour de Blancherive : Loi fondamentale, Code pénal local, Code civil local et Code du commerce local. Le Code pénal qualifie chaque article dans son titre (« (délit) », « (crime) ») ; `separerClassificationTitreCodex_()` en fait la classification et l'ôte du titre. Aucun des quatre ne chiffre ses peines.
 

@@ -53,8 +53,8 @@ Groupes terminaux reconnus :
 - La feuille `Vue globale` date d'avant l'application : calculs manuels (coûts, impayés, absents) que l'application refait de son côté. Archivée par le propriétaire le 28 septembre 2026 : `SoldesGrades` est initialisée et plus aucune formule de `Présences!N` ne référence `L2`, donc le code ne la lit plus. Ne pas la recréer ni y référencer de nouvelles formules.
 ## SyncCodex — cache technique
 
-- `A:J` articles extraits ; `L:O` listes d'infractions des formulaires.
-- `R:W` métadonnées des documents synchronisés : Source, Famille, Autorité, Applicabilité, Local, Lien. Écrit par `ecrireCacheDocumentsCodex_()` et relu par `Codex.js`. Ce bloc existe pour les décrets déposés dans un dossier Drive, qui ne figurent dans aucune déclaration du code : sans lui, chaque consultation du Codex devrait lister le dossier.
+- `A:J` articles extraits ; `L:O` anciennes listes d'infractions des formulaires, que l'application ne lit plus depuis le 29 septembre 2026 (les chefs d'accusation sont validés contre `A:D`).
+- `R:Y` métadonnées des documents synchronisés : Source, Famille, Autorité, Applicabilité, Local, Lien, Abrégé, Citable. Écrit par `ecrireCacheDocumentsCodex_()` et relu par `Codex.js`. Ce bloc existe pour les décrets déposés dans un dossier Drive, qui ne figurent dans aucune déclaration du code : sans lui, chaque consultation du Codex devrait lister le dossier. Un cache écrit avant l'ajout de X:Y laisse ces cellules vides : sigle dérivé du nom, document citable.
 - L'ensemble est régénéré par `synchroniserCodex()` et ne doit pas être édité à la main.
 
 - Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Cadet restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation. L'initialisation n'a lieu que sur une feuille vide : une feuille existante n'acquiert pas de ligne `Cadet` toute seule.
@@ -90,17 +90,50 @@ Ne pas déplacer ni réutiliser les colonnes à partir de P sans vérifier les n
 
 ## Amendes
 
-Colonnes A:G :
+Colonnes A:H :
 
 | Colonne | Contenu |
 |---|---|
 | A | Date |
 | B | Garde |
 | C | Contrevenant |
-| D | Infraction |
-| E | Montant |
+| D | Infraction — libellé lisible des chefs d'accusation |
+| E | Montant — entier en septims, vide pour « À déterminer » |
 | F | Payé |
 | G | Reversé aux trésoriers |
+| H | Chefs d'accusation (JSON) — colonne technique, créée par l'application avec son en-tête si elle manque |
+
+### Chefs d'accusation (Amendes!H, Prison!L)
+
+Depuis le 29 septembre 2026, chaque nouvelle ligne porte ses chefs
+d'accusation sous deux formes. La colonne texte (Amendes!D, Prison!E) reste
+lisible dans Sheets : `CPL art. 16 — Injure ; Motif personnalisé — Décision du
+Thane`, chefs séparés par ` ; `. La colonne technique porte le JSON :
+
+```json
+{"version":1,"chefs":[
+  {"source":"Code pénal local de Blancherive","article":"16","titre":"Injure","classification":"contravention","abrege":"CPL"},
+  {"libre":"Décision du Thane"}
+]}
+```
+
+Un chef du Codex est identifié par `source` et `article` ; `titre`,
+`classification` et `abrege` sont des instantanés pris dans SyncCodex à
+l'enregistrement, inchangés si le document est ensuite modifié ou retiré. Un
+chef libre n'a que `libre`. Vingt chefs au plus, motif libre de 1 à 1 000
+caractères, JSON limité à 45 000 caractères.
+
+Les lignes antérieures n'ont pas de JSON : leur colonne texte (`Art. N —
+Titre` de l'ancien Codex Judiciaire, ou `Motif personnalisé — …`) reste
+affichée telle quelle et se résout à l'ancienne dans l'interface. Aucune
+conversion des anciennes lignes ; une ligne antérieure modifiée depuis
+l'application reçoit alors son JSON.
+
+La validation de données que la feuille posait sur la cellule Infraction est
+retirée par l'application à chaque écriture, le libellé composite ne figurant
+dans aucune liste ; elle est restaurée si l'écriture échoue. Les anciennes
+listes `SyncCodex!L:O` ne servent plus qu'à cette validation Sheets
+historique et peuvent être retirées avec elle.
 
 ## Prison
 
@@ -112,7 +145,7 @@ Les listes structurées sont affichées en lignes « Nom × quantité » dans la
 Les cellules historiques ou non reconnues comme liste structurée restent affichées
 en texte. Aucun déplacement de colonne et aucune conversion des anciennes lignes.
 
-Colonnes A:K :
+Colonnes A:L :
 
 | Colonne | Contenu |
 |---|---|
@@ -120,13 +153,14 @@ Colonnes A:K :
 | B | Garde |
 | C | Détenu |
 | D | Cellule |
-| E | Infraction |
-| F | Durée prévue |
+| E | Infraction — libellé lisible des chefs d'accusation |
+| F | Durée prévue — heures, vide pour « À déterminer » |
 | G | Heure d'entrée |
-| H | Heure de sortie prévue |
+| H | Heure de sortie prévue — vide si la durée est à déterminer |
 | I | Libéré |
 | J | Saisies sur la personne |
 | K | Motif / Notes |
+| L | Chefs d'accusation (JSON) — colonne technique, même forme qu'Amendes!H |
 
 ## Objets
 
@@ -204,9 +238,9 @@ Les colonnes A:J conservent leur structure et leur texte complet ; les nombres
 uniques restent numériques. L’API Codex expose aussi `montants` et `dureesCachot`.
 Les titres de sections numérotés sont exclus du texte et des sanctions des articles.
 
-Les valeurs choisies sont enregistrées dans Amendes!E et Prison!F ; Prison!H est
-calculée depuis cette durée. Aucune réécriture des entrées historiques.
-Les motifs hors Codex sont enregistrés avec le préfixe `Motif personnalisé —`
-dans Amendes!D ou Prison!E. Seule la validation de cette cellule est retirée pour
-l’entrée personnalisée ; elle est restaurée avec les valeurs en cas d’échec.
-Aucune colonne déplacée ou ajoutée.
+Depuis le 29 septembre 2026, ces choix ne contraignent plus les formulaires :
+le montant (Amendes!E) et la durée (Prison!F) sont saisis librement ou laissés
+vides ; Prison!H est calculée depuis la durée quand elle existe. Les valeurs
+chiffrées du Codex ne sont plus que des raccourcis proposés. Voir « Chefs
+d'accusation » plus haut pour les colonnes techniques Amendes!H et Prison!L.
+Aucune réécriture des entrées historiques.

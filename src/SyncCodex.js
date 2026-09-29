@@ -93,10 +93,23 @@ const SYNC_CODEX_DOCUMENTS = [
     page de lecture s'ouvre, mais `export?format=txt` répond 401. Si
     `synchroniserCodex()` échoue à les ouvrir, demander au propriétaire des
     documents d'autoriser le téléchargement pour les lecteurs.
+
+    `abrege` : sigle affiché devant le numéro d'article dans les chefs
+    d'accusation (« CPL art. 16 »). Absent, `abregerSourceCodex_()` le dérive
+    du nom de la source ; les décrets du dossier Drive n'en déclarent jamais.
+
+    `citable` : décision du propriétaire du 29 septembre 2026, tout article
+    du Codex peut fonder un chef d'accusation, droit impérial compris, sauf
+    les documents de contexte marqués `citable: false` (constitution
+    cléricale, registre de chevalerie, s'ils sont un jour inscrits ici).
+    Absent, un document est citable. Un article non citable reste lisible au
+    Codex mais n'est ni proposé ni accepté par les formulaires Amendes et
+    Prison.
   */
   {
     id: "1AMAMjFDZ8dUAaAZ6ySE76ulSoByqOIB20SbtNVGZmWE",
     source: "Loi fondamentale de Blancherive",
+    abrege: "LF",
     famille: "Droit de Blancherive",
     autorite: "Cour de Blancherive",
     applicabilite: "Jarl, Thing, administration et justice de la châtellerie",
@@ -107,6 +120,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1QnltaOqtymMGWiQUtBOts1ltt15KQfNUhrKLaEn7MSw",
     source: "Code pénal local de Blancherive",
+    abrege: "CPL",
     famille: "Droit de Blancherive",
     autorite: "Cour de Blancherive",
     applicabilite: "Infractions locales et sanctions de la Garde",
@@ -117,6 +131,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "116FByPVeFenuLENmTqPnOP_MXu90RM2MVIEyub4eVnk",
     source: "Code civil local de Blancherive",
+    abrege: "CCL",
     famille: "Droit de Blancherive",
     autorite: "Cour de Blancherive",
     applicabilite: "Citoyenneté, obligations, propriété et litiges civils",
@@ -127,6 +142,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1dtSQ_QhP7A6d6gAS7s21x3LAbbZxarmfxXoE4mlctB0",
     source: "Code du commerce local de Blancherive",
+    abrege: "CCoL",
     famille: "Droit de Blancherive",
     autorite: "Cour de Blancherive",
     applicabilite: "Concessions, commerces et échoppes de la châtellerie",
@@ -139,6 +155,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1Q44ArnKr6qsJIRP9pSVCq_eloSzgMxA1JTqbPl7PP-M",
     source: "Corpus Juriscivilis Imperialis",
+    abrege: "CJI",
     famille: "Droit impérial",
     autorite: "Empire de Tamriel",
     applicabilite: "Droit pénal impérial général",
@@ -148,6 +165,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1hMA2J9FeE-LfKwdKXy15U6nrpKpdzRZdFg77hqywrzI",
     source: "De Re Nobilitatis",
+    abrege: "DRN",
     famille: "Droit impérial",
     autorite: "Empire de Tamriel",
     applicabilite: "Droit et statut de la noblesse",
@@ -157,6 +175,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "15ij3H8wqKr-kEAlmHtSSAY1EKslKLudAJT-iM78UERE",
     source: "Corpus Proceduralis Imperialis",
+    abrege: "CProc",
     famille: "Droit impérial",
     autorite: "Empire de Tamriel",
     applicabilite: "Procédure pénale impériale",
@@ -166,6 +185,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1OfwyV6KQynjJS3QyVJyLLbgoTuQc2IP3CoRBSt45soM",
     source: "Justicia Militaris",
+    abrege: "JM",
     famille: "Droit spécial",
     autorite: "Empire de Tamriel",
     applicabilite: "Justice militaire et Légion impériale",
@@ -175,6 +195,7 @@ const SYNC_CODEX_DOCUMENTS = [
   {
     id: "1AwLYSziNrCP5oLCyIUAaAauoWmeQVRjvrBcSIBYP000",
     source: "Codex Penitus Imperialis",
+    abrege: "CPen",
     famille: "Droit spécial",
     autorite: "Empire de Tamriel",
     applicabilite: "Protection de l'autorité impériale",
@@ -418,7 +439,8 @@ function lireDocumentsCodex_() {
         applicabilite: dossier.applicabilite,
         local: dossier.local,
         garde: dossier.garde,
-        sanctions: dossier.sanctions
+        sanctions: dossier.sanctions,
+        citable: dossier.citable !== false
       });
     }
   });
@@ -1168,14 +1190,15 @@ function ecrireCachesTechniquesCodex_(
   ];
 
   /*
-    IMPORTANT :
-    Les documents impériaux sont consultables mais ils ne sont PAS proposés aux
-    gardes dans les formulaires. Seules les sources marquées `sanctions` y
-    entrent : le Codex Judiciaire, et les décrets de la châtellerie.
+    Listes L:O : héritage. Depuis le 29 septembre 2026, les formulaires
+    Amendes et Prison ne les lisent plus ; ils cherchent dans le Codex entier
+    (`getCodex`, cache local du navigateur) et le serveur valide chaque chef
+    d'accusation contre A:J (`indexerArticlesCodex_`). Les listes restent
+    régénérées une version de plus, le temps de retirer les validations de
+    données que la feuille leur emprunte encore ; ne rien construire dessus.
 
-    Un article d'une source marquée n'apparaît pour autant que s'il porte une
-    amende ou une durée de cachot ; les décrets purement réglementaires
-    n'encombrent donc pas les listes.
+    Seules les sources marquées `sanctions` y entrent, et seulement les
+    articles portant une amende ou une durée de cachot.
   */
   const sourcesSanctionnantes = {};
 
@@ -1289,8 +1312,11 @@ function ecrireCachesTechniquesCodex_(
   U Applicabilité
   V Local
   W Lien
+  X Abrégé
+  Y Citable
 */
 const SYNC_CODEX_DOCUMENTS_COLUMN = 18;
+const SYNC_CODEX_DOCUMENTS_WIDTH = 8;
 
 function ecrireCacheDocumentsCodex_(sheet, documents) {
   const headers = [
@@ -1299,7 +1325,9 @@ function ecrireCacheDocumentsCodex_(sheet, documents) {
     "Autorité",
     "Applicabilité",
     "Local",
-    "Lien"
+    "Lien",
+    "Abrégé",
+    "Citable"
   ];
 
   const rows = documents.map(function (document) {
@@ -1309,7 +1337,9 @@ function ecrireCacheDocumentsCodex_(sheet, documents) {
       document.autorite || "",
       document.applicabilite || "",
       document.local ? "oui" : "",
-      "https://docs.google.com/document/d/" + document.id + "/edit"
+      "https://docs.google.com/document/d/" + document.id + "/edit",
+      abregerSourceCodex_(document.source, document.abrege),
+      document.citable === false ? "non" : "oui"
     ];
   });
 
@@ -1318,6 +1348,13 @@ function ecrireCacheDocumentsCodex_(sheet, documents) {
     rows.length + 1,
     2
   );
+
+  // Un classeur plus étroit que R:Y est élargi : les colonnes X:Y sont neuves.
+  if (typeof sheet.getMaxColumns === "function") {
+    const requis = SYNC_CODEX_DOCUMENTS_COLUMN + headers.length - 1;
+    const max = sheet.getMaxColumns();
+    if (max < requis) sheet.insertColumnsAfter(max, requis - max);
+  }
 
   sheet
     .getRange(1, SYNC_CODEX_DOCUMENTS_COLUMN, clearRows, headers.length)
@@ -1411,6 +1448,54 @@ function extraireDureesChoixCodex_(text, keywords) {
     }
   }
   return [...new Set(values)];
+}
+
+
+/*
+  Sigle d'une source pour les chefs d'accusation : « CPL art. 16 ».
+
+  Le sigle déclaré dans le registre l'emporte. À défaut, initiales des mots
+  significatifs du nom, quatre au plus ; un décret garde le préfixe « Décr. »
+  pour qu'on ne le confonde pas avec un code. Partagé avec l'interface par
+  `getCodex`, qui l'expose sur chaque article et chaque source : le navigateur
+  ne le recalcule jamais.
+*/
+const SYNC_CODEX_MOTS_VIDES = {
+  de: 1, des: 1, du: 1, la: 1, le: 1, les: 1, l: 1, d: 1, sur: 1, et: 1,
+  en: 1, a: 1, au: 1, aux: 1, un: 1, une: 1, the: 1, of: 1
+};
+
+function abregerSourceCodex_(source, abrege) {
+  const declare = String(abrege || "").trim();
+
+  if (declare) {
+    return declare;
+  }
+
+  const mots = String(source || "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean);
+
+  let prefixe = "";
+
+  if (mots.length && /^decret(um)?$/i.test(mots[0])) {
+    prefixe = "Décr. ";
+    mots.shift();
+  }
+
+  const initiales = mots
+    .filter(mot => !SYNC_CODEX_MOTS_VIDES[mot.toLowerCase()])
+    .slice(0, 4)
+    .map(mot => mot.charAt(0).toUpperCase())
+    .join("");
+
+  if (initiales) {
+    return prefixe + initiales;
+  }
+
+  return String(source || "").trim().slice(0, 12) || "Source";
 }
 
 

@@ -1,7 +1,9 @@
 import "./styles.css";
 import "./theme.css";
 import { Header, Login, ROLE_PUBLIC } from "./navigation.jsx";
-import { MotifSanction, ChoixSanction } from "./sanctions.jsx";
+import { ChefsField, SentenceField, ChefsChips } from "./chefs.jsx";
+import { useCodex, articleParCle, cleArticle, chefDepuisArticle, ajouterChef, chefsPourServeur, chefsDeLigne, chefsFrequents } from "./codex.js";
+import { lireBrouillon, ecrireBrouillon, effacerBrouillon } from "./brouillon.js";
 import { SaisiesField } from "./saisies.jsx";
 import { InventairePage } from "./inventaire.jsx";
 import { useCatalogue } from "./catalogue.js";
@@ -18,7 +20,6 @@ function normalizeSearchText(value){return String(value||"").toLowerCase().norma
 function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
 function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(Number(value)||0);}
 function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n)>1?"s":""}`;}
-function findCodexArticle(articles,label){if(!articles||!label||String(label).startsWith("Motif personnalis"))return null;const exact=articles.find(a=>a.label===label);if(exact)return exact;const m=String(label).match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);if(!m)return null;return articles.find(a=>String(a.article).toLowerCase()===String(m[1]).toLowerCase()&&a.source==="Codex Judiciaire de Blancherive")||null;}
 
 function App(){
   const[token,setToken]=useState(sessionStorage.getItem("guardAuthToken"));
@@ -1644,7 +1645,36 @@ function EffectifCard({
 }
 
 
-function LawModal({article,onClose,onOpenCodex}){
+/*
+  Texte d'un article avec ses renvois cliquables : « article 76 », « articles
+  6, 17 ou 25 » ouvrent l'article visé dans la même source, ou dans la source
+  nommée juste après (« article 5 du Codex Penitus Imperialis »).
+*/
+function TexteArticle({texte,article,codex,onNavigate}){
+  if(!codex||!onNavigate)return <div className="law-text">{texte}</div>;
+  const source=article.source;
+  const motif=/\b(articles?\s+)((?:\d+(?:-\d+)?)(?:\s*(?:,|et|ou)\s*\d+(?:-\d+)?)*)/gi;
+  const parts=[];let last=0,m;
+  while((m=motif.exec(texte))){
+    const suite=texte.slice(m.index+m[0].length,m.index+m[0].length+90);
+    let cible=source;
+    const lien=/^\s+(?:du|de la|de l’|de l'|des|au)\s+(.+)$/i.exec(suite);
+    if(lien){const reste=normalizeSearchText(lien[1]);const s=codex.sources.find(s=>reste.startsWith(normalizeSearchText(s.nom))||reste.startsWith(normalizeSearchText(s.abrege)));if(s)cible=s.nom;}
+    parts.push(texte.slice(last,m.index),m[1]);
+    const numeros=m[2];const num=/\d+(?:-\d+)?/g;let n,p=0;
+    while((n=num.exec(numeros))){
+      parts.push(numeros.slice(p,n.index));
+      const vise=articleParCle(codex,cible,n[0]);
+      parts.push(vise&&vise!==article?<button key={`${m.index}-${n.index}`} type="button" className="law-link law-renvoi" title={`${vise.abrege} art. ${vise.article} — ${vise.titre}`} onClick={()=>onNavigate(vise)}>{n[0]}</button>:n[0]);
+      p=n.index+n[0].length;
+    }
+    parts.push(numeros.slice(p));last=m.index+m[0].length;
+  }
+  parts.push(texte.slice(last));
+  return <div className="law-text">{parts.map((p,i)=>typeof p==="string"?<React.Fragment key={i}>{p}</React.Fragment>:p)}</div>;
+}
+
+function LawModal({article,onClose,onOpenCodex,codex=null,onNavigate=null,onRetenir=null,retenu=false}){
   const closeRef=useRef(onClose);closeRef.current=onClose;
   useEffect(()=>{
     if(!article)return;
@@ -1653,7 +1683,7 @@ function LawModal({article,onClose,onOpenCodex}){
     const dialog=document.querySelector(".law-modal");
     dialog?.querySelector("button")?.focus();
     function keys(event){
-      if(event.key==="Escape"){event.preventDefault();closeRef.current();}
+      if(event.key==="Escape"){event.preventDefault();event.stopPropagation();closeRef.current();}
       if(event.key!=="Tab"||!dialog)return;
       const controls=[...dialog.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')];
       const first=controls[0],last=controls[controls.length-1];
@@ -1663,9 +1693,43 @@ function LawModal({article,onClose,onOpenCodex}){
     document.addEventListener("keydown",keys);
     return()=>{document.body.style.overflow=overflow;document.removeEventListener("keydown",keys);previous?.focus();};
   },[article]);
-  if(!article)return null;return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="law-modal" role="dialog" aria-modal="true" aria-labelledby="law-title"><div className="law-modal-header"><div><div className="law-modal-number">{article.article==="Préambule"?"Préambule":`Article ${article.article}`}</div><h2 id="law-title" className="law-modal-title">{article.titre}</h2></div><button aria-label="Fermer l’article" className="law-modal-close" onClick={onClose}>×</button></div><div className="law-modal-body"><div className="law-meta">{article.famille&&<span className="law-chip">{article.famille}</span>}<span className="law-chip">{article.source}</span>{article.local&&<span className="law-chip law-chip-local">Applicable localement</span>}{article.classification&&<span className="law-chip">{article.classification}</span>}{(article.montants?.length>0||article.amende!=="")&&<span className="law-chip">💰 {article.amende} septims</span>}{(article.dureesCachot?.length>0||article.cachot!=="")&&<span className="law-chip">🔒 {article.dureesCachot?.length?article.dureesCachot.map(formatHours).join(" / "):formatHours(article.cachot)}</span>}{article.travaux!==""&&<span className="law-chip">⚒ {formatHours(article.travaux)}</span>}</div>{(article.autorite||article.applicabilite)&&<div className="law-source-info">{article.autorite&&<div><strong>Autorité :</strong> {article.autorite}</div>}{article.applicabilite&&<div><strong>Domaine :</strong> {article.applicabilite}</div>}</div>}{article.texte&&<div className="law-text">{article.texte}</div>}{article.sanction&&<div className="law-sanction-box"><strong>⚖ Sanction</strong><div>{article.sanction}</div></div>}{article.alerte&&<div className="law-warning">⚠ <strong>Vérification nécessaire :</strong> {article.alerte}</div>}<div className="form-actions">{article.url&&<button className="secondary-button" onClick={()=>window.open(article.url,"_blank")}>Ouvrir le document source ↗</button>}{onOpenCodex&&<button className="secondary-button" onClick={()=>onOpenCodex(article)}>Voir dans le Codex</button>}</div></div></div></div>;}
+  if(!article)return null;
+  const memeSource=codex?codex.articles.filter(a=>a.source===article.source):[];
+  const position=memeSource.findIndex(a=>a._cle===article._cle);
+  const precedent=position>0?memeSource[position-1]:null,suivant=position>=0&&position<memeSource.length-1?memeSource[position+1]:null;
+  const naviguer=onNavigate&&memeSource.length>1;
+  return <div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="law-modal" role="dialog" aria-modal="true" aria-labelledby="law-title"><div className="law-modal-header"><div><div className="law-modal-number">{article.abrege&&article.abrege!==article.source?`${article.abrege} · `:""}{article.article==="Préambule"?"Préambule":`Article ${article.article}`}</div><h2 id="law-title" className="law-modal-title">{article.titre}</h2></div><button aria-label="Fermer l’article" className="law-modal-close" onClick={onClose}>×</button></div><div className="law-modal-body"><div className="law-meta">{article.famille&&<span className="law-chip">{article.famille}</span>}<span className="law-chip">{article.source}</span>{article.local&&<span className="law-chip law-chip-local">Applicable localement</span>}{article.classification&&<span className="law-chip">{article.classification}</span>}{article.citable===false&&<span className="law-chip">Document de contexte — non citable</span>}{(article.montants?.length>0||article.amende!=="")&&<span className="law-chip">💰 {article.montants?.length?article.montants.join(" / "):article.amende} septims</span>}{(article.dureesCachot?.length>0||article.cachot!=="")&&<span className="law-chip">🔒 {article.dureesCachot?.length?article.dureesCachot.map(formatHours).join(" / "):formatHours(article.cachot)}</span>}{article.travaux!==""&&<span className="law-chip">⚒ {formatHours(article.travaux)}</span>}</div>{(article.autorite||article.applicabilite)&&<div className="law-source-info">{article.autorite&&<div><strong>Autorité :</strong> {article.autorite}</div>}{article.applicabilite&&<div><strong>Domaine :</strong> {article.applicabilite}</div>}</div>}{article.texte&&<TexteArticle texte={article.texte} article={article} codex={codex} onNavigate={onNavigate}/>}{article.sanction&&<div className="law-sanction-box"><strong>⚖ Sanction</strong><div>{article.sanction}</div></div>}{article.alerte&&<div className="law-warning">⚠ <strong>Vérification nécessaire :</strong> {article.alerte}</div>}{naviguer&&<div className="law-nav"><button type="button" className="secondary-button" disabled={!precedent} onClick={()=>precedent&&onNavigate(precedent)} title={precedent?`Art. ${precedent.article} — ${precedent.titre}`:""}>← Article précédent</button><span className="law-nav-position">{position+1} / {memeSource.length}</span><button type="button" className="secondary-button" disabled={!suivant} onClick={()=>suivant&&onNavigate(suivant)} title={suivant?`Art. ${suivant.article} — ${suivant.titre}`:""}>Article suivant →</button></div>}<div className="form-actions">{onRetenir&&article.citable!==false&&<button type="button" className="primary-button" disabled={retenu} onClick={()=>onRetenir(article)}>{retenu?"Déjà retenu":"Retenir ce chef d’accusation"}</button>}{article.url&&<button type="button" className="secondary-button" onClick={()=>window.open(article.url,"_blank")}>Ouvrir le document source ↗</button>}{onOpenCodex&&<button type="button" className="secondary-button" onClick={()=>onOpenCodex(article)}>Voir dans le Codex</button>}</div></div></div></div>;}
 
-function CodexPage({token,focusArticle,onFocusConsumed}){const[data,setData]=useState(null),[search,setSearch]=useState(""),[family,setFamily]=useState(""),[source,setSource]=useState(""),[classification,setClassification]=useState(""),[selected,setSelected]=useState(null),[error,setError]=useState("");useEffect(()=>{serverCall("getCodex",token).then(r=>{setData(r);if(focusArticle){setSelected(r.articles.find(a=>a.source===focusArticle.source&&a.article===focusArticle.article)||focusArticle);onFocusConsumed();}}).catch(e=>setError(e.message));},[]);const families=useMemo(()=>data?[...new Set(data.sources.map(s=>s.famille))]:[],[data]);const classes=useMemo(()=>data?[...new Set(data.articles.map(a=>a.classification).filter(Boolean))].sort():[],[data]);const filtered=useMemo(()=>{if(!data)return[];const q=normalizeSearchText(search);return data.articles.filter(a=>(!family||a.famille===family)&&(!source||a.source===source)&&(!classification||a.classification===classification)&&(!q||normalizeSearchText([a.article,a.titre,a.source,a.famille,a.classification,a.autorite,a.applicabilite,a.texte,a.sanction].join(" ")).includes(q)));},[data,search,family,source,classification]);if(error)return<div className="error">{error}</div>;if(!data)return<div className="loading">Chargement du Codex...</div>;return <><div className="page-header"><div><h1 className="page-title">Codex & Droit impérial</h1><p className="page-subtitle">Bibliothèque juridique de la Garde de Blancherive.</p></div></div><div className="codex-library">{families.map(f=><section className="codex-family" key={f}><h2 className="codex-family-title">{f}</h2><div className="codex-source-list">{data.sources.filter(s=>s.famille===f).map(s=><button key={s.nom} className={`codex-source-button ${source===s.nom?"active":""}`} onClick={()=>{setFamily(f);setSource(source===s.nom?"":s.nom);}}>{s.nom}<small>{s.applicabilite}</small></button>)}</div></section>)}</div><div className="codex-controls"><input type="search" placeholder="Rechercher une loi, un article, un mot..." value={search} onChange={e=>setSearch(e.target.value)}/><select value={family} onChange={e=>{setFamily(e.target.value);setSource("");}}><option value="">Toutes les familles</option>{families.map(v=><option key={v}>{v}</option>)}</select><select value={classification} onChange={e=>setClassification(e.target.value)}><option value="">Toutes classifications</option>{classes.map(v=><option key={v}>{v}</option>)}</select></div><div className="codex-count">{filtered.length} résultat{filtered.length!==1?"s":""}</div><div className="codex-list">{filtered.map((a,i)=><article role="button" tabIndex={0} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(a);}}} className="codex-card" key={`${a.source}-${a.article}-${i}`} onClick={()=>setSelected(a)}><div className="codex-card-top"><div><div className="codex-card-number">{a.article==="Préambule"?"Préambule":`Article ${a.article}`}</div><h2 className="codex-card-title">{a.titre}</h2><div className="law-meta">{a.famille&&<span className="law-chip">{a.famille}</span>}{a.classification&&<span className="law-chip">{a.classification}</span>}{(a.montants?.length>0||a.amende!=="")&&<span className="law-chip">💰 {a.montants?.length?a.montants.join(" / "):a.amende}</span>}{(a.dureesCachot?.length>0||a.cachot!=="")&&<span className="law-chip">🔒 {a.dureesCachot?.length?a.dureesCachot.map(formatHours).join(" / "):formatHours(a.cachot)}</span>}</div></div><div className="codex-card-source">{a.source}<br/>{a.autorite}</div></div>{a.texte&&<div className="codex-card-text">{a.texte}</div>}{a.sanction&&<div className="codex-card-sanction">⚖ {a.sanction}</div>}</article>)}</div><LawModal article={selected} onClose={()=>setSelected(null)}/></>}
+/*
+  Bibliothèque juridique. `mode="selection"` : la même page sert de sélecteur
+  de chefs d'accusation dans les formulaires Amendes et Prison — seuls les
+  articles citables sont listés, chaque carte et la popup portent « Retenir ».
+*/
+function CodexPage({token,focusArticle,onFocusConsumed,mode="lecture",onRetenir=null,retenus=[]}){
+  const etat=useCodex(serverCall,token,true);const data=etat.codex;
+  const[search,setSearch]=useState(""),[family,setFamily]=useState(""),[source,setSource]=useState(""),[classification,setClassification]=useState(""),[selected,setSelected]=useState(null);
+  const selection=mode==="selection";
+  useEffect(()=>{if(data&&focusArticle){setSelected(articleParCle(data,focusArticle.source,focusArticle.article)||focusArticle);onFocusConsumed?.();}},[data,focusArticle]);
+  const families=useMemo(()=>data?[...new Set(data.sources.filter(s=>!selection||s.citable).map(s=>s.famille))]:[],[data,selection]);
+  const classes=useMemo(()=>data?[...new Set(data.articles.map(a=>a.classification).filter(Boolean))].sort():[],[data]);
+  const filtered=useMemo(()=>{if(!data)return[];const q=normalizeSearchText(search);return data.articles.filter(a=>(!selection||a.citable)&&(!family||a.famille===family)&&(!source||a.source===source)&&(!classification||a.classification===classification)&&(!q||normalizeSearchText([a.article,a.abrege,a.titre,a.source,a.famille,a.classification,a.autorite,a.applicabilite,a.texte,a.sanction].join(" ")).includes(q)));},[data,search,family,source,classification,selection]);
+  const estRetenu=a=>retenus.some(c=>c.libre===undefined&&cleArticle(c.source,c.article)===a._cle);
+  if(etat.statut==="erreur"&&!data)return<div className="error">{etat.erreur}</div>;if(!data)return<div className="loading">Chargement du Codex...</div>;
+  return <>{!selection&&<div className="page-header"><div><h1 className="page-title">Codex & Droit impérial</h1><p className="page-subtitle">Bibliothèque juridique de la Garde de Blancherive.</p></div></div>}<div className="codex-library">{families.map(f=><section className="codex-family" key={f}><h2 className="codex-family-title">{f}</h2><div className="codex-source-list">{data.sources.filter(s=>s.famille===f&&(!selection||s.citable)).map(s=><button key={s.nom} type="button" className={`codex-source-button ${source===s.nom?"active":""}`} onClick={()=>{setFamily(f);setSource(source===s.nom?"":s.nom);}}>{s.nom}<small>{s.applicabilite}</small></button>)}</div></section>)}</div><div className="codex-controls"><input type="search" placeholder="Rechercher une loi, un article, un mot..." value={search} onChange={e=>setSearch(e.target.value)}/><select value={family} onChange={e=>{setFamily(e.target.value);setSource("");}}><option value="">Toutes les familles</option>{families.map(v=><option key={v}>{v}</option>)}</select><select value={classification} onChange={e=>setClassification(e.target.value)}><option value="">Toutes classifications</option>{classes.map(v=><option key={v}>{v}</option>)}</select></div><div className="codex-count">{filtered.length} résultat{filtered.length!==1?"s":""}</div><div className="codex-list">{filtered.map((a,i)=><article role="button" tabIndex={0} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(a);}}} className="codex-card" key={`${a.source}-${a.article}-${i}`} onClick={()=>setSelected(a)}><div className="codex-card-top"><div><div className="codex-card-number">{a.abrege&&a.abrege!==a.source?`${a.abrege} · `:""}{a.article==="Préambule"?"Préambule":`Article ${a.article}`}</div><h2 className="codex-card-title">{a.titre}</h2><div className="law-meta">{a.famille&&<span className="law-chip">{a.famille}</span>}{a.classification&&<span className="law-chip">{a.classification}</span>}{(a.montants?.length>0||a.amende!=="")&&<span className="law-chip">💰 {a.montants?.length?a.montants.join(" / "):a.amende}</span>}{(a.dureesCachot?.length>0||a.cachot!=="")&&<span className="law-chip">🔒 {a.dureesCachot?.length?a.dureesCachot.map(formatHours).join(" / "):formatHours(a.cachot)}</span>}</div></div><div className="codex-card-source">{a.source}<br/>{a.autorite}</div></div>{a.texte&&<div className="codex-card-text">{a.texte}</div>}{a.sanction&&<div className="codex-card-sanction">⚖ {a.sanction}</div>}{selection&&<div className="form-actions codex-card-actions"><button type="button" className="primary-button" disabled={estRetenu(a)} onClick={e=>{e.stopPropagation();onRetenir(a);}}>{estRetenu(a)?"Déjà retenu":"Retenir"}</button></div>}</article>)}</div><LawModal article={selected} onClose={()=>setSelected(null)} codex={data} onNavigate={setSelected} onRetenir={selection?onRetenir:null} retenu={selected?estRetenu(selected):false}/></>}
+
+/*
+  Sélecteur de chefs d'accusation : le Codex en modale, par-dessus le
+  formulaire. Retenir un article ne ferme pas le sélecteur, pour en retenir
+  plusieurs d'affilée.
+*/
+function CodexPicker({token,open,onClose,onRetenir,retenus}){
+  const closeRef=useRef(onClose);closeRef.current=onClose;
+  useEffect(()=>{if(!open)return;const overflow=document.body.style.overflow;document.body.style.overflow="hidden";
+    function keys(e){if(e.key==="Escape"&&!document.querySelector(".law-modal")){e.preventDefault();closeRef.current();}}
+    document.addEventListener("keydown",keys);return()=>{document.body.style.overflow=overflow;document.removeEventListener("keydown",keys);};},[open]);
+  if(!open)return null;
+  return <div className="modal-backdrop codex-picker-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="codex-picker" role="dialog" aria-modal="true" aria-labelledby="codex-picker-title"><div className="law-modal-header"><div><div className="law-modal-number">Chefs d’accusation</div><h2 id="codex-picker-title" className="law-modal-title">Parcourir le Codex</h2></div><div className="codex-picker-count">{retenus.length} retenu{retenus.length>1?"s":""}</div><button aria-label="Fermer le sélecteur" className="law-modal-close" onClick={onClose}>×</button></div><div className="codex-picker-body"><CodexPage token={token} mode="selection" onRetenir={onRetenir} retenus={retenus}/></div><div className="form-actions codex-picker-actions"><button type="button" className="primary-button" onClick={onClose}>Revenir au formulaire</button></div></div></div>;}
+
 
 function OrganigrammePage({token}) {
   const [data,setData]=useState(null), [error,setError]=useState("");
@@ -1724,72 +1788,102 @@ function OrgCorps({title,people=[],compact=false}) {
 function Independent({title,subtitle,people=[]}) {
   return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} showCorps/></section>;
 }
-function AmendesPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);useEffect(()=>{Promise.all([serverCall("getAmendes",token),serverCall("getAmendeFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement des amendes...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette amende ?\n\n${item.contrevenant}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerAmende",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Amendes</h1><button className="primary-button" onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle amende"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<AmendeForm data={formData} onOpenLaw={openLaw} onSubmit={async f=>{try{setData(await serverCall("ajouterAmende",token,f));setShowForm(false);}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table"><thead><tr><th>Date</th><th>Garde</th><th>Contrevenant</th><th>Infraction</th><th>Montant</th><th>Payé</th><th>Reversé</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.paye&&i.reverse?"fine-reversed":i.paye?"fine-paid":"fine-unpaid"}><td data-label="Date"><DateRP value={i.date} jour={false}/></td><td data-label="Garde">{i.garde}<div className="fine-recipient">{i.collecteurs.length?<>↳ À reverser à : {i.collecteurs.join(" ou ")}{i.fallbackEtatMajor?" (État-Major)":""}</>:"↳ Aucun collecteur désigné"}</div></td><td data-label="Contrevenant">{i.contrevenant}</td><td data-label="Infraction"><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td data-label="Montant">{i.montant||"À déterminer"}</td><td data-label="Payé" className="cell-center"><input type="checkbox" checked={i.paye} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,6,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Reversé" className="cell-center"><input type="checkbox" checked={i.reverse} disabled={!canDelete} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,7,e.target.checked));}catch(x){setError(x.message);}}}/></td>{canDelete&&<td data-label="Actions"><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
-function AmendeForm({data,onSubmit,onOpenLaw}){
-  const[form,setForm]=useState({date:new Date().toISOString().slice(0,10),garde:"",contrevenant:"",infraction:""});
+function dateIsoDepuisAffichage(valeur){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(String(valeur||"").trim());if(m)return `${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;const iso=/^(\d{4}-\d{2}-\d{2})/.exec(String(valeur||""));return iso?iso[1]:"";}
+function dateLocaleIso(){const now=new Date();return new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString();}
+// Chefs d'une ligne existante, tels que le formulaire de modification les reprend.
+function chefsPourFormulaire(codex,row){return chefsDeLigne(codex,row).map(e=>e.chef);}
+
+function useFormulaireRegistre({cle,initial,vide}){
+  const[form,setForm]=useState(()=>initial?vide(initial):{...(lireBrouillon(cle)||{}),...vide(null),...(lireBrouillon(cle)||{})});
+  useEffect(()=>{if(!initial)ecrireBrouillon(cle,form);},[form]);
+  return[form,setForm];
+}
+
+function AmendesPage({token,canDelete,onOpenCodex}){
+  const[data,setData]=useState(null),[formData,setFormData]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[editing,setEditing]=useState(null),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null);
+  const codexEtat=useCodex(serverCall,token,true);const codex=codexEtat.codex;
+  useEffect(()=>{Promise.all([serverCall("getAmendes",token),serverCall("getAmendeFormData",token)]).then(([r,f])=>{setData(r);setFormData(f);}).catch(e=>setError(e.message));},[]);
+  const frequents=useMemo(()=>chefsFrequents(codex,data?.rows),[codex,data]);
+  if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData)return<div className="loading">Chargement des amendes...</div>;
+  const openLaw=a=>{if(a)setSelected(a);};
+  function fermer(){setShowForm(false);setEditing(null);}
+  function editer(item){setEditing(item);setShowForm(true);setError("");window.scrollTo?.({top:0,behavior:"smooth"});}
+  async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette amende ?\n\n${item.contrevenant}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerAmende",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}
+  return <><div className="page-header"><h1 className="page-title">Amendes</h1><button className="primary-button" onClick={()=>{if(showForm)fermer();else{setEditing(null);setShowForm(true);}}}>{showForm?"Fermer":"+ Nouvelle amende"}</button></div>{error&&<div className="error">{error}</div>}{codexEtat.statut==="erreur"&&<div className="error">Codex indisponible : {codexEtat.erreur}</div>}{showForm&&<AmendeForm key={editing?`edit-${editing.row}`:"new"} token={token} data={formData} codex={codex} codexStatut={codexEtat.statut} frequents={frequents} initial={editing} onOpenLaw={openLaw} onCancel={fermer} onSubmit={async f=>{try{setData(editing?await serverCall("modifierAmende",token,editing.row,f):await serverCall("ajouterAmende",token,f));if(!editing)effacerBrouillon("amende");fermer();setError("");}catch(e){setError(e.message);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table"><thead><tr><th>Date</th><th>Garde</th><th>Contrevenant</th><th>Chefs d’accusation</th><th>Montant</th><th>Payé</th><th>Reversé</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.paye&&i.reverse?"fine-reversed":i.paye?"fine-paid":"fine-unpaid"}><td data-label="Date"><DateRP value={i.date} jour={false}/></td><td data-label="Garde">{i.garde}<div className="fine-recipient">{i.collecteurs.length?<>↳ À reverser à : {i.collecteurs.join(" ou ")}{i.fallbackEtatMajor?" (État-Major)":""}</>:"↳ Aucun collecteur désigné"}</div></td><td data-label="Contrevenant">{i.contrevenant}</td><td data-label="Chefs"><ChefsChips entrees={chefsDeLigne(codex,i)} onOpenLaw={openLaw}/></td><td data-label="Montant">{i.montant||"À déterminer"}</td><td data-label="Payé" className="cell-center"><input type="checkbox" checked={i.paye} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,6,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Reversé" className="cell-center"><input type="checkbox" checked={i.reverse} disabled={!canDelete} onChange={async e=>{try{setData(await serverCall("modifierAmendeCheckbox",token,i.row,7,e.target.checked));}catch(x){setError(x.message);}}}/></td>{canDelete&&<td data-label="Actions"><div className="registry-actions"><button className="secondary-button" disabled={deletingRow===i.row} onClick={()=>editer(i)}>Modifier</button><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></div></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex} codex={codex} onNavigate={setSelected}/></>}
+
+function AmendeForm({token,data,codex,codexStatut,frequents,initial,onSubmit,onCancel,onOpenLaw}){
+  const[form,setForm]=useFormulaireRegistre({cle:"amende",initial,vide:row=>row
+    ?{date:dateIsoDepuisAffichage(row.date),garde:row.garde,contrevenant:row.contrevenant,chefs:chefsPourFormulaire(codex,row),montant:row.montantRaw===null?"":String(row.montantRaw),indetermine:row.montantRaw===null}
+    :{date:dateLocaleIso().slice(0,10),garde:"",contrevenant:"",chefs:[],montant:"",indetermine:false}});
   const[submitting,setSubmitting]=useState(false);
+  const[chefEnCours,setChefEnCours]=useState(false);
+  const[formError,setFormError]=useState("");
+  const[picker,setPicker]=useState(false);
+  const[lu,setLu]=useState(null);
   const submittingRef=useRef(false);
-  const selected=data.infractions.find(i=>i.label===form.infraction);
+  const retenir=a=>{try{setForm(p=>({...p,chefs:ajouterChef(p.chefs,chefDepuisArticle(a))}));setFormError("");}catch(e){setFormError(e.message);}};
 
   async function submit(e){
     e.preventDefault();
-
-    if(submittingRef.current){
-      return;
-    }
-
-    submittingRef.current=true;
-    setSubmitting(true);
-
+    if(submittingRef.current)return;
+    if(chefEnCours){setFormError("Ajoutez la référence en cours ou effacez-la avant d’enregistrer.");return;}
+    if(!form.chefs.length){setFormError("Indiquez au moins un chef d’accusation.");return;}
+    setFormError("");submittingRef.current=true;setSubmitting(true);
     try{
-      const fixed=selected?.sanction?.options.length===1&&!selected.sanction.libre?selected.sanction.options[0].value:"";
-      await onSubmit({...form,montant:form.montant||(!form.personnalisee?fixed:"")});
-    }finally{
-      submittingRef.current=false;
-      setSubmitting(false);
-    }
+      await onSubmit({date:form.date,garde:form.garde,contrevenant:form.contrevenant,chefs:chefsPourServeur(form.chefs),montant:form.indetermine?"":form.montant,attendu:initial?{garde:initial.garde,contrevenant:initial.contrevenant}:undefined});
+    }finally{submittingRef.current=false;setSubmitting(false);}
   }
 
-  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>Nouvelle amende</h2><div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}</select></Field><Field label="Contrevenant"><input required value={form.contrevenant} onChange={e=>setForm({...form,contrevenant:e.target.value})}/></Field><MotifSanction form={form} setForm={setForm} infractions={data.infractions} onOpenLaw={onOpenLaw} valueKey="montant"/><ChoixSanction key={String(Boolean(form.personnalisee))+(form.personnalisee?"":form.infraction)} selected={selected} personnalisee={form.personnalisee} value={form.montant} onChange={value=>setForm(previous=>({...previous,montant:value}))} type="amende"/></div><div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":"Enregistrer"}</button></div></fieldset></form>;
+  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>{initial?`Modifier l’amende — ${initial.contrevenant}`:"Nouvelle amende"}</h2>{initial&&<p className="info-notice">Payé et Reversé ne changent pas ici : ils se cochent depuis le registre.</p>}<div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}{initial&&form.garde&&!data.gardes.includes(form.garde)&&<option value={form.garde}>{form.garde} (hors service actif)</option>}</select></Field><Field label="Contrevenant"><input required maxLength={200} value={form.contrevenant} onChange={e=>setForm({...form,contrevenant:e.target.value})}/></Field><ChefsField codex={codex} statut={codexStatut} value={form.chefs} onChange={chefs=>{setForm(p=>({...p,chefs}));setFormError("");}} onOpenLaw={setLu} onParcourir={()=>setPicker(true)} frequents={frequents} disabled={submitting} onPendingChange={setChefEnCours}/><SentenceField type="amende" codex={codex} chefs={form.chefs} value={form.montant} onChange={montant=>setForm(p=>({...p,montant}))} indetermine={form.indetermine} onIndetermineChange={indetermine=>setForm(p=>({...p,indetermine}))} disabled={submitting}/></div>{formError&&<div className="error" role="alert">{formError}</div>}<div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":initial?"Enregistrer les modifications":"Enregistrer"}</button>{onCancel&&<button type="button" className="secondary-button" onClick={onCancel}>Annuler</button>}</div></fieldset><CodexPicker token={token} open={picker} onClose={()=>setPicker(false)} onRetenir={retenir} retenus={form.chefs}/><LawModal article={lu} onClose={()=>setLu(null)} codex={codex} onNavigate={setLu} onRetenir={retenir} retenu={lu?form.chefs.some(c=>c.libre===undefined&&cleArticle(c.source,c.article)===lu._cle):false}/></form>;
 }
 
-function PrisonPage({token,canDelete,onOpenCodex}){const[data,setData]=useState(null),[formData,setFormData]=useState(null),[codex,setCodex]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null),[saving,setSaving]=useState(false);useEffect(()=>{Promise.all([serverCall("getPrison",token),serverCall("getPrisonFormData",token),serverCall("getCodex",token)]).then(([r,f,c])=>{setData(r);setFormData(f);setCodex(c.articles);}).catch(e=>setError(e.message));},[]);
+function PrisonPage({token,canDelete,onOpenCodex}){
+  const[data,setData]=useState(null),[formData,setFormData]=useState(null),[selected,setSelected]=useState(null),[showForm,setShowForm]=useState(false),[editing,setEditing]=useState(null),[error,setError]=useState(""),[deletingRow,setDeletingRow]=useState(null),[saving,setSaving]=useState(false);
+  const codexEtat=useCodex(serverCall,token,true);const codex=codexEtat.codex;
+  useEffect(()=>{Promise.all([serverCall("getPrison",token),serverCall("getPrisonFormData",token)]).then(([r,f])=>{setData(r);setFormData(f);}).catch(e=>setError(e.message));},[]);
   // Le catalogue des objets est préchargé dès l'ouverture de la page : le
   // formulaire d'incarcération doit proposer ses objets sans attendre le serveur.
   const catalogue=useCatalogue(serverCall,token,true);
-  if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData||!codex)return<div className="loading">Chargement de la prison...</div>;const openLaw=l=>{const a=findCodexArticle(codex,l);if(a)setSelected(a);};async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette incarcération ?\n\n${item.detenu}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerPrison",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}return <><div className="page-header"><h1 className="page-title">Prison</h1><button className="primary-button" disabled={saving} onClick={()=>setShowForm(!showForm)}>{showForm?"Fermer":"+ Nouvelle incarcération"}</button></div>{error&&<div className="error">{error}</div>}{showForm&&<PrisonForm token={token} data={formData} catalogue={catalogue.objets} onOpenLaw={openLaw} onSubmit={async f=>{setSaving(true);setError("");try{setData(await serverCall("ajouterPrison",token,f));setShowForm(false);}catch(e){setError(e.message);}finally{setSaving(false);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table prison-table"><thead><tr><th>Date</th><th>Garde</th><th>Détenu</th><th>Cellule</th><th>Infraction</th><th>Durée</th><th>Entrée</th><th>Sortie prévue</th><th>Libéré</th><th>Saisies</th><th>Notes</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.libere?"prison-released":"prison-active"}><td data-label="Date"><DateRP value={i.date} jour={false}/></td><td data-label="Garde">{i.garde}</td><td data-label="Détenu">{i.detenu}</td><td data-label="Cellule">{i.cellule||"—"}</td><td data-label="Infraction"><button className="law-link" onClick={()=>openLaw(i.infraction)}>{i.infraction} ⓘ</button></td><td data-label="Durée">{i.duree||"À déterminer"}</td><td data-label="Entrée"><DateRP value={i.entree} jour={false}/></td><td data-label="Sortie prévue">{i.sortie?<DateRP value={i.sortie} jour={false}/>:"—"}</td><td data-label="Libéré" className="cell-center"><input type="checkbox" checked={i.libere} onChange={async e=>{try{setData(await serverCall("modifierPrisonLibere",token,i.row,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Saisies" className="saisies-cell">{i.saisies||"—"}</td><td data-label="Notes">{i.notes||"—"}</td>{canDelete&&<td data-label="Actions"><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex}/></>}
-function PrisonForm({token,data,onSubmit,onOpenLaw,catalogue=null}){
-  const now=new Date(),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);
-  const[form,setForm]=useState({date:local.toISOString().slice(0,10),garde:"",detenu:"",cellule:"",infraction:"",entree:local.toISOString().slice(0,16),saisies:[],notes:""});
+  const frequents=useMemo(()=>chefsFrequents(codex,data?.rows),[codex,data]);
+  if(error&&!data)return<div className="error">{error}</div>;if(!data||!formData)return<div className="loading">Chargement de la prison...</div>;
+  const openLaw=a=>{if(a)setSelected(a);};
+  function fermer(){setShowForm(false);setEditing(null);}
+  function editer(item){setEditing(item);setShowForm(true);setError("");window.scrollTo?.({top:0,behavior:"smooth"});}
+  async function del(item){if(!canDelete||!confirm(`Supprimer définitivement cette incarcération ?\n\n${item.detenu}\n${item.infraction}`))return;try{setDeletingRow(item.row);setData(await serverCall("supprimerPrison",token,item.row));}catch(e){setError(e.message);}finally{setDeletingRow(null);}}
+  return <><div className="page-header"><h1 className="page-title">Prison</h1><button className="primary-button" disabled={saving} onClick={()=>{if(showForm)fermer();else{setEditing(null);setShowForm(true);}}}>{showForm?"Fermer":"+ Nouvelle incarcération"}</button></div>{error&&<div className="error">{error}</div>}{codexEtat.statut==="erreur"&&<div className="error">Codex indisponible : {codexEtat.erreur}</div>}{showForm&&<PrisonForm key={editing?`edit-${editing.row}`:"new"} token={token} data={formData} codex={codex} codexStatut={codexEtat.statut} frequents={frequents} catalogue={catalogue.objets} initial={editing} onOpenLaw={openLaw} onCancel={fermer} onSubmit={async f=>{setSaving(true);setError("");try{setData(editing?await serverCall("modifierPrison",token,editing.row,f):await serverCall("ajouterPrison",token,f));if(!editing)effacerBrouillon("prison");fermer();}catch(e){setError(e.message);}finally{setSaving(false);}}}/>}<div className="registry"><div className="registry-table-wrap"><table className="registry-table prison-table"><thead><tr><th>Date</th><th>Garde</th><th>Détenu</th><th>Cellule</th><th>Chefs d’accusation</th><th>Durée</th><th>Entrée</th><th>Sortie prévue</th><th>Libéré</th><th>Saisies</th><th>Notes</th>{canDelete&&<th>Actions</th>}</tr></thead><tbody>{data.rows.map(i=><tr key={i.row} className={i.libere?"prison-released":"prison-active"}><td data-label="Date"><DateRP value={i.date} jour={false}/></td><td data-label="Garde">{i.garde}</td><td data-label="Détenu">{i.detenu}</td><td data-label="Cellule">{i.cellule||"—"}</td><td data-label="Chefs"><ChefsChips entrees={chefsDeLigne(codex,i)} onOpenLaw={openLaw}/></td><td data-label="Durée">{i.duree||"À déterminer"}</td><td data-label="Entrée"><DateRP value={i.entree} jour={false}/></td><td data-label="Sortie prévue">{i.sortie?<DateRP value={i.sortie} jour={false}/>:"—"}</td><td data-label="Libéré" className="cell-center"><input type="checkbox" checked={i.libere} onChange={async e=>{try{setData(await serverCall("modifierPrisonLibere",token,i.row,e.target.checked));}catch(x){setError(x.message);}}}/></td><td data-label="Saisies" className="saisies-cell">{i.saisies||"—"}</td><td data-label="Notes">{i.notes||"—"}</td>{canDelete&&<td data-label="Actions"><div className="registry-actions"><button className="secondary-button" disabled={deletingRow===i.row||saving} onClick={()=>editer(i)}>Modifier</button><button className="danger-button" disabled={deletingRow===i.row} onClick={()=>del(i)}>{deletingRow===i.row?"...":"Supprimer"}</button></div></td>}</tr>)}</tbody></table></div></div><LawModal article={selected} onClose={()=>setSelected(null)} onOpenCodex={onOpenCodex} codex={codex} onNavigate={setSelected}/></>}
+
+function PrisonForm({token,data,codex,codexStatut,frequents,initial,onSubmit,onCancel,onOpenLaw,catalogue=null}){
+  const[form,setForm]=useFormulaireRegistre({cle:"prison",initial,vide:row=>row
+    ?{date:dateIsoDepuisAffichage(row.date),garde:row.garde,detenu:row.detenu,cellule:row.cellule,chefs:chefsPourFormulaire(codex,row),duree:row.dureeRaw===null?"":String(row.dureeRaw),indetermine:row.dureeRaw===null,entree:row.entreeIso||dateIsoDepuisAffichage(row.entree),saisies:row.saisiesListe||[],notes:row.notes}
+    :{date:dateLocaleIso().slice(0,10),garde:"",detenu:"",cellule:"",chefs:[],duree:"",indetermine:false,entree:dateLocaleIso().slice(0,16),saisies:[],notes:""}});
+  const saisiesTexteHistorique=Boolean(initial&&initial.saisiesListe===null&&initial.saisies);
   const[submitting,setSubmitting]=useState(false);
   const[saisieEnCours,setSaisieEnCours]=useState(false);
-  const[saisieError,setSaisieError]=useState("");
+  const[chefEnCours,setChefEnCours]=useState(false);
+  const[formError,setFormError]=useState("");
+  const[picker,setPicker]=useState(false);
+  const[lu,setLu]=useState(null);
   const submittingRef=useRef(false);
-  const selected=data.infractions.find(i=>i.label===form.infraction);
+  const retenir=a=>{try{setForm(p=>({...p,chefs:ajouterChef(p.chefs,chefDepuisArticle(a))}));setFormError("");}catch(e){setFormError(e.message);}};
 
   async function submit(e){
     e.preventDefault();
-
-    if(submittingRef.current){
-      return;
-    }
-
-    if(saisieEnCours){setSaisieError("Ajoutez l’objet en cours à la liste ou effacez la recherche avant d’enregistrer.");return;}
-    setSaisieError("");
-    submittingRef.current=true;
-    setSubmitting(true);
-
+    if(submittingRef.current)return;
+    if(saisieEnCours){setFormError("Ajoutez l’objet en cours à la liste ou effacez la recherche avant d’enregistrer.");return;}
+    if(chefEnCours){setFormError("Ajoutez la référence en cours ou effacez-la avant d’enregistrer.");return;}
+    if(!form.chefs.length){setFormError("Indiquez au moins un chef d’accusation.");return;}
+    setFormError("");submittingRef.current=true;setSubmitting(true);
     try{
-      const fixed=selected?.sanction?.options.length===1&&!selected.sanction.libre?selected.sanction.options[0].value:"";
-      await onSubmit({...form,duree:form.duree||(!form.personnalisee?fixed:"")});
-    }finally{
-      submittingRef.current=false;
-      setSubmitting(false);
-    }
+      const payload={date:form.date,garde:form.garde,detenu:form.detenu,cellule:form.cellule,chefs:chefsPourServeur(form.chefs),duree:form.indetermine?"":form.duree,entree:form.entree,notes:form.notes,attendu:initial?{garde:initial.garde,detenu:initial.detenu}:undefined};
+      // Saisies historiques en texte : la colonne J n'est pas renvoyée, le serveur la conserve.
+      if(!saisiesTexteHistorique)payload.saisies=form.saisies;
+      await onSubmit(payload);
+    }finally{submittingRef.current=false;setSubmitting(false);}
   }
 
-  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>Nouvelle incarcération</h2><div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}</select></Field><Field label="Détenu"><input required value={form.detenu} onChange={e=>setForm({...form,detenu:e.target.value})}/></Field><Field label="Cellule"><input value={form.cellule} onChange={e=>setForm({...form,cellule:e.target.value})}/></Field><MotifSanction form={form} setForm={setForm} infractions={data.infractions} onOpenLaw={onOpenLaw} valueKey="duree"/><ChoixSanction key={String(Boolean(form.personnalisee))+(form.personnalisee?"":form.infraction)} selected={selected} personnalisee={form.personnalisee} value={form.duree} onChange={value=>setForm(previous=>({...previous,duree:value}))} type="cachot"/><Field label="Heure d'entrée"><input type="datetime-local" required value={form.entree} onChange={e=>setForm({...form,entree:e.target.value})}/></Field><SaisiesField token={token} value={form.saisies} disabled={submitting} serverCall={serverCall} catalogue={catalogue} onPendingChange={pending=>{setSaisieEnCours(pending);setSaisieError("");}} onChange={saisies=>setForm(previous=>({...previous,saisies}))}/>{saisieError&&<div className="field-full error" role="alert">{saisieError}</div>}<div className="field field-full"><label>Motif / Notes</label><textarea value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/></div></div><div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":"Enregistrer"}</button></div></fieldset></form>;
+  return <form className="form-card" onSubmit={submit}><fieldset className="form-fieldset" disabled={submitting}><h2>{initial?`Modifier l’incarcération — ${initial.detenu}`:"Nouvelle incarcération"}</h2>{initial&&<p className="info-notice">La case Libéré ne change pas ici : elle se coche depuis le registre. La sortie prévue est recalculée depuis l’entrée et la durée.</p>}<div className="form-grid"><Field label="Date"><input type="date" required value={form.date} onChange={e=>setForm({...form,date:e.target.value})}/></Field><Field label="Garde"><select required value={form.garde} onChange={e=>setForm({...form,garde:e.target.value})}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}{initial&&form.garde&&!data.gardes.includes(form.garde)&&<option value={form.garde}>{form.garde} (hors service actif)</option>}</select></Field><Field label="Détenu"><input required maxLength={200} value={form.detenu} onChange={e=>setForm({...form,detenu:e.target.value})}/></Field><Field label="Cellule"><input maxLength={100} value={form.cellule} onChange={e=>setForm({...form,cellule:e.target.value})}/></Field><Field label="Heure d'entrée"><input type="datetime-local" required value={form.entree} onChange={e=>setForm({...form,entree:e.target.value})}/></Field><ChefsField codex={codex} statut={codexStatut} value={form.chefs} onChange={chefs=>{setForm(p=>({...p,chefs}));setFormError("");}} onOpenLaw={setLu} onParcourir={()=>setPicker(true)} frequents={frequents} disabled={submitting} onPendingChange={setChefEnCours}/><SentenceField type="cachot" codex={codex} chefs={form.chefs} value={form.duree} onChange={duree=>setForm(p=>({...p,duree}))} indetermine={form.indetermine} onIndetermineChange={indetermine=>setForm(p=>({...p,indetermine}))} disabled={submitting}/>{saisiesTexteHistorique?<div className="field field-full"><h3>Saisies sur la personne</h3><p>Saisies enregistrées en texte avant le catalogue, conservées telles quelles :</p><p style={{whiteSpace:"pre-wrap"}}>{initial.saisies}</p></div>:<SaisiesField token={token} value={form.saisies} disabled={submitting} serverCall={serverCall} catalogue={catalogue} onPendingChange={pending=>{setSaisieEnCours(pending);setFormError("");}} onChange={saisies=>setForm(previous=>({...previous,saisies}))}/>}<div className="field field-full"><label>Motif / Notes</label><textarea maxLength={5000} value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})}/></div></div>{formError&&<div className="field-full error" role="alert">{formError}</div>}<div className="form-actions"><button type="submit" className="primary-button">{submitting?"Enregistrement…":initial?"Enregistrer les modifications":"Enregistrer"}</button>{onCancel&&<button type="button" className="secondary-button" onClick={onCancel}>Annuler</button>}</div></fieldset><CodexPicker token={token} open={picker} onClose={()=>setPicker(false)} onRetenir={retenir} retenus={form.chefs}/><LawModal article={lu} onClose={()=>setLu(null)} codex={codex} onNavigate={setLu} onRetenir={retenir} retenu={lu?form.chefs.some(c=>c.libre===undefined&&cleArticle(c.source,c.article)===lu._cle):false}/></form>;
 }
+
 function Field({label,children}){return<div className="field"><label>{label}</label>{children}</div>;}
 
 export const SYNTHESE_OUVERTE_KEY="blancherive.presences.synthese.v1";

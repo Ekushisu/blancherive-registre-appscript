@@ -79,8 +79,12 @@ Règles connues :
 - édition Présences ;
 - tableau de bord officier ;
 - suppression Amendes ;
+- modification d'une amende (`modifierAmende` : date, garde, contrevenant,
+  chefs d'accusation, montant) ;
 - modification du statut `Reversé` des Amendes ;
 - suppression Prison ;
+- modification d'une incarcération (`modifierPrison` : tout sauf la case
+  Libéré) ;
 - règlement d'une semaine depuis la page Paye ;
 - inventaire des coffres : création et modification des coffres, quantités,
   rangement groupé, déplacements.
@@ -106,6 +110,20 @@ Un contrôle uniquement côté React n'est jamais suffisant.
 aucun formulaire d'objets et ne reçoit pas le catalogue ; le rôle public non plus. `ajouterPrison` vérifie le même rôle avant la
 validation des objets. L'initialisation d'une feuille Objets absente est un helper
 privé, sous verrou ; aucune API Web de remplacement ou d'import libre du catalogue.
+
+## Amendes et Prison
+
+`getAmendes`, `getAmendeFormData`, `ajouterAmende`, `getPrison`,
+`getPrisonFormData` et `ajouterPrison` autorisent `GARDE` et `OFFICIER`.
+`modifierAmende` et `modifierPrison` n'autorisent que `OFFICIER`, avant toute
+ouverture du classeur, au même titre que `supprimerAmende` et
+`supprimerPrison` : un garde qui se trompe demande la correction à un
+officier. Les deux exigent en outre l'identité affichée de la ligne (`attendu`)
+et refusent d'écrire si elle a changé.
+
+`getCodex` reste la seule fonction ouverte au rôle public ; son paramètre
+`versionConnue` ne change pas sa liste de rôles. Les formulaires Amendes et
+Prison lisent le Codex par cette fonction, avec un jeton de service.
 
 ## Paye
 

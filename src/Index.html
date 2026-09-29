@@ -2612,6 +2612,241 @@ button {
     grid-template-columns: 1fr;
   }
 }
+.chefs-field h3 {
+  font-size: 15px;
+  margin: 4px 0 12px;
+}
+.chefs-filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 12px;
+}
+.chefs-filtre-groupe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chefs-filtre {
+  border: 1px solid #bbb;
+  background: #fff;
+  color: #444;
+  border-radius: 30px;
+  padding: 5px 11px;
+  font-size: 12px;
+  min-height: 32px;
+  cursor: pointer;
+}
+.chefs-filtre.active {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+.chefs-filtre:disabled {
+  opacity: .5;
+  cursor: default;
+}
+.chef-ref {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #315d8a;
+  background: #e8eef5;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.chef-suggestions li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.chef-suggestion-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.chef-suggestion-main strong {
+  display: block;
+  line-height: 1.4;
+}
+.chef-suggestion-main em {
+  display: block;
+  margin-top: 4px;
+  color: #666;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.5;
+}
+.chef-lire {
+  flex: 0 0 auto;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  border: 1px solid #bbb;
+  background: #fff;
+}
+.chefs-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.chefs-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 7px;
+  padding: 9px 12px;
+}
+.chef-token-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+.chef-token-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.chef-token-actions button {
+  min-height: 36px;
+  padding: 6px 10px;
+}
+.chef-qualif {
+  font-size: 11px;
+}
+.chef-qualif-crime {
+  background: #f4dcdc;
+  color: #7b2b2b;
+}
+.chef-qualif-d\e9lit {
+  background: #f6e7c9;
+  color: #6f4d12;
+}
+.chef-qualif-contravention {
+  background: #e3ecdd;
+  color: #3f5b34;
+}
+.chefs-resume {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #555;
+}
+.sentence-field .saisie-shortcuts {
+  margin: 10px 0 4px;
+}
+.sentence-field .secondary-button.active {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+.chefs-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.chefs-chips li {
+  line-height: 1.5;
+}
+.law-renvoi {
+  font: inherit;
+  display: inline;
+  text-decoration: underline;
+  color: #315d8a;
+}
+.law-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.law-nav-position {
+  font-size: 12px;
+  color: #666;
+}
+.codex-picker-backdrop {
+  z-index: 400;
+  align-items: stretch;
+}
+.codex-picker {
+  width: min(1200px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .35);
+  overflow: hidden;
+}
+.codex-picker .law-modal-header {
+  align-items: center;
+  gap: 12px;
+}
+.codex-picker-count {
+  margin-left: auto;
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+}
+.codex-picker-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+.codex-picker-actions {
+  padding: 12px 20px;
+  border-top: 1px solid #ddd;
+  margin: 0;
+}
+.codex-card-actions {
+  padding-top: 12px;
+  border-top: 0;
+  margin-top: 12px;
+}
+.registry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .chefs-list li {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .chef-token-actions {
+    justify-content: flex-end;
+  }
+  .codex-picker-body {
+    padding: 10px;
+  }
+  .registry-table td .registry-actions {
+    grid-column: 2;
+  }
+}
+.saisie-suggestions .chef-ref {
+  display: inline-block;
+}
+.saisie-suggestions .law-chip {
+  display: inline-flex;
+  margin-right: 6px;
+}
 
 /* ui/src/theme.css */
 :root {
@@ -5284,6 +5519,77 @@ body {
     font-size: 16px;
     min-height: 48px;
   }
+}
+.chefs-filtre {
+  background: #f5ecd8;
+  color: #635032;
+  border-color: #d2bd93;
+}
+.chefs-filtre.active {
+  background: #634526;
+  border-color: #634526;
+  color: #fff3d4;
+}
+.chef-ref {
+  background: #eee1c4;
+  color: #69491f;
+}
+.chefs-list li {
+  background: #f4ead4;
+  border-color: #d4bf97;
+}
+.chef-lire {
+  background: #f4ead3;
+  border-color: #d9c499;
+  color: #69491f;
+}
+.chef-suggestion-main em {
+  color: #786244;
+}
+.chefs-resume {
+  color: #6a583f;
+  padding: 12px 14px;
+  background: #eee4cd;
+  border-left: 2px solid #b4945b;
+  border-radius: 2px;
+}
+.law-renvoi {
+  color: #72501f;
+}
+.law-nav-position {
+  color: #846634;
+}
+.codex-picker {
+  background: var(--surface);
+  border: 1px solid #b1955f;
+  border-radius: 6px;
+}
+.codex-picker-actions {
+  border-color: var(--line);
+  background: #eee1c4;
+}
+.codex-picker-count {
+  color: #705533;
+}
+.sentence-field .secondary-button.active {
+  background: #634526;
+  border-color: #634526;
+  color: #fff3d4;
+}
+.chef-qualif-crime {
+  background: #efd3cd;
+  border-color: #d9a99c;
+  color: #7b2b2b;
+}
+.chef-qualif-d\e9lit {
+  background: #f2e2bd;
+  border-color: #dcc48e;
+  color: #6f4d12;
+}
+.chef-qualif-contravention {
+  background: #e3ead5;
+  border-color: #c5d0ab;
+  color: #3f5b34;
 }</style>
 </head>
 <body>
@@ -5357,26 +5663,481 @@ body {
     return /* @__PURE__ */ React.createElement("div", { className: "login-page" }, /* @__PURE__ */ React.createElement("section", { className: "login-intro" }, /* @__PURE__ */ React.createElement("img", { className: "login-art", src: fort_dragon_default, alt: "Illustration de Fort-Dragon" }), /* @__PURE__ */ React.createElement("span", { className: "login-insignia" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" })), /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Ch\xE2tellerie de Blancherive"), /* @__PURE__ */ React.createElement("h1", null, "Veiller.", /* @__PURE__ */ React.createElement("br", null), "Servir.", /* @__PURE__ */ React.createElement("br", null), /* @__PURE__ */ React.createElement("em", null, "Prot\xE9ger.")), /* @__PURE__ */ React.createElement("p", { className: "login-description" }, "Le registre de la Garde.", /* @__PURE__ */ React.createElement("br", null), "Les effectifs, le service et la justice,", /* @__PURE__ */ React.createElement("br", null), "r\xE9unis en un m\xEAme lieu."), /* @__PURE__ */ React.createElement("span", { className: "login-rule" })), /* @__PURE__ */ React.createElement("div", { className: "login-form-wrap" }, /* @__PURE__ */ React.createElement("form", { className: "login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Acc\xE8s au registre"), /* @__PURE__ */ React.createElement("h2", null, "Prendre son service"), /* @__PURE__ */ React.createElement("p", null, "Identifiez-vous avec votre code de garde ou d\u2019officier."), /* @__PURE__ */ React.createElement("label", { htmlFor: "access-code" }, "Code d\u2019acc\xE8s"), /* @__PURE__ */ React.createElement("input", { id: "access-code", type: "password", autoComplete: "current-password", required: true, disabled: busy, placeholder: "Votre code d\u2019acc\xE8s", value: password, onChange: (event) => setPassword(event.target.value), "aria-describedby": error ? "login-error" : void 0 }), /* @__PURE__ */ React.createElement("button", { className: "primary-button", disabled: busy }, busy ? "Connexion en cours\u2026" : "Entrer dans le registre", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), error && /* @__PURE__ */ React.createElement("div", { id: "login-error", className: "error", role: "alert" }, error), /* @__PURE__ */ React.createElement("div", { className: "login-public" }, /* @__PURE__ */ React.createElement("p", null, "Vous n\u2019\xEAtes pas de la Garde ?"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy, onClick: consulter }, "Consulter le Codex ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), /* @__PURE__ */ React.createElement("small", null, "Lecture seule des lois et d\xE9crets de la ch\xE2tellerie.")), /* @__PURE__ */ React.createElement("div", { className: "login-footnote" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" }), "R\xE9serv\xE9 aux membres de la Garde de Blancherive."))));
   }
 
-  // ui/src/sanctions.jsx
-  function MotifSanction({ form, setForm, infractions, onOpenLaw, valueKey }) {
-    function changer(changes) {
-      setForm((previous) => ({ ...previous, ...changes, [valueKey]: "" }));
-    }
-    return /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: Boolean(form.personnalisee), onChange: (e) => changer({ personnalisee: e.target.checked, infraction: "" }) }), " Motif personnalis\xE9 (d\xE9cret, d\xE9cision\u2026)"), /* @__PURE__ */ React.createElement("label", null, form.personnalisee ? "Motif et r\xE9f\xE9rence du d\xE9cret ou de la d\xE9cision" : "Infraction du Codex", form.personnalisee ? /* @__PURE__ */ React.createElement("textarea", { required: true, maxLength: 1e3, value: form.infraction, onChange: (e) => setForm((previous) => ({ ...previous, infraction: e.target.value })) }) : /* @__PURE__ */ React.createElement("select", { required: true, value: form.infraction, onChange: (e) => changer({ infraction: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), infractions.map((item) => /* @__PURE__ */ React.createElement("option", { key: item.label, value: item.label }, item.label)))), !form.personnalisee && form.infraction && /* @__PURE__ */ React.createElement("div", { className: "law-info-row" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(form.infraction) }, "\u24D8 Consulter cet article")));
+  // ui/src/codex.js
+  var CLE_CODEX_LOCAL = "blancherive.codex.v1";
+  var CHEFS_MAX = 20;
+  var MOTIF_LIBRE_MAX = 1e3;
+  var PREFIXE_LIBRE = "Motif personnalis\xE9 \u2014 ";
+  var SUGGESTIONS_MAX = 12;
+  function normaliserTexteCodex(value) {
+    return String(value || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[’']/g, " ").replace(/\s+/g, " ").trim();
   }
-  function ChoixSanction({ selected, personnalisee, value, onChange, type }) {
-    const sanction = personnalisee ? { options: [], libre: true, texte: "" } : selected == null ? void 0 : selected.sanction;
-    const options = (sanction == null ? void 0 : sanction.options) || [];
-    const [libre, setLibre] = React.useState(Boolean((sanction == null ? void 0 : sanction.libre) && !options.length));
+  function cleArticle(source, article) {
+    return `${String(source || "").replace(/ /g, " ").trim().toLowerCase()}|${String(article || "").replace(/ /g, " ").trim().toLowerCase()}`;
+  }
+  function groupeFamille(famille) {
+    const f = normaliserTexteCodex(famille);
+    if (f.includes("blancherive")) return "blancherive";
+    if (f.includes("decret")) return "decrets";
+    if (f.includes("imperial") || f.includes("special")) return "imperial";
+    return "autres";
+  }
+  var ORDRE_GROUPES = { blancherive: 0, imperial: 1, decrets: 2, autres: 3 };
+  function rangQualification(classification) {
+    const c = normaliserTexteCodex(classification);
+    if (!c) return 0;
+    if (c.includes("crime")) return 3;
+    if (c.includes("delit")) return 2;
+    if (c.includes("contravention")) return 1;
+    return 0;
+  }
+  var QUALIFICATIONS = ["", "contravention", "d\xE9lit", "crime"];
+  var BAREME_IMPERIAL = {
+    contravention: "jusqu\u2019\xE0 500 septims",
+    "d\xE9lit": "de 500 \xE0 2 500 septims",
+    crime: "au-del\xE0 de 2 500 septims"
+  };
+  function numeroTri(article) {
+    const m = String(article || "").match(/^(\d+)(?:-(\d+))?/);
+    return m ? Number(m[1]) * 1e3 + Number(m[2] || 0) : Number.MAX_SAFE_INTEGER;
+  }
+  function preparerCodex(reponse) {
+    if (!reponse || !Array.isArray(reponse.articles) || !Array.isArray(reponse.sources)) throw new Error("Codex illisible.");
+    const parCle = /* @__PURE__ */ new Map();
+    const articles = reponse.articles.map((a) => {
+      const article = {
+        ...a,
+        abrege: a.abrege || a.source,
+        citable: a.citable !== false,
+        _cle: cleArticle(a.source, a.article),
+        _num: normaliserTexteCodex(a.article),
+        _titre: normaliserTexteCodex(a.titre),
+        _texte: normaliserTexteCodex(`${a.titre} ${a.texte} ${a.sanction} ${a.classification}`),
+        _source: normaliserTexteCodex(a.source),
+        _abrege: normaliserTexteCodex(a.abrege || a.source),
+        _groupe: groupeFamille(a.famille),
+        _tri: numeroTri(a.article)
+      };
+      parCle.set(article._cle, article);
+      return article;
+    });
+    const sources = reponse.sources.map((s) => ({ ...s, abrege: s.abrege || s.nom, citable: s.citable !== false, _abrege: normaliserTexteCodex(s.abrege || s.nom), _nom: normaliserTexteCodex(s.nom) }));
+    return { version: String(reponse.version || ""), articles, sources, parCle };
+  }
+  function articleParCle(codex, source, article) {
+    var _a;
+    return ((_a = codex == null ? void 0 : codex.parCle) == null ? void 0 : _a.get(cleArticle(source, article))) || null;
+  }
+  function rechercherArticlesLocal(codex, recherche, filtres = {}) {
+    if (typeof recherche !== "string" || recherche.length > 200) throw new Error("Recherche invalide (200 caract\xE8res maximum).");
+    const query = normaliserTexteCodex(recherche).replace(/\b(art|article|articles)\.?\s*/g, "");
+    const groupe = filtres.groupe || "";
+    const classification = filtres.classification || "";
+    const termes = query.split(" ").filter(Boolean);
+    const sourcesForcees = /* @__PURE__ */ new Set();
+    const numeros = [];
+    const mots = [];
+    for (const terme of termes) {
+      const source = codex.sources.find((s) => s._abrege === terme || s._nom === terme);
+      if (source) {
+        sourcesForcees.add(normaliserTexteCodex(source.nom));
+        continue;
+      }
+      if (/^\d+(-\d+)?$/.test(terme)) numeros.push(terme);
+      mots.push(terme);
+    }
+    if (!termes.length) return { articles: [], tronque: false, total: 0 };
+    const matches = [];
+    for (const a of codex.articles) {
+      if (!a.citable) continue;
+      if (groupe && a._groupe !== groupe) continue;
+      if (classification && rangQualification(a.classification) !== rangQualification(classification)) continue;
+      if (sourcesForcees.size && !sourcesForcees.has(a._source)) continue;
+      let rank;
+      if (numeros.length && numeros.includes(a._num) && mots.every((m) => m === a._num || a._texte.includes(m))) rank = 0;
+      else if (!mots.length) rank = sourcesForcees.size ? 6 : -1;
+      else if (a._titre === mots.join(" ")) rank = 1;
+      else if (a._titre.startsWith(mots.join(" "))) rank = 2;
+      else if (mots.every((m) => a._titre.includes(m))) rank = 3;
+      else if (mots.every((m) => a._texte.includes(m))) rank = 4;
+      else rank = -1;
+      if (rank >= 0) matches.push({ a, rank });
+    }
+    matches.sort((x, y) => x.rank - y.rank || ORDRE_GROUPES[x.a._groupe] - ORDRE_GROUPES[y.a._groupe] || x.a.source.localeCompare(y.a.source, "fr") || x.a._tri - y.a._tri || x.a.article.localeCompare(y.a.article, "fr"));
+    return { articles: matches.slice(0, SUGGESTIONS_MAX).map((m) => m.a), tronque: matches.length > SUGGESTIONS_MAX, total: matches.length };
+  }
+  function chefDepuisArticle(article) {
+    return { source: article.source, article: article.article, titre: article.titre, classification: article.classification || "", abrege: article.abrege || article.source };
+  }
+  function cleChef(chef) {
+    return chef.libre !== void 0 ? `libre|${normaliserTexteCodex(chef.libre)}` : cleArticle(chef.source, chef.article);
+  }
+  function libelleChef(chef) {
+    if (chef.libre !== void 0) return PREFIXE_LIBRE + chef.libre;
+    const reference = `${chef.abrege || chef.source} art. ${chef.article}`;
+    return chef.titre ? `${reference} \u2014 ${chef.titre}` : reference;
+  }
+  function referenceChef(chef) {
+    return chef.libre !== void 0 ? "Motif personnalis\xE9" : `${chef.abrege || chef.source} art. ${chef.article}`;
+  }
+  function ajouterChef(chefs, chef) {
+    if (!chef) throw new Error("S\xE9lectionnez un article ou saisissez une r\xE9f\xE9rence.");
+    if (chef.libre !== void 0) {
+      const motif = String(chef.libre).replace(/\s+/g, " ").trim();
+      if (!motif || motif.length > MOTIF_LIBRE_MAX) throw new Error(`Un motif personnalis\xE9 compte de 1 \xE0 ${MOTIF_LIBRE_MAX} caract\xE8res.`);
+      chef = { libre: motif };
+    }
+    const cle = cleChef(chef);
+    if (chefs.some((c) => cleChef(c) === cle)) throw new Error("Ce chef d\u2019accusation est d\xE9j\xE0 retenu.");
+    if (chefs.length >= CHEFS_MAX) throw new Error(`Une m\xEAme entr\xE9e ne peut porter plus de ${CHEFS_MAX} chefs d\u2019accusation.`);
+    return [...chefs, chef];
+  }
+  function retirerChef(chefs, chef) {
+    const cle = cleChef(chef);
+    return chefs.filter((c) => cleChef(c) !== cle);
+  }
+  function chefsPourServeur(chefs) {
+    return chefs.map((c) => c.libre !== void 0 ? { libre: c.libre } : { source: c.source, article: c.article });
+  }
+  function qualificationMax(chefs) {
+    return QUALIFICATIONS[Math.max(0, ...chefs.map((c) => rangQualification(c.classification)))];
+  }
+  function resoudreLibelleHistorique(codex, label) {
+    const texte = String(label || "");
+    if (!codex || !texte || texte.startsWith("Motif personnalis")) return null;
+    const exact = codex.articles.find((a) => a.label === texte);
+    if (exact) return exact;
+    const m = texte.match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);
+    if (!m) return null;
+    return codex.articles.find((a) => String(a.article).toLowerCase() === String(m[1]).toLowerCase() && a.source === "Codex Judiciaire de Blancherive") || null;
+  }
+  function chefsDeLigne(codex, row) {
+    if (Array.isArray(row.chefs) && row.chefs.length) {
+      return row.chefs.map((chef) => ({ chef, article: chef.libre !== void 0 ? null : articleParCle(codex, chef.source, chef.article) }));
+    }
+    const label = String(row.infraction || "").trim();
+    if (!label) return [];
+    if (label.startsWith(PREFIXE_LIBRE)) return [{ chef: { libre: label.slice(PREFIXE_LIBRE.length) }, article: null }];
+    const article = resoudreLibelleHistorique(codex, label);
+    return [{ chef: article ? chefDepuisArticle(article) : { libre: label }, article, historique: true }];
+  }
+  function chefsFrequents(codex, rows, limite = 6) {
+    const compte = /* @__PURE__ */ new Map();
+    for (const row of rows || []) {
+      for (const { chef, article } of chefsDeLigne(codex, row)) {
+        if (chef.libre !== void 0 || !article) continue;
+        const cle = cleChef(chef);
+        const entree = compte.get(cle) || { chef: chefDepuisArticle(article), n: 0 };
+        entree.n++;
+        compte.set(cle, entree);
+      }
+    }
+    return [...compte.values()].sort((a, b) => b.n - a.n).slice(0, limite).map((e) => e.chef);
+  }
+  function lireStockage() {
+    var _a;
+    try {
+      const brut = (_a = globalThis.localStorage) == null ? void 0 : _a.getItem(CLE_CODEX_LOCAL);
+      if (!brut) return null;
+      const stocke = JSON.parse(brut);
+      return stocke && typeof stocke.version === "string" && Array.isArray(stocke.articles) && Array.isArray(stocke.sources) ? stocke : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function ecrireStockage(reponse) {
+    var _a;
+    try {
+      (_a = globalThis.localStorage) == null ? void 0 : _a.setItem(CLE_CODEX_LOCAL, JSON.stringify({ version: reponse.version, articles: reponse.articles, sources: reponse.sources }));
+    } catch (e) {
+    }
+  }
+  var codexCourant = null;
+  var chargementEnCours = null;
+  function codexEnMemoire() {
+    return codexCourant;
+  }
+  function chargerCodex(serverCall2, token) {
+    if (chargementEnCours) return chargementEnCours;
+    const stocke = lireStockage();
+    if (stocke && !codexCourant) codexCourant = preparerCodex(stocke);
+    chargementEnCours = (async () => {
+      try {
+        const reponse = await serverCall2("getCodex", token, (codexCourant == null ? void 0 : codexCourant.version) || "");
+        if (reponse && Array.isArray(reponse.articles)) {
+          codexCourant = preparerCodex(reponse);
+          ecrireStockage(reponse);
+        } else if (!codexCourant) {
+          throw new Error("Le serveur n\u2019a pas renvoy\xE9 le Codex.");
+        }
+        return codexCourant;
+      } finally {
+        chargementEnCours = null;
+      }
+    })();
+    return chargementEnCours;
+  }
+  function useCodex(serverCall2, token, actif = true) {
+    const { useEffect: useEffect7, useState: useState7 } = React;
+    const [etat, setEtat] = useState7(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect7(() => {
+      if (!actif) return;
+      let vivant = true;
+      setEtat((e) => ({ ...e, statut: e.codex ? "pret" : "chargement", erreur: "" }));
+      chargerCodex(serverCall2, token).then((codex) => {
+        if (vivant) setEtat({ codex, statut: "pret", erreur: "" });
+      }).catch((error) => {
+        if (vivant) setEtat((e) => ({ codex: e.codex, statut: e.codex ? "pret" : "erreur", erreur: error.message || String(error) }));
+      });
+      return () => {
+        vivant = false;
+      };
+    }, [serverCall2, token, actif]);
+    return etat;
+  }
+
+  // ui/src/chefs.jsx
+  var { useEffect, useRef, useState } = React;
+  var GROUPES = [["", "Tout le Codex"], ["blancherive", "Blancherive"], ["imperial", "Imp\xE9rial"], ["decrets", "D\xE9crets"]];
+  var QUALIFS = [["", "Toutes"], ["contravention", "Contravention"], ["d\xE9lit", "D\xE9lit"], ["crime", "Crime"]];
+  var RACCOURCIS_CACHOT = [[0.5, "30 min"], [1, "1 h"], [2, "2 h"], [6, "6 h"], [12, "12 h"], [24, "24 h"]];
+  function extrait(texte, longueur = 140) {
+    const t = String(texte || "").replace(/\s+/g, " ").trim();
+    return t.length > longueur ? `${t.slice(0, longueur).replace(/\s+\S*$/, "")}\u2026` : t;
+  }
+  function QualificationChip({ classification }) {
+    if (!classification) return null;
+    return /* @__PURE__ */ React.createElement("span", { className: `law-chip chef-qualif chef-qualif-${qualificationMax([{ classification }]) || "autre"}` }, classification);
+  }
+  function ChefsField({ codex, value, onChange, onOpenLaw, onParcourir, frequents = [], disabled, onPendingChange = () => {
+  }, statut = "pret" }) {
+    const [query, setQuery] = useState("");
+    const [groupe, setGroupe] = useState("");
+    const [qualif, setQualif] = useState("");
+    const [libre, setLibre] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [active, setActive] = useState(-1);
+    const [error, setError] = useState("");
+    const input = useRef(null);
+    const recherche = codex && !libre && query.trim() ? (() => {
+      try {
+        return rechercherArticlesLocal(codex, query, { groupe, classification: qualif });
+      } catch (e) {
+        return { articles: [], tronque: false, total: 0, erreur: e.message };
+      }
+    })() : null;
+    const results = (recherche == null ? void 0 : recherche.articles) || [];
+    useEffect(() => {
+      setActive(-1);
+    }, [query, groupe, qualif, libre]);
+    useEffect(() => {
+      var _a, _b, _c;
+      if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`chef-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
+    }, [active, open]);
+    function ajouter(chef) {
+      var _a;
+      try {
+        onChange(ajouterChef(value, chef));
+        setQuery("");
+        setError("");
+        setOpen(false);
+        setActive(-1);
+        onPendingChange(false);
+        (_a = input.current) == null ? void 0 : _a.focus();
+      } catch (e) {
+        setError(e.message);
+      }
+    }
+    function edit(text) {
+      setQuery(text);
+      setError("");
+      setOpen(true);
+      onPendingChange(libre && Boolean(text.trim()));
+    }
+    function keyDown(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        setActive(-1);
+      }
+      if (!libre && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+        event.preventDefault();
+        setOpen(true);
+        if (results.length) setActive((index) => event.key === "ArrowDown" ? (index + 1) % results.length : index <= 0 ? results.length - 1 : index - 1);
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (libre) {
+          if (query.trim()) ajouter({ libre: query });
+        } else if (open && active >= 0 && results[active]) ajouter(chefDepuisArticle(results[active]));
+        else if (results.length === 1) ajouter(chefDepuisArticle(results[0]));
+      }
+    }
+    const aide = libre ? `R\xE9f\xE9rence d\u2019un d\xE9cret, d\u2019une d\xE9cision ou d\u2019un ordre hors Codex (${MOTIF_LIBRE_MAX} caract\xE8res maximum). Entr\xE9e ou \xAB Ajouter \xBB pour la retenir.` : statut === "chargement" && !codex ? "Chargement du Codex\u2026" : statut === "erreur" && !codex ? "Le Codex n\u2019a pas pu \xEAtre charg\xE9 : seule la r\xE9f\xE9rence libre est possible." : recherche ? recherche.erreur ? recherche.erreur : results.length ? `${recherche.total} article${recherche.total > 1 ? "s" : ""}${recherche.tronque ? ", les douze premiers affich\xE9s : pr\xE9cisez la recherche." : "."} Entr\xE9e retient l\u2019article surlign\xE9, \u24D8 le lit sans le retenir.` : "Aucun article ne correspond. Essayez un mot du titre, un num\xE9ro (\xAB 16 \xBB, \xAB cpl 16 \xBB) ou parcourez le Codex." : `Un mot du titre, un num\xE9ro d\u2019article ou un sigle (CPL, CCoL\u2026) \u2014 ${codex ? codex.articles.filter((a) => a.citable).length : 0} articles citables.`;
+    return /* @__PURE__ */ React.createElement("div", { className: "field field-full chefs-field" }, /* @__PURE__ */ React.createElement("h3", null, "Chefs d\u2019accusation"), frequents.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "saisie-shortcuts", "aria-label": "Chefs fr\xE9quents" }, frequents.map((chef) => /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        key: cleChef(chef),
+        type: "button",
+        className: "secondary-button",
+        disabled: disabled || value.some((c) => cleChef(c) === cleChef(chef)),
+        title: libelleChef(chef),
+        onClick: () => ajouter(chef)
+      },
+      referenceChef(chef),
+      chef.titre ? ` \xB7 ${extrait(chef.titre, 28)}` : ""
+    ))), !libre && codex && /* @__PURE__ */ React.createElement("div", { className: "chefs-filtres" }, /* @__PURE__ */ React.createElement("div", { className: "chefs-filtre-groupe", role: "group", "aria-label": "Corpus" }, GROUPES.map(([v, l]) => /* @__PURE__ */ React.createElement("button", { key: v, type: "button", className: `chefs-filtre ${groupe === v ? "active" : ""}`, disabled, onClick: () => setGroupe(v) }, l))), /* @__PURE__ */ React.createElement("div", { className: "chefs-filtre-groupe", role: "group", "aria-label": "Qualification" }, QUALIFS.map(([v, l]) => /* @__PURE__ */ React.createElement("button", { key: v, type: "button", className: `chefs-filtre ${qualif === v ? "active" : ""}`, disabled, onClick: () => setQualif(v) }, l)))), /* @__PURE__ */ React.createElement("label", { className: "saisie-free-toggle" }, /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        type: "checkbox",
+        checked: libre,
+        disabled,
+        onChange: (e) => {
+          setLibre(e.target.checked);
+          setOpen(false);
+          setActive(-1);
+          setError("");
+          setQuery((q) => q.slice(0, e.target.checked ? MOTIF_LIBRE_MAX : 200));
+          onPendingChange(e.target.checked && Boolean(query.trim()));
+        }
+      }
+    ), /* @__PURE__ */ React.createElement("span", null, "R\xE9f\xE9rence libre \u2014 d\xE9cret, d\xE9cision, ordre hors Codex")), /* @__PURE__ */ React.createElement("div", { className: "saisie-controls" }, /* @__PURE__ */ React.createElement("div", { className: "saisie-search", onBlur: (event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) {
+        setOpen(false);
+        setActive(-1);
+      }
+    } }, /* @__PURE__ */ React.createElement("label", { htmlFor: "chef-recherche" }, libre ? "R\xE9f\xE9rence" : "Rechercher un article"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: "chef-recherche",
+        ref: input,
+        role: libre ? void 0 : "combobox",
+        autoComplete: "off",
+        maxLength: libre ? MOTIF_LIBRE_MAX : 200,
+        "aria-autocomplete": libre ? void 0 : "list",
+        "aria-expanded": libre ? void 0 : open && results.length > 0,
+        "aria-controls": libre ? void 0 : "chef-suggestions",
+        "aria-describedby": "chef-aide",
+        "aria-activedescendant": open && active >= 0 ? `chef-option-${active}` : void 0,
+        placeholder: libre ? "Ex. D\xE9cision du Thane de Rivebois du 12 \xC2trefeu" : "Injure, vol, 16, cpl 4, refus d\u2019obtemp\xE9rer\u2026",
+        value: query,
+        disabled: disabled || !libre && !codex,
+        onChange: (e) => edit(e.target.value),
+        onFocus: () => setOpen(true),
+        onKeyDown: keyDown
+      }
+    ), !libre && /* @__PURE__ */ React.createElement("ul", { id: "chef-suggestions", role: "listbox", "aria-label": "Articles propos\xE9s", className: "saisie-suggestions chef-suggestions", hidden: !open || !results.length }, results.map((a, index) => /* @__PURE__ */ React.createElement(
+      "li",
+      {
+        id: `chef-option-${index}`,
+        key: a._cle,
+        role: "option",
+        "aria-selected": index === active,
+        className: index === active ? "active" : "",
+        onMouseDown: (e) => e.preventDefault(),
+        onClick: () => ajouter(chefDepuisArticle(a))
+      },
+      /* @__PURE__ */ React.createElement("div", { className: "chef-suggestion-main" }, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, a.abrege, " art. ", a.article), " ", a.titre), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(QualificationChip, { classification: a.classification }), " ", a.source), a.texte && /* @__PURE__ */ React.createElement("em", null, extrait(a.texte))),
+      /* @__PURE__ */ React.createElement(
+        "button",
+        {
+          type: "button",
+          className: "law-info-button chef-lire",
+          "aria-label": `Lire l\u2019article ${a.article}`,
+          title: "Lire sans retenir",
+          onMouseDown: (e) => e.preventDefault(),
+          onClick: (e) => {
+            e.stopPropagation();
+            onOpenLaw(a);
+          }
+        },
+        "\u24D8"
+      )
+    )))), libre && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: disabled || !query.trim(), onClick: () => ajouter({ libre: query }) }, "Ajouter la r\xE9f\xE9rence"), !libre && onParcourir && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: disabled || !codex, onClick: onParcourir }, "Parcourir le Codex"), query && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled, onClick: () => {
+      var _a;
+      setQuery("");
+      setError("");
+      onPendingChange(false);
+      (_a = input.current) == null ? void 0 : _a.focus();
+    } }, "Effacer")), /* @__PURE__ */ React.createElement("p", { id: "chef-aide", className: "saisie-help", role: "status" }, aide), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), value.length ? /* @__PURE__ */ React.createElement("ul", { className: "chefs-list", "aria-label": "Chefs retenus" }, value.map((chef) => {
+      const article = chef.libre === void 0 ? articleParCle(codex, chef.source, chef.article) : null;
+      return /* @__PURE__ */ React.createElement("li", { key: cleChef(chef) }, /* @__PURE__ */ React.createElement("div", { className: "chef-token-main" }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, referenceChef(chef)), /* @__PURE__ */ React.createElement("span", { className: "chef-titre" }, chef.libre !== void 0 ? chef.libre : chef.titre), /* @__PURE__ */ React.createElement(QualificationChip, { classification: chef.classification }), chef.libre === void 0 && !article && codex && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "Texte retir\xE9 du Codex")), /* @__PURE__ */ React.createElement("div", { className: "chef-token-actions" }, article && /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-info-button", onClick: () => onOpenLaw(article) }, "\u24D8 Lire"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "danger-button", disabled, "aria-label": `Retirer ${referenceChef(chef)}`, onClick: () => onChange(retirerChef(value, chef)) }, "Retirer")));
+    })) : /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Aucun chef d\u2019accusation retenu."), /* @__PURE__ */ React.createElement(ResumeQualification, { chefs: value }));
+  }
+  function ResumeQualification({ chefs }) {
+    if (!chefs.length) return null;
+    const q = qualificationMax(chefs);
+    const sansQualif = chefs.filter((c) => c.libre === void 0 && !c.classification).length;
+    return /* @__PURE__ */ React.createElement("p", { className: "chefs-resume" }, q ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Qualification la plus grave retenue : ", /* @__PURE__ */ React.createElement("strong", null, q), ". Bar\xE8me imp\xE9rial indicatif : ", BAREME_IMPERIAL[q], ".") : "Aucune qualification port\xE9e par les chefs retenus.", sansQualif > 0 && q ? ` ${sansQualif} article${sansQualif > 1 ? "s" : ""} sans qualification.` : "", " ", "La sanction reste \xE0 l\u2019appr\xE9ciation de l\u2019autorit\xE9.");
+  }
+  function SentenceField({ type, value, onChange, indetermine, onIndetermineChange, codex, chefs = [], disabled }) {
     const montant = type === "amende";
-    const label = montant ? "Montant (septims)" : "Dur\xE9e de cachot (heures)";
-    const fixe = options.length === 1 && !(sanction == null ? void 0 : sanction.libre);
-    const effective = value != null ? value : "";
-    return /* @__PURE__ */ React.createElement("div", { className: "field field-wide" }, /* @__PURE__ */ React.createElement("label", null, label, fixe ? /* @__PURE__ */ React.createElement("input", { readOnly: true, value: options[0].value }) : sanction && (options.length > 0 || sanction.libre) ? /* @__PURE__ */ React.createElement(React.Fragment, null, options.length > 0 && /* @__PURE__ */ React.createElement("select", { required: true, value: libre ? "libre" : effective, onChange: (e) => {
-      const free = e.target.value === "libre";
-      setLibre(free);
-      onChange(free ? "" : e.target.value);
-    } }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Choisir le niveau applicable\u2026"), options.map((option, index) => /* @__PURE__ */ React.createElement("option", { key: index, value: option.value }, option.label)), sanction.libre && /* @__PURE__ */ React.createElement("option", { value: "libre" }, "\xC0 l\u2019appr\xE9ciation de l\u2019autorit\xE9 \u2014 saisie libre")), libre && /* @__PURE__ */ React.createElement("input", { type: "number", required: true, min: montant ? 1 : 1e-6, step: montant ? 1 : "any", value: effective, onChange: (e) => onChange(e.target.value), placeholder: montant ? "Montant retenu" : "Ex. 0,5 pour 30 minutes" })) : /* @__PURE__ */ React.createElement("input", { readOnly: true, value: selected ? "\xC0 d\xE9terminer \u2014 actualisez le Codex" : "S\xE9lectionnez une infraction" })), (sanction == null ? void 0 : sanction.texte) && /* @__PURE__ */ React.createElement("p", { style: { whiteSpace: "pre-line" } }, sanction.texte), libre && !personnalisee && /* @__PURE__ */ React.createElement("small", null, "\xC0 fixer conform\xE9ment \xE0 l\u2019article et \xE0 la d\xE9cision de l\u2019autorit\xE9 comp\xE9tente."));
+    const propositions = [];
+    for (const chef of chefs) {
+      const article = chef.libre === void 0 ? articleParCle(codex, chef.source, chef.article) : null;
+      for (const v of (montant ? article == null ? void 0 : article.montants : article == null ? void 0 : article.dureesCachot) || []) if (!propositions.some((p) => p[0] === v)) propositions.push([v, montant ? `${v} septims` : formatHeures(v)]);
+    }
+    const raccourcis = montant ? propositions : [...RACCOURCIS_CACHOT, ...propositions.filter((p) => !RACCOURCIS_CACHOT.some((r) => r[0] === p[0]))];
+    return /* @__PURE__ */ React.createElement("div", { className: "field field-wide sentence-field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "sentence-valeur" }, montant ? "Montant (septims)" : "Dur\xE9e de cachot (heures)", /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: "sentence-valeur",
+        type: "number",
+        required: !indetermine,
+        disabled: disabled || indetermine,
+        min: montant ? 1 : 1e-6,
+        step: montant ? 1 : "any",
+        value: indetermine ? "" : value,
+        onChange: (e) => onChange(e.target.value),
+        placeholder: indetermine ? "\xC0 d\xE9terminer" : montant ? "Montant retenu" : "Ex. 0,5 pour 30 minutes"
+      }
+    )), raccourcis.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "saisie-shortcuts", "aria-label": "Valeurs propos\xE9es" }, raccourcis.map(([v, l]) => /* @__PURE__ */ React.createElement("button", { key: v, type: "button", className: `secondary-button ${!indetermine && String(value) === String(v) ? "active" : ""}`, disabled, onClick: () => {
+      onIndetermineChange(false);
+      onChange(String(v));
+    } }, l))), /* @__PURE__ */ React.createElement("label", { className: "saisie-free-toggle" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: indetermine, disabled, onChange: (e) => {
+      onIndetermineChange(e.target.checked);
+      if (e.target.checked) onChange("");
+    } }), /* @__PURE__ */ React.createElement("span", null, "\xC0 d\xE9terminer par l\u2019autorit\xE9", montant ? "" : " \u2014 pas de sortie pr\xE9vue calcul\xE9e")));
+  }
+  function formatHeures(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "";
+    if (n < 1) return `${Math.round(n * 60)} min`;
+    if (Number.isInteger(n)) return `${n} h`;
+    const h = Math.floor(n), m = Math.round((n - h) * 60);
+    return `${h} h ${m} min`;
+  }
+  function ChefsChips({ entrees, onOpenLaw }) {
+    if (!entrees.length) return /* @__PURE__ */ React.createElement("span", null, "\u2014");
+    return /* @__PURE__ */ React.createElement("ul", { className: "chefs-chips" }, entrees.map(({ chef, article }, i) => /* @__PURE__ */ React.createElement("li", { key: `${cleChef(chef)}-${i}` }, article ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-link", onClick: () => onOpenLaw(article), title: libelleChef(chef) }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, referenceChef(chef)), " ", chef.titre, " \u24D8") : chef.libre !== void 0 ? /* @__PURE__ */ React.createElement("span", { title: "Motif personnalis\xE9" }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, "Motif"), " ", chef.libre) : /* @__PURE__ */ React.createElement("span", { title: "Article retir\xE9 du Codex" }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, referenceChef(chef)), " ", chef.titre))));
+  }
+
+  // ui/src/brouillon.js
+  var PREFIXE = "blancherive.brouillon.v1.";
+  function lireBrouillon(cle) {
+    var _a;
+    try {
+      const brut = (_a = globalThis.sessionStorage) == null ? void 0 : _a.getItem(PREFIXE + cle);
+      if (!brut) return null;
+      const valeur = JSON.parse(brut);
+      return valeur && typeof valeur === "object" ? valeur : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function ecrireBrouillon(cle, valeur) {
+    var _a;
+    try {
+      (_a = globalThis.sessionStorage) == null ? void 0 : _a.setItem(PREFIXE + cle, JSON.stringify(valeur));
+    } catch (e) {
+    }
+  }
+  function effacerBrouillon(cle) {
+    var _a;
+    try {
+      (_a = globalThis.sessionStorage) == null ? void 0 : _a.removeItem(PREFIXE + cle);
+    } catch (e) {
+    }
   }
 
   // ui/src/catalogue.js
@@ -5421,7 +6182,7 @@ body {
       tronque: matches.length > RESULTATS_MAX
     };
   }
-  function lireStockage() {
+  function lireStockage2() {
     var _a;
     try {
       const brut = (_a = globalThis.localStorage) == null ? void 0 : _a.getItem(CLE_CATALOGUE_LOCAL);
@@ -5432,7 +6193,7 @@ body {
       return null;
     }
   }
-  function ecrireStockage(reponse) {
+  function ecrireStockage2(reponse) {
     var _a;
     try {
       (_a = globalThis.localStorage) == null ? void 0 : _a.setItem(CLE_CATALOGUE_LOCAL, JSON.stringify({ version: reponse.version, alias: reponse.alias || {}, objets: reponse.objets }));
@@ -5440,34 +6201,34 @@ body {
     }
   }
   var catalogueCourant = null;
-  var chargementEnCours = null;
+  var chargementEnCours2 = null;
   function catalogueEnMemoire() {
     return catalogueCourant;
   }
   function chargerCatalogue(serverCall2, token) {
-    if (chargementEnCours) return chargementEnCours;
-    const stocke = lireStockage();
+    if (chargementEnCours2) return chargementEnCours2;
+    const stocke = lireStockage2();
     if (stocke && !catalogueCourant) catalogueCourant = preparerCatalogue(stocke);
-    chargementEnCours = (async () => {
+    chargementEnCours2 = (async () => {
       try {
         const reponse = await serverCall2("getCatalogueObjets", token, (catalogueCourant == null ? void 0 : catalogueCourant.version) || "");
         if (reponse && Array.isArray(reponse.objets)) {
           catalogueCourant = preparerCatalogue(reponse);
-          ecrireStockage(reponse);
+          ecrireStockage2(reponse);
         } else if (!catalogueCourant) {
           throw new Error("Le serveur n\u2019a pas renvoy\xE9 le catalogue.");
         }
         return catalogueCourant;
       } finally {
-        chargementEnCours = null;
+        chargementEnCours2 = null;
       }
     })();
-    return chargementEnCours;
+    return chargementEnCours2;
   }
   function useCatalogue(serverCall2, token, actif = true) {
-    const { useEffect: useEffect6, useState: useState6 } = React;
-    const [etat, setEtat] = useState6(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect6(() => {
+    const { useEffect: useEffect7, useState: useState7 } = React;
+    const [etat, setEtat] = useState7(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect7(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.objets ? "pret" : "chargement", erreur: "" }));
@@ -5484,7 +6245,7 @@ body {
   }
 
   // ui/src/saisies.jsx
-  var { useEffect, useRef, useState } = React;
+  var { useEffect: useEffect2, useRef: useRef2, useState: useState2 } = React;
   var objetsCourants = [
     { id: "skyrim.esm|00000F", nom: "Or", label: "Or (septims)" },
     { id: "skyrim.esm|00000A", nom: "Crochet", label: "Crochets" },
@@ -5510,20 +6271,20 @@ body {
     return existing ? items.map((item) => cleObjetSaisi(item) === key ? { ...item, quantite: total } : item) : [...items, { ...entree, quantite }];
   }
   function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall: serverCall2, catalogue = null, titre = "Saisies sur la personne", masquerListe = false, aideLibre = "Le nom saisi sera conserv\xE9 avec cette incarc\xE9ration, sans ajout au catalogue." }) {
-    const [query, setQuery] = useState("");
-    const [selected, setSelected] = useState(null);
-    const [quantity, setQuantity] = useState("1");
-    const [results, setResults] = useState([]);
-    const [truncated, setTruncated] = useState(false);
-    const [status, setStatus] = useState("");
-    const [error, setError] = useState("");
-    const [open, setOpen] = useState(false);
-    const [active, setActive] = useState(-1);
-    const [free, setFree] = useState(false);
-    const version = useRef(0);
-    const input = useRef(null);
-    const quantityInput = useRef(null);
-    useEffect(() => {
+    const [query, setQuery] = useState2("");
+    const [selected, setSelected] = useState2(null);
+    const [quantity, setQuantity] = useState2("1");
+    const [results, setResults] = useState2([]);
+    const [truncated, setTruncated] = useState2(false);
+    const [status, setStatus] = useState2("");
+    const [error, setError] = useState2("");
+    const [open, setOpen] = useState2(false);
+    const [active, setActive] = useState2(-1);
+    const [free, setFree] = useState2(false);
+    const version = useRef2(0);
+    const input = useRef2(null);
+    const quantityInput = useRef2(null);
+    useEffect2(() => {
       const current = ++version.current;
       setResults([]);
       setActive(-1);
@@ -5629,11 +6390,11 @@ body {
         else if (selected || free) add();
       }
     }
-    useEffect(() => {
+    useEffect2(() => {
       var _a, _b, _c;
       if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`saisie-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
     }, [active, open]);
-    useEffect(() => {
+    useEffect2(() => {
       var _a;
       if (selected) (_a = quantityInput.current) == null ? void 0 : _a.focus();
     }, [selected]);
@@ -5737,7 +6498,7 @@ body {
   }
 
   // ui/src/inventaire.jsx
-  var { useEffect: useEffect2, useMemo, useRef: useRef2, useState: useState2 } = React;
+  var { useEffect: useEffect3, useMemo, useRef: useRef3, useState: useState3 } = React;
   var LIMITES_COFFRE = { nom: 100, position: 200, description: 1e3 };
   var SEUIL_AJUSTEMENT_MS = 600;
   var COFFRE_INCONNU = "Coffre inconnu";
@@ -5763,27 +6524,27 @@ body {
     return objets.filter((o) => (!coffreId || o.coffreId === coffreId) && termes.every((t) => normaliserTexte(`${o.nom} ${o.id}`).includes(t)));
   }
   function InventairePage({ token, canEdit, serverCall: serverCall2 }) {
-    const [data, setData] = useState2(null);
-    const [error, setError] = useState2("");
-    const [busy, setBusy] = useState2(false);
-    const [coffreFiltre, setCoffreFiltre] = useState2("");
-    const [recherche, setRecherche] = useState2("");
-    const [formCoffre, setFormCoffre] = useState2(null);
-    const [coffreAjout, setCoffreAjout] = useState2("");
-    const [ajoutOuvert, setAjoutOuvert] = useState2(false);
-    const [panier, setPanier] = useState2([]);
-    const [panierEnCours, setPanierEnCours] = useState2(false);
-    const [panierErreur, setPanierErreur] = useState2("");
-    const attente = useRef2({}), envoye = useRef2({}), minuteries = useRef2({});
-    const [ajustements, setAjustements] = useState2({});
+    const [data, setData] = useState3(null);
+    const [error, setError] = useState3("");
+    const [busy, setBusy] = useState3(false);
+    const [coffreFiltre, setCoffreFiltre] = useState3("");
+    const [recherche, setRecherche] = useState3("");
+    const [formCoffre, setFormCoffre] = useState3(null);
+    const [coffreAjout, setCoffreAjout] = useState3("");
+    const [ajoutOuvert, setAjoutOuvert] = useState3(false);
+    const [panier, setPanier] = useState3([]);
+    const [panierEnCours, setPanierEnCours] = useState3(false);
+    const [panierErreur, setPanierErreur] = useState3("");
+    const attente = useRef3({}), envoye = useRef3({}), minuteries = useRef3({});
+    const [ajustements, setAjustements] = useState3({});
     const refleterAjustements = () => {
       const suivant = {};
       for (const [cle, valeur] of Object.entries(attente.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       for (const [cle, valeur] of Object.entries(envoye.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       setAjustements(suivant);
     };
-    useEffect2(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
-    useEffect2(() => {
+    useEffect3(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
+    useEffect3(() => {
       serverCall2("getInventaire", token).then(setData).catch((e) => setError(e.message));
     }, []);
     const catalogue = useCatalogue(serverCall2, token, canEdit);
@@ -5903,7 +6664,7 @@ body {
     } }, "Vider la liste")), /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Les objets s\u2019ajoutent \xE0 la liste sans appel au serveur ; \xAB Ranger \xBB les envoie tous en une seule requ\xEAte. Un objet d\xE9j\xE0 pr\xE9sent dans le coffre voit sa quantit\xE9 augmenter : il n\u2019y a jamais deux lignes pour le m\xEAme objet dans un m\xEAme coffre."))), /* @__PURE__ */ React.createElement("div", { className: "inventaire-filtres" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-filtre-coffre" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-filtre-coffre", value: coffreFiltre, onChange: (e) => setCoffreFiltre(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les coffres"), coffres.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))), /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-recherche" }, "Rechercher un objet"), /* @__PURE__ */ React.createElement("input", { id: "inventaire-recherche", type: "search", placeholder: "Nom ou ID\u2026", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("span", { className: "inventaire-compte", role: "status" }, visibles.length ? `${pluriel(visibles.length, "objet", "objets")} \xB7 ${pluriel(totalVisible, "exemplaire", "exemplaires")}` : "Aucun objet")), visibles.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, data.objets.length ? "Aucun objet ne correspond aux filtres." : "Les coffres sont vides.") : /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table inventaire-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Objet"), /* @__PURE__ */ React.createElement("th", null, "Quantit\xE9"), /* @__PURE__ */ React.createElement("th", null, "Coffre"), canEdit && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, visibles.map((o) => /* @__PURE__ */ React.createElement("tr", { key: `${o.coffreId}|${o.cle}` }, /* @__PURE__ */ React.createElement("td", { "data-label": "Objet" }, /* @__PURE__ */ React.createElement("strong", null, o.nom), /* @__PURE__ */ React.createElement("small", { className: "inventaire-objet-id" }, o.libre ? "Hors catalogue" : o.id)), /* @__PURE__ */ React.createElement("td", { "data-label": "Quantit\xE9" }, canEdit ? /* @__PURE__ */ React.createElement("span", { className: `inventaire-quantite${ajustements[cleLigne(o)] ? " inventaire-quantite-attente" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy || quantiteAffichee(o) <= 0, "aria-label": `Retirer un exemplaire de ${o.nom}`, onClick: () => cliquer(o, -1) }, "\u2212"), /* @__PURE__ */ React.createElement("strong", { "aria-live": "polite" }, nombre(quantiteAffichee(o))), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy, "aria-label": `Ajouter un exemplaire de ${o.nom}`, onClick: () => cliquer(o, 1) }, "+")) : /* @__PURE__ */ React.createElement("strong", null, nombre(o.quantite))), /* @__PURE__ */ React.createElement("td", { "data-label": "Coffre" }, canEdit ? /* @__PURE__ */ React.createElement("select", { "aria-label": `Coffre de ${o.nom}`, value: o.coffreId, disabled: busy || Boolean(ajustements[cleLigne(o)]), onChange: (e) => appeler("deplacerInventaire", { coffreId: o.coffreId, versCoffreId: e.target.value, objet: objetDe(o) }) }, !coffresReels.some((c) => c.id === o.coffreId) && /* @__PURE__ */ React.createElement("option", { value: o.coffreId }, COFFRE_INCONNU), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))) : coffreLibelle(o.coffreId)), canEdit && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "danger-button", disabled: busy || Boolean(ajustements[cleLigne(o)]), onClick: () => retirer(o) }, "Retirer")))))))));
   }
   function CoffreForm({ coffre, busy, onSubmit, onCancel }) {
-    const [form, setForm] = useState2({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
+    const [form, setForm] = useState3({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
     const champ = (cle, valeur) => setForm((precedent) => ({ ...precedent, [cle]: valeur }));
     return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: (e) => {
       e.preventDefault();
@@ -6027,7 +6788,7 @@ body {
   }
 
   // ui/src/changes.jsx
-  var { createContext, useContext, useEffect: useEffect3, useMemo: useMemo2, useRef: useRef3, useState: useState3 } = React;
+  var { createContext, useContext, useEffect: useEffect4, useMemo: useMemo2, useRef: useRef4, useState: useState4 } = React;
   var ChangesContext = createContext({ events: [], seen: {}, mark: () => {
   } });
   var sessionSeen = {};
@@ -6037,17 +6798,17 @@ body {
     return `${labels[change.type]} : ${change.avant || "Sans affectation"} \u2192 ${change.apres || "Sans affectation"}`;
   }
   function ChangesProvider({ data, children }) {
-    const [seen, setSeen] = useState3(() => {
+    const [seen, setSeen] = useState4(() => {
       try {
         return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) };
       } catch (e) {
         return sessionSeen;
       }
     });
-    const [storageFailed, setStorageFailed] = useState3(false);
-    const [now, setNow] = useState3(Date.now());
+    const [storageFailed, setStorageFailed] = useState4(false);
+    const [now, setNow] = useState4(Date.now());
     const events = useMemo2(() => recentChanges(data == null ? void 0 : data.events, now), [data, now]);
-    useEffect3(() => {
+    useEffect4(() => {
       const timer = setInterval(() => setNow(Date.now()), 6e4);
       const sync = (e) => {
         if (e.key === CHANGE_SEEN_KEY) {
@@ -6083,14 +6844,14 @@ body {
     const { events, seen, mark } = useContext(ChangesContext);
     const items = events.filter((e) => e.memberId === memberId);
     const unread = items.filter((e) => !seen[e.id]);
-    const [open, setOpen] = useState3(false);
-    const timer = useRef3(null);
+    const [open, setOpen] = useState4(false);
+    const timer = useRef4(null);
     const signature = items.map((e) => e.id).join("|");
     function cancel() {
       clearTimeout(timer.current);
       timer.current = null;
     }
-    useEffect3(() => {
+    useEffect4(() => {
       cancel();
       setOpen(false);
       return cancel;
@@ -6155,11 +6916,11 @@ body {
   }
   function RecentChanges({ onRefresh }) {
     const { events, seen, mark } = useContext(ChangesContext);
-    const [type, setType] = useState3("");
-    const [onlyUnread, setOnlyUnread] = useState3(false);
-    const [search, setSearch] = useState3("");
-    const [refreshing, setRefreshing] = useState3(false);
-    const [error, setError] = useState3("");
+    const [type, setType] = useState4("");
+    const [onlyUnread, setOnlyUnread] = useState4(false);
+    const [search, setSearch] = useState4("");
+    const [refreshing, setRefreshing] = useState4(false);
+    const [error, setError] = useState4("");
     const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps}`).includes(normalize(search.trim())));
     const unread = events.filter((e) => !seen[e.id]);
@@ -6186,7 +6947,7 @@ body {
   }
 
   // ui/src/grades.jsx
-  var { useEffect: useEffect4, useId, useRef: useRef4, useState: useState4 } = React;
+  var { useEffect: useEffect5, useId, useRef: useRef5, useState: useState5 } = React;
   var cleGrade = (value) => String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
   var DESCRIPTIONS = {
     jarl: "Moyenne noblesse. D\xE9tient le pouvoir judiciaire de la ch\xE2tellerie.",
@@ -6220,10 +6981,10 @@ body {
   }
   function GradeInfo({ grade, variante }) {
     const texte = descriptionGrade(grade, variante);
-    const [open, setOpen] = useState4(false);
-    const wrap = useRef4(null);
+    const [open, setOpen] = useState5(false);
+    const wrap = useRef5(null);
     const id = useId();
-    useEffect4(() => {
+    useEffect5(() => {
       if (!open) return void 0;
       const dehors = (event) => {
         var _a;
@@ -6300,7 +7061,7 @@ body {
   }
 
   // ui/src/app.jsx
-  var { useEffect: useEffect5, useMemo: useMemo3, useRef: useRef5, useState: useState5 } = React;
+  var { useEffect: useEffect6, useMemo: useMemo3, useRef: useRef6, useState: useState6 } = React;
   function serverCall(name, ...args) {
     return new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
@@ -6324,20 +7085,12 @@ body {
     const n = Number(value) || 0;
     return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
   }
-  function findCodexArticle(articles, label) {
-    if (!articles || !label || String(label).startsWith("Motif personnalis")) return null;
-    const exact = articles.find((a) => a.label === label);
-    if (exact) return exact;
-    const m = String(label).match(/Art\.?\s*([0-9IVXLCDM.\-]+)/i);
-    if (!m) return null;
-    return articles.find((a) => String(a.article).toLowerCase() === String(m[1]).toLowerCase() && a.source === "Codex Judiciaire de Blancherive") || null;
-  }
   function App() {
-    const [token, setToken] = useState5(sessionStorage.getItem("guardAuthToken"));
-    const [role, setRole] = useState5(null);
-    const [page, setPage] = useState5("organigramme");
-    const [codexFocus, setCodexFocus] = useState5(null);
-    useEffect5(() => {
+    const [token, setToken] = useState6(sessionStorage.getItem("guardAuthToken"));
+    const [role, setRole] = useState6(null);
+    const [page, setPage] = useState6("organigramme");
+    const [codexFocus, setCodexFocus] = useState6(null);
+    useEffect6(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => {
         setRole(i.role);
@@ -6369,13 +7122,13 @@ body {
     return { "--member-accent": (style == null ? void 0 : style.background) || "#ae8a4a" };
   }
   function EffectifsPage({ token }) {
-    const [data, setData] = useState5(null);
-    const [search, setSearch] = useState5("");
-    const [activeCorps, setActiveCorps] = useState5("ALL");
-    const [showForm, setShowForm] = useState5(false);
-    const [error, setError] = useState5("");
-    const [success, setSuccess] = useState5("");
-    useEffect5(() => {
+    const [data, setData] = useState6(null);
+    const [search, setSearch] = useState6("");
+    const [activeCorps, setActiveCorps] = useState6("ALL");
+    const [showForm, setShowForm] = useState6(false);
+    const [error, setError] = useState6("");
+    const [success, setSuccess] = useState6("");
+    useEffect6(() => {
       serverCall(
         "getEffectifs",
         token
@@ -6887,7 +7640,7 @@ body {
         "En service actif"
       )
     );
-    const [form, setForm] = useState5({
+    const [form, setForm] = useState6({
       prenom: "",
       nom: "",
       grade: options.grades[0] || "",
@@ -6896,7 +7649,7 @@ body {
       status: active || options.statuses[0] || "",
       assermente: false
     });
-    const [saving, setSaving] = useState5(false);
+    const [saving, setSaving] = useState6(false);
     async function submit(e) {
       e.preventDefault();
       try {
@@ -7069,18 +7822,18 @@ body {
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     const memberChanges = useMemberChanges(member.memberId);
-    const [editing, setEditing] = useState5(false);
-    const [grade, setGrade] = useState5(member.grade);
-    const [corps, setCorps] = useState5(member.corps);
-    const [specialite, setSpecialite] = useState5(
+    const [editing, setEditing] = useState6(false);
+    const [grade, setGrade] = useState6(member.grade);
+    const [corps, setCorps] = useState6(member.corps);
+    const [specialite, setSpecialite] = useState6(
       member.specialite || ""
     );
-    const [status, setStatus] = useState5(member.status);
-    const [assermente, setAssermente] = useState5(
+    const [status, setStatus] = useState6(member.status);
+    const [assermente, setAssermente] = useState6(
       member.assermente
     );
-    const [saving, setSaving] = useState5(false);
-    useEffect5(() => {
+    const [saving, setSaving] = useState6(false);
+    useEffect6(() => {
       setGrade(
         member.grade
       );
@@ -7318,11 +8071,42 @@ body {
       saving ? "Enregistrement..." : "Enregistrer"
     ))));
   }
-  function LawModal({ article, onClose, onOpenCodex }) {
-    var _a, _b, _c;
-    const closeRef = useRef5(onClose);
+  function TexteArticle({ texte, article, codex, onNavigate }) {
+    if (!codex || !onNavigate) return /* @__PURE__ */ React.createElement("div", { className: "law-text" }, texte);
+    const source = article.source;
+    const motif = /\b(articles?\s+)((?:\d+(?:-\d+)?)(?:\s*(?:,|et|ou)\s*\d+(?:-\d+)?)*)/gi;
+    const parts = [];
+    let last = 0, m;
+    while (m = motif.exec(texte)) {
+      const suite = texte.slice(m.index + m[0].length, m.index + m[0].length + 90);
+      let cible = source;
+      const lien = /^\s+(?:du|de la|de l’|de l'|des|au)\s+(.+)$/i.exec(suite);
+      if (lien) {
+        const reste = normalizeSearchText(lien[1]);
+        const s = codex.sources.find((s2) => reste.startsWith(normalizeSearchText(s2.nom)) || reste.startsWith(normalizeSearchText(s2.abrege)));
+        if (s) cible = s.nom;
+      }
+      parts.push(texte.slice(last, m.index), m[1]);
+      const numeros = m[2];
+      const num = /\d+(?:-\d+)?/g;
+      let n, p = 0;
+      while (n = num.exec(numeros)) {
+        parts.push(numeros.slice(p, n.index));
+        const vise = articleParCle(codex, cible, n[0]);
+        parts.push(vise && vise !== article ? /* @__PURE__ */ React.createElement("button", { key: `${m.index}-${n.index}`, type: "button", className: "law-link law-renvoi", title: `${vise.abrege} art. ${vise.article} \u2014 ${vise.titre}`, onClick: () => onNavigate(vise) }, n[0]) : n[0]);
+        p = n.index + n[0].length;
+      }
+      parts.push(numeros.slice(p));
+      last = m.index + m[0].length;
+    }
+    parts.push(texte.slice(last));
+    return /* @__PURE__ */ React.createElement("div", { className: "law-text" }, parts.map((p, i) => typeof p === "string" ? /* @__PURE__ */ React.createElement(React.Fragment, { key: i }, p) : p));
+  }
+  function LawModal({ article, onClose, onOpenCodex, codex = null, onNavigate = null, onRetenir = null, retenu = false }) {
+    var _a, _b, _c, _d;
+    const closeRef = useRef6(onClose);
     closeRef.current = onClose;
-    useEffect5(() => {
+    useEffect6(() => {
       var _a2;
       if (!article) return;
       const previous = document.activeElement, overflow = document.body.style.overflow;
@@ -7332,6 +8116,7 @@ body {
       function keys(event) {
         if (event.key === "Escape") {
           event.preventDefault();
+          event.stopPropagation();
           closeRef.current();
         }
         if (event.key !== "Tab" || !dialog) return;
@@ -7353,31 +8138,36 @@ body {
       };
     }, [article]);
     if (!article) return null;
+    const memeSource = codex ? codex.articles.filter((a) => a.source === article.source) : [];
+    const position = memeSource.findIndex((a) => a._cle === article._cle);
+    const precedent = position > 0 ? memeSource[position - 1] : null, suivant = position >= 0 && position < memeSource.length - 1 ? memeSource[position + 1] : null;
+    const naviguer = onNavigate && memeSource.length > 1;
     return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop", onMouseDown: (e) => {
       if (e.target === e.currentTarget) onClose();
-    } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "law-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, article.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${article.article}`), /* @__PURE__ */ React.createElement("h2", { id: "law-title", className: "law-modal-title" }, article.titre)), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer l\u2019article", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, article.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.famille), /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.source), article.local && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-local" }, "Applicable localement"), article.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.classification), (((_a = article.montants) == null ? void 0 : _a.length) > 0 || article.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", article.amende, " septims"), (((_b = article.dureesCachot) == null ? void 0 : _b.length) > 0 || article.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_c = article.dureesCachot) == null ? void 0 : _c.length) ? article.dureesCachot.map(formatHours).join(" / ") : formatHours(article.cachot)), article.travaux !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u2692 ", formatHours(article.travaux))), (article.autorite || article.applicabilite) && /* @__PURE__ */ React.createElement("div", { className: "law-source-info" }, article.autorite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Autorit\xE9 :"), " ", article.autorite), article.applicabilite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Domaine :"), " ", article.applicabilite)), article.texte && /* @__PURE__ */ React.createElement("div", { className: "law-text" }, article.texte), article.sanction && /* @__PURE__ */ React.createElement("div", { className: "law-sanction-box" }, /* @__PURE__ */ React.createElement("strong", null, "\u2696 Sanction"), /* @__PURE__ */ React.createElement("div", null, article.sanction)), article.alerte && /* @__PURE__ */ React.createElement("div", { className: "law-warning" }, "\u26A0 ", /* @__PURE__ */ React.createElement("strong", null, "V\xE9rification n\xE9cessaire :"), " ", article.alerte), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, article.url && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => window.open(article.url, "_blank") }, "Ouvrir le document source \u2197"), onOpenCodex && /* @__PURE__ */ React.createElement("button", { className: "secondary-button", onClick: () => onOpenCodex(article) }, "Voir dans le Codex")))));
+    } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "law-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, article.abrege && article.abrege !== article.source ? `${article.abrege} \xB7 ` : "", article.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${article.article}`), /* @__PURE__ */ React.createElement("h2", { id: "law-title", className: "law-modal-title" }, article.titre)), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer l\u2019article", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, article.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.famille), /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.source), article.local && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-local" }, "Applicable localement"), article.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.classification), article.citable === false && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "Document de contexte \u2014 non citable"), (((_a = article.montants) == null ? void 0 : _a.length) > 0 || article.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = article.montants) == null ? void 0 : _b.length) ? article.montants.join(" / ") : article.amende, " septims"), (((_c = article.dureesCachot) == null ? void 0 : _c.length) > 0 || article.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = article.dureesCachot) == null ? void 0 : _d.length) ? article.dureesCachot.map(formatHours).join(" / ") : formatHours(article.cachot)), article.travaux !== "" && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u2692 ", formatHours(article.travaux))), (article.autorite || article.applicabilite) && /* @__PURE__ */ React.createElement("div", { className: "law-source-info" }, article.autorite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Autorit\xE9 :"), " ", article.autorite), article.applicabilite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Domaine :"), " ", article.applicabilite)), article.texte && /* @__PURE__ */ React.createElement(TexteArticle, { texte: article.texte, article, codex, onNavigate }), article.sanction && /* @__PURE__ */ React.createElement("div", { className: "law-sanction-box" }, /* @__PURE__ */ React.createElement("strong", null, "\u2696 Sanction"), /* @__PURE__ */ React.createElement("div", null, article.sanction)), article.alerte && /* @__PURE__ */ React.createElement("div", { className: "law-warning" }, "\u26A0 ", /* @__PURE__ */ React.createElement("strong", null, "V\xE9rification n\xE9cessaire :"), " ", article.alerte), naviguer && /* @__PURE__ */ React.createElement("div", { className: "law-nav" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !precedent, onClick: () => precedent && onNavigate(precedent), title: precedent ? `Art. ${precedent.article} \u2014 ${precedent.titre}` : "" }, "\u2190 Article pr\xE9c\xE9dent"), /* @__PURE__ */ React.createElement("span", { className: "law-nav-position" }, position + 1, " / ", memeSource.length), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !suivant, onClick: () => suivant && onNavigate(suivant), title: suivant ? `Art. ${suivant.article} \u2014 ${suivant.titre}` : "" }, "Article suivant \u2192")), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, onRetenir && article.citable !== false && /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: retenu, onClick: () => onRetenir(article) }, retenu ? "D\xE9j\xE0 retenu" : "Retenir ce chef d\u2019accusation"), article.url && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => window.open(article.url, "_blank") }, "Ouvrir le document source \u2197"), onOpenCodex && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => onOpenCodex(article) }, "Voir dans le Codex")))));
   }
-  function CodexPage({ token, focusArticle, onFocusConsumed }) {
-    const [data, setData] = useState5(null), [search, setSearch] = useState5(""), [family, setFamily] = useState5(""), [source, setSource] = useState5(""), [classification, setClassification] = useState5(""), [selected, setSelected] = useState5(null), [error, setError] = useState5("");
-    useEffect5(() => {
-      serverCall("getCodex", token).then((r) => {
-        setData(r);
-        if (focusArticle) {
-          setSelected(r.articles.find((a) => a.source === focusArticle.source && a.article === focusArticle.article) || focusArticle);
-          onFocusConsumed();
-        }
-      }).catch((e) => setError(e.message));
-    }, []);
-    const families = useMemo3(() => data ? [...new Set(data.sources.map((s) => s.famille))] : [], [data]);
+  function CodexPage({ token, focusArticle, onFocusConsumed, mode = "lecture", onRetenir = null, retenus = [] }) {
+    const etat = useCodex(serverCall, token, true);
+    const data = etat.codex;
+    const [search, setSearch] = useState6(""), [family, setFamily] = useState6(""), [source, setSource] = useState6(""), [classification, setClassification] = useState6(""), [selected, setSelected] = useState6(null);
+    const selection = mode === "selection";
+    useEffect6(() => {
+      if (data && focusArticle) {
+        setSelected(articleParCle(data, focusArticle.source, focusArticle.article) || focusArticle);
+        onFocusConsumed == null ? void 0 : onFocusConsumed();
+      }
+    }, [data, focusArticle]);
+    const families = useMemo3(() => data ? [...new Set(data.sources.filter((s) => !selection || s.citable).map((s) => s.famille))] : [], [data, selection]);
     const classes = useMemo3(() => data ? [...new Set(data.articles.map((a) => a.classification).filter(Boolean))].sort() : [], [data]);
     const filtered = useMemo3(() => {
       if (!data) return [];
       const q = normalizeSearchText(search);
-      return data.articles.filter((a) => (!family || a.famille === family) && (!source || a.source === source) && (!classification || a.classification === classification) && (!q || normalizeSearchText([a.article, a.titre, a.source, a.famille, a.classification, a.autorite, a.applicabilite, a.texte, a.sanction].join(" ")).includes(q)));
-    }, [data, search, family, source, classification]);
-    if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
+      return data.articles.filter((a) => (!selection || a.citable) && (!family || a.famille === family) && (!source || a.source === source) && (!classification || a.classification === classification) && (!q || normalizeSearchText([a.article, a.abrege, a.titre, a.source, a.famille, a.classification, a.autorite, a.applicabilite, a.texte, a.sanction].join(" ")).includes(q)));
+    }, [data, search, family, source, classification, selection]);
+    const estRetenu = (a) => retenus.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === a._cle);
+    if (etat.statut === "erreur" && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, etat.erreur);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du Codex...");
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Biblioth\xE8que juridique de la Garde de Blancherive."))), /* @__PURE__ */ React.createElement("div", { className: "codex-library" }, families.map((f) => /* @__PURE__ */ React.createElement("section", { className: "codex-family", key: f }, /* @__PURE__ */ React.createElement("h2", { className: "codex-family-title" }, f), /* @__PURE__ */ React.createElement("div", { className: "codex-source-list" }, data.sources.filter((s) => s.famille === f).map((s) => /* @__PURE__ */ React.createElement("button", { key: s.nom, className: `codex-source-button ${source === s.nom ? "active" : ""}`, onClick: () => {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, !selection && /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Biblioth\xE8que juridique de la Garde de Blancherive."))), /* @__PURE__ */ React.createElement("div", { className: "codex-library" }, families.map((f) => /* @__PURE__ */ React.createElement("section", { className: "codex-family", key: f }, /* @__PURE__ */ React.createElement("h2", { className: "codex-family-title" }, f), /* @__PURE__ */ React.createElement("div", { className: "codex-source-list" }, data.sources.filter((s) => s.famille === f && (!selection || s.citable)).map((s) => /* @__PURE__ */ React.createElement("button", { key: s.nom, type: "button", className: `codex-source-button ${source === s.nom ? "active" : ""}`, onClick: () => {
       setFamily(f);
       setSource(source === s.nom ? "" : s.nom);
     } }, s.nom, /* @__PURE__ */ React.createElement("small", null, s.applicabilite))))))), /* @__PURE__ */ React.createElement("div", { className: "codex-controls" }, /* @__PURE__ */ React.createElement("input", { type: "search", placeholder: "Rechercher une loi, un article, un mot...", value: search, onChange: (e) => setSearch(e.target.value) }), /* @__PURE__ */ React.createElement("select", { value: family, onChange: (e) => {
@@ -7390,12 +8180,39 @@ body {
           e.preventDefault();
           setSelected(a);
         }
-      }, className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), (((_a = a.montants) == null ? void 0 : _a.length) > 0 || a.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = a.montants) == null ? void 0 : _b.length) ? a.montants.join(" / ") : a.amende), (((_c = a.dureesCachot) == null ? void 0 : _c.length) > 0 || a.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = a.dureesCachot) == null ? void 0 : _d.length) ? a.dureesCachot.map(formatHours).join(" / ") : formatHours(a.cachot)))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction));
-    })), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null) }));
+      }, className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.abrege && a.abrege !== a.source ? `${a.abrege} \xB7 ` : "", a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), (((_a = a.montants) == null ? void 0 : _a.length) > 0 || a.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = a.montants) == null ? void 0 : _b.length) ? a.montants.join(" / ") : a.amende), (((_c = a.dureesCachot) == null ? void 0 : _c.length) > 0 || a.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = a.dureesCachot) == null ? void 0 : _d.length) ? a.dureesCachot.map(formatHours).join(" / ") : formatHours(a.cachot)))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction), selection && /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-card-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: estRetenu(a), onClick: (e) => {
+        e.stopPropagation();
+        onRetenir(a);
+      } }, estRetenu(a) ? "D\xE9j\xE0 retenu" : "Retenir")));
+    })), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), codex: data, onNavigate: setSelected, onRetenir: selection ? onRetenir : null, retenu: selected ? estRetenu(selected) : false }));
+  }
+  function CodexPicker({ token, open, onClose, onRetenir, retenus }) {
+    const closeRef = useRef6(onClose);
+    closeRef.current = onClose;
+    useEffect6(() => {
+      if (!open) return;
+      const overflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      function keys(e) {
+        if (e.key === "Escape" && !document.querySelector(".law-modal")) {
+          e.preventDefault();
+          closeRef.current();
+        }
+      }
+      document.addEventListener("keydown", keys);
+      return () => {
+        document.body.style.overflow = overflow;
+        document.removeEventListener("keydown", keys);
+      };
+    }, [open]);
+    if (!open) return null;
+    return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop codex-picker-backdrop", onMouseDown: (e) => {
+      if (e.target === e.currentTarget) onClose();
+    } }, /* @__PURE__ */ React.createElement("div", { className: "codex-picker", role: "dialog", "aria-modal": "true", "aria-labelledby": "codex-picker-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("h2", { id: "codex-picker-title", className: "law-modal-title" }, "Parcourir le Codex")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-count" }, retenus.length, " retenu", retenus.length > 1 ? "s" : ""), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer le s\xE9lecteur", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-body" }, /* @__PURE__ */ React.createElement(CodexPage, { token, mode: "selection", onRetenir, retenus })), /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-picker-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onClose }, "Revenir au formulaire"))));
   }
   function OrganigrammePage({ token }) {
-    const [data, setData] = useState5(null), [error, setError] = useState5("");
-    useEffect5(() => {
+    const [data, setData] = useState6(null), [error, setError] = useState6("");
+    useEffect6(() => {
       let active = true;
       serverCall("getOrganigramme", token).then((r) => {
         if (active) setData(r);
@@ -7443,21 +8260,53 @@ body {
   function Independent({ title, subtitle, people = [] }) {
     return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, title), /* @__PURE__ */ React.createElement("p", null, subtitle)), /* @__PURE__ */ React.createElement("span", { className: "org-count" }, people.length)), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people, showCorps: true }));
   }
+  function dateIsoDepuisAffichage(valeur) {
+    const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(String(valeur || "").trim());
+    if (m) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+    const iso = /^(\d{4}-\d{2}-\d{2})/.exec(String(valeur || ""));
+    return iso ? iso[1] : "";
+  }
+  function dateLocaleIso() {
+    const now = /* @__PURE__ */ new Date();
+    return new Date(now.getTime() - now.getTimezoneOffset() * 6e4).toISOString();
+  }
+  function chefsPourFormulaire(codex, row) {
+    return chefsDeLigne(codex, row).map((e) => e.chef);
+  }
+  function useFormulaireRegistre({ cle, initial, vide }) {
+    const [form, setForm] = useState6(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
+    useEffect6(() => {
+      if (!initial) ecrireBrouillon(cle, form);
+    }, [form]);
+    return [form, setForm];
+  }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState5(null), [formData, setFormData] = useState5(null), [codex, setCodex] = useState5(null), [selected, setSelected] = useState5(null), [showForm, setShowForm] = useState5(false), [error, setError] = useState5(""), [deletingRow, setDeletingRow] = useState5(null);
-    useEffect5(() => {
-      Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
+    const [data, setData] = useState6(null), [formData, setFormData] = useState6(null), [selected, setSelected] = useState6(null), [showForm, setShowForm] = useState6(false), [editing, setEditing] = useState6(null), [error, setError] = useState6(""), [deletingRow, setDeletingRow] = useState6(null);
+    const codexEtat = useCodex(serverCall, token, true);
+    const codex = codexEtat.codex;
+    useEffect6(() => {
+      Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
-        setCodex(c.articles);
       }).catch((e) => setError(e.message));
     }, []);
+    const frequents = useMemo3(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
-    if (!data || !formData || !codex) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des amendes...");
-    const openLaw = (l) => {
-      const a = findCodexArticle(codex, l);
+    if (!data || !formData) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des amendes...");
+    const openLaw = (a) => {
       if (a) setSelected(a);
     };
+    function fermer() {
+      setShowForm(false);
+      setEditing(null);
+    }
+    function editer(item) {
+      var _a;
+      setEditing(item);
+      setShowForm(true);
+      setError("");
+      (_a = window.scrollTo) == null ? void 0 : _a.call(window, { top: 0, behavior: "smooth" });
+    }
     async function del(item) {
       if (!canDelete || !confirm(`Supprimer d\xE9finitivement cette amende ?
 
@@ -7472,14 +8321,22 @@ ${item.infraction}`)) return;
         setDeletingRow(null);
       }
     }
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Amendes"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle amende")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(AmendeForm, { data: formData, onOpenLaw: openLaw, onSubmit: async (f) => {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Amendes"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", onClick: () => {
+      if (showForm) fermer();
+      else {
+        setEditing(null);
+        setShowForm(true);
+      }
+    } }, showForm ? "Fermer" : "+ Nouvelle amende")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), codexEtat.statut === "erreur" && /* @__PURE__ */ React.createElement("div", { className: "error" }, "Codex indisponible : ", codexEtat.erreur), showForm && /* @__PURE__ */ React.createElement(AmendeForm, { key: editing ? `edit-${editing.row}` : "new", token, data: formData, codex, codexStatut: codexEtat.statut, frequents, initial: editing, onOpenLaw: openLaw, onCancel: fermer, onSubmit: async (f) => {
       try {
-        setData(await serverCall("ajouterAmende", token, f));
-        setShowForm(false);
+        setData(editing ? await serverCall("modifierAmende", token, editing.row, f) : await serverCall("ajouterAmende", token, f));
+        if (!editing) effacerBrouillon("amende");
+        fermer();
+        setError("");
       } catch (e) {
         setError(e.message);
       }
-    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Infraction" }, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
       try {
         setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
       } catch (x) {
@@ -7491,47 +8348,78 @@ ${item.infraction}`)) return;
       } catch (x) {
         setError(x.message);
       }
-    } })), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
+    } })), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("div", { className: "registry-actions" }, /* @__PURE__ */ React.createElement("button", { className: "secondary-button", disabled: deletingRow === i.row, onClick: () => editer(i) }, "Modifier"), /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer"))))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex, codex, onNavigate: setSelected }));
   }
-  function AmendeForm({ data, onSubmit, onOpenLaw }) {
-    const [form, setForm] = useState5({ date: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10), garde: "", contrevenant: "", infraction: "" });
-    const [submitting, setSubmitting] = useState5(false);
-    const submittingRef = useRef5(false);
-    const selected = data.infractions.find((i) => i.label === form.infraction);
+  function AmendeForm({ token, data, codex, codexStatut, frequents, initial, onSubmit, onCancel, onOpenLaw }) {
+    const [form, setForm] = useFormulaireRegistre({ cle: "amende", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, contrevenant: row.contrevenant, chefs: chefsPourFormulaire(codex, row), montant: row.montantRaw === null ? "" : String(row.montantRaw), indetermine: row.montantRaw === null } : { date: dateLocaleIso().slice(0, 10), garde: "", contrevenant: "", chefs: [], montant: "", indetermine: false } });
+    const [submitting, setSubmitting] = useState6(false);
+    const [chefEnCours, setChefEnCours] = useState6(false);
+    const [formError, setFormError] = useState6("");
+    const [picker, setPicker] = useState6(false);
+    const [lu, setLu] = useState6(null);
+    const submittingRef = useRef6(false);
+    const retenir = (a) => {
+      try {
+        setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
+        setFormError("");
+      } catch (e) {
+        setFormError(e.message);
+      }
+    };
     async function submit(e) {
-      var _a;
       e.preventDefault();
-      if (submittingRef.current) {
+      if (submittingRef.current) return;
+      if (chefEnCours) {
+        setFormError("Ajoutez la r\xE9f\xE9rence en cours ou effacez-la avant d\u2019enregistrer.");
         return;
       }
+      if (!form.chefs.length) {
+        setFormError("Indiquez au moins un chef d\u2019accusation.");
+        return;
+      }
+      setFormError("");
       submittingRef.current = true;
       setSubmitting(true);
       try {
-        const fixed = ((_a = selected == null ? void 0 : selected.sanction) == null ? void 0 : _a.options.length) === 1 && !selected.sanction.libre ? selected.sanction.options[0].value : "";
-        await onSubmit({ ...form, montant: form.montant || (!form.personnalisee ? fixed : "") });
+        await onSubmit({ date: form.date, garde: form.garde, contrevenant: form.contrevenant, chefs: chefsPourServeur(form.chefs), montant: form.indetermine ? "" : form.montant, attendu: initial ? { garde: initial.garde, contrevenant: initial.contrevenant } : void 0 });
       } finally {
         submittingRef.current = false;
         setSubmitting(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle amende"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement(MotifSanction, { form, setForm, infractions: data.infractions, onOpenLaw, valueKey: "montant" }), /* @__PURE__ */ React.createElement(ChoixSanction, { key: String(Boolean(form.personnalisee)) + (form.personnalisee ? "" : form.infraction), selected, personnalisee: form.personnalisee, value: form.montant, onChange: (value) => setForm((previous) => ({ ...previous, montant: value })), type: "amende" })), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019amende \u2014 ${initial.contrevenant}` : "Nouvelle amende"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Pay\xE9 et Revers\xE9 ne changent pas ici : ils se cochent depuis le registre."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)), initial && form.garde && !data.gardes.includes(form.garde) && /* @__PURE__ */ React.createElement("option", { value: form.garde }, form.garde, " (hors service actif)"))), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
+      setForm((p) => ({ ...p, chefs }));
+      setFormError("");
+    }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours }), /* @__PURE__ */ React.createElement(SentenceField, { type: "amende", codex, chefs: form.chefs, value: form.montant, onChange: (montant) => setForm((p) => ({ ...p, montant })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting })), formError && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, formError), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : initial ? "Enregistrer les modifications" : "Enregistrer"), onCancel && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: onCancel }, "Annuler"))), /* @__PURE__ */ React.createElement(CodexPicker, { token, open: picker, onClose: () => setPicker(false), onRetenir: retenir, retenus: form.chefs }), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, onNavigate: setLu, onRetenir: retenir, retenu: lu ? form.chefs.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === lu._cle) : false }));
   }
   function PrisonPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState5(null), [formData, setFormData] = useState5(null), [codex, setCodex] = useState5(null), [selected, setSelected] = useState5(null), [showForm, setShowForm] = useState5(false), [error, setError] = useState5(""), [deletingRow, setDeletingRow] = useState5(null), [saving, setSaving] = useState5(false);
-    useEffect5(() => {
-      Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token), serverCall("getCodex", token)]).then(([r, f, c]) => {
+    const [data, setData] = useState6(null), [formData, setFormData] = useState6(null), [selected, setSelected] = useState6(null), [showForm, setShowForm] = useState6(false), [editing, setEditing] = useState6(null), [error, setError] = useState6(""), [deletingRow, setDeletingRow] = useState6(null), [saving, setSaving] = useState6(false);
+    const codexEtat = useCodex(serverCall, token, true);
+    const codex = codexEtat.codex;
+    useEffect6(() => {
+      Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
-        setCodex(c.articles);
       }).catch((e) => setError(e.message));
     }, []);
     const catalogue = useCatalogue(serverCall, token, true);
+    const frequents = useMemo3(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
-    if (!data || !formData || !codex) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de la prison...");
-    const openLaw = (l) => {
-      const a = findCodexArticle(codex, l);
+    if (!data || !formData) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de la prison...");
+    const openLaw = (a) => {
       if (a) setSelected(a);
     };
+    function fermer() {
+      setShowForm(false);
+      setEditing(null);
+    }
+    function editer(item) {
+      var _a;
+      setEditing(item);
+      setShowForm(true);
+      setError("");
+      (_a = window.scrollTo) == null ? void 0 : _a.call(window, { top: 0, behavior: "smooth" });
+    }
     async function del(item) {
       if (!canDelete || !confirm(`Supprimer d\xE9finitivement cette incarc\xE9ration ?
 
@@ -7546,58 +8434,84 @@ ${item.infraction}`)) return;
         setDeletingRow(null);
       }
     }
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Prison"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", disabled: saving, onClick: () => setShowForm(!showForm) }, showForm ? "Fermer" : "+ Nouvelle incarc\xE9ration")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), showForm && /* @__PURE__ */ React.createElement(PrisonForm, { token, data: formData, catalogue: catalogue.objets, onOpenLaw: openLaw, onSubmit: async (f) => {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Prison"), /* @__PURE__ */ React.createElement("button", { className: "primary-button", disabled: saving, onClick: () => {
+      if (showForm) fermer();
+      else {
+        setEditing(null);
+        setShowForm(true);
+      }
+    } }, showForm ? "Fermer" : "+ Nouvelle incarc\xE9ration")), error && /* @__PURE__ */ React.createElement("div", { className: "error" }, error), codexEtat.statut === "erreur" && /* @__PURE__ */ React.createElement("div", { className: "error" }, "Codex indisponible : ", codexEtat.erreur), showForm && /* @__PURE__ */ React.createElement(PrisonForm, { key: editing ? `edit-${editing.row}` : "new", token, data: formData, codex, codexStatut: codexEtat.statut, frequents, catalogue: catalogue.objets, initial: editing, onOpenLaw: openLaw, onCancel: fermer, onSubmit: async (f) => {
       setSaving(true);
       setError("");
       try {
-        setData(await serverCall("ajouterPrison", token, f));
-        setShowForm(false);
+        setData(editing ? await serverCall("modifierPrison", token, editing.row, f) : await serverCall("ajouterPrison", token, f));
+        if (!editing) effacerBrouillon("prison");
+        fermer();
       } catch (e) {
         setError(e.message);
       } finally {
         setSaving(false);
       }
-    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Infraction"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde), /* @__PURE__ */ React.createElement("td", { "data-label": "D\xE9tenu" }, i.detenu), /* @__PURE__ */ React.createElement("td", { "data-label": "Cellule" }, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Infraction" }, /* @__PURE__ */ React.createElement("button", { className: "law-link", onClick: () => openLaw(i.infraction) }, i.infraction, " \u24D8")), /* @__PURE__ */ React.createElement("td", { "data-label": "Dur\xE9e" }, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Entr\xE9e" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.entree, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Sortie pr\xE9vue" }, i.sortie ? /* @__PURE__ */ React.createElement(DateRP, { value: i.sortie, jour: false }) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Lib\xE9r\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde), /* @__PURE__ */ React.createElement("td", { "data-label": "D\xE9tenu" }, i.detenu), /* @__PURE__ */ React.createElement("td", { "data-label": "Cellule" }, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Dur\xE9e" }, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Entr\xE9e" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.entree, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Sortie pr\xE9vue" }, i.sortie ? /* @__PURE__ */ React.createElement(DateRP, { value: i.sortie, jour: false }) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Lib\xE9r\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
       try {
         setData(await serverCall("modifierPrisonLibere", token, i.row, e.target.checked));
       } catch (x) {
         setError(x.message);
       }
-    } })), /* @__PURE__ */ React.createElement("td", { "data-label": "Saisies", className: "saisies-cell" }, i.saisies || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Notes" }, i.notes || "\u2014"), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer")))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex }));
+    } })), /* @__PURE__ */ React.createElement("td", { "data-label": "Saisies", className: "saisies-cell" }, i.saisies || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Notes" }, i.notes || "\u2014"), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("div", { className: "registry-actions" }, /* @__PURE__ */ React.createElement("button", { className: "secondary-button", disabled: deletingRow === i.row || saving, onClick: () => editer(i) }, "Modifier"), /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer"))))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex, codex, onNavigate: setSelected }));
   }
-  function PrisonForm({ token, data, onSubmit, onOpenLaw, catalogue = null }) {
-    const now = /* @__PURE__ */ new Date(), local = new Date(now.getTime() - now.getTimezoneOffset() * 6e4);
-    const [form, setForm] = useState5({ date: local.toISOString().slice(0, 10), garde: "", detenu: "", cellule: "", infraction: "", entree: local.toISOString().slice(0, 16), saisies: [], notes: "" });
-    const [submitting, setSubmitting] = useState5(false);
-    const [saisieEnCours, setSaisieEnCours] = useState5(false);
-    const [saisieError, setSaisieError] = useState5("");
-    const submittingRef = useRef5(false);
-    const selected = data.infractions.find((i) => i.label === form.infraction);
+  function PrisonForm({ token, data, codex, codexStatut, frequents, initial, onSubmit, onCancel, onOpenLaw, catalogue = null }) {
+    const [form, setForm] = useFormulaireRegistre({ cle: "prison", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, detenu: row.detenu, cellule: row.cellule, chefs: chefsPourFormulaire(codex, row), duree: row.dureeRaw === null ? "" : String(row.dureeRaw), indetermine: row.dureeRaw === null, entree: row.entreeIso || dateIsoDepuisAffichage(row.entree), saisies: row.saisiesListe || [], notes: row.notes } : { date: dateLocaleIso().slice(0, 10), garde: "", detenu: "", cellule: "", chefs: [], duree: "", indetermine: false, entree: dateLocaleIso().slice(0, 16), saisies: [], notes: "" } });
+    const saisiesTexteHistorique = Boolean(initial && initial.saisiesListe === null && initial.saisies);
+    const [submitting, setSubmitting] = useState6(false);
+    const [saisieEnCours, setSaisieEnCours] = useState6(false);
+    const [chefEnCours, setChefEnCours] = useState6(false);
+    const [formError, setFormError] = useState6("");
+    const [picker, setPicker] = useState6(false);
+    const [lu, setLu] = useState6(null);
+    const submittingRef = useRef6(false);
+    const retenir = (a) => {
+      try {
+        setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
+        setFormError("");
+      } catch (e) {
+        setFormError(e.message);
+      }
+    };
     async function submit(e) {
-      var _a;
       e.preventDefault();
-      if (submittingRef.current) {
-        return;
-      }
+      if (submittingRef.current) return;
       if (saisieEnCours) {
-        setSaisieError("Ajoutez l\u2019objet en cours \xE0 la liste ou effacez la recherche avant d\u2019enregistrer.");
+        setFormError("Ajoutez l\u2019objet en cours \xE0 la liste ou effacez la recherche avant d\u2019enregistrer.");
         return;
       }
-      setSaisieError("");
+      if (chefEnCours) {
+        setFormError("Ajoutez la r\xE9f\xE9rence en cours ou effacez-la avant d\u2019enregistrer.");
+        return;
+      }
+      if (!form.chefs.length) {
+        setFormError("Indiquez au moins un chef d\u2019accusation.");
+        return;
+      }
+      setFormError("");
       submittingRef.current = true;
       setSubmitting(true);
       try {
-        const fixed = ((_a = selected == null ? void 0 : selected.sanction) == null ? void 0 : _a.options.length) === 1 && !selected.sanction.libre ? selected.sanction.options[0].value : "";
-        await onSubmit({ ...form, duree: form.duree || (!form.personnalisee ? fixed : "") });
+        const payload = { date: form.date, garde: form.garde, detenu: form.detenu, cellule: form.cellule, chefs: chefsPourServeur(form.chefs), duree: form.indetermine ? "" : form.duree, entree: form.entree, notes: form.notes, attendu: initial ? { garde: initial.garde, detenu: initial.detenu } : void 0 };
+        if (!saisiesTexteHistorique) payload.saisies = form.saisies;
+        await onSubmit(payload);
       } finally {
         submittingRef.current = false;
         setSubmitting(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, "Nouvelle incarc\xE9ration"), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement(MotifSanction, { form, setForm, infractions: data.infractions, onOpenLaw, valueKey: "duree" }), /* @__PURE__ */ React.createElement(ChoixSanction, { key: String(Boolean(form.personnalisee)) + (form.personnalisee ? "" : form.infraction), selected, personnalisee: form.personnalisee, value: form.duree, onChange: (value) => setForm((previous) => ({ ...previous, duree: value })), type: "cachot" }), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement(SaisiesField, { token, value: form.saisies, disabled: submitting, serverCall, catalogue, onPendingChange: (pending) => {
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019incarc\xE9ration \u2014 ${initial.detenu}` : "Nouvelle incarc\xE9ration"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "La case Lib\xE9r\xE9 ne change pas ici : elle se coche depuis le registre. La sortie pr\xE9vue est recalcul\xE9e depuis l\u2019entr\xE9e et la dur\xE9e."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)), initial && form.garde && !data.gardes.includes(form.garde) && /* @__PURE__ */ React.createElement("option", { value: form.garde }, form.garde, " (hors service actif)"))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { maxLength: 100, value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
+      setForm((p) => ({ ...p, chefs }));
+      setFormError("");
+    }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours }), /* @__PURE__ */ React.createElement(SentenceField, { type: "cachot", codex, chefs: form.chefs, value: form.duree, onChange: (duree) => setForm((p) => ({ ...p, duree })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting }), saisiesTexteHistorique ? /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("h3", null, "Saisies sur la personne"), /* @__PURE__ */ React.createElement("p", null, "Saisies enregistr\xE9es en texte avant le catalogue, conserv\xE9es telles quelles :"), /* @__PURE__ */ React.createElement("p", { style: { whiteSpace: "pre-wrap" } }, initial.saisies)) : /* @__PURE__ */ React.createElement(SaisiesField, { token, value: form.saisies, disabled: submitting, serverCall, catalogue, onPendingChange: (pending) => {
       setSaisieEnCours(pending);
-      setSaisieError("");
-    }, onChange: (saisies) => setForm((previous) => ({ ...previous, saisies })) }), saisieError && /* @__PURE__ */ React.createElement("div", { className: "field-full error", role: "alert" }, saisieError), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Motif / Notes"), /* @__PURE__ */ React.createElement("textarea", { value: form.notes, onChange: (e) => setForm({ ...form, notes: e.target.value }) }))), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : "Enregistrer"))));
+      setFormError("");
+    }, onChange: (saisies) => setForm((previous) => ({ ...previous, saisies })) }), /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("label", null, "Motif / Notes"), /* @__PURE__ */ React.createElement("textarea", { maxLength: 5e3, value: form.notes, onChange: (e) => setForm({ ...form, notes: e.target.value }) }))), formError && /* @__PURE__ */ React.createElement("div", { className: "field-full error", role: "alert" }, formError), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : initial ? "Enregistrer les modifications" : "Enregistrer"), onCancel && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: onCancel }, "Annuler"))), /* @__PURE__ */ React.createElement(CodexPicker, { token, open: picker, onClose: () => setPicker(false), onRetenir: retenir, retenus: form.chefs }), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, onNavigate: setLu, onRetenir: retenir, retenu: lu ? form.chefs.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === lu._cle) : false }));
   }
   function Field({ label, children }) {
     return /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, label), children);
@@ -7614,9 +8528,9 @@ ${item.infraction}`)) return;
     }
   }
   function PresenceOfficerDashboard({ token }) {
-    const [data, setData] = useState5(null), [error, setError] = useState5("");
-    const [open, setOpen] = useState5(chargerSyntheseOuverte);
-    useEffect5(() => {
+    const [data, setData] = useState6(null), [error, setError] = useState6("");
+    const [open, setOpen] = useState6(chargerSyntheseOuverte);
+    useEffect6(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
     function basculer() {
@@ -7643,8 +8557,8 @@ ${item.infraction}`)) return;
     return { lundi: s.lundi, prenom: s.prenom, nom: s.nom };
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState5(null), [error, setError] = useState5(""), [weekFilter, setWeekFilter] = useState5(""), [corpsFilter, setCorpsFilter] = useState5(""), [search, setSearch] = useState5("");
-    useEffect5(() => {
+    const [data, setData] = useState6(null), [error, setError] = useState6(""), [weekFilter, setWeekFilter] = useState6(""), [corpsFilter, setCorpsFilter] = useState6(""), [search, setSearch] = useState6("");
+    useEffect6(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement des pr\xE9sences : ", error);
@@ -7671,13 +8585,13 @@ ${item.infraction}`)) return;
     return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, matchesCorps, searching }) {
-    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState5(current);
-    const [seulementImpayes, setSeulementImpayes] = useState5(false);
-    useEffect5(() => {
+    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState6(current);
+    const [seulementImpayes, setSeulementImpayes] = useState6(false);
+    useEffect6(() => {
       if (searching) setOpen(true);
     }, [searching]);
     const impayes = compteImpayesSemaine(rows, { current, matchesCorps });
-    useEffect5(() => {
+    useEffect6(() => {
       if (!impayes) setSeulementImpayes(false);
     }, [impayes]);
     const visible = (r) => matchesCorps(r) && matchesPerson(r) && (!seulementImpayes || estImpayePresence(r));
@@ -7742,8 +8656,8 @@ ${item.infraction}`)) return;
     }
   }
   function PayePage({ token, canRegler }) {
-    const [data, setData] = useState5(null), [error, setError] = useState5(""), [regles, setRegles] = useState5([]), [busy, setBusy] = useState5(null), [filtre, setFiltre] = useState5(null);
-    useEffect5(() => {
+    const [data, setData] = useState6(null), [error, setError] = useState6(""), [regles, setRegles] = useState6([]), [busy, setBusy] = useState6(null), [filtre, setFiltre] = useState6(null);
+    useEffect6(() => {
       serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement de la paye : ", error);
@@ -7777,7 +8691,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, libelleSemaine(s.lundi), " ", /* @__PURE__ */ React.createElement("small", null, "du ", /* @__PURE__ */ React.createElement(DateRP, { value: s.lundi, jour: false }))), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
   }
   function PayeFinanceur({ f, currentWeek, canRegler, busy, regles, onBasculer }) {
-    const [ouvert, setOuvert] = useState5(true), [copie, setCopie] = useState5(""), [texteVisible, setTexteVisible] = useState5(false);
+    const [ouvert, setOuvert] = useState6(true), [copie, setCopie] = useState6(""), [texteVisible, setTexteVisible] = useState6(false);
     const texte = useMemo3(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();

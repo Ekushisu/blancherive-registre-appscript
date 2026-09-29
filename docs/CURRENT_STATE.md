@@ -2,6 +2,67 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Chefs d'accusation, sentence libre et modification des entrées (29 septembre 2026)
+
+- Constat du propriétaire : les quatre codes de Blancherive ne chiffrent
+  aucune peine, le filtre par sanction chiffrée des formulaires Amendes et
+  Prison ne proposait donc plus rien. Refonte complète des deux formulaires.
+- **Chefs d'accusation.** Une entrée porte un ou plusieurs chefs (vingt au
+  plus) : articles de n'importe quel document du Codex, droit impérial et
+  décrets compris, et références libres, mêlés. Décision du propriétaire :
+  tout est citable sauf les documents marqués `citable: false` dans
+  `SYNC_CODEX_DOCUMENTS` (documentation de contexte). Aucun document du
+  registre ne porte ce flag aujourd'hui : la Constitution cléricale et le
+  Registre de la chevalerie n'y sont pas inscrits ; s'ils le sont un jour,
+  c'est avec ce flag.
+- **Stockage.** Colonne texte lisible inchangée (Amendes!D, Prison!E,
+  `CPL art. 16 — Injure ; …`) et JSON dans une nouvelle colonne technique,
+  Amendes!H et Prison!L, créée par l'application avec son en-tête si elle
+  manque. Titre, qualification et sigle figés à l'enregistrement. Lignes
+  antérieures inchangées, résolues à l'ancienne. **À vérifier dans le
+  classeur avant publication : que Amendes!H et Prison!L soient vides.**
+- **Sentence.** Montant et durée libres ; « À déterminer » possible pour les
+  deux (décision du propriétaire) ; barème impérial rappelé à titre indicatif
+  depuis la qualification la plus grave ; valeurs citées par un article
+  proposées en raccourcis.
+- **Modification** d'une amende ou d'une incarcération par les OFFICIER
+  (`modifierAmende`, `modifierPrison`), avec identité de ligne (`attendu`)
+  refusée si la ligne a changé. Payé, Reversé et Libéré restent hors de ce
+  chemin. Le rôle OFFICIER est une hypothèse alignée sur la suppression, à
+  élargir si le propriétaire le souhaite.
+- **Cache local du Codex** (`ui/src/codex.js`, `getCodex(token,
+  versionConnue)` avec empreinte MD5 de A:J et R:Y) : les 470 articles ne sont
+  renvoyés que si la version a changé ; Codex, Amendes et Prison partagent la
+  même copie. Recherche en mémoire : numéro, sigle (`cpl 16`), titre, texte ;
+  filtres corpus et qualification ; douze suggestions.
+- **Interface** (`ui/src/chefs.jsx`) : champ à jetons, chefs fréquents du
+  registre en raccourcis, lecture de tout article en popup sans le retenir,
+  popup avec « Retenir ce chef », article précédent/suivant et renvois
+  cliquables (« article 76 »), sélecteur « Parcourir le Codex » (la page
+  Codex en modale, mode sélection), brouillon `sessionStorage` du formulaire
+  de création, bouton Modifier dans les registres, jetons dans la colonne
+  Infraction.
+- **Registre des sources** : champ `abrege` sur les neuf codes (LF, CPL, CCL,
+  CCoL, CJI, DRN, CProc, JM, CPen), dérivé du nom pour les décrets
+  (`Décr. RFB`) ; cache `SyncCodex!R:W` étendu à `R:Y` (Abrégé, Citable).
+  Les anciennes listes `L:O` sont encore écrites mais plus lues.
+- Retirés : `ui/src/sanctions.jsx`, `findCodexArticle` d'`Index.html` (devenu
+  `resoudreLibelleHistorique` dans `codex.js`), les helpers
+  `lireChoixSanction_` / `validerChoixSanction_` / `valeurUniqueSanction_` /
+  `preparerMotifSanction_` d'`Amendes.js`. `getAmendeFormData` et
+  `getPrisonFormData` ne renvoient plus que les gardes.
+- Vérifié par `node scripts/test-chefs.mjs` (serveur), `test-codex-local.mjs`
+  et `test-chefs-ui.mjs` (navigateur), suites existantes adaptées
+  (`test-sanctions.mjs` réduit à l'analyse des sanctions, `test-prison-objets`,
+  `test-saisies-ui`), toutes vertes. Aperçus Amendes, Prison et Codex
+  régénérés. Aucun push, aucun déploiement, aucune synchronisation du Codex.
+
+**Après publication** : relancer `synchroniserCodex()` pour écrire les
+colonnes X:Y du cache (sinon sigles dérivés du nom et tout citable, ce qui est
+le défaut voulu), puis recharger le registre. Retirer à la main, dans Sheets,
+la validation de données des colonnes Amendes!D et Prison!E si elle gêne :
+l'application la retire déjà cellule par cellule à chaque écriture.
+
 ### Régénération sur grade, corps ou statut ; lignes des sortants conservées (28 septembre 2026)
 
 - Décision du propriétaire. `modifierEffectif` régénère la semaine courante

@@ -1,5 +1,30 @@
 # Journal de passation IA
 
+## 2026-09-29 — Chefs d'accusation, sentence libre, modification des entrées
+
+- Demande du propriétaire : les nouveaux codes n'ayant aucune peine chiffrée,
+  refonte des formulaires Amendes et Prison. Une entrée porte désormais un ou
+  plusieurs chefs d'accusation fondés sur n'importe quel article du Codex
+  (sauf documents `citable: false`) ou une référence libre, avec sentence à
+  l'appréciation libre et « À déterminer » possible ; les OFFICIER modifient
+  une amende ou une incarcération (montant, garde, accusé, chefs…).
+- Serveur : `getCodex(token, versionConnue)` versionné, `indexerArticlesCodex_`
+  et `cleArticleCodex_` (`Codex.js`) ; `validerChefsAccusation_`,
+  `lireChefsAccusation_`, `modifierAmende`, montant libre (`Amendes.js`) ;
+  `modifierPrison`, durée libre, `entreeIso` et `saisiesListe` (`Prison.js`) ;
+  `lireSaisiesPrisonStructurees_` (`Objets.js`) ; `abrege`, `citable` et cache
+  `R:Y` (`SyncCodex.js`). Colonnes techniques Amendes!H et Prison!L.
+- Interface : `ui/src/codex.js` (cache local, recherche, chefs),
+  `ui/src/chefs.jsx` (champ à jetons, sentence, jetons de registre),
+  `ui/src/brouillon.js` ; popup d'article avec navigation, renvois et
+  « Retenir » ; `CodexPage` en mode sélection dans `CodexPicker` ; formulaires
+  de création et de modification unifiés. `sanctions.jsx` retiré.
+- Vérifications : `node scripts/test-chefs.mjs`, `test-codex-local.mjs`,
+  `test-chefs-ui.mjs` (nouveaux) ; `test-sanctions.mjs`, `test-prison-objets.mjs`,
+  `test-saisies-ui.mjs`, `test-sync-codex.mjs` adaptés ; toutes les suites
+  vertes. Aperçus régénérés (`amendes`, `amendes-formulaire`, `codex` ajoutés
+  à `capture-apercus.mjs`). Aucun push ni déploiement.
+
 ## 2026-09-28 — Régénération sur grade, corps ou statut ; sortants conservés
 
 - Règles fixées par le propriétaire : la semaine courante se régénère à

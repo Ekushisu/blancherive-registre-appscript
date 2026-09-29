@@ -148,6 +148,30 @@ const apercus = {
       await page.getByRole("button", { name: "+ Nouvelle incarcération" }).click();
       await page.waitForSelector(".form-card");
     }
+  },
+  amendes: {
+    nav: "Amendes",
+    attendre: ".registry-table",
+    largeurs: [390, 1440]
+  },
+  // Formulaire d'amende avec une recherche de chef d'accusation en cours, pour
+  // montrer les suggestions du Codex en mémoire et les jetons retenus.
+  "amendes-formulaire": {
+    nav: "Amendes",
+    attendre: ".registry-table",
+    largeurs: [1440],
+    async preparer(page) {
+      await page.getByRole("button", { name: "+ Nouvelle amende" }).click();
+      await page.waitForSelector(".chefs-field");
+      await page.locator(".chefs-field .saisie-shortcuts button").first().click();
+      await page.locator("#chef-recherche").fill("refus");
+      await page.waitForSelector("#chef-option-0");
+    }
+  },
+  codex: {
+    nav: "Codex",
+    attendre: ".codex-list",
+    largeurs: [390, 1440]
   }
 };
 

@@ -172,12 +172,16 @@ export const prison = {
       garde: "Sigrid Vent-du-Nord",
       detenu: "Marcurio le Cadet",
       cellule: "Cellule II",
-      infraction: "Art. 12 — Vol simple",
+      infraction: "CPL art. 24 — Vol simple",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"24","titre":"Vol simple","classification":"délit","abrege":"CPL"}],
       duree: "6 h",
+      dureeRaw: 6,
       entree: "14/09/2026 18:30",
+      entreeIso: "2026-09-14T18:30",
       sortie: "15/09/2026 00:30",
       libere: false,
-      saisies: "Dague en acier ×1, Bourse de septims ×1",
+      saisies: "Dague d'acier × 1\nOr × 40",
+      saisiesListe: [{ id: "skyrim.esm|0001397E", nom: "Dague d'acier", quantite: 1 }, { id: "skyrim.esm|00000F", nom: "Or", quantite: 40 }],
       notes: "Pris sur le fait au marché. Objets restitués à la sortie."
     },
     {
@@ -186,12 +190,16 @@ export const prison = {
       garde: "Rolf Écu-Fendu",
       detenu: "Anoriath",
       cellule: "Cellule I",
-      infraction: "Art. 4 — Rixe sur la voie publique",
+      infraction: "CPL art. 31 — Rixe sur la voie publique ; CPL art. 16 — Injure",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"31","titre":"Rixe sur la voie publique","classification":"délit","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"16","titre":"Injure","classification":"contravention","abrege":"CPL"}],
       duree: "2 h",
+      dureeRaw: 2,
       entree: "13/09/2026 21:05",
+      entreeIso: "2026-09-13T21:05",
       sortie: "13/09/2026 23:05",
       libere: true,
       saisies: "",
+      saisiesListe: [],
       notes: ""
     },
     {
@@ -201,40 +209,19 @@ export const prison = {
       detenu: "Nazeem",
       cellule: "Cellule III",
       infraction: "Motif personnalisé — Décret du Jarl",
-      duree: "À déterminer",
+      chefs: null,
+      duree: "",
+      dureeRaw: null,
       entree: "11/09/2026 09:15",
+      entreeIso: "2026-09-11T09:15",
       sortie: "",
       libere: false,
-      saisies: "Amulette de Talos ×1",
+      saisies: "Amulette de Talos",
+      saisiesListe: null,
       notes: "Détention sur ordre direct de l'État-Major, durée en attente."
     }
   ]
 };
-
-const infractions = [
-  {
-    label: "Art. 4 — Rixe sur la voie publique",
-    sanction: {
-      options: [
-        { value: 2, label: "2 h : première rixe" },
-        { value: 6, label: "6 h : récidive" }
-      ],
-      libre: false,
-      texte: "Deux heures de cachot, portées à six en cas de récidive."
-    }
-  },
-  {
-    label: "Art. 12 — Vol simple",
-    sanction: {
-      options: [
-        { value: 6, label: "6 h : vol de faible valeur" },
-        { value: 24, label: "24 h : vol aggravé" }
-      ],
-      libre: true,
-      texte: "Six heures de cachot, à l'appréciation du garde selon la valeur dérobée."
-    }
-  }
-];
 
 // Catalogue préchargé par les pages Prison et Inventaire, même forme que
 // `getCatalogueObjets` : tableau compact [id, nom, type].
@@ -259,28 +246,10 @@ export const prisonForm = {
     "Rolf Écu-Fendu",
     "Ingrid Main-Leste",
     "Astrid Œil-de-Faucon"
-  ],
-  infractions
+  ]
 };
 
-export const amendeForm = {
-  gardes: prisonForm.gardes,
-  infractions: [
-    {
-      label: "Art. 7 — Trouble à l'ordre public",
-      sanction: {
-        options: [
-          { value: 50, label: "50 : simple trouble" },
-          { value: 150, label: "150 : récidive" }
-        ],
-        libre: false,
-        texte: "Cinquante septims, portés à cent cinquante en cas de récidive."
-      }
-    },
-    ...infractions
-  ],
-  collecteurs: [{ nom: "Ingrid Main-Leste", grade: "Major", corps: "Cité de Blancherive" }]
-};
+export const amendeForm = { gardes: prisonForm.gardes };
 
 export const amendes = {
   rows: [
@@ -289,12 +258,14 @@ export const amendes = {
       date: "14/09/2026",
       garde: "Astrid Œil-de-Faucon",
       contrevenant: "Belethor",
-      infraction: "Art. 7 — Trouble à l'ordre public",
-      montant: 150,
+      infraction: "CPL art. 9 — Propos irrespectueux envers une autorité locale ; CPL art. 16 — Injure",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"9","titre":"Propos irrespectueux envers une autorité locale","classification":"contravention","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"16","titre":"Injure","classification":"contravention","abrege":"CPL"}],
+      montant: "150",
+      montantRaw: 150,
       paye: true,
       reverse: false,
-      destinataire: "Ingrid Main-Leste (Major)",
-      notes: "Altercation devant l'échoppe."
+      collecteurs: ["Major Ingrid Main-Leste"],
+      fallbackEtatMajor: false
     },
     {
       row: 5,
@@ -302,79 +273,212 @@ export const amendes = {
       garde: "Rolf Écu-Fendu",
       contrevenant: "Mikael",
       infraction: "Art. 12 — Vol simple",
-      montant: 300,
+      chefs: null,
+      montant: "300",
+      montantRaw: 300,
       paye: true,
       reverse: true,
-      destinataire: "Ingrid Main-Leste (Major)",
-      notes: ""
+      collecteurs: ["Major Ingrid Main-Leste"],
+      fallbackEtatMajor: false
     },
     {
       row: 6,
       date: "09/09/2026",
       garde: "Sigrid Vent-du-Nord",
       contrevenant: "Nazeem",
-      infraction: "Art. 7 — Trouble à l'ordre public",
-      montant: 50,
+      infraction: "CPL art. 4 — Refus d’obtempérer à une injonction locale",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"4","titre":"Refus d’obtempérer à une injonction locale","classification":"délit","abrege":"CPL"}],
+      montant: "",
+      montantRaw: null,
       paye: false,
       reverse: false,
-      destinataire: "Ingrid Main-Leste (Major)",
-      notes: "Refus de circuler."
+      collecteurs: [],
+      fallbackEtatMajor: false
     }
   ]
 };
 
 export const codex = {
-  articles: [
+  "version": "demo",
+  "sources": [
     {
-      article: "4",
-      label: "Art. 4 — Rixe sur la voie publique",
-      titre: "De la rixe sur la voie publique",
-      famille: "Codex Judiciaire de Blancherive",
-      source: "Codex Judiciaire de Blancherive",
-      classification: "Délit",
-      autorite: "Garde en service",
-      applicabilite: "Châtellerie de Blancherive",
-      texte:
-        "Quiconque engage ou poursuit une rixe sur la voie publique trouble la paix du Jarl. Le garde présent sépare les parties, puis conduit au cachot celui qui a porté le premier coup.",
-      sanction: "Deux heures de cachot, portées à six en cas de récidive.",
-      cachot: true,
-      amende: false,
-      dureesCachot: [2, 6],
-      montants: []
+      "nom": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": ""
     },
     {
-      article: "7",
-      label: "Art. 7 — Trouble à l'ordre public",
-      titre: "Du trouble à l'ordre public",
-      famille: "Codex Judiciaire de Blancherive",
-      source: "Codex Judiciaire de Blancherive",
-      classification: "Contravention",
-      autorite: "Garde en service",
-      applicabilite: "Châtellerie de Blancherive",
-      texte:
-        "Le tapage, l'ivresse manifeste et le refus de circuler sur injonction constituent un trouble à l'ordre public.",
-      sanction: "Cinquante septims, portés à cent cinquante en cas de récidive.",
-      cachot: false,
-      amende: true,
-      dureesCachot: [],
-      montants: [50, 150]
+      "nom": "Corpus Juriscivilis Imperialis",
+      "abrege": "CJI",
+      "citable": true,
+      "famille": "Droit impérial",
+      "autorite": "Empire de Tamriel",
+      "applicabilite": "Droit pénal impérial général",
+      "local": false,
+      "url": ""
+    }
+  ],
+  "articles": [
+    {
+      "source": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "article": "4",
+      "titre": "Refus d’obtempérer à une injonction locale",
+      "label": "Art. 4 — Refus d’obtempérer à une injonction locale",
+      "classification": "délit",
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": "",
+      "texte": "Constitue un refus d’obtempérer local le fait, pour toute personne, de refuser volontairement de se conformer sans délai à une injonction claire, compréhensible et légalement fondée, adressée par une autorité compétente de Blancherive. La présente infraction se distingue du non-respect d’une mise en demeure administrative (article 76).",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
     },
     {
-      article: "12",
-      label: "Art. 12 — Vol simple",
-      titre: "Du vol simple",
-      famille: "Codex Judiciaire de Blancherive",
-      source: "Codex Judiciaire de Blancherive",
-      classification: "Délit",
-      autorite: "Officier",
-      applicabilite: "Châtellerie de Blancherive",
-      texte:
-        "Le vol sans violence ni effraction est puni du cachot et de la restitution intégrale du bien dérobé à son propriétaire légitime.",
-      sanction: "Six heures de cachot, à l'appréciation du garde selon la valeur dérobée.",
-      cachot: true,
-      amende: false,
-      dureesCachot: [6, 24],
-      montants: []
+      "source": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "article": "9",
+      "titre": "Propos irrespectueux envers une autorité locale",
+      "label": "Art. 9 — Propos irrespectueux envers une autorité locale",
+      "classification": "contravention",
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": "",
+      "texte": "Le fait de tenir publiquement, envers un représentant de la châtellerie agissant dans l’exercice de ses fonctions, des propos grossiers, méprisants ou offensants constitue une infraction contraventionnelle.",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
+    },
+    {
+      "source": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "article": "16",
+      "titre": "Injure",
+      "label": "Art. 16 — Injure",
+      "classification": "contravention",
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": "",
+      "texte": "Le fait d’adresser à une personne des propos, gestes ou écrits injurieux, hors de toute menace, constitue une contravention.",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
+    },
+    {
+      "source": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "article": "24",
+      "titre": "Vol simple",
+      "label": "Art. 24 — Vol simple",
+      "classification": "délit",
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": "",
+      "texte": "Le fait de soustraire frauduleusement la chose d’autrui, sans violence ni effraction, constitue un délit. La restitution du bien est ordonnée à titre accessoire.",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
+    },
+    {
+      "source": "Code pénal local de Blancherive",
+      "abrege": "CPL",
+      "citable": true,
+      "article": "31",
+      "titre": "Rixe sur la voie publique",
+      "label": "Art. 31 — Rixe sur la voie publique",
+      "classification": "délit",
+      "famille": "Droit de Blancherive",
+      "autorite": "Cour de Blancherive",
+      "applicabilite": "Infractions locales et sanctions de la Garde",
+      "local": true,
+      "url": "",
+      "texte": "Le fait de participer volontairement à une rixe sur la voie publique constitue un délit, sans préjudice des atteintes aux personnes qui en résultent (articles 26 et 27).",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
+    },
+    {
+      "source": "Corpus Juriscivilis Imperialis",
+      "abrege": "CJI",
+      "citable": true,
+      "article": "3",
+      "titre": "Classification des infractions",
+      "label": "Art. 3 — Classification des infractions",
+      "classification": "",
+      "famille": "Droit impérial",
+      "autorite": "Empire de Tamriel",
+      "applicabilite": "Droit pénal impérial général",
+      "local": false,
+      "url": "",
+      "texte": "Les infractions sont classées en contraventions, délits et crimes. La contravention est punie d’une amende jusqu’à 500 septims, le délit de 500 à 2 500 septims, le crime au-delà.",
+      "sanction": "",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": []
+    },
+    {
+      "source": "Codex Judiciaire de Blancherive",
+      "abrege": "CJB",
+      "citable": true,
+      "article": "12",
+      "titre": "Du vol simple",
+      "label": "Art. 12 — Du vol simple",
+      "classification": "Délit",
+      "famille": "Droit de Blancherive",
+      "autorite": "Empire de Tamriel",
+      "applicabilite": "Droit pénal impérial général",
+      "local": false,
+      "url": "",
+      "texte": "Le vol sans violence ni effraction est puni du cachot et de la restitution intégrale du bien dérobé.",
+      "sanction": "Six heures de cachot, à l’appréciation du garde selon la valeur dérobée.",
+      "amende": "",
+      "cachot": "",
+      "travaux": "",
+      "alerte": "",
+      "montants": [],
+      "dureesCachot": [
+        6,
+        24
+      ]
     }
   ]
 };

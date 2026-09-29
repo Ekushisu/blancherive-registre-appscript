@@ -47,10 +47,10 @@ function render() {
   do { dirty = false; cursor = 0; tree = component(); effects.splice(0).forEach(fn => fn()); assert.ok(++loops < 20); } while (dirty);
   return tree;
 }
-function nodes(node = tree) {
+function nodes(node = tree) { if (arguments.length && arguments[0] === undefined) return [];
   if (Array.isArray(node)) return node.flatMap(n => nodes(n));
   if (!node || typeof node !== 'object') return [];
-  return [node,...nodes(node.props?.children)];
+  return [node,...nodes(node.props?.children ?? null)];
 }
 const id = name => nodes().find(n => n.props.id === name);
 const text = node => typeof node === 'string' || typeof node === 'number' ? String(node) :
@@ -109,15 +109,19 @@ assert.equal(dirty,false,'Aucune mise à jour après démontage');
 // Le vrai formulaire bloque les brouillons et les doubles submissions, et
 // conserve les données si l'appel échoue. Compilation isolée du composant.
 const app = readFileSync('ui/src/app.jsx','utf8');
-const formSource = app.slice(app.indexOf('function PrisonForm('),app.indexOf('function Field('));
+const formSource = app.slice(app.indexOf('function dateIsoDepuisAffichage('),app.indexOf('function Field('));
 const formBundle = await build({stdin:{contents:formSource+'\nexport { PrisonForm };',loader:'jsx'},write:false,format:'cjs',jsxFactory:'React.createElement'});
 context.exports={}; context.module={exports:context.exports};
-Object.assign(context,{useState:React.useState,useRef:React.useRef,SaisiesField,MotifSanction:()=>{},ChoixSanction:()=>{},Field:()=>{},formatHours:()=>'',serverCall:props.serverCall});
+const ChefsField=()=>null;
+Object.assign(context,{useState:React.useState,useRef:React.useRef,useEffect:React.useEffect,useMemo:(fn)=>fn(),SaisiesField,ChefsField,SentenceField:()=>null,CodexPicker:()=>null,LawModal:()=>null,Field:()=>{},formatHours:()=>'',serverCall:props.serverCall,
+  chefsPourServeur:c=>c,ajouterChef:(l,c)=>[...l,c],chefDepuisArticle:a=>a,cleArticle:()=>'',lireBrouillon:()=>null,ecrireBrouillon:()=>{},effacerBrouillon:()=>{},chefsDeLigne:()=>[],useCodex:()=>({codex:null,statut:'pret'}),useCatalogue:()=>({objets:null}),chefsFrequents:()=>[],DateRP:()=>null,ChefsChips:()=>null});
 vm.runInContext(formBundle.outputFiles[0].text,context);
 const PrisonForm=context.module.exports.PrisonForm;
 let submitCount=0, rejectSubmit;
-const formProps={token:'GARDE',data:{gardes:['Garde'],infractions:[]},onSubmit:()=>{submitCount++; return new Promise((resolve,reject)=>{rejectSubmit=reject;});}};
+const formProps={token:'GARDE',data:{gardes:['Garde']},codex:null,frequents:[],onSubmit:()=>{submitCount++; return new Promise((resolve,reject)=>{rejectSubmit=reject;});}};
 component=()=>PrisonForm(formProps); render();
+await tree.props.onSubmit(event('submit')); render(); assert.equal(submitCount,0,'Aucun chef : pas de soumission');
+nodes().find(n=>n.type===ChefsField).props.onChange([{libre:'Décision du Thane'}]); render();
 nodes().find(n=>n.type===SaisiesField).props.onPendingChange(true); render();
 await tree.props.onSubmit(event('submit')); render(); assert.equal(submitCount,0,'Brouillon non ajouté : pas de soumission');
 const field=nodes().find(n=>n.type===SaisiesField);

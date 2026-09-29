@@ -153,14 +153,31 @@ function preparerSaisiesPrison_(value) {
   return json;
 }
 
-function afficherSaisiesPrison_(value) {
-  const text = String(value || '');
+/*
+  Liste structurée d'une cellule Prison!J, ou `null` pour une saisie
+  historique en texte libre ou une cellule non reconnue. Le formulaire de
+  modification ne réédite que les listes structurées ; un texte historique
+  reste tel quel.
+*/
+function lireSaisiesPrisonStructurees_(value) {
+  const text = String(value || '').trim();
+  if (!text) return [];
   try {
     const items = JSON.parse(text);
     if (Array.isArray(items) && items.every(item => item && typeof item.id === 'string' &&
         typeof item.nom === 'string' && Number.isSafeInteger(item.quantite) && item.quantite > 0)) {
-      return items.map(item => `${item.nom} × ${item.quantite.toLocaleString('fr-FR')}${item.libre === true ? ' (saisie libre)' : ''}`).join('\n');
+      return items.map(item => item.libre === true
+        ? { id: '', nom: item.nom, quantite: item.quantite, libre: true }
+        : { id: item.id, nom: item.nom, quantite: item.quantite });
     }
-  } catch (_) { /* Texte historique : affichage inchangé. */ }
-  return text;
+  } catch (_) { /* Texte historique. */ }
+  return null;
+}
+
+function afficherSaisiesPrison_(value) {
+  const items = lireSaisiesPrisonStructurees_(value);
+  if (items) {
+    return items.map(item => `${item.nom} × ${item.quantite.toLocaleString('fr-FR')}${item.libre === true ? ' (saisie libre)' : ''}`).join('\n');
+  }
+  return String(value || '');
 }

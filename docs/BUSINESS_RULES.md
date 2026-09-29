@@ -68,8 +68,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
 - Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
 - Les décrets de la châtellerie sont promulgués et abrogés par dépôt et retrait d'un Google Doc dans le dossier Drive déclaré par `SYNC_CODEX_FOLDERS`. Le dossier fait autorité : la synchronisation suivante reflète son contenu exact. Un décret retiré cesse d'apparaître au Codex et d'être proposé dans les formulaires ; les amendes et incarcérations déjà enregistrées sous ce décret restent inchangées.
-- Un article de décret n'est proposé dans les formulaires Amendes ou Prison que s'il porte une sanction chiffrée. Les décrets purement réglementaires restent consultables sans encombrer les listes.
-- Le droit impérial est consultable mais n'alimente jamais les formulaires : la Garde sanctionne sur le fondement du droit de la châtellerie.
+- Depuis le 29 septembre 2026, tout article d'un décret ou d'un texte impérial peut fonder un chef d'accusation, qu'il chiffre ou non sa sanction (voir « Chefs d'accusation »). Les règles antérieures, qui réservaient les formulaires aux sources chiffrées du droit de la châtellerie, sont abrogées.
 - Le barème journalier est défini par grade dans `SoldesGrades`. Initialisation : Commander (alias Commandant) à 100 septims ; autres grades à l'ancienne base `Vue globale!L2` (50 à l'époque ; feuille archivée depuis, l'initialisation ayant eu lieu), sauf Recrue à 0 et Cadet à la moitié (25 actuellement). Le Hird reste à 0 quel que soit le tarif du grade.
 - Le grade `Aspirant-Garde` a été supprimé le 15 septembre 2026 et remplacé par `Cadet`, à tarif identique. Les lignes de Présences antérieures conservent l'ancien nom et leurs formules d'origine ; elles ne doivent pas être renommées. Une feuille `SoldesGrades` déjà créée garde sa ligne `Aspirant-Garde` : il faut y ajouter ou y renommer une ligne `Cadet`, sans quoi les Cadets sont facturés au tarif `Par défaut` au lieu de la moitié.
 - Les changements de barème s'appliquent à toute la semaine courante et aux suivantes, selon le grade enregistré dans Présences. Les semaines passées gardent leur tarif, même après régénération/réparation. Corriger un pointage historique utilise sa formule historique lorsqu'elle existe ; un montant saisi manuellement reste inchangé.
@@ -134,21 +133,61 @@ puis par corps ; l'argent, lui, vient d'un financeur par corps.
   justification ensuite, pour être lu ou remis au financeur.
 - GARDE n'a pas accès à cette page. INTENDANT la consulte sans pouvoir cocher.
 
-## Amendes
+## Chefs d'accusation (Amendes et Prison)
 
-- Les formulaires Amendes et Prison proposent les valeurs chiffrées identifiées
-  dans le texte de sanction avec leur contexte ; plusieurs valeurs nécessitent un
-  choix explicite. La saisie libre est disponible lorsque la sanction est
-  explicitement laissée à l’appréciation ou à la fixation de l’autorité.
-- Un mode « Motif personnalisé » permet aux GARDE et OFFICIER de saisir une
-  référence de décret/décision absente du Codex (1 à 1 000 caractères) et une
-  sanction positive : montant entier en septims ou durée en heures, fraction admise.
-- Les choix du Codex sont revalidés côté serveur. Une alerte de parsing ou une
-  peine non numérique n’autorise pas à elle seule la saisie libre. Les articles
-  sans valeur exploitable ni appréciation explicite ne sont plus proposés.
-- Les montants et durées enregistrés sont des instantanés conservés après une
-  modification du Codex. Les conditions de récidive et les autres conditions
-  restent appréciées par l’utilisateur à la lecture du texte affiché.
+Décisions du propriétaire du 29 septembre 2026, après la mise en place des
+quatre codes de Blancherive, qui ne chiffrent aucune peine.
+
+- Une amende ou une incarcération porte **un ou plusieurs chefs d'accusation**,
+  vingt au plus. Chaque chef est un article du Codex, identifié par sa source et
+  son numéro, ou une référence libre (décret, décision, ordre hors Codex, 1 à
+  1 000 caractères). Les deux se mêlent dans une même entrée.
+- **Tout le Codex est citable**, droit impérial et décrets compris : le Code
+  pénal local renvoie lui-même au droit impérial pour la qualification la plus
+  rigoureuse. Seuls les documents marqués `citable: false` dans le registre
+  (documentation de contexte) sont exclus, ainsi que les préambules. Un article
+  non citable reste lisible au Codex mais n'est ni proposé ni accepté.
+- Le titre, la qualification et le sigle de chaque chef sont **figés à
+  l'enregistrement**. Un article renommé ou un décret retiré ne modifie pas
+  les entrées existantes ; le registre affiche l'instantané avec la mention
+  « texte retiré » si l'article n'est plus au Codex.
+- **La sentence est à l'appréciation de l'autorité** : montant en septims
+  (entier strictement positif) ou durée de cachot en heures (fraction admise),
+  saisis librement. Le barème impérial par qualification (contravention
+  jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà) est rappelé à titre
+  indicatif, jamais imposé. Les montants ou durées que citent encore certains
+  articles sont proposés en raccourcis, sans contrainte.
+- **« À déterminer »** est un choix explicite, pour l'amende comme pour la
+  durée de cachot : l'entrée est inscrite sans montant ou sans durée, donc sans
+  sortie prévue, et la valeur est fixée ensuite par modification.
+- Le serveur revalide chaque chef contre le cache du Codex et refuse un article
+  inconnu, non citable ou cité deux fois ; le titre envoyé par le navigateur
+  n'est jamais pris pour argent comptant.
+- La recherche des chefs se fait dans le navigateur, sur le Codex complet gardé
+  en cache local avec sa version (même mécanisme que le catalogue des objets).
+  Le formulaire propose les chefs les plus enregistrés du registre, des filtres
+  par corpus et par qualification, la lecture de tout article en popup sans le
+  retenir, la navigation entre articles voisins et par renvoi (« article 76 »),
+  et un sélecteur « Parcourir le Codex » pour retenir depuis la bibliothèque.
+- Un formulaire de création garde un brouillon dans l'onglet du navigateur
+  jusqu'à l'enregistrement.
+
+## Modification d'une amende ou d'une incarcération
+
+- Réservée aux **OFFICIER**, comme la suppression. Tout ce que le formulaire de
+  création saisit se modifie : date, garde, contrevenant ou détenu, chefs
+  d'accusation, montant ou durée, et pour la Prison la cellule, l'entrée, les
+  saisies et les notes. La sortie prévue est recalculée.
+- Les cases Payé, Reversé et Libéré ne changent pas par ce chemin : elles
+  gardent leur commande dans le registre et leur règle de rôle.
+- La ligne n'est réécrite que si elle porte encore le garde et le contrevenant
+  (ou le détenu) que l'officier avait sous les yeux ; sinon le serveur refuse
+  et demande de recharger. Le numéro de ligne seul ne désigne pas une entrée.
+- Une entrée antérieure à cette version se modifie aussi ; ses chefs deviennent
+  structurés à l'enregistrement. Ses saisies en texte libre, que le formulaire
+  ne sait pas rééditer, restent intactes.
+
+## Amendes
 
 - GARDE et OFFICIER peuvent consulter / créer.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
@@ -242,4 +281,4 @@ garde à Fort-Dragon.
 - Les listes d'infractions d'Amendes / Prison sont dérivées du cache du Codex.
 - Les identités des gardes ne doivent pas être stockées dans `SyncCodex`.
 - Depuis le 27 septembre 2026, le droit de la châtellerie est constitué des quatre codes adoptés par la Cour de Blancherive (Loi fondamentale, Code pénal local, Code civil local, Code du commerce local). L'ancien Codex Judiciaire est caduc : il ne figure plus au Codex et ne fonde plus aucune sanction nouvelle. Les amendes et incarcérations enregistrées sous son empire restent inchangées.
-- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà). Tant qu'un article ne porte pas de montant ou de durée, il n'est pas proposé dans les formulaires ; la Garde sanctionne alors par motif personnalisé. Chiffrer les sanctions dans le texte, ou décider d'un barème par qualification, est une décision métier à prendre explicitement.
+- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà). Depuis le 29 septembre 2026, ses articles sont cités comme chefs d'accusation et la sentence est laissée à l'appréciation de l'autorité, le barème n'étant qu'un rappel. Chiffrer les sanctions dans le texte, ou imposer un barème par qualification dans l'application, reste une décision métier à prendre explicitement.

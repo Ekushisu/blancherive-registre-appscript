@@ -6,7 +6,9 @@ const seed = JSON.parse(readFileSync('src/CatalogueObjets.html', 'utf8'));
 const sheets = new Map();
 let reads = 0, writes = 0, seedReads = 0, held = false, failWrite = false, failFlush = false;
 class Sheet {
-  constructor(name, rows = []) { this.name = name; this.rows = rows; this.max = 1000; }
+  constructor(name, rows = [], colonnes = 26) { this.name = name; this.rows = rows; this.max = 1000; this.colonnes = colonnes; }
+  getMaxColumns() { return this.colonnes; }
+  insertColumnsAfter(after, count) { this.colonnes += count; }
   getLastRow() {
     let i = this.rows.length;
     while (i && !this.rows[i - 1]?.some(v => v !== '' && v !== undefined)) i--;
@@ -19,7 +21,9 @@ class Sheet {
     const sheet = this;
     const range = {
       getValues() { reads++; return Array.from({length:h}, (_,i) => Array.from({length:w}, (_,j) => sheet.rows[r+i-1]?.[c+j-1] ?? '')); },
-      getDisplayValues() { return this.getValues().map(row => row.map(String)); },
+      getDisplayValues() { return this.getValues().map(row => row.map(v => v instanceof Date ? v.toISOString() : String(v))); },
+      getDisplayValue() { return this.getDisplayValues()[0][0]; },
+      getDataValidation() { return null; }, setDataValidation() { return range; }, clearDataValidations() { return range; },
       setValues(values) {
         assert.equal(held, true, 'Écritures sous verrou');
         writes++;
@@ -44,17 +48,18 @@ const context = vm.createContext({ Date, console, SPREADSHEET_ID:'test',
   SpreadsheetApp: { openById() { reads++; return ss; }, flush() { if (failFlush) { failFlush = false; throw Error('Flush en échec'); } } },
   LockService: { getScriptLock: () => ({ waitLock() { assert.equal(held,false,'Pas de verrou imbriqué'); held = true; }, releaseLock() { held = false; } }) },
   HtmlService: { createHtmlOutputFromFile(name) { assert.equal(name,'CatalogueObjets'); seedReads++; return { getContent: () => JSON.stringify(seed) }; } },
-  Utilities: { formatDate: date => date.toISOString() }
+  Utilities: { formatDate: date => date.toISOString(), DigestAlgorithm: { MD5: 'md5' }, Charset: { UTF_8: 'utf8' }, computeDigest: () => [1, 2, 3], base64EncodeWebSafe: () => 'v' }
 });
-for (const f of ['Amendes.js','Objets.js','Prison.js']) vm.runInContext(readFileSync(`src/${f}`,'utf8'),context);
+for (const f of ['SyncCodex.js','Codex.js','Amendes.js','Objets.js','Prison.js']) vm.runInContext(readFileSync(`src/${f}`,'utf8'),context);
 const plain = x => JSON.parse(JSON.stringify(x));
 const search = q => plain(context.rechercherObjets('GARDE',q));
 const prison = new Sheet('Prison', [Array(11).fill('En-tête'), ['2026-09-01','Garde','Ancien','','Vol',1,'','','', 'Deux épées\nUne bourse', 'Note historique']]);
 sheets.set('Prison',prison);
 sheets.set('Données',new Sheet('Données',[Array(15).fill(''), [...Array(14).fill(''),'Garde ']]));
-sheets.set('SyncCodex',new Sheet('SyncCodex',[Array(15).fill(''), [...Array(13).fill(''),'Vol',2]]));
+sheets.set('SyncCodex',new Sheet('SyncCodex',[Array(25).fill(''), ['Code pénal local de Blancherive','34','Vol','délit','','','','','Texte','']]));
 assert.throws(() => context.rechercherObjets('intrus','epee'), /Accès refusé/);
 assert.throws(() => context.ajouterPrison('intrus',{saisies:[]}), /Accès refusé/);
+assert.throws(() => context.modifierPrison('GARDE',2,{saisies:[]}), /Accès refusé/);
 assert.equal(reads,0);
 assert.equal(search(' ép ').objets.length,0);
 assert.equal(reads,0,'Recherche trop courte sans accès Sheets');
@@ -94,7 +99,7 @@ assert.equal(context.afficherSaisiesPrison_('[ancien texte'),'[ancien texte');
 assert.equal(context.afficherSaisiesPrison_('[{"nom":"X"}]'),'[{"nom":"X"}]');
 assert.equal(context.afficherSaisiesPrison_('[]'),'');
 
-const data = {date:'2026-09-07',garde:'Garde',detenu:'Nouveau',cellule:'1',infraction:'Vol',entree:'2026-09-07T12:00',notes:'Test',saisies:[{id:gold.id,quantite:9000}]};
+const data = {date:'2026-09-07',garde:'Garde',detenu:'Nouveau',cellule:'1',chefs:[{source:'Code pénal local de Blancherive',article:'34'}],entree:'2026-09-07T12:00',notes:'Test',saisies:[{id:gold.id,quantite:9000}]};
 const before = JSON.stringify(prison.rows);
 const beforeWrites = writes;
 assert.throws(() => context.ajouterPrison('GARDE',{...data,saisies:[{id:'absent',quantite:1}]}), /n’existe plus/);
