@@ -156,7 +156,9 @@ quatre codes de Blancherive, qui ne chiffrent aucune peine.
   saisis librement. Le barème impérial par qualification (contravention
   jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà) est rappelé à titre
   indicatif, jamais imposé. Les montants ou durées que citent encore certains
-  articles sont proposés en raccourcis, sans contrainte.
+  articles sont proposés en raccourcis, sans contrainte. Depuis le 4 octobre
+  2026, le décret des peines propose en outre une peine par article (voir
+  « Décrets de peines et amendes ») ; elle reste une proposition.
 - **« À déterminer »** est un choix explicite, pour l'amende comme pour la
   durée de cachot : l'entrée est inscrite sans montant ou sans durée, donc sans
   sortie prévue, et la valeur est fixée ensuite par modification.
@@ -171,6 +173,110 @@ quatre codes de Blancherive, qui ne chiffrent aucune peine.
   et un sélecteur « Parcourir le Codex » pour retenir depuis la bibliothèque.
 - Un formulaire de création garde un brouillon dans l'onglet du navigateur
   jusqu'à l'enregistrement.
+
+## Décrets de peines et amendes
+
+Décision du propriétaire du 4 octobre 2026, sur l'avis du magistrat de
+Blancherive : les quatre codes de la châtellerie ne chiffrant aucune peine, la
+Garde se réfère aux fourchettes impériales du Corpus Juriscivilis pour les
+contraventions, délits et crimes. Le barème qui en découle, article par
+article, est tenu dans la feuille `PeinesAmendes` (voir DATA_MODEL). Il
+**propose** une peine ; la sentence reste à l'appréciation de l'autorité.
+
+- **Fourchettes impériales.** Contravention jusqu'à 500 septims (amende simple
+  ou travaux légers) ; délit de 500 à 2 500 (amende élevée ou travaux forcés) ;
+  crime au-delà de 2 500 (amende forte, emprisonnement ou peine de mort).
+- **Échelons.** Chaque article est rangé dans la fourchette de sa
+  qualification selon la gravité des faits. Valeurs à l'initialisation :
+
+  | Échelon | Amende | Cachot | Rachat noble |
+  |---|---|---|---|
+  | C1 · C2 · C3 · C4 | 50 · 150 · 300 · 500 | — | — |
+  | D1 · D2 | 500 · 750 | — | — |
+  | D3 | 1 000 | 30 min | 1 500 |
+  | D4 | 1 250 | 1 h | 2 250 |
+  | K1 | 3 000 | 1 h | 4 000 |
+  | K2 | 5 000 | 2 h | 7 000 |
+  | K3 | 8 000 | 4 h | 12 000 |
+  | K4 | 12 000 | 6 h | 18 000 |
+  | PM | peine maximale : mort ou bannissement définitif, saisie des biens | | |
+
+  Les délits sont resserrés au bas de leur fourchette, de 500 à 1 250 septims,
+  à la demande du propriétaire du 4 octobre 2026 : la première grille, de 750
+  à 2 250, était jugée trop sévère. Les crimes n'ont pas changé.
+
+  Le cachot ne vient qu'aux délits graves et aux crimes : la classification
+  impériale réserve l'emprisonnement aux crimes, et la juridiction peut le
+  prononcer « selon les circonstances et la gravité des faits ». La peine
+  maximale n'est prononcée que sur verdict public et motivé du magistrat
+  (Corpus Proceduralis, art. 11) et ne se chiffre pas.
+- **Portée.** Toutes les infractions qualifiées du Code pénal local, y compris
+  les doubles qualifications et les qualifications variables ; les infractions
+  du Code du commerce local (art. 10, 12, 13, 14) ; le Corpus Juriscivilis,
+  art. 1 à 17 — vol, violences, meurtre… que le code local laisse au droit
+  impérial et que les autorités locales peuvent juger (Corpus Proceduralis,
+  art. 1) ; les manquements nobiliaires (De Re Nobilitatis, art. 4) ; le port
+  et la fabrication irréguliers d'équipements Orsimer (décret, art. 4). Sans
+  barème : dispositions générales, mesures accessoires, Loi fondamentale, Code
+  civil, autres décrets ; la sentence y est laissée à l'appréciation.
+- **Renvois.** Codex Penitus (juridictions impériales exclusives), Justicia
+  Militaris (légionnaires en service), Decretum de Restitutione Bonorum
+  Imperii (juges impériaux), décret dwemer art. 5 (procès impérial à
+  Markarth), armes éthérées art. 2 : une ligne `Renvoi` dit la conduite à
+  tenir, sans peine locale.
+- **Niveaux.** Un article a plusieurs niveaux quand son texte en prévoit :
+  forme aggravée, requalification (« devient un délit si… »), qualification
+  variable (dénonciation calomnieuse selon l'infraction imputée, dissimulation
+  frauduleuse selon la valeur, mesure exceptionnelle selon l'acte qui la
+  proclame), peine maximale pour les crimes les plus graves. Vol et recel
+  (Corpus Juriscivilis, art. 6 et 7) : valeur jusqu'à 500 septims, de 500 à
+  2 500, au-delà ou objet sous licence ; la « valeur particulièrement élevée »
+  qui fait le crime est lue au seuil criminel de la classification impériale.
+- **Points laissés au magistrat**, signalés dans les observations du barème :
+  CPL art. 86 et 90, qualifiés de crime par leur titre et de délit par leur
+  corps (deux niveaux proposés) ; CPL art. 15-1 Trahison, non rédigé, donc
+  sans élément légal ; CCoL art. 13, qui renvoie à des articles du Code pénal
+  sans rapport avec la matière ; qualifications choisies par le barème pour
+  CCoL art. 10 et le décret Orsimer, que les textes ne qualifient pas ;
+  gradation de la lèse-majesté selon la personne visée, Cour ou Jarl.
+- **Plusieurs chefs.** Des faits distincts cumulent leurs peines. Un même fait
+  qualifié par plusieurs textes n'est puni que selon la qualification la plus
+  rigoureuse (Code pénal local, art. 3). Le formulaire propose le cumul et
+  bascule sur la qualification la plus rigoureuse d'un clic.
+- **Récidive** : peine encourue doublée. **Tentative et complicité** : punies
+  comme l'infraction consommée et comme son auteur (Corpus Proceduralis).
+- **Noblesse (De Re Nobilitatis).**
+  - Art. 8 : une contravention ou un délit isolé sur sept jours n'est pas
+    poursuivi contre un noble. Le formulaire le rappelle et cite les entrées
+    du même nom des sept jours précédents dans le registre ouvert.
+  - Art. 9 : une amende doit toujours lui être proposée, sauf crime de sang.
+    Le cachot se rachète par l'amende nobiliaire du niveau : 1 000 septims
+    l'heure à l'initialisation, sans dépasser 2 500 pour un délit. Crimes de
+    sang retenus : meurtre, assassinat, torture et mutilation, violences
+    aggravées (Corpus Juriscivilis, art. 8, 12, 13, 14).
+  - Art. 10 : pas de travaux forcés pour un noble.
+  - Art. 12 : emprisonnement, mise à mort et déchéance sur décision conjointe
+    avec le Jarl.
+  - Art. 4 : manquements aux devoirs de la noblesse, jusqu'à 5 000 septims
+    (1 000, 2 500 et 5 000 selon la gravité), avec remboursement et
+    bannissement.
+- **Formulaires Amendes et Prison.** Un bloc « Barème des peines » propose un
+  niveau par chef, la récidive, la noblesse et le mode de calcul. La
+  proposition remplit le montant (Amendes) ou la durée (Prison) tant que le
+  champ est vide ou porte encore la proposition précédente : une valeur
+  saisie par l'autorité n'est jamais écrasée, « Reprendre la proposition » la
+  rétablit, et « À déterminer » n'est jamais rempli automatiquement. La part
+  de la peine qui relève de l'autre registre est signalée (cachot dans le
+  formulaire d'amende, amende dans celui de la Prison). Ni le niveau retenu ni
+  la noblesse ne sont enregistrés : seuls le montant et la durée le sont.
+- **Lecture.** La popup d'un article porte son barème partout où elle
+  s'ouvre ; les cartes du Codex portent un résumé. La page « Décrets de peines
+  et amendes » est ouverte aux GARDE et OFFICIER, et à l'INTENDANT en lecture
+  comme le Codex (décision du propriétaire du 4 octobre 2026) ; l'officier y
+  voit en plus les lignes de la feuille à reprendre. Le visiteur public n'y a
+  pas accès, et le Codex public s'affiche sans barème.
+- **Modification** du barème : dans la feuille, par le propriétaire, sur avis
+  du magistrat. Aucune édition depuis l'application.
 
 ## Modification d'une amende ou d'une incarcération
 
@@ -281,4 +387,4 @@ garde à Fort-Dragon.
 - Les listes d'infractions d'Amendes / Prison sont dérivées du cache du Codex.
 - Les identités des gardes ne doivent pas être stockées dans `SyncCodex`.
 - Depuis le 27 septembre 2026, le droit de la châtellerie est constitué des quatre codes adoptés par la Cour de Blancherive (Loi fondamentale, Code pénal local, Code civil local, Code du commerce local). L'ancien Codex Judiciaire est caduc : il ne figure plus au Codex et ne fonde plus aucune sanction nouvelle. Les amendes et incarcérations enregistrées sous son empire restent inchangées.
-- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà). Depuis le 29 septembre 2026, ses articles sont cités comme chefs d'accusation et la sentence est laissée à l'appréciation de l'autorité, le barème n'étant qu'un rappel. Chiffrer les sanctions dans le texte, ou imposer un barème par qualification dans l'application, reste une décision métier à prendre explicitement.
+- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà). Depuis le 29 septembre 2026, ses articles sont cités comme chefs d'accusation et la sentence est laissée à l'appréciation de l'autorité, le barème n'étant qu'un rappel. Décision du 4 octobre 2026 : un barème article par article, dans ces fourchettes, est tenu dans la feuille `PeinesAmendes` et proposé par les formulaires sans être imposé (voir « Décrets de peines et amendes »). L'imposer côté serveur reste une décision métier à prendre explicitement.

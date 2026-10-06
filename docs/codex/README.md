@@ -30,6 +30,11 @@ Il n'y a donc ni puce ni artefact d'export dans ces quatre fichiers.
 
 ## Codes — table `SYNC_CODEX_DOCUMENTS`
 
+Les deux tables de ce fichier font aussi la correspondance fichier →
+document de `scripts/codex-local.mjs`, qui reconstitue le Codex des copies
+locales pour les tests et les aperçus : garder le format
+`| `fichier.txt` | `identifiant` | … |` et l'identifiant du registre.
+
 | Fichier | ID | État |
 |---|---|---|
 | `loi-fondamentale-blancherive.txt` | `1AMAMjFDZ8dUAaAZ6ySE76ulSoByqOIB20SbtNVGZmWE` | Nouveau le 27 septembre 2026, 27 articles, sans sanction |

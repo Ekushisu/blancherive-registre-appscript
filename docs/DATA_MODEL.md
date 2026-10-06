@@ -217,6 +217,47 @@ nombre. Une ligne invalide — coffre ou nom vide, quantité non entière ou nul
 bloque la page en nommant sa ligne physique, plutôt que d'être ignorée en
 silence.
 
+## PeinesAmendes
+
+Barème des sanctions article par article, créé le 4 octobre 2026. Feuille
+créée et initialisée par l'application à la première consultation
+(`getPeinesAmendes`) si elle manque, ou si elle existe entièrement vide ; le
+contenu initial est `PEINES_INITIALES` de `src/PeinesAmendes.js`. Une
+feuille remplie n'est jamais réécrite : elle se corrige dans Sheets, comme
+`SoldesGrades`. Des en-têtes différents arrêtent la lecture avec un message
+explicite. Une ligne par niveau de peine ; un article peut en avoir
+plusieurs (cas de base, forme aggravée, requalification, peine maximale).
+
+| Colonne | Contenu |
+|---|---|
+| A | Source — nom exact de la source au Codex (`SyncCodex!A`) |
+| B | Article — numéro au Codex (`SyncCodex!B`), texte brut ; `*` vise tous les articles de la source qui n'ont pas de ligne propre |
+| C | Intitulé — titre de l'article, pour la lecture de la feuille ; l'application affiche le titre du Codex quand elle le connaît |
+| D | Niveau — cas visé ; vide : « Cas de base ». Unique par source et article |
+| E | Qualification — `Contravention`, `Délit`, `Crime`, `Spéciale` (sanction chiffrée hors fourchette, De Re Nobilitatis art. 4) ou `Renvoi` (compétence d'une autre juridiction, sans peine locale) |
+| F | Échelon — `C1`-`C4`, `D1`-`D4`, `K1`-`K4`, `PM` (peine maximale, non chiffrée) ; repère de lecture et de contrôle |
+| G | Amende (septims) — entier strictement positif, ou vide |
+| H | Cachot (heures) — nombre strictement positif, fraction admise, un an au plus, ou vide |
+| I | Amende nobiliaire (septims) — amende proposée à un noble à la place du cachot (De Re Nobilitatis, art. 9) ; vide sans cachot ou pour un crime de sang |
+| J | Crime de sang — `oui` : aucune amende de substitution pour un noble |
+| K | Peines complémentaires — confiscation, restitution, remise en état… |
+| L | Observations — renvois, réserves, conditions du texte |
+
+Lecture par bloc de A:L. La version renvoyée au navigateur est une empreinte
+MD5 du bloc affiché. Une ligne vide est sautée. Une ligne illisible — source
+ou article vide, qualification inconnue, montant non entier, durée non
+numérique ou supérieure à un an, niveau en double — est écartée des
+propositions et signalée dans `anomalies` avec son numéro de ligne physique.
+Une ligne lisible mais douteuse est gardée et signalée : amende hors de la
+fourchette impériale de sa qualification, cachot pour une contravention,
+rachat nobiliaire manquant ou supérieur au plafond délictuel, rachat donné à
+un crime de sang, échelon incohérent avec la qualification, montants sur une
+ligne de renvoi (ignorés). La page affiche ces signalements aux OFFICIER, et
+ceux des articles que le Codex ne connaît plus.
+
+Aucune autre feuille ne référence celle-ci : Amendes et Prison gardent leur
+montant et leur durée saisis, sans trace du niveau retenu.
+
 ## SyncCodex
 
 Le snapshot courant documente encore les colonnes techniques :

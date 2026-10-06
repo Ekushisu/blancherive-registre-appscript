@@ -171,6 +171,30 @@ assert.deepEqual(Array.from(qualifies, a => [a.titre, a.classification]), [
 // Les codes impériaux gardent leur classification entre crochets.
 assert.equal(extract(['Article 61 — Nécromancie', 'Sanction — 500 septims. [Crime]'])[0].classification, 'Crime');
 
+/*
+  Le Corpus Juriscivilis qualifie dans son titre, entre crochets. La
+  qualification du titre l'emporte sur la requalification annoncée dans le
+  corps (« devient un délit si… ») : l'usurpation d'identité est une
+  contravention, pas un délit.
+*/
+const imperiaux = extract([
+  'Article 1 — Usurpation d\'identité [Contravention]',
+  'Le fait de se faire passer pour autrui.',
+  'Sanction : devient un délit si il s’agit d’une fonction officielle',
+  'Article 7 — Recel  [Délit]',
+  'Sanction : Devient un crime si l’objet a une valeur particulièrement élevée.',
+  'Article 8 — Circonstances aggravantes [Aggravation]',
+  'Les infractions des articles 5, 6 et 7 constituent un crime.',
+  'Article 9 — Note [voir annexe]',
+  'Texte.'
+]);
+assert.deepEqual(Array.from(imperiaux, a => [a.titre, a.classification]), [
+  ['Usurpation d\'identité', 'Contravention'],
+  ['Recel', 'Délit'],
+  ['Circonstances aggravantes', 'Circonstance aggravante'],
+  ['Note [voir annexe]', '']
+]);
+
 // Documents écartés : abandonnés, non partagés, ou documentation de contexte.
 [
   'Codex Procédural de Blancherive',

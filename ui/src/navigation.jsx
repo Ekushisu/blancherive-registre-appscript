@@ -7,6 +7,7 @@ const paths={
   presences:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5',
   paye:'M5 6c0-1.4 3.1-2.5 7-2.5S19 4.6 19 6s-3.1 2.5-7 2.5S5 7.4 5 6M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5',
   codex:'M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-2-1-6-2-10 1',
+  peines:'M12 3v17M8 20h8M5 7h14M12 3v4M2 14l3-7 3 7M2 14a3 3 0 0 0 6 0M16 14l3-7 3 7M16 14a3 3 0 0 0 6 0',
   amendes:'M6 3h12v18l-3-2-3 2-3-2-3 2V3M9 7h6M9 11h6M9 15h3',
   prison:'M4 21V5l8-3 8 3v16M2 21h20M8 8v13M12 8v13M16 8v13M4 12h16',
   inventaire:'M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10H3zM3 12h18M12 10v3M10 12h4v4h-4z',
@@ -18,21 +19,24 @@ export function RegistreIcon({name}) {return <svg viewBox="0 0 24 24" fill="none
 // Le rôle public ne consulte que le Codex ; le serveur refuse tout le reste.
 export const ROLE_PUBLIC="VISITEUR";
 const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",INTENDANT:"Intendant",[ROLE_PUBLIC]:"Visiteur"};
+// Libellés courts de la barre inférieure, où chaque entrée dispose de 45 px.
+const LIBELLES_MOBILES={organigramme:"Hiérarchie",peines:"Peines"};
 
 export function Header({role,page,onPage,onLogout}) {
   // VISITEUR ne consulte que le Codex. INTENDANT est un code remis hors de la
-  // garde — argentier, Thanes, cuisines — et n'a que l'effectif, la paye et
-  // l'inventaire, toujours sans droit d'écriture. L'inventaire des coffres est
-  // une affaire d'officiers et d'intendance : le GARDE ne le voit pas.
+  // garde — argentier, Thanes, cuisines — et n'a que l'effectif, la paye,
+  // l'inventaire, le Codex et les décrets de peines et amendes, toujours sans
+  // droit d'écriture. L'inventaire des coffres est une affaire d'officiers et
+  // d'intendance : le GARDE ne le voit pas.
   const pages=role===ROLE_PUBLIC
     ?[["codex","Codex"]]
     :role==="INTENDANT"
-    ?[["organigramme","Organigramme"],["paye","Paye"],["inventaire","Inventaire"]]
-    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["amendes","Amendes"],["prison","Prison"]];
+    ?[["organigramme","Organigramme"],["paye","Paye"],["inventaire","Inventaire"],["codex","Codex"],["peines","Peines et amendes"]]
+    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["peines","Peines et amendes"],["amendes","Amendes"],["prison","Prison"]];
   return <header className="topbar">
     <div className="brand"><span className="brand-seal"><img src={sceau} alt=""/></span><div><span className="brand-overline">Châtellerie de</span><strong>Blancherive</strong><span className="brand-caption">Registre de la Garde</span></div></div>
     <div className="nav-caption">Le registre</div>
-    <nav className="nav" aria-label="Navigation principale" style={{'--nav-count':pages.length}}>{pages.map(([key,label])=><button key={key} type="button" aria-label={label} aria-current={page===key?"page":undefined} className={page===key?"active":""} onClick={()=>{onPage(key);window.scrollTo(0,0);}}><RegistreIcon name={key}/><span className="nav-label-full">{label}</span><span className="nav-label-mobile">{key==="organigramme"?"Hiérarchie":label}</span></button>)}</nav>
+    <nav className="nav" aria-label="Navigation principale" style={{'--nav-count':pages.length}}>{pages.map(([key,label])=><button key={key} type="button" aria-label={label} aria-current={page===key?"page":undefined} className={page===key?"active":""} onClick={()=>{onPage(key);window.scrollTo(0,0);}}><RegistreIcon name={key}/><span className="nav-label-full">{label}</span><span className="nav-label-mobile">{LIBELLES_MOBILES[key]||label}</span></button>)}</nav>
     <div className="nav-footer"><a className="external-link" href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial <span aria-hidden="true">↗</span></a><div className="session-summary"><span className="role-badge"><span className="session-dot"/>{LIBELLES_ROLE[role]||"Garde"}</span><button className="logout" onClick={onLogout} aria-label={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"} title={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"}><RegistreIcon name="exit"/></button></div></div>
   </header>;
 }

@@ -21,8 +21,12 @@ export function QualificationChip({ classification }) {
   recherche propose les articles du Codex en mémoire, chaque choix devient un
   jeton avec sa lecture (ⓘ) et son retrait. Une référence libre (décret,
   décision) s'ajoute par la case dédiée et se mêle aux articles.
+
+  `resume` : le résumé de qualification par l'article. Les formulaires le
+  retirent quand le barème des peines est chargé : la qualification retenue
+  dépend alors du niveau choisi pour chaque chef, que le barème résume.
 */
-export function ChefsField({ codex, value, onChange, onOpenLaw, onParcourir, frequents = [], disabled, onPendingChange = () => {}, statut = 'pret' }) {
+export function ChefsField({ codex, value, onChange, onOpenLaw, onParcourir, frequents = [], disabled, onPendingChange = () => {}, statut = 'pret', resume = true }) {
   const [query, setQuery] = useState('');
   const [groupe, setGroupe] = useState('');
   const [qualif, setQualif] = useState('');
@@ -119,7 +123,7 @@ export function ChefsField({ codex, value, onChange, onOpenLaw, onParcourir, fre
           <button type="button" className="danger-button" disabled={disabled} aria-label={`Retirer ${referenceChef(chef)}`} onClick={() => onChange(retirerChef(value, chef))}>Retirer</button>
         </div>
       </li>; })}</ul> : <p className="saisie-help">Aucun chef d’accusation retenu.</p>}
-    <ResumeQualification chefs={value}/>
+    {resume && <ResumeQualification chefs={value}/>}
   </div>;
 }
 

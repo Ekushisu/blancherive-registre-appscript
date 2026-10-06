@@ -34,6 +34,7 @@ Avant toute modification, lire :
 - La page Inventaire n'est pas visible du rôle GARDE, ni en lecture ni en écriture. Ne pas ajouter `GARDE` aux listes de rôles de `Inventaire.js` sans décision métier explicite.
 - La page Paye est une vue de lecture sur les Présences : elle ne doit jamais écrire ailleurs que dans `Présences!O`, ni modifier un pointage.
 - Un corps de garde non rattaché à un financeur connu doit rester visible et compté dans la Paye. Ne jamais filtrer silencieusement une solde due.
+- Le barème des peines (`PeinesAmendes.js`, feuille `PeinesAmendes`) propose, il n'impose pas : `Amendes.js` et `Prison.js` ne le lisent pas et n'en vérifient rien. Ne pas en faire une contrainte serveur, ni l'écrire depuis l'application, sans décision métier explicite. `getPeinesAmendes` est réservé à GARDE, OFFICIER et INTENDANT : le barème n'est pas public.
 - Toute modification sensible doit être relue avec un `git diff` avant `clasp push`.
 
 ## Style

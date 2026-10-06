@@ -1,5 +1,29 @@
 # Journal de passation IA
 
+## 2026-10-04 — Décrets de peines et amendes
+
+- Demande du propriétaire, sur l'avis du magistrat : un barème article par
+  article dans les fourchettes impériales (contravention jusqu'à 500 septims,
+  délit de 500 à 2 500, crime au-delà), plusieurs niveaux par article,
+  noblesse comprise, proposé par les formulaires et consultable sur une page.
+- Serveur : `src/PeinesAmendes.js` — feuille `PeinesAmendes` créée et
+  initialisée à la première consultation (163 niveaux, 118 articles : Code
+  pénal local, Code du commerce local, Corpus Juriscivilis, De Re Nobilitatis
+  art. 4, décret Orsimer, renvois impériaux), `getPeinesAmendes` GARDE,
+  OFFICIER et INTENDANT, versionné, contrôle des lignes. Délits resserrés à
+  500 / 750 / 1 000 / 1 250 septims à la demande du propriétaire, crimes
+  inchangés. `getCodex` ouvert à
+  l'INTENDANT, qui reçoit aussi le Codex et la page des peines dans sa
+  navigation (lecture seule). `SyncCodex.js` : qualification
+  entre crochets des titres du Corpus Juriscivilis.
+- Interface : `ui/src/peines.js` (cache, propositions), `bareme.jsx`
+  (niveaux, popup, bloc des formulaires), `peines.jsx` (page),
+  `article.jsx` (popup d'article sortie d'`app.jsx`) ; navigation, Codex,
+  formulaires Amendes et Prison branchés.
+- Vérifications : `test-peines.mjs`, `test-peines-ui.mjs` (nouveaux),
+  `scripts/codex-local.mjs` ; trois suites adaptées ; 24 suites vertes ;
+  aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-09-29 — Chefs d'accusation, sentence libre, modification des entrées
 
 - Demande du propriétaire : les nouveaux codes n'ayant aucune peine chiffrée,

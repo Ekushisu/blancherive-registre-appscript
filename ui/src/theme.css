@@ -142,3 +142,67 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 .inventaire-vide{background:#f8efdc;border:1px dashed #c3aa7d;border-radius:3px;color:#87704a;font-family:Georgia,serif}
 @media(max-width:600px){.registry-table td[data-label="Objet"]{font-weight:700}.registry-table td .inventaire-quantite{grid-column:2}.inventaire-filtres select,.inventaire-filtres input,.inventaire-table select{font-size:16px;min-height:48px}}
 .chefs-filtre{background:#f5ecd8;color:#635032;border-color:#d2bd93}.chefs-filtre.active{background:#634526;border-color:#634526;color:#fff3d4}.chef-ref{background:#eee1c4;color:#69491f}.chefs-list li{background:#f4ead4;border-color:#d4bf97}.chef-lire{background:#f4ead3;border-color:#d9c499;color:#69491f}.chef-suggestion-main em{color:#786244}.chefs-resume{color:#6a583f;padding:12px 14px;background:#eee4cd;border-left:2px solid #b4945b;border-radius:2px}.law-renvoi{color:#72501f}.law-nav-position{color:#846634}.codex-picker{background:var(--surface);border:1px solid #b1955f;border-radius:6px}.codex-picker-actions{border-color:var(--line);background:#eee1c4}.codex-picker-count{color:#705533}.sentence-field .secondary-button.active{background:#634526;border-color:#634526;color:#fff3d4}.chef-qualif-crime{background:#efd3cd;border-color:#d9a99c;color:#7b2b2b}.chef-qualif-délit{background:#f2e2bd;border-color:#dcc48e;color:#6f4d12}.chef-qualif-contravention{background:#e3ead5;border-color:#c5d0ab;color:#3f5b34}
+
+/* Décrets de peines et amendes : barème, formulaires, page. */
+.law-bareme{background:#f3e9d2;border-color:#c9ae78;border-top:3px double #b08d50;border-radius:5px}
+.law-bareme h3{font-family:Georgia,serif;font-weight:400;font-size:19px;color:#5a3f20}
+.law-bareme-note,.bareme-observation{color:#73614e}
+.bareme-niveau{background:#fbf5e7;border-color:#dccaa3;border-left-color:#b49a68;border-radius:4px}
+.bareme-niveau-contravention{border-left-color:#7f9a5f}
+.bareme-niveau-délit{border-left-color:#c39a46}
+.bareme-niveau-crime{border-left-color:#a65a48}
+.bareme-niveau-valeurs dt{color:#7f6744}
+.bareme-niveau-valeurs dd{font-family:Georgia,serif;color:#4d3821}
+.bareme-complement{color:#5e472a}
+.bareme-sang{color:#7b2b2b}
+.bareme-muet{color:#8a7247}
+.law-chip-bareme{background:#efe1c0;border-color:#cfb685;color:#5e4220}
+.bareme-chefs>li{background:#f7eedb;border-color:#d4bf97;border-radius:4px}
+.field .bareme-option{background:#fffaf0;border-color:#d8c59f;border-radius:4px;color:var(--ink);font-size:13px;letter-spacing:0}
+.field .bareme-option:hover{border-color:#aa8954}
+.field .bareme-option.active{background:#f1e2c0;border-color:#9b722d;box-shadow:inset 3px 0 #9b722d}
+.field .bareme-option input{accent-color:#634526}
+.bareme-option-valeur{color:#4d3821}
+.bareme-chef-note,.bareme-note{color:#6a583f}
+.bareme-renvoi{color:#5c4a2d;background:#efe5cf;border-left:2px solid #b4945b;padding:8px 10px;border-radius:2px}
+.bareme-total{background:#eee4cd;border-left:2px solid #b4945b;border-radius:2px;color:#4d3821}
+.bareme-total strong{font-family:Georgia,serif;font-weight:400;font-size:20px;color:#583d21}
+.bareme-noble{background:#f2e6cc;border:1px solid #d6bf8f;border-radius:3px;color:#5e472a}
+.peines-fourchette{background:var(--surface);border:1px solid var(--line);border-top:3px solid #b49a68;border-radius:5px;box-shadow:var(--shadow);color:var(--ink)}
+.peines-fourchette:hover{background:#f6ecd6}
+.peines-fourchette-contravention{border-top-color:#7f9a5f}
+.peines-fourchette-délit{border-top-color:#c39a46}
+.peines-fourchette-crime{border-top-color:#a65a48}
+.peines-fourchette.actif{background:#654a2b;border-color:#654a2b;color:#fff1d1}
+.peines-fourchette-libelle{color:#906c30}
+.peines-fourchette.actif .peines-fourchette-libelle,.peines-fourchette.actif small,.peines-fourchette.actif .peines-fourchette-compte{color:#e3cfa4}
+.peines-fourchette strong{font-family:Georgia,serif;color:inherit}
+.peines-fourchette small{color:#73614e}
+.peines-fourchette-compte{color:#7e6742}
+.peines-principes{background:var(--surface);border:1px solid var(--line);border-radius:5px;box-shadow:var(--shadow)}
+.peines-principes summary{color:#5a3f20;font-family:Georgia,serif;font-weight:400;font-size:17px}
+.peines-principes h3{font-family:Georgia,serif;font-weight:400;font-size:18px;color:#594023}
+.peines-echelons th,.peines-echelons td{border-bottom-color:#e1d1b4}
+.peines-echelons thead th{color:#705733;background:#eee3c9;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.peines-echelons tbody th{color:#5a3f20}
+.peines-regles{color:#4f3e2b}
+.peines-note,.peines-ajustes{color:#7e6742}
+.peines-anomalies{background:#f9ece4;border:1px solid #dfb7a7;border-radius:4px;color:#7b3025}
+.peines-filtres input,.peines-filtres select{border:1px solid #c7b594;background:#fffaf0;color:var(--ink)}
+.peines-source-titre{font-family:Georgia,serif;color:#513820;border-bottom:3px double #c3a36d;padding-bottom:10px}
+.peines-source-titre small{font-family:'Segoe UI',sans-serif;color:#7e6742}
+.peines-table-wrap{border:1px solid var(--line);border-radius:5px;background:var(--surface);box-shadow:var(--shadow)}
+.peines-table thead th{background:#eee3c9;color:#705733;border-bottom:1px solid #c8b386}
+.peines-table tbody{border-top-color:#d5c29c}
+.peines-table tbody tr+tr td{border-top-color:#e2d4b6}
+.peines-table tbody:hover{background:#f6ecd6}
+.peines-article-cellule{background:#f6eedc}
+.peines-article-cellule .law-link{color:#72501f}
+.peines-article-titre{color:#4d3821}
+.peines-niveau{color:#4a3a26}
+.peines-complement{color:#5e472a}
+.peines-observation{color:#7e6742;font-style:italic}
+.peines-alerte{color:#8a3c2a}
+.peines-montant{font-family:Georgia,serif;font-size:15px;color:#583d21}
+.peines-vide{background:#f8efdc;border:1px dashed #c3aa7d;border-radius:3px;color:#87704a;font-family:Georgia,serif}
+@media(max-width:700px){.peines-table-wrap{border:0;background:transparent;box-shadow:none}.peines-table tbody{border-color:var(--line);background:var(--surface);box-shadow:var(--shadow)}.peines-table tbody th{border-bottom-color:#d5c29c}.peines-table tbody tr+tr{border-top-color:#e2d4b6}.peines-article-cellule{background:transparent}.peines-table td:before{color:#796244}}

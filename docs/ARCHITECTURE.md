@@ -84,6 +84,7 @@ Principaux modules :
   - alimentation du cache juridique `SyncCodex!A:J`, des métadonnées `R:Y` (source, famille, autorité, applicabilité, local, lien, sigle, citable) et des anciennes listes d'infractions `SyncCodex!L:O`, que l'application ne lit plus
   - choix de sanctions contextualisés en JSON dans M/O : n'alimentent plus que les suggestions de montant/durée du Codex et des formulaires, sans contrainte
   - `abregerSourceCodex_` : sigle d'une source (déclaré ou dérivé du nom)
+  - qualification du titre, entre parenthèses (« (délit) », codes de Blancherive) ou entre crochets (« [Contravention] », Corpus Juriscivilis) : `separerClassificationTitreCodex_` l'ôte du titre et en fait la classification
 
 - `Amendes.js`
   - registre des amendes : lecture A:H, ajout et modification (OFFICIER) sous verrou de script, montant libre ou vide (« À déterminer »)
@@ -107,6 +108,11 @@ Principaux modules :
   - le bloc `Inventaire!A:D` est relu et réécrit en entier sous verrou de script
   - les objets viennent du catalogue `Objets` par `lireCatalogueObjets_`, nom figé à l'entrée en stock comme dans `Prison!J`
 
+- `PeinesAmendes.js`
+  - feuille `PeinesAmendes` : barème des sanctions article par article (niveaux, qualification, échelon, amende, cachot, rachat nobiliaire, crime de sang), créée et initialisée depuis `PEINES_INITIALES` à la première consultation si elle manque ou est entièrement vide, jamais réécrite ensuite
+  - `getPeinesAmendes(token, versionConnue)` : GARDE, OFFICIER et INTENDANT, versionné par empreinte MD5 comme le Codex ; lignes illisibles écartées et signalées dans `anomalies` avec leur ligne physique, lignes hors fourchette gardées avec leurs `avertissements`
+  - le barème propose, il n'impose pas : `Amendes.js` et `Prison.js` ne lisent pas cette feuille
+
 ## Frontend
 
 Le source frontend est dans `ui/` :
@@ -115,6 +121,10 @@ Le source frontend est dans `ui/` :
 - `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
 - `ui/src/codex.js` : cache local du Codex (`localStorage` versionné, hook `useCodex`), recherche en mémoire des articles citables (`rechercherArticlesLocal`), helpers de chefs d'accusation (`ajouterChef`, `chefsPourServeur`, `chefsDeLigne`, `chefsFrequents`, `qualificationMax`) et résolution des libellés antérieurs ;
 - `ui/src/chefs.jsx` : champ à jetons des chefs d'accusation (`ChefsField`), champ de sentence libre ou à déterminer (`SentenceField`), résumé de qualification et jetons du registre (`ChefsChips`), communs aux formulaires Amendes/Prison ;
+- `ui/src/peines.js` : cache local du barème des peines (`localStorage` versionné, hook `usePeines`), niveaux d'un article (`niveauxArticle`, repli sur la ligne « * » de sa source), valeur d'un niveau pour un noble ou un récidiviste (`valeurNiveau`), proposition d'un formulaire (`propositionBareme` : cumul des faits distincts ou qualification la plus rigoureuse), grille des échelons, entrées d'une personne sur sept jours ;
+- `ui/src/bareme.jsx` : niveaux d'un article (`NiveauxBareme`, `BaremeArticle` dans la lecture d'un article), puce de résumé des cartes du Codex, bloc de proposition des formulaires Amendes et Prison (`PropositionBareme`) ;
+- `ui/src/peines.jsx` : page « Décrets de peines et amendes » ;
+- `ui/src/article.jsx` : lecture d'un article en popup (`LawModal`), commune au Codex, aux registres, aux formulaires et à la page des décrets, avec le barème de l'article ;
 - `ui/src/brouillon.js` : brouillon `sessionStorage` des formulaires de création Amendes/Prison, effacé à l'enregistrement ;
 - `ui/src/styles.css` : styles ;
 - `ui/src/theme.css` : thème parchemin/sépia et adaptations mobiles, chargé après les styles structurels ;
@@ -130,6 +140,8 @@ Le source frontend est dans `ui/` :
 - `ui/index.template.html` : squelette HTML Apps Script.
 
 Les aperçus de `docs/apercus/` se régénèrent par `npm run apercus`. `scripts/capture-apercus.mjs` sert le `src/Index.html` compilé sur un serveur HTTP local, remplace `google.script.run` par un stub alimenté par `scripts/apercus-donnees.mjs`, puis capture les pages avec Microsoft Edge via `playwright-core`. Le navigateur du système est utilisé tel quel : aucun téléchargement de navigateur, et `playwright-core` reste une `devDependency` absente du bundle Apps Script.
+
+`scripts/codex-local.mjs` reconstitue le Codex depuis les copies locales de `docs/codex/`, avec l'extraction réelle de `SyncCodex.js` et la lecture réelle de `Codex.js` ; la correspondance fichier → document vient de la table de `docs/codex/README.md`. `test-peines.mjs` y vérifie que chaque article du barème existe, et les aperçus du barème y lisent les vrais titres.
 
 `src/Index.html` est l'artefact frontend généré par `npm run build` et ne doit pas être modifié à la main. Le build prépare aussi `src/CatalogueObjets.html`, une ressource JSON serveur initialisant Objets, et `docs/catalogue-objets/Objets.csv` depuis l'extraction locale. Le catalogue n'est jamais incorporé au frontend.
 
@@ -150,8 +162,10 @@ Pages :
 - Amendes
 - Prison
 - Inventaire (OFFICIER et INTENDANT ; écriture réservée aux OFFICIER ; invisible pour GARDE)
+- Peines et amendes (GARDE, OFFICIER et INTENDANT, lecture ; le barème se corrige dans Sheets)
 
-Le rôle INTENDANT ne se voit proposer que l'Organigramme, la Paye et l'Inventaire. La
+Le rôle INTENDANT ne se voit proposer que l'Organigramme, la Paye, l'Inventaire, le Codex
+et les Décrets de peines et amendes, tous en lecture. La
 navigation, le routage de `App` et les contrôles serveur portent chacun cette
 restriction : aucun des trois ne suffit seul.
 
@@ -201,6 +215,13 @@ et, déclaré dans `Objets.js`, `lireSaisiesPrisonStructurees_`.
   ne sont plus lues par l'application, mais encore régénérées une version ;
 - `abregerSourceCodex_` (`SyncCodex.js`) pour le sigle d'une source ;
 - `Données!O2:O` pour la liste des gardes actifs.
+
+`PeinesAmendes.js` utilise `nettoyerSaisieUtilisateur` (`Amendes.js`) et
+`cleArticleCodex_` (`Codex.js`) : une ligne du barème désigne un article par
+la même clé source + numéro qu'un chef d'accusation. Côté navigateur, le
+barème est chargé une fois (`usePeines`) et partagé par les pages Codex,
+Amendes, Prison et Peines et amendes, comme le Codex ; le visiteur public ne
+le reçoit pas.
 
 `Codex.js` dérive ses métadonnées du registre `SYNC_CODEX_DOCUMENTS` de `SyncCodex.js`, et les construit à l'exécution afin de ne pas dépendre de l'ordre de chargement Apps Script. Ajouter un texte juridique ne demande donc qu'une entrée dans ce registre, avec au besoin son sigle `abrege` et `citable: false` pour un document de contexte.
 

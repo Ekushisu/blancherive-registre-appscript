@@ -77,6 +77,9 @@ assert.equal(id('chef-recherche').props.value, '', 'Recherche effacée après aj
 assert.equal(pending, false);
 assert.ok(text(tree).includes('contravention'), 'Résumé de qualification');
 assert.ok(text(tree).includes('500 septims'));
+props.resume = false; render();
+assert.ok(!text(tree).includes('Qualification la plus grave'), 'Résumé retiré quand le barème le remplace');
+delete props.resume; render();
 
 // Un seul résultat : Entrée le retient directement.
 edit('refus'); assert.equal(options().length, 1);

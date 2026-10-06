@@ -158,10 +158,12 @@ function getCodex(token, versionConnue) {
   /*
     Seule fonction ouverte au rôle public. Voir l'avertissement en tête
     d'`Auth.js` avant d'ajouter `ROLE_PUBLIC` à une autre liste de rôles.
+    L'INTENDANT consulte aussi le droit, en lecture comme le reste de ses
+    pages (décision du propriétaire du 4 octobre 2026).
   */
   requireRole(
     token,
-    [ROLE_PUBLIC, "GARDE", "OFFICIER"]
+    [ROLE_PUBLIC, "GARDE", "OFFICIER", "INTENDANT"]
   );
 
   const ss =

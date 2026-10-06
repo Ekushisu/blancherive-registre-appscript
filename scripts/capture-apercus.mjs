@@ -37,6 +37,7 @@ const reponses = {
   getAmendes: () => donnees.amendes,
   getAmendeFormData: () => donnees.amendeForm,
   getCodex: () => donnees.codex,
+  getPeinesAmendes: () => donnees.peines,
   getOrganigramme: () => donnees.organigramme,
   getEffectifs: () => donnees.effectifs
 };
@@ -172,6 +173,64 @@ const apercus = {
     nav: "Codex",
     attendre: ".codex-list",
     largeurs: [390, 1440]
+  },
+  // Décrets de peines et amendes, limités au Corpus Juriscivilis : la page
+  // entière, quelque 160 niveaux, donnerait une capture démesurée. Ces aperçus
+  // lisent le Codex reconstitué depuis les textes, pour les vrais titres.
+  peines: {
+    nav: "Peines et amendes",
+    attendre: ".peines-table",
+    largeurs: [390, 1440],
+    reponses: { getCodex: () => donnees.codexComplet },
+    async preparer(page) {
+      await page.selectOption("#peines-source", "Corpus Juriscivilis Imperialis");
+      await page.waitForFunction(() => document.querySelectorAll(".peines-source").length === 1);
+    }
+  },
+  // Mode d'emploi déplié : les échelons tels que la feuille les applique,
+  // les règles de cumul et de récidive, la noblesse.
+  "peines-principes": {
+    nav: "Peines et amendes",
+    attendre: ".peines-table",
+    largeurs: [1440],
+    reponses: { getCodex: () => donnees.codexComplet },
+    async preparer(page) {
+      await page.locator(".peines-principes summary").click();
+      await page.locator("#peines-recherche").fill("harcèlement");
+      await page.waitForFunction(() => document.querySelectorAll(".peines-article").length === 1);
+    }
+  },
+  // Lecture d'un article avec son barème, la même popup que dans le Codex et
+  // les registres.
+  "peines-article": {
+    nav: "Peines et amendes",
+    attendre: ".peines-table",
+    largeurs: [1440],
+    reponses: { getCodex: () => donnees.codexComplet },
+    async preparer(page) {
+      await page.locator("#peines-recherche").fill("cpl 21");
+      await page.locator(".peines-article-cellule .law-link").first().click();
+      await page.waitForSelector(".law-bareme");
+    }
+  },
+  // Formulaire d'amende : deux chefs, la requalification en crime retenue
+  // pour le premier, proposition cumulée reportée dans le montant.
+  "amendes-bareme": {
+    nav: "Amendes",
+    attendre: ".registry-table",
+    largeurs: [390, 1440],
+    reponses: { getCodex: () => donnees.codexComplet },
+    async preparer(page) {
+      await page.getByRole("button", { name: "+ Nouvelle amende" }).click();
+      await page.waitForSelector(".chefs-field");
+      for (const recherche of ["harcèlement moral", "cpl 16"]) {
+        await page.locator("#chef-recherche").fill(recherche);
+        await page.locator("#chef-option-0").click();
+      }
+      await page.waitForSelector(".bareme-chefs");
+      await page.locator(".bareme-option").nth(1).click();
+      await page.waitForFunction(() => document.querySelector("#sentence-valeur")?.value === "3150");
+    }
   }
 };
 
@@ -275,6 +334,9 @@ try {
       await page.getByRole("button", { name: apercu.nav, exact: true }).click();
       await page.waitForSelector(apercu.attendre, { timeout: 15000 });
       if (apercu.preparer) await apercu.preparer(page);
+      // Une saisie fait défiler la page ; les éléments fixes (barre latérale,
+      // lien d'évitement) seraient alors peints décalés dans la capture pleine page.
+      await page.evaluate(() => window.scrollTo(0, 0));
       // Laisse les images en data URL se peindre avant la capture.
       await page.waitForLoadState("networkidle");
 

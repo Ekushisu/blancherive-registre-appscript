@@ -10,6 +10,8 @@
 
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
+import { createHash } from "node:crypto";
+import { codexLocal } from "./codex-local.mjs";
 
 // Présences!A porte le lundi ISO ; les numéros ci-dessous ne servent qu'à
 // la lisibilité des lignes d'aperçu.
@@ -163,6 +165,40 @@ function construirePaye() {
 }
 
 export const paye = construirePaye();
+
+// Le barème des peines est celui que `src/PeinesAmendes.js` écrit à la création
+// de la feuille, relu par sa propre lecture : l'aperçu montre le vrai barème.
+function construirePeines() {
+  const lignes = [];
+  const feuille = {
+    getLastRow: () => lignes.length,
+    getMaxColumns: () => 12,
+    getRange(r, c, h = 1, w = 1) {
+      const valeurs = () => Array.from({ length: h }, (_, i) => Array.from({ length: w }, (_, j) => lignes[r + i - 1]?.[c + j - 1] ?? ""));
+      return { getValues: valeurs, getDisplayValues: () => valeurs().map(l => l.map(String)) };
+    }
+  };
+  const contexte = vm.createContext({
+    Utilities: {
+      DigestAlgorithm: { MD5: "md5" }, Charset: { UTF_8: "utf8" },
+      computeDigest: (algo, texte) => Array.from(createHash(algo).update(texte, "utf8").digest()),
+      base64EncodeWebSafe: octets => Buffer.from(octets).toString("base64url")
+    }
+  });
+  for (const fichier of ["SyncCodex.js", "Codex.js", "Amendes.js", "PeinesAmendes.js"]) {
+    vm.runInContext(readFileSync(new URL(`../src/${fichier}`, import.meta.url), "utf8"), contexte);
+  }
+  lignes.push(Array.from(vm.runInContext("PEINES_HEADERS", contexte)), ...Array.from(contexte.construireBaremeInitial_(), l => Array.from(l)));
+  return JSON.parse(JSON.stringify(contexte.lirePeinesAmendes_(feuille)));
+}
+
+export const peines = construirePeines();
+
+// Codex reconstitué depuis les copies locales des textes (`codex-local.mjs`),
+// pour les aperçus qui citent de vrais articles : barème, formulaire d'amende.
+// Le Codex de démonstration plus bas reste celui de la page Codex, dont la
+// capture pleine page deviendrait démesurée avec quelque 450 articles.
+export const codexComplet = codexLocal();
 
 export const prison = {
   rows: [

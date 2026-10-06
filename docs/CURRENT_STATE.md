@@ -2,6 +2,76 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Décrets de peines et amendes (4 octobre 2026)
+
+- Demande du propriétaire, sur l'avis du magistrat de Blancherive : les quatre
+  codes ne chiffrant aucune peine, se référer aux fourchettes impériales pour
+  fixer, article par article, une amende et une durée de cachot, en plusieurs
+  niveaux s'il le faut, noblesse comprise ; les présenter dans les formulaires
+  et dans une nouvelle page « Décrets de peines et amendes ».
+- **Feuille `PeinesAmendes`** (DATA_MODEL), créée et initialisée par
+  l'application à la première consultation : 163 niveaux pour 118 articles —
+  toutes les infractions qualifiées du Code pénal local, quatre articles du
+  Code du commerce local, les art. 1 à 17 du Corpus Juriscivilis, l'art. 4 du
+  De Re Nobilitatis et du décret Orsimer, et cinq renvois (Codex Penitus,
+  Justicia Militaris, Decretum de Restitutione, décrets dwemer et armes
+  éthérées). Échelons, cumul, récidive et noblesse : BUSINESS_RULES. Le
+  barème propose et n'impose rien ; il se corrige dans Sheets.
+- **Serveur** : `src/PeinesAmendes.js`, `getPeinesAmendes(token,
+  versionConnue)` (GARDE, OFFICIER, INTENDANT), versionné comme le Codex ; lignes
+  illisibles écartées et signalées, lignes hors fourchette gardées avec un
+  avertissement. `Amendes.js` et `Prison.js` inchangés.
+- **Correctif d'extraction** (`SyncCodex.js`) : la qualification entre
+  crochets des titres du Corpus Juriscivilis (« [Contravention] ») restait dans
+  le titre, et le corps décidait à sa place — l'usurpation d'identité passait
+  pour un délit, le vol pour un crime, les violences sans qualification. Elle
+  devient la classification, comme « (délit) » pour les codes de Blancherive.
+  Les titres impériaux perdent leur crochet à la prochaine synchronisation ;
+  les entrées déjà enregistrées gardent leur instantané.
+- **INTENDANT** : décision du propriétaire, même jour — l'intendance consulte
+  aussi le Codex et les décrets de peines, en lecture. `getCodex` et
+  `getPeinesAmendes` acceptent son rôle ; sa navigation passe de trois à cinq
+  pages ; la route du Codex désigne désormais ses rôles au lieu d'exclure
+  l'INTENDANT. Toujours aucune écriture, ni Présences, Amendes, Prison ou
+  Effectifs.
+- **Délits resserrés** : décision du propriétaire, même jour, le barème étant
+  jugé sévère — les échelons de délit passent de 750 / 1 250 / 1 750 / 2 250 à
+  500 / 750 / 1 000 / 1 250 septims, cachots inchangés (30 min pour D3, 1 h
+  pour D4), rachat nobiliaire recalculé (1 500 et 2 250). Crimes et
+  contraventions inchangés. Le changement porte sur le barème initial : une
+  feuille `PeinesAmendes` déjà créée garde ses valeurs ; vidée entièrement,
+  elle est réinitialisée avec la nouvelle grille à la consultation suivante.
+- **Interface** : page « Peines et amendes » (navigation GARDE, OFFICIER et INTENDANT,
+  libellé « Peines » sur mobile) — fourchettes cliquables, mode d'emploi
+  replié (échelons tels que la feuille les applique, règles, noblesse),
+  recherche, filtres, tableau par source devenant des fiches sur téléphone,
+  contrôle de la feuille pour l'officier. Barème dans la popup d'article
+  (déplacée dans `ui/src/article.jsx`), résumé sur les cartes du Codex, bloc
+  « Barème des peines » dans les formulaires Amendes et Prison : niveau par
+  chef, récidive, noble, cumul ou qualification la plus rigoureuse,
+  pré-remplissage sans jamais écraser une saisie, fait isolé sur sept jours
+  pour un noble avec les entrées récentes du registre. Le résumé de
+  qualification par article des chefs n'est plus affiché quand le barème est
+  chargé : il contredisait le niveau retenu.
+- **Vérifications** : `node scripts/test-peines.mjs` (rôles, feuille,
+  contrôles ; chaque article du barème existe dans les copies locales des
+  textes, chaque infraction qualifiée a son barème, chaque montant tient dans
+  sa fourchette) et `test-peines-ui.mjs`, nouveaux ; `scripts/codex-local.mjs`
+  reconstitue le Codex des copies locales avec l'extraction réelle ;
+  `test-sync-codex`, `test-chefs-ui` et `test-saisies-ui` adaptés. Les 24
+  suites sont vertes, `npm run build` passe. Tous les aperçus régénérés (la
+  navigation a une entrée de plus) ; nouveaux : `peines`, `peines-principes`,
+  `peines-article`, `amendes-bareme`. Le harnais remet la page en haut avant
+  chaque capture : les éléments fixes y étaient peints décalés après une
+  saisie. Aucun push, aucun déploiement, aucune synchronisation du Codex.
+
+**Mise en service, dans l'ordre** : relire le `git diff`, `npm run push`,
+publier le déploiement à la main ; ouvrir une fois la page « Peines et
+amendes » (ou un formulaire) pour créer la feuille ; relancer
+`synchroniserCodex()` pour le correctif des qualifications impériales ;
+soumettre au magistrat les points laissés à son appréciation (BUSINESS_RULES,
+« Décrets de peines et amendes »).
+
 ### Chefs d'accusation, sentence libre et modification des entrées (29 septembre 2026)
 
 - Constat du propriétaire : les quatre codes de Blancherive ne chiffrent
@@ -651,6 +721,15 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 
 Un décalage a été signalé visuellement / métier entre Effectifs et la liste des Présences.
 Aucune correction ne doit être faite avant d'identifier précisément le cas et la règle métier souhaitée.
+
+### 2. Caractères corrompus dans `ui/src/theme.css`
+
+Relevé le 4 octobre 2026, non corrigé : quelques chaînes du fichier ont été
+enregistrées en double encodage UTF-8. Visible : le losange décoratif sous
+chaque titre de page s'affiche « â—† » et l'aide de défilement mobile des
+Présences « Faites dÃ©filer… ». Moins visible : le sélecteur
+`td[data-label="DÃ©tenu"]` ne correspond à aucune cellule, et le nom du
+détenu n'est pas mis en gras dans les fiches mobiles de la Prison.
 
 ## Performance
 

@@ -76,7 +76,8 @@ const syncRows = [Array(25).fill('en-tête'),
 syncRows[5] = syncRows[5].map((v, i) => i >= 17 ? doc(CONTEXTE, 'Documentation', '', 'non')[i] : v);
 sheets.set('SyncCodex', new Sheet(syncRows, 25));
 
-assert.throws(() => ctx.getCodex('INTENDANT'), /Accès refusé/);
+assert.throws(() => ctx.getCodex('intrus'), /Accès refusé/);
+assert.ok(plain(ctx.getCodex('INTENDANT')).articles.length, 'L’intendance consulte le Codex');
 const codex = plain(ctx.getCodex('VISITEUR'));
 assert.ok(codex.version.length > 10, 'Version calculée');
 assert.equal(codex.articles.length, 5);

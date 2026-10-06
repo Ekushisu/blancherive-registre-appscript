@@ -782,16 +782,22 @@ function finaliserArticleCodex_(article, config) {
   elle encombrerait les libellés `Art. N — Titre` des formulaires. Une
   parenthèse qui n'est pas une qualification connue, « (article 76) » par
   exemple, reste dans le titre.
+
+  Le Corpus Juriscivilis écrit la sienne entre crochets : « Article 1 —
+  Usurpation d'identité [Contravention] ». Sans ce cas, le crochet restait
+  dans le titre et la qualification était devinée dans le corps, où la
+  requalification (« devient un délit si… ») l'emportait : l'usurpation
+  d'identité passait pour un délit et le vol pour un crime.
 */
 function separerClassificationTitreCodex_(titre) {
   const texte = String(titre || "").trim();
-  const match = texte.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+  const match = texte.match(/^(.*?)\s*(?:\(([^()]+)\)|\[([^\[\]]+)\])\s*$/);
 
   if (!match) {
     return { titre: texte, classification: "" };
   }
 
-  const classification = normaliserClassificationCodex_(match[2]);
+  const classification = normaliserClassificationCodex_(match[2] || match[3]);
 
   if (!classification) {
     return { titre: texte, classification: "" };
@@ -825,7 +831,8 @@ function normaliserClassificationCodex_(valeur) {
     "variable": "Qualification variable",
     "disposition générale": "Disposition générale",
     "dispositions générales": "Disposition générale",
-    "mesure accessoire": "Mesure accessoire"
+    "mesure accessoire": "Mesure accessoire",
+    "aggravation": "Circonstance aggravante"
   };
 
   return table[brut] || "";

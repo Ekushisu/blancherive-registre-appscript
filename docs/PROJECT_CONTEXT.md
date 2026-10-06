@@ -10,6 +10,7 @@ Elle sert de registre opérationnel pour :
 - les présences et soldes ;
 - la paye : ce qu'il reste à demander, et à quel financeur ;
 - le Codex juridique ;
+- les décrets de peines et amendes : le barème des sanctions article par article ;
 - les amendes ;
 - la prison ;
 - l'inventaire des coffres de Fort-Dragon : quels objets, en quelle quantité, dans quel coffre.
@@ -30,6 +31,7 @@ Feuilles métier connues :
 - `Objets`
 - `Coffres`
 - `Inventaire`
+- `PeinesAmendes`
 
 ## Principes
 

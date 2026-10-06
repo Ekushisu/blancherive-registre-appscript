@@ -750,3 +750,100 @@
 @media(max-width:600px){.chefs-list li{flex-direction:column;align-items:stretch}.chef-token-actions{justify-content:flex-end}.codex-picker-body{padding:10px}.registry-table td .registry-actions{grid-column:2}}
 .saisie-suggestions .chef-ref{display:inline-block}
 .saisie-suggestions .law-chip{display:inline-flex;margin-right:6px}
+
+/* --- Décrets de peines et amendes : barème d'un article, formulaires, page --- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.law-bareme{margin-top:20px;padding:16px 18px;border:1px solid #ddd;border-radius:8px}
+.law-bareme h3{margin:0 0 12px;font-size:15px}
+.law-bareme-note{margin:12px 0 0;font-size:12px;line-height:1.6}
+.bareme-niveaux{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.bareme-niveau{border:1px solid #e3e3e3;border-left:3px solid #999;border-radius:6px;padding:10px 12px;background:#fff}
+.bareme-niveau-cas{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;line-height:1.45}
+.bareme-niveau-cas strong{font-weight:600}
+.bareme-niveau-valeurs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 0}
+.bareme-niveau-valeurs div{min-width:0}
+.bareme-niveau-valeurs dt{font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+.bareme-niveau-valeurs dd{margin:2px 0 0;font-size:14px;overflow-wrap:anywhere}
+.bareme-complement,.bareme-observation{margin:8px 0 0;font-size:12px;line-height:1.55}
+.bareme-complement span{font-weight:600}
+.law-chip-bareme{white-space:normal}
+.bareme-proposition h3{font-size:15px;margin:4px 0 12px}
+.bareme-chefs{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.bareme-chefs>li{border:1px solid #ddd;border-radius:7px;padding:10px 12px}
+.bareme-chef-titre{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;font-weight:600;line-height:1.45}
+.bareme-choix{display:grid;gap:6px;margin-top:8px}
+/* `.field .bareme-option` : plus spécifique que `.field label` et `.field input` des formulaires. */
+.field .bareme-option{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 10px;margin:0;padding:8px 10px;border:1px solid #ddd;border-radius:6px;cursor:pointer;line-height:1.45;font-weight:400}
+.field .bareme-option input{width:18px;height:18px;min-height:18px;margin:0;padding:0;border:0;background:none}
+.bareme-option-cas{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}
+.bareme-option-valeur{font-weight:600;font-size:13px;white-space:nowrap;text-align:right}
+.bareme-chef-note,.bareme-renvoi,.bareme-note{margin:8px 0 0;font-size:12px;line-height:1.55}
+.bareme-reglages{display:flex;flex-wrap:wrap;gap:0 22px;margin-top:6px}
+.field .bareme-reglages .saisie-free-toggle{margin:4px 0}
+.bareme-mode{margin:4px 0 10px}
+.bareme-total{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;border-radius:6px;font-size:14px}
+.bareme-total strong{font-size:16px}
+.bareme-noble{margin-top:12px;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.6}
+.bareme-noble ul{margin:6px 0 0;padding-left:18px}
+.peines-fourchettes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.peines-fourchette{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:16px 18px;border-radius:6px;cursor:pointer;min-height:44px}
+.peines-fourchette-libelle{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.peines-fourchette strong{font-size:19px;font-weight:400;line-height:1.3}
+.peines-fourchette small{font-size:12px;line-height:1.5}
+.peines-fourchette-compte{margin-top:6px;font-size:12px;font-weight:600}
+.peines-principes,.peines-anomalies{margin-bottom:18px;border-radius:6px}
+.peines-principes summary,.peines-anomalies summary{cursor:pointer;padding:14px 18px;font-weight:600;min-height:44px;line-height:1.5}
+.peines-principes-corps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;padding:0 18px 18px}
+.peines-principes h3{font-size:15px;margin:14px 0 10px}
+.peines-echelons-wrap{overflow-x:auto}
+.peines-echelons{width:100%;border-collapse:collapse;font-size:13px}
+.peines-echelons th,.peines-echelons td{padding:7px 8px;text-align:left;border-bottom:1px solid #e5e5e5}
+.peines-regles{margin:0;padding-left:18px;font-size:13px;line-height:1.6;display:grid;gap:6px}
+.peines-note{font-size:12px;line-height:1.6;margin:10px 0 0}
+.peines-anomalies ul{margin:0;padding:0 18px 0 36px;font-size:13px;line-height:1.6;display:grid;gap:4px}
+.peines-anomalies p{margin:10px 18px 16px;font-size:12px}
+.peines-filtres{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,300px) minmax(150px,220px) auto;gap:12px;align-items:center;margin-bottom:10px}
+.peines-filtres input,.peines-filtres select{width:100%;min-height:46px;border-radius:4px;padding:10px 12px;font-size:14px}
+.peines-source{margin:22px 0 28px}
+.peines-source-titre{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin:0 0 12px;font-size:22px;font-weight:400}
+.peines-source-titre small{font-size:12px;margin-left:auto}
+.peines-table-wrap{border-radius:6px;overflow:hidden}
+.peines-table{width:100%;border-collapse:collapse}
+.peines-table thead th{text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:12px}
+.peines-table td,.peines-table tbody th{padding:10px 12px;vertical-align:top;font-size:13px;line-height:1.5;text-align:left}
+.peines-table tbody{border-top:1px solid #ddd}
+.peines-table tbody tr+tr td{border-top:1px dashed #e5e5e5}
+.peines-article-cellule{width:26%;font-weight:400}
+.peines-article-cellule .law-link{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:0;background:transparent;padding:0;cursor:pointer;font:inherit;min-height:44px}
+.peines-article-titre{font-family:Georgia,serif;font-size:16px;line-height:1.35}
+.peines-table td[data-label="Niveau"]{width:34%}
+.peines-niveau{display:block;font-weight:600}
+.peines-complement,.peines-observation,.peines-alerte{display:block;margin-top:4px;font-size:12px;line-height:1.5}
+.peines-montant{white-space:nowrap}
+.peines-table .chef-qualif{white-space:nowrap}
+.peines-vide{padding:24px;text-align:center}
+@media(max-width:1000px){.peines-principes-corps{grid-template-columns:minmax(0,1fr)}.peines-filtres{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.peines-filtres input{grid-column:1/-1}}
+@media(max-width:700px){
+  .peines-filtres{grid-template-columns:minmax(0,1fr)}
+  .peines-filtres input,.peines-filtres select{font-size:16px;min-height:48px}
+  .peines-table-wrap{overflow:visible}
+  .peines-table,.peines-table tbody,.peines-table td,.peines-table tbody th{display:block;width:auto}
+  .peines-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .peines-table tbody{margin-bottom:12px;border:1px solid #ddd;border-radius:5px;padding:2px 12px 6px}
+  .peines-table tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:10px;padding:8px 0}
+  .peines-table tbody th{grid-column:1/-1;padding:8px 0 10px;border-bottom:1px solid #ddd}
+  .peines-table tbody tr+tr td{border-top:0}
+  .peines-table tbody tr+tr{border-top:1px dashed #e5e5e5}
+  .peines-table td{padding:4px 0;border:0}
+  .peines-table td[data-label="Niveau"],.peines-table td[data-label="Qualification"]{grid-column:1/-1;width:auto}
+  .peines-montant{white-space:normal}
+  .peines-table td[data-label="Amende"]:before,.peines-table td[data-label="Cachot"]:before,.peines-table td[data-label="Rachat noble"]:before{content:attr(data-label);display:block;font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:600}
+  .field .bareme-option{grid-template-columns:auto minmax(0,1fr)}
+  .peines-fourchettes{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .peines-fourchette{padding:10px 8px;gap:2px}
+  .peines-fourchette-libelle{font-size:9px;letter-spacing:.04em}
+  .peines-fourchette strong{font-size:14px}
+  .peines-fourchette small{display:none}
+  .peines-fourchette-compte{margin-top:4px;font-size:11px}
+  .bareme-option-valeur{grid-column:2;text-align:left;white-space:normal}
+}

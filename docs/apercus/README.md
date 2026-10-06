@@ -48,7 +48,7 @@ Générées par le script, donc rejouables à l’identique :
 - `paye-filtre-1440.png` : un seul financeur retenu — le total en tête suit le
   filtre et porte son nom.
 - `paye-intendant-1440.png` : la même page vue par un INTENDANT — navigation
-  réduite à deux entrées, aucune case à cocher.
+  réduite à ses cinq pages de lecture, aucune case à cocher.
 
 La table `apercus` et les données de démonstration sont communes : les captures
 Présences et Paye décrivent le même registre, donc les impayés repérés semaine
@@ -59,7 +59,25 @@ par semaine sont exactement ceux que la Paye regroupe par financeur.
   objet » déplié, tableau des stocks avec boutons + / −, coffre déroulant et
   retrait.
 - `inventaire-intendant-1440.png` : la même page vue par un INTENDANT —
-  navigation à trois entrées, aucune commande.
+  navigation à cinq entrées, aucune commande.
+- `peines-1440.png`, `peines-390.png` : décrets de peines et amendes, filtrés sur
+  le Corpus Juriscivilis — fourchettes, niveaux, rachat nobiliaire, crimes de
+  sang, peine maximale ; fiches sur téléphone.
+- `peines-principes-1440.png` : le mode d'emploi déplié — échelons, règles,
+  noblesse.
+- `peines-article-1440.png` : lecture d'un article avec son barème, la popup
+  commune au Codex et aux registres.
+- `amendes-bareme-1440.png`, `amendes-bareme-390.png` : formulaire d'amende,
+  deux chefs, requalification en crime retenue, proposition cumulée reportée
+  dans le montant.
+
+Les aperçus du barème lisent le vrai barème initial (`src/PeinesAmendes.js`
+exécuté dans un contexte `vm`) et un Codex reconstitué depuis les copies
+locales des textes (`scripts/codex-local.mjs`), pour afficher les vrais
+titres. La page Codex garde son petit Codex de démonstration : avec ses
+quelque 450 articles, la capture pleine page serait démesurée. Le harnais
+ramène la page en haut avant chaque capture : après une saisie, les éléments
+fixes (barre latérale, lien d'évitement) étaient peints décalés.
 
 ## Captures antérieures
 

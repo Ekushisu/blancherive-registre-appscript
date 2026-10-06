@@ -70,6 +70,7 @@ Règles connues :
 - Organigramme
 - Présences en lecture seule
 - Codex
+- Décrets de peines et amendes, en lecture
 - Amendes (création et statut `Payé`)
 - Prison
 
@@ -94,11 +95,14 @@ Règles connues :
   cour tirent l'effectif à nourrir ;
 - page Paye en lecture seule ;
 - page Inventaire en lecture seule : l'intendance de la cour doit savoir ce que
-  la garde possède, sans pouvoir le modifier.
+  la garde possède, sans pouvoir le modifier ;
+- Codex et décrets de peines et amendes en lecture, depuis le 4 octobre 2026
+  (décision du propriétaire) : `getCodex` et `getPeinesAmendes` acceptent son
+  rôle.
 
-Aucune autre page ne lui est accessible, ni Présences, ni Codex, ni Amendes,
-ni Prison, ni Effectifs. À la différence de `VISITEUR`, `INTENDANT` s'obtient
-par un mot de passe et n'ouvre aucune fonction au public. La navigation ne lui propose que ses trois pages, et
+Aucune autre page ne lui est accessible, ni Présences, ni Amendes, ni Prison,
+ni Effectifs. À la différence de `VISITEUR`, `INTENDANT` s'obtient
+par un mot de passe et n'ouvre aucune fonction au public. La navigation ne lui propose que ses cinq pages, et
 chaque API refuse son rôle côté serveur.
 
 Un contrôle uniquement côté React n'est jamais suffisant.
@@ -121,9 +125,22 @@ ouverture du classeur, au même titre que `supprimerAmende` et
 officier. Les deux exigent en outre l'identité affichée de la ligne (`attendu`)
 et refusent d'écrire si elle a changé.
 
-`getCodex` reste la seule fonction ouverte au rôle public ; son paramètre
+`getCodex` reste la seule fonction ouverte au rôle public ; elle autorise
+`VISITEUR`, `GARDE`, `OFFICIER` et `INTENDANT`, et son paramètre
 `versionConnue` ne change pas sa liste de rôles. Les formulaires Amendes et
 Prison lisent le Codex par cette fonction, avec un jeton de service.
+
+## Décrets de peines et amendes
+
+`getPeinesAmendes` autorise `GARDE` et `OFFICIER`, qui sanctionnent, et
+`INTENDANT`, qui consulte, avant toute ouverture du classeur. `VISITEUR` est
+refusé. Il
+n'existe aucune fonction d'écriture du barème : la feuille `PeinesAmendes`
+se corrige dans Sheets. Le Codex public (`getCodex`, seule fonction ouverte
+au visiteur) ne transporte pas le barème ; la lecture d'un article s'y
+affiche sans lui. Le navigateur ne demande pas le barème pour le visiteur,
+mais seul `requireRole()` le protège. `scripts/test-peines.mjs` vérifie que
+chaque refus précède toute lecture Sheets.
 
 ## Paye
 
