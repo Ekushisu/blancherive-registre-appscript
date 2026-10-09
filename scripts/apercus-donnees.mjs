@@ -16,9 +16,22 @@ import { codexLocal } from "./codex-local.mjs";
 // Présences!A porte le lundi ISO ; les numéros ci-dessous ne servent qu'à
 // la lisibilité des lignes d'aperçu.
 const LUNDI_COURANT = "2026-09-07";
-const LUNDIS = { 34: "2026-08-17", 37: "2026-09-07" };
+const LUNDIS = { 34: "2026-08-17", 35: "2026-08-24", 36: "2026-08-31", 37: "2026-09-07" };
 
 const jours = motif => motif.split("").map(c => c === "x");
+
+// Alias des grades de l'Inquisition, tels que `Données!C` les porte
+// (`lireAliasGrades_`, src/AliasGrades.js) : renvoyés par toutes les lectures
+// qui affichent un grade.
+const ALIAS_GRADES = {
+  Inquisition: {
+    Capitaine: "Grand Inquisiteur",
+    "Lieutenant-Chef": "La Plume",
+    "Sergent-Chef": "Enquêteur",
+    "Caporal-Chef": "Traqueur",
+    Garde: "Inquisiteur"
+  }
+};
 
 function presence(row, semaine, corps, prenom, nom, grade, motif, solde, paye) {
   const j = jours(motif);
@@ -50,6 +63,7 @@ const lignesPresences = [
   presence(23, 37, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", ".xxxx..", 320, false),
   presence(26, 37, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xxx....", 150, false),
   presence(28, 37, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, false),
+  presence(29, 37, "Inquisition", "Ragnhild", "Fer-Juste", "Capitaine", "xxxx...", 320, false),
 
   presence(31, 36, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxxxx", 700, true),
   presence(32, 36, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xxxxx..", 400, false),
@@ -58,6 +72,7 @@ const lignesPresences = [
   presence(35, 36, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxxx.x.", 400, false),
   presence(36, 36, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xx.....", 100, false),
   presence(37, 36, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxxx.", 480, false),
+  presence(38, 36, "Inquisition", "Ragnhild", "Fer-Juste", "Capitaine", "xxxxx..", 400, false),
 
   presence(41, 35, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxxx...", 200, false),
   presence(42, 35, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxx....", 240, false),
@@ -80,7 +95,8 @@ function totauxParCorps(lignes) {
 export const presences = {
   lundiCourant: LUNDI_COURANT,
   rows: lignesPresences,
-  corpsTotals: totauxParCorps(lignesPresences)
+  corpsTotals: totauxParCorps(lignesPresences),
+  aliasGrades: ALIAS_GRADES
 };
 
 const impayesPasses = lignesPresences.filter(
@@ -100,6 +116,7 @@ export const presenceDashboard = {
   pastUnpaidCount: impayesPasses.length,
   pastUnpaidAmount: somme(impayesPasses),
   currentWeekRecoveredFines: 850,
+  aliasGrades: ALIAS_GRADES,
   inactive: [
     {
       nomComplet: "Halvar Sans-Nom",
@@ -160,6 +177,7 @@ function construirePaye() {
   contexte.lundiCourantPresence_ = () => LUNDI_COURANT;
   contexte.estCorpsExcluDesPresences_ = corps =>
     String(corps).toLowerCase().includes("hird");
+  contexte.lireAliasGrades_ = () => ALIAS_GRADES;
 
   return JSON.parse(JSON.stringify(contexte.getPaye("OFFICIER")));
 }
@@ -585,16 +603,38 @@ export const organigramme = {
       key: "faubourgs",
       nom: "Garde des Faubourgs",
       membres: [membre("Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs")]
+    },
+    // Le serveur renvoie toujours les sept corps, même vides : l'aperçu
+    // doit montrer la grille à cette densité.
+    {
+      key: "cap-granite",
+      nom: "Cap Granite",
+      membres: [membre("Ulf", "Œil-Clair", "Garde", "Cap Granite")]
+    },
+    {
+      key: "eclaireurs",
+      nom: "Éclaireurs",
+      membres: [membre("Runa", "Chante-Lame", "Garde", "Éclaireur")]
+    },
+    {
+      key: "inquisition",
+      nom: "Garde inquisitoriale",
+      membres: [
+        membre("Ragnhild", "Fer-Juste", "Capitaine", "Inquisition"),
+        membre("Ivar", "Œil-Sombre", "Garde", "Inquisition")
+      ]
     }
   ],
-  reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")]
+  reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")],
+  aliasGrades: ALIAS_GRADES
 };
 
 /*
   Effectifs : la forme suit `getEffectifs()` de `src/Effectifs.js`.
-  Les six corps sont représentés, afin que la bande d'onglets soit aussi chargée
+  Sept corps sont représentés, afin que la bande d'onglets soit aussi chargée
   qu'en production — c'est à cette densité que les défauts d'affichage mobile
-  apparaissent, pas avec deux corps.
+  apparaissent, pas avec deux corps. « Inquisition » est le libellé de la
+  feuille ; l'interface affiche « Garde inquisitoriale ».
 */
 const CORPS = [
   "Cité de Blancherive",
@@ -602,6 +642,7 @@ const CORPS = [
   "Garnison de Bois-de-Chêne",
   "Garde des Faubourgs",
   "Éclaireur",
+  "Inquisition",
   "Hird du Jarl"
 ];
 
@@ -629,6 +670,7 @@ const membreEffectif = (id, prenom, nom, grade, corps, options = {}) => ({
 export const effectifs = {
   gradeOrder: GRADES,
   changes: { events: [] },
+  aliasGrades: ALIAS_GRADES,
   options: {
     grades: GRADES,
     corps: CORPS,
@@ -650,7 +692,9 @@ export const effectifs = {
     membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs"),
     membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse" }),
     membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "Hird du Jarl"),
-    membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true })
+    membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true }),
+    membreEffectif(15, "Ragnhild", "Fer-Juste", "Capitaine", "Inquisition"),
+    membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Inquisition")
   ]
 };
 

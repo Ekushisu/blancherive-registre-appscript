@@ -1,5 +1,79 @@
 # Journal de passation IA
 
+## 2026-10-08 — « Garde inquisitoriale »
+
+- Demande du propriétaire : « Brigade des Inquisiteurs » devient « Garde
+  inquisitoriale » (minuscule à l'adjectif, usage français). Affichage
+  seulement, la feuille garde « Inquisition ».
+- `ui/src/corps.js`, `ORGANIGRAMME_GARNISONS` (libellé et nom reconnu),
+  jeton Paye `inquisitorial` à la place de `inquisiteur` ; tests, données
+  d'aperçu et documentation vivante mis à jour, entrées datées antérieures
+  laissées telles quelles avec renvoi. 25 suites vertes, build, aperçus
+  régénérés. Aucun push ni déploiement.
+
+## 2026-10-08 — Alias des grades de l'Inquisition
+
+- Demande du propriétaire : la feuille `Données` porte une nouvelle colonne
+  « Alias Inquisition » (C). Un membre de l'Inquisition voit son grade sous
+  l'alias, le grade régulier à défaut d'alias ; les données restent sur les
+  grades réguliers, mis en équivalence.
+- Serveur : `src/AliasGrades.js` (`lireAliasGrades_`, `gradeAffiche_`),
+  colonne repérée par l'en-tête « Alias <corps> ». Table `aliasGrades` ajoutée
+  aux réponses de `getEffectifs`, `getOrganigramme`, `getPresences`,
+  `getPresenceOfficerDashboard` et `getPaye` ; collecteurs des Amendes nommés
+  par l'alias.
+- Interface : `libelleGrade` dans `ui/src/corps.js`, appliqué aux Effectifs
+  (titres, formulaires, recherche), à l'Organigramme, aux Présences, à la
+  synthèse officier, à la Paye et à son récapitulatif, au panneau des
+  changements (`ChangesProvider` reçoit `aliasGrades`). `GradeInfo` accepte
+  un `libelle` pour son nom accessible. Options de formulaire : libellé alias,
+  valeur grade régulier.
+- Vérifications : `test-alias-grades.mjs` nouveau, cinq suites adaptées, 25
+  suites vertes, build, rendu contrôlé dans Edge, aperçus Organigramme,
+  Effectifs, Présences et Paye régénérés (Ivar Œil-Sombre, Garde de
+  l'Inquisition, ajouté aux Effectifs d'aperçu). Aucun push ni déploiement.
+
+## 2026-10-08 — Décret d'application pluriel de Blancherive au Codex
+
+- Demande du propriétaire : ajouter au Codex le décret d'application pluriel
+  (`1NKKFL-TfTDhhDj8vRsJtJm4-9V9kBoYCCHTqHiv66XY`). Aucun doublon dans le
+  registre, ni par identifiant ni par sujet : le décret applique le Code du
+  commerce local, il ne le remplace pas.
+- `SYNC_CODEX_DOCUMENTS` (`SyncCodex.js`) : entrée après les quatre codes,
+  « Décret d'application pluriel de Blancherive », Jarl de Blancherive, local,
+  garde, `sanctions: false` (les montants sont des redevances).
+- Copie locale reconstituée depuis `DOCS_modelChunk` (export en 401) ; tableau
+  de `docs/codex/README.md` complété, ce qui l'inclut dans `codex-local.mjs`.
+  Extraction simulée : préambule, articles 1 à 16 et 5-1.
+- `test-sync-codex.mjs` : le droit local compte désormais cinq textes. 24
+  suites vertes. Aucun push, aucun déploiement, aucune synchronisation du
+  Codex.
+
+## 2026-10-07 — Brigade des Inquisiteurs ; Faubourgs payés par l'argentier
+
+- Demande du propriétaire : nouveau corps, écrit « Inquisition » dans la
+  feuille (liste des corps, `Données!G10`) et affiché « Brigade des
+  Inquisiteurs » dans l'application ; il répond directement à l'État-Major,
+  sous un Capitaine, payé par l'argentier de la cour, reversement des amendes
+  selon la règle commune. Même jour : les Faubourgs passent du Thane à
+  l'argentier.
+- Serveur : `ORGANIGRAMME_GARNISONS` (`Organigramme.js`), sans quoi les membres
+  du corps n'apparaissaient nulle part dans l'organigramme ;
+  `PAYE_FINANCEURS` (`Paye.js`), entrée `thane-faubourgs` retirée.
+  `Amendes.js` inchangé.
+- Interface : `ui/src/corps.js` (`libelleCorps`), appliqué à l'affichage des
+  pages Effectifs, Organigramme, Présences, Paye et au panneau des changements ;
+  les valeurs envoyées au serveur restent celles de la feuille. Groupes
+  d'Effectifs et sections de semaine triés par nom affiché. Grille de
+  l'organigramme à sept colonnes à partir de 1401 px, marges resserrées ;
+  disposition en arbre jusqu'à 1400 px (au lieu de 1250).
+- Vérifications : `test-organigramme.mjs` (nouvelle garnison, accord des noms
+  affichés serveur / interface), `test-paye.mjs` (rattachements) ; 24 suites
+  vertes ; contrôle ponctuel de débordement des cartes de 1300 à 1920 px ;
+  aperçus Organigramme, Effectifs, Présences et Paye régénérés. Données
+  d'aperçu : semaines 35 et 36 ajoutées à `LUNDIS`, leurs lignes étaient
+  jusque-là sans lundi. Aucun push ni déploiement.
+
 ## 2026-10-04 — Décrets de peines et amendes
 
 - Demande du propriétaire, sur l'avis du magistrat : un barème article par

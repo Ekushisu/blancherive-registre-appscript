@@ -2,6 +2,129 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### « Garde inquisitoriale » remplace « Brigade des Inquisiteurs » (8 octobre 2026)
+
+- Demande du propriétaire : le corps « Inquisition » s'affiche désormais
+  **« Garde inquisitoriale »**, adjectif en minuscule selon l'usage français
+  des noms d'institution (« Garde républicaine », « Légion impériale »). La
+  feuille garde « Inquisition » ; rien n'y est réécrit.
+- `ui/src/corps.js` et `ORGANIGRAMME_GARNISONS` portent le nouveau nom ;
+  l'ancien quitte les libellés reconnus de l'Organigramme. Paye : le jeton
+  `inquisiteur` devient `inquisitorial`, pour que le nom affiché, s'il était un
+  jour écrit dans la feuille, reste rattaché à l'argentier. Aucun libellé de la
+  feuille ne portait l'ancien nom affiché : la liste `Données!G` valide la
+  colonne Corps.
+- Vérifications : suites adaptées, 25 vertes ; `npm run build` ; aperçus
+  Organigramme, Effectifs, Présences et Paye régénérés. Aucun push ni
+  déploiement.
+
+### Grades de l'Inquisition affichés sous leur alias (8 octobre 2026)
+
+- Le propriétaire a ajouté à `Données` une colonne « Alias Inquisition » (C) :
+  Capitaine → Grand Inquisiteur, Lieutenant-Chef → La Plume, Sergent-Chef →
+  Enquêteur, Caporal-Chef → Traqueur, Garde → Inquisiteur. Décision : un
+  membre de l'Inquisition voit son grade sous l'alias, ou sous le grade
+  régulier s'il n'y en a pas ; les données gardent le grade régulier, dont
+  l'alias est l'équivalent.
+- **Serveur** : nouveau `src/AliasGrades.js`. `lireAliasGrades_` repère les
+  colonnes par leur en-tête « Alias <corps> », pas par leur position, et
+  renvoie `{ Inquisition: { Capitaine: "Grand Inquisiteur", … } }` ; la table
+  accompagne `getEffectifs`, `getOrganigramme`, `getPresences`,
+  `getPresenceOfficerDashboard` et `getPaye` (deux lectures de `Données` de
+  plus par appel). `gradeAffiche_` nomme les collecteurs des Amendes
+  (« Inquisiteur Ragnhild Fer-Juste »), `Données` n'étant lue que s'il existe
+  un collecteur actif. Aucune écriture, aucune colonne déplacée.
+- **Interface** : `libelleGrade` (`ui/src/corps.js`) dans les titres de grade
+  et les listes de grade des formulaires d'Effectifs (alias selon le corps
+  choisi, valeur envoyée inchangée), la recherche d'Effectifs, l'Organigramme
+  (« Grand Inquisiteur » de la Garde inquisitoriale, même vacant ; groupes de grade et
+  Réserve), les Présences, les gardes à surveiller, la Paye et son
+  récapitulatif, le panneau des changements. Les descriptions de grade (ⓘ)
+  restent celles du grade régulier.
+- **Vérifications** : `scripts/test-alias-grades.mjs` (nouveau : lecture de
+  `Données`, cas limites, parité serveur / navigateur, collecteurs) ;
+  `test-organigramme`, `test-paye`, `test-presence-finances`,
+  `test-changes-ui` étendus, `test-presences-lundi` adapté ; 25 suites vertes ;
+  `npm run build` ; rendu contrôlé dans Edge sur les données d'aperçu
+  (Organigramme, Effectifs et ses formulaires, Présences, Paye et
+  récapitulatif copié, panneau des changements), sans erreur JavaScript ;
+  aperçus Organigramme, Effectifs, Présences et Paye régénérés. Aucun push ni
+  déploiement.
+
+**Mise en service** : relire le `git diff`, `npm run push` (le nouveau fichier
+`AliasGrades.js` part avec les autres), publier le déploiement à la main.
+L'en-tête « Alias Inquisition » de `Données!C1` doit rester tel quel : sans
+lui, l'application affiche les grades réguliers.
+
+### Décret d'application pluriel de Blancherive (8 octobre 2026)
+
+- Nouveau texte au Codex, fourni par le propriétaire :
+  `1NKKFL-TfTDhhDj8vRsJtJm4-9V9kBoYCCHTqHiv66XY`, décret du Jarl pris pour
+  l'application du Code du commerce local. Il fixe les redevances, les taxes sur
+  le chiffre d'affaires, les catégories et les quantités autorisées pour les
+  concessions permanentes, les étals et les commerces itinérants. Il contient
+  16 articles plus un article 5-1. Ce n'est pas un doublon : il complète le Code
+  du commerce sans le remplacer.
+- Registre : famille « Droit de Blancherive », autorité « Jarl de
+  Blancherive », `local` et `garde` (un garde peut délivrer l'autorisation de
+  commerce itinérant, art. 9), sigle dérivé `Décr. APB`, citable.
+  `sanctions: false` : le décret ne fixe aucune peine et renvoie aux codes. Ses
+  septims sont des redevances, que l'analyseur lit comme des montants
+  d'amende.
+- Limite connue de l'analyseur, déjà visible sur le décret sur le régime
+  fiscal (art. 8 et 11) : les articles 7 et 10 affichent au Codex une pastille
+  « 75 septims » et « 50 septims ». Ces montants ne sont pas proposés comme
+  amende dans les chefs d'accusation.
+- Partage identique à celui des codes de Blancherive : l'export texte répond
+  401. Copie locale `docs/codex/decret-application-pluriel-blancherive.txt`
+  reconstituée depuis la page de lecture.
+- Vérifications : `test-sync-codex.mjs` adapté (droit local), 24 suites vertes.
+  Aucun push ni déploiement.
+
+**Après publication, relancer `synchroniserCodex()`** pour que le décret
+apparaisse au Codex.
+
+### Brigade des Inquisiteurs ; Faubourgs payés par l'argentier (7 octobre 2026)
+
+- Décision du propriétaire : nouveau corps, inscrit **« Inquisition »** dans la
+  liste des corps de `Données` (G10) et affiché **« Brigade des Inquisiteurs »**
+  dans l'application *(« Garde inquisitoriale » depuis le 8 octobre 2026, voir
+  plus haut)*. Il répond directement à l'État-Major, comme la Cité, les
+  Faubourgs, Cap Granite et les Éclaireurs, sous un Capitaine. Payé par
+  l'argentier de la cour ; reversement des amendes selon la règle commune (ses
+  collecteurs, puis ceux de l'État-Major).
+- Même jour : la **garnison des Faubourgs** est désormais payée par l'argentier
+  de la cour, et non plus par un Thane. Son reversement des amendes ne change
+  pas.
+- **Organigramme** : garnison `inquisition` ajoutée à `ORGANIGRAMME_GARNISONS`.
+  Un corps absent de cette liste ne figure nulle part dans l'organigramme,
+  ses membres actifs compris : tout nouveau corps doit y être déclaré.
+- **Paye** : jetons `faubourg`, `inquisition`, `inquisiteur` rattachés à
+  l'argentier ; le financeur « Thane des Faubourgs » disparaît. La coupure
+  centrale / locale de la Paye ne coïncide plus avec celle du reversement des
+  amendes.
+- **Nom affiché** : `ui/src/corps.js` (`libelleCorps`) remplace « Inquisition »
+  par « Brigade des Inquisiteurs » à l'affichage — onglets, groupes, fiches et
+  listes d'Effectifs, organigramme, sections et filtre des Présences, Paye et
+  son récapitulatif, panneau des changements. Les valeurs écrites et envoyées
+  au serveur restent celles de la feuille. Les recherches trouvent les deux
+  noms.
+- **Grille de l'organigramme** : sept colonnes à partir de 1401 px (deux pour
+  le commandement commun, cinq corps directs), marges intérieures resserrées
+  et titres de corps à 16 px ; en dessous, disposition en arbre sur deux
+  colonnes, désormais jusqu'à 1400 px au lieu de 1250. Contrôlé sans
+  débordement de 1300 à 1920 px avec dix grades par corps.
+- Vérifications : `test-organigramme.mjs` et `test-paye.mjs` étendus ; 24
+  suites vertes ; `npm run build` ; aperçus Organigramme, Effectifs, Présences
+  et Paye régénérés. Aucun push ni déploiement.
+
+« Inquisition » est inscrit en `Données!G10`, dans la plage qui valide la
+colonne Corps d'`Effectifs` (confirmé par le propriétaire).
+
+**Mise en service, dans l'ordre** : relire le `git diff` ; `npm run push` ;
+publier le déploiement à la main ; seulement ensuite, affecter des membres au
+corps.
+
 ### Décrets de peines et amendes (4 octobre 2026)
 
 - Demande du propriétaire, sur l'avis du magistrat de Blancherive : les quatre
@@ -649,7 +772,7 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 ### Organigramme
 - Implémenté dans `Organigramme.js`.
 - Refonte locale du 5 septembre 2026 : chaîne centrale jusqu'aux Majors de l'État-Major, Hird relié uniquement au Jarl, Capitaines mis en avant et personnel repliable par corps. Hird replié initialement ; garnisons ouvertes.
-- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous l'État-Major central ; les deux garnisons sont rattachées à ce groupe. Les quatre autres corps restent directement sous l'État-Major.
+- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous l'État-Major central ; les deux garnisons sont rattachées à ce groupe. Les cinq autres corps, dont la Garde inquisitoriale depuis le 7 octobre 2026, restent directement sous l'État-Major.
 - Autres Majors actifs hors commandement et Réserve commune dans deux blocs en bas. Répartition vérifiée par `node scripts/test-organigramme.mjs`, notamment les variantes de nom de Bois-de-Chêne, les réservistes et les postes vacants. Version Web déployée non mise à jour par cette refonte locale.
 
 ### Effectifs

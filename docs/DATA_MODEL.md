@@ -13,9 +13,13 @@ Le code Web détecte les colonnes par en-tête et reconnaît notamment :
 - `Status` / `Statut`
 - `Assermenté`
 
+La colonne Corps d'`Effectifs` est validée par la liste des corps `Données!G2:G` ; la Web App ne propose et n'accepte que ces valeurs. Depuis le 7 octobre 2026, cette liste porte « Inquisition » en G10, affichée « Garde inquisitoriale » par l'application (voir BUSINESS_RULES, « Nom affiché d'un corps ») ; la feuille garde le libellé court.
+
 `Données!A2:A` sert de référence pour :
 - l'ordre hiérarchique des grades ;
 - le style/couleur associé aux grades dans la Web App.
+
+`Données!C`, en-tête « Alias Inquisition » (ajoutée par le propriétaire le 8 octobre 2026) : alias du grade de la même ligne pour les membres de l'Inquisition, vide quand le grade garde son nom. Colonne repérée par son en-tête, pas par sa position : toute colonne de `Données` (hors A) dont l'en-tête est « Alias <corps> » est lue comme les alias de ce corps, le corps écrit comme dans la liste `Données!G`. Lecture seule, par `lireAliasGrades_` (`AliasGrades.js`) ; l'application n'y écrit jamais, et ne déplace ni ne renomme cet en-tête. Affichage seulement : voir BUSINESS_RULES, « Grade affiché selon le corps ».
 
 `Données!O2:O` contient la liste triée des gardes actifs utilisée par les formulaires Amendes et Prison. Cette liste est produite dans la feuille par la formule :
 

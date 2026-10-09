@@ -76,8 +76,12 @@ export function GradeDescription({ grade, variante }) {
   Bouton d'information à côté d'un libellé de grade, sur le modèle de
   `ChangeBadge` : un encart replié, ouvert au clic ou au clavier. Fermeture par
   Échap ou par un clic à l'extérieur, comme la modale du Codex.
+
+  `libelle` : grade affiché quand il diffère du grade régulier (alias de
+  l'Inquisition, `libelleGrade` dans corps.js). La description reste celle du
+  grade régulier, dont l'alias est l'équivalent.
 */
-export function GradeInfo({ grade, variante }) {
+export function GradeInfo({ grade, variante, libelle }) {
   const texte = descriptionGrade(grade, variante);
   const [open, setOpen] = useState(false);
   const wrap = useRef(null);
@@ -106,7 +110,7 @@ export function GradeInfo({ grade, variante }) {
   return <span className="grade-info" ref={wrap}>
     <button type="button" className="grade-info-button" aria-expanded={open}
       aria-controls={open ? id : undefined}
-      aria-label={`Rôle du grade ${grade}`}
+      aria-label={`Rôle du grade ${libelle || grade}`}
       onClick={event => { event.stopPropagation(); setOpen(value => !value); }}>
       ⓘ
     </button>

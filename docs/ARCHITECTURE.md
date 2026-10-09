@@ -25,6 +25,12 @@ Principaux modules :
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
+  - `ORGANIGRAMME_GARNISONS` : corps affichés, leur nom et les libellés de la feuille qui y mènent ; un corps absent n'apparaît pas
+
+- `AliasGrades.js`
+  - `lireAliasGrades_` : alias de grade par corps, lus dans les colonnes « Alias <corps> » de `Données` (« Alias Inquisition ») ; table renvoyée sous `aliasGrades` par `getEffectifs`, `getOrganigramme`, `getPresences`, `getPresenceOfficerDashboard` et `getPaye`
+  - `gradeAffiche_` : grade à afficher pour un membre d'un corps, utilisé par `Amendes.js` pour nommer les collecteurs ; même règle que `libelleGrade` (`ui/src/corps.js`), parité vérifiée par `scripts/test-alias-grades.mjs`
+  - affichage seulement, aucune écriture
 
 - `Effectifs.js`
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
@@ -60,7 +66,8 @@ Principaux modules :
 
 - `Paye.js`
   - regroupement des semaines closes impayées par financeur : argentier de la cour
-    pour Cité de Blancherive / Éclaireurs / État-Major, un Thane par garnison
+    pour Cité de Blancherive / Éclaireurs / État-Major / Faubourgs / Garde
+    inquisitoriale, un Thane pour Rivebois, Bois-de-Chêne et Cap Granite
   - lecture OFFICIER et INTENDANT ; règlement d'une semaine par les seuls OFFICIER,
     délégué à `ecrirePresenceCellule_` de `Presences.js`
   - n'écrit rien de lui-même et ne touche à aucune colonne autre que `Présences!O`
@@ -136,6 +143,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/catalogue.js` : cache local du catalogue des objets — préchargement à l'ouverture des pages Prison et Inventaire (officier), `localStorage` versionné, recherche en mémoire identique à `rechercherObjets` (parité vérifiée par `scripts/test-catalogue-local.mjs`), hook `useCatalogue` ;
 - `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
+- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (« Inquisition » → « Garde inquisitoriale ») ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS`. Grade affiché d'un membre selon son corps (`libelleGrade`, alias de l'Inquisition), d'après la table `aliasGrades` renvoyée par le serveur ; le corps peut être le libellé de la feuille ou le nom affiché ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 
@@ -189,6 +197,11 @@ quel que soit le prochain rôle ajouté.
 `Presences.js` : toute lecture de `Présences!A` passe par ces helpers, sans quoi
 une ancienne valeur (numéro de semaine, cellule au format date) casse la détection
 de la semaine courante.
+
+`Effectifs.js`, `Organigramme.js`, `Presences.js`, `PresenceDashboard.gs.js`,
+`Paye.js` et `Amendes.js` utilisent `lireAliasGrades_` (`AliasGrades.js`) ;
+`Amendes.js` utilise aussi `gradeAffiche_`. Les suites de test qui chargent ces
+fichiers sans `AliasGrades.js` y substituent `lireAliasGrades_`.
 
 `Inventaire.js` utilise :
 - `nettoyerSaisieUtilisateur`, déclaré dans `Amendes.js` ;

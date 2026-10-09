@@ -1631,7 +1631,9 @@ function getPresences(
 
   const result = {
     lundiCourant: lundiCourant,
-    rows: rows
+    rows: rows,
+    // Grades affichés selon le corps de la ligne (AliasGrades.js).
+    aliasGrades: lireAliasGrades_(ss)
   };
 
   // Les agrégats financiers sont réservés aux officiers.

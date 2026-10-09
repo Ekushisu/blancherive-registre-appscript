@@ -68,6 +68,10 @@ context.mettreAJourSoldesPresences_ = () => {};
 context.getLastPresenceRowWebApp = () => lignes.length + 1;
 context.lundiCourantPresence_ = () => LUNDI_COURANT;
 context.estCorpsExcluDesPresences_ = corps => String(corps).toLowerCase().includes('hird');
+// Lecture de la feuille Données couverte par test-alias-grades ; seule la
+// transmission de la table au navigateur est vérifiée ici.
+const ALIAS_GRADES = { Inquisition: { Garde: 'Inquisiteur' } };
+context.lireAliasGrades_ = () => ALIAS_GRADES;
 
 // Les valeurs naissent dans le contexte vm : un aller-retour JSON leur rend
 // les prototypes de cette réalité, sans quoi deepStrictEqual échoue.
@@ -123,6 +127,7 @@ lignes = [
   ligne(36, 'Bois-de-Chêne', 'Garde', 'Kjell', 'Bras-Long', 3, 240, false),
   ligne(36, 'Faubourgs de Blancherive', 'Garde', 'Sif', 'Pied-Sûr', 4, 320, false),
   ligne(36, 'Cap Granite', 'Garde', 'Ulf', 'Œil-Clair', 2, 160, false),
+  ligne(36, 'Inquisition', 'Garde', 'Ragnhild', 'Fer-Juste', 3, 240, false),
   ligne(36, 'Hird du Jarl', 'Garde', 'Hirdman', '', 7, 999, false)
 ];
 
@@ -130,24 +135,34 @@ let paye = lirePaye('OFFICIER');
 
 assert.equal(
   financeur(paye, 'argentier').total,
-  1320,
-  'Cité, Éclaireur et État-Major relèvent du même argentier'
+  1880,
+  'Cité, Éclaireur, État-Major, Faubourgs et Inquisition relèvent du même argentier'
 );
-assert.equal(financeur(paye, 'argentier').nbGardes, 3);
+assert.equal(financeur(paye, 'argentier').nbGardes, 5);
+assert.deepEqual(
+  financeur(paye, 'argentier').corps,
+  ['Cité de Blancherive', 'Éclaireur', 'État-Major', 'Faubourgs de Blancherive', 'Inquisition']
+);
 assert.equal(financeur(paye, 'thane-rivebois').total, 400, '« Garnison de Rivebois » est reconnu');
 assert.equal(financeur(paye, 'thane-bois-de-chene').total, 240);
-assert.equal(financeur(paye, 'thane-faubourgs').total, 320);
+assert.equal(financeur(paye, 'thane-faubourgs'), undefined, 'Les Faubourgs n’ont plus de Thane payeur');
 assert.equal(financeur(paye, 'thane-cap-granite').total, 160);
 assert.equal(financeur(paye, 'a-determiner'), undefined, 'Aucun corps non classé ici');
-assert.equal(paye.totalADemander, 2440, 'Le Hird est exclu de la demande');
-assert.equal(paye.nbGardesDus, 7);
+assert.equal(paye.totalADemander, 2680, 'Le Hird est exclu de la demande');
+assert.equal(paye.nbGardesDus, 8);
 
-// Les Faubourgs portent « Blancherive » comme la Cité : les deux doivent
-// rester distincts, sans quoi la demande partirait au mauvais financeur.
-assert.equal(
-  financeur(paye, 'argentier').corps.includes('Faubourgs de Blancherive'),
-  false
-);
+// La table des alias accompagne la Paye ; le grade de la ligne reste le
+// grade régulier, l'alias n'étant appliqué qu'à l'affichage.
+assert.deepEqual(paye.aliasGrades, ALIAS_GRADES);
+const ragnhild = financeur(paye, 'argentier').groupes
+  .find(g => g.corps === 'Inquisition').gardes[0];
+assert.equal(ragnhild.grade, 'Garde');
+assert.equal(ragnhild.corps, 'Inquisition', 'Le corps du garde sert à choisir l’alias');
+
+// Le libellé de la feuille est « Inquisition » ; le nom affiché par
+// l'application, s'il y était écrit un jour, reste reconnu.
+lignes = [ligne(36, 'Garde inquisitoriale', 'Garde', 'Ragnhild', 'Fer-Juste', 3, 240, false)];
+assert.equal(financeur(lirePaye('OFFICIER'), 'argentier').total, 240);
 
 
 // ============================================================

@@ -150,6 +150,32 @@ const SYNC_CODEX_DOCUMENTS = [
     garde: true,
     sanctions: true
   },
+  /*
+    Ajouté le 8 octobre 2026. Décret du Jarl pris pour l'application du Code
+    du commerce : redevances, taxes sur le chiffre d'affaires, catégories et
+    quantités autorisées des concessions, étals et commerces itinérants. Seize
+    articles et un article 5-1. Un garde peut délivrer l'autorisation de
+    commerce itinérant (art. 9) : texte de référence directe pour la Garde.
+
+    Le décret ne fixe aucune peine ; il renvoie aux « sanctions prévues par les
+    codes applicables » (art. 13 et 15). Ses montants en septims sont des
+    redevances (75 pour un étal, 50 pour un commerce itinérant), que l'analyseur
+    lit comme des amendes : `sanctions: false` les tient hors des listes L:O.
+    Ses articles restent citables comme chefs d'accusation.
+
+    Même partage que les codes de Blancherive : export texte en 401, copie
+    locale reconstituée depuis la page de lecture.
+  */
+  {
+    id: "1NKKFL-TfTDhhDj8vRsJtJm4-9V9kBoYCCHTqHiv66XY",
+    source: "Décret d'application pluriel de Blancherive",
+    famille: "Droit de Blancherive",
+    autorite: "Jarl de Blancherive",
+    applicabilite: "Redevances et taxes des concessions, étals et commerces itinérants",
+    local: true,
+    garde: true,
+    sanctions: false
+  },
 
   // ----- Codes impériaux -----
   {

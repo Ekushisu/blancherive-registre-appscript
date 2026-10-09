@@ -133,6 +133,8 @@ vm.runInContext(readFileSync('src/Presences.js', 'utf8'), context);
 context.lundiCourantPresence_ = () => LUNDI_COURANT;
 context.mettreAJourSoldesPresences_ = () => {};
 context.ecrireFormulesSoldeParBlocs_ = () => {};
+// Couvert par test-alias-grades.
+context.lireAliasGrades_ = () => ({});
 
 // --- Calendrier ISO ---------------------------------------------------------
 

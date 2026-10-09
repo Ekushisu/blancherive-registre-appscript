@@ -103,18 +103,24 @@ registre.forEach(d => {
 });
 
 /*
-  Droit de la châtellerie : les quatre codes du 27 septembre 2026. L'ancien
-  Codex Judiciaire est caduc et ne doit pas revenir au registre ; son nom reste
-  réservé à la résolution des libellés historiques.
+  Droit de la châtellerie : les quatre codes du 27 septembre 2026 et le décret
+  d'application pluriel du Jarl, du 8 octobre 2026. L'ancien Codex Judiciaire
+  est caduc et ne doit pas revenir au registre ; son nom reste réservé à la
+  résolution des libellés historiques.
 */
 const CODE_PENAL_SOURCE = 'Code pénal local de Blancherive';
+const DECRET_PLURIEL_SOURCE = 'Décret d\'application pluriel de Blancherive';
 const locaux = registre.filter(d => d.local).map(d => d.source).sort();
 assert.deepEqual(locaux, [
   'Code civil local de Blancherive',
   'Code du commerce local de Blancherive',
   CODE_PENAL_SOURCE,
+  DECRET_PLURIEL_SOURCE,
   'Loi fondamentale de Blancherive'
-], 'Les quatre codes de Blancherive, et eux seuls, sont du droit local');
+], 'Les quatre codes de Blancherive et le décret d’application pluriel, et eux seuls, sont du droit local');
+// Ses montants sont des redevances, que l'analyseur prendrait pour des amendes.
+assert.ok(!registre.find(d => d.source === DECRET_PLURIEL_SOURCE).sanctions,
+  'Le décret d’application pluriel n’alimente pas les listes de sanctions');
 assert.ok(!sources.includes(lire('CODEX_JUDICIAIRE_SOURCE')),
   'Le Codex Judiciaire est caduc et ne doit plus être référencé');
 assert.ok(!registre.some(d => d.id === '1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk'),

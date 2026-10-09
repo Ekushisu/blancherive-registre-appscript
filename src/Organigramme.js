@@ -73,6 +73,22 @@ const ORGANIGRAMME_GARNISONS = [
       "éclaireur",
       "éclaireurs"
     ]
+  },
+
+  /*
+    La feuille écrit « Inquisition » (Données!G) ; l'application
+    affiche « Garde inquisitoriale » (« Brigade des Inquisiteurs »
+    jusqu'au 8 octobre 2026). Le même nom affiché est déclaré pour
+    les autres pages dans `ui/src/corps.js`.
+  */
+
+  {
+    key: "inquisition",
+    label: "Garde inquisitoriale",
+    aliases: [
+      "inquisition",
+      "garde inquisitoriale"
+    ]
   }
 
 ];
@@ -429,7 +445,11 @@ function getOrganigramme(
       garnisons,
 
     reserve:
-      reserve
+      reserve,
+
+    // Grades affichés selon le corps (AliasGrades.js).
+    aliasGrades:
+      lireAliasGrades_(ss)
 
   };
 }

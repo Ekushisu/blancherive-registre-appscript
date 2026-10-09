@@ -1,17 +1,26 @@
 import { CHANGE_SEEN_KEY, parseSeenChanges, markChangesSeen, recentChanges } from "./change-state.js";
 import { DateRP } from "./calendrier.jsx";
+import { libelleCorps, libelleGrade } from "./corps.js";
 
 const { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
-const ChangesContext = createContext({ events: [], seen: {}, mark: () => {} });
+const ChangesContext = createContext({ events: [], seen: {}, mark: () => {}, aliasGrades: null });
 let sessionSeen = {};
 const labels = { arrivee: "Arrivée", grade: "Grade", corps: "Mutation" };
 
-function describe(change) {
+/*
+  Un grade s'affiche selon le corps du membre de part et d'autre du
+  changement : celui de la mutation du même événement s'il y en a une,
+  sinon son corps actuel.
+*/
+function describe(change, event, aliasGrades) {
   if (change.type === "arrivee") return "A rejoint les effectifs";
-  return `${labels[change.type]} : ${change.avant || "Sans affectation"} → ${change.apres || "Sans affectation"}`;
+  const mutation = event.changes.find(c => c.type === "corps");
+  const nom = change.type === "corps" ? libelleCorps
+    : (valeur, cote) => libelleGrade(valeur, mutation ? mutation[cote] : event.corps, aliasGrades);
+  return `${labels[change.type]} : ${nom(change.avant, "avant") || "Sans affectation"} → ${nom(change.apres, "apres") || "Sans affectation"}`;
 }
 
-export function ChangesProvider({ data, children }) {
+export function ChangesProvider({ data, aliasGrades = null, children }) {
   const [seen, setSeen] = useState(() => {
     try { return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) }; }
     catch { return sessionSeen; }
@@ -40,7 +49,7 @@ export function ChangesProvider({ data, children }) {
     catch { setStorageFailed(true); }
     setSeen(next);
   }
-  return <ChangesContext.Provider value={{ events, seen, mark }}>
+  return <ChangesContext.Provider value={{ events, seen, mark, aliasGrades }}>
     {storageFailed && <p className="info-notice">Le navigateur ne permet pas de conserver les éléments vus après fermeture. Ils restent mémorisés pendant cette visite.</p>}
     {children}
   </ChangesContext.Provider>;
@@ -74,6 +83,7 @@ export function useMemberChanges(memberId) {
 }
 
 export function ChangeBadge({ change }) {
+  const { aliasGrades } = useContext(ChangesContext);
   if (!change.items.length) return null;
   return <span className="member-change">
     <button type="button" className={`change-badge ${change.unread ? "change-new" : "change-seen"}`}
@@ -83,7 +93,7 @@ export function ChangeBadge({ change }) {
     </button>
     {change.open && <span className="change-details">
       {change.items.map(event => <span className="change-detail" key={event.id}>
-        <span>{event.changes.map(describe).join(" · ")}</span>
+        <span>{event.changes.map(c => describe(c, event, aliasGrades)).join(" · ")}</span>
         <small><DateRP value={event.date}/></small>
       </span>)}
     </span>}
@@ -100,7 +110,7 @@ export function ChangesCount({ people, corps }) {
 }
 
 export function RecentChanges({ onRefresh }) {
-  const { events, seen, mark } = useContext(ChangesContext);
+  const { events, seen, mark, aliasGrades } = useContext(ChangesContext);
   const [type, setType] = useState("");
   const [onlyUnread, setOnlyUnread] = useState(false);
   const [search, setSearch] = useState("");
@@ -108,7 +118,7 @@ export function RecentChanges({ onRefresh }) {
   const [error, setError] = useState("");
   const normalize = text => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const filtered = events.filter(e => (!type || e.changes.some(c => c.type === type)) &&
-    (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps}`).includes(normalize(search.trim())));
+    (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps} ${libelleCorps(e.corps)}`).includes(normalize(search.trim())));
   const unread = events.filter(e => !seen[e.id]);
   return <details className="recent-changes">
     <summary>Changements récents <span>{unread.length} non vu{unread.length > 1 ? "s" : ""}</span></summary>
@@ -130,8 +140,8 @@ export function RecentChanges({ onRefresh }) {
       {error && <p className="error" role="alert">{error}</p>}
       {!filtered.length && <p role="status">Aucun changement récent ne correspond à cette sélection.</p>}
       <ol className="changes-list">{filtered.map(event => <li key={event.id}>
-        <div><strong>{event.nom}</strong> <span>{event.corps}</span><small><DateRP value={event.date}/></small>
-          {event.changes.map((change, i) => <div key={i}>{describe(change)}</div>)}
+        <div><strong>{event.nom}</strong> <span>{libelleCorps(event.corps)}</span><small><DateRP value={event.date}/></small>
+          {event.changes.map((change, i) => <div key={i}>{describe(change, event, aliasGrades)}</div>)}
         </div>
         <button type="button" className={`change-badge ${seen[event.id] ? "change-seen" : "change-new"}`}
           disabled={Boolean(seen[event.id])} onClick={() => mark([event])}>{seen[event.id] ? "Vu" : "Marquer comme vu"}</button>

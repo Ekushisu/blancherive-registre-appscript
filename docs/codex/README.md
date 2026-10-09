@@ -2,8 +2,9 @@
 
 Exports texte des documents Google Docs sources, récupérés le 15 septembre 2026,
 complétés le 22 septembre 2026 pour les décrets sur les équipements dwemers,
-les équipements orsimer et les recherches archéologiques, puis le 27 septembre
-2026 pour les quatre codes de Blancherive.
+les équipements orsimer et les recherches archéologiques, le 27 septembre
+2026 pour les quatre codes de Blancherive, puis le 8 octobre 2026 pour le
+décret d'application pluriel de Blancherive.
 
 **Ces copies ne sont pas la source de vérité.** Les Google Docs le restent, et
 `SyncCodex` reste le cache technique généré à partir d'eux. Ces fichiers servent
@@ -21,12 +22,13 @@ Attention : l'export texte insère les puces des listes en début de ligne
 (`* Article 1`, `■ Article I`). Ces puces n'existent pas dans le document ;
 ne pas en déduire la structure réelle sans vérifier.
 
-Les quatre codes de Blancherive font exception : leur partage interdit le
-téléchargement aux lecteurs, et l'export répond HTTP 401 alors que la page de
-lecture s'ouvre. Leurs copies ont été reconstituées depuis le modèle embarqué
-dans la page de lecture (`DOCS_modelChunk`), et les sauts de ligne doux
-(Maj+Entrée, tabulation verticale) y sont rendus par de vrais sauts de ligne.
-Il n'y a donc ni puce ni artefact d'export dans ces quatre fichiers.
+Les quatre codes de Blancherive et le décret d'application pluriel font
+exception : leur partage interdit le téléchargement aux lecteurs, et l'export
+répond HTTP 401 alors que la page de lecture s'ouvre. Leurs copies ont été
+reconstituées depuis le modèle embarqué dans la page de lecture
+(`DOCS_modelChunk`), et les sauts de ligne doux (Maj+Entrée, tabulation
+verticale) y sont rendus par de vrais sauts de ligne. Il n'y a donc ni puce ni
+artefact d'export dans ces cinq fichiers.
 
 ## Codes — table `SYNC_CODEX_DOCUMENTS`
 
@@ -41,6 +43,7 @@ locales pour les tests et les aperçus : garder le format
 | `code-penal-local-blancherive.txt` | `1QnltaOqtymMGWiQUtBOts1ltt15KQfNUhrKLaEn7MSw` | Nouveau le 27 septembre 2026, 96 articles qualifiés, aucune peine chiffrée |
 | `code-civil-local-blancherive.txt` | `116FByPVeFenuLENmTqPnOP_MXu90RM2MVIEyub4eVnk` | Nouveau le 27 septembre 2026, 30 articles, sans sanction |
 | `code-commerce-local-blancherive.txt` | `1dtSQ_QhP7A6d6gAS7s21x3LAbbZxarmfxXoE4mlctB0` | Nouveau le 27 septembre 2026, 20 articles, renvoie au Code pénal |
+| `decret-application-pluriel-blancherive.txt` | `1NKKFL-TfTDhhDj8vRsJtJm4-9V9kBoYCCHTqHiv66XY` | Nouveau le 8 octobre 2026, décret du Jarl pour l'application du Code du commerce, 16 articles et un article 5-1, redevances et taxes sans peine |
 | `ancien-code-judiciaire-blancherive.txt` | `1_awmZGCcQ0TgQycHQGRiBXLTr-f6Yjsn4fR7dAMdQvk` | Caduc depuis le 27 septembre 2026, retiré du registre, conservé pour comparaison |
 | `code-corpus-juriscivilis.txt` | `1Q44ArnKr6qsJIRP9pSVCq_eloSzgMxA1JTqbPl7PP-M` | Nouveau, remplace `1_AslqVk…` |
 | `code-de-re-nobilitatis.txt` | `1hMA2J9FeE-LfKwdKXy15U6nrpKpdzRZdFg77hqywrzI` | Nouveau, remplace `1Kcw1wll…` |

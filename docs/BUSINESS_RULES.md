@@ -5,9 +5,24 @@
 - Chaîne verticale : Jarl → Maréchal → Commander → Majors du corps État-Major.
 - Le Hird répond uniquement au Jarl, par une branche directe indépendante du reste de la garde.
 - Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
-- Cité de Blancherive, Faubourgs, Éclaireurs et Cap Granite répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
+- Cité de Blancherive, Faubourgs, Cap Granite, Éclaireurs et Garde inquisitoriale (depuis le 7 octobre 2026) répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
+- Un corps n'apparaît dans l'organigramme que s'il est déclaré dans `ORGANIGRAMME_GARNISONS` (`Organigramme.js`) ; ses membres actifs n'y figurent pas autrement. Tout nouveau corps doit y être ajouté.
+
+## Nom affiché d'un corps
+
+- La feuille garde le libellé de la liste des corps de `Données` ; l'application peut en afficher un autre. Seul cas aujourd'hui, décision du propriétaire du 7 octobre 2026 : « Inquisition » s'affiche « Garde inquisitoriale » (« Brigade des Inquisiteurs » jusqu'au 8 octobre 2026, renommée à la demande du propriétaire).
+- Le nom affiché est déclaré deux fois : `ORGANIGRAMME_GARNISONS` (serveur, organigramme) et `ui/src/corps.js` (toutes les autres pages). `scripts/test-organigramme.mjs` vérifie qu'ils concordent.
+- Seul l'affichage change : les valeurs écrites dans Effectifs et Présences, envoyées au serveur, comparées par les filtres, restent celles de la feuille. Les recherches trouvent les deux noms ; les groupes d'Effectifs, les sections de semaine et la liste des corps des Présences sont triés par nom affiché.
 - Les autres Majors actifs hors État-Major et hors commandement de Rivebois / Bois-de-Chêne sont regroupés à part en bas, à côté de la Réserve.
 - Tous les réservistes, quel que soit leur grade ou corps, apparaissent uniquement dans la Réserve commune.
+
+## Grade affiché selon le corps
+
+- Décision du propriétaire du 8 octobre 2026 : un membre de l'Inquisition voit son grade affiché sous l'alias de l'Inquisition. Les alias sont tenus dans la feuille `Données`, colonne « Alias Inquisition » (C), sur la ligne du grade régulier dont ils sont l'équivalent : Capitaine → Grand Inquisiteur, Lieutenant-Chef → La Plume, Sergent-Chef → Enquêteur, Caporal-Chef → Traqueur, Garde → Inquisiteur. Un grade sans alias garde son nom (Lieutenant, Sergent, Caporal, Cadet, Recrue, et les grades du commandement central).
+- Seul l'affichage change. Effectifs et Présences gardent le grade régulier ; les formulaires d'Effectifs proposent les alias quand le corps choisi est l'Inquisition, mais envoient le grade régulier. L'ordre hiérarchique, les couleurs, les soldes et les descriptions de grade sont ceux du grade régulier.
+- Pages concernées : Effectifs (titres de grade, listes de grade des formulaires, recherche, qui trouve les deux noms), Organigramme (titre « Grand Inquisiteur » de la Garde inquisitoriale, même vacant, groupes de grade, Réserve), Présences (ligne et gardes à surveiller), Paye (détail et récapitulatif copié), panneau des changements, collecteurs des Amendes.
+- Dans le panneau des changements, un grade s'affiche selon le corps du membre de part et d'autre du changement : celui de la mutation du même événement s'il y en a une, sinon son corps actuel. Un changement de grade suivi, plus tard, d'une mutation hors de l'Inquisition s'affiche donc avec les grades réguliers.
+- L'en-tête nomme le corps : une autre colonne « Alias <corps> » de `Données`, le corps écrit comme dans la liste des corps, donnerait ses alias à ce corps sans changement de code. Sans colonne d'alias, l'application affiche les grades réguliers.
 
 ## Effectifs
 
@@ -88,14 +103,20 @@ La page répond à une question précise : le jour de la paye, combien l'officie
 doit-il demander, et à qui. Le registre des Présences est organisé par semaine
 puis par corps ; l'argent, lui, vient d'un financeur par corps.
 
-- Financeurs. L'argentier de la cour couvre Cité de Blancherive, Éclaireurs et
-  État-Major ; un Thane couvre chacune des garnisons de Rivebois, Bois-de-Chêne,
-  Faubourgs et Cap Granite. C'est la même coupure centrale / locale que le
-  reversement des amendes.
+- Financeurs. L'argentier de la cour couvre Cité de Blancherive, Éclaireurs,
+  État-Major, Faubourgs de Blancherive et Garde inquisitoriale ; un Thane
+  couvre chacune des garnisons de Rivebois, Bois-de-Chêne et Cap Granite.
+  Décisions du propriétaire du 7 octobre 2026 pour les Faubourgs, jusque-là
+  payés par leur Thane, et pour la Garde inquisitoriale. Cette coupure ne suit plus celle du
+  reversement des amendes : les Faubourgs et la Garde inquisitoriale reversent à leurs
+  propres collecteurs.
 - Le rattachement se fait par jeton distinctif recherché dans le libellé du corps,
   et non par égalité, afin d'accepter « Rivebois » comme « Garnison de Rivebois ».
   Le jeton « blancherive » seul n'est jamais utilisé : la Cité et les Faubourgs le
-  portent tous les deux et ne dépendent pas du même financeur.
+  portent tous les deux. Ils relèvent aujourd'hui du même financeur, mais chacun
+  garde son jeton propre, pour qu'un changement futur n'en entraîne pas un autre.
+  La Garde inquisitoriale est reconnue sous le libellé de la feuille (« Inquisition ») comme
+  sous son nom affiché.
 - Un corps ne correspondant à aucun financeur connu n'est jamais écarté. Il est
   regroupé sous « Financeur à déterminer », compté dans le total général et
   affiché en tête comme une anomalie de libellé à corriger. Une solde ne doit pas
@@ -298,7 +319,7 @@ article, est tenu dans la feuille `PeinesAmendes` (voir DATA_MODEL). Il
 - GARDE et OFFICIER peuvent consulter / créer.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - Seul un OFFICIER peut modifier `Reversé aux trésoriers`.
-- Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.
+- Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps, Faubourgs et Garde inquisitoriale compris, utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.
 - Couleurs des lignes : rouge si non payée, gris si payée mais non reversée, vert si payée et reversée.
 - OFFICIER peut supprimer une entrée.
 - La suppression applicative efface le contenu de l'entrée mais doit préserver la structure de la feuille.

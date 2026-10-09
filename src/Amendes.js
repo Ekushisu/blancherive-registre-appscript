@@ -127,6 +127,8 @@ function lireReversementsAmendes_(ss) {
   const statut = trouverColonneAmendes_(headers, ["status", "statut"]);
   if ([prenom, nom, grade, corps, specialite, statut].some(index => index < 0)) return new Map();
   const corpsParGarde = new Map(), collecteursParCorps = new Map();
+  // Lu au premier collecteur actif seulement (AliasGrades.js).
+  let aliasGrades = null;
   const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, width).getDisplayValues();
   for (const row of rows) {
     const nomComplet = nettoyerSaisieUtilisateur(`${row[prenom] || ""} ${row[nom] || ""}`);
@@ -139,7 +141,9 @@ function lireReversementsAmendes_(ss) {
     const estActif = normaliserReferenceAmendes_(row[statut]) === normaliserReferenceAmendes_(AMENDES_STATUT_ACTIF);
     if (!estCollecteur || !estActif) continue;
     if (!collecteursParCorps.has(corpsGarde)) collecteursParCorps.set(corpsGarde, []);
-    const gradeCollecteur = nettoyerSaisieUtilisateur(row[grade]);
+    if (!aliasGrades) aliasGrades = lireAliasGrades_(ss);
+    // Un collecteur de l'Inquisition est nommé par l'alias de son grade.
+    const gradeCollecteur = gradeAffiche_(nettoyerSaisieUtilisateur(row[grade]), row[corps], aliasGrades);
     collecteursParCorps.get(corpsGarde).push(gradeCollecteur ? `${gradeCollecteur} ${nomComplet}` : nomComplet);
   }
   const collecteursEtatMajor = [];

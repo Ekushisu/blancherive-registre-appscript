@@ -11,10 +11,16 @@
 //
 // Financeurs :
 //   - Argentier de la cour : Cité de Blancherive, Éclaireurs,
-//     État-Major. Même regroupement central que le reversement
-//     des amendes (`AMENDES_CORPS_REVERSEMENT_MUTUALISES`).
+//     État-Major, Faubourgs de Blancherive et Garde
+//     inquisitoriale (« Inquisition » dans la feuille), depuis
+//     le 7 octobre 2026 pour ces deux derniers.
 //   - Un Thane par garnison : Rivebois, Bois-de-Chêne,
-//     Faubourgs, Cap Granite.
+//     Cap Granite.
+//
+// Ce rattachement ne suit plus celui du reversement des
+// amendes (`AMENDES_CORPS_REVERSEMENT_MUTUALISES`) : les
+// Faubourgs et l'Inquisition sont payés par l'argentier mais
+// reversent à leurs propres collecteurs.
 //
 // Le Hird du Jarl est exclu des Présences ; il l'est ici aussi.
 //
@@ -34,9 +40,10 @@ const PAYE_PRESENCES_SHEET = "Présences";
   « Rivebois » que « Garnison de Rivebois ».
 
   Les jetons sont volontairement discriminants : aucun n'est
-  contenu dans le libellé d'un autre corps. En particulier on
-  n'utilise jamais « blancherive » seul, que portent à la fois
-  la Cité et les Faubourgs.
+  contenu dans le libellé d'un autre corps. On n'utilise jamais
+  « blancherive » seul, que portent à la fois la Cité et les
+  Faubourgs : ils relèvent aujourd'hui du même argentier, mais
+  la séparation doit survivre au prochain changement.
 */
 
 const PAYE_FINANCEURS = [
@@ -49,7 +56,10 @@ const PAYE_FINANCEURS = [
       "cite de blancherive",
       "eclaireur",
       "etat-major",
-      "etat major"
+      "etat major",
+      "faubourg",
+      "inquisition",
+      "inquisitorial"
     ]
   },
 
@@ -69,15 +79,6 @@ const PAYE_FINANCEURS = [
     jetons: [
       "bois-de-chene",
       "bois de chene"
-    ]
-  },
-
-  {
-    cle: "thane-faubourgs",
-    libelle: "Thane des Faubourgs",
-    role: "thane",
-    jetons: [
-      "faubourg"
     ]
   },
 
@@ -177,7 +178,12 @@ function getPaye(token) {
     });
   }
 
-  return construireResultatPaye_(lignes, lundiCourant);
+  const resultat = construireResultatPaye_(lignes, lundiCourant);
+
+  // Grades affichés selon le corps (AliasGrades.js).
+  resultat.aliasGrades = lireAliasGrades_(ss);
+
+  return resultat;
 }
 
 

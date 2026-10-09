@@ -1590,7 +1590,7 @@ button {
 }
 .org-corps-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 16px;
   position: relative;
   padding-top: 22px;
@@ -1600,8 +1600,8 @@ button {
   content: "";
   position: absolute;
   top: 0;
-  left: calc((100% - 80px)/6 + 8px);
-  right: calc((100% - 80px)/12);
+  left: calc((100% - 96px)/7 + 8px);
+  right: calc((100% - 96px)/14);
   height: 1px;
   background: var(--org-line);
 }
@@ -1667,7 +1667,7 @@ button {
   grid-template-columns: 1fr 1fr;
   column-gap: 20px;
 }
-@media (max-width: 1250px) {
+@media (max-width: 1400px) {
   .org-corps-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px 16px;
@@ -1829,7 +1829,32 @@ button {
 .org-local-corps .org-unit-header {
   border-radius: 11px 11px 0 0;
 }
-@media (min-width: 761px) and (max-width: 1250px) {
+@media (min-width: 1401px) {
+  .org-corps-grid .org-unit-header,
+  .org-corps-grid .org-captains,
+  .org-corps-grid .org-roster summary,
+  .org-corps-grid .org-roster-body {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .org-corps-grid .org-rank-title {
+    gap: 6px;
+  }
+  .org-corps-grid .org-unit-header h3 {
+    font-size: 16px;
+  }
+  .org-local-command {
+    padding: 18px 8px;
+  }
+  .org-local-corps {
+    gap: 8px;
+  }
+  .org-local-corps:after {
+    left: calc((100% - 8px)/4);
+    right: calc((100% - 8px)/4);
+  }
+}
+@media (min-width: 761px) and (max-width: 1400px) {
   .org-corps-grid {
     border-left: 1px solid var(--org-line);
     margin-left: 6px;
@@ -8100,17 +8125,40 @@ body {
     return (events || []).filter((e) => Date.parse(e.date) >= now - CHANGE_MAX_AGE);
   }
 
+  // ui/src/corps.js
+  var NOMS_AFFICHES_CORPS = {
+    inquisition: "Garde inquisitoriale"
+  };
+  var normaliser = (valeur) => String(valeur || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  function libelleCorps(corps) {
+    return NOMS_AFFICHES_CORPS[normaliser(corps)] || corps;
+  }
+  function libelleGrade(grade, corps, aliasGrades) {
+    const cleCorps = normaliser(corps);
+    const cleGrade2 = normaliser(grade);
+    if (!cleCorps || !cleGrade2 || !aliasGrades) return grade;
+    for (const [corpsAlias, table] of Object.entries(aliasGrades)) {
+      if (normaliser(corpsAlias) !== cleCorps && normaliser(libelleCorps(corpsAlias)) !== cleCorps) continue;
+      for (const [gradeRegulier, alias] of Object.entries(table || {})) {
+        if (normaliser(gradeRegulier) === cleGrade2 && String(alias || "").trim()) return String(alias).trim();
+      }
+    }
+    return grade;
+  }
+
   // ui/src/changes.jsx
   var { createContext, useContext, useEffect: useEffect6, useMemo: useMemo3, useRef: useRef6, useState: useState5 } = React;
   var ChangesContext = createContext({ events: [], seen: {}, mark: () => {
-  } });
+  }, aliasGrades: null });
   var sessionSeen = {};
   var labels = { arrivee: "Arriv\xE9e", grade: "Grade", corps: "Mutation" };
-  function describe(change) {
+  function describe(change, event, aliasGrades) {
     if (change.type === "arrivee") return "A rejoint les effectifs";
-    return `${labels[change.type]} : ${change.avant || "Sans affectation"} \u2192 ${change.apres || "Sans affectation"}`;
+    const mutation = event.changes.find((c) => c.type === "corps");
+    const nom = change.type === "corps" ? libelleCorps : (valeur, cote) => libelleGrade(valeur, mutation ? mutation[cote] : event.corps, aliasGrades);
+    return `${labels[change.type]} : ${nom(change.avant, "avant") || "Sans affectation"} \u2192 ${nom(change.apres, "apres") || "Sans affectation"}`;
   }
-  function ChangesProvider({ data, children }) {
+  function ChangesProvider({ data, aliasGrades = null, children }) {
     const [seen, setSeen] = useState5(() => {
       try {
         return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) };
@@ -8151,7 +8199,7 @@ body {
       }
       setSeen(next);
     }
-    return /* @__PURE__ */ React.createElement(ChangesContext.Provider, { value: { events, seen, mark } }, storageFailed && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Le navigateur ne permet pas de conserver les \xE9l\xE9ments vus apr\xE8s fermeture. Ils restent m\xE9moris\xE9s pendant cette visite."), children);
+    return /* @__PURE__ */ React.createElement(ChangesContext.Provider, { value: { events, seen, mark, aliasGrades } }, storageFailed && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Le navigateur ne permet pas de conserver les \xE9l\xE9ments vus apr\xE8s fermeture. Ils restent m\xE9moris\xE9s pendant cette visite."), children);
   }
   function useMemberChanges(memberId) {
     const { events, seen, mark } = useContext(ChangesContext);
@@ -8202,6 +8250,7 @@ body {
     };
   }
   function ChangeBadge({ change }) {
+    const { aliasGrades } = useContext(ChangesContext);
     if (!change.items.length) return null;
     return /* @__PURE__ */ React.createElement("span", { className: "member-change" }, /* @__PURE__ */ React.createElement(
       "button",
@@ -8217,7 +8266,7 @@ body {
       },
       change.unread ? "Nouveau" : "Vu",
       change.items.length > 1 ? ` \xB7 ${change.items.length}` : ""
-    ), change.open && /* @__PURE__ */ React.createElement("span", { className: "change-details" }, change.items.map((event) => /* @__PURE__ */ React.createElement("span", { className: "change-detail", key: event.id }, /* @__PURE__ */ React.createElement("span", null, event.changes.map(describe).join(" \xB7 ")), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date }))))));
+    ), change.open && /* @__PURE__ */ React.createElement("span", { className: "change-details" }, change.items.map((event) => /* @__PURE__ */ React.createElement("span", { className: "change-detail", key: event.id }, /* @__PURE__ */ React.createElement("span", null, event.changes.map((c) => describe(c, event, aliasGrades)).join(" \xB7 ")), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date }))))));
   }
   function ChangesCount({ people, corps }) {
     const { events, seen } = useContext(ChangesContext);
@@ -8228,14 +8277,14 @@ body {
     return count ? /* @__PURE__ */ React.createElement("span", { className: "changes-count" }, count, " nouveaut\xE9", count > 1 ? "s" : "") : null;
   }
   function RecentChanges({ onRefresh }) {
-    const { events, seen, mark } = useContext(ChangesContext);
+    const { events, seen, mark, aliasGrades } = useContext(ChangesContext);
     const [type, setType] = useState5("");
     const [onlyUnread, setOnlyUnread] = useState5(false);
     const [search, setSearch] = useState5("");
     const [refreshing, setRefreshing] = useState5(false);
     const [error, setError] = useState5("");
     const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps}`).includes(normalize(search.trim())));
+    const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps} ${libelleCorps(e.corps)}`).includes(normalize(search.trim())));
     const unread = events.filter((e) => !seen[e.id]);
     return /* @__PURE__ */ React.createElement("details", { className: "recent-changes" }, /* @__PURE__ */ React.createElement("summary", null, "Changements r\xE9cents ", /* @__PURE__ */ React.createElement("span", null, unread.length, " non vu", unread.length > 1 ? "s" : "")), /* @__PURE__ */ React.createElement("div", { className: "recent-changes-body" }, /* @__PURE__ */ React.createElement("p", null, "Les 14 derniers jours. Un survol de 800 ms marque les changements comme vus. Sur mobile, touche le badge. Le suivi est commun aux deux pages sur ce navigateur."), /* @__PURE__ */ React.createElement("div", { className: "changes-controls" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: refreshing, onClick: async () => {
       setRefreshing(true);
@@ -8247,7 +8296,7 @@ body {
       } finally {
         setRefreshing(false);
       }
-    } }, refreshing ? "Actualisation\u2026" : "Actualiser"), /* @__PURE__ */ React.createElement("label", null, "Type ", /* @__PURE__ */ React.createElement("select", { value: type, onChange: (e) => setType(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous"), Object.entries(labels).map(([key, label]) => /* @__PURE__ */ React.createElement("option", { value: key, key }, label)))), /* @__PURE__ */ React.createElement("label", null, "Personne ou corps ", /* @__PURE__ */ React.createElement("input", { type: "search", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: onlyUnread, onChange: (e) => setOnlyUnread(e.target.checked) }), " Non vus uniquement"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !unread.length, onClick: () => mark(unread) }, "Tout marquer comme vu")), error && /* @__PURE__ */ React.createElement("p", { className: "error", role: "alert" }, error), !filtered.length && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucun changement r\xE9cent ne correspond \xE0 cette s\xE9lection."), /* @__PURE__ */ React.createElement("ol", { className: "changes-list" }, filtered.map((event) => /* @__PURE__ */ React.createElement("li", { key: event.id }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, event.nom), " ", /* @__PURE__ */ React.createElement("span", null, event.corps), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date })), event.changes.map((change, i) => /* @__PURE__ */ React.createElement("div", { key: i }, describe(change)))), /* @__PURE__ */ React.createElement(
+    } }, refreshing ? "Actualisation\u2026" : "Actualiser"), /* @__PURE__ */ React.createElement("label", null, "Type ", /* @__PURE__ */ React.createElement("select", { value: type, onChange: (e) => setType(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous"), Object.entries(labels).map(([key, label]) => /* @__PURE__ */ React.createElement("option", { value: key, key }, label)))), /* @__PURE__ */ React.createElement("label", null, "Personne ou corps ", /* @__PURE__ */ React.createElement("input", { type: "search", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: onlyUnread, onChange: (e) => setOnlyUnread(e.target.checked) }), " Non vus uniquement"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !unread.length, onClick: () => mark(unread) }, "Tout marquer comme vu")), error && /* @__PURE__ */ React.createElement("p", { className: "error", role: "alert" }, error), !filtered.length && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucun changement r\xE9cent ne correspond \xE0 cette s\xE9lection."), /* @__PURE__ */ React.createElement("ol", { className: "changes-list" }, filtered.map((event) => /* @__PURE__ */ React.createElement("li", { key: event.id }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, event.nom), " ", /* @__PURE__ */ React.createElement("span", null, libelleCorps(event.corps)), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date })), event.changes.map((change, i) => /* @__PURE__ */ React.createElement("div", { key: i }, describe(change, event, aliasGrades)))), /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -8292,7 +8341,7 @@ body {
     if (!texte) return null;
     return /* @__PURE__ */ React.createElement("p", { className: "grade-description" }, texte);
   }
-  function GradeInfo({ grade, variante }) {
+  function GradeInfo({ grade, variante, libelle }) {
     const texte = descriptionGrade(grade, variante);
     const [open, setOpen] = useState6(false);
     const wrap = useRef7(null);
@@ -8324,7 +8373,7 @@ body {
         className: "grade-info-button",
         "aria-expanded": open,
         "aria-controls": open ? id : void 0,
-        "aria-label": `R\xF4le du grade ${grade}`,
+        "aria-label": `R\xF4le du grade ${libelle || grade}`,
         onClick: (event) => {
           event.stopPropagation();
           setOpen((value) => !value);
@@ -8508,7 +8557,9 @@ body {
           member.prenom,
           member.nom,
           member.grade,
+          libelleGrade(member.grade, member.corps, data == null ? void 0 : data.aliasGrades),
           member.corps,
+          libelleCorps(member.corps),
           member.specialite,
           member.status,
           member.assermente ? "assermente" : "non assermente",
@@ -8516,6 +8567,7 @@ body {
         ].join(" ")).includes(q);
       });
     }, [
+      data,
       activeRows,
       search,
       activeCorps
@@ -8532,13 +8584,16 @@ body {
           member.prenom,
           member.nom,
           member.grade,
+          libelleGrade(member.grade, member.corps, data == null ? void 0 : data.aliasGrades),
           member.corps,
+          libelleCorps(member.corps),
           member.specialite,
           member.status,
           member.terminalGroup
         ].join(" ")).includes(q)
       );
     }, [
+      data,
       terminalRows,
       search
     ]);
@@ -8586,8 +8641,8 @@ body {
         );
       }
       return [...corpsMap.entries()].sort(
-        ([a], [b]) => a.localeCompare(
-          b,
+        ([a], [b]) => libelleCorps(a).localeCompare(
+          libelleCorps(b),
           "fr"
         )
       ).map(([corps, group]) => {
@@ -8695,7 +8750,7 @@ body {
     const countForCorps = (corps) => corps === "ALL" ? activeRows.length : activeRows.filter(
       (member) => member.corps === corps
     ).length;
-    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Effectifs"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Gestion des membres de la Garde \u2014 officiers uniquement.")), /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes, aliasGrades: data.aliasGrades }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Effectifs"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Gestion des membres de la Garde \u2014 officiers uniquement.")), /* @__PURE__ */ React.createElement(
       "button",
       {
         className: "primary-button",
@@ -8712,6 +8767,7 @@ body {
       NouvelEffectifForm,
       {
         options: data.options,
+        aliasGrades: data.aliasGrades,
         initialCorps: activeCorps === "ALL" ? "" : activeCorps,
         onSubmit: async (form) => {
           try {
@@ -8786,14 +8842,14 @@ body {
               } : void 0
             }
           ),
-          corps,
+          libelleCorps(corps),
           /* @__PURE__ */ React.createElement(ChangesCount, { people: activeRows, corps }),
           /* @__PURE__ */ React.createElement("span", { className: "effectifs-tab-count" }, countForCorps(
             corps
           ))
         );
       })
-    ), /* @__PURE__ */ React.createElement("div", { className: "effectifs-toolbar-v3" }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-total" }, /* @__PURE__ */ React.createElement("strong", null, activeCorps === "ALL" ? "Tous les corps" : activeCorps), /* @__PURE__ */ React.createElement("span", null, filteredActive.length, " membre", filteredActive.length !== 1 ? "s" : "")), /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ React.createElement("div", { className: "effectifs-toolbar-v3" }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-total" }, /* @__PURE__ */ React.createElement("strong", null, activeCorps === "ALL" ? "Tous les corps" : libelleCorps(activeCorps)), /* @__PURE__ */ React.createElement("span", null, filteredActive.length, " membre", filteredActive.length !== 1 ? "s" : "")), /* @__PURE__ */ React.createElement(
       "input",
       {
         className: "effectifs-search",
@@ -8826,7 +8882,7 @@ body {
               borderLeftColor: corpsStyle.background
             } : void 0
           },
-          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-title" }, corpsGroup.corps), /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-subtitle" }, total, " membre", total !== 1 ? "s" : ""))
+          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-title" }, libelleCorps(corpsGroup.corps)), /* @__PURE__ */ React.createElement("div", { className: "effectifs-corps-subtitle" }, total, " membre", total !== 1 ? "s" : ""))
         ),
         /* @__PURE__ */ React.createElement("div", { className: "effectifs-grade-groups" }, corpsGroup.groups.map((group) => {
           var _a2, _b2;
@@ -8847,7 +8903,11 @@ body {
                 className: "effectifs-grade-heading",
                 style: effectifsAccent(gradeStyle)
               },
-              /* @__PURE__ */ React.createElement("span", null, group.type === "reserve" ? "R\xE9serve" : group.grade),
+              /* @__PURE__ */ React.createElement("span", null, group.type === "reserve" ? "R\xE9serve" : libelleGrade(
+                group.grade,
+                corpsGroup.corps,
+                data.aliasGrades
+              )),
               /* @__PURE__ */ React.createElement("span", { className: "effectifs-grade-count" }, group.members.length)
             ),
             /* @__PURE__ */ React.createElement("div", { className: "effectifs-member-list" }, group.members.map(
@@ -8857,6 +8917,7 @@ body {
                   key: `${member.row}-${member.prenom}-${member.nom}`,
                   member,
                   options: data.options,
+                  aliasGrades: data.aliasGrades,
                   onSave: async (values) => {
                     try {
                       setError("");
@@ -8908,6 +8969,7 @@ body {
               key: `terminal-${member.row}-${member.prenom}-${member.nom}`,
               member,
               options: data.options,
+              aliasGrades: data.aliasGrades,
               showCorps: true,
               onSave: async (values) => {
                 try {
@@ -8947,6 +9009,7 @@ body {
   }
   function NouvelEffectifForm({
     options,
+    aliasGrades,
     initialCorps,
     onSubmit
   }) {
@@ -9022,7 +9085,11 @@ body {
               key: value,
               value
             },
-            value
+            libelleGrade(
+              value,
+              form.corps,
+              aliasGrades
+            )
           )
         )
       )), /* @__PURE__ */ React.createElement(Field, { label: "Corps de garde" }, /* @__PURE__ */ React.createElement(
@@ -9047,7 +9114,7 @@ body {
               key: value,
               value
             },
-            value
+            libelleCorps(value)
           )
         )
       )), /* @__PURE__ */ React.createElement(Field, { label: "Sp\xE9cialit\xE9" }, options.specialites.length > 0 ? /* @__PURE__ */ React.createElement(
@@ -9133,6 +9200,7 @@ body {
   function EffectifCard({
     member,
     options,
+    aliasGrades,
     onSave,
     showCorps = false
   }) {
@@ -9215,7 +9283,7 @@ body {
           {}
         )
       },
-      member.corps
+      libelleCorps(member.corps)
     ), member.specialite && /* @__PURE__ */ React.createElement(
       "span",
       {
@@ -9271,7 +9339,11 @@ body {
             key: value,
             value
           },
-          value
+          libelleGrade(
+            value,
+            corps,
+            aliasGrades
+          )
         )
       )
     )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Corps"), /* @__PURE__ */ React.createElement(
@@ -9293,7 +9365,7 @@ body {
             key: value,
             value
           },
-          value
+          libelleCorps(value)
         )
       )
     )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Sp\xE9cialit\xE9"), options.specialites.length > 0 ? /* @__PURE__ */ React.createElement(
@@ -9471,36 +9543,42 @@ body {
     const localKeys = (local == null ? void 0 : local.garnisonKeys) || [];
     const directCorps = data.garnisons.filter((g) => !localKeys.includes(g.key));
     const localCorps = data.garnisons.filter((g) => localKeys.includes(g.key));
-    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Hird du Jarl" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.jarl ? [data.jarl] : [], grade: "Jarl" })), /* @__PURE__ */ React.createElement("aside", { className: "org-hird-branch" }, /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(OrgCorps, { title: "Hird du Jarl", people: data.hird, compact: true })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne", variante: "commandementLocal" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve }))));
+    const alias = data.aliasGrades;
+    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes, aliasGrades: alias }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Hird du Jarl" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.jarl ? [data.jarl] : [], grade: "Jarl" })), /* @__PURE__ */ React.createElement("aside", { className: "org-hird-branch" }, /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(OrgCorps, { title: "Hird du Jarl", people: data.hird, aliasGrades: alias, compact: true })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne", variante: "commandementLocal" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors, aliasGrades: alias }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve, aliasGrades: alias }))));
   }
   function PersonCard({ personne, center = false, showCorps = false }) {
     const memberChanges = useMemberChanges(personne == null ? void 0 : personne.memberId);
     if (!personne) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, personne.corps));
+    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, libelleCorps(personne.corps)));
   }
   function CentralGroup({ personnes = [], grade, note, variante }) {
     return /* @__PURE__ */ React.createElement("section", { className: "org-command-node", "aria-label": note ? `${grade} \u2014 ${note}` : grade }, /* @__PURE__ */ React.createElement("h3", null, grade, note && /* @__PURE__ */ React.createElement("span", null, note)), /* @__PURE__ */ React.createElement(GradeDescription, { grade, variante }), personnes.length ? personnes.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, center: true })) : /* @__PURE__ */ React.createElement("div", { className: "org-vacant" }, "Poste vacant"));
   }
-  function RankedPeople({ personnes = [], showCorps = false }) {
+  function RankedPeople({ personnes = [], showCorps = false, aliasGrades }) {
     if (!personnes.length) return /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Aucun personnel.");
     const groups = [];
     personnes.forEach((p) => {
-      let g = groups.find((x) => x.grade === p.grade);
+      const libelle = libelleGrade(p.grade, p.corps, aliasGrades);
+      let g = groups.find((x) => x.grade === p.grade && x.libelle === libelle);
       if (!g) {
-        g = { grade: p.grade, people: [] };
+        g = { grade: p.grade, libelle, people: [] };
         groups.push(g);
       }
       g.people.push(p);
     });
-    return groups.map((g) => /* @__PURE__ */ React.createElement("section", { className: "org-rank-group", key: g.grade }, /* @__PURE__ */ React.createElement("h4", { className: "org-rank-title" }, g.grade, /* @__PURE__ */ React.createElement(GradeInfo, { grade: g.grade }), /* @__PURE__ */ React.createElement("span", null, g.people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-rank-members" }, g.people.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, showCorps })))));
+    return groups.map((g) => /* @__PURE__ */ React.createElement("section", { className: "org-rank-group", key: `${g.grade}|${g.libelle}` }, /* @__PURE__ */ React.createElement("h4", { className: "org-rank-title" }, g.libelle, /* @__PURE__ */ React.createElement(GradeInfo, { grade: g.grade, libelle: g.libelle }), /* @__PURE__ */ React.createElement("span", null, g.people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-rank-members" }, g.people.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, showCorps })))));
   }
-  function OrgCorps({ title, people = [], compact = false }) {
+  function plurielGrade(libelle) {
+    return libelle.split(" ").map((mot) => /[sxz]$/i.test(mot) ? mot : `${mot}s`).join(" ");
+  }
+  function OrgCorps({ title, people = [], compact = false, aliasGrades }) {
     const captains = people.filter((p) => normalizeSearchText2(p.grade).trim() === "capitaine");
     const others = people.filter((p) => normalizeSearchText2(p.grade).trim() !== "capitaine");
-    return /* @__PURE__ */ React.createElement("article", { className: `org-unit ${compact ? "org-unit-hird" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "org-unit-header" }, /* @__PURE__ */ React.createElement("h3", null, title, " ", /* @__PURE__ */ React.createElement(ChangesCount, { people })), /* @__PURE__ */ React.createElement("span", { className: "org-count", title: "Personnel en service actif" }, people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-captains" }, /* @__PURE__ */ React.createElement("div", { className: "org-eyebrow" }, "Capitaine", captains.length > 1 ? "s" : "", /* @__PURE__ */ React.createElement(GradeInfo, { grade: "Capitaine" })), captains.length ? captains.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p })) : /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Poste vacant")), /* @__PURE__ */ React.createElement("details", { className: "org-roster", open: compact ? void 0 : true }, /* @__PURE__ */ React.createElement("summary", null, "Personnel ", /* @__PURE__ */ React.createElement("span", null, others.length), " ", /* @__PURE__ */ React.createElement(ChangesCount, { people: others })), /* @__PURE__ */ React.createElement("div", { className: "org-roster-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: others }))));
+    const capitaine = libelleGrade("Capitaine", title, aliasGrades);
+    return /* @__PURE__ */ React.createElement("article", { className: `org-unit ${compact ? "org-unit-hird" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "org-unit-header" }, /* @__PURE__ */ React.createElement("h3", null, title, " ", /* @__PURE__ */ React.createElement(ChangesCount, { people })), /* @__PURE__ */ React.createElement("span", { className: "org-count", title: "Personnel en service actif" }, people.length)), /* @__PURE__ */ React.createElement("div", { className: "org-captains" }, /* @__PURE__ */ React.createElement("div", { className: "org-eyebrow" }, captains.length > 1 ? plurielGrade(capitaine) : capitaine, /* @__PURE__ */ React.createElement(GradeInfo, { grade: "Capitaine", libelle: capitaine })), captains.length ? captains.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p })) : /* @__PURE__ */ React.createElement("div", { className: "org-empty" }, "Poste vacant")), /* @__PURE__ */ React.createElement("details", { className: "org-roster", open: compact ? void 0 : true }, /* @__PURE__ */ React.createElement("summary", null, "Personnel ", /* @__PURE__ */ React.createElement("span", null, others.length), " ", /* @__PURE__ */ React.createElement(ChangesCount, { people: others })), /* @__PURE__ */ React.createElement("div", { className: "org-roster-body" }, /* @__PURE__ */ React.createElement(RankedPeople, { personnes: others, aliasGrades }))));
   }
-  function Independent({ title, subtitle, people = [] }) {
-    return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, title), /* @__PURE__ */ React.createElement("p", null, subtitle)), /* @__PURE__ */ React.createElement("span", { className: "org-count" }, people.length)), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people, showCorps: true }));
+  function Independent({ title, subtitle, people = [], aliasGrades }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "org-independent-block" }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, title), /* @__PURE__ */ React.createElement("p", null, subtitle)), /* @__PURE__ */ React.createElement("span", { className: "org-count" }, people.length)), /* @__PURE__ */ React.createElement(RankedPeople, { personnes: people, aliasGrades, showCorps: true }));
   }
   function dateIsoDepuisAffichage(valeur) {
     const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(String(valeur || "").trim());
@@ -9791,7 +9869,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("section", { className: "presence-synthese" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "presence-synthese-toggle", onClick: basculer, "aria-expanded": open, "aria-controls": "presence-synthese-corps" }, /* @__PURE__ */ React.createElement("span", null, "Synth\xE8se de la garde"), /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-meta" }, error ? /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "Indisponible") : aSurveiller > 0 && /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "\u26A0 ", aSurveiller, " \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, open ? "\u25BE" : "\u25B8"))), open && /* @__PURE__ */ React.createElement("div", { id: "presence-synthese-corps", className: "presence-synthese-corps" }, error ? /* @__PURE__ */ React.createElement("div", { className: "error" }, error) : !data ? /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du tableau de bord...") : /* @__PURE__ */ React.createElement(PresenceOfficerSynthese, { data })));
   }
   function PresenceOfficerSynthese({ data }) {
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 ${libelleSemaine(data.lundiCourant).toLowerCase()}`, value: formatSeptims2(data.currentWeekTotal), sub: /* @__PURE__ */ React.createElement(React.Fragment, null, "Du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims2(data.currentWeekPaid), sub: `Reste : ${formatSeptims2(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims2(data.pastUnpaidAmount), danger: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Amendes de la semaine d\xE9j\xE0 revers\xE9es", value: formatSeptims2(data.currentWeekRecoveredFines), sub: "Amendes dat\xE9es du lundi au dimanche de la semaine courante." })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, g.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [g.grade, g.corps].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : /* @__PURE__ */ React.createElement(React.Fragment, null, "Derni\xE8re pr\xE9sence : ", /* @__PURE__ */ React.createElement(DateRP, { value: g.dernierePresence }), " (", g.joursDepuis, " jours)")))))));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 ${libelleSemaine(data.lundiCourant).toLowerCase()}`, value: formatSeptims2(data.currentWeekTotal), sub: /* @__PURE__ */ React.createElement(React.Fragment, null, "Du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims2(data.currentWeekPaid), sub: `Reste : ${formatSeptims2(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims2(data.pastUnpaidAmount), danger: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Amendes de la semaine d\xE9j\xE0 revers\xE9es", value: formatSeptims2(data.currentWeekRecoveredFines), sub: "Amendes dat\xE9es du lundi au dimanche de la semaine courante." })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, g.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [libelleGrade(g.grade, g.corps, data.aliasGrades), libelleCorps(g.corps)].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : /* @__PURE__ */ React.createElement(React.Fragment, null, "Derni\xE8re pr\xE9sence : ", /* @__PURE__ */ React.createElement(DateRP, { value: g.dernierePresence }), " (", g.joursDepuis, " jours)")))))));
   }
   function Stat({ label, value, sub, warning, danger }) {
     return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
@@ -9815,12 +9893,12 @@ ${item.infraction}`)) return;
       weeks.get(r.lundi).push(r);
     });
     const weekEntries = [...weeks.entries()].sort((a, b) => comparerLundisDecroissant(a[0], b[0]));
-    const corpsList = [...new Set(data.rows.map(corpsPresence))].sort((a, b) => a.localeCompare(b, "fr"));
+    const corpsList = [...new Set(data.rows.map(corpsPresence))].sort((a, b) => libelleCorps(a).localeCompare(libelleCorps(b), "fr"));
     const searchTerms = normalizeSearchText2(search).trim().split(/\s+/).filter(Boolean);
     const matchesPerson = (r) => searchTerms.every((term) => normalizeSearchText2(`${r.prenom} ${r.nom}`).includes(term));
     const matchesCorps = (r) => !corpsFilter || corpsPresence(r) === corpsFilter;
     const filteredWeeks = weekEntries.filter(([week, rows]) => (!weekFilter || week === weekFilter) && rows.some((r) => matchesCorps(r) && matchesPerson(r)));
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, libelleSemaine(week), " \xB7 du ", dateTamriel(week, { jour: false })))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-corps-filter" }, "Corps"), /* @__PURE__ */ React.createElement("select", { id: "presence-corps-filter", value: corpsFilter, onChange: (e) => setCorpsFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les corps"), corpsList.map((corps) => /* @__PURE__ */ React.createElement("option", { key: corps, value: corps }, corps))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-search" }, "Rechercher une personne"), /* @__PURE__ */ React.createElement("input", { id: "presence-search", type: "search", placeholder: "Pr\xE9nom ou nom\u2026", value: search, onChange: (e) => setSearch(e.target.value) })), canEdit && /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Co\xFBt total estim\xE9 : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les pr\xE9sences enregistr\xE9es."), filteredWeeks.length === 0 && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucune pr\xE9sence ne correspond aux filtres s\xE9lectionn\xE9s."), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.lundiCourant, canEdit, token, onRefresh: setData, corpsTotals: data.corpsTotals || [], matchesPerson, matchesCorps, searching: searchTerms.length > 0 || Boolean(corpsFilter) })));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Pr\xE9sences"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Suivi des pr\xE9sences et des soldes."))), canEdit && /* @__PURE__ */ React.createElement(PresenceOfficerDashboard, { token }), " ", !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent modifier les pr\xE9sences et le r\xE8glement des soldes."), /* @__PURE__ */ React.createElement("div", { className: "presence-week-filter" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-week-filter" }, "Semaine"), /* @__PURE__ */ React.createElement("select", { id: "presence-week-filter", value: weekFilter, onChange: (e) => setWeekFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes les semaines"), weekEntries.map(([week]) => /* @__PURE__ */ React.createElement("option", { key: week, value: week }, libelleSemaine(week), " \xB7 du ", dateTamriel(week, { jour: false })))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-corps-filter" }, "Corps"), /* @__PURE__ */ React.createElement("select", { id: "presence-corps-filter", value: corpsFilter, onChange: (e) => setCorpsFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les corps"), corpsList.map((corps) => /* @__PURE__ */ React.createElement("option", { key: corps, value: corps }, libelleCorps(corps)))), /* @__PURE__ */ React.createElement("label", { htmlFor: "presence-search" }, "Rechercher une personne"), /* @__PURE__ */ React.createElement("input", { id: "presence-search", type: "search", placeholder: "Pr\xE9nom ou nom\u2026", value: search, onChange: (e) => setSearch(e.target.value) })), canEdit && /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Co\xFBt total estim\xE9 : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les pr\xE9sences enregistr\xE9es."), filteredWeeks.length === 0 && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucune pr\xE9sence ne correspond aux filtres s\xE9lectionn\xE9s."), filteredWeeks.map(([w, r]) => /* @__PURE__ */ React.createElement(WeekSection, { key: w, week: w, rows: r, currentWeek: data.lundiCourant, canEdit, token, onRefresh: setData, corpsTotals: data.corpsTotals || [], aliasGrades: data.aliasGrades, matchesPerson, matchesCorps, searching: searchTerms.length > 0 || Boolean(corpsFilter) })));
   }
   function estImpayePresence(s) {
     return !s.paye && Number(s.soldeRaw) > 0;
@@ -9830,7 +9908,7 @@ ${item.infraction}`)) return;
     const retenu = matchesCorps || (() => true);
     return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
   }
-  function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, matchesCorps, searching }) {
+  function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, aliasGrades, matchesPerson, matchesCorps, searching }) {
     const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState7(current);
     const [seulementImpayes, setSeulementImpayes] = useState7(false);
     useEffect8(() => {
@@ -9849,14 +9927,14 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("section", { className: `week-section ${current ? "week-current" : "week-old"}` }, /* @__PURE__ */ React.createElement("div", { className: "week-bar" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "week-header week-toggle", onClick: () => setOpen(!open), "aria-expanded": open }, /* @__PURE__ */ React.createElement("span", null, libelleSemaine(week), " \xB7 du ", /* @__PURE__ */ React.createElement(DateRP, { value: week, jour: false }), impayes > 0 && /* @__PURE__ */ React.createElement("span", { className: "week-unpaid-badge" }, impayes, " impay\xE9", impayes > 1 ? "s" : "")), /* @__PURE__ */ React.createElement("span", null, current ? "Semaine courante \xB7 " : "", open ? "\u25BE" : "\u25B8")), impayes > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: `week-unpaid-filter ${seulementImpayes ? "active" : ""}`, "aria-pressed": seulementImpayes, title: seulementImpayes ? "Afficher toute la semaine" : "N\u2019afficher que les soldes impay\xE9es", onClick: () => {
       setSeulementImpayes(!seulementImpayes);
       setOpen(true);
-    } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, libelleSemaine(week), " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.filter(matchesCorps).length, "."), open && [...groups.entries()].filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
+    } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, libelleSemaine(week), " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.filter(matchesCorps).length, "."), open && [...groups.entries()].sort(([a], [b]) => libelleCorps(a).localeCompare(libelleCorps(b), "fr")).filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
       var _a;
-      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, corps), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
+      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(corps)), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, libelleGrade(s.grade, s.corps, aliasGrades))), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
     }));
   }
-  function payeRecapTexte(f, currentWeek) {
+  function payeRecapTexte(f, currentWeek, aliasGrades) {
     const l = ["Garde de Blancherive \u2014 demande de budget", f.libelle];
-    if (f.corps.length) l.push(f.corps.join(" \xB7 "));
+    if (f.corps.length) l.push(f.corps.map(libelleCorps).join(" \xB7 "));
     l.push("");
     if (f.total <= 0) {
       l.push("Aucune solde en attente. Rien \xE0 demander.");
@@ -9867,9 +9945,9 @@ ${item.infraction}`)) return;
     l.push(f.semaines.length > 1 ? `Semaines ${numeroSemaine(f.semaines[0])} ${du(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])} ${du(f.semaines[f.semaines.length - 1])}, non r\xE9gl\xE9es.` : `${libelleSemaine(f.semaines[0])} ${du(f.semaines[0])}, non r\xE9gl\xE9e.`);
     l.push("");
     f.groupes.forEach((g) => {
-      l.push(`${g.corps} \u2014 ${formatSeptims2(g.total)}`);
+      l.push(`${libelleCorps(g.corps)} \u2014 ${formatSeptims2(g.total)}`);
       g.gardes.forEach((p) => {
-        l.push(`  ${p.nomComplet}${p.grade ? ` (${p.grade})` : ""} \u2014 ${formatSeptims2(p.total)}`);
+        l.push(`  ${p.nomComplet}${p.grade ? ` (${libelleGrade(p.grade, p.corps, aliasGrades)})` : ""} \u2014 ${formatSeptims2(p.total)}`);
         p.semaines.forEach((s) => l.push(`    ${libelleSemaine(s.lundi).toLowerCase()} ${du(s.lundi)} \xB7 ${s.joursPresents} j \xB7 ${formatSeptims2(s.montant)}`));
       });
     });
@@ -9930,15 +10008,15 @@ ${item.infraction}`)) return;
     const aDemander = choisi ? choisi.total : data.totalADemander;
     const aPrevoir = choisi ? choisi.previsionTotal : data.totalAPrevoir;
     const gardesDus = choisi ? choisi.nbGardes : data.nbGardesDus;
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Paye"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce qu'il faut demander, et \xE0 qui, pour solder les semaines closes."))), !canRegler && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent marquer une semaine r\xE9gl\xE9e."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), data.financeurs.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "paye-filtres", role: "group", "aria-label": "Filtrer par financeur" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: `paye-filtre${filtre ? "" : " actif"}`, "aria-pressed": !filtre, onClick: () => setFiltre(null) }, "Tous", /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, formatMontantCourt(data.totalADemander))), data.financeurs.map((f) => /* @__PURE__ */ React.createElement("button", { key: f.cle, type: "button", className: `paye-filtre${filtre === f.cle ? " actif" : ""}${f.role === "inconnu" && f.total > 0 ? " paye-filtre-anomalie" : ""}`, "aria-pressed": filtre === f.cle, onClick: () => setFiltre(filtre === f.cle ? null : f.cle) }, f.libelle, /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, f.total > 0 ? formatMontantCourt(f.total) : "\xE0 jour")))), /* @__PURE__ */ React.createElement("section", { className: "paye-resume", "aria-label": "Total \xE0 demander" }, /* @__PURE__ */ React.createElement("div", { className: "paye-resume-principal" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "Total \xE0 demander", choisi && ` \u2014 ${choisi.libelle}`), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-montant" }, formatSeptims2(aDemander)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, aDemander > 0 ? `${gardesDus} garde${gardesDus > 1 ? "s" : ""} en attente${choisi ? "" : ` \xB7 ${dus.length} financeur${dus.length > 1 ? "s" : ""} \xE0 solliciter`}` : choisi ? "Ce financeur est \xE0 jour." : "Toutes les semaines closes sont r\xE9gl\xE9es.")), /* @__PURE__ */ React.createElement("div", { className: "paye-resume-secondaire" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "\xC0 pr\xE9voir \u2014 ", libelleSemaine(data.lundiCourant).toLowerCase(), " en cours, du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-prevision" }, formatSeptims2(aPrevoir)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, "Non close : ce montant peut encore \xE9voluer d'ici dimanche. Il n'entre pas dans le total \xE0 demander."))), dus.map((f) => /* @__PURE__ */ React.createElement(PayeFinanceur, { key: f.cle, f, currentWeek: data.lundiCourant, canRegler, busy, regles: regles.filter((e) => e.financeur === f.cle), onBasculer: basculer })), ajour.length > 0 && !choisi && /* @__PURE__ */ React.createElement("section", { className: "paye-ajour" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-ajour-titre" }, "\xC0 jour \u2014 rien \xE0 demander"), /* @__PURE__ */ React.createElement("ul", { className: "paye-ajour-liste" }, ajour.map((f) => /* @__PURE__ */ React.createElement("li", { key: f.cle }, /* @__PURE__ */ React.createElement("strong", null, f.libelle), /* @__PURE__ */ React.createElement("span", null, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9"), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("em", null, formatSeptims2(f.previsionTotal), " \xE0 pr\xE9voir pour la ", libelleSemaine(data.lundiCourant).toLowerCase()))))));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Paye"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce qu'il faut demander, et \xE0 qui, pour solder les semaines closes."))), !canRegler && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent marquer une semaine r\xE9gl\xE9e."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), data.financeurs.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "paye-filtres", role: "group", "aria-label": "Filtrer par financeur" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: `paye-filtre${filtre ? "" : " actif"}`, "aria-pressed": !filtre, onClick: () => setFiltre(null) }, "Tous", /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, formatMontantCourt(data.totalADemander))), data.financeurs.map((f) => /* @__PURE__ */ React.createElement("button", { key: f.cle, type: "button", className: `paye-filtre${filtre === f.cle ? " actif" : ""}${f.role === "inconnu" && f.total > 0 ? " paye-filtre-anomalie" : ""}`, "aria-pressed": filtre === f.cle, onClick: () => setFiltre(filtre === f.cle ? null : f.cle) }, f.libelle, /* @__PURE__ */ React.createElement("span", { className: "paye-filtre-montant" }, f.total > 0 ? formatMontantCourt(f.total) : "\xE0 jour")))), /* @__PURE__ */ React.createElement("section", { className: "paye-resume", "aria-label": "Total \xE0 demander" }, /* @__PURE__ */ React.createElement("div", { className: "paye-resume-principal" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "Total \xE0 demander", choisi && ` \u2014 ${choisi.libelle}`), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-montant" }, formatSeptims2(aDemander)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, aDemander > 0 ? `${gardesDus} garde${gardesDus > 1 ? "s" : ""} en attente${choisi ? "" : ` \xB7 ${dus.length} financeur${dus.length > 1 ? "s" : ""} \xE0 solliciter`}` : choisi ? "Ce financeur est \xE0 jour." : "Toutes les semaines closes sont r\xE9gl\xE9es.")), /* @__PURE__ */ React.createElement("div", { className: "paye-resume-secondaire" }, /* @__PURE__ */ React.createElement("span", { className: "paye-resume-label" }, "\xC0 pr\xE9voir \u2014 ", libelleSemaine(data.lundiCourant).toLowerCase(), " en cours, du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })), /* @__PURE__ */ React.createElement("strong", { className: "paye-resume-prevision" }, formatSeptims2(aPrevoir)), /* @__PURE__ */ React.createElement("span", { className: "paye-resume-meta" }, "Non close : ce montant peut encore \xE9voluer d'ici dimanche. Il n'entre pas dans le total \xE0 demander."))), dus.map((f) => /* @__PURE__ */ React.createElement(PayeFinanceur, { key: f.cle, f, currentWeek: data.lundiCourant, aliasGrades: data.aliasGrades, canRegler, busy, regles: regles.filter((e) => e.financeur === f.cle), onBasculer: basculer })), ajour.length > 0 && !choisi && /* @__PURE__ */ React.createElement("section", { className: "paye-ajour" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-ajour-titre" }, "\xC0 jour \u2014 rien \xE0 demander"), /* @__PURE__ */ React.createElement("ul", { className: "paye-ajour-liste" }, ajour.map((f) => /* @__PURE__ */ React.createElement("li", { key: f.cle }, /* @__PURE__ */ React.createElement("strong", null, f.libelle), /* @__PURE__ */ React.createElement("span", null, f.corps.map(libelleCorps).join(" \xB7 ") || "Aucun corps rattach\xE9"), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("em", null, formatSeptims2(f.previsionTotal), " \xE0 pr\xE9voir pour la ", libelleSemaine(data.lundiCourant).toLowerCase()))))));
   }
   function PayeSemaine({ s, canRegler, busy, onRegler }) {
     const Ligne = canRegler ? "label" : "div";
     return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, libelleSemaine(s.lundi), " ", /* @__PURE__ */ React.createElement("small", null, "du ", /* @__PURE__ */ React.createElement(DateRP, { value: s.lundi, jour: false }))), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims2(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
   }
-  function PayeFinanceur({ f, currentWeek, canRegler, busy, regles, onBasculer }) {
+  function PayeFinanceur({ f, currentWeek, aliasGrades, canRegler, busy, regles, onBasculer }) {
     const [ouvert, setOuvert] = useState7(true), [copie, setCopie] = useState7(""), [texteVisible, setTexteVisible] = useState7(false);
-    const texte = useMemo4(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
+    const texte = useMemo4(() => payeRecapTexte(f, currentWeek, aliasGrades), [f, currentWeek, aliasGrades]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();
     async function copier() {
@@ -9946,7 +10024,7 @@ ${item.infraction}`)) return;
       setCopie(ok ? "R\xE9capitulatif copi\xE9." : "Copie impossible ici \u2014 le texte est affich\xE9 ci-dessous.");
       if (!ok) setTexteVisible(true);
     }
-    return /* @__PURE__ */ React.createElement("section", { className: `paye-card${anomalie ? " paye-card-anomalie" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "paye-card-header" }, /* @__PURE__ */ React.createElement("div", { className: "paye-card-identite" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-financeur" }, f.libelle), /* @__PURE__ */ React.createElement("p", { className: "paye-corps" }, f.corps.join(" \xB7 ") || "Aucun corps rattach\xE9")), /* @__PURE__ */ React.createElement("div", { className: "paye-card-montant" }, /* @__PURE__ */ React.createElement("span", { className: "paye-montant-label" }, "\xC0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-montant" }, formatSeptims2(f.total)), /* @__PURE__ */ React.createElement("span", { className: "paye-montant-meta" }, f.total > 0 ? `${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""} \xB7 ${periode}` : "Plus rien en attente"))), anomalie && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte", role: "alert" }, "\u26A0 Ces corps ne correspondent \xE0 aucun financeur connu. V\xE9rifiez leur libell\xE9 dans la feuille Pr\xE9sences avant de pr\xE9senter la demande : le montant est bien d\xFB, mais son payeur reste \xE0 \xE9tablir."), !anomalie && f.retardMax >= 3 && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte" }, "\u26A0 La plus ancienne semaine due remonte \xE0 ", f.retardMax, " semaines."), /* @__PURE__ */ React.createElement("div", { className: "paye-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-copier", onClick: copier }, "Copier le r\xE9capitulatif"), f.groupes.length > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-detail", onClick: () => setOuvert(!ouvert), "aria-expanded": ouvert }, ouvert ? "Masquer le d\xE9tail" : "Voir le d\xE9tail"), copie && /* @__PURE__ */ React.createElement("span", { className: "paye-copie", role: "status" }, copie)), texteVisible && /* @__PURE__ */ React.createElement("textarea", { className: "paye-texte", readOnly: true, rows: 10, value: texte, "aria-label": `R\xE9capitulatif pour ${f.libelle}` }), ouvert && /* @__PURE__ */ React.createElement("div", { className: "paye-detail" }, f.groupes.map((g) => /* @__PURE__ */ React.createElement("div", { className: "paye-groupe", key: g.corps }, /* @__PURE__ */ React.createElement("div", { className: "paye-groupe-titre" }, /* @__PURE__ */ React.createElement("span", null, g.corps), /* @__PURE__ */ React.createElement("span", null, formatSeptims2(g.total))), g.gardes.map((p) => /* @__PURE__ */ React.createElement("div", { className: "paye-garde", key: p.cle }, /* @__PURE__ */ React.createElement("div", { className: "paye-garde-identite" }, /* @__PURE__ */ React.createElement("strong", null, p.nomComplet), /* @__PURE__ */ React.createElement("span", { className: "grade" }, p.grade)), /* @__PURE__ */ React.createElement("div", { className: "paye-garde-total" }, formatSeptims2(p.total)), /* @__PURE__ */ React.createElement("ul", { className: "paye-semaines" }, p.semaines.map((s) => /* @__PURE__ */ React.createElement(PayeSemaine, { key: s.row, s, canRegler, busy, onRegler: () => onBasculer({ row: s.row, financeur: f.cle, nomComplet: p.nomComplet, lundi: s.lundi, montant: s.montant, identite: { lundi: s.lundi, prenom: p.prenom, nom: p.nom } }, true) })))))))), regles.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "paye-regles" }, /* @__PURE__ */ React.createElement("span", { className: "paye-regles-titre" }, "R\xE9gl\xE9 \xE0 l'instant"), /* @__PURE__ */ React.createElement("ul", null, regles.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.row }, /* @__PURE__ */ React.createElement("span", null, e.nomComplet, " \u2014 ", libelleSemaine(e.lundi).toLowerCase(), " \u2014 ", formatSeptims2(e.montant)), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy !== null, onClick: () => onBasculer(e, false) }, "Annuler"))))), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("p", { className: "paye-prevision" }, "\xC0 pr\xE9voir pour la ", libelleSemaine(currentWeek).toLowerCase(), ", encore en cours : ", /* @__PURE__ */ React.createElement("strong", null, formatSeptims2(f.previsionTotal)), " pour ", f.previsionGardes, " garde", f.previsionGardes > 1 ? "s" : "", ". Non compris dans le montant \xE0 demander."));
+    return /* @__PURE__ */ React.createElement("section", { className: `paye-card${anomalie ? " paye-card-anomalie" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "paye-card-header" }, /* @__PURE__ */ React.createElement("div", { className: "paye-card-identite" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-financeur" }, f.libelle), /* @__PURE__ */ React.createElement("p", { className: "paye-corps" }, f.corps.map(libelleCorps).join(" \xB7 ") || "Aucun corps rattach\xE9")), /* @__PURE__ */ React.createElement("div", { className: "paye-card-montant" }, /* @__PURE__ */ React.createElement("span", { className: "paye-montant-label" }, "\xC0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-montant" }, formatSeptims2(f.total)), /* @__PURE__ */ React.createElement("span", { className: "paye-montant-meta" }, f.total > 0 ? `${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""} \xB7 ${periode}` : "Plus rien en attente"))), anomalie && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte", role: "alert" }, "\u26A0 Ces corps ne correspondent \xE0 aucun financeur connu. V\xE9rifiez leur libell\xE9 dans la feuille Pr\xE9sences avant de pr\xE9senter la demande : le montant est bien d\xFB, mais son payeur reste \xE0 \xE9tablir."), !anomalie && f.retardMax >= 3 && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte" }, "\u26A0 La plus ancienne semaine due remonte \xE0 ", f.retardMax, " semaines."), /* @__PURE__ */ React.createElement("div", { className: "paye-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-copier", onClick: copier }, "Copier le r\xE9capitulatif"), f.groupes.length > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-detail", onClick: () => setOuvert(!ouvert), "aria-expanded": ouvert }, ouvert ? "Masquer le d\xE9tail" : "Voir le d\xE9tail"), copie && /* @__PURE__ */ React.createElement("span", { className: "paye-copie", role: "status" }, copie)), texteVisible && /* @__PURE__ */ React.createElement("textarea", { className: "paye-texte", readOnly: true, rows: 10, value: texte, "aria-label": `R\xE9capitulatif pour ${f.libelle}` }), ouvert && /* @__PURE__ */ React.createElement("div", { className: "paye-detail" }, f.groupes.map((g) => /* @__PURE__ */ React.createElement("div", { className: "paye-groupe", key: g.corps }, /* @__PURE__ */ React.createElement("div", { className: "paye-groupe-titre" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(g.corps)), /* @__PURE__ */ React.createElement("span", null, formatSeptims2(g.total))), g.gardes.map((p) => /* @__PURE__ */ React.createElement("div", { className: "paye-garde", key: p.cle }, /* @__PURE__ */ React.createElement("div", { className: "paye-garde-identite" }, /* @__PURE__ */ React.createElement("strong", null, p.nomComplet), /* @__PURE__ */ React.createElement("span", { className: "grade" }, libelleGrade(p.grade, p.corps, aliasGrades))), /* @__PURE__ */ React.createElement("div", { className: "paye-garde-total" }, formatSeptims2(p.total)), /* @__PURE__ */ React.createElement("ul", { className: "paye-semaines" }, p.semaines.map((s) => /* @__PURE__ */ React.createElement(PayeSemaine, { key: s.row, s, canRegler, busy, onRegler: () => onBasculer({ row: s.row, financeur: f.cle, nomComplet: p.nomComplet, lundi: s.lundi, montant: s.montant, identite: { lundi: s.lundi, prenom: p.prenom, nom: p.nom } }, true) })))))))), regles.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "paye-regles" }, /* @__PURE__ */ React.createElement("span", { className: "paye-regles-titre" }, "R\xE9gl\xE9 \xE0 l'instant"), /* @__PURE__ */ React.createElement("ul", null, regles.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.row }, /* @__PURE__ */ React.createElement("span", null, e.nomComplet, " \u2014 ", libelleSemaine(e.lundi).toLowerCase(), " \u2014 ", formatSeptims2(e.montant)), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy !== null, onClick: () => onBasculer(e, false) }, "Annuler"))))), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("p", { className: "paye-prevision" }, "\xC0 pr\xE9voir pour la ", libelleSemaine(currentWeek).toLowerCase(), ", encore en cours : ", /* @__PURE__ */ React.createElement("strong", null, formatSeptims2(f.previsionTotal)), " pour ", f.previsionGardes, " garde", f.previsionGardes > 1 ? "s" : "", ". Non compris dans le montant \xE0 demander."));
   }
 
   // ui/src/main.jsx

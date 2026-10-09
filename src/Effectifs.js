@@ -328,6 +328,9 @@ function getEffectifs(token) {
     changes: historiqueEffectifsPourRole_(history, "OFFICIER"),
     gradeOrder,
 
+    // Affichage seulement : les options et les valeurs restent les grades réguliers.
+    aliasGrades: lireAliasGrades_(ss),
+
     options: {
       grades: lireOptionsColonneEffectifsWeb_(
         ss,

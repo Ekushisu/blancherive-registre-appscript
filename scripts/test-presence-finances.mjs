@@ -33,6 +33,8 @@ vm.runInContext(readFileSync('src/Presences.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/PresenceDashboard.gs.js', 'utf8'), context);
 // Le barème et sa migration sont couverts par test-soldes-grades.mjs.
 context.mettreAJourSoldesPresences_ = () => {};
+// Lecture couverte par test-alias-grades ; seule la transmission est vérifiée ici.
+context.lireAliasGrades_ = () => ({ Inquisition: { Garde: 'Inquisiteur' } });
 context.getLastPresenceRowWebApp = () => presenceRows.length + 1;
 context.lundiCourantPresence_ = () => '2026-08-31';
 context.estCorpsExcluDesPresences_ = corps => corps === 'Hird';
@@ -40,6 +42,8 @@ assert.throws(() => context.getPresences('invalid'), /Accès refusé/);
 assert.throws(() => context.getPresenceOfficerDashboard('GARDE'), /Accès refusé/);
 assert.equal(reads, 0, 'Refus avant lecture Sheets');
 assert.equal('corpsTotals' in context.getPresences('GARDE'), false);
+// Les alias de grade ne sont pas une donnée financière : le GARDE les reçoit.
+assert.equal(context.getPresences('GARDE').aliasGrades.Inquisition.Garde, 'Inquisiteur');
 const totals = context.getPresences('OFFICIER').corpsTotals;
 assert.deepEqual(JSON.parse(JSON.stringify(totals)), [
   { lundi: '2026-08-31', corps: 'Rivebois', total: 300 },

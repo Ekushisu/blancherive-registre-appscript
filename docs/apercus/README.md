@@ -36,10 +36,13 @@ un message explicite plutôt que de laisser un écran de chargement muet.
 Générées par le script, donc rejouables à l’identique :
 
 - `effectifs-1440.png`, `effectifs-390.png` : onglets par corps, vue d'ensemble
-  et fiches de service. Le jeu de démonstration couvre les six corps, densité à
-  laquelle les défauts d'affichage mobile apparaissent.
+  et fiches de service. Le jeu de démonstration couvre sept corps, densité à
+  laquelle les défauts d'affichage mobile apparaissent, dont « Inquisition »
+  affiché « Garde inquisitoriale », ses grades sous leur alias (« Grand
+  Inquisiteur », « Inquisiteur »).
 - `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement,
-  corps et garnisons, avec les descriptions de grades.
+  les sept corps et garnisons sur la grille à sept colonnes, avec les
+  descriptions de grades et les alias de grade de la Garde inquisitoriale.
 - `organigramme-grade-1440.png` : un encart de description de grade déplié.
 - `presences-1440.png`, `presences-390.png` : tableau de bord OFFICIER,
   accordéons de semaines, coût total par corps.

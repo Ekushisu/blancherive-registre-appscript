@@ -16,6 +16,7 @@ import { GradeDescription, GradeInfo } from "./grades.jsx";
 import { libelleSemaine, dateLundi, numeroSemaine, comparerLundisDecroissant } from "./semaine.js";
 import { dateTamriel } from "./calendrier.js";
 import { DateRP } from "./calendrier.jsx";
+import { libelleCorps, libelleGrade } from "./corps.js";
 
 const {useEffect,useMemo,useRef,useState}=React;
 
@@ -166,7 +167,9 @@ function EffectifsPage({token}){
         member.prenom,
         member.nom,
         member.grade,
+        libelleGrade(member.grade,member.corps,data?.aliasGrades),
         member.corps,
+        libelleCorps(member.corps),
         member.specialite,
         member.status,
         member.assermente
@@ -179,6 +182,7 @@ function EffectifsPage({token}){
         .includes(q);
     });
   },[
+    data,
     activeRows,
     search,
     activeCorps
@@ -204,7 +208,9 @@ function EffectifsPage({token}){
         member.prenom,
         member.nom,
         member.grade,
+        libelleGrade(member.grade,member.corps,data?.aliasGrades),
         member.corps,
+        libelleCorps(member.corps),
         member.specialite,
         member.status,
         member.terminalGroup
@@ -212,6 +218,7 @@ function EffectifsPage({token}){
         .includes(q)
     );
   },[
+    data,
     terminalRows,
     search
   ]);
@@ -287,8 +294,8 @@ function EffectifsPage({token}){
     return [...corpsMap.entries()]
       .sort(
         ([a],[b])=>
-          a.localeCompare(
-            b,
+          libelleCorps(a).localeCompare(
+            libelleCorps(b),
             "fr"
           )
       )
@@ -465,7 +472,7 @@ function EffectifsPage({token}){
       ).length;
 
   return(
-    <ChangesProvider data={data.changes}><div className="effectifs-page">
+    <ChangesProvider data={data.changes} aliasGrades={data.aliasGrades}><div className="effectifs-page">
       <div className="page-header">
         <div>
           <h1 className="page-title">
@@ -517,6 +524,7 @@ function EffectifsPage({token}){
       {showForm&&
         <NouvelEffectifForm
           options={data.options}
+          aliasGrades={data.aliasGrades}
           initialCorps={
             activeCorps==="ALL"
               ?""
@@ -625,7 +633,7 @@ function EffectifsPage({token}){
                 }
               />
 
-              {corps}
+              {libelleCorps(corps)}
               <ChangesCount people={activeRows} corps={corps}/>
 
               <span className="effectifs-tab-count">
@@ -643,7 +651,7 @@ function EffectifsPage({token}){
           <strong>
             {activeCorps==="ALL"
               ?"Tous les corps"
-              :activeCorps
+              :libelleCorps(activeCorps)
             }
           </strong>
 
@@ -712,7 +720,7 @@ function EffectifsPage({token}){
               >
                 <div>
                   <div className="effectifs-corps-title">
-                    {corpsGroup.corps}
+                    {libelleCorps(corpsGroup.corps)}
                   </div>
 
                   <div className="effectifs-corps-subtitle">
@@ -758,7 +766,11 @@ function EffectifsPage({token}){
                         <span>
                           {group.type==="reserve"
                             ?"Réserve"
-                            :group.grade
+                            :libelleGrade(
+                              group.grade,
+                              corpsGroup.corps,
+                              data.aliasGrades
+                            )
                           }
                         </span>
 
@@ -778,6 +790,9 @@ function EffectifsPage({token}){
                             }
                             options={
                               data.options
+                            }
+                            aliasGrades={
+                              data.aliasGrades
                             }
                             onSave={
                               async values=>{
@@ -886,6 +901,9 @@ function EffectifsPage({token}){
                       options={
                         data.options
                       }
+                      aliasGrades={
+                        data.aliasGrades
+                      }
                       showCorps
                       onSave={
                         async values=>{
@@ -953,6 +971,7 @@ function EffectifsPage({token}){
 
 function NouvelEffectifForm({
   options,
+  aliasGrades,
   initialCorps,
   onSubmit
 }){
@@ -1052,13 +1071,21 @@ function NouvelEffectifForm({
               Sélectionner…
             </option>
 
+            {/*
+              Libellé selon le corps choisi (alias de l'Inquisition) ;
+              la valeur envoyée reste le grade régulier.
+            */}
             {options.grades.map(
               value=>
                 <option
                   key={value}
                   value={value}
                 >
-                  {value}
+                  {libelleGrade(
+                    value,
+                    form.corps,
+                    aliasGrades
+                  )}
                 </option>
             )}
           </select>
@@ -1094,7 +1121,7 @@ function NouvelEffectifForm({
                   key={value}
                   value={value}
                 >
-                  {value}
+                  {libelleCorps(value)}
                 </option>
             )}
           </select>
@@ -1233,6 +1260,7 @@ function NouvelEffectifForm({
 function EffectifCard({
   member,
   options,
+  aliasGrades,
   onSave,
   showCorps=false
 }){
@@ -1360,7 +1388,7 @@ function EffectifCard({
                 )
               }
             >
-              {member.corps}
+              {libelleCorps(member.corps)}
             </span>
           }
 
@@ -1451,13 +1479,21 @@ function EffectifCard({
                 )
               }
             >
+              {/*
+                Libellé selon le corps en cours d'édition ;
+                la valeur envoyée reste le grade régulier.
+              */}
               {options.grades.map(
                 value=>
                   <option
                     key={value}
                     value={value}
                   >
-                    {value}
+                    {libelleGrade(
+                      value,
+                      corps,
+                      aliasGrades
+                    )}
                   </option>
               )}
             </select>
@@ -1491,7 +1527,7 @@ function EffectifCard({
                     key={value}
                     value={value}
                   >
-                    {value}
+                    {libelleCorps(value)}
                   </option>
               )}
             </select>
@@ -1692,13 +1728,14 @@ function OrganigrammePage({token}) {
   const localKeys = local?.garnisonKeys || [];
   const directCorps = data.garnisons.filter(g => !localKeys.includes(g.key));
   const localCorps = data.garnisons.filter(g => localKeys.includes(g.key));
-  return <ChangesProvider data={data.changes}><div className="org-page">
+  const alias = data.aliasGrades;
+  return <ChangesProvider data={data.changes} aliasGrades={alias}><div className="org-page">
     <div className="page-header"><div><h1 className="page-title">Organigramme</h1><p className="page-subtitle">Garde de Blancherive · Chaîne de commandement</p></div><span className="org-seal">Au service de la châtellerie</span></div>
     <RecentChanges onRefresh={async()=>setData(await serverCall("getOrganigramme",token))}/>
     <section className="org-hierarchy" aria-label="État-Major et Hird du Jarl">
       <div className="org-command-heading">État-Major</div>
       <div className="org-sovereign"><CentralGroup personnes={data.jarl?[data.jarl]:[]} grade="Jarl"/></div>
-      <aside className="org-hird-branch"><div className="org-direct-label">Autorité directe du Jarl</div><OrgCorps title="Hird du Jarl" people={data.hird} compact/></aside>
+      <aside className="org-hird-branch"><div className="org-direct-label">Autorité directe du Jarl</div><OrgCorps title="Hird du Jarl" people={data.hird} aliasGrades={alias} compact/></aside>
       <div className="org-command-chain"><CentralGroup personnes={data.marechaux} grade="Maréchal"/><CentralGroup personnes={data.commandants} grade="Commander"/><CentralGroup personnes={data.majorsEtatMajor} grade="Major" note="État-Major"/></div>
     </section>
     <section className="org-corps-section" aria-labelledby="org-corps-title">
@@ -1707,38 +1744,48 @@ function OrganigrammePage({token}) {
         {local && <section className="org-local-command" aria-label={local.nom}>
           <div className="org-local-heading"><h3>{local.nom}</h3><p>Sous les ordres directs de l’État-Major central</p></div>
           <CentralGroup personnes={local.majors} grade="Majors" note="Rivebois · Bois-de-Chêne" variante="commandementLocal"/>
-          <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
+          <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} aliasGrades={alias}/>)}</div>
         </section>}
-        {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
+        {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} aliasGrades={alias}/>)}</div>
     </section>
-    <div className="org-detached"><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve}/></div>
+    <div className="org-detached"><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors} aliasGrades={alias}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve} aliasGrades={alias}/></div>
   </div></ChangesProvider>;
 }
 function PersonCard({personne,center=false,showCorps=false}) {
   const memberChanges=useMemberChanges(personne?.memberId);
   if(!personne)return null;
-  return <div className={`org-person ${center?"center":""}`} {...memberChanges.hoverProps}><div className="org-person-name">{personne.nomComplet}<ChangeBadge change={memberChanges}/></div>{showCorps&&personne.corps&&<div className="org-person-corps">{personne.corps}</div>}</div>;
+  return <div className={`org-person ${center?"center":""}`} {...memberChanges.hoverProps}><div className="org-person-name">{personne.nomComplet}<ChangeBadge change={memberChanges}/></div>{showCorps&&personne.corps&&<div className="org-person-corps">{libelleCorps(personne.corps)}</div>}</div>;
 }
 function CentralGroup({personnes=[],grade,note,variante}) {
   return <section className="org-command-node" aria-label={note?`${grade} — ${note}`:grade}><h3>{grade}{note&&<span>{note}</span>}</h3><GradeDescription grade={grade} variante={variante}/>{personnes.length?personnes.map((p,i)=><PersonCard key={i} personne={p} center/>):<div className="org-vacant">Poste vacant</div>}</section>;
 }
-function RankedPeople({personnes=[],showCorps=false}) {
+/*
+  Groupes de grade dans l'ordre reçu du serveur. Le titre est le grade affiché
+  selon le corps : dans la Réserve, tous corps confondus, les Capitaines et les
+  Grands Inquisiteurs forment deux groupes voisins. La description reste celle
+  du grade régulier, dont l'alias est l'équivalent.
+*/
+function RankedPeople({personnes=[],showCorps=false,aliasGrades}) {
   if(!personnes.length)return <div className="org-empty">Aucun personnel.</div>;
   const groups=[];
-  personnes.forEach(p=>{let g=groups.find(x=>x.grade===p.grade);if(!g){g={grade:p.grade,people:[]};groups.push(g);}g.people.push(p);});
-  return groups.map(g=><section className="org-rank-group" key={g.grade}><h4 className="org-rank-title">{g.grade}<GradeInfo grade={g.grade}/><span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
+  personnes.forEach(p=>{const libelle=libelleGrade(p.grade,p.corps,aliasGrades);let g=groups.find(x=>x.grade===p.grade&&x.libelle===libelle);if(!g){g={grade:p.grade,libelle,people:[]};groups.push(g);}g.people.push(p);});
+  return groups.map(g=><section className="org-rank-group" key={`${g.grade}|${g.libelle}`}><h4 className="org-rank-title">{g.libelle}<GradeInfo grade={g.grade} libelle={g.libelle}/><span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
 }
-function OrgCorps({title,people=[],compact=false}) {
+// « Capitaine » → « Capitaines », « Grand Inquisiteur » → « Grands Inquisiteurs ».
+function plurielGrade(libelle){return libelle.split(" ").map(mot=>/[sxz]$/i.test(mot)?mot:`${mot}s`).join(" ");}
+function OrgCorps({title,people=[],compact=false,aliasGrades}) {
   const captains=people.filter(p=>normalizeSearchText(p.grade).trim()==="capitaine");
   const others=people.filter(p=>normalizeSearchText(p.grade).trim()!=="capitaine");
+  // Le titre de la garnison suffit à trouver l'alias, même quand le poste est vacant.
+  const capitaine=libelleGrade("Capitaine",title,aliasGrades);
   return <article className={`org-unit ${compact?"org-unit-hird":""}`}>
     <header className="org-unit-header"><h3>{title} <ChangesCount people={people}/></h3><span className="org-count" title="Personnel en service actif">{people.length}</span></header>
-    <div className="org-captains"><div className="org-eyebrow">Capitaine{captains.length>1?"s":""}<GradeInfo grade="Capitaine"/></div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
-    <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others}/></div></details>
+    <div className="org-captains"><div className="org-eyebrow">{captains.length>1?plurielGrade(capitaine):capitaine}<GradeInfo grade="Capitaine" libelle={capitaine}/></div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
+    <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others} aliasGrades={aliasGrades}/></div></details>
   </article>;
 }
-function Independent({title,subtitle,people=[]}) {
-  return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} showCorps/></section>;
+function Independent({title,subtitle,people=[],aliasGrades}) {
+  return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} aliasGrades={aliasGrades} showCorps/></section>;
 }
 function dateIsoDepuisAffichage(valeur){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(String(valeur||"").trim());if(m)return `${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;const iso=/^(\d{4}-\d{2}-\d{2})/.exec(String(valeur||""));return iso?iso[1]:"";}
 function dateLocaleIso(){const now=new Date();return new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString();}
@@ -1882,7 +1929,7 @@ function PresenceOfficerDashboard({token}){
   </section>;
 }
 
-function PresenceOfficerSynthese({data}){return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — ${libelleSemaine(data.lundiCourant).toLowerCase()}`} value={formatSeptims(data.currentWeekTotal)} sub={<>Du <DateRP value={data.lundiCourant} jour={false}/></>}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,g.corps].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":<>Dernière présence : <DateRP value={g.dernierePresence}/> ({g.joursDepuis} jours)</>}</div></div>)}</div></div></>}
+function PresenceOfficerSynthese({data}){return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — ${libelleSemaine(data.lundiCourant).toLowerCase()}`} value={formatSeptims(data.currentWeekTotal)} sub={<>Du <DateRP value={data.lundiCourant} jour={false}/></>}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[libelleGrade(g.grade,g.corps,data.aliasGrades),libelleCorps(g.corps)].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":<>Dernière présence : <DateRP value={g.dernierePresence}/> ({g.joursDepuis} jours)</>}</div></div>)}</div></div></>}
 function Stat({label,value,sub,warning,danger}){return<div className={`presence-stat-card ${warning?"presence-stat-warning":""} ${danger?"presence-stat-danger":""}`}><div className="presence-stat-label">{label}</div><div className="presence-stat-value">{value}</div>{sub&&<div className="presence-stat-sub">{sub}</div>}</div>;}
 /*
   Le corps d'appartenance sert d'identité de filtre : une ligne sans corps est
@@ -1899,7 +1946,7 @@ export function corpsPresence(r){return r.corps||"Sans corps";}
 */
 export function identitePresence(s){return {lundi:s.lundi,prenom:s.prenom,nom:s.nom};}
 
-function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[corpsFilter,setCorpsFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.lundi))weeks.set(r.lundi,[]);weeks.get(r.lundi).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>comparerLundisDecroissant(a[0],b[0]));const corpsList=[...new Set(data.rows.map(corpsPresence))].sort((a,b)=>a.localeCompare(b,"fr"));const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const matchesCorps=r=>!corpsFilter||corpsPresence(r)===corpsFilter;const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||week===weekFilter)&&rows.some(r=>matchesCorps(r)&&matchesPerson(r)));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>{libelleSemaine(week)} · du {dateTamriel(week,{jour:false})}</option>)}</select><label htmlFor="presence-corps-filter">Corps</label><select id="presence-corps-filter" value={corpsFilter} onChange={e=>setCorpsFilter(e.target.value)}><option value="">Tous les corps</option>{corpsList.map(corps=><option key={corps} value={corps}>{corps}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.lundiCourant} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} matchesPerson={matchesPerson} matchesCorps={matchesCorps} searching={searchTerms.length>0||Boolean(corpsFilter)}/>)}</>}
+function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[corpsFilter,setCorpsFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.lundi))weeks.set(r.lundi,[]);weeks.get(r.lundi).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>comparerLundisDecroissant(a[0],b[0]));const corpsList=[...new Set(data.rows.map(corpsPresence))].sort((a,b)=>libelleCorps(a).localeCompare(libelleCorps(b),"fr"));const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const matchesCorps=r=>!corpsFilter||corpsPresence(r)===corpsFilter;const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||week===weekFilter)&&rows.some(r=>matchesCorps(r)&&matchesPerson(r)));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>{libelleSemaine(week)} · du {dateTamriel(week,{jour:false})}</option>)}</select><label htmlFor="presence-corps-filter">Corps</label><select id="presence-corps-filter" value={corpsFilter} onChange={e=>setCorpsFilter(e.target.value)}><option value="">Tous les corps</option>{corpsList.map(corps=><option key={corps} value={corps}>{libelleCorps(corps)}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.lundiCourant} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} aliasGrades={data.aliasGrades} matchesPerson={matchesPerson} matchesCorps={matchesCorps} searching={searchTerms.length>0||Boolean(corpsFilter)}/>)}</>}
 /*
   Une solde est impayée si elle est due et non réglée. Une solde nulle — Recrue,
   ou semaine sans présence — n'est pas un impayé : c'est déjà la distinction que
@@ -1925,7 +1972,7 @@ export function compteImpayesSemaine(rows,{current,matchesCorps}={}){
   return rows.filter(r=>retenu(r)&&estImpayePresence(r)).length;
 }
 
-function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,matchesCorps,searching}){
+function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,aliasGrades,matchesPerson,matchesCorps,searching}){
   // `week` et `currentWeek` sont des lundis ISO : la semaine courante se
   // reconnaît par égalité de texte, l'année comprise.
   const groups=new Map(),current=week===currentWeek,[open,setOpen]=useState(current);
@@ -1941,15 +1988,15 @@ function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,
       {impayes>0&&<button type="button" className={`week-unpaid-filter ${seulementImpayes?"active":""}`} aria-pressed={seulementImpayes} title={seulementImpayes?"Afficher toute la semaine":"N’afficher que les soldes impayées"} onClick={()=>{setSeulementImpayes(!seulementImpayes);setOpen(true);}}>{seulementImpayes?"Tout afficher":"Impayés"}</button>}
     </div>
     {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">{libelleSemaine(week)} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.filter(matchesCorps).length}.</p>}
-    {open&&[...groups.entries()].filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{corps}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.lundi===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked,identitePresence(s)))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked,identitePresence(s)))}/></td></tr>)}</tbody></table></div></div>)}
+    {open&&[...groups.entries()].sort(([a],[b])=>libelleCorps(a).localeCompare(libelleCorps(b),"fr")).filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{libelleCorps(corps)}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.lundi===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{libelleGrade(s.grade,s.corps,aliasGrades)}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked,identitePresence(s)))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked,identitePresence(s)))}/></td></tr>)}</tbody></table></div></div>)}
   </section>;
 }
 
 // Récapitulatif en texte brut, à lire ou à recopier devant le financeur.
 // Il reprend l'ordre de l'écran : montant d'abord, justification ensuite.
-function payeRecapTexte(f,currentWeek){
+function payeRecapTexte(f,currentWeek,aliasGrades){
   const l=["Garde de Blancherive — demande de budget",f.libelle];
-  if(f.corps.length)l.push(f.corps.join(" · "));
+  if(f.corps.length)l.push(f.corps.map(libelleCorps).join(" · "));
   l.push("");
   if(f.total<=0){l.push("Aucune solde en attente. Rien à demander.");return l.join("\n");}
   l.push(`À verser : ${formatSeptims(f.total)}, pour ${f.nbGardes} garde${f.nbGardes>1?"s":""}.`);
@@ -1958,9 +2005,9 @@ function payeRecapTexte(f,currentWeek){
   l.push(f.semaines.length>1?`Semaines ${numeroSemaine(f.semaines[0])} ${du(f.semaines[0])} à ${numeroSemaine(f.semaines[f.semaines.length-1])} ${du(f.semaines[f.semaines.length-1])}, non réglées.`:`${libelleSemaine(f.semaines[0])} ${du(f.semaines[0])}, non réglée.`);
   l.push("");
   f.groupes.forEach(g=>{
-    l.push(`${g.corps} — ${formatSeptims(g.total)}`);
+    l.push(`${libelleCorps(g.corps)} — ${formatSeptims(g.total)}`);
     g.gardes.forEach(p=>{
-      l.push(`  ${p.nomComplet}${p.grade?` (${p.grade})`:""} — ${formatSeptims(p.total)}`);
+      l.push(`  ${p.nomComplet}${p.grade?` (${libelleGrade(p.grade,p.corps,aliasGrades)})`:""} — ${formatSeptims(p.total)}`);
       p.semaines.forEach(s=>l.push(`    ${libelleSemaine(s.lundi).toLowerCase()} ${du(s.lundi)} · ${s.joursPresents} j · ${formatSeptims(s.montant)}`));
     });
   });
@@ -2044,10 +2091,10 @@ function PayePage({token,canRegler}){
       </div>
     </section>
 
-    {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.lundiCourant} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
+    {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.lundiCourant} aliasGrades={data.aliasGrades} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
     {ajour.length>0&&!choisi&&<section className="paye-ajour">
       <h2 className="paye-ajour-titre">À jour — rien à demander</h2>
-      <ul className="paye-ajour-liste">{ajour.map(f=><li key={f.cle}><strong>{f.libelle}</strong><span>{f.corps.join(" · ")||"Aucun corps rattaché"}</span>{f.previsionTotal>0&&<em>{formatSeptims(f.previsionTotal)} à prévoir pour la {libelleSemaine(data.lundiCourant).toLowerCase()}</em>}</li>)}</ul>
+      <ul className="paye-ajour-liste">{ajour.map(f=><li key={f.cle}><strong>{f.libelle}</strong><span>{f.corps.map(libelleCorps).join(" · ")||"Aucun corps rattaché"}</span>{f.previsionTotal>0&&<em>{formatSeptims(f.previsionTotal)} à prévoir pour la {libelleSemaine(data.lundiCourant).toLowerCase()}</em>}</li>)}</ul>
     </section>}
   </>;
 }
@@ -2067,9 +2114,9 @@ function PayeSemaine({s,canRegler,busy,onRegler}){
   </li>;
 }
 
-function PayeFinanceur({f,currentWeek,canRegler,busy,regles,onBasculer}){
+function PayeFinanceur({f,currentWeek,aliasGrades,canRegler,busy,regles,onBasculer}){
   const[ouvert,setOuvert]=useState(true),[copie,setCopie]=useState(""),[texteVisible,setTexteVisible]=useState(false);
-  const texte=useMemo(()=>payeRecapTexte(f,currentWeek),[f,currentWeek]);
+  const texte=useMemo(()=>payeRecapTexte(f,currentWeek,aliasGrades),[f,currentWeek,aliasGrades]);
   const anomalie=f.role==="inconnu"&&f.total>0;
   // La carte reste affichée après le règlement de la dernière semaine : le
   // sous-titre doit alors dire que la dette est éteinte, pas nommer une période.
@@ -2081,7 +2128,7 @@ function PayeFinanceur({f,currentWeek,canRegler,busy,regles,onBasculer}){
     <header className="paye-card-header">
       <div className="paye-card-identite">
         <h2 className="paye-financeur">{f.libelle}</h2>
-        <p className="paye-corps">{f.corps.join(" · ")||"Aucun corps rattaché"}</p>
+        <p className="paye-corps">{f.corps.map(libelleCorps).join(" · ")||"Aucun corps rattaché"}</p>
       </div>
       <div className="paye-card-montant">
         <span className="paye-montant-label">À demander</span>
@@ -2102,9 +2149,9 @@ function PayeFinanceur({f,currentWeek,canRegler,busy,regles,onBasculer}){
 
     {ouvert&&<div className="paye-detail">
       {f.groupes.map(g=><div className="paye-groupe" key={g.corps}>
-        <div className="paye-groupe-titre"><span>{g.corps}</span><span>{formatSeptims(g.total)}</span></div>
+        <div className="paye-groupe-titre"><span>{libelleCorps(g.corps)}</span><span>{formatSeptims(g.total)}</span></div>
         {g.gardes.map(p=><div className="paye-garde" key={p.cle}>
-          <div className="paye-garde-identite"><strong>{p.nomComplet}</strong><span className="grade">{p.grade}</span></div>
+          <div className="paye-garde-identite"><strong>{p.nomComplet}</strong><span className="grade">{libelleGrade(p.grade,p.corps,aliasGrades)}</span></div>
           <div className="paye-garde-total">{formatSeptims(p.total)}</div>
           <ul className="paye-semaines">{p.semaines.map(s=><PayeSemaine key={s.row} s={s} canRegler={canRegler} busy={busy} onRegler={()=>onBasculer({row:s.row,financeur:f.cle,nomComplet:p.nomComplet,lundi:s.lundi,montant:s.montant,identite:{lundi:s.lundi,prenom:p.prenom,nom:p.nom}},true)}/>)}</ul>
         </div>)}
