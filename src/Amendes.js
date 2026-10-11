@@ -44,7 +44,7 @@ const AMENDES_CHEFS_HEADER = "Chefs d'accusation (JSON)";
 // ============================================================
 
 function getAmendes(token) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName(AMENDES_SHEET_NAME);
@@ -53,10 +53,20 @@ function getAmendes(token) {
     throw new Error("Feuille Amendes introuvable.");
   }
 
+  /*
+    Session Discord d'un garde : la case Payé ne vaut que pour ses propres
+    amendes (`modifierAmendeCheckbox`). L'interface la grise ailleurs ; seul
+    le serveur l'impose.
+  */
+  const encaissement = {
+    garde: gardeImposeSession_(auth),
+    restreint: auth.role === "GARDE" && Boolean(gardeImposeSession_(auth))
+  };
+
   const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
 
   if (lastRow < 2) {
-    return { rows: [] };
+    return { rows: [], encaissement };
   }
 
   const largeur = Math.min(AMENDES_CHEFS_COLUMN, sheet.getMaxColumns());
@@ -111,7 +121,7 @@ function getAmendes(token) {
 
   rows.reverse();
 
-  return { rows };
+  return { rows, encaissement };
 }
 
 function lireReversementsAmendes_(ss) {
@@ -181,7 +191,7 @@ function contientSpecialiteAmendes_(specialites, specialiteRecherchee) { const r
   d'accusation. Seule la liste des gardes reste propre au formulaire.
 */
 function getAmendeFormData(token) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const donneesSheet = ss.getSheetByName(AMENDES_DONNEES_SHEET_NAME);
@@ -191,7 +201,9 @@ function getAmendeFormData(token) {
   }
 
   return {
-    gardes: lireColonneTechnique(donneesSheet, 15)
+    gardes: lireColonneTechnique(donneesSheet, 15),
+    // Session Discord : le garde est celui qui saisit (Auth.js).
+    gardeImpose: gardeImposeSession_(auth)
   };
 }
 
@@ -212,13 +224,14 @@ function getAmendeFormData(token) {
   sera fixé par l'autorité et saisi par modification.
 */
 function ajouterAmende(token, data) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
 
   if (!data) {
     throw new Error("Données de l'amende manquantes.");
   }
 
-  const saisie = preparerSaisieAmende_(data);
+  // Session Discord : l'amende est dressée au nom de celui qui la saisit.
+  const saisie = preparerSaisieAmende_(imposerGardeSession_(auth, data));
 
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -329,6 +342,30 @@ function modifierAmende(token, row, data) {
   }
 
   return getAmendes(token);
+}
+
+
+// ============================================================
+// IDENTITÉ DE SESSION — partagée avec Prison.js
+// ============================================================
+
+/*
+  Décision du propriétaire, 11 octobre 2026 : connecté par Discord, un membre
+  ne saisit une amende ou une incarcération qu'à son propre nom, officier
+  compris. Le serveur l'impose et ignore la valeur envoyée par le navigateur.
+  Une session par code n'identifie personne : le champ reste libre. La
+  modification d'une ligne, réservée aux officiers, reste le chemin de
+  correction et garde le champ libre.
+*/
+function gardeImposeSession_(auth) {
+  return auth && auth.via === "discord" ? String(auth.nom || "").trim() : "";
+}
+
+function imposerGardeSession_(auth, data) {
+  if (!auth || auth.via !== "discord") return data;
+  const garde = gardeImposeSession_(auth);
+  if (!garde) throw new Error("Votre session Discord ne porte pas de nom : reconnectez-vous.");
+  return Object.assign({}, data || {}, { garde });
 }
 
 
@@ -527,6 +564,22 @@ function modifierAmendeCheckbox(
 
   if (!rowData.some(value => String(value || "").trim())) {
     throw new Error("Cette ligne d'amende est vide.");
+  }
+
+  /*
+    Session Discord d'un garde : il ne marque payées que ses propres amendes.
+    Un officier garde la main sur toutes ; une session par code, qui
+    n'identifie personne, aussi.
+  */
+  const gardeSession = gardeImposeSession_(auth);
+  if (
+    column === 6 &&
+    auth.role === "GARDE" &&
+    gardeSession &&
+    normaliserReferenceAmendes_(rowData[1]).replace(/\s+/g, " ") !==
+      normaliserReferenceAmendes_(gardeSession).replace(/\s+/g, " ")
+  ) {
+    throw new Error("Seul le garde qui a dressé cette amende, ou un officier, peut changer son statut Payé.");
   }
 
   if (column === 7 && checked === true) {

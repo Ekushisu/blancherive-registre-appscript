@@ -4866,7 +4866,7 @@ svg {
     width: 145px;
   }
   .presence-table-wrap:before {
-    content: "Faites d\c3\a9 filer les jours horizontalement \e2\2020\2019";
+    content: "Faites d\e9 filer les jours horizontalement \2192";
     display: block;
     padding: 8px 12px;
     color: #7b633c;
@@ -5028,7 +5028,7 @@ svg {
     color: #583d21;
   }
   .registry-table td[data-label=Contrevenant],
-  .registry-table td[data-label=D\c3\a9tenu] {
+  .registry-table td[data-label=D\e9tenu] {
     font-weight: 700;
   }
   .saisies-cell {
@@ -5648,7 +5648,7 @@ body {
   border-bottom: 3px double #b3965f;
 }
 .page-header:after {
-  content: "\e2\2014\2020";
+  content: "\25c6";
   position: absolute;
   right: 0;
   bottom: -9px;
@@ -6584,6 +6584,295 @@ body {
     padding-top: 72px;
     padding-bottom: 118px;
   }
+}
+.livret-entete {
+  align-items: flex-end;
+  gap: 16px;
+}
+.livret-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.livret-page > .grade-description {
+  max-width: 760px;
+  margin: -6px 0 18px;
+  color: #76603c;
+  font-style: italic;
+  text-align: left;
+}
+.livret-alerte {
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border: 1px solid #c98f6f;
+  border-left: 4px solid #a5432f;
+  border-radius: 3px;
+  background: #f6e2d6;
+  color: #7a2f1f;
+}
+.livret-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.livret-section {
+  min-width: 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+}
+.livret-section-entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 3px double #ccb184;
+}
+.livret-section-entete h2 {
+  margin: 0;
+  font: 400 22px Georgia, serif;
+  color: #49321d;
+}
+.livret-section-entete p {
+  margin: 0;
+  color: #87704a;
+  font-size: 12px;
+}
+.livret-section h3 {
+  margin: 18px 0 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #87704a;
+}
+.livret-semaine {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+.livret-jour {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 2px;
+  border: 1px solid #dcc9a6;
+  border-radius: 3px;
+  background: #fbf3e1;
+  color: #968165;
+  font-size: 11px;
+}
+.livret-jour strong {
+  font: 18px Georgia, serif;
+  color: #b9a27a;
+}
+.livret-jour.is-present {
+  background: #e8e9d4;
+  border-color: #a9ae80;
+  color: #5c633e;
+}
+.livret-jour.is-present strong {
+  color: #4f5a2c;
+}
+.livret-ligne-solde {
+  margin: 12px 0 0;
+  color: #594024;
+  line-height: 1.6;
+}
+.livret-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.livret-liste li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 1px solid #e2d4b6;
+  border-radius: 3px;
+  background: #fbf3e1;
+}
+.livret-liste li > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.livret-liste small {
+  color: #87704a;
+  font-size: 11px;
+}
+.livret-amende-etat {
+  justify-items: end;
+  text-align: right;
+  flex-shrink: 0;
+}
+.livret-total {
+  margin: 10px 0 0;
+  text-align: right;
+  color: #594024;
+}
+.livret-percu {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed #d8c39c;
+  color: #76603c;
+  font-size: 13px;
+}
+.livret-vide {
+  margin: 0;
+  color: #87704a;
+  font-style: italic;
+}
+.livret-tuiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 10px;
+}
+.livret-tuile {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid #dcc9a6;
+  border-radius: 3px;
+  background: #fbf3e1;
+}
+.livret-tuile strong {
+  font: 400 28px/1.1 Georgia, serif;
+  color: #49321d;
+}
+.livret-tuile span {
+  color: #76603c;
+  font-size: 12px;
+}
+.livret-tuile small {
+  color: #968165;
+  font-size: 11px;
+}
+.livret-personnes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.livret-personne {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-left: 3px solid #bfa473;
+  background: #fbf3e1;
+}
+.livret-personne-grade {
+  min-width: 120px;
+  color: #87704a;
+  font-size: 12px;
+}
+.livret-personne-nom {
+  font: 16px Georgia, serif;
+  color: #49321d;
+}
+.livret-carriere {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0 0 0 14px;
+  border-left: 2px solid #d8c39c;
+  display: grid;
+  gap: 10px;
+}
+.livret-carriere li {
+  display: grid;
+  gap: 2px;
+}
+.livret-carriere li .date-rp {
+  color: #87704a;
+  font-size: 12px;
+}
+@media (max-width: 900px) {
+  .livret-grille {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .livret-entete {
+    align-items: flex-start;
+  }
+  .livret-section {
+    padding: 16px 14px;
+  }
+  .livret-jour {
+    padding: 6px 0;
+    font-size: 10px;
+  }
+  .livret-personne {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .livret-personne-grade {
+    min-width: 0;
+  }
+}
+.session-nom {
+  margin: 0 0 8px;
+  padding: 0 4px;
+  color: #f3e6c8;
+  font: 15px Georgia, serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .session-nom {
+    display: none;
+  }
+}
+.presence-table tr.row-moi td:first-child {
+  box-shadow: inset 4px 0 0 #a5803f;
+}
+.presence-table tr.row-moi td:first-child strong:after {
+  content: " \b7  vous";
+  color: #a5803f;
+  font-weight: 400;
+  font-size: 12px;
+}
+.org-person.org-person-moi {
+  outline: 2px solid #a5803f;
+  outline-offset: 2px;
+}
+.org-person.org-person-moi .org-person-name:after {
+  content: " \b7  vous";
+  color: #a5803f;
+  font-size: 12px;
+}
+input.champ-impose {
+  background: #efe3c8;
+  color: #594024;
+  cursor: not-allowed;
+}
+@media (max-width: 900px) {
+  .nav.nav-dense {
+    grid-template-columns: repeat(var(--nav-count), minmax(56px, 1fr));
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .nav.nav-dense::-webkit-scrollbar {
+    display: none;
+  }
 }</style>
 </head>
 <body>
@@ -6647,6 +6936,7 @@ body {
 
   // ui/src/navigation.jsx
   var paths = {
+    livret: "M6 3h11a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1M5 19a2 2 0 0 1 2-2h12M9 7h6M9 11h4",
     organigramme: "M12 3v6M5 15v-4h14v4M3 15h4v5H3zM10 15h4v5h-4zM17 15h4v5h-4zM9 3h6v5H9z",
     effectifs: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3a4 4 0 0 1 0 8M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0",
     presences: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5",
@@ -6664,13 +6954,14 @@ body {
   }
   var ROLE_PUBLIC = "VISITEUR";
   var LIBELLES_ROLE = { OFFICIER: "Officier", GARDE: "Garde", INTENDANT: "Intendant", [ROLE_PUBLIC]: "Visiteur" };
-  var LIBELLES_MOBILES = { organigramme: "Hi\xE9rarchie", peines: "Peines" };
+  var LIBELLES_MOBILES = { livret: "Livret", organigramme: "Hi\xE9rarchie", peines: "Peines" };
   function Header({ role, nom = "", page, onPage, onLogout }) {
-    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"], ["inventaire", "Inventaire"], ["codex", "Codex"], ["peines", "Peines et amendes"]] : [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"], ["inventaire", "Inventaire"]] : [], ["codex", "Codex"], ["peines", "Peines et amendes"], ["amendes", "Amendes"], ["prison", "Prison"]];
-    return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-seal" }, /* @__PURE__ */ React.createElement("img", { src: sceau_default, alt: "" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "brand-overline" }, "Ch\xE2tellerie de"), /* @__PURE__ */ React.createElement("strong", null, "Blancherive"), /* @__PURE__ */ React.createElement("span", { className: "brand-caption" }, "Registre de la Garde"))), /* @__PURE__ */ React.createElement("div", { className: "nav-caption" }, "Le registre"), /* @__PURE__ */ React.createElement("nav", { className: "nav", "aria-label": "Navigation principale", style: { "--nav-count": pages.length } }, pages.map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, type: "button", "aria-label": label, "aria-current": page === key ? "page" : void 0, className: page === key ? "active" : "", onClick: () => {
+    const livret = nom && (role === "GARDE" || role === "OFFICIER") ? [["livret", "Livret de service"]] : [];
+    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"], ["inventaire", "Inventaire"], ["codex", "Codex"], ["peines", "Peines et amendes"]] : [...livret, ["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"], ["inventaire", "Inventaire"]] : [], ["codex", "Codex"], ["peines", "Peines et amendes"], ["amendes", "Amendes"], ["prison", "Prison"]];
+    return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-seal" }, /* @__PURE__ */ React.createElement("img", { src: sceau_default, alt: "" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "brand-overline" }, "Ch\xE2tellerie de"), /* @__PURE__ */ React.createElement("strong", null, "Blancherive"), /* @__PURE__ */ React.createElement("span", { className: "brand-caption" }, "Registre de la Garde"))), /* @__PURE__ */ React.createElement("div", { className: "nav-caption" }, "Le registre"), /* @__PURE__ */ React.createElement("nav", { className: `nav${pages.length >= 10 ? " nav-dense" : ""}`, "aria-label": "Navigation principale", style: { "--nav-count": pages.length } }, pages.map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, type: "button", "aria-label": label, "aria-current": page === key ? "page" : void 0, className: page === key ? "active" : "", onClick: () => {
       onPage(key);
       window.scrollTo(0, 0);
-    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge", title: nom ? `Connect\xE9 : ${nom}` : void 0 }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
+    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, nom && /* @__PURE__ */ React.createElement("div", { className: "session-nom", title: `Connect\xE9 par Discord : ${nom}` }, nom), /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge", title: nom ? `Connect\xE9 : ${nom}` : void 0 }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
   }
   function Login({ onLogin, serverCall: serverCall2, discordRetour = {} }) {
     const [password, setPassword] = React.useState("");
@@ -6948,9 +7239,9 @@ body {
     return chargementEnCours;
   }
   function useCodex(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState9 } = React;
-    const [etat, setEtat] = useState9(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect9(() => {
+    const { useEffect: useEffect10, useState: useState10 } = React;
+    const [etat, setEtat] = useState10(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect10(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.codex ? "pret" : "chargement", erreur: "" }));
@@ -7418,9 +7709,9 @@ body {
     return chargementEnCours2;
   }
   function usePeines(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState9 } = React;
-    const [etat, setEtat] = useState9(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect9(() => {
+    const { useEffect: useEffect10, useState: useState10 } = React;
+    const [etat, setEtat] = useState10(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect10(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.peines ? "pret" : "chargement", erreur: "" }));
@@ -7900,9 +8191,9 @@ body {
     return chargementEnCours3;
   }
   function useCatalogue(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState9 } = React;
-    const [etat, setEtat] = useState9(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect9(() => {
+    const { useEffect: useEffect10, useState: useState10 } = React;
+    const [etat, setEtat] = useState10(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect10(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.objets ? "pret" : "chargement", erreur: "" }));
@@ -8659,6 +8950,10 @@ body {
     const pad2 = (value) => String(value).padStart(2, "0");
     return `${pad2(date.getUTCDate())}/${pad2(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`;
   }
+  function titreSemaine(lundi) {
+    const date = dateLundi(lundi);
+    return date ? `${libelleSemaine(lundi)} \xB7 du ${date}` : libelleSemaine(lundi);
+  }
   function comparerLundisDecroissant(a, b) {
     const lundiA = parserLundi(a) !== null;
     const lundiB = parserLundi(b) !== null;
@@ -8721,8 +9016,8 @@ body {
     return chargement;
   }
   function useMembresDiscord(serverCall2, token) {
-    const { useCallback, useState: useState9 } = React;
-    const [etat, setEtat] = useState9(() => membresCourants ? { statut: "pret", membres: membresCourants, erreur: "" } : { statut: "inactif", membres: [], erreur: "" });
+    const { useCallback, useState: useState10 } = React;
+    const [etat, setEtat] = useState10(() => membresCourants ? { statut: "pret", membres: membresCourants, erreur: "" } : { statut: "inactif", membres: [], erreur: "" });
     const charger = useCallback((rafraichir = false) => {
       setEtat((e) => ({ ...e, statut: "chargement", erreur: "" }));
       chargerMembresDiscord(serverCall2, token, rafraichir).then((membres) => setEtat({ statut: "pret", membres, erreur: "" })).catch((error) => setEtat((e) => ({ ...e, statut: "erreur", erreur: error.message || String(error) })));
@@ -8748,8 +9043,81 @@ body {
     })), recherche.trim() && !suggestions.length && discord.statut === "pret" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Aucun membre du serveur ne correspond.")), anomalie && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur", role: "alert" }, anomalie), discord.statut === "chargement" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Chargement des membres du serveur\u2026"), discord.statut === "erreur" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur" }, discord.erreur, " ", /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger() }, "R\xE9essayer")), discord.statut === "pret" && !value && /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger(true) }, "Actualiser la liste du serveur"));
   }
 
+  // ui/src/livret.jsx
+  var { useEffect: useEffect8, useState: useState8 } = React;
+  var JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  function septims(valeur) {
+    const n = Number(valeur) || 0;
+    return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
+  }
+  function pluriel3(n, singulier, plurielForme = singulier + "s") {
+    return `${new Intl.NumberFormat("fr-FR").format(Number(n) || 0)} ${Math.abs(Number(n) || 0) > 1 ? plurielForme : singulier}`;
+  }
+  function libelleEvenement(evenement) {
+    if (evenement.type === "grade") {
+      return `\xC9lev\xE9 au grade de ${evenement.apres}${evenement.avant ? `, auparavant ${evenement.avant}` : ""}`;
+    }
+    if (evenement.type === "corps") {
+      return `Affect\xE9 \xE0 ${libelleCorps(evenement.apres)}${evenement.avant ? `, venant de ${libelleCorps(evenement.avant)}` : ""}`;
+    }
+    if (evenement.type === "arrivee") return "Inscription au registre de la Garde";
+    return evenement.apres || evenement.type;
+  }
+  function depuisJours(n) {
+    if (n === null || n === void 0) return "";
+    if (n <= 0) return "aujourd\u2019hui";
+    if (n === 1) return "hier";
+    return `il y a ${n} jours`;
+  }
+  function Section({ titre, sousTitre, children }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "livret-section" }, /* @__PURE__ */ React.createElement("header", { className: "livret-section-entete" }, /* @__PURE__ */ React.createElement("h2", null, titre), sousTitre && /* @__PURE__ */ React.createElement("p", null, sousTitre)), children);
+  }
+  function Tuile({ valeur, libelle, detail }) {
+    return /* @__PURE__ */ React.createElement("div", { className: "livret-tuile" }, /* @__PURE__ */ React.createElement("strong", null, valeur), /* @__PURE__ */ React.createElement("span", null, libelle), detail && /* @__PURE__ */ React.createElement("small", null, detail));
+  }
+  function Personne({ personne, aliasGrades }) {
+    return /* @__PURE__ */ React.createElement("li", { className: "livret-personne" }, /* @__PURE__ */ React.createElement("span", { className: "livret-personne-grade" }, libelleGrade(personne.grade, personne.corps, aliasGrades)), /* @__PURE__ */ React.createElement("span", { className: "livret-personne-nom" }, personne.nomComplet));
+  }
+  function Solde({ s }) {
+    if (s.exclu) {
+      return /* @__PURE__ */ React.createElement(Section, { titre: "Solde" }, /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Le Hird du Jarl n\u2019est pas sold\xE9 par le registre de la Garde."));
+    }
+    const courante = s.semaineCourante;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Solde", sousTitre: titreSemaine(s.lundiCourant) }, /* @__PURE__ */ React.createElement("div", { className: "livret-semaine", "aria-label": "Jours de service de la semaine en cours" }, JOURS.map((jour, i) => {
+      var _a;
+      const present = Boolean((_a = courante == null ? void 0 : courante.jours) == null ? void 0 : _a[i]);
+      return /* @__PURE__ */ React.createElement("div", { key: jour, className: `livret-jour ${present ? "is-present" : ""}` }, /* @__PURE__ */ React.createElement("span", null, jour), /* @__PURE__ */ React.createElement("strong", { "aria-label": present ? "en service" : "absent" }, present ? "\u2713" : "\xB7"));
+    })), /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, courante ? /* @__PURE__ */ React.createElement(React.Fragment, null, pluriel3(courante.joursPresents, "jour"), " de service cette semaine \xB7 ", /* @__PURE__ */ React.createElement("strong", null, septims(courante.solde)), " \xE0 recevoir de ", courante.financeur) : "Aucun pointage cette semaine."), /* @__PURE__ */ React.createElement("h3", null, "Soldes en attente"), s.enAttente.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, s.enAttente.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.lundi }, /* @__PURE__ */ React.createElement("span", null, titreSemaine(e.lundi), /* @__PURE__ */ React.createElement("small", null, pluriel3(e.joursPresents, "jour"), " \xB7 ", e.financeur)), /* @__PURE__ */ React.createElement("strong", null, septims(e.solde))))), /* @__PURE__ */ React.createElement("p", { className: "livret-total" }, "\xC0 r\xE9clamer : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalEnAttente)))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune solde en attente : vous \xEAtes \xE0 jour."), /* @__PURE__ */ React.createElement("p", { className: "livret-percu" }, "Soldes per\xE7ues : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalPercu)), s.derniereSemaineReglee && /* @__PURE__ */ React.createElement(React.Fragment, null, " \xB7 derni\xE8re semaine r\xE9gl\xE9e : ", titreSemaine(s.derniereSemaineReglee))));
+  }
+  function Service({ s }) {
+    if (s.exclu) return null;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Service" }, /* @__PURE__ */ React.createElement("div", { className: "livret-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: s.joursTotal, libelle: "jours de service" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.semainesServies, libelle: "semaines servies" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: new Intl.NumberFormat("fr-FR").format(s.moyenne), libelle: "jours par semaine", detail: "en moyenne" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.serie, libelle: s.serie > 1 ? "semaines de suite" : "semaine de suite", detail: "s\xE9rie en cours" })), /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, "Dernier service : ", s.dernierJour ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(DateRP, { value: s.dernierJour, heure: false }), " (", depuisJours(s.joursDepuis), ")") : "aucun service enregistr\xE9."));
+  }
+  function Justice({ j }) {
+    const a = j.amendes, p = j.prison;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Justice" }, /* @__PURE__ */ React.createElement("div", { className: "livret-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: a.nombre, libelle: a.nombre > 1 ? "amendes dress\xE9es" : "amende dress\xE9e", detail: septims(a.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aEncaisser.nombre, libelle: "\xE0 encaisser", detail: `${septims(a.aEncaisser.total)}${a.aEncaisser.aDeterminer ? ` \xB7 ${a.aEncaisser.aDeterminer} \xE0 d\xE9terminer` : ""}` }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aReverser.nombre, libelle: "\xE0 reverser", detail: septims(a.aReverser.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: p.nombre, libelle: p.nombre > 1 ? "incarc\xE9rations" : "incarc\xE9ration" })), p.enCellule.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Encore en cellule"), /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, p.enCellule.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.detenu, /* @__PURE__ */ React.createElement("small", null, "Cellule ", d.cellule || "?", " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("small", null, d.sortie ? /* @__PURE__ */ React.createElement(React.Fragment, null, "sortie pr\xE9vue ", /* @__PURE__ */ React.createElement(DateRP, { value: d.sortie })) : "dur\xE9e \xE0 d\xE9terminer"))))), /* @__PURE__ */ React.createElement("h3", null, "Derni\xE8res amendes"), a.dernieres.length ? /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, a.dernieres.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.contrevenant, /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: d.date, jour: false, heure: false }), " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("span", { className: "livret-amende-etat" }, /* @__PURE__ */ React.createElement("strong", null, d.montant === null ? "\xC0 d\xE9terminer" : septims(d.montant)), /* @__PURE__ */ React.createElement("small", null, d.reverse ? "Revers\xE9e" : d.paye ? "Pay\xE9e, \xE0 reverser" : "\xC0 encaisser"))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune amende dress\xE9e."));
+  }
+  function Commandement({ cmd, aliasGrades }) {
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Cha\xEEne de commandement" }, cmd.corps.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Dans votre corps"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.corps.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucun officier au-dessus de vous dans votre corps."), cmd.etatMajor.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.etatMajor.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))));
+  }
+  function Carriere({ c }) {
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Carri\xE8re" }, /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, c.avantJournal ? "D\xE9j\xE0 au service de la Garde \xE0 l\u2019ouverture du registre, en septembre 2026." : c.inscription ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Inscrit au registre le ", /* @__PURE__ */ React.createElement(DateRP, { value: c.inscription, heure: false }), ".") : "Inscription non retrouv\xE9e au journal des Effectifs."), c.evenements.length ? /* @__PURE__ */ React.createElement("ol", { className: "livret-carriere" }, c.evenements.map((e, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement(DateRP, { value: e.date, heure: false }), /* @__PURE__ */ React.createElement("span", null, libelleEvenement(e))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune promotion ni mutation depuis l\u2019ouverture du journal."));
+  }
+  function LivretPage({ token, serverCall: serverCall2 }) {
+    const [data, setData] = useState8(null);
+    const [erreur, setErreur] = useState8("");
+    useEffect8(() => {
+      serverCall2("getLivretService", token).then(setData).catch((e) => setErreur(e.message));
+    }, []);
+    if (erreur) return /* @__PURE__ */ React.createElement("div", { className: "error" }, erreur);
+    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Ouverture du livret de service\u2026");
+    const { fiche, service: s, justice: j, carriere: c, commandement: cmd, aliasGrades } = data;
+    return /* @__PURE__ */ React.createElement("div", { className: "livret-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header livret-entete" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Livret de service"), /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, fiche.nomComplet), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, libelleGrade(fiche.grade, fiche.corps, aliasGrades), " \xB7 ", libelleCorps(fiche.corps), fiche.specialite ? ` \xB7 ${fiche.specialite}` : "")), /* @__PURE__ */ React.createElement("div", { className: "livret-badges" }, /* @__PURE__ */ React.createElement("span", { className: "effectif-badge" }, fiche.statut || "Sans statut"), /* @__PURE__ */ React.createElement("span", { className: `effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}` }, fiche.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"))), /* @__PURE__ */ React.createElement(GradeDescription, { grade: fiche.grade }), s.inactif && /* @__PURE__ */ React.createElement("div", { className: "livret-alerte", role: "status" }, s.joursDepuis === null ? "Aucun jour de service enregistr\xE9 \xE0 votre nom." : `Aucun service depuis ${s.joursDepuis} jours : au-del\xE0 de ${s.seuilInactivite}, votre nom remonte au tableau des officiers.`), /* @__PURE__ */ React.createElement("div", { className: "livret-grille" }, /* @__PURE__ */ React.createElement(Solde, { s }), /* @__PURE__ */ React.createElement(Service, { s }), /* @__PURE__ */ React.createElement(Justice, { j }), /* @__PURE__ */ React.createElement(Commandement, { cmd, aliasGrades }), /* @__PURE__ */ React.createElement(Carriere, { c })));
+  }
+
   // ui/src/app.jsx
-  var { useEffect: useEffect8, useMemo: useMemo4, useRef: useRef8, useState: useState8 } = React;
+  var { useContext: useContext2, useEffect: useEffect9, useMemo: useMemo4, useRef: useRef8, useState: useState9 } = React;
+  var MoiContext = React.createContext("");
   function serverCall(name, ...args) {
     return new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
@@ -8757,6 +9125,10 @@ body {
   }
   function normalizeSearchText2(value) {
     return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function memeNom(a, b) {
+    const n = (v) => normalizeSearchText2(v).replace(/\s+/g, " ").trim();
+    return Boolean(n(a)) && n(a) === n(b);
   }
   function formatHours(value) {
     const n = Number(value);
@@ -8774,21 +9146,22 @@ body {
     return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
   }
   function App() {
-    const [token, setToken] = useState8(sessionStorage.getItem("guardAuthToken"));
-    const [role, setRole] = useState8(null);
-    const [nom, setNom] = useState8("");
-    const [page, setPage] = useState8("organigramme");
-    const [codexFocus, setCodexFocus] = useState8(null);
-    const [discordRetour, setDiscordRetour] = useState8({ statut: "", erreur: "" });
-    useEffect8(() => {
+    const [token, setToken] = useState9(sessionStorage.getItem("guardAuthToken"));
+    const [role, setRole] = useState9(null);
+    const [nom, setNom] = useState9("");
+    const [page, setPage] = useState9("organigramme");
+    const [codexFocus, setCodexFocus] = useState9(null);
+    const [discordRetour, setDiscordRetour] = useState9({ statut: "", erreur: "" });
+    useEffect9(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => {
         setRole(i.role);
         setNom(i.nom || "");
         if (i.role === ROLE_PUBLIC) setPage("codex");
+        else if (i.nom && (i.role === "GARDE" || i.role === "OFFICIER")) setPage("livret");
       }).catch(logout);
     }, [token]);
-    useEffect8(() => {
+    useEffect9(() => {
       lireRetourDiscord().then((retour) => {
         if (!retour) return;
         effacerRetourDiscord();
@@ -8822,7 +9195,7 @@ body {
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
-    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
+    return /* @__PURE__ */ React.createElement(MoiContext.Provider, { value: nom }, /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "livret" && nom && (role === "GARDE" || role === "OFFICIER") && /* @__PURE__ */ React.createElement(LivretPage, { token, serverCall }), page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
     } }), page === "amendes" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
@@ -8831,21 +9204,21 @@ body {
     } }), page === "prison" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PrisonPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
-    } }), /* @__PURE__ */ React.createElement("footer", { className: "registry-footer" }, /* @__PURE__ */ React.createElement("span", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("a", { href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197"))));
+    } }), /* @__PURE__ */ React.createElement("footer", { className: "registry-footer" }, /* @__PURE__ */ React.createElement("span", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("a", { href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197")))));
   }
   function effectifsAccent(style) {
     return { "--member-accent": (style == null ? void 0 : style.background) || "#ae8a4a" };
   }
   function EffectifsPage({ token }) {
-    const [data, setData] = useState8(null);
-    const [search, setSearch] = useState8("");
-    const [activeCorps, setActiveCorps] = useState8("ALL");
-    const [showForm, setShowForm] = useState8(false);
-    const [error, setError] = useState8("");
-    const [success, setSuccess] = useState8("");
+    const [data, setData] = useState9(null);
+    const [search, setSearch] = useState9("");
+    const [activeCorps, setActiveCorps] = useState9("ALL");
+    const [showForm, setShowForm] = useState9(false);
+    const [error, setError] = useState9("");
+    const [success, setSuccess] = useState9("");
     const discord = useMembresDiscord(serverCall, token);
     const rattaches = useMemo4(() => comptesRattaches(data == null ? void 0 : data.rows), [data]);
-    useEffect8(() => {
+    useEffect9(() => {
       serverCall(
         "getEffectifs",
         token
@@ -9379,7 +9752,7 @@ body {
         "En service actif"
       )
     );
-    const [form, setForm] = useState8({
+    const [form, setForm] = useState9({
       prenom: "",
       nom: "",
       grade: options.grades[0] || "",
@@ -9388,7 +9761,7 @@ body {
       status: active || options.statuses[0] || "",
       assermente: false
     });
-    const [saving, setSaving] = useState8(false);
+    const [saving, setSaving] = useState9(false);
     async function submit(e) {
       e.preventDefault();
       try {
@@ -9568,21 +9941,21 @@ body {
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     const memberChanges = useMemberChanges(member.memberId);
-    const [editing, setEditing] = useState8(false);
-    const [discordId, setDiscordId] = useState8(
+    const [editing, setEditing] = useState9(false);
+    const [discordId, setDiscordId] = useState9(
       member.discordId || ""
     );
-    const [grade, setGrade] = useState8(member.grade);
-    const [corps, setCorps] = useState8(member.corps);
-    const [specialite, setSpecialite] = useState8(
+    const [grade, setGrade] = useState9(member.grade);
+    const [corps, setCorps] = useState9(member.corps);
+    const [specialite, setSpecialite] = useState9(
       member.specialite || ""
     );
-    const [status, setStatus] = useState8(member.status);
-    const [assermente, setAssermente] = useState8(
+    const [status, setStatus] = useState9(member.status);
+    const [assermente, setAssermente] = useState9(
       member.assermente
     );
-    const [saving, setSaving] = useState8(false);
-    useEffect8(() => {
+    const [saving, setSaving] = useState9(false);
+    useEffect9(() => {
       setGrade(
         member.grade
       );
@@ -9609,7 +9982,7 @@ body {
       member.assermente,
       member.discordId
     ]);
-    useEffect8(() => {
+    useEffect9(() => {
       if (editing && (discord == null ? void 0 : discord.statut) === "inactif") {
         discord.charger();
       }
@@ -9854,9 +10227,9 @@ body {
     const etat = useCodex(serverCall, token, true);
     const data = etat.codex;
     const peines = usePeines(serverCall, token, peinesActif).peines;
-    const [search, setSearch] = useState8(""), [family, setFamily] = useState8(""), [source, setSource] = useState8(""), [classification, setClassification] = useState8(""), [selected, setSelected] = useState8(null);
+    const [search, setSearch] = useState9(""), [family, setFamily] = useState9(""), [source, setSource] = useState9(""), [classification, setClassification] = useState9(""), [selected, setSelected] = useState9(null);
     const selection = mode === "selection";
-    useEffect8(() => {
+    useEffect9(() => {
       if (data && focusArticle) {
         setSelected(articleParCle(data, focusArticle.source, focusArticle.article) || focusArticle);
         onFocusConsumed == null ? void 0 : onFocusConsumed();
@@ -9894,7 +10267,7 @@ body {
   function CodexPicker({ token, open, onClose, onRetenir, retenus }) {
     const closeRef = useRef8(onClose);
     closeRef.current = onClose;
-    useEffect8(() => {
+    useEffect9(() => {
       if (!open) return;
       const overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
@@ -9916,8 +10289,8 @@ body {
     } }, /* @__PURE__ */ React.createElement("div", { className: "codex-picker", role: "dialog", "aria-modal": "true", "aria-labelledby": "codex-picker-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("h2", { id: "codex-picker-title", className: "law-modal-title" }, "Parcourir le Codex")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-count" }, retenus.length, " retenu", retenus.length > 1 ? "s" : ""), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer le s\xE9lecteur", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-body" }, /* @__PURE__ */ React.createElement(CodexPage, { token, mode: "selection", onRetenir, retenus })), /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-picker-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onClose }, "Revenir au formulaire"))));
   }
   function OrganigrammePage({ token }) {
-    const [data, setData] = useState8(null), [error, setError] = useState8("");
-    useEffect8(() => {
+    const [data, setData] = useState9(null), [error, setError] = useState9("");
+    useEffect9(() => {
       let active = true;
       serverCall("getOrganigramme", token).then((r) => {
         if (active) setData(r);
@@ -9939,8 +10312,9 @@ body {
   }
   function PersonCard({ personne, center = false, showCorps = false }) {
     const memberChanges = useMemberChanges(personne == null ? void 0 : personne.memberId);
+    const moi = useContext2(MoiContext);
     if (!personne) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, libelleCorps(personne.corps)));
+    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}${memeNom(personne.nomComplet, moi) ? " org-person-moi" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, libelleCorps(personne.corps)));
   }
   function CentralGroup({ personnes = [], grade, note, variante }) {
     return /* @__PURE__ */ React.createElement("section", { className: "org-command-node", "aria-label": note ? `${grade} \u2014 ${note}` : grade }, /* @__PURE__ */ React.createElement("h3", null, grade, note && /* @__PURE__ */ React.createElement("span", null, note)), /* @__PURE__ */ React.createElement(GradeDescription, { grade, variante }), personnes.length ? personnes.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, center: true })) : /* @__PURE__ */ React.createElement("div", { className: "org-vacant" }, "Poste vacant"));
@@ -9985,18 +10359,18 @@ body {
     return chefsDeLigne(codex, row).map((e) => e.chef);
   }
   function useFormulaireRegistre({ cle, initial, vide }) {
-    const [form, setForm] = useState8(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
-    useEffect8(() => {
+    const [form, setForm] = useState9(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
+    useEffect9(() => {
       if (!initial) ecrireBrouillon(cle, form);
     }, [form]);
     return [form, setForm];
   }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState8(null), [formData, setFormData] = useState8(null), [selected, setSelected] = useState8(null), [showForm, setShowForm] = useState8(false), [editing, setEditing] = useState8(null), [error, setError] = useState8(""), [deletingRow, setDeletingRow] = useState8(null);
+    const [data, setData] = useState9(null), [formData, setFormData] = useState9(null), [selected, setSelected] = useState9(null), [showForm, setShowForm] = useState9(false), [editing, setEditing] = useState9(null), [error, setError] = useState9(""), [deletingRow, setDeletingRow] = useState9(null);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
-    useEffect8(() => {
+    useEffect9(() => {
       Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
@@ -10048,28 +10422,38 @@ ${item.infraction}`)) return;
       } catch (e) {
         setError(e.message);
       }
-    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, onChange: async (e) => {
-      try {
-        setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
-      } catch (x) {
-        setError(x.message);
-      }
-    } })), /* @__PURE__ */ React.createElement("td", { "data-label": "Revers\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.reverse, disabled: !canDelete, onChange: async (e) => {
-      try {
-        setData(await serverCall("modifierAmendeCheckbox", token, i.row, 7, e.target.checked));
-      } catch (x) {
-        setError(x.message);
-      }
-    } })), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("div", { className: "registry-actions" }, /* @__PURE__ */ React.createElement("button", { className: "secondary-button", disabled: deletingRow === i.row, onClick: () => editer(i) }, "Modifier"), /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer"))))))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex, codex, peines: peinesEtat.peines, onNavigate: setSelected }));
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => {
+      var _a, _b;
+      return /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, disabled: Boolean((_a = data.encaissement) == null ? void 0 : _a.restreint) && !memeNom(i.garde, data.encaissement.garde), title: ((_b = data.encaissement) == null ? void 0 : _b.restreint) && !memeNom(i.garde, data.encaissement.garde) ? "Seul le garde qui a dress\xE9 l\u2019amende, ou un officier, peut la marquer pay\xE9e." : void 0, onChange: async (e) => {
+        try {
+          setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
+        } catch (x) {
+          setError(x.message);
+        }
+      } })), /* @__PURE__ */ React.createElement("td", { "data-label": "Revers\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.reverse, disabled: !canDelete, onChange: async (e) => {
+        try {
+          setData(await serverCall("modifierAmendeCheckbox", token, i.row, 7, e.target.checked));
+        } catch (x) {
+          setError(x.message);
+        }
+      } })), canDelete && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("div", { className: "registry-actions" }, /* @__PURE__ */ React.createElement("button", { className: "secondary-button", disabled: deletingRow === i.row, onClick: () => editer(i) }, "Modifier"), /* @__PURE__ */ React.createElement("button", { className: "danger-button", disabled: deletingRow === i.row, onClick: () => del(i) }, deletingRow === i.row ? "..." : "Supprimer"))));
+    }))))), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), onOpenCodex, codex, peines: peinesEtat.peines, onNavigate: setSelected }));
+  }
+  function gardeSaisi(data, initial, garde) {
+    return data.gardeImpose && !initial ? data.gardeImpose : garde;
+  }
+  function ChampGarde({ data, initial, value, onChange }) {
+    if (data.gardeImpose && !initial) return /* @__PURE__ */ React.createElement("input", { readOnly: true, value: data.gardeImpose, className: "champ-impose", title: "Connect\xE9 par Discord : vous saisissez \xE0 votre nom." });
+    return /* @__PURE__ */ React.createElement("select", { required: true, value, onChange: (e) => onChange(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)), initial && value && !data.gardes.includes(value) && /* @__PURE__ */ React.createElement("option", { value }, value, " (hors service actif)"));
   }
   function AmendeForm({ token, data, codex, codexStatut, peines = null, peinesStatut = "pret", rows = [], frequents, initial, onSubmit, onCancel, onOpenLaw }) {
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "amende", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, contrevenant: row.contrevenant, chefs: chefsPourFormulaire(codex, row), montant: row.montantRaw === null ? "" : String(row.montantRaw), indetermine: row.montantRaw === null, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", contrevenant: "", chefs: [], montant: "", indetermine: false, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
-    const [submitting, setSubmitting] = useState8(false);
-    const [chefEnCours, setChefEnCours] = useState8(false);
-    const [formError, setFormError] = useState8("");
-    const [picker, setPicker] = useState8(false);
-    const [lu, setLu] = useState8(null);
+    const [submitting, setSubmitting] = useState9(false);
+    const [chefEnCours, setChefEnCours] = useState9(false);
+    const [formError, setFormError] = useState9("");
+    const [picker, setPicker] = useState9(false);
+    const [lu, setLu] = useState9(null);
     const submittingRef = useRef8(false);
     const retenir = (a) => {
       try {
@@ -10094,23 +10478,23 @@ ${item.infraction}`)) return;
       submittingRef.current = true;
       setSubmitting(true);
       try {
-        await onSubmit({ date: form.date, garde: form.garde, contrevenant: form.contrevenant, chefs: chefsPourServeur(form.chefs), montant: form.indetermine ? "" : form.montant, attendu: initial ? { garde: initial.garde, contrevenant: initial.contrevenant } : void 0 });
+        await onSubmit({ date: form.date, garde: gardeSaisi(data, initial, form.garde), contrevenant: form.contrevenant, chefs: chefsPourServeur(form.chefs), montant: form.indetermine ? "" : form.montant, attendu: initial ? { garde: initial.garde, contrevenant: initial.contrevenant } : void 0 });
       } finally {
         submittingRef.current = false;
         setSubmitting(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019amende \u2014 ${initial.contrevenant}` : "Nouvelle amende"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Pay\xE9 et Revers\xE9 ne changent pas ici : ils se cochent depuis le registre."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)), initial && form.garde && !data.gardes.includes(form.garde) && /* @__PURE__ */ React.createElement("option", { value: form.garde }, form.garde, " (hors service actif)"))), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019amende \u2014 ${initial.contrevenant}` : "Nouvelle amende"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Pay\xE9 et Revers\xE9 ne changent pas ici : ils se cochent depuis le registre."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement(ChampGarde, { data, initial, value: form.garde, onChange: (garde) => setForm({ ...form, garde }) })), /* @__PURE__ */ React.createElement(Field, { label: "Contrevenant" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.contrevenant, onChange: (e) => setForm({ ...form, contrevenant: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
       setForm((p) => ({ ...p, chefs }));
       setFormError("");
     }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours, resume: !peines }), /* @__PURE__ */ React.createElement(PropositionBareme, { type: "amende", peines, statut: peinesStatut, chefs: form.chefs, reglages: form.bareme, onReglages: (bareme) => setForm((p) => ({ ...p, bareme })), valeur: form.montant, indetermine: form.indetermine, onAppliquer: (montant) => setForm((p) => ({ ...p, montant, indetermine: false })), historique: ((_a = form.bareme) == null ? void 0 : _a.noble) ? entreesRecentes(rows, form.contrevenant, form.date, { champ: "contrevenant", exclureRow: initial ? initial.row : null }) : null, disabled: submitting }), /* @__PURE__ */ React.createElement(SentenceField, { type: "amende", codex, chefs: form.chefs, value: form.montant, onChange: (montant) => setForm((p) => ({ ...p, montant })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting })), formError && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, formError), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : initial ? "Enregistrer les modifications" : "Enregistrer"), onCancel && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: onCancel }, "Annuler"))), /* @__PURE__ */ React.createElement(CodexPicker, { token, open: picker, onClose: () => setPicker(false), onRetenir: retenir, retenus: form.chefs }), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, peines, onNavigate: setLu, onRetenir: retenir, retenu: lu ? form.chefs.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === lu._cle) : false }));
   }
   function PrisonPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState8(null), [formData, setFormData] = useState8(null), [selected, setSelected] = useState8(null), [showForm, setShowForm] = useState8(false), [editing, setEditing] = useState8(null), [error, setError] = useState8(""), [deletingRow, setDeletingRow] = useState8(null), [saving, setSaving] = useState8(false);
+    const [data, setData] = useState9(null), [formData, setFormData] = useState9(null), [selected, setSelected] = useState9(null), [showForm, setShowForm] = useState9(false), [editing, setEditing] = useState9(null), [error, setError] = useState9(""), [deletingRow, setDeletingRow] = useState9(null), [saving, setSaving] = useState9(false);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
-    useEffect8(() => {
+    useEffect9(() => {
       Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
@@ -10178,12 +10562,12 @@ ${item.infraction}`)) return;
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "prison", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, detenu: row.detenu, cellule: row.cellule, chefs: chefsPourFormulaire(codex, row), duree: row.dureeRaw === null ? "" : String(row.dureeRaw), indetermine: row.dureeRaw === null, entree: row.entreeIso || dateIsoDepuisAffichage(row.entree), saisies: row.saisiesListe || [], notes: row.notes, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", detenu: "", cellule: "", chefs: [], duree: "", indetermine: false, entree: dateLocaleIso().slice(0, 16), saisies: [], notes: "", bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
     const saisiesTexteHistorique = Boolean(initial && initial.saisiesListe === null && initial.saisies);
-    const [submitting, setSubmitting] = useState8(false);
-    const [saisieEnCours, setSaisieEnCours] = useState8(false);
-    const [chefEnCours, setChefEnCours] = useState8(false);
-    const [formError, setFormError] = useState8("");
-    const [picker, setPicker] = useState8(false);
-    const [lu, setLu] = useState8(null);
+    const [submitting, setSubmitting] = useState9(false);
+    const [saisieEnCours, setSaisieEnCours] = useState9(false);
+    const [chefEnCours, setChefEnCours] = useState9(false);
+    const [formError, setFormError] = useState9("");
+    const [picker, setPicker] = useState9(false);
+    const [lu, setLu] = useState9(null);
     const submittingRef = useRef8(false);
     const retenir = (a) => {
       try {
@@ -10212,7 +10596,7 @@ ${item.infraction}`)) return;
       submittingRef.current = true;
       setSubmitting(true);
       try {
-        const payload = { date: form.date, garde: form.garde, detenu: form.detenu, cellule: form.cellule, chefs: chefsPourServeur(form.chefs), duree: form.indetermine ? "" : form.duree, entree: form.entree, notes: form.notes, attendu: initial ? { garde: initial.garde, detenu: initial.detenu } : void 0 };
+        const payload = { date: form.date, garde: gardeSaisi(data, initial, form.garde), detenu: form.detenu, cellule: form.cellule, chefs: chefsPourServeur(form.chefs), duree: form.indetermine ? "" : form.duree, entree: form.entree, notes: form.notes, attendu: initial ? { garde: initial.garde, detenu: initial.detenu } : void 0 };
         if (!saisiesTexteHistorique) payload.saisies = form.saisies;
         await onSubmit(payload);
       } finally {
@@ -10220,7 +10604,7 @@ ${item.infraction}`)) return;
         setSubmitting(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019incarc\xE9ration \u2014 ${initial.detenu}` : "Nouvelle incarc\xE9ration"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "La case Lib\xE9r\xE9 ne change pas ici : elle se coche depuis le registre. La sortie pr\xE9vue est recalcul\xE9e depuis l\u2019entr\xE9e et la dur\xE9e."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement("select", { required: true, value: form.garde, onChange: (e) => setForm({ ...form, garde: e.target.value }) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), data.gardes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g }, g)), initial && form.garde && !data.gardes.includes(form.garde) && /* @__PURE__ */ React.createElement("option", { value: form.garde }, form.garde, " (hors service actif)"))), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { maxLength: 100, value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
+    return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: submitting }, /* @__PURE__ */ React.createElement("h2", null, initial ? `Modifier l\u2019incarc\xE9ration \u2014 ${initial.detenu}` : "Nouvelle incarc\xE9ration"), initial && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "La case Lib\xE9r\xE9 ne change pas ici : elle se coche depuis le registre. La sortie pr\xE9vue est recalcul\xE9e depuis l\u2019entr\xE9e et la dur\xE9e."), /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Date" }, /* @__PURE__ */ React.createElement("input", { type: "date", required: true, value: form.date, onChange: (e) => setForm({ ...form, date: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Garde" }, /* @__PURE__ */ React.createElement(ChampGarde, { data, initial, value: form.garde, onChange: (garde) => setForm({ ...form, garde }) })), /* @__PURE__ */ React.createElement(Field, { label: "D\xE9tenu" }, /* @__PURE__ */ React.createElement("input", { required: true, maxLength: 200, value: form.detenu, onChange: (e) => setForm({ ...form, detenu: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Cellule" }, /* @__PURE__ */ React.createElement("input", { maxLength: 100, value: form.cellule, onChange: (e) => setForm({ ...form, cellule: e.target.value }) })), /* @__PURE__ */ React.createElement(Field, { label: "Heure d'entr\xE9e" }, /* @__PURE__ */ React.createElement("input", { type: "datetime-local", required: true, value: form.entree, onChange: (e) => setForm({ ...form, entree: e.target.value }) })), /* @__PURE__ */ React.createElement(ChefsField, { codex, statut: codexStatut, value: form.chefs, onChange: (chefs) => {
       setForm((p) => ({ ...p, chefs }));
       setFormError("");
     }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours, resume: !peines }), /* @__PURE__ */ React.createElement(PropositionBareme, { type: "cachot", peines, statut: peinesStatut, chefs: form.chefs, reglages: form.bareme, onReglages: (bareme) => setForm((p) => ({ ...p, bareme })), valeur: form.duree, indetermine: form.indetermine, onAppliquer: (duree) => setForm((p) => ({ ...p, duree, indetermine: false })), historique: ((_a = form.bareme) == null ? void 0 : _a.noble) ? entreesRecentes(rows, form.detenu, form.date, { champ: "detenu", exclureRow: initial ? initial.row : null }) : null, disabled: submitting }), /* @__PURE__ */ React.createElement(SentenceField, { type: "cachot", codex, chefs: form.chefs, value: form.duree, onChange: (duree) => setForm((p) => ({ ...p, duree })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting }), saisiesTexteHistorique ? /* @__PURE__ */ React.createElement("div", { className: "field field-full" }, /* @__PURE__ */ React.createElement("h3", null, "Saisies sur la personne"), /* @__PURE__ */ React.createElement("p", null, "Saisies enregistr\xE9es en texte avant le catalogue, conserv\xE9es telles quelles :"), /* @__PURE__ */ React.createElement("p", { style: { whiteSpace: "pre-wrap" } }, initial.saisies)) : /* @__PURE__ */ React.createElement(SaisiesField, { token, value: form.saisies, disabled: submitting, serverCall, catalogue, onPendingChange: (pending) => {
@@ -10243,9 +10627,9 @@ ${item.infraction}`)) return;
     }
   }
   function PresenceOfficerDashboard({ token }) {
-    const [data, setData] = useState8(null), [error, setError] = useState8("");
-    const [open, setOpen] = useState8(chargerSyntheseOuverte);
-    useEffect8(() => {
+    const [data, setData] = useState9(null), [error, setError] = useState9("");
+    const [open, setOpen] = useState9(chargerSyntheseOuverte);
+    useEffect9(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
     function basculer() {
@@ -10272,8 +10656,8 @@ ${item.infraction}`)) return;
     return { lundi: s.lundi, prenom: s.prenom, nom: s.nom };
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState8(null), [error, setError] = useState8(""), [weekFilter, setWeekFilter] = useState8(""), [corpsFilter, setCorpsFilter] = useState8(""), [search, setSearch] = useState8("");
-    useEffect8(() => {
+    const [data, setData] = useState9(null), [error, setError] = useState9(""), [weekFilter, setWeekFilter] = useState9(""), [corpsFilter, setCorpsFilter] = useState9(""), [search, setSearch] = useState9("");
+    useEffect9(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement des pr\xE9sences : ", error);
@@ -10300,13 +10684,14 @@ ${item.infraction}`)) return;
     return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, aliasGrades, matchesPerson, matchesCorps, searching }) {
-    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState8(current);
-    const [seulementImpayes, setSeulementImpayes] = useState8(false);
-    useEffect8(() => {
+    const moi = useContext2(MoiContext);
+    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState9(current);
+    const [seulementImpayes, setSeulementImpayes] = useState9(false);
+    useEffect9(() => {
       if (searching) setOpen(true);
     }, [searching]);
     const impayes = compteImpayesSemaine(rows, { current, matchesCorps });
-    useEffect8(() => {
+    useEffect9(() => {
       if (!impayes) setSeulementImpayes(false);
     }, [impayes]);
     const visible = (r) => matchesCorps(r) && matchesPerson(r) && (!seulementImpayes || estImpayePresence(r));
@@ -10320,7 +10705,7 @@ ${item.infraction}`)) return;
       setOpen(true);
     } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, libelleSemaine(week), " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.filter(matchesCorps).length, "."), open && [...groups.entries()].sort(([a], [b]) => libelleCorps(a).localeCompare(libelleCorps(b), "fr")).filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
       var _a;
-      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(corps)), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : "" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, libelleGrade(s.grade, s.corps, aliasGrades))), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
+      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(corps)), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: `${current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : ""}${memeNom(`${s.prenom} ${s.nom}`, moi) ? " row-moi" : ""}` }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, libelleGrade(s.grade, s.corps, aliasGrades))), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
     }));
   }
   function payeRecapTexte(f, currentWeek, aliasGrades) {
@@ -10371,8 +10756,8 @@ ${item.infraction}`)) return;
     }
   }
   function PayePage({ token, canRegler }) {
-    const [data, setData] = useState8(null), [error, setError] = useState8(""), [regles, setRegles] = useState8([]), [busy, setBusy] = useState8(null), [filtre, setFiltre] = useState8(null);
-    useEffect8(() => {
+    const [data, setData] = useState9(null), [error, setError] = useState9(""), [regles, setRegles] = useState9([]), [busy, setBusy] = useState9(null), [filtre, setFiltre] = useState9(null);
+    useEffect9(() => {
       serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement de la paye : ", error);
@@ -10406,7 +10791,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, libelleSemaine(s.lundi), " ", /* @__PURE__ */ React.createElement("small", null, "du ", /* @__PURE__ */ React.createElement(DateRP, { value: s.lundi, jour: false }))), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims2(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
   }
   function PayeFinanceur({ f, currentWeek, aliasGrades, canRegler, busy, regles, onBasculer }) {
-    const [ouvert, setOuvert] = useState8(true), [copie, setCopie] = useState8(""), [texteVisible, setTexteVisible] = useState8(false);
+    const [ouvert, setOuvert] = useState9(true), [copie, setCopie] = useState9(""), [texteVisible, setTexteVisible] = useState9(false);
     const texte = useMemo4(() => payeRecapTexte(f, currentWeek, aliasGrades), [f, currentWeek, aliasGrades]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();

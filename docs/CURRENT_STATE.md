@@ -2,6 +2,32 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Livret de service et saisie à son propre nom (11 octobre 2026)
+
+- Décisions du propriétaire : en session Discord, une amende ou une
+  incarcération se saisit à son propre nom, officier compris ; page
+  personnelle « Livret de service », ouverte par défaut, avec tout le contenu
+  proposé (fiche, solde, service, justice, commandement, carrière).
+- **Serveur** : nouveau `src/LivretService.js` (`getLivretService`) ;
+  `imposerGardeSession_` et `gardeImposeSession_` dans `Amendes.js`, appliqués
+  par `ajouterAmende` et `ajouterPrison` ; `gardeImpose` dans les données de
+  formulaire ; case Payé limitée aux propres amendes d'un GARDE en session
+  Discord (`encaissement` dans `getAmendes`).
+- **Interface** : `ui/src/livret.jsx` ; entrée « Livret de service » et nom
+  dans la barre latérale ; champ Garde figé à la création ; case Payé grisée
+  ailleurs ; ligne de Présences et carte d'Organigramme repérées « · vous » ;
+  barre mobile qui défile à dix entrées (officier en session Discord).
+- **Correctif hors sujet, trouvé en vérifiant les aperçus** : cinq fragments de
+  `theme.css` mal encodés (« â—† », « dÃ©filer », « DÃ©tenu »…) ; le losange
+  des en-têtes s'affiche de nouveau et la colonne Détenu de la Prison retrouve
+  son gras, son sélecteur ne la trouvant plus.
+- La trace « Saisi par », envisagée, est abandonnée : en session Discord, le
+  garde inscrit est toujours celui qui saisit.
+- Vérifications : `test-livret-service.mjs` et `test-livret-ui.mjs` nouveaux,
+  `test-chefs.mjs` étendu (sessions Discord), 34 suites vertes ; build ;
+  aperçus `livret` (390, 1440) et `livret-officier` (390), les autres
+  régénérés. Aucun push ni déploiement.
+
 ### Connexion Discord, étape 3 : synchronisation des rôles (11 octobre 2026)
 
 - Rôles décrits par le propriétaire : Garde de Blancherive (en service),

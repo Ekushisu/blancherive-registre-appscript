@@ -336,6 +336,23 @@ relire et corriger `RolesDiscord`, la protéger, régler `DISCORD_SYNCHRO` à
 `SIMULATION` le temps de quelques passages, puis à `ACTIF`. Le rôle du bot doit
 être au-dessus d'Officier de Blancherive et de tous les rôles de la feuille.
 
+### Ce que change une session Discord
+
+- `getLivretService` (Livret de service) : GARDE et OFFICIER, **et seulement en
+  session Discord** — un code commun n'identifie personne et reçoit un refus.
+  Ne renvoie que les données du membre désigné par l'ID membre du jeton.
+- `ajouterAmende`, `ajouterPrison` : en session Discord, le garde inscrit est
+  celui de la session, officier compris (`imposerGardeSession_`) ;
+  `getAmendeFormData` et `getPrisonFormData` le renvoient sous `gardeImpose`
+  pour figer le champ.
+- `modifierAmendeCheckbox`, case Payé : en session Discord, un GARDE ne la
+  change que sur ses propres amendes ; `getAmendes` renvoie `encaissement`
+  pour griser les autres cases. Seul le serveur l'impose.
+- Interface : le livret s'ouvre par défaut, le nom s'affiche dans la barre
+  latérale, sa ligne de Présences et sa carte d'Organigramme sont repérées
+  (« · vous »). Règles métier détaillées : BUSINESS_RULES, « Saisie à son
+  propre nom » et « Livret de service ».
+
 ### Session Discord
 
 - `getModesConnexion()` : appelée par l'écran de connexion, sans jeton. Renvoie

@@ -1,5 +1,16 @@
 # Journal de passation IA
 
+## 2026-10-11 — Livret de service, saisie à son propre nom
+
+- Demande du propriétaire : individualiser les formulaires en session Discord
+  et créer une page personnelle. Décisions : pas de saisie au nom d'un autre,
+  officiers compris ; nom « Livret de service » ; tout le contenu proposé.
+- `LivretService.js`, `livret.jsx`, identité de session dans `Amendes.js`,
+  `MoiContext` et `ChampGarde` dans `app.jsx`, navigation et thème.
+- Correctif d'encodage de `theme.css` (losange des en-têtes, bandeau mobile des
+  Présences, sélecteur de la colonne Détenu).
+- 34 suites vertes ; aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-10-11 — Synchronisation des rôles Discord
 
 - Relais mis en ligne par le propriétaire, diagnostic entièrement vert.

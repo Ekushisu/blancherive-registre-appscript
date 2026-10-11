@@ -3,6 +3,7 @@ import sceau from "../assets/sceau.jpg";
 import { nouvelEtatDiscord, urlConnexionDiscord, memoriserEtatDiscord } from "./connexion-discord.js";
 
 const paths={
+  livret:'M6 3h11a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1M5 19a2 2 0 0 1 2-2h12M9 7h6M9 11h4',
   organigramme:'M12 3v6M5 15v-4h14v4M3 15h4v5H3zM10 15h4v5h-4zM17 15h4v5h-4zM9 3h6v5H9z',
   effectifs:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3a4 4 0 0 1 0 8M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
   presences:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5',
@@ -21,24 +22,26 @@ export function RegistreIcon({name}) {return <svg viewBox="0 0 24 24" fill="none
 export const ROLE_PUBLIC="VISITEUR";
 const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",INTENDANT:"Intendant",[ROLE_PUBLIC]:"Visiteur"};
 // Libellés courts de la barre inférieure, où chaque entrée dispose de 45 px.
-const LIBELLES_MOBILES={organigramme:"Hiérarchie",peines:"Peines"};
+const LIBELLES_MOBILES={livret:"Livret",organigramme:"Hiérarchie",peines:"Peines"};
 
 export function Header({role,nom="",page,onPage,onLogout}) {
   // VISITEUR ne consulte que le Codex. INTENDANT est un code remis hors de la
   // garde — argentier, Thanes, cuisines — et n'a que l'effectif, la paye,
   // l'inventaire, le Codex et les décrets de peines et amendes, toujours sans
   // droit d'écriture. L'inventaire des coffres est une affaire d'officiers et
-  // d'intendance : le GARDE ne le voit pas.
+  // d'intendance : le GARDE ne le voit pas. Le livret de service n'existe que
+  // pour une session Discord, la seule qui sache qui est connecté (`nom`).
+  const livret=nom&&(role==="GARDE"||role==="OFFICIER")?[["livret","Livret de service"]]:[];
   const pages=role===ROLE_PUBLIC
     ?[["codex","Codex"]]
     :role==="INTENDANT"
     ?[["organigramme","Organigramme"],["paye","Paye"],["inventaire","Inventaire"],["codex","Codex"],["peines","Peines et amendes"]]
-    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["peines","Peines et amendes"],["amendes","Amendes"],["prison","Prison"]];
+    :[...livret,["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["peines","Peines et amendes"],["amendes","Amendes"],["prison","Prison"]];
   return <header className="topbar">
     <div className="brand"><span className="brand-seal"><img src={sceau} alt=""/></span><div><span className="brand-overline">Châtellerie de</span><strong>Blancherive</strong><span className="brand-caption">Registre de la Garde</span></div></div>
     <div className="nav-caption">Le registre</div>
-    <nav className="nav" aria-label="Navigation principale" style={{'--nav-count':pages.length}}>{pages.map(([key,label])=><button key={key} type="button" aria-label={label} aria-current={page===key?"page":undefined} className={page===key?"active":""} onClick={()=>{onPage(key);window.scrollTo(0,0);}}><RegistreIcon name={key}/><span className="nav-label-full">{label}</span><span className="nav-label-mobile">{LIBELLES_MOBILES[key]||label}</span></button>)}</nav>
-    <div className="nav-footer"><a className="external-link" href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial <span aria-hidden="true">↗</span></a><div className="session-summary"><span className="role-badge" title={nom?`Connecté : ${nom}`:undefined}><span className="session-dot"/>{LIBELLES_ROLE[role]||"Garde"}</span><button className="logout" onClick={onLogout} aria-label={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"} title={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"}><RegistreIcon name="exit"/></button></div></div>
+    <nav className={`nav${pages.length>=10?" nav-dense":""}`} aria-label="Navigation principale" style={{'--nav-count':pages.length}}>{pages.map(([key,label])=><button key={key} type="button" aria-label={label} aria-current={page===key?"page":undefined} className={page===key?"active":""} onClick={()=>{onPage(key);window.scrollTo(0,0);}}><RegistreIcon name={key}/><span className="nav-label-full">{label}</span><span className="nav-label-mobile">{LIBELLES_MOBILES[key]||label}</span></button>)}</nav>
+    <div className="nav-footer">{nom&&<div className="session-nom" title={`Connecté par Discord : ${nom}`}>{nom}</div>}<a className="external-link" href="https://registre-imperial.lovable.app/" target="_blank" rel="noopener noreferrer">Registre impérial <span aria-hidden="true">↗</span></a><div className="session-summary"><span className="role-badge" title={nom?`Connecté : ${nom}`:undefined}><span className="session-dot"/>{LIBELLES_ROLE[role]||"Garde"}</span><button className="logout" onClick={onLogout} aria-label={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"} title={role===ROLE_PUBLIC?"Quitter la consultation":"Se déconnecter"}><RegistreIcon name="exit"/></button></div></div>
   </header>;
 }
 

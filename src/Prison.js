@@ -125,7 +125,7 @@ function getPrison(token) {
 // ============================================================
 
 function getPrisonFormData(token) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const donneesSheet = ss.getSheetByName(PRISON_DONNEES_SHEET_NAME);
@@ -135,7 +135,9 @@ function getPrisonFormData(token) {
   }
 
   return {
-    gardes: lireColonneTechnique(donneesSheet, 15)
+    gardes: lireColonneTechnique(donneesSheet, 15),
+    // Session Discord : le garde est celui qui saisit (Auth.js).
+    gardeImpose: gardeImposeSession_(auth)
   };
 }
 
@@ -149,9 +151,10 @@ function getPrisonFormData(token) {
   `duree` vide signifie « À déterminer » : pas de sortie prévue calculée.
 */
 function ajouterPrison(token, data) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
   if (!data) throw new Error("Données d'incarcération manquantes.");
-  const saisie = preparerSaisiePrison_(data);
+  // Session Discord : l'incarcération est prononcée au nom de celui qui la saisit.
+  const saisie = preparerSaisiePrison_(imposerGardeSession_(auth, data));
   // La première recherche peut créer Objets sous son propre verrou.
   // La validation des objets est donc terminée avant le verrou d'écriture.
   const objets = preparerSaisiesPrison_(data.saisies);

@@ -751,3 +751,62 @@ export const inventaire = {
 };
 
 export const sessionInfo = { role: "OFFICIER" };
+
+/*
+  Livret de service : la forme suit `getLivretService()` de
+  `src/LivretService.js`. Eydis, Sergent de Rivebois connectée par Discord.
+*/
+export const livret = {
+  fiche: {
+    prenom: "Eydis", nom: "la Silencieuse", nomComplet: "Eydis la Silencieuse", grade: "Sergent",
+    corps: "Garnison de Rivebois", specialite: "Pisteuse", statut: "En service actif", assermente: true
+  },
+  aliasGrades: ALIAS_GRADES,
+  commandement: {
+    corps: [
+      { nomComplet: "Brynjar Poing-de-Fer", grade: "Capitaine", corps: "Garnison de Rivebois" },
+      { nomComplet: "Sigrid Vent-du-Nord", grade: "Lieutenant-Chef", corps: "Garnison de Rivebois" }
+    ],
+    etatMajor: [
+      { nomComplet: "Haldvar de Blancherive", grade: "Commander", corps: "État-Major" },
+      { nomComplet: "Torsten Pierre-Grise", grade: "Major", corps: "État-Major" }
+    ]
+  },
+  carriere: {
+    inscription: "2026-09-06T12:00:00.000Z",
+    avantJournal: true,
+    evenements: [
+      { date: "2026-10-01T10:00:00.000Z", type: "corps", avant: "Cité de Blancherive", apres: "Garnison de Rivebois" },
+      { date: "2026-09-20T10:00:00.000Z", type: "grade", avant: "Caporal", apres: "Sergent" }
+    ]
+  },
+  service: {
+    lundiCourant: "2026-10-12", exclu: false,
+    semaineCourante: { lundi: "2026-10-12", jours: [true, true, false, false, false, false, false], joursPresents: 2, solde: 80, financeur: "Thane de Rivebois" },
+    enAttente: [
+      { lundi: "2026-10-05", joursPresents: 3, solde: 120, financeur: "Thane de Rivebois" },
+      { lundi: "2026-09-14", joursPresents: 1, solde: 40, financeur: "Thane de Rivebois" }
+    ],
+    totalEnAttente: 160, totalPercu: 640, derniereSemaineReglee: "2026-09-28",
+    joursTotal: 24, semainesServies: 8, moyenne: 3, serie: 3,
+    dernierJour: "2026-10-13", joursDepuis: 1, inactif: false, seuilInactivite: 5
+  },
+  justice: {
+    amendes: {
+      nombre: 6, total: 950,
+      aEncaisser: { nombre: 2, total: 100, aDeterminer: 1 },
+      aReverser: { nombre: 1, total: 200 },
+      dernieres: [
+        { date: "04/10/2026", contrevenant: "Ysolda", infraction: "CPL art. 16 — Injure", montant: 50, paye: true, reverse: true },
+        { date: "03/10/2026", contrevenant: "Heimskr", infraction: "CPL art. 16 — Injure", montant: 200, paye: true, reverse: false },
+        { date: "02/10/2026", contrevenant: "Belethor", infraction: "CPL art. 4 — Refus d’obtempérer", montant: null, paye: false, reverse: false },
+        { date: "01/10/2026", contrevenant: "Nazeem", infraction: "CPL art. 16 — Injure", montant: 100, paye: false, reverse: false }
+      ]
+    },
+    prison: {
+      nombre: 3,
+      enCellule: [{ date: "06/10/2026", detenu: "Belethor", cellule: "III", infraction: "CPL art. 4 — Refus d’obtempérer", entree: "06/10/2026 10:00", sortie: "16/10/2026 10:00", libere: false }],
+      dernieres: []
+    }
+  }
+};

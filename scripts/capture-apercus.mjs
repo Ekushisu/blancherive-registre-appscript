@@ -41,7 +41,8 @@ const reponses = {
   getPeinesAmendes: () => donnees.peines,
   getOrganigramme: () => donnees.organigramme,
   getEffectifs: () => donnees.effectifs,
-  getMembresDiscord: () => donnees.membresDiscord
+  getMembresDiscord: () => donnees.membresDiscord,
+  getLivretService: () => donnees.livret
 };
 
 // Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues,
@@ -59,6 +60,18 @@ const apercus = {
         discord: { url: "https://discord.com/oauth2/authorize?response_type=code&client_id=1&scope=identify" }
       })
     }
+  },
+  // Session Discord d'un garde : le livret s'ouvre de lui-même.
+  livret: {
+    attendre: ".livret-grille",
+    largeurs: [390, 1440],
+    reponses: { getSessionInfo: () => ({ role: "GARDE", nom: "Eydis la Silencieuse" }) }
+  },
+  // Officier connecté par Discord : dix entrées dans la barre inférieure mobile.
+  "livret-officier": {
+    attendre: ".livret-grille",
+    largeurs: [390],
+    reponses: { getSessionInfo: () => ({ role: "OFFICIER", nom: "Eydis la Silencieuse" }) }
   },
   organigramme: {
     nav: "Organigramme",

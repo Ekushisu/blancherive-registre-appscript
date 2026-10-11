@@ -314,9 +314,58 @@ article, est tenu dans la feuille `PeinesAmendes` (voir DATA_MODEL). Il
   structurés à l'enregistrement. Ses saisies en texte libre, que le formulaire
   ne sait pas rééditer, restent intactes.
 
+## Saisie à son propre nom (session Discord)
+
+Décision du propriétaire, 11 octobre 2026. Une session Discord sait qui est
+connecté ; une session par code commun ne le sait pas.
+
+- **Création d'une amende ou d'une incarcération** : connecté par Discord, le
+  garde inscrit est toujours celui qui saisit, **officier compris**. Le champ
+  est figé dans le formulaire, et le serveur (`imposerGardeSession_`,
+  `Amendes.js`) remplace toute valeur envoyée par le navigateur par le nom de
+  la session, résolu dans `Données!O` ; un nom absent de cette liste est
+  refusé. Par code commun, le champ reste libre.
+- **Modification** : réservée aux officiers, elle reste le chemin de correction
+  et garde le champ libre, avec le contrôle d'identité de la ligne.
+- **Case Payé** : connecté par Discord, un GARDE ne la change que sur les
+  amendes dressées à son nom ; un officier, ou une session par code, sur
+  toutes. Reversé reste aux officiers.
+
+## Livret de service
+
+Page personnelle, ouverte par défaut à une session Discord de GARDE ou
+d'OFFICIER (`getLivretService`, `LivretService.js`). Lecture seule ; le
+serveur ne renvoie que les données du membre de la session.
+
+- **Rattachement** : la fiche par l'ID membre du jeton ; les lignes de
+  Présences, Amendes et Prison par le « Prénom Nom » de la fiche, sans casse,
+  accents ni espaces superflus. Un membre renommé perd le rattachement de ses
+  lignes antérieures.
+- **Solde** : semaine en cours (jours pointés, solde, payeur selon
+  `PAYE_FINANCEURS`) ; **en attente** = même définition que la page Paye
+  (semaine close, solde strictement positive, non réglée) ; **perçue** = total
+  des semaines réglées, et la dernière d'entre elles. Le Hird du Jarl n'est pas
+  soldé par le registre.
+- **Service** : jours de service (somme de `Présences!M`), semaines servies
+  (au moins un jour), moyenne par semaine servie, **série** (semaines servies
+  consécutives, la semaine en cours comprise si elle compte déjà un jour),
+  dernier jour pointé. **Inactivité** : en service actif et plus de
+  `PRESENCE_DASHBOARD_INACTIVITY_DAYS` (5) jours sans service, ou aucun
+  pointage ; même seuil que le tableau des officiers.
+- **Carrière** : événements du journal `HistoriqueEffectifs` (arrivée, grade,
+  corps) ; un membre présent à l'ouverture du journal (septembre 2026) n'a pas
+  de date d'arrivée réelle.
+- **Chaîne de commandement** : supérieurs en service actif de son corps, à
+  partir de Sergent-Chef ; puis l'État-Major, sauf pour l'État-Major et le Hird
+  du Jarl.
+- **Justice** : amendes dressées (nombre, total), à encaisser (non payées,
+  montant fixé ou à déterminer), à reverser (payées, non reversées), cinq
+  dernières ; incarcérations prononcées, détenus encore en cellule, cinq
+  dernières.
+
 ## Amendes
 
-- GARDE et OFFICIER peuvent consulter / créer.
+- GARDE et OFFICIER peuvent consulter / créer ; connecté par Discord, à son propre nom (voir « Saisie à son propre nom »).
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - Seul un OFFICIER peut modifier `Reversé aux trésoriers`.
 - Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps, Faubourgs et Garde inquisitoriale compris, utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.

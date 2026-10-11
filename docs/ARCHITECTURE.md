@@ -67,6 +67,18 @@ Principaux modules :
   - `verifierConfigurationDiscord()` : diagnostic à lancer depuis l'éditeur,
     résultat au journal d'exécution, rien de renvoyé, une fois par minute
 
+- `LivretService.js`
+  - `getLivretService(token)` : livret de service d'une session Discord de
+    GARDE ou d'OFFICIER ; fiche, commandement, carrière (journal
+    `HistoriqueEffectifs`), solde et service (Présences), amendes et
+    incarcérations, du seul membre de la session
+  - réutilise `lireSchemaEffectifsWeb_` (Effectifs.js), `lireOrdreGradesDiscord_`,
+    `cleGradeDiscord_` et `DISCORD_SEUIL_OFFICIER` (Discord.js), les helpers de
+    lundi de `Presences.js`, `mettreAJourSoldesPresences_`,
+    `trouverFinanceurPaye_` (Paye.js), `PRESENCE_DASHBOARD_INACTIVITY_DAYS`,
+    `getLastNonEmptyRowInColumn`, `formatDateAmende_` (Amendes.js) et
+    `formatDatePrison_` / `formatDateTimePrison_` (Prison.js)
+
 - `SynchroDiscord.js`
   - rôles Discord appliqués d'après `Effectifs` et la feuille `RolesDiscord`
     (créée et préremplie une fois), puis pseudos « Prénom Nom »
@@ -139,7 +151,9 @@ Principaux modules :
 - `Amendes.js`
   - registre des amendes : lecture A:H, ajout et modification (OFFICIER) sous verrou de script, montant libre ou vide (« À déterminer »)
   - chefs d'accusation : `validerChefsAccusation_` (références revalidées contre l'index du Codex, titres figés, JSON en colonne technique), `lireChefsAccusation_`, `garantirColonnesRegistre_`, identité de ligne `lireIdentiteAttendue_` / `verifierIdentiteRegistre_`
-  - helpers partagés utilisés aussi par `Prison.js`
+  - helpers partagés utilisés aussi par `Prison.js`, dont l'identité de session
+    (`gardeImposeSession_`, `imposerGardeSession_`) : en session Discord, une
+    amende ou une incarcération se saisit au nom de la session
 
 - `Prison.js`
   - registre des incarcérations : lecture A:L, ajout et modification (OFFICIER) sous verrou, durée libre ou vide, sortie prévue recalculée
@@ -201,6 +215,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
+- `ui/src/livret.jsx` : page « Livret de service » (`LivretPage`), ouverte par défaut à une session Discord de GARDE ou d'OFFICIER ; libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
 - `ui/src/connexion-discord.js` : aller-retour de la connexion Discord — `state` aléatoire gardé dans `sessionStorage` au clic et vérifié une seule fois au retour, lecture du code par `google.script.url.getLocation`, effacement de l'adresse par `google.script.history.replace` ; l'écran de connexion (`navigation.jsx`) met Discord en bouton principal quand `getModesConnexion` le propose, le code d'accès restant en dessous ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 

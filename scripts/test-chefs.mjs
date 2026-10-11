@@ -43,7 +43,12 @@ class Sheet {
 }
 const ctx = vm.createContext({
   console, Date, SPREADSHEET_ID: 'test', ROLE_PUBLIC: 'VISITEUR',
-  requireRole(token, roles) { if (!roles.includes(token)) throw Error('Accès refusé'); return { role: token }; },
+  // « RÔLE@Nom » : session Discord de ce membre ; « RÔLE » seul : session par code.
+  requireRole(token, roles) {
+    const [role, nom] = String(token).split('@');
+    if (!roles.includes(role)) throw Error('Accès refusé');
+    return nom ? { role, via: 'discord', nom } : { role };
+  },
   SpreadsheetApp: { openById() { return { getSheetByName: name => sheets.get(name) || null }; }, flush() { if (failFlush) { failFlush = false; throw Error('Échec flush'); } } },
   LockService: { getScriptLock: () => ({ waitLock() { assert.equal(locked, false, 'Pas de verrou imbriqué'); locked = true; }, releaseLock() { locked = false; } }) },
   Utilities: {
@@ -139,7 +144,7 @@ assert.equal(ctx.lireChefsAccusation_('{"version":1,"chefs":[{"source":"x"}]}'),
 assert.equal(ctx.lireChefsAccusation_('{"version":1,"chefs":[{"source":"Décret X","article":"2","titre":"T"}]}')[0].abrege, 'Décr. X', 'Sigle dérivé si absent du JSON');
 
 // ---------------------------------------------------------------- Amendes
-sheets.set('Données', new Sheet([[], [...Array(14).fill(''), 'Rorik ']], 15));
+sheets.set('Données', new Sheet([[], [...Array(14).fill(''), 'Rorik '], [...Array(14).fill(''), 'Ulfgar']], 15));
 const fines = new Sheet([Array(7).fill('En-tête'), ['2026-09-01', 'Rorik ', 'Ancien', 'Art. 12 — Vol simple', 300, true, false]], 7);
 sheets.set('Amendes', fines);
 const base = { date: '2026-09-29', garde: 'Rorik', contrevenant: 'Belethor', chefs: [{ source: CPL, article: '16' }] };
@@ -151,7 +156,8 @@ for (const montant of [-1, 0, 1.5, 'abc', ' ', {}, true, Number.MAX_SAFE_INTEGER
   assert.throws(() => ctx.ajouterAmende('GARDE', { ...base, montant }), /entier strictement positif/, `montant ${String(montant)}`);
 }
 assert.equal(fines.rows.length, 2, 'Aucune ligne écrite par un refus');
-assert.deepEqual(plain(ctx.getAmendeFormData('GARDE')), { gardes: ['Rorik'] });
+assert.deepEqual(plain(ctx.getAmendeFormData('GARDE')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: '' }, 'Code commun : garde libre');
+assert.deepEqual(plain(ctx.getAmendeFormData('GARDE@Rorik')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: 'Rorik' }, 'Discord : garde imposé');
 
 const lu = plain(ctx.getAmendes('GARDE'));
 assert.equal(lu.rows[0].chefs, null, 'Ligne antérieure : pas de chefs structurés');
@@ -211,6 +217,32 @@ assert.equal(JSON.parse(fines.rows[1][7]).chefs[0].libre, 'Art. 12 — Vol simpl
 ctx.supprimerAmende('OFFICIER', 2);
 assert.ok(fines.rows[1].every(v => v === ''));
 
+// Session Discord : l'amende est au nom de celui qui la saisit, officier
+// compris ; la valeur envoyée par le navigateur est ignorée.
+ctx.ajouterAmende('GARDE@Rorik', { ...base, garde: 'Ulfgar', contrevenant: 'Saisie de Rorik', montant: 50 });
+const ligneDe = contrevenant => fines.rows.findIndex(r => r[2] === contrevenant) + 1;
+assert.equal(fines.rows[ligneDe('Saisie de Rorik') - 1][1], 'Rorik ', 'Garde imposé, valeur brute de Données');
+ctx.ajouterAmende('OFFICIER@Ulfgar', { ...base, garde: 'Rorik', contrevenant: 'Saisie d’Ulfgar', montant: 80 });
+assert.equal(fines.rows[ligneDe('Saisie d’Ulfgar') - 1][1], 'Ulfgar', 'Un officier aussi');
+assert.throws(() => ctx.ajouterAmende('GARDE@Inconnu Personne', { ...base, contrevenant: 'Refusé' }), /garde/i,
+  'Nom de session absent de la liste des gardes : refusé');
+assert.equal(ligneDe('Refusé'), 0);
+assert.deepEqual(plain(ctx.getAmendes('GARDE@Rorik').encaissement), { garde: 'Rorik', restreint: true });
+assert.deepEqual(plain(ctx.getAmendes('OFFICIER@Rorik').encaissement), { garde: 'Rorik', restreint: false });
+assert.deepEqual(plain(ctx.getAmendes('GARDE').encaissement), { garde: '', restreint: false });
+
+// Case Payé : un garde connecté par Discord ne la change que sur ses amendes.
+const ligneUlfgar = ligneDe('Saisie d’Ulfgar');
+assert.throws(() => ctx.modifierAmendeCheckbox('GARDE@Rorik', ligneUlfgar, 6, true), /Seul le garde qui a dressé cette amende, ou un officier/);
+assert.equal(fines.rows[ligneUlfgar - 1][5], false, 'Rien d’écrit');
+ctx.modifierAmendeCheckbox('GARDE@Ulfgar', ligneUlfgar, 6, true);
+assert.equal(fines.rows[ligneUlfgar - 1][5], true);
+ctx.modifierAmendeCheckbox('OFFICIER@Rorik', ligneUlfgar, 6, false);
+assert.equal(fines.rows[ligneUlfgar - 1][5], false, 'Un officier, sur toutes');
+ctx.modifierAmendeCheckbox('GARDE', ligneUlfgar, 6, true);
+assert.equal(fines.rows[ligneUlfgar - 1][5], true, 'Code commun : inchangé');
+assert.throws(() => ctx.modifierAmendeCheckbox('GARDE@Ulfgar', ligneUlfgar, 7, true), /Seuls les officiers/, 'Reversé reste aux officiers');
+
 // ---------------------------------------------------------------- Prison
 const prison = new Sheet([Array(11).fill('En-tête'), ['2026-09-01', 'Rorik ', 'Ancien', '', 'Art. 12 — Vol simple', 2, new Date('2026-09-01T10:00:00Z'), new Date('2026-09-01T12:00:00Z'), false, 'Deux épées\nUne bourse', 'Note']], 11);
 sheets.set('Prison', prison);
@@ -220,7 +252,8 @@ assert.throws(() => ctx.ajouterPrison('GARDE', { ...basePrison, chefs: undefined
 for (const duree of [-1, 0, 'abc', ' ', {}, 24 * 400]) {
   assert.throws(() => ctx.ajouterPrison('GARDE', { ...basePrison, duree }), /durée/i, `durée ${String(duree)}`);
 }
-assert.deepEqual(plain(ctx.getPrisonFormData('GARDE')), { gardes: ['Rorik'] });
+assert.deepEqual(plain(ctx.getPrisonFormData('GARDE')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: '' });
+assert.deepEqual(plain(ctx.getPrisonFormData('OFFICIER@Ulfgar')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: 'Ulfgar' });
 let lecture = plain(ctx.getPrison('GARDE'));
 assert.equal(lecture.rows[0].chefs, null);
 assert.equal(lecture.rows[0].saisiesListe, null, 'Saisies historiques en texte : pas de liste');
@@ -270,4 +303,8 @@ assert.equal(locked, false);
 ctx.supprimerPrison('OFFICIER', 2);
 assert.ok(prison.rows[1].every(v => v === ''));
 
-console.log('Chefs d’accusation : version du Codex, index, validation, Amendes et Prison (ajout, modification, à déterminer, identité, rollback, colonnes) OK.');
+// Session Discord : l'incarcération est prononcée au nom de celui qui la saisit.
+ctx.ajouterPrison('GARDE@Ulfgar', { ...basePrison, garde: 'Rorik', detenu: 'Détenu par Ulfgar', duree: 1 });
+assert.equal(prison.rows.find(r => r[2] === 'Détenu par Ulfgar')[1], 'Ulfgar', 'Garde imposé');
+
+console.log('Chefs d’accusation : version du Codex, index, validation, Amendes et Prison (ajout, modification, à déterminer, identité, rollback, colonnes, garde imposé par la session Discord) OK.');
