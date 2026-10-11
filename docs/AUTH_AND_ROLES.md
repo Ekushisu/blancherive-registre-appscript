@@ -55,10 +55,24 @@ au moins privilégié, afin que le résultat reste déterministe si deux codes o
 Le login renvoie un token contenant :
 - le rôle ;
 - son origine `via` : `code` pour un code commun (le jeton public n'en porte pas) ;
+- pour un code, l'empreinte `cle` du code en vigueur (HMAC par `AUTH_SECRET`,
+  tronquée ; le code lui-même n'est jamais dans le jeton) ;
 - une expiration.
 
-Durée actuelle :
-- 8 heures.
+Durées (demande du propriétaire, 11 octobre 2026 : plus de 24 heures ;
+constantes `DUREE_SESSION_*` d'`Auth.js`) :
+- **code commun : 3 jours**, jamais prolongé. Changer le code d'un rôle ferme
+  aussitôt les sessions ouvertes avec l'ancien (empreinte), le désactiver aussi ;
+- **Discord : 30 jours, glissants** : à chaque visite, au plus une fois par jour,
+  `getSessionInfo` renvoie un jeton neuf (`jeton`), délivré seulement après
+  `verifyAuthToken`, donc pour une fiche qui donne encore ce rôle à ce compte ;
+- **visiteur du Codex : 2 heures**.
+
+Le navigateur garde le jeton dans `localStorage`, d'une ouverture à l'autre ;
+seul le bouton de déconnexion l'efface. Sur un ordinateur partagé, se
+déconnecter. Avant le 11 octobre 2026 : 8 heures, et un jeton perdu à la
+fermeture de l'onglet (`sessionStorage`), repris automatiquement par la
+nouvelle version.
 
 Le token est signé en HMAC SHA-256. Changer `AUTH_SECRET` ferme toutes les
 sessions ouvertes, publiques comprises : c'est le recours si un jeton a pu être
@@ -115,7 +129,7 @@ AUTH_CODES = INTENDANT                  ← garde entière passée sur Discord
   d'un rôle ouvert, c'est le rôle ouvert qui l'emporte.
 - **Coupure immédiate** (décision du propriétaire) : `verifyAuthToken` refuse un
   jeton obtenu par un code désormais désactivé, dès l'appel suivant, sans
-  attendre ses 8 heures. Les jetons délivrés avant l'introduction de `via` n'en
+  attendre son expiration. Les jetons délivrés avant l'introduction de `via` n'en
   portent pas et sont traités comme obtenus par code. Rallumer un code ranime
   les sessions encore valides ouvertes avec lui ; pour les fermer
   définitivement, changer `AUTH_SECRET`.

@@ -11,6 +11,7 @@
   sessions ouvertes avec lui, dès l'appel suivant.
 */
 import assert from 'node:assert/strict';
+import { createHmac } from 'node:crypto';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
@@ -36,7 +37,8 @@ for (const fichier of fs.readdirSync('src').filter(f => f.endsWith('.js'))) {
     if (m[1] !== 'createAuthToken_' && /createAuthToken_\s*\(/.test(corps)) emetteurs.push(m[1]);
   });
 }
-assert.deepEqual(emetteurs.sort(), ['login', 'ouvrirSessionDiscord', 'ouvrirSessionPublique'],
+// `getSessionInfo` ne fait que prolonger une session Discord déjà vérifiée (test-connexion-discord.mjs).
+assert.deepEqual(emetteurs.sort(), ['getSessionInfo', 'login', 'ouvrirSessionDiscord', 'ouvrirSessionPublique'],
   'Une nouvelle fonction délivre un jeton : la relire, puis l’ajouter ici en connaissance de cause');
 
 let horloge = 1_000_000;
@@ -50,8 +52,9 @@ const context = vm.createContext({
     base64EncodeWebSafe: valeur => Buffer.from(
       typeof valeur === 'string' ? valeur : Buffer.from(valeur)
     ).toString('base64url'),
+    // Vraie signature HMAC : l'empreinte tronquée d'un code doit dépendre du code.
     computeHmacSha256Signature: (donnees, cle) => Array.from(
-      Buffer.from(`${cle}::${donnees}`).values()
+      createHmac('sha256', cle).update(donnees).digest().values()
     ),
     base64DecodeWebSafe: valeur => Array.from(Buffer.from(valeur, 'base64url').values()),
     newBlob: octets => ({ getDataAsString: () => Buffer.from(octets).toString('utf8') })
@@ -142,9 +145,29 @@ assert.throws(() => context.verifyAuthToken(ancien), /des officiers n'est plus a
 const forge = Buffer.from(JSON.stringify({ ...charge(officier), via: 'discord' })).toString('base64url');
 assert.throws(() => context.verifyAuthToken(`${forge}.${officier.split('.')[1]}`), /Token invalide/);
 
-// L'expiration prime toujours.
+// Code changé : les sessions ouvertes avec l'ancien tombent, les autres rôles non.
 regler({});
-horloge += 8 * 60 * 60 * 1000 + 1000;
-assert.throws(() => context.verifyAuthToken(garde), /Session expirée/);
+const gardeAvant = context.login('garde');
+const contenuGarde = charge(gardeAvant);
+assert.equal(typeof contenuGarde.cle, 'string');
+assert.ok(contenuGarde.cle.length >= 12, 'Empreinte présente');
+assert.ok(!JSON.stringify(contenuGarde).includes('garde"') && !Object.values(contenuGarde).includes('garde'), 'Le code lui-même n’est jamais dans le jeton');
+regler({ PASSWORD_GARDE: 'nouveau-code' });
+assert.throws(() => context.verifyAuthToken(gardeAvant), /^Error: Le code des gardes a changé : reconnectez-vous avec le nouveau code\.$/);
+assert.equal(role(intendant), 'INTENDANT', 'Code d’un autre rôle inchangé : session intacte');
+assert.equal(role(context.login('nouveau-code')), 'GARDE');
+regler({ PASSWORD_GARDE: 'nouveau-code', AUTH_SECRET: 'autre-secret' });
+assert.throws(() => context.verifyAuthToken(intendant), /Token invalide/, 'Changer AUTH_SECRET ferme tout');
 
-console.log('Codes communs : activables par rôle, coupure immédiate des sessions, aucune fabrique de jeton publique.');
+// Durées : trois jours pour un code, sans prolongation ; deux heures pour le visiteur.
+regler({});
+const debut = horloge;
+const longue = context.login('garde');
+assert.equal(charge(longue).exp - debut, 3 * 24 * 60 * 60 * 1000);
+assert.equal(charge(context.ouvrirSessionPublique()).exp - debut, 2 * 60 * 60 * 1000);
+horloge += 2 * 24 * 60 * 60 * 1000;
+assert.deepEqual({ ...context.getSessionInfo(longue) }, { role: 'GARDE', nom: '' }, 'Session par code jamais prolongée');
+horloge = debut + 3 * 24 * 60 * 60 * 1000 + 1;
+assert.throws(() => context.verifyAuthToken(longue), /Session expirée/);
+
+console.log('Codes communs : activables par rôle, coupure immédiate des sessions, code changé, durées, aucune fabrique de jeton publique.');

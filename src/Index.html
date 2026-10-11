@@ -9118,6 +9118,45 @@ input.champ-impose {
   // ui/src/app.jsx
   var { useContext: useContext2, useEffect: useEffect9, useMemo: useMemo4, useRef: useRef8, useState: useState9 } = React;
   var MoiContext = React.createContext("");
+  var CLE_JETON = "guardAuthToken";
+  function lireJeton() {
+    try {
+      const garde = localStorage.getItem(CLE_JETON);
+      if (garde) return garde;
+      const ancien = sessionStorage.getItem(CLE_JETON);
+      if (ancien) {
+        localStorage.setItem(CLE_JETON, ancien);
+        sessionStorage.removeItem(CLE_JETON);
+      }
+      return ancien;
+    } catch (e) {
+      try {
+        return sessionStorage.getItem(CLE_JETON);
+      } catch (e2) {
+        return null;
+      }
+    }
+  }
+  function ecrireJeton(jeton) {
+    try {
+      localStorage.setItem(CLE_JETON, jeton);
+    } catch (e) {
+      try {
+        sessionStorage.setItem(CLE_JETON, jeton);
+      } catch (e2) {
+      }
+    }
+  }
+  function effacerJeton() {
+    try {
+      localStorage.removeItem(CLE_JETON);
+    } catch (e) {
+    }
+    try {
+      sessionStorage.removeItem(CLE_JETON);
+    } catch (e) {
+    }
+  }
   function serverCall(name, ...args) {
     return new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
@@ -9146,7 +9185,7 @@ input.champ-impose {
     return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
   }
   function App() {
-    const [token, setToken] = useState9(sessionStorage.getItem("guardAuthToken"));
+    const [token, setToken] = useState9(lireJeton);
     const [role, setRole] = useState9(null);
     const [nom, setNom] = useState9("");
     const [page, setPage] = useState9("organigramme");
@@ -9155,6 +9194,7 @@ input.champ-impose {
     useEffect9(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => {
+        if (i.jeton) ecrireJeton(i.jeton);
         setRole(i.role);
         setNom(i.nom || "");
         if (i.role === ROLE_PUBLIC) setPage("codex");
@@ -9165,7 +9205,7 @@ input.champ-impose {
       lireRetourDiscord().then((retour) => {
         if (!retour) return;
         effacerRetourDiscord();
-        if (sessionStorage.getItem("guardAuthToken")) return;
+        if (lireJeton()) return;
         let code;
         try {
           code = verifierRetourDiscord(retour);
@@ -9175,7 +9215,7 @@ input.champ-impose {
         }
         setDiscordRetour({ statut: "connexion", erreur: "" });
         serverCall("ouvrirSessionDiscord", code).then((t) => {
-          sessionStorage.setItem("guardAuthToken", t);
+          ecrireJeton(t);
           setDiscordRetour({ statut: "", erreur: "" });
           setToken(t);
         }).catch((e) => setDiscordRetour({ statut: "", erreur: e.message }));
@@ -9184,14 +9224,14 @@ input.champ-impose {
     const publicSeulement = role === ROLE_PUBLIC;
     const intendantSeulement = role === "INTENDANT";
     function logout() {
-      sessionStorage.removeItem("guardAuthToken");
+      effacerJeton();
       setToken(null);
       setRole(null);
       setNom("");
       setPage("organigramme");
     }
     if (!token) return /* @__PURE__ */ React.createElement(Login, { serverCall, discordRetour, onLogin: (t) => {
-      sessionStorage.setItem("guardAuthToken", t);
+      ecrireJeton(t);
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");

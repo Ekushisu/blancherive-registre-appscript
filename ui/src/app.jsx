@@ -27,6 +27,17 @@ const {useContext,useEffect,useMemo,useRef,useState}=React;
 // Nom du membre connecté par Discord ; vide pour une session par code, qui n'identifie personne.
 const MoiContext=React.createContext("");
 
+/*
+  Jeton de session, gardé d'une ouverture du navigateur à l'autre : seule la
+  déconnexion l'efface (durées dans Auth.js). Un jeton laissé dans
+  `sessionStorage` par une version antérieure est repris. Stockage refusé :
+  repli sur l'onglet.
+*/
+const CLE_JETON="guardAuthToken";
+function lireJeton(){try{const garde=localStorage.getItem(CLE_JETON);if(garde)return garde;const ancien=sessionStorage.getItem(CLE_JETON);if(ancien){localStorage.setItem(CLE_JETON,ancien);sessionStorage.removeItem(CLE_JETON);}return ancien;}catch{try{return sessionStorage.getItem(CLE_JETON);}catch{return null;}}}
+function ecrireJeton(jeton){try{localStorage.setItem(CLE_JETON,jeton);}catch{try{sessionStorage.setItem(CLE_JETON,jeton);}catch{/* stockage refusé */}}}
+function effacerJeton(){try{localStorage.removeItem(CLE_JETON);}catch{/* stockage refusé */}try{sessionStorage.removeItem(CLE_JETON);}catch{/* stockage refusé */}}
+
 function serverCall(name,...args){return new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(resolve).withFailureHandler(error=>reject(new Error(error?.message||String(error))))[name](...args);});}
 function normalizeSearchText(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
 // M\u00eame personne, sans casse, accents ni espaces superflus : comme le serveur rapproche les lignes.
@@ -36,18 +47,18 @@ function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(
 function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n)>1?"s":""}`;}
 
 function App(){
-  const[token,setToken]=useState(sessionStorage.getItem("guardAuthToken"));
+  const[token,setToken]=useState(lireJeton);
   const[role,setRole]=useState(null);const[nom,setNom]=useState("");const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
   const[discordRetour,setDiscordRetour]=useState({statut:"",erreur:""});
   // Le visiteur public n'a que le Codex : on l'y place d'emblée.
   // Connecté par Discord, un garde ou un officier ouvre d'abord son livret de service.
-  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{setRole(i.role);setNom(i.nom||"");if(i.role===ROLE_PUBLIC)setPage("codex");else if(i.nom&&(i.role==="GARDE"||i.role==="OFFICIER"))setPage("livret");}).catch(logout);},[token]);
+  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{if(i.jeton)ecrireJeton(i.jeton);setRole(i.role);setNom(i.nom||"");if(i.role===ROLE_PUBLIC)setPage("codex");else if(i.nom&&(i.role==="GARDE"||i.role==="OFFICIER"))setPage("livret");}).catch(logout);},[token]);
   // Retour de Discord : code et `state` dans l'adresse, traités une seule fois, puis retirés de l'adresse.
-  useEffect(()=>{lireRetourDiscord().then(retour=>{if(!retour)return;effacerRetourDiscord();if(sessionStorage.getItem("guardAuthToken"))return;let code;try{code=verifierRetourDiscord(retour);}catch(e){setDiscordRetour({statut:"",erreur:e.message});return;}setDiscordRetour({statut:"connexion",erreur:""});serverCall("ouvrirSessionDiscord",code).then(t=>{sessionStorage.setItem("guardAuthToken",t);setDiscordRetour({statut:"",erreur:""});setToken(t);}).catch(e=>setDiscordRetour({statut:"",erreur:e.message}));});},[]);
+  useEffect(()=>{lireRetourDiscord().then(retour=>{if(!retour)return;effacerRetourDiscord();if(lireJeton())return;let code;try{code=verifierRetourDiscord(retour);}catch(e){setDiscordRetour({statut:"",erreur:e.message});return;}setDiscordRetour({statut:"connexion",erreur:""});serverCall("ouvrirSessionDiscord",code).then(t=>{ecrireJeton(t);setDiscordRetour({statut:"",erreur:""});setToken(t);}).catch(e=>setDiscordRetour({statut:"",erreur:e.message}));});},[]);
   const publicSeulement=role===ROLE_PUBLIC;
   const intendantSeulement=role==="INTENDANT";
-  function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setNom("");setPage("organigramme");}
-  if(!token)return <Login serverCall={serverCall} discordRetour={discordRetour} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
+  function logout(){effacerJeton();setToken(null);setRole(null);setNom("");setPage("organigramme");}
+  if(!token)return <Login serverCall={serverCall} discordRetour={discordRetour} onLogin={t=>{ecrireJeton(t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
   return <MoiContext.Provider value={nom}><div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} nom={nom} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
     {page==="livret"&&nom&&(role==="GARDE"||role==="OFFICIER")&&<LivretPage token={token} serverCall={serverCall}/>}

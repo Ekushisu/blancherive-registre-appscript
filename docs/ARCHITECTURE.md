@@ -21,7 +21,9 @@ Principaux modules :
   - login par mot de passe de rôle, activable par rôle (`AUTH_CODES`) ; un code
     désactivé ferme aussi les sessions ouvertes avec lui
   - token HMAC, avec son origine `via`
-  - expiration 8 h
+  - durées : code 3 jours (empreinte du code : le changer ferme ses sessions),
+    Discord 30 jours prolongés à chaque visite par `getSessionInfo`, visiteur
+    2 h ; jeton gardé dans `localStorage` par l'interface
   - `requireRole()`
   - `createAuthToken_` privée : seules `login`, `ouvrirSessionPublique` et
     `ouvrirSessionDiscord` délivrent un jeton au navigateur

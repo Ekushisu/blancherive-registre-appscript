@@ -2,6 +2,23 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Sessions plus longues (11 octobre 2026)
+
+- Demande du propriétaire : des sessions de plus de 24 heures. Code commun :
+  3 jours, sans prolongation ; Discord : 30 jours, prolongés à chaque visite
+  (au plus une fois par jour, par `getSessionInfo`) ; visiteur : 2 heures.
+- Pour qu'une longue session par code reste maîtrisable, le jeton porte
+  l'empreinte du code : changer le code d'un rôle ferme les sessions ouvertes
+  avec l'ancien. Auparavant, seul le désactiver ou changer `AUTH_SECRET` le
+  faisait.
+- Interface : jeton dans `localStorage` (gardé à la fermeture du navigateur),
+  repris de `sessionStorage` pour une session ouverte avant la mise à jour ;
+  effacé par la déconnexion.
+- Vérifications : `test-auth-codes.mjs` (vraie signature HMAC dans le test,
+  sans quoi l'empreinte tronquée ne voyait que le secret) et
+  `test-connexion-discord.mjs` étendus ; 34 suites vertes. Aucun push ni
+  déploiement.
+
 ### Livret de service et saisie à son propre nom (11 octobre 2026)
 
 - Décisions du propriétaire : en session Discord, une amende ou une
@@ -931,7 +948,9 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 ### Auth
 - Login GARDE / OFFICIER / INTENDANT par code commun, chaque code activable
   dans `AUTH_CODES` ; consultation publique `VISITEUR` sans code.
-- Token HMAC avec expiration 8 h ; un code désactivé ferme ses sessions.
+- Token HMAC : code commun 3 jours, Discord 30 jours glissants, visiteur 2 h ;
+  un code désactivé ou changé ferme ses sessions. Jeton gardé d'une ouverture
+  du navigateur à l'autre.
 - Connexion Discord en conception (`docs/AUTH_AND_ROLES.md`).
 
 ### Organigramme

@@ -276,9 +276,26 @@ proprietes.AUTH_DISCORD = 'ACTIF';
 const forge = Buffer.from(JSON.stringify({ ...charge(garde), role: 'OFFICIER' })).toString('base64url');
 assert.throws(() => context.verifyAuthToken(`${forge}.${garde.split('.')[1]}`), /Token invalide/);
 
-// Expiration habituelle.
-horloge += 8 * 60 * 60 * 1000 + 1;
-assert.throws(() => context.verifyAuthToken(jeton), /Session expirée/);
+// Session glissante : trente jours, prolongée à chaque visite, au plus une fois par jour.
+const JOUR = 24 * 60 * 60 * 1000;
+const emis = charge(jeton).exp - 30 * JOUR;
+assert.equal(context.getSessionInfo(jeton).jeton, undefined, 'Moins d’un jour : pas de nouveau jeton');
+horloge = emis + 25 * 60 * 60 * 1000;
+const prolonge = context.getSessionInfo(jeton).jeton;
+assert.ok(prolonge, 'Plus d’un jour : jeton neuf');
+assert.equal(charge(prolonge).exp, horloge + 30 * JOUR);
+for (const champ of ['role', 'via', 'membre', 'discord', 'nom']) {
+  assert.equal(charge(prolonge)[champ], charge(jeton)[champ], `Prolongé à l’identique : ${champ}`);
+}
+effectifs.rows[2][4] = 'Réserve'; resynchroniser();
+assert.throws(() => context.getSessionInfo(jeton), /accès au registre a changé/, 'Une fiche sans accès n’est jamais prolongée');
+effectifs.rows[2][4] = 'En service actif'; resynchroniser();
+horloge = charge(prolonge).exp - JOUR;
+assert.equal(context.verifyAuthToken(prolonge).role, 'OFFICIER', 'Valable vingt-neuf jours après la visite');
+
+// Expiration : trente jours sans visite.
+horloge = charge(prolonge).exp + 1;
+assert.throws(() => context.verifyAuthToken(prolonge), /Session expirée/);
 
 // ---------------------------------------------------------------- diagnostic de l'éditeur
 // Ordre des appels : secret faux, bot, route fermée, serveurs du bot, serveur, membres.

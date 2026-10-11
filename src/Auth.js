@@ -15,7 +15,8 @@
   Pour la même raison, toute fonction qui fabrique un jeton finit par `_` :
   `google.script.run` n'atteint pas les fonctions privées. Seules `login`,
   `ouvrirSessionPublique` et `ouvrirSessionDiscord` délivrent un jeton au
-  navigateur, et chacune décide elle-même du rôle. `scripts/test-auth-codes.mjs`
+  navigateur, et chacune décide elle-même du rôle ; `getSessionInfo` ne fait
+  que prolonger une session Discord déjà vérifiée, à l'identique. `scripts/test-auth-codes.mjs`
   vérifie la liste des fonctions publiques de ce fichier et qu'aucune autre
   fonction du dépôt n'appelle `createAuthToken_`.
 */
@@ -46,6 +47,24 @@ const ROLE_PUBLIC = "VISITEUR";
 */
 const ROLES_CODE = ["OFFICIER", "GARDE", "INTENDANT"];
 
+/*
+  Durée des sessions (demande du propriétaire, 11 octobre 2026 : plus de
+  24 heures). Le navigateur garde le jeton d'une ouverture à l'autre ; seule
+  la déconnexion l'efface.
+  - Code commun : trois jours, sans prolongation. Un code n'identifie
+    personne : changer le code d'un rôle ferme les sessions ouvertes avec
+    l'ancien (empreinte `cle` du jeton), le désactiver aussi.
+  - Discord : trente jours, prolongés à chaque visite (`getSessionInfo`), au
+    plus une fois par jour. Ces sessions se ferment une à une par la table
+    d'accès (fiche rétrogradée, partie, déliée) ou `AUTH_DISCORD`.
+  - Visiteur du Codex : deux heures.
+  Changer `AUTH_SECRET` ferme toutes les sessions, quelle que soit leur durée.
+*/
+const DUREE_SESSION_CODE = 3 * 24 * 60 * 60 * 1000;
+const DUREE_SESSION_DISCORD = 30 * 24 * 60 * 60 * 1000;
+const RENOUVELLEMENT_SESSION_DISCORD = 24 * 60 * 60 * 1000;
+const DUREE_SESSION_PUBLIQUE = 2 * 60 * 60 * 1000;
+
 const LIBELLES_CODE = {
   OFFICIER: "des officiers",
   GARDE: "des gardes",
@@ -60,7 +79,7 @@ const LIBELLES_CODE = {
   un visiteur consulte, il ne prend pas son service.
 */
 function ouvrirSessionPublique() {
-  return createAuthToken_(ROLE_PUBLIC, 2 * 60 * 60 * 1000);
+  return createAuthToken_(ROLE_PUBLIC, DUREE_SESSION_PUBLIQUE);
 }
 
 
@@ -95,7 +114,12 @@ function login(password) {
 
   if (role) {
 
-    return createAuthToken_(role, null, "code");
+    return createAuthToken_(
+      role,
+      DUREE_SESSION_CODE,
+      "code",
+      { cle: empreinteCode_(props, role) }
+    );
   }
 
 
@@ -142,6 +166,31 @@ function rolesCodeActifs_(props) {
   return ROLES_CODE.filter(
     role => demandes.includes(role)
   );
+}
+
+
+/*
+  Empreinte du code en vigueur d'un rôle : signée par `AUTH_SECRET`, elle ne
+  permet pas de retrouver le code, qui n'est jamais placé dans le jeton.
+  Vide si le code ou le secret manque.
+*/
+function empreinteCode_(props, role) {
+
+  const code =
+    props.getProperty("PASSWORD_" + role);
+
+  const secret =
+    props.getProperty("AUTH_SECRET");
+
+  if (!code || !secret) {
+
+    return "";
+  }
+
+
+  return Utilities.base64EncodeWebSafe(
+    Utilities.computeHmacSha256Signature("code:" + role + ":" + code, secret)
+  ).slice(0, 16);
 }
 
 
@@ -225,7 +274,7 @@ function ouvrirSessionDiscord(code) {
 
   return createAuthToken_(
     acces.role,
-    null,
+    DUREE_SESSION_DISCORD,
     "discord",
     {
       membre: acces.membre,
@@ -409,14 +458,35 @@ function verifyAuthToken(token) {
 
   if (
     ROLES_CODE.includes(payload.role) &&
-    (payload.via || "code") === "code" &&
-    !rolesCodeActifs_(props).includes(payload.role)
+    (payload.via || "code") === "code"
   ) {
 
-    throw new Error(
-      messageCodeDesactive_(payload.role) +
-      " Session fermée."
-    );
+    if (!rolesCodeActifs_(props).includes(payload.role)) {
+
+      throw new Error(
+        messageCodeDesactive_(payload.role) +
+        " Session fermée."
+      );
+    }
+
+
+    /*
+      Code changé : les sessions ouvertes avec l'ancien tombent.
+      Un jeton antérieur à l'empreinte n'en porte pas ; il expire
+      au plus tard huit heures après sa délivrance.
+    */
+
+    if (
+      payload.cle &&
+      payload.cle !== empreinteCode_(props, payload.role)
+    ) {
+
+      throw new Error(
+        "Le code " +
+        LIBELLES_CODE[payload.role] +
+        " a changé : reconnectez-vous avec le nouveau code."
+      );
+    }
   }
 
 
@@ -488,8 +558,37 @@ function getSessionInfo(token) {
 
 
   // Le nom n'existe que pour une session Discord : un code n'identifie personne.
-  return {
+  const info = {
     role: auth.role,
     nom: auth.nom || ""
   };
+
+
+  /*
+    Session Discord glissante : à chaque visite, au plus une fois
+    par jour, un jeton neuf de trente jours remplace l'ancien. Il
+    n'est délivré qu'après `verifyAuthToken`, donc pour une fiche
+    qui donne encore ce rôle à ce compte. Une session par code
+    n'est jamais prolongée.
+  */
+
+  if (
+    auth.via === "discord" &&
+    auth.exp - Date.now() < DUREE_SESSION_DISCORD - RENOUVELLEMENT_SESSION_DISCORD
+  ) {
+
+    info.jeton = createAuthToken_(
+      auth.role,
+      DUREE_SESSION_DISCORD,
+      "discord",
+      {
+        membre: auth.membre,
+        discord: auth.discord,
+        nom: auth.nom
+      }
+    );
+  }
+
+
+  return info;
 }

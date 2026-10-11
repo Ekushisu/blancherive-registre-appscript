@@ -1,5 +1,15 @@
 # Journal de passation IA
 
+## 2026-10-11 — Sessions plus longues
+
+- Demande du propriétaire : sessions de plus de 24 heures. Code 3 jours,
+  Discord 30 jours glissants, visiteur 2 heures ; jeton gardé dans
+  `localStorage`.
+- Empreinte du code dans le jeton : changer un code ferme ses sessions.
+  `getSessionInfo` prolonge une session Discord vérifiée ; ajouté en
+  connaissance de cause à la liste des fonctions qui délivrent un jeton.
+- 34 suites vertes. Aucun push ni déploiement.
+
 ## 2026-10-11 — Livret de service, saisie à son propre nom
 
 - Demande du propriétaire : individualiser les formulaires en session Discord
