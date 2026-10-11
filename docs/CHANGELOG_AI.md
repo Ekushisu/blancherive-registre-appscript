@@ -1,5 +1,91 @@
 # Journal de passation IA
 
+## 2026-10-11 — Synchronisation des rôles Discord
+
+- Relais mis en ligne par le propriétaire, diagnostic entièrement vert.
+- Rôles décrits par le propriétaire ; « Garde de Blancherive » compris comme
+  un seul rôle, de fonction, donné à tout membre en service.
+- `src/SynchroDiscord.js` : feuille `RolesDiscord` préremplie, résolution des
+  noms de rôles sur le serveur (introuvable, doublon, réservé, au-dessus du
+  bot), plan par compte rattaché, simulation, application plafonnée, passage
+  après mutation et horaire, rapport. Branché dans
+  `executerMutationHistoriqueEffectifs_` et `getEffectifs`.
+- Tests : `test-synchro-discord.mjs`, historique et connexion étendus ; 32
+  suites vertes. Aucun push ni déploiement.
+- Suite le même jour : préremplissage calé sur les rôles réels du serveur
+  (noms exacts, cases vides expliquées, comparaison sans ponctuation), Cité →
+  Garde de Fort-Dragon, feuille réduite à ses en-têtes préremplie de nouveau,
+  pseudos « Prénom Nom » (option B). 32 suites vertes.
+
+## 2026-10-11 — Relais Discord (Cloudflare Workers)
+
+- Diagnostic réel : Google ignore l'en-tête User-Agent fourni à UrlFetchApp ;
+  Discord refuse au bot les routes `/guilds/…` (403, code 40333). Connexion des
+  membres confirmée par le propriétaire.
+- Décision du propriétaire : option A, relais sur Cloudflare Workers (offre
+  gratuite vérifiée : 100 000 requêtes par jour).
+- `relais-discord/worker.js` : secret partagé, liste fermée de routes, pseudo
+  seul, jeton du bot détenu par le relais ; défaut trouvé par le test et
+  corrigé avant toute mise en ligne (réponse 204 recréée avec un corps).
+  `README.md` de mise en ligne, `wrangler.toml` facultatif.
+- `Discord.js` : appels du bot par le relais, écritures préparées pour
+  l'étape 3 (méthode, corps JSON, raison d'audit), messages des refus du
+  relais, diagnostic qui éprouve le relais. Documentation et AGENTS mis à jour.
+- 31 suites vertes. Aucun push ni déploiement.
+
+## 2026-10-11 — Connexion Discord : étape 2
+
+- Le propriétaire a poussé et déployé les codes activables, le correctif
+  `createAuthToken_` et l'étape 1, réglé les propriétés Discord et changé
+  `AUTH_SECRET`. Le premier essai du rattachement a échoué sur la permission
+  Google « services externes », non accordée : procédure donnée, et
+  `verifierConfigurationDiscord` ajoutée pour la forcer et diagnostiquer.
+- Étape 2 réalisée selon le parcours validé : `getModesConnexion`,
+  `ouvrirSessionDiscord`, table `DISCORD_ACCES`, interrupteur `AUTH_DISCORD`,
+  contrôle dans `verifyAuthToken`, écran de connexion. `appelerDiscordBot_`
+  devient une enveloppe d'`appelerDiscord_`, qui accepte des messages propres
+  à chaque appel.
+- Carte de connexion plus haute avec Discord : marges ajustées pour que les
+  ornements étirés du parchemin ne recouvrent ni le titre ni la dernière ligne.
+- Tests : deux suites nouvelles, deux mises à jour, 30 vertes ; build ; aperçu
+  `connexion`. Aucun push ni déploiement.
+
+## 2026-10-11 — Connexion Discord : conception et rattachement des comptes
+
+- Décisions du propriétaire, consignées dans AUTH_AND_ROLES : le tableur
+  décide ; OFFICIER à partir de Sergent-Chef, Hird, Jarl et Maréchal compris ;
+  réserve sans accès, rôle de réserviste seul ; départs sans accès ni rôle ;
+  pseudos gérés par le bot (format ouvert) ; comptes non rattachés intacts
+  pendant la passation ; parcours de connexion, table d'accès, `AUTH_DISCORD`
+  et écran de connexion validés.
+- Étape 1 réalisée : `src/Discord.js` (membres du serveur, colonne
+  `Effectifs!ID Discord`), branchement dans `getEffectifs`,
+  `ajouterEffectifInterne_`, `modifierEffectifInterne_` et la synchronisation de
+  l'historique ; `ui/src/discord.js` et `discord.jsx`, champ et badges dans
+  `EffectifCard`, styles et thème.
+- Le propriétaire a collé le secret OAuth de l'application Discord dans la
+  conversation : réinitialisation demandée, secret écrit nulle part.
+- Tests : deux suites nouvelles, une étendue, 28 vertes ; build ; aperçus
+  Effectifs régénérés et `effectifs-discord` ajouté. Aucun push ni déploiement.
+
+## 2026-10-10 — Codes communs activables ; fabrique de jeton privée
+
+- Conception de la connexion Discord avec le propriétaire, premier point : les
+  codes communs restent (secours si Discord tombe, passation progressive),
+  activables par rôle. L'intendance n'est pas sur le Discord de la garde et
+  garde son code ; un code désactivé ferme ses sessions immédiatement.
+- `Auth.js` : propriété `AUTH_CODES` (absente = les trois codes), origine `via`
+  dans le jeton, refus des jetons d'un code désactivé dans `verifyAuthToken`,
+  message explicite au login.
+- Faille trouvée en relisant : `createAuthToken` était publique, donc
+  appelable par `google.script.run` en anonyme avec le rôle de son choix.
+  Renommée `createAuthToken_` (nom public changé sans demande explicite : c'est
+  le correctif, et aucun appelant hors du fichier). Changer `AUTH_SECRET` après
+  le déploiement.
+- `scripts/test-auth-codes.mjs` nouveau ; 26 suites vertes. Documentation :
+  AUTH_AND_ROLES, ARCHITECTURE, CURRENT_STATE, AGENTS. Aucun push ni
+  déploiement ; interface inchangée, pas de build nécessaire.
+
 ## 2026-10-08 — « Garde inquisitoriale »
 
 - Demande du propriétaire : « Brigade des Inquisiteurs » devient « Garde

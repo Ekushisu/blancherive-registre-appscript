@@ -41,6 +41,63 @@ Groupes terminaux reconnus :
 - Démissionnaires
 - Déserteurs
 
+## Compte Discord des membres (`Effectifs!ID Discord`)
+
+Colonne technique ajoutée le 11 octobre 2026 pour la connexion par Discord
+(`docs/AUTH_AND_ROLES.md`). Elle est créée par l'application au premier
+rattachement, après la dernière colonne utilisée, comme `ID membre`, et repérée
+par son en-tête, jamais par sa position.
+
+- Contenu : identifiant Discord du membre, texte de 17 à 20 chiffres. La colonne
+  est au format texte brut `@` sur toute sa hauteur : au-delà de 15 chiffres,
+  Sheets arrondit un nombre. Une valeur lue comme nombre a perdu ses derniers
+  chiffres ; elle est signalée et ne vaut pour personne.
+- Écriture : seulement par `ecrireLienDiscordEffectif_` (`Discord.js`), depuis
+  `modifierEffectif`, par un OFFICIER, sous le verrou des mutations d'Effectifs
+  et après le contrôle d'identité de la ligne. Un compte ne peut être relié qu'à
+  un membre.
+- Lecture : `lireLiensDiscordEffectifs_`. Un lien ne vaut que pour une ligne
+  nommée, au bon format, et dont le compte n'est relié à aucune autre ligne ; un
+  doublon est signalé sur les deux lignes et ne vaut pour aucune.
+- Une ligne réemployée par `ajouterEffectif` est vidée avant écriture, et une
+  ligne dont le prénom et le nom ont été effacés à la main perd son lien à la
+  synchronisation de l'historique : un nouveau membre n'hérite jamais du compte
+  d'un autre.
+- Inclure cette colonne dans les tris de lignes, comme `ID membre`. Elle peut être
+  remplie à la main dans Sheets, en texte.
+- Le changement de lien n'est pas journalisé dans `HistoriqueEffectifs` : l'état
+  suivi y reste prénom, nom, grade, corps et statut.
+
+## RolesDiscord
+
+Correspondance entre `Effectifs` et les rôles du serveur Discord (synchronisation
+des rôles, `SynchroDiscord.js`, 11 octobre 2026). Feuille créée et préremplie
+par l'application au premier passage si elle manque, est entièrement vide ou
+réduite à sa ligne d'en-têtes, jamais réécrite dès qu'elle a une ligne ; des
+en-têtes différents arrêtent la synchronisation. Une feuille qui ne désigne
+aucun rôle du serveur ne gère rien, et le rapport du passage le dit.
+Elle décide d'un rôle d'administration Discord : à protéger dans Sheets,
+propriétaire seul.
+
+| Colonne | Contenu |
+|---|---|
+| A | Type — `Statut`, `À partir du grade`, `Grade` ou `Corps` |
+| B | Valeur — un statut, un grade de `Données!A` ou un corps de `Données!G`, écrit comme dans `Effectifs` |
+| C | Rôle Discord — nom exact du rôle sur le serveur, `@` initial toléré ; vide : pas de rôle |
+
+Préremplissage, fait au premier passage d'après les rôles réellement présents
+sur le serveur : `En service actif` → Garde de Blancherive, `Réserve` →
+Réserviste, à partir du grade `Lieutenant` → Officiers de Blancherive, chaque
+grade vers le rôle du même nom (Garde → Garde du domaine), chaque corps vers
+le rôle relevé par le propriétaire (Cité de Blancherive → Garde de
+Fort-Dragon). Un rôle absent du
+serveur ou placé au-dessus du bot laisse la case vide, et le journal du
+passage le dit. Les noms se comparent sans tenir compte de la casse, des
+accents, des espaces, tirets et apostrophes ; la feuille garde le nom exact du
+serveur. Plusieurs lignes pour une même valeur donnent plusieurs rôles. Lignes
+illisibles, noms introuvables ou en double, `@everyone`, rôles d'intégration et
+rôles placés au-dessus du bot : ignorés et signalés par numéro de ligne.
+
 ## Suivi des changements d'Effectifs
 
 - `Effectifs` : colonne technique `ID membre` ajoutée après la dernière colonne utilisée, sans déplacer de colonne. UUID attribué aux membres et conservé lors des tris de lignes complètes. Ne pas modifier cette colonne ; inclure celle-ci dans les tris et déplacements manuels. Un UUID dupliqué est réattribué aux occurrences suivantes.

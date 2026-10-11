@@ -87,6 +87,10 @@ function synchroniserHistoriqueEffectifsSansVerrou_(ss, source) {
     }
   });
   if (idsChanged) sheet.getRange(2, idIndex + 1, count, 1).setValues(values.map(r => [r[idIndex]]));
+  // Une ligne sans nom ne garde pas non plus de compte Discord (Discord.js).
+  effacerLiensDiscordOrphelins_(sheet, headers, values, schema);
+  // Table d'accès des sessions Discord, recalculée à chaque passage (Discord.js).
+  const accesDiscord = mettreAJourAccesDiscord_(ss, sheet, schema, values, idIndex, headers);
   if (pending.length) {
     const start = journal.getLastRow() + 1;
     const required = start + pending.length - 1;
@@ -106,7 +110,7 @@ function synchroniserHistoriqueEffectifsSansVerrou_(ss, source) {
     corps: current.get(String(row[2])).corps,
     changes: JSON.parse(String(row[5])), source: String(row[7])
   })).reverse();
-  return { members, events, idIndex, days: HISTORIQUE_EFFECTIFS_DAYS };
+  return { members, events, idIndex, days: HISTORIQUE_EFFECTIFS_DAYS, accesDiscord };
 }
 
 function historiqueEffectifsPourRole_(history, role) {
@@ -137,11 +141,14 @@ function surModificationHistoriqueEffectifs_(e) {
 
 function executerMutationHistoriqueEffectifs_(token, data, mutation) {
   requireRole(token, ["OFFICIER"]);
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let apres = null;
   avecVerrouHistoriqueEffectifs_(() => {
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     synchroniserHistoriqueEffectifsSansVerrou_(ss, "Détection");
     try { mutation(token, data); }
-    finally { synchroniserHistoriqueEffectifsSansVerrou_(ss, "Application"); }
+    finally { apres = synchroniserHistoriqueEffectifsSansVerrou_(ss, "Application"); }
   });
+  // Rôles Discord, hors du verrou ; une panne n'annule jamais la modification (SynchroDiscord.js).
+  appliquerRolesDiscordApresModification_(ss, apres);
   return getEffectifs(token);
 }

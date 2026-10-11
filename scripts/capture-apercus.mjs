@@ -26,6 +26,7 @@ const outDir = path.join(rootDir, "docs", "apercus");
 // un écran de chargement silencieux.
 const reponses = {
   login: () => "jeton-de-demonstration",
+  getModesConnexion: () => ({ discord: null }),
   getSessionInfo: () => donnees.sessionInfo,
   getPresences: () => donnees.presences,
   getPresenceOfficerDashboard: () => donnees.presenceDashboard,
@@ -39,7 +40,8 @@ const reponses = {
   getCodex: () => donnees.codex,
   getPeinesAmendes: () => donnees.peines,
   getOrganigramme: () => donnees.organigramme,
-  getEffectifs: () => donnees.effectifs
+  getEffectifs: () => donnees.effectifs,
+  getMembresDiscord: () => donnees.membresDiscord
 };
 
 // Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues,
@@ -47,6 +49,17 @@ const reponses = {
 // des réponses serveur propres à la page, superposées aux réponses communes —
 // c'est ainsi que l'on capture une même page sous un autre rôle.
 const apercus = {
+  // Écran de connexion, Discord ouvert : bouton principal, code en dessous.
+  connexion: {
+    attendre: ".discord-button",
+    largeurs: [390, 1440],
+    sansJeton: true,
+    reponses: {
+      getModesConnexion: () => ({
+        discord: { url: "https://discord.com/oauth2/authorize?response_type=code&client_id=1&scope=identify" }
+      })
+    }
+  },
   organigramme: {
     nav: "Organigramme",
     attendre: ".org-hierarchy",
@@ -67,6 +80,17 @@ const apercus = {
     nav: "Effectifs",
     attendre: ".effectifs-tabs",
     largeurs: [390, 1440]
+  },
+  "effectifs-discord": {
+    nav: "Effectifs",
+    attendre: ".effectifs-tabs",
+    largeurs: [390, 1440],
+    // Fiche d'un membre sans compte : recherche parmi les membres du serveur.
+    async preparer(page) {
+      await page.getByRole("button", { name: "Modifier la fiche de Eydis la Silencieuse" }).click();
+      await page.getByLabel("Compte Discord").fill("ey");
+      await page.waitForSelector(".compte-discord-suggestions");
+    }
   },
   presences: {
     nav: "Présences",
@@ -271,7 +295,8 @@ try {
       // Installé avant tout script de la page, donc avant le bundle React.
       await page.addInitScript(
         ([table, jeton]) => {
-          sessionStorage.setItem("guardAuthToken", jeton);
+          // Sans jeton, la page s'ouvre sur l'écran de connexion.
+          if (jeton) sessionStorage.setItem("guardAuthToken", jeton);
           const fabrique = () => {
             let succes = () => {};
             let echec = error => {
@@ -323,7 +348,7 @@ try {
               ([cle, valeur]) => [cle, valeur()]
             )
           ),
-          "jeton-de-demonstration"
+          apercu.sansJeton ? "" : "jeton-de-demonstration"
         ]
       );
 
@@ -331,7 +356,7 @@ try {
       page.on("pageerror", erreur => erreurs.push(erreur.message));
 
       await page.goto(base, { waitUntil: "networkidle" });
-      await page.getByRole("button", { name: apercu.nav, exact: true }).click();
+      if (apercu.nav) await page.getByRole("button", { name: apercu.nav, exact: true }).click();
       await page.waitForSelector(apercu.attendre, { timeout: 15000 });
       if (apercu.preparer) await apercu.preparer(page);
       // Une saisie fait défiler la page ; les éléments fixes (barre latérale,

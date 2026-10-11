@@ -83,6 +83,8 @@ function getEffectifs(token) {
 
   const history = synchroniserHistoriqueEffectifs_(ss);
   installerDeclencheurHistoriqueEffectifs_(ss);
+  // Passage horaire des rôles Discord, dès que `DISCORD_SYNCHRO` existe (SynchroDiscord.js).
+  installerDeclencheurSynchroDiscord_();
   const schema = lireSchemaEffectifsWeb_(sheet);
   const lastRow = sheet.getLastRow();
   const lastColumn = sheet.getLastColumn();
@@ -117,6 +119,15 @@ function getEffectifs(token) {
     const backgrounds = range.getBackgrounds();
     const fontColors = range.getFontColors();
     const fontWeights = range.getFontWeights();
+
+    // Compte Discord rattaché (Discord.js) ; un lien en anomalie ne vaut pas.
+    const liensDiscord = lireLiensDiscordEffectifs_(
+      values,
+      schema,
+      trouverColonneDiscordEffectifs_(
+        sheet.getRange(1, 1, 1, lastColumn).getDisplayValues()[0]
+      )
+    );
 
     for (let i = 0; i < values.length; i++) {
       const prenom = nettoyerEffectifsWeb_(
@@ -226,6 +237,12 @@ function getEffectifs(token) {
 
         assermente:
           values[i][schema.assermente] === true,
+
+        discordId:
+          liensDiscord[i].id,
+
+        discordAnomalie:
+          liensDiscord[i].anomalie,
 
         styles: rowStyles
       });
@@ -523,6 +540,12 @@ function ajouterEffectifInterne_(token, data) {
       .setDataValidations(validations);
   }
 
+  /*
+    La ligne peut être réemployée : le nouveau membre n'hérite
+    jamais du compte Discord d'un autre.
+  */
+  effacerLienDiscordLigne_(sheet, targetRow);
+
   sheet.getRange(targetRow, schema.prenom + 1).setValue(prenom);
   sheet.getRange(targetRow, schema.nom + 1).setValue(nom);
   sheet.getRange(targetRow, schema.grade + 1).setValue(grade);
@@ -608,6 +631,7 @@ function trouverLigneModeleEffectifsWeb_(sheet, schema, lastRow, lastColumn, tar
 // - Spécialité
 // - Assermenté
 // - Status
+// - Compte Discord (colonne technique « ID Discord », Discord.js)
 //
 // Nom et prénom restent en lecture seule.
 // La suppression n'existe volontairement pas.
@@ -743,6 +767,20 @@ function modifierEffectifInterne_(token, data) {
     status,
     "statut"
   );
+
+  /*
+    Compte Discord : champ facultatif, envoyé seulement s'il a
+    changé ; chaîne vide, le lien est retiré. Écrit avant le
+    reste, pour qu'un compte déjà pris n'enregistre rien.
+  */
+  if (data.discordId !== undefined) {
+    ecrireLienDiscordEffectif_(
+      sheet,
+      schema,
+      row,
+      data.discordId
+    );
+  }
 
   sheet
     .getRange(row, schema.grade + 1)

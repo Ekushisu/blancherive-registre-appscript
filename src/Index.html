@@ -1215,6 +1215,89 @@ button {
   gap: 7px;
   align-items: center;
 }
+.effectif-badge-discord {
+  background: #e4e6f6;
+  color: #3f4a8a;
+  border-color: #c4c9ea;
+}
+.effectif-badge-alerte {
+  background: #f8e1dc;
+  color: #8f2f1f;
+  border-color: #e5b5aa;
+}
+.compte-discord {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.compte-discord-lie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+.compte-discord-nom {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.compte-discord-suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 264px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  background: #fff;
+}
+.compte-discord-suggestions button {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid #eee;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.compte-discord-suggestions li:last-child button {
+  border-bottom: 0;
+}
+.compte-discord-suggestions button:hover:not(:disabled),
+.compte-discord-suggestions button:focus-visible {
+  background: #f3ead6;
+}
+.compte-discord-suggestions button:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+.compte-discord-aide {
+  color: #776;
+  font-size: 12px;
+}
+.compte-discord-erreur {
+  color: #9b2c1f;
+}
+.compte-discord-lien {
+  justify-self: start;
+  min-height: 32px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: #7a5427;
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .effectifs-empty {
   background: white;
   border: 1px dashed #bbb;
@@ -6414,6 +6497,93 @@ body {
   .peines-table td:before {
     color: #796244;
   }
+}
+.effectifs-page .effectif-badge-discord {
+  border-left-color: #6a6fa8;
+  background: #e6e4ec5e;
+  color: #4c4f78;
+}
+.effectifs-page .effectif-badge-alerte {
+  border-left-color: #a5432f;
+  background: #f2d9cf8a;
+  color: #8a3c2a;
+}
+.effectifs-page .compte-discord-nom {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #49321d;
+}
+.effectifs-page .compte-discord-suggestions {
+  background: #fff9ed;
+  border-color: #c7af85;
+  border-radius: 3px;
+}
+.effectifs-page .compte-discord-suggestions button {
+  border-bottom-color: #eadcc0;
+  color: #594024;
+}
+.effectifs-page .compte-discord-suggestions button:hover:not(:disabled),
+.effectifs-page .compte-discord-suggestions button:focus-visible {
+  background: #f1e3c4;
+}
+.effectifs-page .compte-discord-suggestions small {
+  color: #8a6d3b;
+}
+.effectifs-page .compte-discord-aide {
+  color: #87704a;
+}
+.effectifs-page .compte-discord-erreur {
+  color: #8a3c2a;
+}
+.effectifs-page .compte-discord-lien {
+  color: #836036;
+}
+.login-card .discord-button,
+.login-card .login-code-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 50px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+}
+.login-card .discord-button {
+  text-decoration: none;
+}
+.login-card .discord-button[aria-disabled] {
+  opacity: .6;
+  pointer-events: none;
+}
+.login-separateur {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 18px;
+  color: #87704a;
+  font-size: 12px;
+}
+.login-separateur:before,
+.login-separateur:after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+.login-card > p.login-statut {
+  color: #634526;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.login-card.login-card-discord {
+  padding-top: 80px;
+  padding-bottom: 125px;
+}
+@media (max-width: 600px) {
+  .login-card.login-card-discord {
+    padding-top: 72px;
+    padding-bottom: 118px;
+  }
 }</style>
 </head>
 <body>
@@ -6424,6 +6594,56 @@ body {
 
   // ui/assets/sceau.jpg
   var sceau_default = "data:image/jpeg;base64,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";
+
+  // ui/src/connexion-discord.js
+  var CLE_ETAT = "blancherive.discord.etat";
+  function nouvelEtatDiscord() {
+    const octets = new Uint8Array(16);
+    globalThis.crypto.getRandomValues(octets);
+    return Array.from(octets, (octet) => octet.toString(16).padStart(2, "0")).join("");
+  }
+  function urlConnexionDiscord(base, etat) {
+    return `${base}&state=${encodeURIComponent(etat)}`;
+  }
+  function memoriserEtatDiscord(etat) {
+    var _a;
+    try {
+      (_a = globalThis.sessionStorage) == null ? void 0 : _a.setItem(CLE_ETAT, etat);
+    } catch (e) {
+    }
+  }
+  function lireRetourDiscord() {
+    var _a, _b;
+    const url = (_b = (_a = globalThis.google) == null ? void 0 : _a.script) == null ? void 0 : _b.url;
+    if (!(url == null ? void 0 : url.getLocation)) return Promise.resolve(null);
+    return new Promise((resolve) => url.getLocation((location) => {
+      const p = (location == null ? void 0 : location.parameter) || {};
+      resolve(p.code || p.error ? { code: p.code || "", etat: p.state || "", erreur: p.error || "" } : null);
+    }));
+  }
+  function verifierRetourDiscord(retour) {
+    var _a, _b, _c;
+    let attendu = null;
+    try {
+      attendu = (_b = (_a = globalThis.sessionStorage) == null ? void 0 : _a.getItem(CLE_ETAT)) != null ? _b : null;
+      (_c = globalThis.sessionStorage) == null ? void 0 : _c.removeItem(CLE_ETAT);
+    } catch (e) {
+    }
+    if (retour.erreur) {
+      throw new Error(retour.erreur === "access_denied" ? "Connexion Discord annul\xE9e." : "Discord a refus\xE9 la connexion : recommencer.");
+    }
+    if (!attendu || attendu !== retour.etat) {
+      throw new Error("Connexion Discord interrompue : recommencer depuis ce navigateur.");
+    }
+    return retour.code;
+  }
+  function effacerRetourDiscord() {
+    var _a, _b, _c;
+    try {
+      (_c = (_b = (_a = globalThis.google) == null ? void 0 : _a.script) == null ? void 0 : _b.history) == null ? void 0 : _c.replace(null, {}, "");
+    } catch (e) {
+    }
+  }
 
   // ui/src/navigation.jsx
   var paths = {
@@ -6445,21 +6665,38 @@ body {
   var ROLE_PUBLIC = "VISITEUR";
   var LIBELLES_ROLE = { OFFICIER: "Officier", GARDE: "Garde", INTENDANT: "Intendant", [ROLE_PUBLIC]: "Visiteur" };
   var LIBELLES_MOBILES = { organigramme: "Hi\xE9rarchie", peines: "Peines" };
-  function Header({ role, page, onPage, onLogout }) {
+  function Header({ role, nom = "", page, onPage, onLogout }) {
     const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"], ["inventaire", "Inventaire"], ["codex", "Codex"], ["peines", "Peines et amendes"]] : [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"], ["inventaire", "Inventaire"]] : [], ["codex", "Codex"], ["peines", "Peines et amendes"], ["amendes", "Amendes"], ["prison", "Prison"]];
     return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-seal" }, /* @__PURE__ */ React.createElement("img", { src: sceau_default, alt: "" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "brand-overline" }, "Ch\xE2tellerie de"), /* @__PURE__ */ React.createElement("strong", null, "Blancherive"), /* @__PURE__ */ React.createElement("span", { className: "brand-caption" }, "Registre de la Garde"))), /* @__PURE__ */ React.createElement("div", { className: "nav-caption" }, "Le registre"), /* @__PURE__ */ React.createElement("nav", { className: "nav", "aria-label": "Navigation principale", style: { "--nav-count": pages.length } }, pages.map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, type: "button", "aria-label": label, "aria-current": page === key ? "page" : void 0, className: page === key ? "active" : "", onClick: () => {
       onPage(key);
       window.scrollTo(0, 0);
-    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge" }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
+    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge", title: nom ? `Connect\xE9 : ${nom}` : void 0 }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
   }
-  function Login({ onLogin, serverCall: serverCall2 }) {
+  function Login({ onLogin, serverCall: serverCall2, discordRetour = {} }) {
     const [password, setPassword] = React.useState("");
     const [error, setError] = React.useState("");
     const [busy, setBusy] = React.useState(false);
     const pending = React.useRef(false);
+    const [modes, setModes] = React.useState(null);
+    const [etat] = React.useState(nouvelEtatDiscord);
+    React.useEffect(() => {
+      let vivant = true;
+      serverCall2("getModesConnexion").then((m) => {
+        if (vivant) setModes(m);
+      }).catch(() => {
+        if (vivant) setModes({ discord: null });
+      });
+      return () => {
+        vivant = false;
+      };
+    }, []);
+    const discord = modes == null ? void 0 : modes.discord;
+    const enRetour = discordRetour.statut === "connexion";
+    const occupe = busy || enRetour;
+    const erreur = error || discordRetour.erreur || "";
     async function submit(event) {
       event.preventDefault();
-      if (pending.current) return;
+      if (pending.current || enRetour) return;
       pending.current = true;
       setBusy(true);
       try {
@@ -6473,7 +6710,7 @@ body {
       }
     }
     async function consulter() {
-      if (pending.current) return;
+      if (pending.current || enRetour) return;
       pending.current = true;
       setBusy(true);
       try {
@@ -6486,7 +6723,14 @@ body {
         setBusy(false);
       }
     }
-    return /* @__PURE__ */ React.createElement("div", { className: "login-page" }, /* @__PURE__ */ React.createElement("section", { className: "login-intro" }, /* @__PURE__ */ React.createElement("img", { className: "login-art", src: fort_dragon_default, alt: "Illustration de Fort-Dragon" }), /* @__PURE__ */ React.createElement("span", { className: "login-insignia" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" })), /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Ch\xE2tellerie de Blancherive"), /* @__PURE__ */ React.createElement("h1", null, "Veiller.", /* @__PURE__ */ React.createElement("br", null), "Servir.", /* @__PURE__ */ React.createElement("br", null), /* @__PURE__ */ React.createElement("em", null, "Prot\xE9ger.")), /* @__PURE__ */ React.createElement("p", { className: "login-description" }, "Le registre de la Garde.", /* @__PURE__ */ React.createElement("br", null), "Les effectifs, le service et la justice,", /* @__PURE__ */ React.createElement("br", null), "r\xE9unis en un m\xEAme lieu."), /* @__PURE__ */ React.createElement("span", { className: "login-rule" })), /* @__PURE__ */ React.createElement("div", { className: "login-form-wrap" }, /* @__PURE__ */ React.createElement("form", { className: "login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Acc\xE8s au registre"), /* @__PURE__ */ React.createElement("h2", null, "Prendre son service"), /* @__PURE__ */ React.createElement("p", null, "Identifiez-vous avec votre code de garde ou d\u2019officier."), /* @__PURE__ */ React.createElement("label", { htmlFor: "access-code" }, "Code d\u2019acc\xE8s"), /* @__PURE__ */ React.createElement("input", { id: "access-code", type: "password", autoComplete: "current-password", required: true, disabled: busy, placeholder: "Votre code d\u2019acc\xE8s", value: password, onChange: (event) => setPassword(event.target.value), "aria-describedby": error ? "login-error" : void 0 }), /* @__PURE__ */ React.createElement("button", { className: "primary-button", disabled: busy }, busy ? "Connexion en cours\u2026" : "Entrer dans le registre", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), error && /* @__PURE__ */ React.createElement("div", { id: "login-error", className: "error", role: "alert" }, error), /* @__PURE__ */ React.createElement("div", { className: "login-public" }, /* @__PURE__ */ React.createElement("p", null, "Vous n\u2019\xEAtes pas de la Garde ?"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy, onClick: consulter }, "Consulter le Codex ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), /* @__PURE__ */ React.createElement("small", null, "Lecture seule des lois et d\xE9crets de la ch\xE2tellerie.")), /* @__PURE__ */ React.createElement("div", { className: "login-footnote" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" }), "R\xE9serv\xE9 aux membres de la Garde de Blancherive."))));
+    function partirVersDiscord(event) {
+      if (occupe) {
+        event.preventDefault();
+        return;
+      }
+      memoriserEtatDiscord(etat);
+    }
+    return /* @__PURE__ */ React.createElement("div", { className: "login-page" }, /* @__PURE__ */ React.createElement("section", { className: "login-intro" }, /* @__PURE__ */ React.createElement("img", { className: "login-art", src: fort_dragon_default, alt: "Illustration de Fort-Dragon" }), /* @__PURE__ */ React.createElement("span", { className: "login-insignia" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" })), /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Ch\xE2tellerie de Blancherive"), /* @__PURE__ */ React.createElement("h1", null, "Veiller.", /* @__PURE__ */ React.createElement("br", null), "Servir.", /* @__PURE__ */ React.createElement("br", null), /* @__PURE__ */ React.createElement("em", null, "Prot\xE9ger.")), /* @__PURE__ */ React.createElement("p", { className: "login-description" }, "Le registre de la Garde.", /* @__PURE__ */ React.createElement("br", null), "Les effectifs, le service et la justice,", /* @__PURE__ */ React.createElement("br", null), "r\xE9unis en un m\xEAme lieu."), /* @__PURE__ */ React.createElement("span", { className: "login-rule" })), /* @__PURE__ */ React.createElement("div", { className: "login-form-wrap" }, /* @__PURE__ */ React.createElement("form", { className: `login-card${discord ? " login-card-discord" : ""}`, onSubmit: submit }, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Acc\xE8s au registre"), /* @__PURE__ */ React.createElement("h2", null, "Prendre son service"), enRetour && /* @__PURE__ */ React.createElement("p", { className: "login-statut", role: "status" }, "Connexion Discord en cours\u2026"), discord ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("p", null, "Membres de la Garde : connectez-vous avec Discord. Intendance et secours : code d\u2019acc\xE8s."), /* @__PURE__ */ React.createElement("a", { className: "primary-button discord-button", href: urlConnexionDiscord(discord.url, etat), target: "_top", "aria-disabled": occupe || void 0, onClick: partirVersDiscord }, "Se connecter avec Discord", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), /* @__PURE__ */ React.createElement("div", { className: "login-separateur" }, /* @__PURE__ */ React.createElement("span", null, "ou avec un code d\u2019acc\xE8s"))) : /* @__PURE__ */ React.createElement("p", null, "Identifiez-vous avec votre code de garde ou d\u2019officier."), /* @__PURE__ */ React.createElement("label", { htmlFor: "access-code" }, "Code d\u2019acc\xE8s"), /* @__PURE__ */ React.createElement("input", { id: "access-code", type: "password", autoComplete: "current-password", required: true, disabled: occupe, placeholder: "Votre code d\u2019acc\xE8s", value: password, onChange: (event) => setPassword(event.target.value), "aria-describedby": erreur ? "login-error" : void 0 }), /* @__PURE__ */ React.createElement("button", { className: discord ? "secondary-button login-code-button" : "primary-button", disabled: occupe }, busy ? "Connexion en cours\u2026" : "Entrer dans le registre", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), erreur && /* @__PURE__ */ React.createElement("div", { id: "login-error", className: "error", role: "alert" }, erreur), /* @__PURE__ */ React.createElement("div", { className: "login-public" }, /* @__PURE__ */ React.createElement("p", null, "Vous n\u2019\xEAtes pas de la Garde ?"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy, onClick: consulter }, "Consulter le Codex ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2192")), /* @__PURE__ */ React.createElement("small", null, "Lecture seule des lois et d\xE9crets de la ch\xE2tellerie.")), /* @__PURE__ */ React.createElement("div", { className: "login-footnote" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "shield" }), "R\xE9serv\xE9 aux membres de la Garde de Blancherive."))));
   }
 
   // ui/src/codex.js
@@ -6704,8 +6948,8 @@ body {
     return chargementEnCours;
   }
   function useCodex(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState8 } = React;
-    const [etat, setEtat] = useState8(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    const { useEffect: useEffect9, useState: useState9 } = React;
+    const [etat, setEtat] = useState9(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
     useEffect9(() => {
       if (!actif) return;
       let vivant = true;
@@ -7174,8 +7418,8 @@ body {
     return chargementEnCours2;
   }
   function usePeines(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState8 } = React;
-    const [etat, setEtat] = useState8(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    const { useEffect: useEffect9, useState: useState9 } = React;
+    const [etat, setEtat] = useState9(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
     useEffect9(() => {
       if (!actif) return;
       let vivant = true;
@@ -7656,8 +7900,8 @@ body {
     return chargementEnCours3;
   }
   function useCatalogue(serverCall2, token, actif = true) {
-    const { useEffect: useEffect9, useState: useState8 } = React;
-    const [etat, setEtat] = useState8(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    const { useEffect: useEffect9, useState: useState9 } = React;
+    const [etat, setEtat] = useState9(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
     useEffect9(() => {
       if (!actif) return;
       let vivant = true;
@@ -8422,8 +8666,90 @@ body {
     return String(b || "").localeCompare(String(a || ""));
   }
 
+  // ui/src/discord.js
+  var MOTIF_ID_DISCORD = /^\d{17,20}$/;
+  var SUGGESTIONS_MAX2 = 8;
+  var membresCourants = null;
+  var chargementEnCours4 = null;
+  function normaliserRechercheDiscord(value) {
+    return String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+  }
+  function suggestionsDiscord(membres, recherche, limite = SUGGESTIONS_MAX2) {
+    const brut = String(recherche || "").trim();
+    const q = normaliserRechercheDiscord(brut).replace(/^@/, "");
+    if (!q) return [];
+    const debut = [], milieu = [];
+    for (const membre of membres || []) {
+      const nom = normaliserRechercheDiscord(membre.nom);
+      const pseudo = normaliserRechercheDiscord(membre.pseudo);
+      if (membre.id === brut || nom.startsWith(q) || pseudo.startsWith(q)) debut.push(membre);
+      else if (nom.includes(q) || pseudo.includes(q)) milieu.push(membre);
+    }
+    const liste = [...debut, ...milieu].slice(0, limite);
+    if (MOTIF_ID_DISCORD.test(brut) && !liste.some((membre) => membre.id === brut)) {
+      liste.unshift({ id: brut, nom: "", pseudo: "", manuel: true });
+    }
+    return liste;
+  }
+  function libelleMembreDiscord(membre) {
+    if (!membre) return "";
+    if (membre.manuel || !membre.nom) return `Identifiant ${membre.id}`;
+    return membre.pseudo && normaliserRechercheDiscord(membre.pseudo) !== normaliserRechercheDiscord(membre.nom) ? `${membre.nom} (@${membre.pseudo})` : membre.nom;
+  }
+  function membreDiscordParId(membres, id) {
+    return (membres || []).find((membre) => membre.id === id) || null;
+  }
+  function comptesRattaches(rows) {
+    const comptes = /* @__PURE__ */ new Map();
+    for (const row of rows || []) {
+      if (row.discordId && !comptes.has(row.discordId)) {
+        comptes.set(row.discordId, { memberId: row.memberId, nom: row.nomComplet });
+      }
+    }
+    return comptes;
+  }
+  function chargerMembresDiscord(serverCall2, token, rafraichir = false) {
+    if (!rafraichir && membresCourants) return Promise.resolve(membresCourants);
+    if (!rafraichir && chargementEnCours4) return chargementEnCours4;
+    const chargement = serverCall2("getMembresDiscord", token, rafraichir === true).then((reponse) => {
+      membresCourants = reponse.membres || [];
+      return membresCourants;
+    }).finally(() => {
+      if (chargementEnCours4 === chargement) chargementEnCours4 = null;
+    });
+    chargementEnCours4 = chargement;
+    return chargement;
+  }
+  function useMembresDiscord(serverCall2, token) {
+    const { useCallback, useState: useState9 } = React;
+    const [etat, setEtat] = useState9(() => membresCourants ? { statut: "pret", membres: membresCourants, erreur: "" } : { statut: "inactif", membres: [], erreur: "" });
+    const charger = useCallback((rafraichir = false) => {
+      setEtat((e) => ({ ...e, statut: "chargement", erreur: "" }));
+      chargerMembresDiscord(serverCall2, token, rafraichir).then((membres) => setEtat({ statut: "pret", membres, erreur: "" })).catch((error) => setEtat((e) => ({ ...e, statut: "erreur", erreur: error.message || String(error) })));
+    }, [serverCall2, token]);
+    return { ...etat, charger };
+  }
+
+  // ui/src/discord.jsx
+  var { useId: useId2, useState: useState7 } = React;
+  function CompteDiscordField({ value, onChange, discord, rattaches, memberId, anomalie = "", disabled = false }) {
+    const idChamp = useId2();
+    const [recherche, setRecherche] = useState7("");
+    const membre = value ? membreDiscordParId(discord.membres, value) : null;
+    const suggestions = value ? [] : suggestionsDiscord(discord.membres, recherche);
+    function choisir(id) {
+      onChange(id);
+      setRecherche("");
+    }
+    return /* @__PURE__ */ React.createElement("div", { className: "field compte-discord" }, /* @__PURE__ */ React.createElement("label", { htmlFor: idChamp }, "Compte Discord"), value ? /* @__PURE__ */ React.createElement("div", { className: "compte-discord-lie" }, /* @__PURE__ */ React.createElement("span", { id: idChamp, className: "compte-discord-nom", title: `Identifiant ${value}` }, membre ? libelleMembreDiscord(membre) : discord.statut === "pret" ? `Identifiant ${value} \u2014 absent du serveur` : `Identifiant ${value}`), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled, onClick: () => choisir("") }, "Retirer le lien")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("input", { id: idChamp, type: "search", autoComplete: "off", disabled, placeholder: "Nom, pseudo ou identifiant Discord", value: recherche, onChange: (event) => setRecherche(event.target.value) }), suggestions.length > 0 && /* @__PURE__ */ React.createElement("ul", { className: "compte-discord-suggestions", "aria-label": "Membres du serveur Discord" }, suggestions.map((suggestion) => {
+      const titulaire = rattaches.get(suggestion.id);
+      const pris = Boolean(titulaire) && titulaire.memberId !== memberId;
+      return /* @__PURE__ */ React.createElement("li", { key: suggestion.id }, /* @__PURE__ */ React.createElement("button", { type: "button", disabled: disabled || pris, onClick: () => choisir(suggestion.id) }, /* @__PURE__ */ React.createElement("span", null, libelleMembreDiscord(suggestion)), pris && /* @__PURE__ */ React.createElement("small", null, "d\xE9j\xE0 li\xE9 \xE0 ", titulaire.nom)));
+    })), recherche.trim() && !suggestions.length && discord.statut === "pret" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Aucun membre du serveur ne correspond.")), anomalie && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur", role: "alert" }, anomalie), discord.statut === "chargement" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Chargement des membres du serveur\u2026"), discord.statut === "erreur" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur" }, discord.erreur, " ", /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger() }, "R\xE9essayer")), discord.statut === "pret" && !value && /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger(true) }, "Actualiser la liste du serveur"));
+  }
+
   // ui/src/app.jsx
-  var { useEffect: useEffect8, useMemo: useMemo4, useRef: useRef8, useState: useState7 } = React;
+  var { useEffect: useEffect8, useMemo: useMemo4, useRef: useRef8, useState: useState8 } = React;
   function serverCall(name, ...args) {
     return new Promise((resolve, reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler((error) => reject(new Error((error == null ? void 0 : error.message) || String(error))))[name](...args);
@@ -8448,31 +8774,55 @@ body {
     return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
   }
   function App() {
-    const [token, setToken] = useState7(sessionStorage.getItem("guardAuthToken"));
-    const [role, setRole] = useState7(null);
-    const [page, setPage] = useState7("organigramme");
-    const [codexFocus, setCodexFocus] = useState7(null);
+    const [token, setToken] = useState8(sessionStorage.getItem("guardAuthToken"));
+    const [role, setRole] = useState8(null);
+    const [nom, setNom] = useState8("");
+    const [page, setPage] = useState8("organigramme");
+    const [codexFocus, setCodexFocus] = useState8(null);
+    const [discordRetour, setDiscordRetour] = useState8({ statut: "", erreur: "" });
     useEffect8(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => {
         setRole(i.role);
+        setNom(i.nom || "");
         if (i.role === ROLE_PUBLIC) setPage("codex");
       }).catch(logout);
     }, [token]);
+    useEffect8(() => {
+      lireRetourDiscord().then((retour) => {
+        if (!retour) return;
+        effacerRetourDiscord();
+        if (sessionStorage.getItem("guardAuthToken")) return;
+        let code;
+        try {
+          code = verifierRetourDiscord(retour);
+        } catch (e) {
+          setDiscordRetour({ statut: "", erreur: e.message });
+          return;
+        }
+        setDiscordRetour({ statut: "connexion", erreur: "" });
+        serverCall("ouvrirSessionDiscord", code).then((t) => {
+          sessionStorage.setItem("guardAuthToken", t);
+          setDiscordRetour({ statut: "", erreur: "" });
+          setToken(t);
+        }).catch((e) => setDiscordRetour({ statut: "", erreur: e.message }));
+      });
+    }, []);
     const publicSeulement = role === ROLE_PUBLIC;
     const intendantSeulement = role === "INTENDANT";
     function logout() {
       sessionStorage.removeItem("guardAuthToken");
       setToken(null);
       setRole(null);
+      setNom("");
       setPage("organigramme");
     }
-    if (!token) return /* @__PURE__ */ React.createElement(Login, { serverCall, onLogin: (t) => {
+    if (!token) return /* @__PURE__ */ React.createElement(Login, { serverCall, discordRetour, onLogin: (t) => {
       sessionStorage.setItem("guardAuthToken", t);
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
-    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
+    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
     } }), page === "amendes" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
@@ -8487,12 +8837,14 @@ body {
     return { "--member-accent": (style == null ? void 0 : style.background) || "#ae8a4a" };
   }
   function EffectifsPage({ token }) {
-    const [data, setData] = useState7(null);
-    const [search, setSearch] = useState7("");
-    const [activeCorps, setActiveCorps] = useState7("ALL");
-    const [showForm, setShowForm] = useState7(false);
-    const [error, setError] = useState7("");
-    const [success, setSuccess] = useState7("");
+    const [data, setData] = useState8(null);
+    const [search, setSearch] = useState8("");
+    const [activeCorps, setActiveCorps] = useState8("ALL");
+    const [showForm, setShowForm] = useState8(false);
+    const [error, setError] = useState8("");
+    const [success, setSuccess] = useState8("");
+    const discord = useMembresDiscord(serverCall, token);
+    const rattaches = useMemo4(() => comptesRattaches(data == null ? void 0 : data.rows), [data]);
     useEffect8(() => {
       serverCall(
         "getEffectifs",
@@ -8563,7 +8915,9 @@ body {
           member.specialite,
           member.status,
           member.assermente ? "assermente" : "non assermente",
-          member.reserve ? "reserve" : ""
+          member.reserve ? "reserve" : "",
+          // « sans discord » liste les membres à rattacher pendant la passation.
+          member.discordId ? "discord rattache" : "sans discord"
         ].join(" ")).includes(q);
       });
     }, [
@@ -8918,6 +9272,8 @@ body {
                   member,
                   options: data.options,
                   aliasGrades: data.aliasGrades,
+                  discord,
+                  rattaches,
                   onSave: async (values) => {
                     try {
                       setError("");
@@ -8933,7 +9289,8 @@ body {
                           corps: values.corps,
                           specialite: values.specialite,
                           status: values.status,
-                          assermente: values.assermente
+                          assermente: values.assermente,
+                          discordId: values.discordId
                         }
                       );
                       setData(
@@ -8970,6 +9327,8 @@ body {
               member,
               options: data.options,
               aliasGrades: data.aliasGrades,
+              discord,
+              rattaches,
               showCorps: true,
               onSave: async (values) => {
                 try {
@@ -8986,7 +9345,8 @@ body {
                       corps: values.corps,
                       specialite: values.specialite,
                       status: values.status,
-                      assermente: values.assermente
+                      assermente: values.assermente,
+                      discordId: values.discordId
                     }
                   );
                   setData(
@@ -9019,7 +9379,7 @@ body {
         "En service actif"
       )
     );
-    const [form, setForm] = useState7({
+    const [form, setForm] = useState8({
       prenom: "",
       nom: "",
       grade: options.grades[0] || "",
@@ -9028,7 +9388,7 @@ body {
       status: active || options.statuses[0] || "",
       assermente: false
     });
-    const [saving, setSaving] = useState7(false);
+    const [saving, setSaving] = useState8(false);
     async function submit(e) {
       e.preventDefault();
       try {
@@ -9201,22 +9561,27 @@ body {
     member,
     options,
     aliasGrades,
+    discord,
+    rattaches,
     onSave,
     showCorps = false
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     const memberChanges = useMemberChanges(member.memberId);
-    const [editing, setEditing] = useState7(false);
-    const [grade, setGrade] = useState7(member.grade);
-    const [corps, setCorps] = useState7(member.corps);
-    const [specialite, setSpecialite] = useState7(
+    const [editing, setEditing] = useState8(false);
+    const [discordId, setDiscordId] = useState8(
+      member.discordId || ""
+    );
+    const [grade, setGrade] = useState8(member.grade);
+    const [corps, setCorps] = useState8(member.corps);
+    const [specialite, setSpecialite] = useState8(
       member.specialite || ""
     );
-    const [status, setStatus] = useState7(member.status);
-    const [assermente, setAssermente] = useState7(
+    const [status, setStatus] = useState8(member.status);
+    const [assermente, setAssermente] = useState8(
       member.assermente
     );
-    const [saving, setSaving] = useState7(false);
+    const [saving, setSaving] = useState8(false);
     useEffect8(() => {
       setGrade(
         member.grade
@@ -9233,14 +9598,24 @@ body {
       setAssermente(
         member.assermente
       );
+      setDiscordId(
+        member.discordId || ""
+      );
     }, [
       member.grade,
       member.corps,
       member.specialite,
       member.status,
-      member.assermente
+      member.assermente,
+      member.discordId
     ]);
-    const changed = grade !== member.grade || corps !== member.corps || specialite !== (member.specialite || "") || status !== member.status || assermente !== member.assermente;
+    useEffect8(() => {
+      if (editing && (discord == null ? void 0 : discord.statut) === "inactif") {
+        discord.charger();
+      }
+    }, [editing]);
+    const discordChanged = discordId !== (member.discordId || "");
+    const changed = grade !== member.grade || corps !== member.corps || specialite !== (member.specialite || "") || status !== member.status || assermente !== member.assermente || discordChanged;
     async function save() {
       try {
         setSaving(true);
@@ -9249,7 +9624,9 @@ body {
           corps,
           specialite,
           status,
-          assermente
+          assermente,
+          // Absent de la requête s'il n'a pas changé : la case reste intacte.
+          discordId: discordChanged ? discordId : void 0
         });
         setEditing(false);
       } finally {
@@ -9271,6 +9648,9 @@ body {
       );
       setAssermente(
         member.assermente
+      );
+      setDiscordId(
+        member.discordId || ""
       );
       setEditing(false);
     }
@@ -9310,7 +9690,7 @@ body {
         className: `effectif-badge ${member.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}`
       },
       member.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"
-    ))), !editing && /* @__PURE__ */ React.createElement(
+    ), member.discordAnomalie ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-alerte", title: member.discordAnomalie }, "Discord : anomalie") : member.discordId ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-discord", title: `Compte Discord ${member.discordId}` }, "Discord") : !member.terminalGroup && /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-muted" }, "Sans Discord"))), !editing && /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -9439,7 +9819,18 @@ body {
           e.target.checked
         )
       }
-    ), "Asserment\xE9"), /* @__PURE__ */ React.createElement("div", { className: "effectif-editor-actions" }, /* @__PURE__ */ React.createElement(
+    ), "Asserment\xE9"), discord && /* @__PURE__ */ React.createElement(
+      CompteDiscordField,
+      {
+        value: discordId,
+        onChange: setDiscordId,
+        discord,
+        rattaches,
+        memberId: member.memberId,
+        anomalie: member.discordAnomalie,
+        disabled: saving
+      }
+    ), /* @__PURE__ */ React.createElement("div", { className: "effectif-editor-actions" }, /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -9463,7 +9854,7 @@ body {
     const etat = useCodex(serverCall, token, true);
     const data = etat.codex;
     const peines = usePeines(serverCall, token, peinesActif).peines;
-    const [search, setSearch] = useState7(""), [family, setFamily] = useState7(""), [source, setSource] = useState7(""), [classification, setClassification] = useState7(""), [selected, setSelected] = useState7(null);
+    const [search, setSearch] = useState8(""), [family, setFamily] = useState8(""), [source, setSource] = useState8(""), [classification, setClassification] = useState8(""), [selected, setSelected] = useState8(null);
     const selection = mode === "selection";
     useEffect8(() => {
       if (data && focusArticle) {
@@ -9525,7 +9916,7 @@ body {
     } }, /* @__PURE__ */ React.createElement("div", { className: "codex-picker", role: "dialog", "aria-modal": "true", "aria-labelledby": "codex-picker-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("h2", { id: "codex-picker-title", className: "law-modal-title" }, "Parcourir le Codex")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-count" }, retenus.length, " retenu", retenus.length > 1 ? "s" : ""), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer le s\xE9lecteur", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-body" }, /* @__PURE__ */ React.createElement(CodexPage, { token, mode: "selection", onRetenir, retenus })), /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-picker-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onClose }, "Revenir au formulaire"))));
   }
   function OrganigrammePage({ token }) {
-    const [data, setData] = useState7(null), [error, setError] = useState7("");
+    const [data, setData] = useState8(null), [error, setError] = useState8("");
     useEffect8(() => {
       let active = true;
       serverCall("getOrganigramme", token).then((r) => {
@@ -9594,14 +9985,14 @@ body {
     return chefsDeLigne(codex, row).map((e) => e.chef);
   }
   function useFormulaireRegistre({ cle, initial, vide }) {
-    const [form, setForm] = useState7(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
+    const [form, setForm] = useState8(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
     useEffect8(() => {
       if (!initial) ecrireBrouillon(cle, form);
     }, [form]);
     return [form, setForm];
   }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState7(null), [formData, setFormData] = useState7(null), [selected, setSelected] = useState7(null), [showForm, setShowForm] = useState7(false), [editing, setEditing] = useState7(null), [error, setError] = useState7(""), [deletingRow, setDeletingRow] = useState7(null);
+    const [data, setData] = useState8(null), [formData, setFormData] = useState8(null), [selected, setSelected] = useState8(null), [showForm, setShowForm] = useState8(false), [editing, setEditing] = useState8(null), [error, setError] = useState8(""), [deletingRow, setDeletingRow] = useState8(null);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
@@ -9674,11 +10065,11 @@ ${item.infraction}`)) return;
   function AmendeForm({ token, data, codex, codexStatut, peines = null, peinesStatut = "pret", rows = [], frequents, initial, onSubmit, onCancel, onOpenLaw }) {
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "amende", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, contrevenant: row.contrevenant, chefs: chefsPourFormulaire(codex, row), montant: row.montantRaw === null ? "" : String(row.montantRaw), indetermine: row.montantRaw === null, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", contrevenant: "", chefs: [], montant: "", indetermine: false, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
-    const [submitting, setSubmitting] = useState7(false);
-    const [chefEnCours, setChefEnCours] = useState7(false);
-    const [formError, setFormError] = useState7("");
-    const [picker, setPicker] = useState7(false);
-    const [lu, setLu] = useState7(null);
+    const [submitting, setSubmitting] = useState8(false);
+    const [chefEnCours, setChefEnCours] = useState8(false);
+    const [formError, setFormError] = useState8("");
+    const [picker, setPicker] = useState8(false);
+    const [lu, setLu] = useState8(null);
     const submittingRef = useRef8(false);
     const retenir = (a) => {
       try {
@@ -9715,7 +10106,7 @@ ${item.infraction}`)) return;
     }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours, resume: !peines }), /* @__PURE__ */ React.createElement(PropositionBareme, { type: "amende", peines, statut: peinesStatut, chefs: form.chefs, reglages: form.bareme, onReglages: (bareme) => setForm((p) => ({ ...p, bareme })), valeur: form.montant, indetermine: form.indetermine, onAppliquer: (montant) => setForm((p) => ({ ...p, montant, indetermine: false })), historique: ((_a = form.bareme) == null ? void 0 : _a.noble) ? entreesRecentes(rows, form.contrevenant, form.date, { champ: "contrevenant", exclureRow: initial ? initial.row : null }) : null, disabled: submitting }), /* @__PURE__ */ React.createElement(SentenceField, { type: "amende", codex, chefs: form.chefs, value: form.montant, onChange: (montant) => setForm((p) => ({ ...p, montant })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting })), formError && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, formError), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : initial ? "Enregistrer les modifications" : "Enregistrer"), onCancel && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: onCancel }, "Annuler"))), /* @__PURE__ */ React.createElement(CodexPicker, { token, open: picker, onClose: () => setPicker(false), onRetenir: retenir, retenus: form.chefs }), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, peines, onNavigate: setLu, onRetenir: retenir, retenu: lu ? form.chefs.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === lu._cle) : false }));
   }
   function PrisonPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState7(null), [formData, setFormData] = useState7(null), [selected, setSelected] = useState7(null), [showForm, setShowForm] = useState7(false), [editing, setEditing] = useState7(null), [error, setError] = useState7(""), [deletingRow, setDeletingRow] = useState7(null), [saving, setSaving] = useState7(false);
+    const [data, setData] = useState8(null), [formData, setFormData] = useState8(null), [selected, setSelected] = useState8(null), [showForm, setShowForm] = useState8(false), [editing, setEditing] = useState8(null), [error, setError] = useState8(""), [deletingRow, setDeletingRow] = useState8(null), [saving, setSaving] = useState8(false);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
@@ -9787,12 +10178,12 @@ ${item.infraction}`)) return;
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "prison", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, detenu: row.detenu, cellule: row.cellule, chefs: chefsPourFormulaire(codex, row), duree: row.dureeRaw === null ? "" : String(row.dureeRaw), indetermine: row.dureeRaw === null, entree: row.entreeIso || dateIsoDepuisAffichage(row.entree), saisies: row.saisiesListe || [], notes: row.notes, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", detenu: "", cellule: "", chefs: [], duree: "", indetermine: false, entree: dateLocaleIso().slice(0, 16), saisies: [], notes: "", bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
     const saisiesTexteHistorique = Boolean(initial && initial.saisiesListe === null && initial.saisies);
-    const [submitting, setSubmitting] = useState7(false);
-    const [saisieEnCours, setSaisieEnCours] = useState7(false);
-    const [chefEnCours, setChefEnCours] = useState7(false);
-    const [formError, setFormError] = useState7("");
-    const [picker, setPicker] = useState7(false);
-    const [lu, setLu] = useState7(null);
+    const [submitting, setSubmitting] = useState8(false);
+    const [saisieEnCours, setSaisieEnCours] = useState8(false);
+    const [chefEnCours, setChefEnCours] = useState8(false);
+    const [formError, setFormError] = useState8("");
+    const [picker, setPicker] = useState8(false);
+    const [lu, setLu] = useState8(null);
     const submittingRef = useRef8(false);
     const retenir = (a) => {
       try {
@@ -9852,8 +10243,8 @@ ${item.infraction}`)) return;
     }
   }
   function PresenceOfficerDashboard({ token }) {
-    const [data, setData] = useState7(null), [error, setError] = useState7("");
-    const [open, setOpen] = useState7(chargerSyntheseOuverte);
+    const [data, setData] = useState8(null), [error, setError] = useState8("");
+    const [open, setOpen] = useState8(chargerSyntheseOuverte);
     useEffect8(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -9881,7 +10272,7 @@ ${item.infraction}`)) return;
     return { lundi: s.lundi, prenom: s.prenom, nom: s.nom };
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState7(null), [error, setError] = useState7(""), [weekFilter, setWeekFilter] = useState7(""), [corpsFilter, setCorpsFilter] = useState7(""), [search, setSearch] = useState7("");
+    const [data, setData] = useState8(null), [error, setError] = useState8(""), [weekFilter, setWeekFilter] = useState8(""), [corpsFilter, setCorpsFilter] = useState8(""), [search, setSearch] = useState8("");
     useEffect8(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -9909,8 +10300,8 @@ ${item.infraction}`)) return;
     return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, aliasGrades, matchesPerson, matchesCorps, searching }) {
-    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState7(current);
-    const [seulementImpayes, setSeulementImpayes] = useState7(false);
+    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState8(current);
+    const [seulementImpayes, setSeulementImpayes] = useState8(false);
     useEffect8(() => {
       if (searching) setOpen(true);
     }, [searching]);
@@ -9980,7 +10371,7 @@ ${item.infraction}`)) return;
     }
   }
   function PayePage({ token, canRegler }) {
-    const [data, setData] = useState7(null), [error, setError] = useState7(""), [regles, setRegles] = useState7([]), [busy, setBusy] = useState7(null), [filtre, setFiltre] = useState7(null);
+    const [data, setData] = useState8(null), [error, setError] = useState8(""), [regles, setRegles] = useState8([]), [busy, setBusy] = useState8(null), [filtre, setFiltre] = useState8(null);
     useEffect8(() => {
       serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
     }, []);
@@ -10015,7 +10406,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, libelleSemaine(s.lundi), " ", /* @__PURE__ */ React.createElement("small", null, "du ", /* @__PURE__ */ React.createElement(DateRP, { value: s.lundi, jour: false }))), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims2(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
   }
   function PayeFinanceur({ f, currentWeek, aliasGrades, canRegler, busy, regles, onBasculer }) {
-    const [ouvert, setOuvert] = useState7(true), [copie, setCopie] = useState7(""), [texteVisible, setTexteVisible] = useState7(false);
+    const [ouvert, setOuvert] = useState8(true), [copie, setCopie] = useState8(""), [texteVisible, setTexteVisible] = useState8(false);
     const texte = useMemo4(() => payeRecapTexte(f, currentWeek, aliasGrades), [f, currentWeek, aliasGrades]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();

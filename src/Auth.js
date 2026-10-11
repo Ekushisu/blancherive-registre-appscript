@@ -11,8 +11,47 @@
   `getCodex`. L'ajouter ailleurs rendrait la fonction concernée entièrement
   publique, sans que rien ne le signale. `scripts/test-acces-public.mjs` échoue
   si ce rôle apparaît dans une autre fonction.
+
+  Pour la même raison, toute fonction qui fabrique un jeton finit par `_` :
+  `google.script.run` n'atteint pas les fonctions privées. Seules `login`,
+  `ouvrirSessionPublique` et `ouvrirSessionDiscord` délivrent un jeton au
+  navigateur, et chacune décide elle-même du rôle. `scripts/test-auth-codes.mjs`
+  vérifie la liste des fonctions publiques de ce fichier et qu'aucune autre
+  fonction du dépôt n'appelle `createAuthToken_`.
 */
 const ROLE_PUBLIC = "VISITEUR";
+
+/*
+  Codes communs.
+
+  Chaque rôle de service a un code partagé, rangé dans `PASSWORD_<RÔLE>`. La
+  connexion Discord ne les remplace pas : ils restent le mode de secours si le
+  serveur Discord est coupé, changé ou indisponible, et l'accès de ceux qui n'y
+  sont pas encore passés. L'intendance — argentier de la cour, Thanes,
+  cuisines — n'est pas sur le Discord de la garde : son code reste son seul
+  accès.
+
+  `AUTH_CODES` liste les rôles dont le code est accepté, séparés par des
+  virgules (`GARDE,OFFICIER,INTENDANT`). Propriété absente : les trois codes,
+  comme avant son introduction. Un mot qui ne nomme aucun rôle — `AUCUN`, une
+  faute de frappe — n'ouvre rien : une erreur de saisie ferme, elle n'ouvre pas.
+
+  Cet interrupteur ne vit que dans les propriétés du script. Dans
+  l'application, il serait hors d'atteinte le jour où Discord et les codes sont
+  coupés ensemble ; dans le classeur, tout éditeur de la feuille pourrait
+  rouvrir les codes.
+
+  Ordre de test : du plus au moins privilégié, afin que le résultat reste
+  déterministe si deux codes ont été réglés à la même valeur par erreur.
+*/
+const ROLES_CODE = ["OFFICIER", "GARDE", "INTENDANT"];
+
+const LIBELLES_CODE = {
+  OFFICIER: "des officiers",
+  GARDE: "des gardes",
+  INTENDANT: "de l'intendance"
+};
+
 
 /*
   Session de consultation du Codex, sans authentification.
@@ -21,7 +60,7 @@ const ROLE_PUBLIC = "VISITEUR";
   un visiteur consulte, il ne prend pas son service.
 */
 function ouvrirSessionPublique() {
-  return createAuthToken(ROLE_PUBLIC, 2 * 60 * 60 * 1000);
+  return createAuthToken_(ROLE_PUBLIC, 2 * 60 * 60 * 1000);
 }
 
 
@@ -30,66 +69,180 @@ function login(password) {
   const props =
     PropertiesService.getScriptProperties();
 
-  const passwords = {
-    GARDE:
-      props.getProperty("PASSWORD_GARDE"),
 
-    OFFICIER:
-      props.getProperty("PASSWORD_OFFICIER"),
+  /*
+    Une propriété absente ne correspond jamais, y compris à
+    un mot de passe vide.
+  */
 
-    /*
-      INTENDANT : code distribué hors de la garde — argentier
-      de la cour, Thanes, cuisines. Lecture de l'organigramme
-      et de la paye, rien d'autre.
-    */
+  const correspond = role => {
 
-    INTENDANT:
-      props.getProperty("PASSWORD_INTENDANT")
+    const code =
+      props.getProperty("PASSWORD_" + role);
+
+    return Boolean(code) && password === code;
   };
 
 
   /*
-    Rôles testés du plus au moins privilégié, afin que le
-    résultat reste déterministe si deux codes ont été réglés
-    à la même valeur par erreur. Une propriété absente ne
-    correspond jamais, y compris à un mot de passe vide.
+    Les rôles actifs sont testés avant les rôles désactivés :
+    si le code d'un rôle coupé coïncide par erreur avec celui
+    d'un rôle ouvert, c'est le rôle ouvert qui l'emporte.
   */
 
-  let role = null;
+  const role =
+    rolesCodeActifs_(props).find(correspond);
 
-  if (
-    passwords.OFFICIER &&
-    password === passwords.OFFICIER
-  ) {
-    role = "OFFICIER";
-  }
-  else if (
-    passwords.GARDE &&
-    password === passwords.GARDE
-  ) {
-    role = "GARDE";
-  }
-  else if (
-    passwords.INTENDANT &&
-    password === passwords.INTENDANT
-  ) {
-    role = "INTENDANT";
+  if (role) {
+
+    return createAuthToken_(role, null, "code");
   }
 
 
-  if (!role) {
+  /*
+    Code juste mais désactivé : pendant la passation, « Mot de
+    passe incorrect » ferait croire à une faute de frappe.
+  */
+
+  const desactive =
+    ROLES_CODE.find(correspond);
+
+  if (desactive) {
 
     throw new Error(
-      "Mot de passe incorrect."
+      messageCodeDesactive_(desactive)
     );
   }
 
 
-  return createAuthToken(role);
+  throw new Error(
+    "Mot de passe incorrect."
+  );
 }
 
 
-function createAuthToken(role, dureeMs) {
+function rolesCodeActifs_(props) {
+
+  const valeur =
+    props.getProperty("AUTH_CODES");
+
+
+  if (valeur === null) {
+
+    return ROLES_CODE.slice();
+  }
+
+
+  const demandes =
+    String(valeur)
+      .split(",")
+      .map(role => role.trim().toUpperCase());
+
+
+  return ROLES_CODE.filter(
+    role => demandes.includes(role)
+  );
+}
+
+
+function messageCodeDesactive_(role) {
+
+  return (
+    "Le code " +
+    LIBELLES_CODE[role] +
+    " n'est plus accepté."
+  );
+}
+
+
+/*
+  Connexion par Discord (docs/AUTH_AND_ROLES.md).
+
+  Discord ne prouve que l'identité : le rôle se déduit de la fiche
+  `Effectifs` rattachée au compte (`accesCompteDiscord_`, Discord.js),
+  jamais des rôles du serveur Discord.
+
+  `AUTH_DISCORD` doit valoir `ACTIF`. Sinon le bouton reste caché, aucune
+  session Discord ne s'ouvre et celles qui sont ouvertes sont refusées à
+  l'appel suivant, comme un code désactivé. `AUTH_CODES` ne concerne pas
+  les sessions Discord.
+*/
+function connexionDiscordActive_(props) {
+
+  return (
+    String(props.getProperty("AUTH_DISCORD") || "")
+      .trim()
+      .toUpperCase() === "ACTIF"
+  );
+}
+
+
+/*
+  Modes proposés par l'écran de connexion, avant toute session. Le code
+  d'accès est toujours proposé : c'est l'accès de l'intendance et le
+  secours. L'adresse d'autorisation Discord n'a rien de secret.
+*/
+function getModesConnexion() {
+
+  const props =
+    PropertiesService.getScriptProperties();
+
+  const url =
+    connexionDiscordActive_(props)
+      ? urlAutorisationDiscord_(props)
+      : "";
+
+  return {
+    discord: url ? { url: url } : null
+  };
+}
+
+
+/*
+  Retour de Discord : `code` est le code à usage unique transmis dans
+  l'adresse. Le navigateur a déjà vérifié son `state`.
+*/
+function ouvrirSessionDiscord(code) {
+
+  if (
+    !connexionDiscordActive_(
+      PropertiesService.getScriptProperties()
+    )
+  ) {
+
+    throw new Error(
+      "La connexion par Discord n'est pas ouverte : utiliser le code d'accès."
+    );
+  }
+
+
+  const compte =
+    identifierCompteDiscord_(code);
+
+  const acces =
+    accesCompteDiscord_(compte);
+
+
+  return createAuthToken_(
+    acces.role,
+    null,
+    "discord",
+    {
+      membre: acces.membre,
+      discord: compte.id,
+      nom: acces.nom
+    }
+  );
+}
+
+
+/*
+  `via` indique comment le jeton a été obtenu : `code` pour un
+  code commun, `discord` pour une connexion Discord, qui ajoute
+  dans `extra` l'ID membre, l'identifiant Discord et le nom de la
+  fiche. Le jeton public n'en porte pas.
+*/
+function createAuthToken_(role, dureeMs, via, extra) {
 
   const secret =
     PropertiesService
@@ -114,6 +267,18 @@ function createAuthToken(role, dureeMs) {
       (dureeMs || 8 * 60 * 60 * 1000)
 
   };
+
+
+  if (via) {
+
+    payload.via = via;
+  }
+
+
+  Object.keys(extra || {}).forEach(cle => {
+
+    payload[cle] = extra[cle];
+  });
 
 
   const encodedPayload =
@@ -174,10 +339,11 @@ function verifyAuthToken(token) {
     parts[1];
 
 
+  const props =
+    PropertiesService.getScriptProperties();
+
   const secret =
-    PropertiesService
-      .getScriptProperties()
-      .getProperty("AUTH_SECRET");
+    props.getProperty("AUTH_SECRET");
 
 
   if (!secret) {
@@ -233,6 +399,59 @@ function verifyAuthToken(token) {
   }
 
 
+  /*
+    Coupure immédiate : une session ouverte par un code que le
+    propriétaire vient de désactiver est refusée dès l'appel
+    suivant, sans attendre son expiration. Les jetons délivrés
+    avant l'introduction de `via` n'en portent pas ; pour un
+    rôle à code, ils sont traités comme obtenus par code.
+  */
+
+  if (
+    ROLES_CODE.includes(payload.role) &&
+    (payload.via || "code") === "code" &&
+    !rolesCodeActifs_(props).includes(payload.role)
+  ) {
+
+    throw new Error(
+      messageCodeDesactive_(payload.role) +
+      " Session fermée."
+    );
+  }
+
+
+  /*
+    Session Discord : refusée dès que la connexion Discord est
+    coupée, ou que la table d'accès ne donne plus ce rôle à cette
+    fiche pour ce compte — fiche rétrogradée, passée en réserve,
+    partie ou déliée (voir `DISCORD_PROPRIETE_ACCES`, Discord.js).
+  */
+
+  if (payload.via === "discord") {
+
+    if (!connexionDiscordActive_(props)) {
+
+      throw new Error(
+        "La connexion par Discord est fermée. Session fermée."
+      );
+    }
+
+
+    const table =
+      lireTableAccesDiscord_(props);
+
+    if (
+      table[payload.discord] !==
+      entreeAccesDiscord_(payload.role, payload.membre)
+    ) {
+
+      throw new Error(
+        "Votre accès au registre a changé : reconnectez-vous."
+      );
+    }
+  }
+
+
   return payload;
 }
 
@@ -268,7 +487,9 @@ function getSessionInfo(token) {
     verifyAuthToken(token);
 
 
+  // Le nom n'existe que pour une session Discord : un code n'identifie personne.
   return {
-    role: auth.role
+    role: auth.role,
+    nom: auth.nom || ""
   };
 }

@@ -206,3 +206,24 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 .peines-montant{font-family:Georgia,serif;font-size:15px;color:#583d21}
 .peines-vide{background:#f8efdc;border:1px dashed #c3aa7d;border-radius:3px;color:#87704a;font-family:Georgia,serif}
 @media(max-width:700px){.peines-table-wrap{border:0;background:transparent;box-shadow:none}.peines-table tbody{border-color:var(--line);background:var(--surface);box-shadow:var(--shadow)}.peines-table tbody th{border-bottom-color:#d5c29c}.peines-table tbody tr+tr{border-top-color:#e2d4b6}.peines-article-cellule{background:transparent}.peines-table td:before{color:#796244}}
+/* Compte Discord d'un membre (Effectifs) : accent indigo discret, alerte brique. */
+.effectifs-page .effectif-badge-discord{border-left-color:#6a6fa8;background:#e6e4ec5e;color:#4c4f78}
+.effectifs-page .effectif-badge-alerte{border-left-color:#a5432f;background:#f2d9cf8a;color:#8a3c2a}
+.effectifs-page .compte-discord-nom{font-family:Georgia,serif;font-weight:400;font-size:16px;color:#49321d}
+.effectifs-page .compte-discord-suggestions{background:#fff9ed;border-color:#c7af85;border-radius:3px}
+.effectifs-page .compte-discord-suggestions button{border-bottom-color:#eadcc0;color:#594024}
+.effectifs-page .compte-discord-suggestions button:hover:not(:disabled),.effectifs-page .compte-discord-suggestions button:focus-visible{background:#f1e3c4}
+.effectifs-page .compte-discord-suggestions small{color:#8a6d3b}
+.effectifs-page .compte-discord-aide{color:#87704a}
+.effectifs-page .compte-discord-erreur{color:#8a3c2a}
+.effectifs-page .compte-discord-lien{color:#836036}
+/* Connexion par Discord : bouton principal ; le code d'accès, en dessous, devient secondaire. */
+.login-card .discord-button,.login-card .login-code-button{width:100%;display:flex;justify-content:space-between;align-items:center;min-height:50px;padding:14px 18px;box-sizing:border-box}
+.login-card .discord-button{text-decoration:none}
+.login-card .discord-button[aria-disabled]{opacity:.6;pointer-events:none}
+.login-separateur{display:flex;align-items:center;gap:12px;margin:24px 0 18px;color:#87704a;font-size:12px}
+.login-separateur:before,.login-separateur:after{content:"";flex:1;border-top:1px solid var(--line)}
+.login-card>p.login-statut{color:#634526;font-weight:600;margin-bottom:16px}
+/* Avec Discord, la carte s'allonge et le parchemin, étiré avec elle, grandit ses ornements : le sceau et les coins empiéteraient sur la première et la dernière ligne. */
+.login-card.login-card-discord{padding-top:80px;padding-bottom:125px}
+@media(max-width:600px){.login-card.login-card-discord{padding-top:72px;padding-bottom:118px}}

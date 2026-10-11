@@ -1,0 +1,11 @@
+# Relais Discord du registre de la Garde — voir README.md.
+# Facultatif : ne sert qu'à publier depuis un terminal (`npx wrangler deploy`
+# depuis ce dossier). Le tableau de bord Cloudflare suffit sans lui.
+name = "relais-discord-garde"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Secrets, jamais écrits ici :
+#   npx wrangler secret put DISCORD_BOT_TOKEN
+#   npx wrangler secret put DISCORD_GUILD_ID
+#   npx wrangler secret put RELAIS_SECRET

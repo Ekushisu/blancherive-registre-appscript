@@ -664,8 +664,13 @@ const membreEffectif = (id, prenom, nom, grade, corps, options = {}) => ({
   reserve: Boolean(options.reserve),
   terminalGroup: "",
   assermente: options.assermente !== false,
+  discordId: options.discordId || "",
+  discordAnomalie: options.discordAnomalie || "",
   styles: {}
 });
+
+// Identifiants Discord fictifs, de 18 chiffres comme les vrais.
+const discord = n => String(300000000000000000n + BigInt(n));
 
 export const effectifs = {
   gradeOrder: GRADES,
@@ -679,22 +684,39 @@ export const effectifs = {
     styles: { grades: {}, corps: {}, specialites: {}, statuses: {} }
   },
   rows: [
-    membreEffectif(1, "Haldvar", "de Blancherive", "Commander", "Cité de Blancherive", { collecteur: true }),
-    membreEffectif(2, "Astrid", "Brise-Lame", "Capitaine", "Cité de Blancherive", { collecteur: true }),
-    membreEffectif(3, "Rorik", "Marche-Hiver", "Lieutenant", "Cité de Blancherive"),
+    membreEffectif(1, "Haldvar", "de Blancherive", "Commander", "Cité de Blancherive", { collecteur: true, discordId: discord(1) }),
+    membreEffectif(2, "Astrid", "Brise-Lame", "Capitaine", "Cité de Blancherive", { collecteur: true, discordId: discord(2) }),
+    membreEffectif(3, "Rorik", "Marche-Hiver", "Lieutenant", "Cité de Blancherive", { discordId: discord(3) }),
     membreEffectif(4, "Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
-    membreEffectif(5, "Brynjar", "Poing-de-Fer", "Capitaine", "Garnison de Rivebois"),
-    membreEffectif(6, "Sigrid", "Vent-du-Nord", "Lieutenant-Chef", "Garnison de Rivebois"),
+    membreEffectif(5, "Brynjar", "Poing-de-Fer", "Capitaine", "Garnison de Rivebois", { discordId: discord(5) }),
+    membreEffectif(6, "Sigrid", "Vent-du-Nord", "Lieutenant-Chef", "Garnison de Rivebois", { discordId: discord(6) }),
     membreEffectif(7, "Eydis", "la Silencieuse", "Cadet", "Garnison de Rivebois", { assermente: false }),
     membreEffectif(8, "Alva", "Pied-Léger", "Recrue", "Garnison de Rivebois", { assermente: false }),
     membreEffectif(9, "Torsten", "Pierre-Grise", "Major", "Garnison de Bois-de-Chêne"),
     membreEffectif(10, "Frida", "Val-Profond", "Garde", "Garnison de Bois-de-Chêne"),
     membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs"),
-    membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse" }),
+    membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse", discordId: discord(12) }),
     membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "Hird du Jarl"),
     membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true }),
     membreEffectif(15, "Ragnhild", "Fer-Juste", "Capitaine", "Inquisition"),
-    membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Inquisition")
+    membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Inquisition", {
+      discordAnomalie: "Identifiant Discord enregistré comme nombre : Sheets en a arrondi les derniers chiffres. Rattacher le compte de nouveau."
+    })
+  ]
+};
+
+/*
+  Membres du serveur Discord : la forme suit `getMembresDiscord()` de
+  `src/Discord.js`. Eydis et Alva n'y sont pas encore rattachées.
+*/
+export const membresDiscord = {
+  membres: [
+    { id: discord(2), nom: "Astrid", pseudo: "astrid.bl" },
+    { id: discord(20), nom: "Eyvind", pseudo: "eyvind.rp" },
+    { id: discord(7), nom: "Eydis", pseudo: "eydis_silence" },
+    { id: discord(8), nom: "Alva Pied-Léger", pseudo: "alva" },
+    { id: discord(1), nom: "Haldvar", pseudo: "haldvar" },
+    { id: discord(3), nom: "Rorik", pseudo: "rorik_mh" }
   ]
 };
 

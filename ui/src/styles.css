@@ -346,6 +346,102 @@
       align-items: center;
     }
 
+    .effectif-badge-discord {
+      background: #e4e6f6;
+      color: #3f4a8a;
+      border-color: #c4c9ea;
+    }
+
+    .effectif-badge-alerte {
+      background: #f8e1dc;
+      color: #8f2f1f;
+      border-color: #e5b5aa;
+    }
+
+    .compte-discord {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .compte-discord-lie {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+    }
+
+    .compte-discord-nom {
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .compte-discord-suggestions {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 264px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      background: #fff;
+    }
+
+    .compte-discord-suggestions button {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 4px 10px;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 0;
+      border-bottom: 1px solid #eee;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .compte-discord-suggestions li:last-child button {
+      border-bottom: 0;
+    }
+
+    .compte-discord-suggestions button:hover:not(:disabled),
+    .compte-discord-suggestions button:focus-visible {
+      background: #f3ead6;
+    }
+
+    .compte-discord-suggestions button:disabled {
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .compte-discord-aide {
+      color: #776;
+      font-size: 12px;
+    }
+
+    .compte-discord-erreur {
+      color: #9b2c1f;
+    }
+
+    .compte-discord-lien {
+      justify-self: start;
+      min-height: 32px;
+      padding: 4px 0;
+      border: 0;
+      background: none;
+      color: #7a5427;
+      font: inherit;
+      font-size: 12px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .effectifs-empty {
       background: white;
       border: 1px dashed #bbb;

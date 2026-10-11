@@ -18,10 +18,18 @@ Principaux modules :
     l'Organigramme de l'application les remplaçant
 
 - `Auth.js`
-  - login par mot de passe de rôle
-  - token HMAC
+  - login par mot de passe de rôle, activable par rôle (`AUTH_CODES`) ; un code
+    désactivé ferme aussi les sessions ouvertes avec lui
+  - token HMAC, avec son origine `via`
   - expiration 8 h
   - `requireRole()`
+  - `createAuthToken_` privée : seules `login`, `ouvrirSessionPublique` et
+    `ouvrirSessionDiscord` délivrent un jeton au navigateur
+  - connexion Discord : `getModesConnexion` (avant session, adresse
+    d'autorisation si `AUTH_DISCORD` vaut `ACTIF`), `ouvrirSessionDiscord(code)`,
+    jeton `via: "discord"` portant `membre`, `discord` et `nom` ;
+    `verifyAuthToken` le confronte à la table d'accès `DISCORD_ACCES` à chaque
+    appel ; `getSessionInfo` renvoie le nom d'une session Discord
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
@@ -35,6 +43,41 @@ Principaux modules :
 - `Effectifs.js`
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
   - aucune suppression
+
+- `Discord.js`
+  - configuration dans les Script Properties (`DISCORD_RELAIS_URL`,
+    `DISCORD_RELAIS_SECRET`, `DISCORD_GUILD_ID`, et les trois de la connexion),
+    jamais dans le code ni le classeur
+  - appels du bot par le relais `relais-discord/` (`appelerDiscordBot_`, secret
+    `X-Relais-Secret`, méthode, corps JSON et raison d'audit pour les
+    écritures) ; appels OAuth de la connexion directement à Discord
+  - `getMembresDiscord(token, rafraichir)` : OFFICIER, membres du serveur
+    Discord pour le choix d'un compte, bots exclus, dix minutes de cache
+  - `appelerDiscord_` : API REST v10 par `UrlFetchApp`, une nouvelle tentative
+    après une limitation courte, messages d'erreur en français sans aucun
+    secret ; refus du relais et refus réseau de Discord (40333) reconnus
+  - colonne `Effectifs!ID Discord` : `lireLiensDiscordEffectifs_`,
+    `ecrireLienDiscordEffectif_` (seul chemin d'écriture), `effacerLienDiscordLigne_`,
+    `effacerLiensDiscordOrphelins_`
+  - connexion : `identifierCompteDiscord_` (échange du code, `/users/@me`),
+    `roleRegistreDiscord_` (statut puis seuil `DISCORD_SEUIL_OFFICIER` dans
+    l'ordre de `Données!A`), `indexerAccesDiscord_` et `mettreAJourAccesDiscord_`
+    (table `DISCORD_ACCES`, appelée par la synchronisation de l'historique),
+    `accesCompteDiscord_`
+  - `verifierConfigurationDiscord()` : diagnostic à lancer depuis l'éditeur,
+    résultat au journal d'exécution, rien de renvoyé, une fois par minute
+
+- `SynchroDiscord.js`
+  - rôles Discord appliqués d'après `Effectifs` et la feuille `RolesDiscord`
+    (créée et préremplie une fois), puis pseudos « Prénom Nom »
+    (`pseudoVouluDiscord_`) ; interrupteur `DISCORD_SYNCHRO` (`SIMULATION`,
+    `ACTIF`)
+  - `synchroniserRolesDiscord_` : un passage (règles de la feuille, rôles et
+    membres du serveur par le relais, plan, exécution plafonnée) ;
+    `appliquerRolesDiscordApresModification_` après une mutation d'Effectifs ;
+    `synchroDiscordPeriodique_`, déclencheur horaire installé par
+    `installerDeclencheurSynchroDiscord_` depuis `getEffectifs`
+  - `simulerSynchroDiscord()` : plan au journal d'exécution, depuis l'éditeur
 
 - `HistoriqueEffectifs.js`
   - identifiants stables dans `Effectifs!ID membre` et journal append-only `HistoriqueEffectifs`
@@ -120,6 +163,17 @@ Principaux modules :
   - `getPeinesAmendes(token, versionConnue)` : GARDE, OFFICIER et INTENDANT, versionné par empreinte MD5 comme le Codex ; lignes illisibles écartées et signalées dans `anomalies` avec leur ligne physique, lignes hors fourchette gardées avec leurs `avertissements`
   - le barème propose, il n'impose pas : `Amendes.js` et `Prison.js` ne lisent pas cette feuille
 
+## Relais Discord (`relais-discord/`)
+
+Hors d'Apps Script, jamais poussé par `clasp` (seul `src/` l'est) : un
+Cloudflare Worker (`worker.js`, module sans dépendance) qui transmet à Discord
+les appels du bot avec le jeton du bot et un en-tête de bot, après contrôle d'un
+secret partagé et d'une liste fermée de routes du seul serveur de la Garde.
+Apps Script ne peut pas appeler ces routes lui-même : Discord refuse son
+User-Agent imposé (code 40333). Mise en ligne et mise à jour à la main depuis le
+tableau de bord Cloudflare ou par `npx wrangler deploy` : voir
+`relais-discord/README.md`. Vérifié par `scripts/test-relais-discord.mjs`.
+
 ## Frontend
 
 Le source frontend est dans `ui/` :
@@ -145,6 +199,9 @@ Le source frontend est dans `ui/` :
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
 - `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (« Inquisition » → « Garde inquisitoriale ») ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS`. Grade affiché d'un membre selon son corps (`libelleGrade`, alias de l'Inquisition), d'après la table `aliasGrades` renvoyée par le serveur ; le corps peut être le libellé de la feuille ou le nom affiché ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
+- `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
+- `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
+- `ui/src/connexion-discord.js` : aller-retour de la connexion Discord — `state` aléatoire gardé dans `sessionStorage` au clic et vérifié une seule fois au retour, lecture du code par `google.script.url.getLocation`, effacement de l'adresse par `google.script.history.replace` ; l'écran de connexion (`navigation.jsx`) met Discord en bouton principal quand `getModesConnexion` le propose, le code d'accès restant en dessous ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 
 Les aperçus de `docs/apercus/` se régénèrent par `npm run apercus`. `scripts/capture-apercus.mjs` sert le `src/Index.html` compilé sur un serveur HTTP local, remplace `google.script.run` par un stub alimenté par `scripts/apercus-donnees.mjs`, puis capture les pages avec Microsoft Edge via `playwright-core`. Le navigateur du système est utilisé tel quel : aucun téléchargement de navigateur, et `playwright-core` reste une `devDependency` absente du bundle Apps Script.
@@ -202,6 +259,21 @@ de la semaine courante.
 `Paye.js` et `Amendes.js` utilisent `lireAliasGrades_` (`AliasGrades.js`) ;
 `Amendes.js` utilise aussi `gradeAffiche_`. Les suites de test qui chargent ces
 fichiers sans `AliasGrades.js` y substituent `lireAliasGrades_`.
+
+`Discord.js` utilise `nettoyerEffectifsWeb_`, `normaliserEffectifsWeb_`,
+`EFFECTIFS_WEB_ACTIVE_STATUS` et `EFFECTIFS_WEB_DONNEES_SHEET_NAME`
+(`Effectifs.js`), et `synchroniserHistoriqueEffectifs_` à la connexion.
+`Auth.js` utilise `urlAutorisationDiscord_`, `identifierCompteDiscord_`,
+`accesCompteDiscord_`, `lireTableAccesDiscord_` et `entreeAccesDiscord_`.
+`SynchroDiscord.js` utilise de `Discord.js` `lireConfigBotDiscord_`,
+`appelerDiscordBot_`, `lireMembresServeurDiscord_`, `lireOrdreGradesDiscord_`
+et `cleGradeDiscord_`, et l'index `accesDiscord` (grade, corps, statut) de la
+synchronisation de l'historique ; `HistoriqueEffectifs.js` et `Effectifs.js`
+l'appellent après une mutation et à la consultation. Les suites qui chargent
+`HistoriqueEffectifs.js` chargent aussi `Discord.js` et `SynchroDiscord.js`. En retour, `Effectifs.js` (`getEffectifs`,
+`ajouterEffectifInterne_`, `modifierEffectifInterne_`) et `HistoriqueEffectifs.js`
+(synchronisation) appellent ses helpers de la colonne `ID Discord` ; les suites de
+test qui chargent `HistoriqueEffectifs.js` chargent aussi `Discord.js`.
 
 `Inventaire.js` utilise :
 - `nettoyerSaisieUtilisateur`, déclaré dans `Amendes.js` ;

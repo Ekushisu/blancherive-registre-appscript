@@ -28,7 +28,8 @@ class Sheet {
         });
         return range;
       },
-      setValue: value => range.setValues([[value]]), setNote: () => range
+      setValue: value => range.setValues([[value]]), setNote: () => range,
+      clearContent: () => range.setValues(read().map(r => r.map(() => '')))
     };
     return range;
   }
@@ -54,6 +55,8 @@ const context = vm.createContext({
   LockService: { getScriptLock: () => ({ waitLock() { assert.equal(locked, false); locked = true; }, releaseLock() { locked = false; } }) },
   lireSchemaEffectifsWeb_: () => ({ prenom: 0, nom: 1, grade: 2, corps: 3, status: 4 }),
   normaliserEffectifsWeb_: normalize,
+  EFFECTIFS_WEB_DONNEES_SHEET_NAME: 'Données', EFFECTIFS_WEB_ACTIVE_STATUS: 'En service actif',
+  nettoyerEffectifsWeb_: value => String(value ?? '').replace(/ /g, ' ').trim(),
   estStatutReserveOrganigramme: value => normalize(value) === 'reserve',
   requireRole(token, roles) { if (!roles.includes(token)) throw Error('Accès refusé'); return { role: token }; },
   getEffectifs: () => ({ ok: true }),
@@ -65,6 +68,8 @@ const context = vm.createContext({
   } }
 });
 vm.runInContext(readFileSync('src/HistoriqueEffectifs.js', 'utf8'), context);
+vm.runInContext(readFileSync('src/Discord.js', 'utf8'), context);
+vm.runInContext(readFileSync('src/SynchroDiscord.js', 'utf8'), context);
 const sync = () => context.synchroniserHistoriqueEffectifs_(ss);
 let result = sync();
 assert.equal(result.events.length, 0, 'Pas de fausses arrivées à l’initialisation');
@@ -108,9 +113,14 @@ roster.rows.push(['Double', '', 'Garde', 'Rivebois', 'En service actif', aliceId
 result = sync();
 assert.notEqual(roster.rows[4][5], aliceId, 'UUID copié réattribué');
 assert.equal(result.events[0].changes[0].type, 'arrivee');
+roster.rows[0][6] = 'ID Discord';
+roster.rows[1][6] = '223456789012345678';
+roster.rows[4][6] = '123456789012345678';
 roster.rows[4][0] = '';
 result = sync();
 assert.equal(roster.rows[4][5], '', 'Une ligne vidée ne réutilise pas son ancien ID');
+assert.equal(roster.rows[4][6], '', 'Une ligne vidée perd son compte Discord');
+assert.equal(roster.rows[1][6], '223456789012345678', 'Une ligne nommée garde son compte Discord');
 assert.equal(result.events.length, 2);
 time += 15 * 86400000;
 assert.equal(sync().events.length, 0, 'Expiration des badges après 14 jours');
@@ -127,14 +137,29 @@ context.installerDeclencheurHistoriqueEffectifs_(ss);
 context.installerDeclencheurHistoriqueEffectifs_(ss);
 assert.equal(triggers, 1, 'Installation du déclencheur idempotente');
 
+// Rôles Discord après une modification : hors du verrou, avec l'index de la
+// synchronisation « Application », jamais après un échec.
+const synchrosDiscord = [];
+const vraiAppliquer = context.appliquerRolesDiscordApresModification_;
+context.appliquerRolesDiscordApresModification_ = (classeur, apres) => {
+  synchrosDiscord.push({ verrou: locked, classeur, acces: apres && apres.accesDiscord });
+};
 assert.throws(() => context.executerMutationHistoriqueEffectifs_('GARDE', {}, () => assert.fail()), /Accès refusé/);
 context.executerMutationHistoriqueEffectifs_('OFFICIER', {}, () => {
   assert.equal(locked, true); roster.rows[2][3] = 'Bois-de-Chêne';
 });
 assert.equal(locked, false);
 assert.equal(journal.rows.at(-1)[7], 'Application');
+assert.equal(synchrosDiscord.length, 1);
+assert.equal(synchrosDiscord[0].verrou, false, 'Discord hors du verrou des mutations');
+assert.equal(synchrosDiscord[0].classeur, ss);
+assert.equal(typeof synchrosDiscord[0].acces?.get, 'function', 'Index des comptes transmis, sans nouvelle lecture');
 assert.throws(() => context.executerMutationHistoriqueEffectifs_('OFFICIER', {}, () => { throw Error('Échec'); }), /Échec/);
 assert.equal(locked, false, 'Verrou libéré même en cas d’erreur');
+assert.equal(synchrosDiscord.length, 1, 'Aucune synchronisation après un échec');
+context.appliquerRolesDiscordApresModification_ = vraiAppliquer;
+// Interrupteur absent : la vraie fonction ne fait rien, sans erreur.
+context.executerMutationHistoriqueEffectifs_('OFFICIER', {}, () => {});
 const originalHeader = journal.rows[0][0];
 journal.rows[0][0] = 'Autre contenu';
 assert.throws(sync, /structure différente/);

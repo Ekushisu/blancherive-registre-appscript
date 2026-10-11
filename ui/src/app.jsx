@@ -17,6 +17,9 @@ import { libelleSemaine, dateLundi, numeroSemaine, comparerLundisDecroissant } f
 import { dateTamriel } from "./calendrier.js";
 import { DateRP } from "./calendrier.jsx";
 import { libelleCorps, libelleGrade } from "./corps.js";
+import { useMembresDiscord, comptesRattaches } from "./discord.js";
+import { CompteDiscordField } from "./discord.jsx";
+import { lireRetourDiscord, verifierRetourDiscord, effacerRetourDiscord } from "./connexion-discord.js";
 
 const {useEffect,useMemo,useRef,useState}=React;
 
@@ -28,15 +31,18 @@ function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberF
 
 function App(){
   const[token,setToken]=useState(sessionStorage.getItem("guardAuthToken"));
-  const[role,setRole]=useState(null);const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
+  const[role,setRole]=useState(null);const[nom,setNom]=useState("");const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
+  const[discordRetour,setDiscordRetour]=useState({statut:"",erreur:""});
   // Le visiteur public n'a que le Codex : on l'y place d'emblée.
-  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{setRole(i.role);if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
+  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{setRole(i.role);setNom(i.nom||"");if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
+  // Retour de Discord : code et `state` dans l'adresse, traités une seule fois, puis retirés de l'adresse.
+  useEffect(()=>{lireRetourDiscord().then(retour=>{if(!retour)return;effacerRetourDiscord();if(sessionStorage.getItem("guardAuthToken"))return;let code;try{code=verifierRetourDiscord(retour);}catch(e){setDiscordRetour({statut:"",erreur:e.message});return;}setDiscordRetour({statut:"connexion",erreur:""});serverCall("ouvrirSessionDiscord",code).then(t=>{sessionStorage.setItem("guardAuthToken",t);setDiscordRetour({statut:"",erreur:""});setToken(t);}).catch(e=>setDiscordRetour({statut:"",erreur:e.message}));});},[]);
   const publicSeulement=role===ROLE_PUBLIC;
   const intendantSeulement=role==="INTENDANT";
-  function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setPage("organigramme");}
-  if(!token)return <Login serverCall={serverCall} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
+  function logout(){sessionStorage.removeItem("guardAuthToken");setToken(null);setRole(null);setNom("");setPage("organigramme");}
+  if(!token)return <Login serverCall={serverCall} discordRetour={discordRetour} onLogin={t=>{sessionStorage.setItem("guardAuthToken",t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
-  return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
+  return <div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} nom={nom} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
     {page==="organigramme"&&!publicSeulement&&<OrganigrammePage token={token}/>}
     {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>}
     {page==="presences"&&!publicSeulement&&!intendantSeulement&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>}
@@ -75,6 +81,10 @@ function EffectifsPage({token}){
   const[showForm,setShowForm]=useState(false);
   const[error,setError]=useState("");
   const[success,setSuccess]=useState("");
+
+  // Membres du serveur Discord, demandés à la première fiche ouverte.
+  const discord=useMembresDiscord(serverCall,token);
+  const rattaches=useMemo(()=>comptesRattaches(data?.rows),[data]);
 
   useEffect(()=>{
     serverCall(
@@ -177,7 +187,11 @@ function EffectifsPage({token}){
           :"non assermente",
         member.reserve
           ?"reserve"
-          :""
+          :"",
+        // « sans discord » liste les membres à rattacher pendant la passation.
+        member.discordId
+          ?"discord rattache"
+          :"sans discord"
       ].join(" "))
         .includes(q);
     });
@@ -794,6 +808,8 @@ function EffectifsPage({token}){
                             aliasGrades={
                               data.aliasGrades
                             }
+                            discord={discord}
+                            rattaches={rattaches}
                             onSave={
                               async values=>{
                                 try{
@@ -827,7 +843,10 @@ function EffectifsPage({token}){
                                           values.status,
 
                                         assermente:
-                                          values.assermente
+                                          values.assermente,
+
+                                        discordId:
+                                          values.discordId
                                       }
                                     );
 
@@ -904,6 +923,8 @@ function EffectifsPage({token}){
                       aliasGrades={
                         data.aliasGrades
                       }
+                      discord={discord}
+                      rattaches={rattaches}
                       showCorps
                       onSave={
                         async values=>{
@@ -938,7 +959,10 @@ function EffectifsPage({token}){
                                     values.status,
 
                                   assermente:
-                                    values.assermente
+                                    values.assermente,
+
+                                  discordId:
+                                    values.discordId
                                 }
                               );
 
@@ -1261,12 +1285,19 @@ function EffectifCard({
   member,
   options,
   aliasGrades,
+  discord,
+  rattaches,
   onSave,
   showCorps=false
 }){
   const memberChanges=useMemberChanges(member.memberId);
   const[editing,setEditing]=
     useState(false);
+
+  const[discordId,setDiscordId]=
+    useState(
+      member.discordId||""
+    );
 
   const[grade,setGrade]=
     useState(member.grade);
@@ -1310,20 +1341,36 @@ function EffectifCard({
     setAssermente(
       member.assermente
     );
+
+    setDiscordId(
+      member.discordId||""
+    );
   },[
     member.grade,
     member.corps,
     member.specialite,
     member.status,
-    member.assermente
+    member.assermente,
+    member.discordId
   ]);
+
+  // La liste du serveur n'est demandée qu'à la première fiche ouverte.
+  useEffect(()=>{
+    if(editing&&discord?.statut==="inactif"){
+      discord.charger();
+    }
+  },[editing]);
+
+  const discordChanged=
+    discordId!==(member.discordId||"");
 
   const changed=
     grade!==member.grade||
     corps!==member.corps||
     specialite!==(member.specialite||"")||
     status!==member.status||
-    assermente!==member.assermente;
+    assermente!==member.assermente||
+    discordChanged;
 
   async function save(){
     try{
@@ -1334,7 +1381,13 @@ function EffectifCard({
         corps,
         specialite,
         status,
-        assermente
+        assermente,
+
+        // Absent de la requête s'il n'a pas changé : la case reste intacte.
+        discordId:
+          discordChanged
+            ?discordId
+            :undefined
       });
 
       setEditing(false);
@@ -1362,6 +1415,10 @@ function EffectifCard({
 
     setAssermente(
       member.assermente
+    );
+
+    setDiscordId(
+      member.discordId||""
     );
 
     setEditing(false);
@@ -1438,6 +1495,20 @@ function EffectifCard({
               :"Non assermenté"
             }
           </span>
+
+          {member.discordAnomalie
+            ?<span className="effectif-badge effectif-badge-alerte" title={member.discordAnomalie}>
+              Discord : anomalie
+            </span>
+            :member.discordId
+              ?<span className="effectif-badge effectif-badge-discord" title={`Compte Discord ${member.discordId}`}>
+                Discord
+              </span>
+              :!member.terminalGroup&&
+                <span className="effectif-badge effectif-badge-muted">
+                  Sans Discord
+                </span>
+          }
         </div>
       </div>
 
@@ -1653,6 +1724,18 @@ function EffectifCard({
 
             Assermenté
           </label>
+
+          {discord&&
+            <CompteDiscordField
+              value={discordId}
+              onChange={setDiscordId}
+              discord={discord}
+              rattaches={rattaches}
+              memberId={member.memberId}
+              anomalie={member.discordAnomalie}
+              disabled={saving}
+            />
+          }
 
           <div className="effectif-editor-actions">
             <button
