@@ -41,8 +41,14 @@ Générées par le script, donc rejouables à l’identique :
   affiché « Garde inquisitoriale », ses grades sous leur alias (« Grand
   Inquisiteur », « Inquisiteur »).
 - `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement,
-  les sept corps et garnisons sur la grille à sept colonnes, avec les
-  descriptions de grades et les alias de grade de la Garde inquisitoriale.
+  le Huscarl et le Hird sous l'autorité directe du Jarl, les sept corps et
+  garnisons sur la grille à sept colonnes, avec les descriptions de grades et
+  les alias de grade de la Garde inquisitoriale.
+- `effectifs-ajout-1440.png`, `effectifs-ajout-390.png` : formulaire « Nouveau
+  membre », sans grade par défaut, compte Discord cherché parmi les membres du
+  serveur.
+- `effectifs-renommage-1440.png`, `effectifs-renommage-390.png` : fiche en
+  modification, renommage ouvert par « Modifier le nom… ».
 - `organigramme-grade-1440.png` : un encart de description de grade déplié.
 - `presences-1440.png`, `presences-390.png` : tableau de bord OFFICIER,
   accordéons de semaines, coût total par corps.

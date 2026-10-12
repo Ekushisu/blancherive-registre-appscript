@@ -346,6 +346,45 @@
       align-items: center;
     }
 
+    /* Renommage : caché derrière un bouton, en tête de l'éditeur. */
+    .effectif-renommage-ouvrir {
+      grid-column: 1 / -1;
+    }
+
+    .effectif-renommage {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      min-width: 0;
+      margin: 0;
+      padding: 10px 12px 12px;
+      border: 1px solid #e5b5aa;
+      border-radius: 7px;
+      background: #fbf0ec;
+    }
+
+    .effectif-renommage legend {
+      padding: 0 6px;
+      font-weight: 700;
+      color: #8f2f1f;
+    }
+
+    .effectif-renommage-avertissement {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: #8f2f1f;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    @media(max-width:760px) {
+      .effectif-renommage {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .effectif-badge-discord {
       background: #e4e6f6;
       color: #3f4a8a;
@@ -589,6 +628,8 @@
 .org-hird-branch{grid-column:3;grid-row:2 / 4;align-self:start;position:relative;min-width:0}
 .org-hird-branch:before{content:"";position:absolute;left:-48px;width:48px;height:1px;top:38px;background:var(--org-gold)}
 .org-direct-label{font-size:10px;color:#79613a;margin:0 0 8px;line-height:1.4}
+/* Huscarl, au-dessus du Hird dans la branche directe du Jarl. */
+.org-hird-branch > .org-command-node{margin-bottom:16px}
 .org-unit{background:#fff;border:1px solid #deded5;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 3px 10px #283a3605}
 .org-unit-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:17px 16px;background:#e9ede8;border-bottom:1px solid #d9dfd6}
 .org-unit-header h3{font-size:14px;color:var(--org-ink);margin:0;line-height:1.4}

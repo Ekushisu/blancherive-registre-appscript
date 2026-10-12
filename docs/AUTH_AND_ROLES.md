@@ -166,7 +166,10 @@ Le propriétaire a la main sur le serveur Discord de la Garde depuis octobre
   `Données!A` ouvre une session GARDE ; le seuil est une constante du code, pour
   qu'un changement d'accès passe par une relecture du `git diff`. Le Hird du
   Jarl, le Jarl et le Maréchal suivent la même règle (décision du propriétaire,
-  11 octobre 2026) : aucun corps ni aucune personne n'y fait exception ;
+  11 octobre 2026) : aucun corps ni aucune personne n'y fait exception. Le
+  Jarl et le Huscarl, en tête de `Données!A` depuis le 12 octobre 2026, ouvrent
+  donc une session OFFICIER et reçoivent le rôle « Officiers de Blancherive »
+  (ligne « À partir du grade » Lieutenant de `RolesDiscord`), sans code ;
 - **le statut prime sur le grade** (décisions du propriétaire, 11 octobre
   2026) :
 
@@ -253,7 +256,8 @@ Validé par le propriétaire, à réaliser en trois étapes, chacune livrable se
 1. **Rattachement** — fait le 11 octobre 2026 (`Discord.js`, colonne
    `Effectifs!ID Discord`, voir DATA_MODEL). Un OFFICIER relie une fiche à un
    compte depuis le formulaire des Effectifs, en choisissant parmi les membres
-   du serveur ou en tapant l'identifiant. Un garde ne se rattache jamais
+   du serveur ou en tapant l'identifiant ; depuis le 12 octobre 2026, dès
+   l'ajout d'un membre. Un garde ne se rattache jamais
    lui-même : n'importe qui pourrait se déclarer Capitaine.
 2. **Connexion** — réalisée le 11 octobre 2026, détail dans « Session
    Discord » ci-dessous. Bouton « Se connecter avec Discord », page d'autorisation
@@ -385,11 +389,17 @@ relire et corriger `RolesDiscord`, la protéger, régler `DISCORD_SYNCHRO` à
   GARDE sinon, y compris pour un grade absent de la liste. Si le seuil lui-même
   disparaît de `Données!A`, personne n'est OFFICIER par Discord.
 - Table d'accès `DISCORD_ACCES` (Script Property, technique) : identifiant
-  Discord → `O|` ou `G|` suivi des huit premiers caractères de l'ID membre.
+  Discord → `O|` ou `G|`, les huit premiers caractères de l'ID membre, puis
+  `|` et une empreinte de quatre caractères du nom de la fiche
+  (`empreinteNomDiscord_`, depuis le 12 octobre 2026). Le jeton porte ce nom,
+  qui signe les amendes et incarcérations : une fiche renommée ferme la
+  session, la reconnexion reprend le nouveau nom. Une table écrite avant
+  l'empreinte (`entreeAccesDiscordSansNom_`) vaut jusqu'à son premier
+  recalcul, pour ne fermer aucune session au déploiement.
   Recalculée par `mettreAJourAccesDiscord_` à chaque synchronisation de
   l'historique des Effectifs (pages Organigramme et Effectifs, modifications par
   l'application, déclencheur des éditions à la main) et à chaque connexion,
-  écrite seulement si elle change. Une table trop grande (au-delà d'environ 250
+  écrite seulement si elle change. Une table trop grande (au-delà d'environ 220
   comptes) est effacée : sessions Discord refusées, codes intacts.
 - `verifyAuthToken`, pour `via: "discord"` : refuse si `AUTH_DISCORD` n'est plus
   `ACTIF`, ou si la table ne donne plus ce rôle à cette fiche pour ce compte
@@ -515,8 +525,8 @@ chaque refus précède toute lecture Sheets.
 
 `getMembresDiscord` n'autorise que `OFFICIER`, avant toute lecture de
 configuration ou tout appel à Discord : la liste des membres du serveur ne sert
-qu'à rattacher une fiche. Le rattachement passe par `modifierEffectif`, déjà
-réservé à `OFFICIER`. `getOrganigramme` ne transmet aucun compte Discord.
+qu'à rattacher une fiche. Le rattachement passe par `modifierEffectif` ou
+`ajouterEffectif`, réservés à `OFFICIER`. `getOrganigramme` ne transmet aucun compte Discord.
 `scripts/test-discord-rattachement.mjs` vérifie l'ordre des contrôles.
 
 ## Nouveautés des Effectifs

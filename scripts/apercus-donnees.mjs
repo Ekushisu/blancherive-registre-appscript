@@ -555,6 +555,7 @@ const membre = (prenom, nom, grade, corps) => ({
 export const organigramme = {
   changes: { events: [] },
   jarl: membre("Lucius", "Haldor", "Jarl", "État-Major"),
+  huscarls: [membre("Lydia", "Bras-Fort", "Huscarl", "Cité de Blancherive")],
   hird: [membre("Ulfgar", "Bouclier-Noir", "Lieutenant", "Hird du Jarl")],
   marechaux: [],
   commandants: [membre("Haldvar", "de Blancherive", "Commander", "État-Major")],

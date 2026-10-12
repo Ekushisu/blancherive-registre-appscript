@@ -29,6 +29,7 @@ export function libelleEvenement(evenement) {
     return `Affecté à ${libelleCorps(evenement.apres)}${evenement.avant ? `, venant de ${libelleCorps(evenement.avant)}` : ""}`;
   }
   if (evenement.type === "arrivee") return "Inscription au registre de la Garde";
+  if (evenement.type === "nom") return `Nom changé en ${evenement.apres}, auparavant ${evenement.avant}`;
   return evenement.apres || evenement.type;
 }
 
@@ -58,9 +59,11 @@ function Personne({ personne, aliasGrades }) {
   </li>;
 }
 
-function Solde({ s }) {
+// Hors solde : le Jarl, par son grade, et le Hird du Jarl, par son corps.
+function Solde({ s, grade }) {
   if (s.exclu) {
-    return <Section titre="Solde"><p className="livret-vide">Le Hird du Jarl n’est pas soldé par le registre de la Garde.</p></Section>;
+    const qui = String(grade || "").trim().toLowerCase() === "jarl" ? "Le Jarl" : "Le Hird du Jarl";
+    return <Section titre="Solde"><p className="livret-vide">{qui} n’est pas soldé par le registre de la Garde.</p></Section>;
   }
   const courante = s.semaineCourante;
   return <Section titre="Solde" sousTitre={titreSemaine(s.lundiCourant)}>
@@ -154,6 +157,7 @@ function Commandement({ cmd, aliasGrades }) {
       ? <><h3>Dans votre corps</h3><ul className="livret-personnes">{cmd.corps.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>
       : <p className="livret-vide">Aucun officier au-dessus de vous dans votre corps.</p>}
     {cmd.etatMajor.length > 0 && <><h3>État-Major</h3><ul className="livret-personnes">{cmd.etatMajor.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>}
+    {cmd.jarl?.length > 0 && <><h3>Jarl</h3><ul className="livret-personnes">{cmd.jarl.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>}
   </Section>;
 }
 
@@ -206,7 +210,7 @@ export function LivretPage({ token, serverCall }) {
         : `Aucun service depuis ${s.joursDepuis} jours : au-delà de ${s.seuilInactivite}, votre nom remonte au tableau des officiers.`}
     </div>}
     <div className="livret-grille">
-      <Solde s={s} />
+      <Solde s={s} grade={fiche.grade} />
       <Service s={s} />
       <Justice j={j} />
       <Commandement cmd={cmd} aliasGrades={aliasGrades} />

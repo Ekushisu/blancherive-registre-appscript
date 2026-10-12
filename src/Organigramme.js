@@ -247,6 +247,26 @@ function getOrganigramme(
 
 
   // ==========================================================
+  // HUSCARL
+  //
+  // Grade à part, sous l'autorité directe du Jarl, à côté du
+  // Hird : ni dans la chaîne de l'État-Major, ni dans son corps.
+  // ==========================================================
+
+  const huscarls =
+    actifs
+      .filter(
+        personne =>
+          estGradeHuscarl(
+            personne.grade
+          )
+      )
+      .sort(
+        comparerNomsOrganigramme
+      );
+
+
+  // ==========================================================
   // MARÉCHAUX
   // ==========================================================
 
@@ -329,7 +349,7 @@ function getOrganigramme(
       )
       .filter(
         personne =>
-          !estGradeCommandementGeneral(
+          !estGradeHorsCorps(
             personne.grade
           )
       )
@@ -351,7 +371,7 @@ function getOrganigramme(
     actifs
       .filter(
         personne =>
-          !estGradeCommandementGeneral(
+          !estGradeHorsCorps(
             personne.grade
           )
       )
@@ -419,6 +439,9 @@ function getOrganigramme(
 
     jarl:
       jarl,
+
+    huscarls:
+      huscarls,
 
     hird:
       hird,
@@ -812,6 +835,47 @@ function estGradeCommandementGeneral(
     )
     ||
     estGradeMajor(
+      grade
+    )
+  );
+}
+
+
+/*
+  Grade rendu à part, accepté seul ou avec son titre complet
+  (« Huscarl de Blancherive »).
+*/
+function estGradeHuscarl(
+  grade
+) {
+
+  const value =
+    normaliserOrganigramme(
+      grade
+    );
+
+
+  return (
+    value === "huscarl"
+    ||
+    value.startsWith(
+      "huscarl "
+    )
+  );
+}
+
+
+// Grades rendus hors des corps et du Hird : la chaîne centrale et le Huscarl.
+function estGradeHorsCorps(
+  grade
+) {
+
+  return (
+    estGradeCommandementGeneral(
+      grade
+    )
+    ||
+    estGradeHuscarl(
       grade
     )
   );

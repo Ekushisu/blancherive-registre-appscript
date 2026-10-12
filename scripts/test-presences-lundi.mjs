@@ -193,7 +193,8 @@ assert.deepEqual(totaux.map(t => t.lundi), [L39, L38, 'S37'], 'Totaux par lundi 
 context.lireEffectifsActifsPourPresences = () => [
   { prenom: 'Corrompu', nom: '', grade: 'Garde', corps: 'Cité' },
   { prenom: 'Sain', nom: '', grade: 'Garde', corps: 'Cité' },
-  { prenom: 'Nouveau', nom: '', grade: 'Garde', corps: 'Rivebois' }
+  { prenom: 'Nouveau', nom: '', grade: 'Garde', corps: 'Rivebois' },
+  { prenom: 'Souverain', nom: '', grade: ' JARL ', corps: 'État-Major' }
 ];
 context.genererPresencesSemaineCourante();
 
@@ -203,6 +204,7 @@ assert.ok(colonneA.every(v => typeof v === 'string'), `Aucune Date ni nombre ré
 assert.deepEqual(colonneA, ['S37', L38, L39, L39, L39, L39], 'Valeur inconnue en tête, puis semaine passée, puis semaine courante');
 assert.deepEqual(parNom('Parti').slice(5, 12), [false, false, false, true, false, false, false], 'Sorti du service actif : sa ligne pointée est conservée');
 assert.equal(parNom('Fantome'), undefined, 'Sorti sans pointage : ligne retirée');
+assert.equal(parNom('Souverain'), undefined, 'Le Jarl n’a pas de ligne de Présences, quel que soit son corps');
 assert.deepEqual(presence.rows.slice(1).filter(r => r[0] === L39).map(r => r[3]), ['Corrompu', 'Parti', 'Sain', 'Nouveau'], 'Semaine courante : corps puis nom');
 assert.equal(presence.rows[0][0], 'Lundi', 'En-tête renommé');
 
@@ -312,6 +314,37 @@ sheets.set('Présences', new Sheet('Présences', [entete(), ligne(L39, 'Cité', 
 const propre = sheets.get('Présences');
 assert.equal(context.migrerPresencesVersLundis().corrigees, 0);
 assert.deepEqual(propre.writes.map(w => [w.row, w.col]), [[1, 1]], 'Colonne saine : seul l\'en-tête est réécrit');
+
+// --- Renommage d'un membre : toutes ses semaines suivent ----------------------
+
+const avecNom = (semaine, prenom, nom, jours) => { const l = ligne(semaine, 'Cité', prenom, jours); l[4] = nom; return l; };
+const historique = new Sheet('Présences', [entete(),
+  avecNom(L39, 'Alice', 'Nord', [true, ...Array(6).fill(false)]),
+  avecNom(L38, ' alice ', 'NORD', Array(7).fill(true)),
+  avecNom('S37', 'Alice', 'Nord', Array(7).fill(false)),
+  avecNom(L39, 'Bob', 'Sud', Array(7).fill(false)),
+  avecNom(L38, 'Alice', 'Sud', Array(7).fill(false))
+]);
+historique.rows[1][15] = 'Colonne technique';
+sheets.set('Présences', historique);
+const ancien = { prenom: 'Alice', nom: 'Nord' };
+assert.equal(context.renommerMembrePresences_(ss, ancien, { prenom: 'Alicia', nom: 'Nord' }), 3,
+  'Semaine courante, semaines passées et ligne non reconnue ; casse et espaces ignorés');
+assert.deepEqual(historique.rows.slice(1).map(r => `${r[3]} ${r[4]}`), ['Alicia Nord', 'Alicia Nord', 'Alicia Nord', 'Bob Sud', 'Alice Sud']);
+assert.deepEqual(historique.rows[2].slice(5, 12), Array(7).fill(true), 'Pointages intacts');
+assert.equal(historique.rows[1][15], 'Colonne technique', 'Rien hors des colonnes D:E');
+assert.ok(historique.writes.every(w => w.col === 4 && w.width === 2), 'Seules les colonnes D:E sont écrites, en un bloc');
+// Des lignes portent déjà le nouveau nom : refus, rien d'écrit.
+const ecrituresAvant = historique.writes.length;
+assert.throws(() => context.verifierRenommagePresences_(ss, { prenom: 'Alicia', nom: 'Nord' }, { prenom: 'bob', nom: 'sud' }), /portent déjà le nom « bob sud »/);
+assert.throws(() => context.renommerMembrePresences_(ss, { prenom: 'Alicia', nom: 'Nord' }, { prenom: 'Bob', nom: 'Sud' }), /Renommage annulé/);
+assert.equal(historique.writes.length, ecrituresAvant);
+assert.equal(context.renommerMembrePresences_(ss, { prenom: 'Personne', nom: '' }, { prenom: 'Quelqu’un', nom: '' }), 0);
+assert.equal(historique.writes.length, ecrituresAvant, 'Aucune ligne : aucune écriture');
+// Reprise : lignes déjà au nouveau nom, d'autres semaines que l'ancien, gardées telles quelles.
+historique.rows[1][3] = 'Alice'; historique.rows[1][4] = 'Nord';
+assert.equal(context.renommerMembrePresences_(ss, ancien, { prenom: 'Alicia', nom: 'Nord' }), 1);
+assert.deepEqual(historique.rows.slice(1).map(r => `${r[3]} ${r[4]}`), ['Alicia Nord', 'Alicia Nord', 'Alicia Nord', 'Bob Sud', 'Alice Sud']);
 
 // --- Libellés côté interface ------------------------------------------------
 

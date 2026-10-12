@@ -2,6 +2,77 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Renommage : correctif après essai du propriétaire (12 octobre 2026)
+
+- Essai en ligne : « Les données que vous avez saisies dans la cellule B2 ne
+  respectent pas les règles de validation », remonté ligne 858
+  (`getDataValidation`, premier vidage après les écritures). La fiche
+  réécrivait grade, corps, spécialité et statut même inchangés, et la colonne
+  Garde d'Amendes et de Prison était réécrite en entier ; une case hors de sa
+  liste de validation fait échouer tout le lot.
+- Correctif : seules les cases qui changent sont écrites (fiche, colonne
+  Garde), validation retirée puis remise sur une case Garde qui refuse ;
+  `SpreadsheetApp.flush()` après Amendes et Prison, avant la fiche. Renommage
+  relançable : lignes de Présences ou de registres déjà au nouveau nom
+  gardées, refus seulement si ancien et nouveau nom partagent une semaine de
+  Présences.
+- Le propriétaire retire la validation de données des feuilles (plus
+  d'édition à la main) : listes d'Effectifs lues dans `Données`
+  (`lireListeDonneesEffectifsWeb_`).
+- 34 suites vertes ; build. Aucun push ni déploiement.
+
+### Grade de Jarl verrouillé ; renommage d'un membre (12 octobre 2026)
+
+- Décisions du propriétaire : le Jarl est inscrit et ne change pas depuis
+  l'application ; renommer un membre doit garder son ancienneté dans les
+  Présences et rester une manœuvre délibérée.
+- **Jarl** : `verifierGradeJarlEffectifsWeb_` (`Effectifs.js`) refuse de donner
+  ou de retirer le grade, à l'ajout comme à la modification ; il remplace
+  `verifierJarlUniqueEffectifsWeb_`. Interface : grade absent des listes,
+  figé sur la fiche du Jarl.
+- **Renommage** : `modifierEffectif` accepte `nouveauPrenom` et `nouveauNom` ;
+  `preparerRenommageEffectifsWeb_` (`Effectifs.js`), puis
+  `verifierRenommagePresences_` et `renommerMembrePresences_` (`Presences.js`,
+  colonnes D:E, verrou de document) avant l'écriture de la fiche ; semaine
+  courante régénérée. Journal : changement de type `nom`
+  (`HistoriqueEffectifs.js`), affiché par le panneau des changements et le
+  Livret. Session Discord : empreinte du nom dans `DISCORD_ACCES`
+  (`entreeAccesDiscord_`, `empreinteNomDiscord_`), ancien format accepté
+  jusqu'au premier recalcul (`entreeAccesDiscordSansNom_`, `verifyAuthToken`).
+  Interface : bouton « Modifier le nom… », avertissement, confirmation.
+- Amendes et Prison (décision du propriétaire, le même jour) : colonne Garde
+  renommée par `renommerGardeRegistres_` (`Amendes.js`), contrôlée avec les
+  Présences avant toute écriture, écrite après elles ; contrevenants et
+  détenus intacts.
+- Vérifications : huit suites étendues, 34 vertes ; build ; aperçus
+  `effectifs-renommage` et `effectifs-ajout`. Aucun push ni déploiement.
+
+### Jarl et Huscarl aux Effectifs ; Discord dès l'ajout (12 octobre 2026)
+
+- Décisions du propriétaire : le Jarl entre aux Effectifs, au grade « Jarl »
+  placé au-dessus du Maréchal, tenu par une seule personne, accès OFFICIER,
+  hors Présences et sans solde. Le Huscarl de Blancherive est un grade à part,
+  directement sous le Jarl, accès OFFICIER, pointé et soldé. Tous deux
+  reçoivent le rôle Discord « Officiers de Blancherive ».
+- **Serveur** : `estExcluDesPresences_(corps, grade)` (`Presences.js`)
+  remplace le seul test de corps dans la génération et la lecture des
+  Présences, la Paye, le barème (`tarifSoldeGrade_`), le tableau de bord
+  (`presenceDashboardIsExcludedCorps_` supprimée) et le Livret ;
+  `estGradeHuscarl` et `estGradeHorsCorps` (`Organigramme.js`), liste
+  `huscarls` de `getOrganigramme` ; chaîne de commandement du Livret avec le
+  Jarl à part (`jarl`) ; `verifierJarlUniqueEffectifsWeb_` à l'ajout et à la
+  modification (remplacée le même jour, voir ci-dessus) ; `ajouterEffectif` accepte `discordId`, écrit par
+  `ecrireLienDiscordEffectif_` avant la fiche.
+- **Interface** : Huscarl dans la branche « Autorité directe du Jarl » de
+  l'organigramme ; description de grade ; champ Compte Discord et grade sans
+  valeur par défaut dans « Nouveau membre » ; Livret (solde du Jarl, Jarl en
+  tête de chaîne).
+- **Reste au propriétaire** : grades `Jarl` et `Huscarl` en tête de
+  `Données!A` ; ligne `Huscarl` dans `SoldesGrades` ; fiches du Jarl et du
+  Huscarl. Aucun changement de code n'est nécessaire côté Discord.
+- Vérifications : sept suites étendues, 34 vertes ; build ; aperçus
+  `organigramme` et `effectifs-ajout`. Aucun push ni déploiement.
+
 ### Sessions plus longues (11 octobre 2026)
 
 - Demande du propriétaire : des sessions de plus de 24 heures. Code commun :

@@ -1,4 +1,4 @@
-// Journal partagé des arrivées, changements de grade et mutations.
+// Journal partagé des arrivées, changements de nom, de grade et mutations.
 // Structure documentée dans docs/DATA_MODEL.md.
 const HISTORIQUE_EFFECTIFS_HEADERS = [
   "ID événement", "Date ISO", "ID membre", "Type", "Nom",
@@ -77,6 +77,9 @@ function synchroniserHistoriqueEffectifsSansVerrou_(ss, source) {
     const changes = [];
     if (!initial && !old) changes.push({ type: "arrivee", avant: "", apres: `${prenom} ${nom}`.trim() });
     if (!initial && old) {
+      // Renommage : même ID membre, l'ancien nom reste au journal.
+      const ancienNom = `${old.prenom || ""} ${old.nom || ""}`.trim();
+      if (ancienNom !== `${prenom} ${nom}`.trim()) changes.push({ type: "nom", avant: ancienNom, apres: `${prenom} ${nom}`.trim() });
       ["grade", "corps"].forEach(type => {
         if (old[type] !== state[type]) changes.push({ type, avant: old[type], apres: state[type] });
       });

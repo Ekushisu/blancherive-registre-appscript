@@ -106,6 +106,9 @@ const detail = evenement => {
 const promotion = [{ type: 'grade', avant: 'Garde', apres: 'Caporal-Chef' }];
 assert.match(detail({ ...event, id: 'alias-1', corps: 'Inquisition', changes: promotion }), /Grade : Inquisiteur → Traqueur/);
 assert.match(detail({ ...event, id: 'alias-2', corps: 'Rivebois', changes: promotion }), /Grade : Garde → Caporal-Chef/);
+// Renommage : les deux noms, tels quels, jamais pris pour un grade.
+assert.match(detail({ ...event, id: 'nom-1', corps: 'Inquisition', changes: [{ type: 'nom', avant: 'Ivar Œil', apres: 'Ivar Œil-Sombre' }] }),
+  /Renommé : Ivar Œil → Ivar Œil-Sombre/);
 assert.match(
   detail({ ...event, id: 'alias-3', corps: 'Inquisition', changes: [...promotion, { type: 'corps', avant: 'Rivebois', apres: 'Inquisition' }] }),
   /Grade : Garde → Traqueur · Mutation : Rivebois → Garde inquisitoriale/,

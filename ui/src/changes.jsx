@@ -5,7 +5,7 @@ import { libelleCorps, libelleGrade } from "./corps.js";
 const { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
 const ChangesContext = createContext({ events: [], seen: {}, mark: () => {}, aliasGrades: null });
 let sessionSeen = {};
-const labels = { arrivee: "Arrivée", grade: "Grade", corps: "Mutation" };
+const labels = { arrivee: "Arrivée", nom: "Nom", grade: "Grade", corps: "Mutation" };
 
 /*
   Un grade s'affiche selon le corps du membre de part et d'autre du
@@ -14,6 +14,7 @@ const labels = { arrivee: "Arrivée", grade: "Grade", corps: "Mutation" };
 */
 function describe(change, event, aliasGrades) {
   if (change.type === "arrivee") return "A rejoint les effectifs";
+  if (change.type === "nom") return `Renommé : ${change.avant} → ${change.apres}`;
   const mutation = event.changes.find(c => c.type === "corps");
   const nom = change.type === "corps" ? libelleCorps
     : (valeur, cote) => libelleGrade(valeur, mutation ? mutation[cote] : event.corps, aliasGrades);

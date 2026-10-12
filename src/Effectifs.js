@@ -405,6 +405,7 @@ function ajouterEffectifInterne_(token, data) {
   const specialite = nettoyerEffectifsWeb_(data.specialite);
   const status = nettoyerEffectifsWeb_(data.status);
   const assermente = data.assermente === true;
+  const discordId = nettoyerEffectifsWeb_(data.discordId);
 
   if (!prenom && !nom) {
     throw new Error("Le prénom ou le nom doit être renseigné.");
@@ -421,6 +422,8 @@ function ajouterEffectifInterne_(token, data) {
   if (!status) {
     throw new Error("Le statut est obligatoire.");
   }
+
+  verifierGradeJarlEffectifsWeb_(grade, "");
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName(EFFECTIFS_WEB_SHEET_NAME);
@@ -545,6 +548,14 @@ function ajouterEffectifInterne_(token, data) {
     jamais du compte Discord d'un autre.
   */
   effacerLienDiscordLigne_(sheet, targetRow);
+
+  /*
+    Compte Discord facultatif, écrit avant la fiche : un compte
+    déjà rattaché à un autre membre n'enregistre personne.
+  */
+  if (discordId) {
+    ecrireLienDiscordEffectif_(sheet, schema, targetRow, discordId);
+  }
 
   sheet.getRange(targetRow, schema.prenom + 1).setValue(prenom);
   sheet.getRange(targetRow, schema.nom + 1).setValue(nom);
@@ -715,6 +726,12 @@ function modifierEffectifInterne_(token, data) {
       .getDisplayValue()
   );
 
+  const currentSpecialite = nettoyerEffectifsWeb_(
+    sheet
+      .getRange(row, schema.specialite + 1)
+      .getDisplayValue()
+  );
+
   const expectedPrenom =
     nettoyerEffectifsWeb_(data.expectedPrenom);
 
@@ -768,6 +785,25 @@ function modifierEffectifInterne_(token, data) {
     "statut"
   );
 
+  verifierGradeJarlEffectifsWeb_(grade, currentGrade);
+
+  /*
+    Renommage, envoyé seulement quand l'officier l'a ouvert sur la
+    fiche. Contrôlé ici, Présences comprises, avant toute écriture.
+  */
+  const renommage = preparerRenommageEffectifsWeb_(
+    sheet,
+    schema,
+    row,
+    data,
+    currentPrenom,
+    currentNom
+  );
+
+  if (renommage) {
+    verifierRenommagePresences_(ss, renommage.ancien, renommage.nouveau);
+  }
+
   /*
     Compte Discord : champ facultatif, envoyé seulement s'il a
     changé ; chaîne vide, le lien est retiré. Écrit avant le
@@ -782,21 +818,40 @@ function modifierEffectifInterne_(token, data) {
     );
   }
 
-  sheet
-    .getRange(row, schema.grade + 1)
-    .setValue(grade);
+  /*
+    Les Présences d'abord : si leur verrou ne se libère pas, la fiche
+    garde son nom et rien ne diverge. Puis les amendes et incarcérations
+    qu'il a dressées (Amendes.js), et la fiche. Le journal des Effectifs
+    note le changement de nom à la synchronisation qui suit
+    (HistoriqueEffectifs.js).
+  */
+  if (renommage) {
+    renommerMembrePresences_(ss, renommage.ancien, renommage.nouveau);
+    renommerGardeRegistres_(ss, renommage.gardeAncien, renommage.gardeNouveau);
 
-  sheet
-    .getRange(row, schema.corps + 1)
-    .setValue(corps);
+    sheet
+      .getRange(row, schema.prenom + 1)
+      .setValue(renommage.nouveau.prenom);
 
-  sheet
-    .getRange(row, schema.specialite + 1)
-    .setValue(specialite);
+    sheet
+      .getRange(row, schema.nom + 1)
+      .setValue(renommage.nouveau.nom);
+  }
 
-  sheet
-    .getRange(row, schema.status + 1)
-    .setValue(status);
+  /*
+    Seules les cases qui changent sont écrites : une case inchangée
+    n'a pas à repasser une validation de données de la feuille.
+  */
+  [
+    [schema.grade, grade, currentGrade],
+    [schema.corps, corps, currentCorps],
+    [schema.specialite, specialite, currentSpecialite],
+    [schema.status, status, currentStatus]
+  ].forEach(([colonne, valeur, actuelle]) => {
+    if (valeur !== actuelle) {
+      sheet.getRange(row, colonne + 1).setValue(valeur);
+    }
+  });
 
   const assermenteCell = sheet.getRange(
     row,
@@ -819,13 +874,14 @@ function modifierEffectifInterne_(token, data) {
   SpreadsheetApp.flush();
 
   /*
-    Grade, corps et statut figurent dans la ligne de Présences de
-    la semaine courante : chacun de ces changements la régénère,
+    Grade, corps, statut et nom figurent dans la ligne de Présences
+    de la semaine courante : chacun de ces changements la régénère,
     pointages conservés. Un membre sorti du service actif garde sa
     ligne s'il a des jours pointés (voir Presences.js). Spécialité
     et assermentation ne touchent pas aux Présences.
   */
   if (
+    renommage ||
     currentStatus !== status ||
     currentGrade !== grade ||
     currentCorps !== corps
@@ -910,6 +966,49 @@ function lireSchemaEffectifsWeb_(sheet) {
 // OPTIONS - GRADE / CORPS / SPÉCIALITÉ / STATUS
 // ============================================================
 
+/*
+  Listes de référence de `Données`, lues directement : les grades en A, dans
+  l'ordre hiérarchique, les autres par l'en-tête de leur colonne. La
+  validation de données d'Effectifs n'est plus nécessaire à l'application
+  (décision du propriétaire, 12 octobre 2026 : la feuille ne s'édite plus à
+  la main) ; si elle reste, ses valeurs s'ajoutent à celles-ci.
+*/
+const EFFECTIFS_WEB_ENTETES_DONNEES = {
+  corps: ["corps"],
+  specialite: ["specialite", "specialites"],
+  status: ["status", "statut", "statuts"]
+};
+
+function lireListeDonneesEffectifsWeb_(ss, type) {
+  const donnees = ss.getSheetByName(EFFECTIFS_WEB_DONNEES_SHEET_NAME);
+  if (!donnees || donnees.getLastRow() < 2) return [];
+
+  const cle = normaliserEffectifsWeb_(type);
+  let colonne = 0;
+
+  if (cle !== "grade") {
+    const famille = cle.startsWith("specialit") ? "specialite" : cle === "statut" ? "status" : cle;
+    const entetes = EFFECTIFS_WEB_ENTETES_DONNEES[famille];
+    if (!entetes) return [];
+
+    colonne = donnees
+      .getRange(1, 1, 1, donnees.getLastColumn())
+      .getDisplayValues()[0]
+      .map(normaliserEffectifsWeb_)
+      .findIndex(entete => entetes.includes(entete));
+
+    if (colonne < 0) return [];
+  }
+
+  return donnees
+    .getRange(2, colonne + 1, donnees.getLastRow() - 1, 1)
+    .getDisplayValues()
+    .flat()
+    .map(nettoyerEffectifsWeb_)
+    .filter(Boolean);
+}
+
+
 function lireOptionsColonneEffectifsWeb_(
   ss,
   sheet,
@@ -952,30 +1051,8 @@ function lireOptionsColonneEffectifsWeb_(
     }
   }
 
-  if (type === "grade") {
-    const donnees = ss.getSheetByName(
-      EFFECTIFS_WEB_DONNEES_SHEET_NAME
-    );
-
-    if (
-      donnees &&
-      donnees.getLastRow() >= 2
-    ) {
-      const grades = donnees
-        .getRange(
-          2,
-          1,
-          donnees.getLastRow() - 1,
-          1
-        )
-        .getDisplayValues()
-        .flat();
-
-      for (const grade of grades) {
-        const cleaned = nettoyerEffectifsWeb_(grade);
-        if (cleaned) result.push(cleaned);
-      }
-    }
+  for (const valeur of lireListeDonneesEffectifsWeb_(ss, type)) {
+    result.push(valeur);
   }
 
   if (sheet.getLastRow() >= 2) {
@@ -1263,6 +1340,71 @@ function estReserveEffectifsWeb_(status) {
       )
     )
   );
+}
+
+
+/*
+  Le grade de Jarl ne se donne ni ne se retire depuis le registre
+  (décision du propriétaire, 12 octobre 2026) : le Jarl est inscrit et
+  changé à la main dans la feuille Effectifs. La fiche du Jarl reste
+  modifiable pour le reste. `actuel` : grade de la fiche, vide à l'ajout.
+*/
+function verifierGradeJarlEffectifsWeb_(grade, actuel) {
+  if (estGradeJarl(grade) !== estGradeJarl(actuel)) {
+    throw new Error(
+      "Le grade de Jarl ne se donne ni ne se retire depuis le registre : il se change dans la feuille Effectifs."
+    );
+  }
+}
+
+
+/*
+  Nouveau nom demandé par le formulaire de modification, ou null. Mêmes
+  règles qu'à l'ajout : un prénom ou un nom, et aucun autre membre du
+  même nom, sans casse ni accents.
+*/
+function preparerRenommageEffectifsWeb_(sheet, schema, row, data, currentPrenom, currentNom) {
+  if (data.nouveauPrenom === undefined && data.nouveauNom === undefined) {
+    return null;
+  }
+
+  const prenom = nettoyerEffectifsWeb_(data.nouveauPrenom);
+  const nom = nettoyerEffectifsWeb_(data.nouveauNom);
+
+  if (!prenom && !nom) {
+    throw new Error("Le prénom ou le nom doit être renseigné.");
+  }
+
+  if (prenom === currentPrenom && nom === currentNom) {
+    return null;
+  }
+
+  const cle = clePersonneEffectifsWeb_(prenom, nom);
+
+  if (cle !== clePersonneEffectifsWeb_(currentPrenom, currentNom)) {
+    const valeurs = sheet
+      .getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn())
+      .getDisplayValues();
+
+    const doublon = valeurs.some((ligne, index) =>
+      index + 2 !== row &&
+      clePersonneEffectifsWeb_(ligne[schema.prenom], ligne[schema.nom]) === cle
+    );
+
+    if (doublon) {
+      throw new Error(
+        `Un membre nommé "${`${prenom} ${nom}`.trim()}" existe déjà dans Effectifs.`
+      );
+    }
+  }
+
+  return {
+    ancien: { prenom: currentPrenom, nom: currentNom },
+    nouveau: { prenom, nom },
+    // Colonne Garde d'Amendes et de Prison, écrite comme `Données!O`.
+    gardeAncien: `${currentPrenom} ${currentNom}`,
+    gardeNouveau: `${prenom} ${nom}`
+  };
 }
 
 

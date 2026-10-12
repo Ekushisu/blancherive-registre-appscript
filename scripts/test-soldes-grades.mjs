@@ -123,6 +123,8 @@ const rates = context.lireBaremeSoldesGrades_(ss);
 assert.equal(context.tarifSoldeGrade_(rates, ' COMMANDANT ', 'Cité'), 100);
 assert.equal(context.tarifSoldeGrade_(rates, 'Grade inconnu', 'Cité'), 50);
 assert.equal(context.tarifSoldeGrade_(rates, 'Commander', 'Hird'), 0);
+assert.equal(context.tarifSoldeGrade_(rates, ' jarl ', 'État-Major'), 0, 'Le Jarl n’est pas soldé');
+assert.equal(context.tarifSoldeGrade_(rates, 'Huscarl', 'Cité'), 50, 'Le Huscarl est soldé au barème');
 assert.equal(context.nombreFormuleSolde_(25.5), '(255*10^-1)', 'Tarif décimal indépendant de la langue du classeur');
 
 tariff.rows.find(r => r[0] === 'Commander')[1] = 120;

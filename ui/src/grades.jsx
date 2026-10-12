@@ -23,6 +23,10 @@ const cleGrade = value =>
 */
 const DESCRIPTIONS = {
   jarl: "Moyenne noblesse. Détient le pouvoir judiciaire de la châtellerie.",
+  huscarl:
+    "Garde personnel du Jarl, lié à lui par serment. Grade à part, sous son autorité directe.",
+  huscarldeblancherive:
+    "Garde personnel du Jarl, lié à lui par serment. Grade à part, sous son autorité directe.",
   marechal:
     "Petite noblesse, siège à la haute cour de la châtellerie. Orchestre les affaires militaires et celles de la garde.",
   commander:

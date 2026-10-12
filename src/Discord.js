@@ -585,14 +585,15 @@ function effacerLiensDiscordOrphelins_(sheet, headers, valeurs, schema) {
 const DISCORD_SEUIL_OFFICIER = "Sergent-Chef";
 
 /*
-  Table d'accès, propriété du script : identifiant Discord → « O|xxxxxxxx » ou
-  « G|xxxxxxxx » (initiale du rôle, huit premiers caractères de l'ID membre).
-  `verifyAuthToken` la relit à chaque appel d'une session Discord : une fiche
-  rétrogradée, passée en réserve, partie ou déliée ferme sa session à l'appel
-  suivant. Recalculée à chaque synchronisation de l'historique des Effectifs
-  (pages, modifications par l'application, déclencheur des éditions à la
-  main) et à chaque connexion. Environ 250 comptes tiennent dans une
-  propriété de 9 Ko.
+  Table d'accès, propriété du script : identifiant Discord → « O|xxxxxxxx|nnnn »
+  ou « G|xxxxxxxx|nnnn » (initiale du rôle, huit premiers caractères de l'ID
+  membre, empreinte du nom de la fiche). `verifyAuthToken` la relit à chaque
+  appel d'une session Discord : une fiche rétrogradée, passée en réserve,
+  partie, déliée ou renommée ferme sa session à l'appel suivant ; la
+  reconnexion reprend le nouveau nom, que le jeton porte. Recalculée à chaque
+  synchronisation de l'historique des Effectifs (pages, modifications par
+  l'application, déclencheur des éditions à la main) et à chaque connexion.
+  Environ 220 comptes tiennent dans une propriété de 9 Ko.
 */
 const DISCORD_PROPRIETE_ACCES = "DISCORD_ACCES";
 
@@ -763,8 +764,29 @@ function indexerAccesDiscord_(ss, sheet, schema, values, idIndex, headers) {
 }
 
 
-function entreeAccesDiscord_(role, membre) {
+function entreeAccesDiscord_(role, membre, nom) {
+  return String(role || "").charAt(0) + "|" + String(membre || "").slice(0, 8) +
+    "|" + empreinteNomDiscord_(nom);
+}
+
+
+/*
+  Entrée écrite avant l'empreinte du nom (12 octobre 2026). Une table de cet
+  âge reste valable jusqu'à son premier recalcul, pour ne fermer aucune
+  session au déploiement ; une table recalculée ne la contient plus.
+*/
+function entreeAccesDiscordSansNom_(role, membre) {
   return String(role || "").charAt(0) + "|" + String(membre || "").slice(0, 8);
+}
+
+
+// Quatre caractères (FNV-1a) : de quoi voir qu'un nom a changé, sans le stocker.
+function empreinteNomDiscord_(nom) {
+  let empreinte = 0x811c9dc5;
+  for (const caractere of String(nom || "").trim()) {
+    empreinte = Math.imul(empreinte ^ caractere.codePointAt(0), 0x01000193) >>> 0;
+  }
+  return (empreinte % 1679616).toString(36).padStart(4, "0");
 }
 
 
@@ -790,7 +812,7 @@ function mettreAJourAccesDiscord_(ss, sheet, schema, values, idIndex, headers) {
 
   Array.from(index.keys()).sort().forEach(id => {
     const acces = index.get(id);
-    if (acces.role && acces.membre) table[id] = entreeAccesDiscord_(acces.role, acces.membre);
+    if (acces.role && acces.membre) table[id] = entreeAccesDiscord_(acces.role, acces.membre, acces.nom);
   });
 
   const texte = JSON.stringify(table);
@@ -837,7 +859,7 @@ function accesCompteDiscord_(compte) {
   }
 
   const table = lireTableAccesDiscord_(PropertiesService.getScriptProperties());
-  if (table[compte.id] !== entreeAccesDiscord_(acces.role, acces.membre)) {
+  if (table[compte.id] !== entreeAccesDiscord_(acces.role, acces.membre, acces.nom)) {
     throw new Error("Table d'accès Discord indisponible : utiliser le code d'accès et prévenir le propriétaire.");
   }
 

@@ -46,6 +46,8 @@ assert.equal(L.libelleEvenement({ type: 'grade', avant: 'Caporal', apres: 'Serge
 assert.equal(L.libelleEvenement({ type: 'corps', avant: 'Cité de Blancherive', apres: 'Inquisition' }), 'Affecté à Garde inquisitoriale, venant de Cité de Blancherive',
   'Nom affiché du corps');
 assert.equal(L.libelleEvenement({ type: 'arrivee', avant: '', apres: 'Eydis' }), 'Inscription au registre de la Garde');
+assert.equal(L.libelleEvenement({ type: 'nom', avant: 'Eydis Silencieuse', apres: 'Eydis la Silencieuse' }),
+  'Nom changé en Eydis la Silencieuse, auparavant Eydis Silencieuse');
 assert.equal(L.depuisJours(0), 'aujourd’hui');
 assert.equal(L.depuisJours(1), 'hier');
 assert.equal(L.depuisJours(4), 'il y a 4 jours');
@@ -110,6 +112,15 @@ page = text(tree);
 assert.match(page, /Le Hird du Jarl n’est pas soldé par le registre/);
 assert.doesNotMatch(page, /jours de service/);
 assert.ok(!nodes(tree).some(n => n.props?.role === 'status'));
+
+// Jarl : non soldé, quel que soit son corps ; Huscarl : le Jarl pour seul supérieur.
+await rendre({ ...base, fiche: { ...base.fiche, grade: 'Jarl', corps: 'État-Major' }, service: { ...base.service, exclu: true, inactif: false } });
+assert.match(text(tree), /Le Jarl n’est pas soldé par le registre/);
+await rendre({ ...base, fiche: { ...base.fiche, grade: 'Huscarl', corps: 'Cité de Blancherive' },
+  commandement: { corps: [], etatMajor: [], jarl: [{ nomComplet: 'Siddgeir Vent-Doré', grade: 'Jarl', corps: 'État-Major' }] } });
+page = text(tree);
+assert.match(page, /Aucun officier au-dessus de vous dans votre corps/);
+assert.match(page, /Siddgeir Vent-Doré/, 'Le Jarl dans la chaîne de commandement');
 
 // Erreur du serveur : affichée telle quelle.
 await rendre(new Error('Le livret de service n’existe que pour une connexion par Discord.'));

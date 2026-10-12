@@ -63,7 +63,7 @@ function lireBaremeSoldesGrades_(ss) {
 }
 
 function tarifSoldeGrade_(rates, grade, corps) {
-  if (estCorpsExcluDesPresences_(corps)) return 0;
+  if (estExcluDesPresences_(corps, grade)) return 0;
   const key = cleGradeSolde_(grade);
   return rates.has(key) ? rates.get(key) : rates.get("par defaut");
 }

@@ -97,17 +97,20 @@ assert.equal(journal.rows.length, 5, 'Un tri de lignes complètes ne crée aucun
 
 roster.rows[2][0] = 'Alicia';
 result = sync();
+// Un renommage garde l'ID membre et laisse l'ancien nom au journal.
 assert.equal(result.events[0].memberId, aliceId);
 assert.equal(result.events[0].nom, 'Alicia Nord');
-assert.equal(result.events[0].id, eventId, 'Un renommage conserve identité et lecture');
+assert.deepEqual(JSON.parse(JSON.stringify(result.events[0].changes)), [{ type: 'nom', avant: 'Alice Nord', apres: 'Alicia Nord' }]);
+assert.equal(result.events[1].id, eventId, 'Un renommage conserve identité et lecture des événements passés');
+assert.equal(result.events[1].nom, 'Alicia Nord');
 roster.rows.push(['Claire', '', 'Recrue', 'Rivebois', 'Radié']);
 result = sync();
 assert.equal(result.events[0].changes[0].type, 'arrivee');
-assert.equal(context.historiqueEffectifsPourRole_(result, 'GARDE').events.length, 1);
-assert.equal(context.historiqueEffectifsPourRole_(result, 'OFFICIER').events.length, 2);
+assert.equal(context.historiqueEffectifsPourRole_(result, 'GARDE').events.length, 2);
+assert.equal(context.historiqueEffectifsPourRole_(result, 'OFFICIER').events.length, 3);
 roster.rows[3][4] = 'Réserve';
 result = sync();
-assert.equal(context.historiqueEffectifsPourRole_(result, 'GARDE').events.length, 2);
+assert.equal(context.historiqueEffectifsPourRole_(result, 'GARDE').events.length, 3);
 
 roster.rows.push(['Double', '', 'Garde', 'Rivebois', 'En service actif', aliceId]);
 result = sync();
@@ -121,7 +124,7 @@ result = sync();
 assert.equal(roster.rows[4][5], '', 'Une ligne vidée ne réutilise pas son ancien ID');
 assert.equal(roster.rows[4][6], '', 'Une ligne vidée perd son compte Discord');
 assert.equal(roster.rows[1][6], '223456789012345678', 'Une ligne nommée garde son compte Discord');
-assert.equal(result.events.length, 2);
+assert.equal(result.events.length, 3, 'Changement, renommage d’Alice et arrivée de Claire');
 time += 15 * 86400000;
 assert.equal(sync().events.length, 0, 'Expiration des badges après 14 jours');
 assert.ok(journal.rows.length > 5, 'Historique conservé');

@@ -15,8 +15,8 @@ vm.runInContext(bundle.outputFiles[0].text,ctx);
 const {descriptionGrade,GradeDescription,GradeInfo}=ctx.module.exports;
 const nodes=node=>Array.isArray(node)?node.flatMap(nodes):node&&typeof node==='object'?[node,...nodes(node.props?.children)]:[];
 
-// Les quinze grades de la doctrine ont un texte.
-for(const grade of ['Jarl','Maréchal','Commander','Major','Capitaine','Lieutenant-Chef',
+// Les grades de la doctrine ont un texte.
+for(const grade of ['Jarl','Huscarl','Huscarl de Blancherive','Maréchal','Commander','Major','Capitaine','Lieutenant-Chef',
   'Lieutenant','Sergent-Chef','Sergent','Caporal-Chef','Caporal','Garde','Cadet','Recrue']){
   assert.ok(descriptionGrade(grade),`${grade} doit avoir une description`);
 }

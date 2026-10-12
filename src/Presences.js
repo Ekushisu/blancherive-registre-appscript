@@ -35,6 +35,10 @@ const PRESENCES_EFFECTIFS_SHEET_NAME =
 const PRESENCE_EXCLUDED_CORPS =
   "Hird du Jarl";
 
+// Le Jarl n'est ni pointé ni soldé, quel que soit son corps.
+const PRESENCE_EXCLUDED_GRADE =
+  "Jarl";
+
 const PRESENCE_TIMEZONE =
   "Europe/Stockholm";
 
@@ -100,8 +104,9 @@ function genererPresencesSemaineCourante() {
       )
         .filter(
           garde =>
-            !estCorpsExcluDesPresences_(
-              garde.corps
+            !estExcluDesPresences_(
+              garde.corps,
+              garde.grade
             )
         );
 
@@ -552,6 +557,11 @@ function lireEffectifsActifsPourPresences(
             row[corpsIndex] || ""
           ).trim();
 
+        const grade =
+          String(
+            row[gradeIndex] || ""
+          ).trim();
+
 
         return (
           (
@@ -563,8 +573,9 @@ function lireEffectifsActifsPourPresences(
           status ===
             PRESENCE_ACTIVE_STATUS
           &&
-          !estCorpsExcluDesPresences_(
-            corps
+          !estExcluDesPresences_(
+            corps,
+            grade
           )
         );
       }
@@ -723,6 +734,25 @@ function estCorpsExcluDesPresences_(corps) {
   return valeur === corpsExclu || valeur === "hird";
 }
 
+function estGradeExcluDesPresences_(grade) {
+  const valeur = String(grade || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  return valeur === PRESENCE_EXCLUDED_GRADE.toLowerCase();
+}
+
+/*
+  Hors Présences et hors solde : le Hird du Jarl (par son corps) et le
+  Jarl (par son grade). Seule règle à appeler pour une fiche ou une
+  ligne de Présences.
+*/
+function estExcluDesPresences_(corps, grade) {
+  return estCorpsExcluDesPresences_(corps) || estGradeExcluDesPresences_(grade);
+}
+
 
 // ============================================================
 // CLÉ STABLE
@@ -753,6 +783,99 @@ function construireClePresence(
   ].join(
     "|"
   );
+}
+
+
+// ============================================================
+// RENOMMAGE D'UN MEMBRE
+//
+// Un membre renommé depuis les Effectifs garde son ancienneté :
+// toutes ses lignes de Présences, semaine courante comprise,
+// prennent le nouveau nom (colonnes D:E), sous le verrou de
+// document de la génération. Une ligne est au membre quand elle
+// porte son ancien prénom et son ancien nom, comparés comme la
+// clé de ligne (`construireClePresence`). Seuls les noms sont
+// réécrits ; aucun pointage n'est touché.
+//
+// Des lignes portent déjà le nouveau nom : refus si l'une d'elles
+// tombe la même semaine qu'une ligne de l'ancien nom, car ce sont
+// alors deux personnes. Sinon elles restent telles quelles, ce qui
+// permet de relancer un renommage interrompu.
+// ============================================================
+
+function lignesPresencesARenommer_(lignesAE, ancien, nouveau) {
+  const cle = (prenom, nom) => construireClePresence("", prenom, nom);
+  const cleAncien = cle(ancien.prenom, ancien.nom);
+  const cleNouveau = cle(nouveau.prenom, nouveau.nom);
+  const lignes = [];
+  const semainesAncien = new Set();
+  const semainesNouveau = new Set();
+
+  lignesAE.forEach((ligne, index) => {
+    const valeur = cle(ligne[3], ligne[4]);
+    const semaine = String(ligne[0] || "").trim();
+
+    if (valeur === cleAncien) {
+      lignes.push(index);
+      semainesAncien.add(semaine);
+    } else if (valeur === cleNouveau) {
+      semainesNouveau.add(semaine);
+    }
+  });
+
+  if ([...semainesAncien].some(semaine => semainesNouveau.has(semaine))) {
+    throw new Error(
+      `Des lignes de Présences portent déjà le nom « ${`${nouveau.prenom} ${nouveau.nom}`.trim()} » ` +
+      "les mêmes semaines que ce membre : ce sont deux personnes. Renommage annulé : corrigez d'abord la feuille Présences."
+    );
+  }
+
+  return lignes;
+}
+
+// Contrôle seul, avant toute écriture.
+function verifierRenommagePresences_(ss, ancien, nouveau) {
+  const sheet = ss.getSheetByName(PRESENCES_SHEET_NAME);
+  if (!sheet) return;
+
+  const lastRow = getLastPresenceRowWebApp(sheet);
+  if (lastRow < 2) return;
+
+  lignesPresencesARenommer_(
+    sheet.getRange(2, 1, lastRow - 1, 5).getValues(),
+    ancien,
+    nouveau
+  );
+}
+
+// Renvoie le nombre de lignes renommées.
+function renommerMembrePresences_(ss, ancien, nouveau) {
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(30000);
+
+  try {
+    const sheet = ss.getSheetByName(PRESENCES_SHEET_NAME);
+    if (!sheet) return 0;
+
+    const lastRow = getLastPresenceRowWebApp(sheet);
+    if (lastRow < 2) return 0;
+
+    const lignesAE = sheet.getRange(2, 1, lastRow - 1, 5).getValues();
+    const lignes = lignesPresencesARenommer_(lignesAE, ancien, nouveau);
+    if (!lignes.length) return 0;
+
+    const range = sheet.getRange(2, 4, lastRow - 1, 2);
+    const noms = lignesAE.map(ligne => [ligne[3], ligne[4]]);
+    lignes.forEach(index => {
+      noms[index] = [nouveau.prenom, nouveau.nom];
+    });
+
+    range.setValues(noms);
+    SpreadsheetApp.flush();
+    return lignes.length;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 
@@ -1564,8 +1687,9 @@ function getPresences(
     if (
       lundi === ""
       ||
-      estCorpsExcluDesPresences_(
-        displayValues[i][1]
+      estExcluDesPresences_(
+        displayValues[i][1],
+        displayValues[i][2]
       )
     ) {
 

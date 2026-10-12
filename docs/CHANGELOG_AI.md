@@ -1,5 +1,46 @@
 # Journal de passation IA
 
+## 2026-10-12 — Renommage : erreur de validation en ligne, correctif
+
+- Le propriétaire a essayé le renommage en ligne : erreur de validation de
+  données « cellule B2 ». Cause : écritures de cases inchangées (fiche,
+  colonne Garde entière) soumises aux validations « refuser » de la feuille.
+- Seules les cases qui changent sont écrites ; validation contournée puis
+  remise sur une case Garde ; renommage relançable après interruption.
+- Validation de données retirée des feuilles par le propriétaire : listes
+  d'Effectifs lues dans `Données`.
+- 34 suites vertes. Aucun push ni déploiement.
+
+## 2026-10-12 — Grade de Jarl verrouillé ; renommage d'un membre
+
+- Demande du propriétaire : ne plus pouvoir mettre ni retirer le grade de Jarl
+  depuis les formulaires ; renommer un membre derrière un bouton, en reportant
+  le nouveau nom sur toutes ses Présences pour garder son ancienneté.
+- Grade de Jarl refusé par le serveur dans les deux sens, retiré des listes.
+- Renommage : contrôles (nom vide, doublon Effectifs, lignes de Présences déjà
+  à ce nom), Présences D:E réécrites avant la fiche, journal « nom », Livret
+  et panneau des changements.
+- Trouvé en route : le jeton Discord porte le nom de la fiche et le
+  renouvellement le recopie ; un membre renommé aurait signé sous l'ancien nom.
+  Empreinte du nom dans `DISCORD_ACCES`, avec l'ancien format accepté
+  jusqu'au premier recalcul.
+- Puis, sur décision du propriétaire, colonne Garde d'Amendes et de Prison
+  renommée aussi (`renommerGardeRegistres_`), contrevenants et détenus
+  intacts.
+- 34 suites vertes ; aperçus `effectifs-renommage`. Aucun push ni déploiement.
+
+## 2026-10-12 — Jarl et Huscarl ; compte Discord à l'ajout
+
+- Demande du propriétaire : grade Jarl au-dessus du Maréchal, une seule
+  personne, OFFICIER, hors Présences et sans solde ; grade Huscarl à part sous
+  le Jarl, OFFICIER, aux Présences ; champ Discord dans le formulaire d'ajout.
+- Exclusion par grade du Jarl via `estExcluDesPresences_`, partout où le Hird
+  l'était par son corps. Huscarl dans l'organigramme et le Livret. Unicité du
+  Jarl côté serveur. `discordId` accepté par `ajouterEffectif`.
+- Grade par défaut retiré du formulaire d'ajout : il aurait été « Jarl ».
+- 34 suites vertes ; aperçus `organigramme` et `effectifs-ajout`. Aucun push
+  ni déploiement.
+
 ## 2026-10-11 — Sessions plus longues
 
 - Demande du propriétaire : sessions de plus de 24 heures. Code 3 jours,

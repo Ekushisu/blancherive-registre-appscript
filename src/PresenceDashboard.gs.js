@@ -90,7 +90,7 @@ function getPresenceOfficerDashboard(token) {
       continue;
     }
 
-    if (presenceDashboardIsExcludedCorps_(row[1])) {
+    if (estExcluDesPresences_(row[1], row[2])) {
       continue;
     }
 
@@ -474,7 +474,7 @@ function presenceDashboardReadActiveGuards_(
     if (
       (!prenom && !nom)
       ||
-      presenceDashboardIsExcludedCorps_(corps)
+      estExcluDesPresences_(corps, row[gradeIndex])
     ) {
       continue;
     }
@@ -495,11 +495,6 @@ function presenceDashboardReadActiveGuards_(
   }
 
   return guards;
-}
-
-function presenceDashboardIsExcludedCorps_(corps) {
-  const value = presenceDashboardNormalize_(corps);
-  return value === "hird du jarl" || value === "hird";
 }
 
 

@@ -132,10 +132,19 @@ assert.equal(role('En service actif', 'Commander', sansSeuil), 'GARDE', 'Seuil d
 configurer();
 let index = context.synchroniserHistoriqueEffectifs_().accesDiscord;
 const table = JSON.parse(proprietes.DISCORD_ACCES);
-assert.deepEqual(table, {
+const sansEmpreinte = t => Object.fromEntries(Object.entries(t).map(([k, v]) => [k, v.split('|').slice(0, 2).join('|')]));
+assert.deepEqual(sansEmpreinte(table), {
   [id(1)]: 'O|00000001', [id(2)]: 'O|00000002', [id(3)]: 'G|00000003',
   [id(4)]: 'O|00000004', [id(8)]: 'G|00000008'
 }, 'Seuls les liens valides ouvrant un accès ; Hird compris ; réserve, départ, faute, doublon et nombre exclus');
+// Troisième partie : empreinte du nom de la fiche, jamais le nom lui-même.
+for (const [compte, entree] of Object.entries(table)) {
+  assert.equal(entree.split('|')[2], context.empreinteNomDiscord_(index.get(compte).nom));
+  assert.ok(!entree.includes(index.get(compte).nom));
+}
+assert.match(context.empreinteNomDiscord_('Alice Nord'), /^[0-9a-z]{4}$/);
+assert.equal(context.empreinteNomDiscord_(' Alice Nord '), context.empreinteNomDiscord_('Alice Nord'));
+assert.notEqual(context.empreinteNomDiscord_('Alicia Nord'), context.empreinteNomDiscord_('Alice Nord'));
 assert.equal(index.get(id(5)).role, '');
 assert.equal(index.get(id(5)).statut, 'Réserve');
 assert.match(index.get(id(9)).anomalie, /Même compte Discord/);
@@ -263,6 +272,23 @@ effectifs.rows[12][6] = id(2); effectifs.rows[12][2] = 'Capitaine'; resynchronis
 assert.throws(() => context.verifyAuthToken(jeton), /accès au registre a changé/, 'Même compte, autre fiche');
 effectifs.rows[12][6] = ''; effectifs.rows[12][2] = 'Garde'; effectifs.rows[2][6] = id(2); resynchroniser();
 assert.equal(context.verifyAuthToken(jeton).role, 'OFFICIER');
+
+// Renommage : le jeton porte l'ancien nom, la session tombe ; la reconnexion prend le nouveau.
+const ancienPrenom = effectifs.rows[2][0];
+effectifs.rows[2][0] = 'Renommé'; resynchroniser();
+assert.throws(() => context.verifyAuthToken(jeton), /accès au registre a changé/, 'Fiche renommée');
+connexionReussie(2);
+assert.match(charge(context.ouvrirSessionDiscord(CODE)).nom, /^Renommé /);
+effectifs.rows[2][0] = ancienPrenom; resynchroniser();
+assert.equal(context.verifyAuthToken(jeton).role, 'OFFICIER');
+
+// Table écrite avant l'empreinte du nom : valable jusqu'à son premier recalcul.
+const tableRecente = proprietes.DISCORD_ACCES;
+proprietes.DISCORD_ACCES = JSON.stringify({ [id(2)]: 'O|00000002' });
+assert.equal(context.verifyAuthToken(jeton).role, 'OFFICIER', 'Aucune session fermée au déploiement');
+proprietes.DISCORD_ACCES = JSON.stringify({ [id(2)]: 'G|00000002' });
+assert.throws(() => context.verifyAuthToken(jeton), /accès au registre a changé/, 'L’ancien format contrôle encore le rôle');
+proprietes.DISCORD_ACCES = tableRecente;
 
 // Interrupteur coupé : sessions Discord refusées, sessions par code intactes.
 proprietes.PASSWORD_GARDE = 'garde';

@@ -13,11 +13,13 @@ Le code Web détecte les colonnes par en-tête et reconnaît notamment :
 - `Status` / `Statut`
 - `Assermenté`
 
-La colonne Corps d'`Effectifs` est validée par la liste des corps `Données!G2:G` ; la Web App ne propose et n'accepte que ces valeurs. Depuis le 7 octobre 2026, cette liste porte « Inquisition » en G10, affichée « Garde inquisitoriale » par l'application (voir BUSINESS_RULES, « Nom affiché d'un corps ») ; la feuille garde le libellé court.
+La colonne Corps d'`Effectifs` prend ses valeurs dans la liste des corps `Données!G2:G` ; la Web App ne propose et n'accepte que ces valeurs. Depuis le 12 octobre 2026, la feuille n'étant plus éditée à la main, le propriétaire retire la validation de données des feuilles : l'application lit les listes directement dans `Données` (`lireListeDonneesEffectifsWeb_` : grades en A, corps, spécialités et statuts par l'en-tête de leur colonne), et une validation restante ne fait qu'y ajouter ses valeurs. Les couleurs de grade viennent du fond et du texte des cellules de `Données!A`, jamais d'une validation. Depuis le 7 octobre 2026, cette liste porte « Inquisition » en G10, affichée « Garde inquisitoriale » par l'application (voir BUSINESS_RULES, « Nom affiché d'un corps ») ; la feuille garde le libellé court.
 
 `Données!A2:A` sert de référence pour :
 - l'ordre hiérarchique des grades ;
 - le style/couleur associé aux grades dans la Web App.
+
+Depuis le 12 octobre 2026 (décision du propriétaire), la liste commence par `Jarl` puis `Huscarl`, au-dessus de `Maréchal`. Leur rang les place au-dessus de Sergent-Chef (session OFFICIER par Discord) et de Lieutenant (rôle Discord « Officiers de Blancherive »). Le grade du Huscarl est reconnu écrit « Huscarl » ou « Huscarl de Blancherive » (`estGradeHuscarl`, `Organigramme.js`). Les lignes s'insèrent dans le bloc des grades et de leurs alias (A à C), sans décaler les listes des spécialités (E) et des corps (G).
 
 `Données!C`, en-tête « Alias Inquisition » (ajoutée par le propriétaire le 8 octobre 2026) : alias du grade de la même ligne pour les membres de l'Inquisition, vide quand le grade garde son nom. Colonne repérée par son en-tête, pas par sa position : toute colonne de `Données` (hors A) dont l'en-tête est « Alias <corps> » est lue comme les alias de ce corps, le corps écrit comme dans la liste `Données!G`. Lecture seule, par `lireAliasGrades_` (`AliasGrades.js`) ; l'application n'y écrit jamais, et ne déplace ni ne renomme cet en-tête. Affichage seulement : voir BUSINESS_RULES, « Grade affiché selon le corps ».
 
@@ -102,7 +104,7 @@ rôles placés au-dessus du bot : ignorés et signalés par numéro de ligne.
 
 - `Effectifs` : colonne technique `ID membre` ajoutée après la dernière colonne utilisée, sans déplacer de colonne. UUID attribué aux membres et conservé lors des tris de lignes complètes. Ne pas modifier cette colonne ; inclure celle-ci dans les tris et déplacements manuels. Un UUID dupliqué est réattribué aux occurrences suivantes.
 - `HistoriqueEffectifs` : feuille créée automatiquement. Colonnes A:H : `ID événement`, `Date ISO`, `ID membre`, `Type`, `Nom`, `Changements JSON`, `État JSON`, `Source`.
-- `État JSON` conserve prénom, nom, grade, corps et statut pour comparer les états successifs. `Changements JSON` conserve les valeurs avant/après des arrivées, grades et corps. Les événements `reference` ne produisent pas de notification ; ils initialisent l'état ou suivent une modification non notifiée. Une ligne `initialisation` est écrite même si les effectifs sont vides.
+- `État JSON` conserve prénom, nom, grade, corps et statut pour comparer les états successifs. `Changements JSON` conserve les valeurs avant/après des arrivées, noms (type `nom`, « Prénom Nom », depuis le 12 octobre 2026), grades et corps. Les événements `reference` ne produisent pas de notification ; ils initialisent l'état ou suivent une modification non notifiée. Une ligne `initialisation` est écrite même si les effectifs sont vides.
 - Journal ajouté par blocs, jamais purgé automatiquement. Seuls les événements des 14 derniers jours des membres encore présents sont transmis à l'interface. Le rôle GARDE ne reçoit que ceux des membres actifs ou réservistes, comme l'organigramme.
 - Les états « Vu » sont conservés par ID événement dans le stockage local du navigateur, avec une durée de 14 jours. Ils ne sont ni communs à tous les officiers ni synchronisés entre appareils.
 
@@ -119,7 +121,7 @@ rôles placés au-dessus du bot : ignorés et signalés par numéro de ligne.
 - L'ensemble est régénéré par `synchroniserCodex()` et ne doit pas être édité à la main.
 
 - Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Cadet restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation. L'initialisation n'a lieu que sur une feuille vide : une feuille existante n'acquiert pas de ligne `Cadet` toute seule.
-- Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird reste exclu indépendamment du barème. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
+- Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird et le Jarl restent exclus indépendamment du barème : le Jarl n'a pas besoin de ligne. Le Huscarl est soldé au tarif de sa ligne, à défaut à celui de `Par défaut`. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
 - La formule N de la semaine courante contient le tarif journalier numérique du grade de la ligne, multiplié par M. Le barème est appliqué au chargement des Présences/du tableau de bord et lors des générations/réparations de formules.
 - Les anciennes références à `Vue globale!L2` des semaines passées sont remplacées par sa valeur au moment de la migration, sans modifier le résultat. Les autres formules et montants historiques sont conservés. Les formules sont restaurées en R1C1 lors des réordonnancements de lignes, pour conserver leurs références relatives.
 
@@ -156,7 +158,7 @@ Colonnes A:H :
 | Colonne | Contenu |
 |---|---|
 | A | Date |
-| B | Garde |
+| B | Garde — réécrite au renommage d'un membre (`renommerGardeRegistres_`, comme Prison!B) |
 | C | Contrevenant |
 | D | Infraction — libellé lisible des chefs d'accusation |
 | E | Montant — entier en septims, vide pour « À déterminer » |
@@ -211,7 +213,7 @@ Colonnes A:L :
 | Colonne | Contenu |
 |---|---|
 | A | Date |
-| B | Garde |
+| B | Garde — réécrite au renommage d'un membre (`renommerGardeRegistres_`, `Amendes.js`) |
 | C | Détenu |
 | D | Cellule |
 | E | Infraction — libellé lisible des chefs d'accusation |

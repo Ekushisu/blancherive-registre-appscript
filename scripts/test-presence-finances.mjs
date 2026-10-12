@@ -76,4 +76,18 @@ assert.equal(context.presenceDashboardRecoveredFines_(ss, new Date('2026-01-01')
 fineRows = [];
 assert.equal(context.presenceDashboardRecoveredFines_(ss, new Date()), 0);
 assert.throws(() => context.presenceDashboardRecoveredFines_({ getSheetByName: () => null }, new Date()), /introuvable/);
+// Surveillance d'inactivité : ni le Hird ni le Jarl, quel que soit son corps.
+const EFFECTIFS = [
+  ['Prénom', 'Nom', 'Grade', 'Corps', 'Statut'],
+  ['Alice', 'Nord', 'Garde', 'Rivebois', 'En service actif'],
+  ['Hird', '', 'Garde', 'Hird', 'En service actif'],
+  ['Souverain', '', 'Jarl', 'État-Major', 'En service actif'],
+  ['Huscarl', '', 'Huscarl', 'Cité de Blancherive', 'En service actif']
+];
+const gardes = context.presenceDashboardReadActiveGuards_({
+  getLastRow: () => EFFECTIFS.length,
+  getLastColumn: () => EFFECTIFS[0].length,
+  getRange: (row, col, height) => ({ getDisplayValues: () => EFFECTIFS.slice(row - 1, row - 1 + height) })
+});
+assert.deepEqual(Array.from(gardes, g => g.nomComplet), ['Alice Nord', 'Huscarl']);
 console.log('Finances des présences : autorisations, totaux et semaines validés.');

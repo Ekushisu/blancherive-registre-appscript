@@ -1215,6 +1215,39 @@ button {
   gap: 7px;
   align-items: center;
 }
+.effectif-renommage-ouvrir {
+  grid-column: 1 / -1;
+}
+.effectif-renommage {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px 12px;
+  border: 1px solid #e5b5aa;
+  border-radius: 7px;
+  background: #fbf0ec;
+}
+.effectif-renommage legend {
+  padding: 0 6px;
+  font-weight: 700;
+  color: #8f2f1f;
+}
+.effectif-renommage-avertissement {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #8f2f1f;
+  font-size: 13px;
+  line-height: 1.45;
+}
+@media (max-width: 760px) {
+  .effectif-renommage {
+    grid-template-columns: 1fr;
+  }
+}
 .effectif-badge-discord {
   background: #e4e6f6;
   color: #3f4a8a;
@@ -1532,6 +1565,9 @@ button {
   color: #79613a;
   margin: 0 0 8px;
   line-height: 1.4;
+}
+.org-hird-branch > .org-command-node {
+  margin-bottom: 16px;
 }
 .org-unit {
   background: #fff;
@@ -8686,9 +8722,10 @@ input.champ-impose {
   var ChangesContext = createContext({ events: [], seen: {}, mark: () => {
   }, aliasGrades: null });
   var sessionSeen = {};
-  var labels = { arrivee: "Arriv\xE9e", grade: "Grade", corps: "Mutation" };
+  var labels = { arrivee: "Arriv\xE9e", nom: "Nom", grade: "Grade", corps: "Mutation" };
   function describe(change, event, aliasGrades) {
     if (change.type === "arrivee") return "A rejoint les effectifs";
+    if (change.type === "nom") return `Renomm\xE9 : ${change.avant} \u2192 ${change.apres}`;
     const mutation = event.changes.find((c) => c.type === "corps");
     const nom = change.type === "corps" ? libelleCorps : (valeur, cote) => libelleGrade(valeur, mutation ? mutation[cote] : event.corps, aliasGrades);
     return `${labels[change.type]} : ${nom(change.avant, "avant") || "Sans affectation"} \u2192 ${nom(change.apres, "apres") || "Sans affectation"}`;
@@ -8848,6 +8885,8 @@ input.champ-impose {
   var cleGrade = (value) => String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
   var DESCRIPTIONS = {
     jarl: "Moyenne noblesse. D\xE9tient le pouvoir judiciaire de la ch\xE2tellerie.",
+    huscarl: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
+    huscarldeblancherive: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
     marechal: "Petite noblesse, si\xE8ge \xE0 la haute cour de la ch\xE2tellerie. Orchestre les affaires militaires et celles de la garde.",
     commander: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
     commandant: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
@@ -9061,6 +9100,7 @@ input.champ-impose {
       return `Affect\xE9 \xE0 ${libelleCorps(evenement.apres)}${evenement.avant ? `, venant de ${libelleCorps(evenement.avant)}` : ""}`;
     }
     if (evenement.type === "arrivee") return "Inscription au registre de la Garde";
+    if (evenement.type === "nom") return `Nom chang\xE9 en ${evenement.apres}, auparavant ${evenement.avant}`;
     return evenement.apres || evenement.type;
   }
   function depuisJours(n) {
@@ -9078,9 +9118,10 @@ input.champ-impose {
   function Personne({ personne, aliasGrades }) {
     return /* @__PURE__ */ React.createElement("li", { className: "livret-personne" }, /* @__PURE__ */ React.createElement("span", { className: "livret-personne-grade" }, libelleGrade(personne.grade, personne.corps, aliasGrades)), /* @__PURE__ */ React.createElement("span", { className: "livret-personne-nom" }, personne.nomComplet));
   }
-  function Solde({ s }) {
+  function Solde({ s, grade }) {
     if (s.exclu) {
-      return /* @__PURE__ */ React.createElement(Section, { titre: "Solde" }, /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Le Hird du Jarl n\u2019est pas sold\xE9 par le registre de la Garde."));
+      const qui = String(grade || "").trim().toLowerCase() === "jarl" ? "Le Jarl" : "Le Hird du Jarl";
+      return /* @__PURE__ */ React.createElement(Section, { titre: "Solde" }, /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, qui, " n\u2019est pas sold\xE9 par le registre de la Garde."));
     }
     const courante = s.semaineCourante;
     return /* @__PURE__ */ React.createElement(Section, { titre: "Solde", sousTitre: titreSemaine(s.lundiCourant) }, /* @__PURE__ */ React.createElement("div", { className: "livret-semaine", "aria-label": "Jours de service de la semaine en cours" }, JOURS.map((jour, i) => {
@@ -9098,7 +9139,8 @@ input.champ-impose {
     return /* @__PURE__ */ React.createElement(Section, { titre: "Justice" }, /* @__PURE__ */ React.createElement("div", { className: "livret-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: a.nombre, libelle: a.nombre > 1 ? "amendes dress\xE9es" : "amende dress\xE9e", detail: septims(a.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aEncaisser.nombre, libelle: "\xE0 encaisser", detail: `${septims(a.aEncaisser.total)}${a.aEncaisser.aDeterminer ? ` \xB7 ${a.aEncaisser.aDeterminer} \xE0 d\xE9terminer` : ""}` }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aReverser.nombre, libelle: "\xE0 reverser", detail: septims(a.aReverser.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: p.nombre, libelle: p.nombre > 1 ? "incarc\xE9rations" : "incarc\xE9ration" })), p.enCellule.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Encore en cellule"), /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, p.enCellule.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.detenu, /* @__PURE__ */ React.createElement("small", null, "Cellule ", d.cellule || "?", " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("small", null, d.sortie ? /* @__PURE__ */ React.createElement(React.Fragment, null, "sortie pr\xE9vue ", /* @__PURE__ */ React.createElement(DateRP, { value: d.sortie })) : "dur\xE9e \xE0 d\xE9terminer"))))), /* @__PURE__ */ React.createElement("h3", null, "Derni\xE8res amendes"), a.dernieres.length ? /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, a.dernieres.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.contrevenant, /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: d.date, jour: false, heure: false }), " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("span", { className: "livret-amende-etat" }, /* @__PURE__ */ React.createElement("strong", null, d.montant === null ? "\xC0 d\xE9terminer" : septims(d.montant)), /* @__PURE__ */ React.createElement("small", null, d.reverse ? "Revers\xE9e" : d.paye ? "Pay\xE9e, \xE0 reverser" : "\xC0 encaisser"))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune amende dress\xE9e."));
   }
   function Commandement({ cmd, aliasGrades }) {
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Cha\xEEne de commandement" }, cmd.corps.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Dans votre corps"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.corps.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucun officier au-dessus de vous dans votre corps."), cmd.etatMajor.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.etatMajor.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))));
+    var _a;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Cha\xEEne de commandement" }, cmd.corps.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Dans votre corps"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.corps.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucun officier au-dessus de vous dans votre corps."), cmd.etatMajor.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.etatMajor.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))), ((_a = cmd.jarl) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Jarl"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.jarl.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p, aliasGrades })))));
   }
   function Carriere({ c }) {
     return /* @__PURE__ */ React.createElement(Section, { titre: "Carri\xE8re" }, /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, c.avantJournal ? "D\xE9j\xE0 au service de la Garde \xE0 l\u2019ouverture du registre, en septembre 2026." : c.inscription ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Inscrit au registre le ", /* @__PURE__ */ React.createElement(DateRP, { value: c.inscription, heure: false }), ".") : "Inscription non retrouv\xE9e au journal des Effectifs."), c.evenements.length ? /* @__PURE__ */ React.createElement("ol", { className: "livret-carriere" }, c.evenements.map((e, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement(DateRP, { value: e.date, heure: false }), /* @__PURE__ */ React.createElement("span", null, libelleEvenement(e))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune promotion ni mutation depuis l\u2019ouverture du journal."));
@@ -9112,7 +9154,7 @@ input.champ-impose {
     if (erreur) return /* @__PURE__ */ React.createElement("div", { className: "error" }, erreur);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Ouverture du livret de service\u2026");
     const { fiche, service: s, justice: j, carriere: c, commandement: cmd, aliasGrades } = data;
-    return /* @__PURE__ */ React.createElement("div", { className: "livret-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header livret-entete" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Livret de service"), /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, fiche.nomComplet), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, libelleGrade(fiche.grade, fiche.corps, aliasGrades), " \xB7 ", libelleCorps(fiche.corps), fiche.specialite ? ` \xB7 ${fiche.specialite}` : "")), /* @__PURE__ */ React.createElement("div", { className: "livret-badges" }, /* @__PURE__ */ React.createElement("span", { className: "effectif-badge" }, fiche.statut || "Sans statut"), /* @__PURE__ */ React.createElement("span", { className: `effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}` }, fiche.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"))), /* @__PURE__ */ React.createElement(GradeDescription, { grade: fiche.grade }), s.inactif && /* @__PURE__ */ React.createElement("div", { className: "livret-alerte", role: "status" }, s.joursDepuis === null ? "Aucun jour de service enregistr\xE9 \xE0 votre nom." : `Aucun service depuis ${s.joursDepuis} jours : au-del\xE0 de ${s.seuilInactivite}, votre nom remonte au tableau des officiers.`), /* @__PURE__ */ React.createElement("div", { className: "livret-grille" }, /* @__PURE__ */ React.createElement(Solde, { s }), /* @__PURE__ */ React.createElement(Service, { s }), /* @__PURE__ */ React.createElement(Justice, { j }), /* @__PURE__ */ React.createElement(Commandement, { cmd, aliasGrades }), /* @__PURE__ */ React.createElement(Carriere, { c })));
+    return /* @__PURE__ */ React.createElement("div", { className: "livret-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header livret-entete" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Livret de service"), /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, fiche.nomComplet), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, libelleGrade(fiche.grade, fiche.corps, aliasGrades), " \xB7 ", libelleCorps(fiche.corps), fiche.specialite ? ` \xB7 ${fiche.specialite}` : "")), /* @__PURE__ */ React.createElement("div", { className: "livret-badges" }, /* @__PURE__ */ React.createElement("span", { className: "effectif-badge" }, fiche.statut || "Sans statut"), /* @__PURE__ */ React.createElement("span", { className: `effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}` }, fiche.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"))), /* @__PURE__ */ React.createElement(GradeDescription, { grade: fiche.grade }), s.inactif && /* @__PURE__ */ React.createElement("div", { className: "livret-alerte", role: "status" }, s.joursDepuis === null ? "Aucun jour de service enregistr\xE9 \xE0 votre nom." : `Aucun service depuis ${s.joursDepuis} jours : au-del\xE0 de ${s.seuilInactivite}, votre nom remonte au tableau des officiers.`), /* @__PURE__ */ React.createElement("div", { className: "livret-grille" }, /* @__PURE__ */ React.createElement(Solde, { s, grade: fiche.grade }), /* @__PURE__ */ React.createElement(Service, { s }), /* @__PURE__ */ React.createElement(Justice, { j }), /* @__PURE__ */ React.createElement(Commandement, { cmd, aliasGrades }), /* @__PURE__ */ React.createElement(Carriere, { c })));
   }
 
   // ui/src/app.jsx
@@ -9164,6 +9206,9 @@ input.champ-impose {
   }
   function normalizeSearchText2(value) {
     return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function estGradeJarl(grade) {
+    return normalizeSearchText2(grade).trim() === "jarl";
   }
   function memeNom(a, b) {
     const n = (v) => normalizeSearchText2(v).replace(/\s+/g, " ").trim();
@@ -9535,6 +9580,8 @@ input.champ-impose {
       {
         options: data.options,
         aliasGrades: data.aliasGrades,
+        discord,
+        rattaches,
         initialCorps: activeCorps === "ALL" ? "" : activeCorps,
         onSubmit: async (form) => {
           try {
@@ -9703,7 +9750,9 @@ input.champ-impose {
                           specialite: values.specialite,
                           status: values.status,
                           assermente: values.assermente,
-                          discordId: values.discordId
+                          discordId: values.discordId,
+                          nouveauPrenom: values.nouveauPrenom,
+                          nouveauNom: values.nouveauNom
                         }
                       );
                       setData(
@@ -9759,7 +9808,9 @@ input.champ-impose {
                       specialite: values.specialite,
                       status: values.status,
                       assermente: values.assermente,
-                      discordId: values.discordId
+                      discordId: values.discordId,
+                      nouveauPrenom: values.nouveauPrenom,
+                      nouveauNom: values.nouveauNom
                     }
                   );
                   setData(
@@ -9783,6 +9834,8 @@ input.champ-impose {
   function NouvelEffectifForm({
     options,
     aliasGrades,
+    discord,
+    rattaches,
     initialCorps,
     onSubmit
   }) {
@@ -9795,13 +9848,19 @@ input.champ-impose {
     const [form, setForm] = useState9({
       prenom: "",
       nom: "",
-      grade: options.grades[0] || "",
+      grade: "",
       corps: initialCorps || options.corps[0] || "",
       specialite: "",
       status: active || options.statuses[0] || "",
-      assermente: false
+      assermente: false,
+      discordId: ""
     });
     const [saving, setSaving] = useState9(false);
+    useEffect9(() => {
+      if ((discord == null ? void 0 : discord.statut) === "inactif") {
+        discord.charger();
+      }
+    }, []);
     async function submit(e) {
       e.preventDefault();
       try {
@@ -9851,7 +9910,7 @@ input.champ-impose {
           })
         },
         /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"),
-        options.grades.map(
+        options.grades.filter((value) => !estGradeJarl(value)).map(
           (value) => /* @__PURE__ */ React.createElement(
             "option",
             {
@@ -9959,7 +10018,20 @@ input.champ-impose {
             assermente: e.target.checked
           })
         }
-      ), "Asserment\xE9"))),
+      ), "Asserment\xE9")), discord && /* @__PURE__ */ React.createElement(
+        CompteDiscordField,
+        {
+          value: form.discordId,
+          onChange: (discordId) => setForm((previous) => ({
+            ...previous,
+            discordId
+          })),
+          discord,
+          rattaches,
+          memberId: null,
+          disabled: saving
+        }
+      )),
       /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement(
         "button",
         {
@@ -9994,7 +10066,11 @@ input.champ-impose {
     const [assermente, setAssermente] = useState9(
       member.assermente
     );
+    const [renommer, setRenommer] = useState9(false);
+    const [nouveauPrenom, setNouveauPrenom] = useState9(member.prenom || "");
+    const [nouveauNom, setNouveauNom] = useState9(member.nom || "");
     const [saving, setSaving] = useState9(false);
+    const jarl = estGradeJarl(member.grade);
     useEffect9(() => {
       setGrade(
         member.grade
@@ -10014,13 +10090,18 @@ input.champ-impose {
       setDiscordId(
         member.discordId || ""
       );
+      setRenommer(false);
+      setNouveauPrenom(member.prenom || "");
+      setNouveauNom(member.nom || "");
     }, [
       member.grade,
       member.corps,
       member.specialite,
       member.status,
       member.assermente,
-      member.discordId
+      member.discordId,
+      member.prenom,
+      member.nom
     ]);
     useEffect9(() => {
       if (editing && (discord == null ? void 0 : discord.statut) === "inactif") {
@@ -10028,11 +10109,24 @@ input.champ-impose {
       }
     }, [editing]);
     const discordChanged = discordId !== (member.discordId || "");
-    const changed = grade !== member.grade || corps !== member.corps || specialite !== (member.specialite || "") || status !== member.status || assermente !== member.assermente || discordChanged;
+    const nomChanged = renommer && (nouveauPrenom.trim() !== (member.prenom || "").trim() || nouveauNom.trim() !== (member.nom || "").trim());
+    const nomVide = renommer && !nouveauPrenom.trim() && !nouveauNom.trim();
+    const changed = nomChanged || grade !== member.grade || corps !== member.corps || specialite !== (member.specialite || "") || status !== member.status || assermente !== member.assermente || discordChanged;
     async function save() {
+      if (nomChanged) {
+        const nouveau = `${nouveauPrenom.trim()} ${nouveauNom.trim()}`.trim();
+        if (!confirm(
+          `Renommer ${member.nomComplet} en ${nouveau} ?
+
+Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u2019il a dress\xE9es, prendront ce nom. Contrevenants et d\xE9tenus ne changent pas.`
+        )) return;
+      }
       try {
         setSaving(true);
         await onSave({
+          // Absents de la requête sans renommage.
+          nouveauPrenom: nomChanged ? nouveauPrenom : void 0,
+          nouveauNom: nomChanged ? nouveauNom : void 0,
           grade,
           corps,
           specialite,
@@ -10065,7 +10159,15 @@ input.champ-impose {
       setDiscordId(
         member.discordId || ""
       );
+      setRenommer(false);
+      setNouveauPrenom(member.prenom || "");
+      setNouveauNom(member.nom || "");
       setEditing(false);
+    }
+    function garderNom() {
+      setRenommer(false);
+      setNouveauPrenom(member.prenom || "");
+      setNouveauNom(member.nom || "");
     }
     return /* @__PURE__ */ React.createElement("article", { className: `effectif-row ${editing ? "is-editing" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "effectif-monogram", "aria-hidden": "true" }, [member.prenom, member.nom].filter(Boolean).map((value) => String(value).trim().charAt(0)).join("").toLocaleUpperCase("fr") || "G"), /* @__PURE__ */ React.createElement("div", { className: "effectif-identity" }, /* @__PURE__ */ React.createElement("div", { className: "effectif-name" }, member.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), /* @__PURE__ */ React.createElement("div", { className: "effectif-badges" }, showCorps && member.corps && /* @__PURE__ */ React.createElement(
       "span",
@@ -10113,10 +10215,48 @@ input.champ-impose {
         onClick: () => setEditing(true)
       },
       "Modifier"
-    ), editing && /* @__PURE__ */ React.createElement("div", { className: "effectif-editor" }, /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Grade"), /* @__PURE__ */ React.createElement(
+    ), editing && /* @__PURE__ */ React.createElement("div", { className: "effectif-editor" }, renommer ? /* @__PURE__ */ React.createElement("fieldset", { className: "effectif-renommage" }, /* @__PURE__ */ React.createElement("legend", null, "Nouveau nom"), /* @__PURE__ */ React.createElement("p", { className: "effectif-renommage-avertissement", role: "note" }, "Le nouveau nom remplace l\u2019ancien dans toutes les semaines de Pr\xE9sences et sur les amendes et incarc\xE9rations qu\u2019il a dress\xE9es : le membre garde son anciennet\xE9. Connect\xE9 par Discord, il devra se reconnecter."), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: `renommer-prenom-${member.row}` }, "Pr\xE9nom"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: `renommer-prenom-${member.row}`,
+        value: nouveauPrenom,
+        maxLength: 100,
+        disabled: saving,
+        onChange: (e) => setNouveauPrenom(e.target.value)
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: `renommer-nom-${member.row}` }, "Nom"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        id: `renommer-nom-${member.row}`,
+        value: nouveauNom,
+        maxLength: 100,
+        disabled: saving,
+        onChange: (e) => setNouveauNom(e.target.value)
+      }
+    )), /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "secondary-button",
+        disabled: saving,
+        onClick: garderNom
+      },
+      "Garder le nom actuel"
+    )) : /* @__PURE__ */ React.createElement("div", { className: "effectif-renommage-ouvrir" }, /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "secondary-button",
+        disabled: saving,
+        onClick: () => setRenommer(true)
+      },
+      "Modifier le nom\u2026"
+    )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Grade"), /* @__PURE__ */ React.createElement(
       "select",
       {
         value: grade,
+        disabled: jarl,
+        title: jarl ? "Le grade de Jarl se change dans la feuille Effectifs." : void 0,
         style: effectifsAccent(
           (_e = (_d = options.styles) == null ? void 0 : _d.grades) == null ? void 0 : _e[grade],
           {}
@@ -10125,7 +10265,7 @@ input.champ-impose {
           e.target.value
         )
       },
-      options.grades.map(
+      options.grades.filter((value) => jarl || !estGradeJarl(value)).map(
         (value) => /* @__PURE__ */ React.createElement(
           "option",
           {
@@ -10257,7 +10397,7 @@ input.champ-impose {
       {
         type: "button",
         className: "primary-button",
-        disabled: !changed || saving,
+        disabled: !changed || nomVide || saving,
         onClick: save
       },
       saving ? "Enregistrement..." : "Enregistrer"
@@ -10329,6 +10469,7 @@ input.champ-impose {
     } }, /* @__PURE__ */ React.createElement("div", { className: "codex-picker", role: "dialog", "aria-modal": "true", "aria-labelledby": "codex-picker-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("h2", { id: "codex-picker-title", className: "law-modal-title" }, "Parcourir le Codex")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-count" }, retenus.length, " retenu", retenus.length > 1 ? "s" : ""), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer le s\xE9lecteur", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "codex-picker-body" }, /* @__PURE__ */ React.createElement(CodexPage, { token, mode: "selection", onRetenir, retenus })), /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-picker-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onClose }, "Revenir au formulaire"))));
   }
   function OrganigrammePage({ token }) {
+    var _a;
     const [data, setData] = useState9(null), [error, setError] = useState9("");
     useEffect9(() => {
       let active = true;
@@ -10348,7 +10489,9 @@ input.champ-impose {
     const directCorps = data.garnisons.filter((g) => !localKeys.includes(g.key));
     const localCorps = data.garnisons.filter((g) => localKeys.includes(g.key));
     const alias = data.aliasGrades;
-    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes, aliasGrades: alias }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Hird du Jarl" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.jarl ? [data.jarl] : [], grade: "Jarl" })), /* @__PURE__ */ React.createElement("aside", { className: "org-hird-branch" }, /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(OrgCorps, { title: "Hird du Jarl", people: data.hird, aliasGrades: alias, compact: true })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne", variante: "commandementLocal" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors, aliasGrades: alias }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve, aliasGrades: alias }))));
+    const huscarls = data.huscarls || [];
+    const titreHuscarl = ((_a = huscarls[0]) == null ? void 0 : _a.grade) || "Huscarl";
+    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes, aliasGrades: alias }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major, Huscarl et Hird du Jarl" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.jarl ? [data.jarl] : [], grade: "Jarl" })), /* @__PURE__ */ React.createElement("aside", { className: "org-hird-branch" }, /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: huscarls, grade: titreHuscarl }), /* @__PURE__ */ React.createElement(OrgCorps, { title: "Hird du Jarl", people: data.hird, aliasGrades: alias, compact: true })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne", variante: "commandementLocal" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, aliasGrades: alias })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors, aliasGrades: alias }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve, aliasGrades: alias }))));
   }
   function PersonCard({ personne, center = false, showCorps = false }) {
     const memberChanges = useMemberChanges(personne == null ? void 0 : personne.memberId);

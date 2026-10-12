@@ -105,6 +105,29 @@ const apercus = {
       await page.waitForSelector(".compte-discord-suggestions");
     }
   },
+  // Renommage ouvert sur une fiche : avertissement, prénom et nom.
+  "effectifs-renommage": {
+    nav: "Effectifs",
+    attendre: ".effectifs-tabs",
+    largeurs: [390, 1440],
+    async preparer(page) {
+      await page.getByRole("button", { name: "Modifier la fiche de Eydis la Silencieuse" }).click();
+      await page.getByRole("button", { name: "Modifier le nom…" }).click();
+      await page.getByLabel("Prénom").last().fill("Eydis");
+      await page.waitForSelector(".effectif-renommage");
+    }
+  },
+  // Formulaire d'ajout : compte Discord cherché parmi les membres du serveur.
+  "effectifs-ajout": {
+    nav: "Effectifs",
+    attendre: ".effectifs-tabs",
+    largeurs: [390, 1440],
+    async preparer(page) {
+      await page.getByRole("button", { name: "+ Nouveau membre" }).click();
+      await page.getByLabel("Compte Discord").fill("ey");
+      await page.waitForSelector(".compte-discord-suggestions");
+    }
+  },
   presences: {
     nav: "Présences",
     attendre: ".presence-table",

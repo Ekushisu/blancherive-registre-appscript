@@ -4,6 +4,8 @@
 
 - Chaîne verticale : Jarl → Maréchal → Commander → Majors du corps État-Major.
 - Le Hird répond uniquement au Jarl, par une branche directe indépendante du reste de la garde.
+- Le Jarl est inscrit aux Effectifs au grade « Jarl », en tête de `Données!A`, au-dessus du Maréchal (décision du propriétaire, 12 octobre 2026). Le grade de Jarl ne se donne ni ne se retire depuis l'application (décision du propriétaire, 12 octobre 2026) : les formulaires d'ajout et de modification ne le proposent pas, la fiche du Jarl garde son grade figé, et le serveur refuse les deux. Le reste de sa fiche reste modifiable. Un changement de Jarl se fait à la main dans la feuille `Effectifs`. Sans Jarl actif aux Effectifs, l'organigramme affiche Lucius Haldor.
+- Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` et sous son autorité directe (même décision). L'organigramme le place dans la branche « Autorité directe du Jarl », au-dessus du Hird, quel que soit son corps ; il ne figure ni dans son corps, ni dans la chaîne de l'État-Major.
 - Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
 - Cité de Blancherive, Faubourgs, Cap Granite, Éclaireurs et Garde inquisitoriale (depuis le 7 octobre 2026) répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
 - Un corps n'apparaît dans l'organigramme que s'il est déclaré dans `ORGANIGRAMME_GARNISONS` (`Organigramme.js`) ; ses membres actifs n'y figurent pas autrement. Tout nouveau corps doit y être ajouté.
@@ -27,13 +29,25 @@
 ## Effectifs
 
 - Page accessible uniquement aux OFFICIER.
-- Un officier peut ajouter un membre.
+- Un officier peut ajouter un membre, et lui rattacher son compte Discord dès l'ajout (champ facultatif, mêmes contrôles qu'à la modification). Le formulaire d'ajout ne propose aucun grade par défaut : le premier de `Données!A` est le Jarl.
 - Un officier peut modifier :
   - grade ;
   - corps ;
   - spécialité ;
   - statut ;
-  - assermentation.
+  - assermentation ;
+  - nom (prénom et nom), derrière le bouton « Modifier le nom… » puis une confirmation (décision du propriétaire, 12 octobre 2026).
+
+### Renommer un membre
+
+- Le membre garde son ancienneté : toutes ses lignes de Présences, semaines passées et semaine courante, prennent le nouveau nom. Une ligne est à lui quand elle porte son ancien prénom et son ancien nom, sans casse ni espaces autour. Seuls les noms sont réécrits ; pointages et paiements restent tels quels.
+- Refus, sans rien écrire : nom vide ; nom déjà porté par un autre membre des Effectifs (sans casse ni accents), partis compris puisque la feuille les garde ; lignes de Présences au nouveau nom tombant les mêmes semaines que des lignes à l'ancien nom (deux personnes). D'autres lignes déjà au nouveau nom sont laissées telles quelles : un renommage interrompu se relance et s'achève.
+- Les Présences sont réécrites avant la fiche : si leur verrou ne se libère pas, rien ne diverge. La semaine courante est ensuite régénérée, comme pour un changement de grade.
+- Le journal des Effectifs note le changement (« Nom », avant → après) : badge de nouveauté et ligne de carrière au Livret. Un renommage fait à la main dans la feuille y figure de même.
+- Connecté par Discord, le membre renommé voit sa session fermée et se reconnecte sous son nouveau nom, que portera son jeton. Le bot renomme son pseudo au passage suivant.
+- Les amendes et incarcérations qu'il a dressées passent aussi au nouveau nom (décision du propriétaire, 12 octobre 2026), colonne Garde seule, écrite comme la liste `Données!O`. Une ligne est à lui quand le Livret la lui rattache (sans casse, accents ni espaces superflus). Contrevenants, détenus et chefs d'accusation ne changent pas. Seules ses cases sont écrites ; une validation « refuser » qui y resterait est retirée le temps de l'écriture puis remise.
+- Ordre des écritures : Présences, puis Amendes et Prison, puis la fiche, dont seules les cases qui changent sont écrites.
+- Incident du 12 octobre 2026, version précédente : la colonne Garde était réécrite en entier et chaque case de la fiche réécrite même inchangée ; une validation « refuser » de la feuille a fait échouer le renommage (« cellule B2 »).
 - L'application ne doit jamais offrir de suppression physique d'un membre.
 - La suppression reste une opération manuelle dans la feuille `Effectifs`.
 
@@ -64,7 +78,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - Un survol de 800 ms, un focus clavier de même durée ou un clic/appui sur le badge marque les événements du membre comme vus. Un survol plus bref ne le fait pas. Une nouvelle modification crée un nouvel événement non vu.
 - « Vu » est propre au navigateur, commun aux deux pages et aux rôles utilisés dans ce navigateur. Pas de compte individuel ni de suivi entre appareils.
 - Le panneau propose des filtres par type, nom/corps et non-vus, une actualisation et « Tout marquer comme vu ». Les compteurs par corps comptent les membres avec des événements non vus.
-- Les modifications manuelles Sheets sont journalisées lors du déclencheur d'édition ou, en repli, à la prochaine consultation. La date est celle de la détection ; plusieurs changements entre deux détections peuvent être regroupés. Les changements de nom ou statut actualisent la référence sans badge dédié dans cette version.
+- Les modifications manuelles Sheets sont journalisées lors du déclencheur d'édition ou, en repli, à la prochaine consultation. La date est celle de la détection ; plusieurs changements entre deux détections peuvent être regroupés. Depuis le 12 octobre 2026, un changement de nom crée un événement « Nom » ; un changement de statut actualise la référence sans badge dédié.
 - Les GARDE ne reçoivent que les événements des membres actuellement actifs ou réservistes ; les OFFICIER peuvent voir les événements de tous les membres encore dans Effectifs.
 
 ## Dates
@@ -81,7 +95,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - La liste se filtre par semaine, par corps et par personne. Le filtre par corps existe pour l'officier de corps, qui vient pointer ses seuls hommes dans une liste hebdomadaire devenue longue : il masque les autres corps dans chaque semaine affichée et restreint le compte d'impayés de la semaine, afin que le badge parle bien du corps demandé. Une ligne sans corps est regroupée sous « Sans corps », dans la liste déroulante comme dans les sections de semaine, pour qu'aucun garde ne disparaisse entre les deux vues.
 - La semaine courante n'a jamais d'impayés : la solde se règle le lundi pour la semaine précédente, une semaine en cours est donc impayée par construction. Son badge et son filtre « Impayés » ne s'affichent pas. Le tableau de bord OFFICIER et la Paye appliquent déjà la même exclusion ; les trois doivent rester d'accord, sans quoi une alerte permanente cesserait d'être lue.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
-- Le Hird du Jarl est exclu des présences, des calculs de solde et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées.
+- Le Hird du Jarl (par son corps) et le Jarl (par son grade, quel que soit son corps ; décision du propriétaire, 12 octobre 2026) sont exclus des présences, des calculs de solde, de la Paye et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées. La règle unique est `estExcluDesPresences_(corps, grade)` (`Presences.js`). Le Huscarl, lui, est pointé et soldé comme tout membre.
 - Les décrets de la châtellerie sont promulgués et abrogés par dépôt et retrait d'un Google Doc dans le dossier Drive déclaré par `SYNC_CODEX_FOLDERS`. Le dossier fait autorité : la synchronisation suivante reflète son contenu exact. Un décret retiré cesse d'apparaître au Codex et d'être proposé dans les formulaires ; les amendes et incarcérations déjà enregistrées sous ce décret restent inchangées.
 - Depuis le 29 septembre 2026, tout article d'un décret ou d'un texte impérial peut fonder un chef d'accusation, qu'il chiffre ou non sa sanction (voir « Chefs d'accusation »). Les règles antérieures, qui réservaient les formulaires aux sources chiffrées du droit de la châtellerie, sont abrogées.
 - Le barème journalier est défini par grade dans `SoldesGrades`. Initialisation : Commander (alias Commandant) à 100 septims ; autres grades à l'ancienne base `Vue globale!L2` (50 à l'époque ; feuille archivée depuis, l'initialisation ayant eu lieu), sauf Recrue à 0 et Cadet à la moitié (25 actuellement). Le Hird reste à 0 quel que soit le tarif du grade.
@@ -339,8 +353,9 @@ serveur ne renvoie que les données du membre de la session.
 
 - **Rattachement** : la fiche par l'ID membre du jeton ; les lignes de
   Présences, Amendes et Prison par le « Prénom Nom » de la fiche, sans casse,
-  accents ni espaces superflus. Un membre renommé perd le rattachement de ses
-  lignes antérieures.
+  accents ni espaces superflus. Un membre renommé depuis les Effectifs garde
+  ses Présences, ses amendes et ses incarcérations, réécrites à son nouveau
+  nom.
 - **Solde** : semaine en cours (jours pointés, solde, payeur selon
   `PAYE_FINANCEURS`) ; **en attente** = même définition que la page Paye
   (semaine close, solde strictement positive, non réglée) ; **perçue** = total
@@ -357,7 +372,9 @@ serveur ne renvoie que les données du membre de la session.
   de date d'arrivée réelle.
 - **Chaîne de commandement** : supérieurs en service actif de son corps, à
   partir de Sergent-Chef ; puis l'État-Major, sauf pour l'État-Major et le Hird
-  du Jarl.
+  du Jarl ; puis le Jarl, quel que soit son corps. Le Huscarl n'entre dans la
+  chaîne de personne, et la sienne ne compte que le Jarl ; le Jarl n'en a pas,
+  et sa solde ne figure pas au livret.
 - **Justice** : amendes dressées (nombre, total), à encaisser (non payées,
   montant fixé ou à déterminer), à reverser (payées, non reversées), cinq
   dernières ; incarcérations prononcées, détenus encore en cellule, cinq

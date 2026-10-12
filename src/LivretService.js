@@ -10,8 +10,9 @@
 
   Présences, Amendes et Prison désignent un garde par son nom, pas par son ID
   membre : les lignes sont rapprochées du « Prénom Nom » de la fiche, sans
-  casse, accents ni espaces superflus. Un membre renommé dans Effectifs perd le
-  rattachement de ses lignes antérieures.
+  casse, accents ni espaces superflus. Un membre renommé depuis les Effectifs
+  garde ses Présences, ses amendes et ses incarcérations, réécrites à son
+  nouveau nom (`renommerMembrePresences_`, `renommerGardeRegistres_`).
 */
 const LIVRET_DERNIERES = 5;
 
@@ -99,6 +100,11 @@ function lireEffectifsLivret_(ss) {
   Supérieurs en service actif : dans le corps du membre, ceux d'un grade plus
   élevé à partir de Sergent-Chef ; puis l'État-Major, sauf pour l'État-Major
   lui-même et le Hird du Jarl, qui ne répond qu'au Jarl. Ordre de `Données!A`.
+
+  Le Jarl, au sommet, est rendu à part (`jarl`) pour tous les autres membres,
+  quel que soit son corps. Le Huscarl est un grade à part, sous l'autorité
+  directe du Jarl : il ne figure dans la chaîne de personne, et la sienne ne
+  compte que le Jarl.
 */
 function commandementLivret_(effectifs, fiche, ordre) {
   const actif = normaliserEffectifsWeb_(EFFECTIFS_WEB_ACTIVE_STATUS);
@@ -113,16 +119,23 @@ function commandementLivret_(effectifs, fiche, ordre) {
   const etatMajor = corps => cleGradeDiscord_(corps) === "etatmajor";
   const hird = corps => cleGradeDiscord_(corps).includes("hird");
 
-  const corps = enService
+  if (estGradeJarl(fiche.grade)) return { corps: [], etatMajor: [], jarl: [] };
+
+  const jarl = enService.filter(m => estGradeJarl(m.grade)).map(presenter);
+  if (estGradeHuscarl(fiche.grade)) return { corps: [], etatMajor: [], jarl };
+
+  const chaine = enService.filter(m => !estGradeJarl(m.grade) && !estGradeHuscarl(m.grade));
+
+  const corps = chaine
     .filter(m => memeCorps(m.corps, fiche.corps) && rang(m) < rang(fiche) && rang(m) <= seuil)
     .sort((a, b) => rang(a) - rang(b))
     .map(presenter);
 
   const etatMajorListe = etatMajor(fiche.corps) || hird(fiche.corps)
     ? []
-    : enService.filter(m => etatMajor(m.corps)).sort((a, b) => rang(a) - rang(b)).map(presenter);
+    : chaine.filter(m => etatMajor(m.corps)).sort((a, b) => rang(a) - rang(b)).map(presenter);
 
-  return { corps, etatMajor: etatMajorListe };
+  return { corps, etatMajor: etatMajorListe, jarl };
 }
 
 
@@ -177,7 +190,7 @@ function lireServiceLivret_(ss, fiche) {
   const lundiCourant = lundiCourantPresence_();
   const resultat = {
     lundiCourant,
-    exclu: estCorpsExcluDesPresences_(fiche.corps),
+    exclu: estExcluDesPresences_(fiche.corps, fiche.grade),
     semaineCourante: null,
     enAttente: [],
     totalEnAttente: 0,
@@ -213,7 +226,7 @@ function lireServiceLivret_(ss, fiche) {
   values.forEach((row, i) => {
     if (cleNomLivret_(display[i][3] + " " + display[i][4]) !== cle) return;
     const lundi = normaliserLundiPresence_(row[0], lundiCourant);
-    if (!estLundiPresence_(lundi) || estCorpsExcluDesPresences_(display[i][1])) return;
+    if (!estLundiPresence_(lundi) || estExcluDesPresences_(display[i][1], display[i][2])) return;
     semaines.push({
       lundi,
       corps: String(display[i][1] || "").trim(),

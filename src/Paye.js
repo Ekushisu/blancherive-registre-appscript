@@ -22,7 +22,8 @@
 // Faubourgs et l'Inquisition sont payés par l'argentier mais
 // reversent à leurs propres collecteurs.
 //
-// Le Hird du Jarl est exclu des Présences ; il l'est ici aussi.
+// Le Hird du Jarl et le Jarl sont exclus des Présences ; ils le sont
+// ici aussi.
 //
 // Lecture des Présences, colonnes A:O — voir `Presences.js`.
 //
@@ -161,7 +162,7 @@ function getPaye(token) {
 
     const corps = String(displayValues[i][1] || "").trim();
 
-    if (estCorpsExcluDesPresences_(corps)) {
+    if (estExcluDesPresences_(corps, displayValues[i][2])) {
       continue;
     }
 

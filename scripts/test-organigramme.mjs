@@ -23,7 +23,12 @@ const people = [
   person('Inquisitrice', 'Capitaine', 'Inquisition'),
   person('Hird', 'Capitaine', 'Hird du Jarl'),
   person('Maréchal', 'Maréchal', 'État-Major'),
-  person('Commander', 'Commander', 'État-Major')
+  person('Commander', 'Commander', 'État-Major'),
+  person('Jarl réel', 'Jarl', 'État-Major'),
+  // Le Huscarl est rendu sous le Jarl, quel que soit son corps, Hird compris.
+  person('Huscarl', 'Huscarl', 'Cité de Blancherive'),
+  person('Huscarl titré', 'Huscarl de Blancherive', 'Hird du Jarl'),
+  person('Huscarl réserviste', 'Huscarl', 'Cité de Blancherive', 'Réserve')
 ];
 // Données : grades en A, alias de l'Inquisition en C (AliasGrades.js).
 const DONNEES = [
@@ -75,8 +80,14 @@ assert.deepEqual(names(data.majors), ['Détaché', 'Major du Hird']);
 assert.deepEqual(names(data.commandementLocal.majors), ['Major Chêne', 'Major Chêne alias', 'Major Rivebois']);
 assert.deepEqual(Array.from(data.commandementLocal.garnisonKeys), ['rivebois', 'bois-de-chene']);
 assert.deepEqual(Array.from(data.garnisons.filter(g => !data.commandementLocal.garnisonKeys.includes(g.key)), g => g.key).sort(), ['cap-granite', 'cite', 'eclaireurs', 'faubourgs', 'inquisition']);
-assert.deepEqual(names(data.reserve), ['Réserviste central', 'Réserviste du Hird', 'Réserviste local']);
+assert.deepEqual(names(data.reserve), ['Huscarl réserviste', 'Réserviste central', 'Réserviste du Hird', 'Réserviste local']);
 assert.deepEqual(names(data.hird), ['Hird']);
+// Le Jarl inscrit aux Effectifs remplace le Jarl par défaut.
+assert.equal(data.jarl.nomComplet, 'Jarl réel');
+assert.deepEqual(names(data.huscarls), ['Huscarl', 'Huscarl titré']);
+assert.ok(!names(data.garnisons.find(g => g.key === 'cite').membres).includes('Huscarl'), 'Le Huscarl n’est pas dans son corps');
+for (const grade of ['Huscarl', ' huscarl de Blancherive ', 'HUSCARL']) assert.ok(context.estGradeHuscarl(grade), grade);
+for (const grade of ['Huscarls', 'Garde', '']) assert.ok(!context.estGradeHuscarl(grade), grade);
 assert.equal(data.garnisons.length, 7);
 // La feuille écrit « Inquisition », l'organigramme affiche le nom de la Garde inquisitoriale.
 const inquisition = data.garnisons.find(g => g.key === 'inquisition');
@@ -104,7 +115,7 @@ assert.equal(libelleCorps(' INQUISITION '), 'Garde inquisitoriale', 'Casse et es
 assert.equal(libelleCorps('Rivebois'), 'Rivebois', 'Un corps sans nom affiché garde le libellé de la feuille');
 assert.equal(libelleCorps(''), '');
 assert.deepEqual(Array.from(data.garnisons.find(g => g.key === 'rivebois').membres, p => p.grade), ['Capitaine', 'Garde']);
-const displayed = [data.jarl, ...data.marechaux, ...data.commandants, ...data.majorsEtatMajor,
+const displayed = [data.jarl, ...data.huscarls, ...data.marechaux, ...data.commandants, ...data.majorsEtatMajor,
   ...data.commandementLocal.majors, ...data.majors, ...data.hird, ...data.reserve, ...data.garnisons.flatMap(g => g.membres)];
 assert.equal(new Set(names(displayed)).size, displayed.length, 'Aucun membre en double');
 assert.ok(!names(displayed).includes('Ancien'));
@@ -112,6 +123,7 @@ assert.ok(!names(displayed).includes('Ancien local'));
 context.lireEffectifsOrganigramme = () => [];
 const empty = context.getOrganigramme('test-token');
 assert.equal(empty.jarl.nomComplet, 'Lucius Haldor');
+assert.equal(empty.huscarls.length, 0, 'Poste de Huscarl vacant');
 assert.equal(empty.majorsEtatMajor.length, 0);
 assert.equal(empty.reserve.length, 0);
 assert.equal(empty.commandementLocal.majors.length, 0);

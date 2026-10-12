@@ -41,6 +41,8 @@ function effacerJeton(){try{localStorage.removeItem(CLE_JETON);}catch{/* stockag
 function serverCall(name,...args){return new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(resolve).withFailureHandler(error=>reject(new Error(error?.message||String(error))))[name](...args);});}
 function normalizeSearchText(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
 // M\u00eame personne, sans casse, accents ni espaces superflus : comme le serveur rapproche les lignes.
+// Le grade de Jarl ne se donne ni ne se retire depuis le registre (Effectifs.js).
+function estGradeJarl(grade){return normalizeSearchText(grade).trim()==="jarl";}
 function memeNom(a,b){const n=v=>normalizeSearchText(v).replace(/\s+/g," ").trim();return Boolean(n(a))&&n(a)===n(b);}
 function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
 function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(Number(value)||0);}
@@ -558,6 +560,8 @@ function EffectifsPage({token}){
         <NouvelEffectifForm
           options={data.options}
           aliasGrades={data.aliasGrades}
+          discord={discord}
+          rattaches={rattaches}
           initialCorps={
             activeCorps==="ALL"
               ?""
@@ -865,7 +869,13 @@ function EffectifsPage({token}){
                                           values.assermente,
 
                                         discordId:
-                                          values.discordId
+                                          values.discordId,
+
+                                        nouveauPrenom:
+                                          values.nouveauPrenom,
+
+                                        nouveauNom:
+                                          values.nouveauNom
                                       }
                                     );
 
@@ -981,7 +991,13 @@ function EffectifsPage({token}){
                                     values.assermente,
 
                                   discordId:
-                                    values.discordId
+                                    values.discordId,
+
+                                  nouveauPrenom:
+                                    values.nouveauPrenom,
+
+                                  nouveauNom:
+                                    values.nouveauNom
                                 }
                               );
 
@@ -1015,6 +1031,8 @@ function EffectifsPage({token}){
 function NouvelEffectifForm({
   options,
   aliasGrades,
+  discord,
+  rattaches,
   initialCorps,
   onSubmit
 }){
@@ -1027,11 +1045,14 @@ function NouvelEffectifForm({
         )
     );
 
+  /*
+    Pas de grade par défaut : le premier de Données!A est le Jarl.
+    Le compte Discord, facultatif, part avec la fiche.
+  */
   const[form,setForm]=useState({
     prenom:"",
     nom:"",
-    grade:
-      options.grades[0]||"",
+    grade:"",
     corps:
       initialCorps||
       options.corps[0]||"",
@@ -1039,11 +1060,19 @@ function NouvelEffectifForm({
     status:
       active||
       options.statuses[0]||"",
-    assermente:false
+    assermente:false,
+    discordId:""
   });
 
   const[saving,setSaving]=
     useState(false);
+
+  // La liste du serveur est demandée à l'ouverture du formulaire.
+  useEffect(()=>{
+    if(discord?.statut==="inactif"){
+      discord.charger();
+    }
+  },[]);
 
   async function submit(e){
     e.preventDefault();
@@ -1116,9 +1145,9 @@ function NouvelEffectifForm({
 
             {/*
               Libellé selon le corps choisi (alias de l'Inquisition) ;
-              la valeur envoyée reste le grade régulier.
+              la valeur envoyée reste le grade régulier. Jamais le Jarl.
             */}
-            {options.grades.map(
+            {options.grades.filter(value=>!estGradeJarl(value)).map(
               value=>
                 <option
                   key={value}
@@ -1282,6 +1311,22 @@ function NouvelEffectifForm({
             Assermenté
           </label>
         </div>
+
+        {discord&&
+          <CompteDiscordField
+            value={form.discordId}
+            onChange={discordId=>
+              setForm(previous=>({
+                ...previous,
+                discordId
+              }))
+            }
+            discord={discord}
+            rattaches={rattaches}
+            memberId={null}
+            disabled={saving}
+          />
+        }
       </div>
 
       <div className="form-actions">
@@ -1337,8 +1382,25 @@ function EffectifCard({
       member.assermente
     );
 
+  /*
+    Renommage : caché derrière un bouton, il réécrit le nom dans toutes
+    les semaines de Présences. Fermé, il n'envoie rien.
+  */
+  const[renommer,setRenommer]=
+    useState(false);
+
+  const[nouveauPrenom,setNouveauPrenom]=
+    useState(member.prenom||"");
+
+  const[nouveauNom,setNouveauNom]=
+    useState(member.nom||"");
+
   const[saving,setSaving]=
     useState(false);
+
+  // La fiche du Jarl garde son grade ; aucune autre ne peut le prendre.
+  const jarl=
+    estGradeJarl(member.grade);
 
   useEffect(()=>{
     setGrade(
@@ -1364,13 +1426,18 @@ function EffectifCard({
     setDiscordId(
       member.discordId||""
     );
+    setRenommer(false);
+    setNouveauPrenom(member.prenom||"");
+    setNouveauNom(member.nom||"");
   },[
     member.grade,
     member.corps,
     member.specialite,
     member.status,
     member.assermente,
-    member.discordId
+    member.discordId,
+    member.prenom,
+    member.nom
   ]);
 
   // La liste du serveur n'est demandée qu'à la première fiche ouverte.
@@ -1383,7 +1450,17 @@ function EffectifCard({
   const discordChanged=
     discordId!==(member.discordId||"");
 
+  const nomChanged=
+    renommer&&(
+      nouveauPrenom.trim()!==(member.prenom||"").trim()||
+      nouveauNom.trim()!==(member.nom||"").trim()
+    );
+
+  const nomVide=
+    renommer&&!nouveauPrenom.trim()&&!nouveauNom.trim();
+
   const changed=
+    nomChanged||
     grade!==member.grade||
     corps!==member.corps||
     specialite!==(member.specialite||"")||
@@ -1392,10 +1469,28 @@ function EffectifCard({
     discordChanged;
 
   async function save(){
+    if(nomChanged){
+      const nouveau=`${nouveauPrenom.trim()} ${nouveauNom.trim()}`.trim();
+      if(!confirm(
+        `Renommer ${member.nomComplet} en ${nouveau} ?\n\n`+
+        "Toutes ses semaines de Présences, et les amendes et incarcérations qu’il a dressées, prendront ce nom. "+
+        "Contrevenants et détenus ne changent pas."
+      ))return;
+    }
+
     try{
       setSaving(true);
 
       await onSave({
+        // Absents de la requête sans renommage.
+        nouveauPrenom:
+          nomChanged
+            ?nouveauPrenom
+            :undefined,
+        nouveauNom:
+          nomChanged
+            ?nouveauNom
+            :undefined,
         grade,
         corps,
         specialite,
@@ -1439,8 +1534,16 @@ function EffectifCard({
     setDiscordId(
       member.discordId||""
     );
-
+    setRenommer(false);
+    setNouveauPrenom(member.prenom||"");
+    setNouveauNom(member.nom||"");
     setEditing(false);
+  }
+
+  function garderNom(){
+    setRenommer(false);
+    setNouveauPrenom(member.prenom||"");
+    setNouveauNom(member.nom||"");
   }
 
   return(
@@ -1547,6 +1650,53 @@ function EffectifCard({
 
       {editing&&
         <div className="effectif-editor">
+          {renommer
+            ?<fieldset className="effectif-renommage">
+              <legend>Nouveau nom</legend>
+              <p className="effectif-renommage-avertissement" role="note">
+                Le nouveau nom remplace l’ancien dans toutes les semaines de Présences et sur les amendes et incarcérations qu’il a dressées : le membre garde son ancienneté. Connecté par Discord, il devra se reconnecter.
+              </p>
+              <div className="field">
+                <label htmlFor={`renommer-prenom-${member.row}`}>Prénom</label>
+                <input
+                  id={`renommer-prenom-${member.row}`}
+                  value={nouveauPrenom}
+                  maxLength={100}
+                  disabled={saving}
+                  onChange={e=>setNouveauPrenom(e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor={`renommer-nom-${member.row}`}>Nom</label>
+                <input
+                  id={`renommer-nom-${member.row}`}
+                  value={nouveauNom}
+                  maxLength={100}
+                  disabled={saving}
+                  onChange={e=>setNouveauNom(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className="secondary-button"
+                disabled={saving}
+                onClick={garderNom}
+              >
+                Garder le nom actuel
+              </button>
+            </fieldset>
+            :<div className="effectif-renommage-ouvrir">
+              <button
+                type="button"
+                className="secondary-button"
+                disabled={saving}
+                onClick={()=>setRenommer(true)}
+              >
+                Modifier le nom…
+              </button>
+            </div>
+          }
+
           <div className="field">
             <label>
               Grade
@@ -1554,6 +1704,12 @@ function EffectifCard({
 
             <select
               value={grade}
+              disabled={jarl}
+              title={
+                jarl
+                  ?"Le grade de Jarl se change dans la feuille Effectifs."
+                  :undefined
+              }
               style={
                 effectifsAccent(
                   options
@@ -1572,8 +1728,9 @@ function EffectifCard({
               {/*
                 Libellé selon le corps en cours d'édition ;
                 la valeur envoyée reste le grade régulier.
+                Le Jarl n'est proposé que sur sa propre fiche.
               */}
-              {options.grades.map(
+              {options.grades.filter(value=>jarl||!estGradeJarl(value)).map(
                 value=>
                   <option
                     key={value}
@@ -1771,6 +1928,7 @@ function EffectifCard({
               className="primary-button"
               disabled={
                 !changed||
+                nomVide||
                 saving
               }
               onClick={save}
@@ -1831,13 +1989,16 @@ function OrganigrammePage({token}) {
   const directCorps = data.garnisons.filter(g => !localKeys.includes(g.key));
   const localCorps = data.garnisons.filter(g => localKeys.includes(g.key));
   const alias = data.aliasGrades;
+  // Titre du poste : le grade tel que Données!A l'écrit (« Huscarl » ou « Huscarl de Blancherive »).
+  const huscarls = data.huscarls || [];
+  const titreHuscarl = huscarls[0]?.grade || "Huscarl";
   return <ChangesProvider data={data.changes} aliasGrades={alias}><div className="org-page">
     <div className="page-header"><div><h1 className="page-title">Organigramme</h1><p className="page-subtitle">Garde de Blancherive · Chaîne de commandement</p></div><span className="org-seal">Au service de la châtellerie</span></div>
     <RecentChanges onRefresh={async()=>setData(await serverCall("getOrganigramme",token))}/>
-    <section className="org-hierarchy" aria-label="État-Major et Hird du Jarl">
+    <section className="org-hierarchy" aria-label="État-Major, Huscarl et Hird du Jarl">
       <div className="org-command-heading">État-Major</div>
       <div className="org-sovereign"><CentralGroup personnes={data.jarl?[data.jarl]:[]} grade="Jarl"/></div>
-      <aside className="org-hird-branch"><div className="org-direct-label">Autorité directe du Jarl</div><OrgCorps title="Hird du Jarl" people={data.hird} aliasGrades={alias} compact/></aside>
+      <aside className="org-hird-branch"><div className="org-direct-label">Autorité directe du Jarl</div><CentralGroup personnes={huscarls} grade={titreHuscarl}/><OrgCorps title="Hird du Jarl" people={data.hird} aliasGrades={alias} compact/></aside>
       <div className="org-command-chain"><CentralGroup personnes={data.marechaux} grade="Maréchal"/><CentralGroup personnes={data.commandants} grade="Commander"/><CentralGroup personnes={data.majorsEtatMajor} grade="Major" note="État-Major"/></div>
     </section>
     <section className="org-corps-section" aria-labelledby="org-corps-title">

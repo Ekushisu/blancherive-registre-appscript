@@ -247,6 +247,45 @@ assert.match(modifier, /data\.discordId !== undefined/, 'Champ absent : case int
 const ajouter = corps('ajouterEffectifInterne_');
 assert.ok(ajouter.indexOf('effacerLienDiscordLigne_(sheet, targetRow)') > 0);
 assert.ok(ajouter.indexOf('effacerLienDiscordLigne_') < ajouter.indexOf('.setValue(prenom)'));
+// Compte choisi dès l'ajout : écrit après l'effacement de la case, avant la fiche.
+assert.ok(ajouter.indexOf('ecrireLienDiscordEffectif_(sheet, schema, targetRow, discordId)') > ajouter.indexOf('effacerLienDiscordLigne_(sheet, targetRow)'));
+assert.ok(ajouter.indexOf('ecrireLienDiscordEffectif_') < ajouter.indexOf('.setValue(prenom)'));
+
+// Grade de Jarl : ni donné ni retiré par le registre, contrôlé avant toute écriture.
+assert.ok(ajouter.indexOf('verifierGradeJarlEffectifsWeb_') > 0 && ajouter.indexOf('verifierGradeJarlEffectifsWeb_') < ajouter.indexOf('.setValue('));
+assert.ok(modifier.indexOf('verifierGradeJarlEffectifsWeb_') > 0 && modifier.indexOf('verifierGradeJarlEffectifsWeb_') < modifier.indexOf('.setValue('));
+const contexteEffectifs = vm.createContext({});
+vm.runInContext(effectifs, contexteEffectifs);
+vm.runInContext(readFileSync('src/Organigramme.js', 'utf8'), contexteEffectifs);
+const gradeJarl = (grade, actuel) => contexteEffectifs.verifierGradeJarlEffectifsWeb_(grade, actuel);
+assert.throws(() => gradeJarl('Jarl', ''), /ne se donne ni ne se retire/, 'Ajout d’un Jarl');
+assert.throws(() => gradeJarl(' jarl ', 'Maréchal'), /ne se donne ni ne se retire/, 'Promotion');
+assert.throws(() => gradeJarl('Maréchal', 'Jarl'), /ne se donne ni ne se retire/, 'Rétrogradation du Jarl');
+gradeJarl('Jarl', 'Jarl'); // le reste de sa fiche reste modifiable
+gradeJarl('Garde', 'Recrue');
+
+// Renommage : champs absents, rien ; nom vide ou déjà pris, refus ; contrôlé
+// avant le lien Discord, Présences comprises, et Présences écrites avant la fiche.
+const feuilleNoms = new Sheet([['Prénom', 'Nom', 'Grade', 'Corps', 'Statut'],
+  ['Alice', 'Nord', 'Garde', 'Rivebois', 'En service actif'], ['Bob', 'Sud', 'Garde', 'Rivebois', 'En service actif']]);
+const renommer = data => contexteEffectifs.preparerRenommageEffectifsWeb_(feuilleNoms, schema, 2, data, 'Alice', 'Nord');
+assert.equal(renommer({}), null);
+assert.equal(renommer({ nouveauPrenom: ' Alice ', nouveauNom: 'Nord' }), null, 'Nom inchangé');
+assert.deepEqual(JSON.parse(JSON.stringify(renommer({ nouveauPrenom: 'Alicia', nouveauNom: 'Nord' }))),
+  { ancien: { prenom: 'Alice', nom: 'Nord' }, nouveau: { prenom: 'Alicia', nom: 'Nord' },
+    gardeAncien: 'Alice Nord', gardeNouveau: 'Alicia Nord' });
+assert.equal(renommer({ nouveauPrenom: 'Alicia', nouveauNom: '' }).gardeNouveau, 'Alicia ', 'Comme Données!O : espace final sans nom');
+assert.ok(renommer({ nouveauPrenom: 'ALICE', nouveauNom: 'Nord' }), 'Casse corrigée : sa propre ligne n’est pas un doublon');
+assert.throws(() => renommer({ nouveauPrenom: '', nouveauNom: ' ' }), /prénom ou le nom doit être renseigné/);
+assert.throws(() => renommer({ nouveauPrenom: 'bob', nouveauNom: 'SUD' }), /Un membre nommé "bob SUD" existe déjà/);
+assert.ok(modifier.indexOf('verifierRenommagePresences_') < modifier.indexOf('ecrireLienDiscordEffectif_'));
+assert.ok(modifier.indexOf('renommerMembrePresences_') < modifier.indexOf('.setValue(renommage.nouveau.prenom)'));
+// Une case inchangée n'est jamais réécrite : elle n'a pas à repasser la validation de la feuille.
+assert.ok(!/\.setValue\((grade|corps|specialite|status)\)/.test(modifier), 'Grade, corps, spécialité et statut écrits seulement s’ils changent');
+assert.match(modifier, /if \(valeur !== actuelle\)/);
+assert.ok(modifier.indexOf('renommerMembrePresences_') < modifier.indexOf('renommerGardeRegistres_') &&
+  modifier.indexOf('renommerGardeRegistres_') < modifier.indexOf('.setValue(renommage.nouveau.prenom)'),
+  'Présences, puis Amendes et Prison, puis la fiche');
 assert.match(corps('getEffectifs'), /discordId:\s*liensDiscord\[i\]\.id/);
 assert.ok(!/discord/i.test(readFileSync('src/Organigramme.js', 'utf8')), 'L’organigramme ne transmet aucun compte Discord');
 

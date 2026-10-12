@@ -370,6 +370,85 @@ function imposerGardeSession_(auth, data) {
 
 
 // ============================================================
+// RENOMMAGE D'UN GARDE — partagé avec Prison.js
+// ============================================================
+
+/*
+  Décision du propriétaire, 12 octobre 2026 : un membre renommé depuis les
+  Effectifs garde les amendes et incarcérations qu'il a dressées. Seule la
+  colonne Garde (B) d'Amendes et de Prison change ; contrevenants, détenus et
+  chefs d'accusation restent tels quels. Une ligne est à lui quand le Livret
+  la lui rattache : même nom sans casse, accents ni espaces superflus. Le
+  nouveau nom s'écrit comme `Données!O` l'écrit (« Prénom Nom »), pour rester
+  dans la liste de validation des deux feuilles.
+
+  Appelé par `modifierEffectifInterne_`, sous le verrou de script que prennent
+  aussi les écritures d'Amendes et de Prison. Seules les cases de ce garde
+  sont écrites : réécrire la colonne entière ferait repasser la validation de
+  données aux noms des anciens gardes, qui ne sont plus dans `Données!O`. Une
+  case qui garde une validation « refuser » la voit retirée le temps de
+  l'écriture puis remise : le nouveau nom n'entre dans `Données!O` qu'une
+  fois la fiche renommée, et jamais pour un membre hors service. Le doublon
+  de nom est écarté plus tôt par les Effectifs, qui gardent tous les membres,
+  partis compris : des lignes au nouveau nom sont laissées telles quelles,
+  ce qui permet de relancer un renommage interrompu.
+*/
+function cleGardeRenommage_(valeur) {
+  return String(valeur || "")
+    .replace(/ /g, " ")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function lignesGardeARenommer_(gardes, ancien) {
+  const cleAncien = cleGardeRenommage_(ancien);
+  const lignes = [];
+
+  gardes.forEach((ligne, index) => {
+    const cle = cleGardeRenommage_(ligne[0]);
+    if (cle && cle === cleAncien) lignes.push(index);
+  });
+
+  return lignes;
+}
+
+// Renvoie le nombre de lignes renommées, Amendes et Prison confondues.
+function renommerGardeRegistres_(ss, ancien, nouveau) {
+  let total = 0;
+
+  [ss.getSheetByName(AMENDES_SHEET_NAME), ss.getSheetByName(PRISON_SHEET_NAME)]
+    .filter(Boolean)
+    .forEach(sheet => {
+      const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
+      if (lastRow < 2) return;
+
+      const range = sheet.getRange(2, 2, lastRow - 1, 1);
+      const lignes = lignesGardeARenommer_(range.getValues(), ancien);
+      if (!lignes.length) return;
+
+      const regles = range.getDataValidations();
+      lignes.forEach(index => {
+        const cellule = sheet.getRange(index + 2, 2);
+        const regle = regles[index][0];
+        const refuse = regle && !regle.getAllowInvalid();
+
+        if (refuse) cellule.clearDataValidations();
+        cellule.setValue(nouveau);
+        if (refuse) cellule.setDataValidation(regle);
+      });
+      total += lignes.length;
+    });
+
+  // Une écriture refusée remonte ici, avant celle de la fiche.
+  SpreadsheetApp.flush();
+  return total;
+}
+
+
+// ============================================================
 // HELPERS D'ÉCRITURE AMENDES
 // ============================================================
 

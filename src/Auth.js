@@ -493,8 +493,10 @@ function verifyAuthToken(token) {
   /*
     Session Discord : refusée dès que la connexion Discord est
     coupée, ou que la table d'accès ne donne plus ce rôle à cette
-    fiche pour ce compte — fiche rétrogradée, passée en réserve,
-    partie ou déliée (voir `DISCORD_PROPRIETE_ACCES`, Discord.js).
+    fiche sous ce nom pour ce compte — fiche rétrogradée, passée
+    en réserve, partie, déliée ou renommée (voir
+    `DISCORD_PROPRIETE_ACCES`, Discord.js). Une table écrite avant
+    l'empreinte du nom vaut jusqu'à son premier recalcul.
   */
 
   if (payload.via === "discord") {
@@ -510,9 +512,14 @@ function verifyAuthToken(token) {
     const table =
       lireTableAccesDiscord_(props);
 
+    const entree =
+      table[payload.discord];
+
     if (
-      table[payload.discord] !==
-      entreeAccesDiscord_(payload.role, payload.membre)
+      entree !==
+        entreeAccesDiscord_(payload.role, payload.membre, payload.nom) &&
+      entree !==
+        entreeAccesDiscordSansNom_(payload.role, payload.membre)
     ) {
 
       throw new Error(

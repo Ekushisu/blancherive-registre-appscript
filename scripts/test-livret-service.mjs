@@ -15,15 +15,33 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
+// Validation « refuser la saisie » simulée : une écriture hors liste échoue,
+// comme dans Sheets, y compris par script.
 class Sheet {
-  constructor(rows) { this.rows = rows; }
+  constructor(rows) { this.rows = rows; this.regles = new Map(); this.ecritures = []; }
   getLastRow() { return this.rows.length; }
   getLastColumn() { return Math.max(...this.rows.map(r => r.length)); }
   getMaxColumns() { return this.getLastColumn(); }
   getRange(row, col, height = 1, width = 1) {
+    const sheet = this;
+    const cles = () => Array.from({ length: height }, (_, i) => Array.from({ length: width }, (_, j) => `${row + i}:${col + j}`));
     const read = () => Array.from({ length: height }, (_, i) =>
-      Array.from({ length: width }, (_, j) => this.rows[row - 1 + i]?.[col - 1 + j] ?? ''));
-    return { getValues: read, getDisplayValues: () => read().map(r => r.map(v => (v === true ? 'TRUE' : v === false ? 'FALSE' : String(v)))) };
+      Array.from({ length: width }, (_, j) => sheet.rows[row - 1 + i]?.[col - 1 + j] ?? ''));
+    const ecrire = valeurs => valeurs.forEach((ligne, i) => ligne.forEach((v, j) => {
+      const regle = sheet.regles.get(`${row + i}:${col + j}`);
+      if (regle && !regle.getAllowInvalid() && !regle.liste.includes(v)) {
+        throw new Error(`Les données que vous avez saisies dans la cellule ${String.fromCharCode(64 + col + j)}${row + i} ne respectent pas les règles de validation.`);
+      }
+      sheet.rows[row - 1 + i][col - 1 + j] = v;
+      sheet.ecritures.push(`${row + i}:${col + j}`);
+    }));
+    return {
+      getValues: read, setValues: ecrire, setValue: v => ecrire([[v]]),
+      getDisplayValues: () => read().map(r => r.map(v => (v === true ? 'TRUE' : v === false ? 'FALSE' : String(v)))),
+      getDataValidations: () => cles().map(l => l.map(k => sheet.regles.get(k) || null)),
+      clearDataValidations: () => cles().flat().forEach(k => sheet.regles.delete(k)),
+      setDataValidation: regle => cles().flat().forEach(k => sheet.regles.set(k, regle))
+    };
   }
 }
 
@@ -31,6 +49,9 @@ const sessions = {
   eydis: { role: 'GARDE', via: 'discord', membre: 'u-eydis', nom: 'Eydis la Silencieuse' },
   ulfgar: { role: 'OFFICIER', via: 'discord', membre: 'u-ulf', nom: 'Ulfgar Bouclier-Noir' },
   haldvar: { role: 'OFFICIER', via: 'discord', membre: 'u-hal', nom: 'Haldvar de Blancherive' },
+  rorik: { role: 'OFFICIER', via: 'discord', membre: 'u-ror', nom: 'Rorik Marche-Hiver' },
+  jarl: { role: 'OFFICIER', via: 'discord', membre: 'u-jarl', nom: 'Siddgeir Vent-Doré' },
+  huscarl: { role: 'OFFICIER', via: 'discord', membre: 'u-hus', nom: 'Lydia Bras-Fort' },
   fantome: { role: 'GARDE', via: 'discord', membre: 'u-absent', nom: 'Fantôme' },
   code: { role: 'GARDE', via: 'code' },
   intendant: { role: 'INTENDANT', via: 'code' }
@@ -46,10 +67,12 @@ const effectifs = new Sheet([
   membre('Torsten', 'Pierre-Grise', 'Caporal', 'Garnison de Rivebois', 'En service actif', 'u-tor'),
   membre('Haldvar', 'de Blancherive', 'Commander', 'État-Major', 'En service actif', 'u-hal'),
   membre('Ulfgar', 'Bouclier-Noir', 'Lieutenant', 'Hird du Jarl', 'En service actif', 'u-ulf'),
-  membre('Rorik', 'Marche-Hiver', 'Capitaine', 'Cité de Blancherive', 'En service actif', 'u-ror')
+  membre('Rorik', 'Marche-Hiver', 'Capitaine', 'Cité de Blancherive', 'En service actif', 'u-ror'),
+  membre('Siddgeir', 'Vent-Doré', 'Jarl', 'État-Major', 'En service actif', 'u-jarl'),
+  membre('Lydia', 'Bras-Fort', 'Huscarl', 'Cité de Blancherive', 'En service actif', 'u-hus')
 ]);
 effectifs.rows[1][6] = false;
-const GRADES = ['Commander', 'Major', 'Capitaine', 'Lieutenant-Chef', 'Lieutenant', 'Sergent-Chef', 'Sergent', 'Caporal', 'Garde'];
+const GRADES = ['Jarl', 'Huscarl', 'Commander', 'Major', 'Capitaine', 'Lieutenant-Chef', 'Lieutenant', 'Sergent-Chef', 'Sergent', 'Caporal', 'Garde'];
 const donnees = new Sheet([['Grade'], ...GRADES.map(g => [g])]);
 
 const evt = (id, date, membreId, type, changes = []) => [id, date, membreId, type, '', JSON.stringify(changes), '{}', 'Détection'];
@@ -107,7 +130,7 @@ const context = vm.createContext({
   Utilities: { formatDate: () => '' },
   PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) }
 });
-for (const f of ['Code.js', 'Effectifs.js', 'Discord.js', 'AliasGrades.js', 'Presences.js', 'Paye.js',
+for (const f of ['Code.js', 'Effectifs.js', 'Discord.js', 'AliasGrades.js', 'Organigramme.js', 'Presences.js', 'Paye.js',
   'PresenceDashboard.gs.js', 'Amendes.js', 'Prison.js', 'LivretService.js']) {
   vm.runInContext(readFileSync(`src/${f}`, 'utf8'), context);
 }
@@ -131,9 +154,17 @@ assert.deepEqual(l.fiche, { prenom: 'Eydis', nom: 'la Silencieuse', nomComplet: 
   corps: 'Garnison de Rivebois', specialite: 'Pisteuse', statut: 'En service actif', assermente: false });
 assert.deepEqual(l.commandement.corps.map(p => p.nomComplet), ['Brynjar Poing-de-Fer', 'Sigrid Vent-du-Nord'],
   'Supérieurs du corps, en service, à partir de Sergent-Chef, du plus haut au plus bas ; ni réserve, ni subordonné');
-assert.deepEqual(l.commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive']);
-assert.deepEqual(livret('haldvar').commandement, { corps: [], etatMajor: [] }, 'L’État-Major ne se voit pas lui-même');
+assert.deepEqual(l.commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive'],
+  'Le Jarl, même inscrit à l’État-Major, est rendu à part');
+const jarl = [{ nomComplet: 'Siddgeir Vent-Doré', grade: 'Jarl', corps: 'État-Major' }];
+assert.deepEqual(l.commandement.jarl, jarl, 'Le Jarl au sommet de chaque chaîne');
+assert.deepEqual(livret('haldvar').commandement, { corps: [], etatMajor: [], jarl }, 'L’État-Major ne se voit pas lui-même');
 assert.deepEqual(livret('ulfgar').commandement.etatMajor, [], 'Le Hird ne répond qu’au Jarl');
+assert.deepEqual(livret('ulfgar').commandement.jarl, jarl);
+// Le Huscarl ne répond qu'au Jarl et n'entre dans la chaîne de personne.
+assert.deepEqual(livret('huscarl').commandement, { corps: [], etatMajor: [], jarl });
+assert.deepEqual(livret('rorik').commandement.corps, [], 'Le Huscarl n’est pas un supérieur de son corps');
+assert.deepEqual(livret('jarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Jarl n’a pas de supérieur');
 
 // ---------------------------------------------------------------- carrière
 assert.equal(l.carriere.inscription, '2026-09-06T12:00:00.000Z');
@@ -175,6 +206,9 @@ const hird = livret('ulfgar').service;
 assert.equal(hird.exclu, true);
 assert.equal(hird.semaineCourante, null);
 assert.equal(hird.joursTotal, 0);
+// Le Jarl non plus, quel que soit son corps ; le Huscarl l'est.
+assert.equal(livret('jarl').service.exclu, true);
+assert.equal(livret('huscarl').service.exclu, false);
 
 // ---------------------------------------------------------------- justice
 const a = l.justice.amendes;
@@ -194,5 +228,31 @@ const brut = JSON.stringify({ service: l.service, justice: l.justice, carriere: 
 for (const autre of ['999', 'Contrevenant de Brynjar', 'Détenu de Brynjar', 'Lieutenant', 'arrivee']) {
   assert.ok(!brut.includes(autre), `Aucune donnée d’un autre membre : ${autre}`);
 }
+
+// ---------------------------------------------------------------- renommage d'un garde
+// Colonne Garde d'Amendes et de Prison : les seules cases de ce garde, lignes
+// rapprochées comme le Livret ; contrevenants, détenus et autres gardes intacts.
+const garde = sheet => sheet.rows.slice(1).map(r => r[1]);
+const contrevenants = amendes.rows.map(r => r[2]).join('|');
+// Validation « refuser » sur toute la colonne, liste des gardes actifs : ni le
+// nouveau nom, ni un ancien garde parti n'y figurent.
+const regleGardes = { liste: ['Eydis la Silencieuse', 'Brynjar Poing-de-Fer'], getAllowInvalid: () => false };
+amendes.rows.push(['06/10/2026', 'Garde Parti', 'Lydia', 'CPL art. 16 — Injure', 10, F, F]);
+for (const feuille of [amendes, prison]) {
+  for (let r = 2; r <= feuille.rows.length; r++) feuille.regles.set(`${r}:2`, regleGardes);
+  feuille.ecritures = [];
+}
+assert.equal(context.renommerGardeRegistres_(ss, 'Eydis la Silencieuse', 'Eydis Brise-Nuit'), 6, 'Quatre amendes, deux incarcérations');
+assert.deepEqual(garde(amendes), [...Array(4).fill('Eydis Brise-Nuit'), 'Brynjar Poing-de-Fer', 'Garde Parti']);
+assert.deepEqual(garde(prison), ['Eydis Brise-Nuit', 'Eydis Brise-Nuit', 'Brynjar Poing-de-Fer']);
+assert.equal(amendes.rows.slice(0, 6).map(r => r[2]).join('|'), contrevenants);
+assert.deepEqual(amendes.ecritures, ['2:2', '3:2', '4:2', '5:2'], 'Ni Brynjar ni le garde parti ne sont réécrits');
+assert.ok([amendes, prison].every(f => [...f.regles.values()].length === f.rows.length - 1 && [...f.regles.values()].every(r => r === regleGardes)),
+  'Validation remise sur chaque case réécrite');
+// Reprise d'un renommage interrompu : des lignes portent déjà le nouveau nom.
+amendes.rows[1][1] = 'Eydis la Silencieuse';
+assert.equal(context.renommerGardeRegistres_(ss, 'Eydis la Silencieuse', 'Eydis Brise-Nuit'), 1);
+assert.deepEqual(garde(amendes), [...Array(4).fill('Eydis Brise-Nuit'), 'Brynjar Poing-de-Fer', 'Garde Parti']);
+assert.equal(context.renommerGardeRegistres_(ss, 'Personne', 'Quelqu’un'), 0);
 
 console.log('Livret de service : accès, fiche, commandement, carrière, solde, service, justice et confidentialité validés.');
