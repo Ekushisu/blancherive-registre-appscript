@@ -2,6 +2,31 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Connexion Discord retirée, retour aux codes (13 octobre 2026)
+
+- Demande du staff : retour à l'authentification par mot de passe partagé.
+  Branche `discord-auth-removal`, issue de `discord-auth`.
+- `CONNEXION_DISCORD_OUVERTE = false` (`Auth.js`) : aucun bouton Discord, aucune
+  session Discord ouverte ni prolongée, les sessions déjà ouvertes refusées à
+  l'appel suivant. La propriété `AUTH_DISCORD` ne rouvre plus rien seule.
+- Rien n'est supprimé : le Livret de service, la saisie à son propre nom, la case
+  Payé restreinte et le nom de session restent dans le code, inertes faute de
+  session Discord. Le rattachement des comptes et la synchronisation des rôles et
+  pseudos (`DISCORD_SYNCHRO`) restent en place et ne sont pas coupés par ce
+  changement.
+- Codes communs, `AUTH_CODES`, durées (3 jours code, 2 heures visiteur), Jarl et
+  Huscarl, renommage et alias de grades : inchangés.
+- Vérifications : 34 suites vertes ; `test-connexion-discord.mjs` teste le mode
+  ouvert en surchargeant le drapeau, `test-auth-codes.mjs` vérifie le fichier livré
+  (bouton absent, session Discord refusée, codes ouverts). Aucun build d'interface,
+  aucun `clasp push`, aucun déploiement.
+- **Mise en service, à faire par le propriétaire** : relire le `git diff`,
+  `npm run push`, publier le déploiement à la main. Les jetons Discord déjà émis
+  seront refusés dès la publication ; les membres reconnectés par code.
+- **À décider par le propriétaire** : `DISCORD_SYNCHRO` tourne toujours s'il vaut
+  `ACTIF` (rôles et pseudos sur le serveur Discord). Le régler à une autre valeur
+  le coupe, sans code.
+
 ### Renommage : correctif après essai du propriétaire (12 octobre 2026)
 
 - Essai en ligne : « Les données que vous avez saisies dans la cellule B2 ne
@@ -1022,7 +1047,7 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 - Token HMAC : code commun 3 jours, Discord 30 jours glissants, visiteur 2 h ;
   un code désactivé ou changé ferme ses sessions. Jeton gardé d'une ouverture
   du navigateur à l'autre.
-- Connexion Discord en conception (`docs/AUTH_AND_ROLES.md`).
+- Connexion Discord retirée (drapeau `CONNEXION_DISCORD_OUVERTE`, `docs/AUTH_AND_ROLES.md`).
 
 ### Organigramme
 - Implémenté dans `Organigramme.js`.

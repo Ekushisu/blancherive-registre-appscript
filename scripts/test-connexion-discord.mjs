@@ -91,7 +91,11 @@ const context = vm.createContext({
     return { accesDiscord: context.mettreAJourAccesDiscord_(ss, effectifs, schema, values, 5, entetes) };
   }
 });
-vm.runInContext(readFileSync('src/Auth.js', 'utf8'), context);
+// La connexion est fermée dans le fichier livré : cette suite teste son fonctionnement, ouvert ici.
+// `scripts/test-auth-codes.mjs` vérifie le fichier tel quel.
+const authSource = readFileSync('src/Auth.js', 'utf8');
+assert.ok(authSource.includes('const CONNEXION_DISCORD_OUVERTE = false;'), 'Drapeau de connexion attendu');
+vm.runInContext(authSource.replace('const CONNEXION_DISCORD_OUVERTE = false;', 'const CONNEXION_DISCORD_OUVERTE = true;'), context);
 vm.runInContext(readFileSync('src/Discord.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/SynchroDiscord.js', 'utf8'), context);
 

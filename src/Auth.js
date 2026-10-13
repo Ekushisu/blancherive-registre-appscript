@@ -216,9 +216,13 @@ function messageCodeDesactive_(role) {
   l'appel suivant, comme un code désactivé. `AUTH_CODES` ne concerne pas
   les sessions Discord.
 */
+// Connexion Discord retirée à la demande du staff : true et AUTH_DISCORD à ACTIF pour la rétablir.
+const CONNEXION_DISCORD_OUVERTE = false;
+
 function connexionDiscordActive_(props) {
 
   return (
+    CONNEXION_DISCORD_OUVERTE &&
     String(props.getProperty("AUTH_DISCORD") || "")
       .trim()
       .toUpperCase() === "ACTIF"

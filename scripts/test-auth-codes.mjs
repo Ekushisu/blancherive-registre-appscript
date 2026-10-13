@@ -159,6 +159,14 @@ assert.equal(role(context.login('nouveau-code')), 'GARDE');
 regler({ PASSWORD_GARDE: 'nouveau-code', AUTH_SECRET: 'autre-secret' });
 assert.throws(() => context.verifyAuthToken(intendant), /Token invalide/, 'Changer AUTH_SECRET ferme tout');
 
+// Connexion Discord fermée dans le fichier livré, même avec la propriété à ACTIF : ni bouton, ni session, ni session déjà ouverte.
+regler({ AUTH_DISCORD: 'ACTIF', DISCORD_CLIENT_ID: '1', DISCORD_REDIRECT_URI: 'https://script.google.com/macros/s/ABC/exec' });
+assert.equal(context.getModesConnexion().discord, null, 'Aucun bouton Discord');
+assert.throws(() => context.ouvrirSessionDiscord('AbCdEf0123456789'), /n'est pas ouverte/);
+const sessionDiscord = context.createAuthToken_('OFFICIER', 60 * 60 * 1000, 'discord', { membre: 'u-1', discord: '1', nom: 'Ancien' });
+assert.throws(() => context.verifyAuthToken(sessionDiscord), /La connexion par Discord est fermée/, 'Une session Discord déjà ouverte est refusée');
+assert.equal(context.verifyAuthToken(context.login('garde')).role, 'GARDE', 'Les codes restent ouverts');
+
 // Durées : trois jours pour un code, sans prolongation ; deux heures pour le visiteur.
 regler({});
 const debut = horloge;

@@ -146,7 +146,28 @@ rallumer un code que connaissent les radiés et les déserteurs, que Discord, lu
 aurait écartés. Réactiver un rôle, c'est donc aussi changer la valeur de son
 `PASSWORD_<RÔLE>`. Le code ne peut pas l'imposer.
 
-## Connexion par Discord — en conception
+## Connexion par Discord — retirée, code conservé
+
+Retirée à la demande du staff (13 octobre 2026) : retour aux codes communs.
+`CONNEXION_DISCORD_OUVERTE` (`Auth.js`) vaut `false` et l'emporte sur la
+propriété `AUTH_DISCORD`. Conséquences, sans suppression de code :
+- aucun bouton Discord (`getModesConnexion` renvoie `{ discord: null }`) ;
+- `ouvrirSessionDiscord` refuse ;
+- une session Discord déjà ouverte est refusée à l'appel suivant, par
+  `verifyAuthToken` ;
+- le Livret de service, la saisie à son propre nom, la case Payé restreinte et
+  le nom de session ne reçoivent plus aucune session Discord : ils restent dans
+  le code, inertes (ils ne se déclenchent que sur `via: "discord"`).
+
+Rétablir la connexion : passer le drapeau à `true`, régler `AUTH_DISCORD` à
+`ACTIF`, relire le `git diff`, `clasp push`, puis publier le déploiement à la
+main. Le rattachement des comptes (`Effectifs!ID Discord`) et la synchronisation
+des rôles et pseudos (`DISCORD_SYNCHRO`) ne sont pas touchés par ce retrait : ce
+sont des fonctions du bot, à couper séparément.
+
+Le détail de la conception ci-dessous reste la référence si la connexion revient.
+
+## Connexion par Discord — conception (suspendue)
 
 Le propriétaire a la main sur le serveur Discord de la Garde depuis octobre
 2026. Principes retenus à ce stade, à compléter au fil de la conception :
