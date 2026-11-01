@@ -142,9 +142,17 @@ Principaux modules :
   - `getCodexDocumentMetadata_()` dérive familles, autorités, liens, sigles et citabilité du registre
     `SYNC_CODEX_DOCUMENTS` et du cache `R:Y` ; les documents ne sont déclarés qu'une fois
   - `indexerArticlesCodex_()` et `cleArticleCodex_()` : index `source|article` servant à valider les chefs d'accusation d'`Amendes.js` et `Prison.js`
+  - renvoie le journal des synchronisations (`journal`, JournalCodex.js) ; la version porte le nombre de lignes du journal, pour que le navigateur reçoive les nouveautés même sans article changé
+
+- `JournalCodex.js`
+  - `journaliserSynchroCodex_` : compare l'avant et l'après de `SyncCodex!A:J` (par `cleArticleCodex_`, blancs repliés) et le cache des documents, puis écrit le passage dans la feuille `JournalCodex` ; `decrireSynchroCodex_` en fait le compte rendu du journal d'exécution
+  - `tracesSynchroCodex_` : messages d'un passage, écrits au journal d'exécution et, pour un passage lancé du registre, publiés au fil de l'eau dans le cache du script sous l'identifiant de suivi du navigateur
+  - `synchroniserCodexRegistre(token, suivi)` (OFFICIER, délai de trois minutes) et `getProgressionSynchroCodex(token, suivi)` (OFFICIER, traces du passage en cours)
+  - `lireJournalCodex_` : derniers passages, du plus récent au plus ancien, plafonnés
 
 - `SyncCodex.js`
   - `SYNC_CODEX_DOCUMENTS` : registre unique des documents, codes et décrets
+  - `synchroniserCodex()` (éditeur) et `synchroniserCodexDepuis_(origine, suivi)` : lecture document par document avec traces, articles d'un document illisible conservés, puis journal
   - lecture par `getText()`, qui couvre les listes à puces et les tableaux,
     et parcours des onglets par `getTabs()` quand l'exécution les expose
   - extraction des documents juridiques
@@ -220,6 +228,8 @@ Le source frontend est dans `ui/` :
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
+- `ui/src/journal-codex.js` : nouveautés du Codex, fonctions pures — passages non vus depuis la dernière visite (`localStorage`, quatorze jours sans visite), résumé, articles récents à repérer, délai du bouton, différence mot à mot (`diffMots`) ;
+- `ui/src/journal-codex.jsx` : bandeau en tête du Codex, fenêtre « Nouveautés du Codex » (par passage : nouvelles lois, modifiées avec leurs différences, retirées avec leur dernier texte, documents ; compte rendu technique pour les officiers), bouton « Synchroniser maintenant » des officiers et fenêtre de synchronisation qui relit les traces du serveur toutes les deux secondes (`SynchroCodexModal`) ;
 - `ui/src/fiche.jsx` : fiche de service d'un effectif. `FicheProvider` (autour de l'application, sauf pour le visiteur) tient la pile des fiches ouvertes et affiche `FichePanneau`, panneau modal par-dessus la page ; il charge toutes les fiches 1,5 s après le lancement (`getFichesService`) dans un cache en mémoire, rangé par ID membre et par nom (`memoriserFiche`, `ficheEnCache`, `cleNomFiche` au rapprochement du serveur) ; une fiche connue s'affiche aussitôt, avec « Mise à jour… » le temps que `getFicheService` la rafraîchisse ; `NomEffectif` rend un nom cliquable qui ouvre la fiche (ID membre si connu, sinon nom), sans propager le clic, et du texte simple sans fournisseur. Libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
 - `ui/src/connexion-discord.js` : aller-retour de la connexion Discord — `state` aléatoire gardé dans `sessionStorage` au clic et vérifié une seule fois au retour, lecture du code par `google.script.url.getLocation`, effacement de l'adresse par `google.script.history.replace` ; l'écran de connexion (`navigation.jsx`) met Discord en bouton principal quand `getModesConnexion` le propose, le code d'accès restant en dessous ;
 - `ui/index.template.html` : squelette HTML Apps Script.

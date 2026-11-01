@@ -511,6 +511,21 @@ et refusent d'écrire si elle a changé.
 `versionConnue` ne change pas sa liste de rôles. Les formulaires Amendes et
 Prison lisent le Codex par cette fonction, avec un jeton de service.
 
+## Journal du Codex
+
+`getCodex` renvoie le journal des synchronisations à tous ses rôles, visiteur
+compris : les nouveautés du droit sont publiques comme le droit lui-même, et
+aucune autre fonction n'est ouverte au rôle public pour cela. Le journal ne
+porte que des articles et des documents, jamais d'identité.
+
+`synchroniserCodexRegistre(token, suivi)` et `getProgressionSynchroCodex(token,
+suivi)` n'autorisent que `OFFICIER`, avant toute lecture. Le délai de trois
+minutes entre deux lancements par le bouton est vérifié par le serveur
+(propriété `CODEX_SYNCHRO_BOUTON`), sous verrou ; l'interface ne fait que
+l'afficher. `synchroniserCodex()` depuis l'éditeur n'y est jamais soumis.
+`scripts/test-journal-codex.mjs` vérifie les refus, le délai et le
+cloisonnement des traces par identifiant de suivi.
+
 ## Décrets de peines et amendes
 
 `getPeinesAmendes` autorise `GARDE` et `OFFICIER`, qui sanctionnent, et

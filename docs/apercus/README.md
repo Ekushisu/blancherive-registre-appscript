@@ -97,7 +97,13 @@ commande ci-dessus.
 
 - `connexion-ordinateur.png`, `connexion-mobile.png` : entrée dans le registre.
 - `amendes-1440.png`, `amendes-390.png` : tableau et fiches mobiles.
-- `codex-1440.png`, `codex-390.png` : lecture du Codex.
+- `codex-1440.png`, `codex-390.png` : lecture du Codex, bandeau des
+  nouveautés et puces « Nouveau » / « Modifié » sur les articles récents.
+- `codex-nouveautes-1440.png`, `codex-nouveautes-390.png` : fenêtre
+  « Nouveautés du Codex », dernière synchronisation dépliée, différence du
+  texte d'un article modifié, compte rendu technique (officier). Écran seul.
+- `codex-synchro-1440.png` : synchronisation lancée par un officier, traces du
+  serveur et résultat. Écran seul.
 - `effectifs-1440.png`, `effectifs-390.png`, `effectifs-edition-mobile.png`.
 - `formulaire-mobile.png` : saisie d’un motif personnalisé.
 

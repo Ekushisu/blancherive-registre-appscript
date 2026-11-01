@@ -75,5 +75,6 @@ export function codexLocal(documents = documentsLocaux()) {
   });
   vm.runInContext(lire('src/SyncCodex.js'), ctx);
   vm.runInContext(lire('src/Codex.js'), ctx);
+  vm.runInContext(lire('src/JournalCodex.js'), ctx);
   return JSON.parse(JSON.stringify(ctx.getCodex('GARDE', '')));
 }

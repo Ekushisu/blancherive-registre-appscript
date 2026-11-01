@@ -479,16 +479,37 @@ function lireDocumentsCodex_() {
 // SYNCHRONISATION PRINCIPALE
 // ============================================================
 
+/*
+  Lancée depuis l'éditeur Apps Script : jamais soumise au délai du bouton des
+  officiers (`synchroniserCodexRegistre`, JournalCodex.js), qui passe par le
+  même `synchroniserCodexDepuis_`.
+*/
 function synchroniserCodex() {
+  return synchroniserCodexDepuis_("editeur");
+}
+
+
+/*
+  Chaque étape est écrite au journal d'exécution, document par document, puis
+  le compte rendu des changements ; le même compte rendu, origine, durée et
+  détail par document compris, va dans la feuille `JournalCodex`.
+  `origine` : « editeur » ou « registre » ; `suivi` : identifiant donné par le
+  navigateur, qui suit les traces pendant l'attente (`tracesSynchroCodex_`).
+*/
+function synchroniserCodexDepuis_(origine, suivi) {
+  const debut = Date.now();
+  const trace = tracesSynchroCodex_(origine, debut, suivi);
   const lock = LockService.getScriptLock();
 
   try {
+    trace.info("Synchronisation du Codex (" + (origine === "registre" ? "bouton du registre" : "éditeur Apps Script") + ") : attente du verrou…");
     lock.waitLock(30000);
 
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     let sheet = ss.getSheetByName(SYNC_CODEX_SHEET_NAME);
 
     if (!sheet) {
+      trace.info("Feuille SyncCodex absente : création.");
       sheet = ss.insertSheet(SYNC_CODEX_SHEET_NAME);
     }
 
@@ -496,18 +517,57 @@ function synchroniserCodex() {
     const erreursDocuments = [];
     const documents = lireDocumentsCodex_();
 
-    for (const config of documents) {
+    // État d'avant, pour le journal des changements (JournalCodex.js).
+    const articlesAvant = lireArticlesSyncCodex_(sheet);
+    const sourcesAvant = lireSourcesSyncCodex_(sheet);
+    const sourcesIllisibles = [];
+    const parDocument = [];
+
+    trace.info(
+      documents.length + " document(s) à lire. Cache actuel : " +
+      articlesAvant.length + " article(s), " + sourcesAvant.length + " document(s)."
+    );
+
+    documents.forEach((config, i) => {
+      const rang = "[" + (i + 1) + "/" + documents.length + "] " + config.source;
+      const debutDocument = Date.now();
+
       try {
         const document = DocumentApp.openById(config.id);
         const parsed = extraireArticlesCodex_(document, config);
+        const alertes = parsed.filter(article => article.alerte);
 
         articles.push(...parsed);
-      } catch (error) {
-        erreursDocuments.push(
-          `${config.source} : ${error.message || error}`
+        parDocument.push({ source: config.source, articles: parsed.length, alertes: alertes.length, duree: Date.now() - debutDocument });
+
+        trace.info(
+          rang + " : " + parsed.length + " article(s)" +
+          (alertes.length ? ", " + alertes.length + " alerte(s) de lecture" : "") +
+          " (" + (Date.now() - debutDocument) + " ms)"
         );
+        alertes.slice(0, 5).forEach(article => trace.info("    alerte, article " + article.article + " : " + article.alerte));
+        if (alertes.length > 5) trace.info("    … et " + (alertes.length - 5) + " autre(s) alerte(s).");
+        if (!parsed.length) trace.alerte(rang + " : aucun article reconnu. Vérifier la forme des intitulés « Article N ».");
+      } catch (error) {
+        const message = String(error.message || error);
+        erreursDocuments.push(config.source + " : " + message);
+
+        /*
+          Document illisible ce jour-là (droits, Drive indisponible) : ses
+          articles précédents sont conservés, à leur place. Sans cela, ses lois
+          disparaîtraient du Codex jusqu'à la synchronisation suivante, et le
+          journal les annoncerait abrogées.
+        */
+        const conserves = articlesAvant.filter(article => article.source === config.source);
+        sourcesIllisibles.push(config.source);
+        articles.push(...conserves);
+        parDocument.push({ source: config.source, articles: conserves.length, alertes: 0, duree: Date.now() - debutDocument, illisible: true, erreur: message });
+
+        trace.alerte(rang + " : ILLISIBLE — " + message + " — " + conserves.length + " article(s) précédent(s) conservé(s).");
       }
-    }
+    });
+
+    trace.info("Écriture du cache SyncCodex : " + articles.length + " article(s)…");
 
     ecrireSyncCodex_(sheet, articles);
 
@@ -526,12 +586,38 @@ function synchroniserCodex() {
 
     SpreadsheetApp.flush();
 
+    /*
+      Journal : l'après est relu dans la feuille, comme l'avant, pour comparer
+      ce que Sheets a réellement écrit et non ce que l'extraction a produit.
+    */
+    const journal = journaliserSynchroCodex_(ss, {
+      avant: articlesAvant,
+      apres: lireArticlesSyncCodex_(sheet),
+      sourcesAvant: sourcesAvant,
+      sourcesApres: documents.map(document => document.source),
+      sourcesIllisibles: sourcesIllisibles,
+      erreurs: erreursDocuments,
+      parDocument: parDocument,
+      duree: Date.now() - debut,
+      origine: origine
+    });
+
+    trace.info(decrireSynchroCodex_(journal, Date.now() - debut));
+    trace.fin();
+
     return {
       articles: articles.length,
       documents: documents.length,
-      erreurs: erreursDocuments
+      erreurs: erreursDocuments,
+      changements: journal.compte,
+      duree: Date.now() - debut,
+      traces: trace.lignes()
     };
 
+  } catch (error) {
+    trace.erreur("Synchronisation du Codex interrompue : " + (error.message || error));
+    trace.fin();
+    throw error;
   } finally {
     try {
       lock.releaseLock();
@@ -1408,6 +1494,51 @@ function ecrireCacheDocumentsCodex_(sheet, documents) {
   sheet.setColumnWidth(SYNC_CODEX_DOCUMENTS_COLUMN + 1, 160);
   sheet.setColumnWidth(SYNC_CODEX_DOCUMENTS_COLUMN + 2, 200);
   sheet.setColumnWidth(SYNC_CODEX_DOCUMENTS_COLUMN + 3, 240);
+}
+
+
+// ============================================================
+// RELECTURE DU CACHE
+// ============================================================
+
+/*
+  Articles du cache A:J, dans l'ordre de la feuille, sous la forme que produit
+  l'extraction : montants et durées en valeurs, le reste en texte affiché.
+*/
+function lireArticlesSyncCodex_(sheet) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+
+  const range = sheet.getRange(2, 1, lastRow - 1, 10);
+  const values = range.getValues();
+  const display = range.getDisplayValues();
+  const texte = valeur => String(valeur || "").trim();
+
+  return display.map((ligne, i) => ({
+    source: texte(ligne[0]),
+    article: texte(ligne[1]),
+    titre: texte(ligne[2]),
+    classification: texte(ligne[3]),
+    amende: values[i][4],
+    travaux: values[i][5],
+    cachot: values[i][6],
+    sanction: texte(ligne[7]),
+    texte: texte(ligne[8]),
+    alerte: texte(ligne[9])
+  })).filter(article => article.source || article.article || article.titre);
+}
+
+
+// Sources du cache des documents (R), ou liste vide avant sa création.
+function lireSourcesSyncCodex_(sheet) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2 || sheet.getLastColumn() < SYNC_CODEX_DOCUMENTS_COLUMN) return [];
+
+  return sheet
+    .getRange(2, SYNC_CODEX_DOCUMENTS_COLUMN, lastRow - 1, 1)
+    .getDisplayValues()
+    .map(ligne => String(ligne[0] || "").trim())
+    .filter(Boolean);
 }
 
 

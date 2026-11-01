@@ -50,7 +50,7 @@ const context = vm.createContext({ Date, console, SPREADSHEET_ID:'test',
   HtmlService: { createHtmlOutputFromFile(name) { assert.equal(name,'CatalogueObjets'); seedReads++; return { getContent: () => JSON.stringify(seed) }; } },
   Utilities: { formatDate: date => date.toISOString(), DigestAlgorithm: { MD5: 'md5' }, Charset: { UTF_8: 'utf8' }, computeDigest: () => [1, 2, 3], base64EncodeWebSafe: () => 'v' }
 });
-for (const f of ['SyncCodex.js','Codex.js','Amendes.js','Objets.js','Prison.js']) vm.runInContext(readFileSync(`src/${f}`,'utf8'),context);
+for (const f of ['SyncCodex.js','Codex.js','JournalCodex.js','Amendes.js','Objets.js','Prison.js']) vm.runInContext(readFileSync(`src/${f}`,'utf8'),context);
 const plain = x => JSON.parse(JSON.stringify(x));
 const search = q => plain(context.rechercherObjets('GARDE',q));
 const prison = new Sheet('Prison', [Array(11).fill('En-tête'), ['2026-09-01','Garde','Ancien','','Vol',1,'','','', 'Deux épées\nUne bourse', 'Note historique']]);

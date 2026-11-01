@@ -52,7 +52,7 @@ const ctx = vm.createContext({
     base64EncodeWebSafe: octets => Buffer.from(octets).toString('base64url')
   }
 });
-for (const file of ['SyncCodex.js', 'Codex.js', 'Amendes.js', 'PeinesAmendes.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
+for (const file of ['SyncCodex.js', 'Codex.js', 'JournalCodex.js', 'Amendes.js', 'PeinesAmendes.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
 const plain = v => JSON.parse(JSON.stringify(v));
 const SEED = Array.from(vm.runInContext('PEINES_INITIALES', ctx));
 const SOURCES = vm.runInContext('PEINES_SOURCES', ctx);

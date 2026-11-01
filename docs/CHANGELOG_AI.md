@@ -1,5 +1,19 @@
 # Journal de passation IA
 
+## 2026-11-01 — Nouveautés du Codex, journal des synchronisations
+
+- Demande du propriétaire : notifier les usagers du Codex des lois changées,
+  disparues ou nouvelles ; journal lisible pour lui aussi ; logs bavards dans
+  l'éditeur ; bouton des officiers à délai de trois minutes ; fenêtre avec les
+  traces en direct.
+- Choix : feuille `JournalCodex` écrite par la synchronisation, journal
+  transporté par `getCodex` (seule fonction publique), fenêtre modale plutôt
+  qu'une page. Trouvé en route : un document illisible faisait disparaître
+  ses articles du Codex jusqu'au passage suivant ; ils sont désormais gardés.
+- Traces en direct : Apps Script ne répond qu'à la fin, d'où une publication
+  dans `CacheService` sous un identifiant tiré par le navigateur.
+- 35 suites vertes ; aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-11-01 — Fiche de service de tout effectif
 
 - Demande du propriétaire : reprendre le Livret de service (Discord seul,

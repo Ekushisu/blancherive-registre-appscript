@@ -122,6 +122,23 @@ rôles placés au-dessus du bot : ignorés et signalés par numéro de ligne.
 - `R:Y` métadonnées des documents synchronisés : Source, Famille, Autorité, Applicabilité, Local, Lien, Abrégé, Citable. Écrit par `ecrireCacheDocumentsCodex_()` et relu par `Codex.js`. Ce bloc existe pour les décrets déposés dans un dossier Drive, qui ne figurent dans aucune déclaration du code : sans lui, chaque consultation du Codex devrait lister le dossier. Un cache écrit avant l'ajout de X:Y laisse ces cellules vides : sigle dérivé du nom, document citable.
 - L'ensemble est régénéré par `synchroniserCodex()` et ne doit pas être édité à la main.
 
+## JournalCodex — journal des synchronisations
+
+Feuille créée par la première synchronisation après le 1er novembre 2026, écrite à la suite par `synchroniserCodex()` seule (`JournalCodex.js`), jamais à la main. Chaque passage s'ouvre par une ligne `synchronisation`, même sans changement.
+
+| Col. | Contenu |
+|---|---|
+| A | Synchronisation — date ISO en texte, commune aux lignes d'un passage |
+| B | Type — `synchronisation`, `ajout`, `modification`, `retrait`, `document-ajout`, `document-retrait`, `document-illisible` |
+| C | Source |
+| D | Article |
+| E | Titre — actuel, ou dernier connu d'un article retiré |
+| F | Champs modifiés — `titre`, `classification`, `sanction`, `texte` |
+| G | Avant — JSON des champs d'avant (tout l'article pour un retrait) |
+| H | Après — JSON des champs d'après ; pour la ligne `synchronisation`, le compte rendu : articles, documents, erreurs, durée, origine (`editeur` ou `registre`), détail par document |
+
+Un texte trop long pour une cellule est tronqué et marqué `tronque`. `getCodex` ne renvoie que les douze derniers passages, 150 changements au plus chacun. La propriété de script `CODEX_SYNCHRO_BOUTON` (heure du dernier lancement par le bouton) et l'entrée de cache `CODEX_SYNCHRO_PROGRESSION` (traces du passage en cours, dix minutes) sont techniques.
+
 - Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Cadet restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation. L'initialisation n'a lieu que sur une feuille vide : une feuille existante n'acquiert pas de ligne `Cadet` toute seule.
 - Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird et le Jarl restent exclus indépendamment du barème : le Jarl n'a pas besoin de ligne. Le Huscarl est soldé au tarif de sa ligne, à défaut à celui de `Par défaut`. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
 - La formule N de la semaine courante contient le tarif journalier numérique du grade de la ligne, multiplié par M. Le barème est appliqué au chargement des Présences/du tableau de bord et lors des générations/réparations de formules.

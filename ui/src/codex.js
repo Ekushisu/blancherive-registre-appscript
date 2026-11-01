@@ -81,7 +81,9 @@ export function preparerCodex(reponse) {
     return article;
   });
   const sources = reponse.sources.map(s => ({ ...s, abrege: s.abrege || s.nom, citable: s.citable !== false, _abrege: normaliserTexteCodex(s.abrege || s.nom), _nom: normaliserTexteCodex(s.nom) }));
-  return { version: String(reponse.version || ''), articles, sources, parCle };
+  // Nouveautés (journal-codex.js) : absentes d'un cache local antérieur.
+  const journal = Array.isArray(reponse.journal) ? reponse.journal : [];
+  return { version: String(reponse.version || ''), articles, sources, parCle, journal };
 }
 
 export function articleParCle(codex, source, article) {
@@ -240,7 +242,7 @@ function lireStockage() {
 }
 
 function ecrireStockage(reponse) {
-  try { globalThis.localStorage?.setItem(CLE_CODEX_LOCAL, JSON.stringify({ version: reponse.version, articles: reponse.articles, sources: reponse.sources })); }
+  try { globalThis.localStorage?.setItem(CLE_CODEX_LOCAL, JSON.stringify({ version: reponse.version, articles: reponse.articles, sources: reponse.sources, journal: reponse.journal || [] })); }
   catch { /* quota ou stockage refusé : le Codex reste en mémoire */ }
 }
 
@@ -273,7 +275,8 @@ export function chargerCodex(serverCall, token) {
 // Réservé aux tests.
 export function reinitialiserCodex() { codexCourant = null; chargementEnCours = null; }
 
-export function useCodex(serverCall, token, actif = true) {
+// `cle` : changer sa valeur recharge le Codex (après une synchronisation lancée du registre).
+export function useCodex(serverCall, token, actif = true, cle = 0) {
   const { useEffect, useState } = React;
   const [etat, setEtat] = useState(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? (codexEnMemoire() ? 'pret' : 'chargement') : 'inactif', erreur: '' }));
   useEffect(() => {
@@ -284,6 +287,6 @@ export function useCodex(serverCall, token, actif = true) {
       .then(codex => { if (vivant) setEtat({ codex, statut: 'pret', erreur: '' }); })
       .catch(error => { if (vivant) setEtat(e => ({ codex: e.codex, statut: e.codex ? 'pret' : 'erreur', erreur: error.message || String(error) })); });
     return () => { vivant = false; };
-  }, [serverCall, token, actif]);
+  }, [serverCall, token, actif, cle]);
   return etat;
 }

@@ -32,7 +32,7 @@ function baremeServeur() {
       base64EncodeWebSafe: octets => Buffer.from(octets).toString('base64url')
     }
   });
-  for (const file of ['SyncCodex.js', 'Codex.js', 'Amendes.js', 'PeinesAmendes.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
+  for (const file of ['SyncCodex.js', 'Codex.js', 'JournalCodex.js', 'Amendes.js', 'PeinesAmendes.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
   lignes.push(Array.from(vm.runInContext('PEINES_HEADERS', ctx)), ...Array.from(ctx.construireBaremeInitial_(), l => Array.from(l)));
   return JSON.parse(JSON.stringify(ctx.lirePeinesAmendes_(feuille)));
 }

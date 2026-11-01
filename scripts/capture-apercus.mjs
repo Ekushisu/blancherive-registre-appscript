@@ -38,6 +38,9 @@ const reponses = {
   getAmendes: () => donnees.amendes,
   getAmendeFormData: () => donnees.amendeForm,
   getCodex: () => donnees.codex,
+  // Synchronisation lancée du registre : le stub répond aussitôt, la fenêtre montre le résultat et ses traces.
+  getProgressionSynchroCodex: () => ({ fini: false, lignes: [] }),
+  synchroniserCodexRegistre: () => donnees.synchroResultat,
   getPeinesAmendes: () => donnees.peines,
   getOrganigramme: () => donnees.organigramme,
   getEffectifs: () => donnees.effectifs,
@@ -233,6 +236,31 @@ const apercus = {
     nav: "Codex",
     attendre: ".codex-list",
     largeurs: [390, 1440]
+  },
+  // Nouveautés du Codex : fenêtre des changements de la dernière synchronisation.
+  "codex-nouveautes": {
+    nav: "Codex",
+    attendre: ".codex-list",
+    largeurs: [390, 1440],
+    ecranSeul: true,
+    async preparer(page) {
+      await page.getByRole("button", { name: /^Nouveautés/ }).click();
+      await page.waitForSelector(".journal-codex");
+      await page.locator(".journal-modification details").first().evaluate(d => { d.open = true; });
+      await page.locator(".journal-rapport").first().evaluate(d => { d.open = true; });
+    }
+  },
+  // Synchronisation lancée par un officier : traces du serveur en direct.
+  "codex-synchro": {
+    nav: "Codex",
+    attendre: ".codex-list",
+    largeurs: [1440],
+    ecranSeul: true,
+    async preparer(page) {
+      await page.getByRole("button", { name: /^Nouveautés/ }).click();
+      await page.getByRole("button", { name: "Synchroniser maintenant" }).click();
+      await page.waitForSelector(".synchro-trace-alerte");
+    }
   },
   // Décrets de peines et amendes, limités au Corpus Juriscivilis : la page
   // entière, quelque 160 niveaux, donnerait une capture démesurée. Ces aperçus

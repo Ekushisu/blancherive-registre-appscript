@@ -187,7 +187,7 @@ function construirePeines() {
       base64EncodeWebSafe: octets => Buffer.from(octets).toString("base64url")
     }
   });
-  for (const fichier of ["SyncCodex.js", "Codex.js", "Amendes.js", "PeinesAmendes.js"]) {
+  for (const fichier of ["SyncCodex.js", "Codex.js", "JournalCodex.js", "Amendes.js", "PeinesAmendes.js"]) {
     vm.runInContext(readFileSync(new URL(`../src/${fichier}`, import.meta.url), "utf8"), contexte);
   }
   lignes.push(Array.from(vm.runInContext("PEINES_HEADERS", contexte)), ...Array.from(contexte.construireBaremeInitial_(), l => Array.from(l)));
@@ -336,8 +336,55 @@ export const amendes = {
   ]
 };
 
+// Journal des synchronisations (src/JournalCodex.js) : nouveautés du Codex.
+const JOURNAL_CODEX_DEMO = [
+  {
+    date: new Date(Date.now() - 2 * 86400000).toISOString(), origine: "registre", articles: 452, documents: 18, erreurs: [], duree: 38400,
+    parDocument: [
+      { source: "Code pénal local de Blancherive", articles: 31, alertes: 0, duree: 2100 },
+      { source: "Décret sur le couvre-feu", articles: 4, alertes: 1, duree: 900 }
+    ],
+    compte: { ajouts: 1, modifications: 2, retraits: 1, documentsAjoutes: 1, documentsRetires: 0, documentsIllisibles: 0 },
+    tronque: false,
+    changements: [
+      { type: "document-ajout", source: "Décret sur le couvre-feu", article: "", titre: "", champs: [], avant: null, apres: null },
+      { type: "ajout", source: "Code pénal local de Blancherive", article: "4", titre: "Refus d’obtempérer à une injonction locale", champs: [],
+        avant: null, apres: { titre: "Refus d’obtempérer à une injonction locale", classification: "délit", sanction: "Amende de 250 à 500 septims ou 6 à 24 heures de cachot" } },
+      { type: "modification", source: "Code pénal local de Blancherive", article: "16", titre: "Injure", champs: ["sanction", "texte"],
+        avant: { sanction: "Amende de 50 septims", texte: "Quiconque injurie un garde dans l’exercice de ses fonctions est puni d’une amende de 50 septims." },
+        apres: { sanction: "Amende de 100 septims", texte: "Quiconque injurie un garde ou un officier dans l’exercice de ses fonctions est puni d’une amende de 100 septims." } },
+      { type: "modification", source: "Code pénal local de Blancherive", article: "9", titre: "Propos irrespectueux envers une autorité locale", champs: ["classification"],
+        avant: { classification: "contravention" }, apres: { classification: "délit" } },
+      { type: "retrait", source: "Code pénal local de Blancherive", article: "21", titre: "Port de la capuche dans l’enceinte du fort", champs: [],
+        avant: { titre: "Port de la capuche dans l’enceinte du fort", classification: "contravention", sanction: "Amende de 20 septims", texte: "Le port de la capuche est interdit dans l’enceinte de Fort-Dragon." }, apres: null }
+    ]
+  },
+  {
+    date: new Date(Date.now() - 16 * 86400000).toISOString(), origine: "editeur", articles: 448, documents: 17, erreurs: [], duree: 41200, parDocument: [],
+    compte: { ajouts: 0, modifications: 0, retraits: 0, documentsAjoutes: 0, documentsRetires: 0, documentsIllisibles: 0 }, tronque: false, changements: []
+  }
+];
+
+// Traces d'une synchronisation lancée du registre, telles que le serveur les publie.
+export const synchroTraces = [
+  { niveau: "info", ms: 12, texte: "Synchronisation du Codex (bouton du registre) : attente du verrou…" },
+  { niveau: "info", ms: 640, texte: "18 document(s) à lire. Cache actuel : 452 article(s), 18 document(s)." },
+  { niveau: "info", ms: 2900, texte: "[1/18] Code pénal local de Blancherive : 31 article(s) (2240 ms)" },
+  { niveau: "info", ms: 4100, texte: "[2/18] Corpus Juriscivilis : 58 article(s), 1 alerte(s) de lecture (1180 ms)" },
+  { niveau: "info", ms: 4100, texte: "    alerte, article 12 : Sanction illisible" },
+  { niveau: "alerte", ms: 6300, texte: "[3/18] Décret sur les marchés : ILLISIBLE — Accès refusé au document. — 6 article(s) précédent(s) conservé(s)." },
+  { niveau: "info", ms: 31200, texte: "Écriture du cache SyncCodex : 452 article(s)…" },
+  { niveau: "info", ms: 37900, texte: "Synchronisation du Codex terminée en 37,9 s.\nChangements : 0 nouveau(x), 1 modifié(s), 0 retiré(s) ; documents : 0 ajouté(s), 0 retiré(s), 1 illisible(s).\n  ~ Code pénal local de Blancherive art. 16 — Injure [sanction, texte]\n  ! document illisible Décret sur les marchés : Accès refusé au document.\nDétail : feuille JournalCodex, et « Nouveautés » sur la page Codex du registre." }
+];
+export const synchroResultat = {
+  articles: 452, documents: 18, erreurs: ["Décret sur les marchés : Accès refusé au document."], duree: 37900,
+  changements: { ajouts: 0, modifications: 1, retraits: 0, documentsAjoutes: 0, documentsRetires: 0, documentsIllisibles: 1 },
+  traces: synchroTraces
+};
+
 export const codex = {
   "version": "demo",
+  "journal": JOURNAL_CODEX_DEMO,
   "sources": [
     {
       "nom": "Code pénal local de Blancherive",

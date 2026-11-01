@@ -6992,6 +6992,271 @@ input.champ-impose {
   .nav.nav-dense::-webkit-scrollbar {
     display: none;
   }
+}
+.codex-nouveautes-bandeau {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border: 1px solid #c6ad7a;
+  border-left: 4px solid var(--gold);
+  border-radius: 3px;
+  background: #f6ecd3;
+  color: #594024;
+}
+.codex-nouveautes-bouton {
+  position: relative;
+}
+.codex-nouveautes-bouton .codex-nouveautes-compte {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--seal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+.law-chip-nouveau {
+  background: #e4ead2;
+  color: #3f5324;
+  border-color: #b7c48f;
+}
+.law-chip-modifie {
+  background: #f6e7c9;
+  color: #7a5410;
+  border-color: #dcc08a;
+}
+.journal-codex {
+  width: min(960px, 100%);
+}
+.journal-derniere {
+  margin: 6px 0 0;
+  color: #87704a;
+  font-size: 13px;
+}
+.journal-synchro {
+  margin: 0 0 10px;
+}
+.journal-synchro > details {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+.journal-synchro > details > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font: 16px Georgia, serif;
+  color: #49321d;
+}
+.journal-synchro > details > summary:hover {
+  background: #f5ecd8;
+}
+.journal-resume {
+  color: #76603c;
+  font: 13px system-ui, sans-serif;
+}
+.journal-groupe {
+  padding: 0 16px 14px;
+}
+.journal-groupe h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 12px 0 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #87704a;
+}
+.journal-groupe h3 span {
+  font-weight: 400;
+}
+.journal-groupe ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.journal-entree {
+  padding: 9px 12px;
+  border: 1px solid #e2d4b6;
+  border-left-width: 4px;
+  border-radius: 3px;
+  background: #fbf3e1;
+  color: #49321d;
+  line-height: 1.5;
+}
+.journal-entree small {
+  color: #87704a;
+}
+.journal-ajout,
+.journal-document-ajout {
+  border-left-color: #7e9450;
+}
+.journal-modification {
+  border-left-color: #c99a3a;
+}
+.journal-retrait,
+.journal-document-retrait {
+  border-left-color: #a5432f;
+}
+.journal-entree summary {
+  cursor: pointer;
+}
+.journal-entree > span {
+  display: block;
+}
+.journal-champ {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+.journal-diff {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.journal-diff ins,
+.journal-champ ins {
+  background: #dfe8c4;
+  color: #2f4214;
+  text-decoration: none;
+  padding: 0 2px;
+}
+.journal-diff del,
+.journal-champ del {
+  background: #f3d2cb;
+  color: #7a2f1f;
+  text-decoration: line-through;
+  padding: 0 2px;
+}
+.journal-avant {
+  margin: 8px 0 0;
+  color: #6f5a3c;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.journal-lire {
+  display: inline-block;
+  min-height: 32px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+}
+.journal-note {
+  margin: 4px 16px 14px;
+  color: #87704a;
+  font-style: italic;
+  font-size: 13px;
+}
+.journal-rapport {
+  margin: 0 16px 14px;
+  padding: 10px 12px;
+  border: 1px dashed #d8c39c;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #594024;
+}
+.journal-rapport summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.journal-rapport p {
+  margin: 8px 0;
+}
+.journal-documents {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+.journal-documents th,
+.journal-documents td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #e9dcc2;
+  text-align: left;
+  vertical-align: top;
+}
+.journal-documents th {
+  font-weight: 600;
+  color: #87704a;
+}
+.journal-illisible {
+  color: #7a2f1f;
+}
+.journal-synchroniser {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding-bottom: 16px;
+  border-bottom: 3px double #ccb184;
+}
+.journal-synchroniser small {
+  color: #87704a;
+}
+.synchro-codex {
+  width: min(880px, 100%);
+}
+.synchro-traces {
+  list-style: none;
+  margin: 0;
+  padding: 12px 14px;
+  max-height: 50vh;
+  overflow-y: auto;
+  border: 1px solid #d8c39c;
+  border-radius: 3px;
+  background: #2d241b;
+  color: #e9dcc2;
+  font:
+    13px/1.6 ui-monospace,
+    Consolas,
+    monospace;
+}
+.synchro-trace {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 10px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.synchro-trace > span:first-child {
+  color: #a08a62;
+  text-align: right;
+}
+.synchro-trace-alerte {
+  color: #f0c674;
+}
+.synchro-trace-erreur {
+  color: #f29b8b;
+}
+@media (max-width: 600px) {
+  .codex-nouveautes-bandeau {
+    padding: 10px 12px;
+  }
+  .journal-groupe {
+    padding: 0 10px 12px;
+  }
+  .synchro-trace {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 6px;
+  }
 }</style>
 </head>
 <body>
@@ -7302,14 +7567,14 @@ input.champ-impose {
   function cleNomFiche(nom) {
     return String(nom != null ? nom : "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
   }
-  function memoriserFiche(cache, data, depuis) {
+  function memoriserFiche(cache, data, depuis2) {
     const fiche = data == null ? void 0 : data.fiche;
     if (!cache || !fiche) return;
     const nom = cleNomFiche(fiche.nomComplet);
     const cles = [fiche.memberId && `id:${fiche.memberId}`, nom && `nom:${nom}`].filter(Boolean);
     for (const cle of cles) {
       const actuelle = cache.get(cle);
-      if (!actuelle || actuelle.depuis <= depuis) cache.set(cle, { data, depuis });
+      if (!actuelle || actuelle.depuis <= depuis2) cache.set(cle, { data, depuis: depuis2 });
     }
   }
   function ficheEnCache(cache, cible) {
@@ -7326,8 +7591,8 @@ input.champ-impose {
     const valeur = useMemo(() => ({ ouvrir: (cible) => setPile((p) => [...p, cible]) }), []);
     useEffect2(() => {
       const minuteur = setTimeout(() => {
-        const depuis = Date.now();
-        serverCall2("getFichesService", token).then((reponse) => ((reponse == null ? void 0 : reponse.fiches) || []).forEach((data) => memoriserFiche(cache.current, data, depuis))).catch(() => {
+        const depuis2 = Date.now();
+        serverCall2("getFichesService", token).then((reponse) => ((reponse == null ? void 0 : reponse.fiches) || []).forEach((data) => memoriserFiche(cache.current, data, depuis2))).catch(() => {
         });
       }, delaiPrechargement);
       return () => clearTimeout(minuteur);
@@ -7375,10 +7640,10 @@ input.champ-impose {
       const connue = ficheEnCache(cache, cible);
       setEtat({ data: (connue == null ? void 0 : connue.data) || null, erreur: "", miseAJour: true, avertissement: "" });
       (_b = (_a = panneau.current) == null ? void 0 : _a.scrollTo) == null ? void 0 : _b.call(_a, 0, 0);
-      const depuis = Date.now();
+      const depuis2 = Date.now();
       serverCall2("getFicheService", token, cible).then((data2) => {
         if (!vivant) return;
-        memoriserFiche(cache, data2, depuis);
+        memoriserFiche(cache, data2, depuis2);
         setEtat({ data: data2, erreur: "", miseAJour: false, avertissement: "" });
       }).catch((e) => {
         if (!vivant) return;
@@ -7613,7 +7878,8 @@ input.champ-impose {
       return article;
     });
     const sources = reponse.sources.map((s) => ({ ...s, abrege: s.abrege || s.nom, citable: s.citable !== false, _abrege: normaliserTexteCodex(s.abrege || s.nom), _nom: normaliserTexteCodex(s.nom) }));
-    return { version: String(reponse.version || ""), articles, sources, parCle };
+    const journal = Array.isArray(reponse.journal) ? reponse.journal : [];
+    return { version: String(reponse.version || ""), articles, sources, parCle, journal };
   }
   function articleParCle(codex, source, article) {
     var _a;
@@ -7739,7 +8005,7 @@ input.champ-impose {
   function ecrireStockage(reponse) {
     var _a;
     try {
-      (_a = globalThis.localStorage) == null ? void 0 : _a.setItem(CLE_CODEX_LOCAL, JSON.stringify({ version: reponse.version, articles: reponse.articles, sources: reponse.sources }));
+      (_a = globalThis.localStorage) == null ? void 0 : _a.setItem(CLE_CODEX_LOCAL, JSON.stringify({ version: reponse.version, articles: reponse.articles, sources: reponse.sources, journal: reponse.journal || [] }));
     } catch (e) {
     }
   }
@@ -7768,10 +8034,10 @@ input.champ-impose {
     })();
     return chargementEnCours;
   }
-  function useCodex(serverCall2, token, actif = true) {
-    const { useEffect: useEffect10, useState: useState10 } = React;
-    const [etat, setEtat] = useState10(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect10(() => {
+  function useCodex(serverCall2, token, actif = true, cle = 0) {
+    const { useEffect: useEffect11, useState: useState11 } = React;
+    const [etat, setEtat] = useState11(() => ({ codex: actif ? codexEnMemoire() : null, statut: actif ? codexEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect11(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.codex ? "pret" : "chargement", erreur: "" }));
@@ -7783,7 +8049,7 @@ input.champ-impose {
       return () => {
         vivant = false;
       };
-    }, [serverCall2, token, actif]);
+    }, [serverCall2, token, actif, cle]);
     return etat;
   }
 
@@ -8239,9 +8505,9 @@ input.champ-impose {
     return chargementEnCours2;
   }
   function usePeines(serverCall2, token, actif = true) {
-    const { useEffect: useEffect10, useState: useState10 } = React;
-    const [etat, setEtat] = useState10(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect10(() => {
+    const { useEffect: useEffect11, useState: useState11 } = React;
+    const [etat, setEtat] = useState11(() => ({ peines: actif ? peinesEnMemoire() : null, statut: actif ? peinesEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect11(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.peines ? "pret" : "chargement", erreur: "" }));
@@ -8404,8 +8670,297 @@ input.champ-impose {
     } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "law-title" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, article.abrege && article.abrege !== article.source ? `${article.abrege} \xB7 ` : "", article.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${article.article}`), /* @__PURE__ */ React.createElement("h2", { id: "law-title", className: "law-modal-title" }, article.titre)), /* @__PURE__ */ React.createElement("button", { "aria-label": "Fermer l\u2019article", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, article.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.famille), /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.source), article.local && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-local" }, "Applicable localement"), article.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, article.classification), article.citable === false && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "Document de contexte \u2014 non citable"), (((_a = article.montants) == null ? void 0 : _a.length) > 0 || renseigne(article.amende)) && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = article.montants) == null ? void 0 : _b.length) ? article.montants.join(" / ") : article.amende, " septims"), (((_c = article.dureesCachot) == null ? void 0 : _c.length) > 0 || renseigne(article.cachot)) && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = article.dureesCachot) == null ? void 0 : _d.length) ? article.dureesCachot.map(formatHeures).join(" / ") : formatHeures(article.cachot)), renseigne(article.travaux) && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u2692 ", formatHeures(article.travaux))), (article.autorite || article.applicabilite) && /* @__PURE__ */ React.createElement("div", { className: "law-source-info" }, article.autorite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Autorit\xE9 :"), " ", article.autorite), article.applicabilite && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Domaine :"), " ", article.applicabilite)), article.texte && /* @__PURE__ */ React.createElement(TexteArticle, { texte: article.texte, article, codex, onNavigate }), article.sanction && /* @__PURE__ */ React.createElement("div", { className: "law-sanction-box" }, /* @__PURE__ */ React.createElement("strong", null, "\u2696 Sanction"), /* @__PURE__ */ React.createElement("div", null, article.sanction)), peines && /* @__PURE__ */ React.createElement(BaremeArticle, { peines, article }), article.alerte && /* @__PURE__ */ React.createElement("div", { className: "law-warning" }, "\u26A0 ", /* @__PURE__ */ React.createElement("strong", null, "V\xE9rification n\xE9cessaire :"), " ", article.alerte), naviguer && /* @__PURE__ */ React.createElement("div", { className: "law-nav" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !precedent, onClick: () => precedent && onNavigate(precedent), title: precedent ? `Art. ${precedent.article} \u2014 ${precedent.titre}` : "" }, "\u2190 Article pr\xE9c\xE9dent"), /* @__PURE__ */ React.createElement("span", { className: "law-nav-position" }, position + 1, " / ", memeSource.length), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !suivant, onClick: () => suivant && onNavigate(suivant), title: suivant ? `Art. ${suivant.article} \u2014 ${suivant.titre}` : "" }, "Article suivant \u2192")), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, onRetenir && article.citable !== false && /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: retenu, onClick: () => onRetenir(article) }, retenu ? "D\xE9j\xE0 retenu" : "Retenir ce chef d\u2019accusation"), article.url && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => window.open(article.url, "_blank") }, "Ouvrir le document source \u2197"), onOpenCodex && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => onOpenCodex(article) }, "Voir dans le Codex")))));
   }
 
+  // ui/src/journal-codex.js
+  var CLE_JOURNAL_VU = "blancherive.codex.journal-vu.v1";
+  var JOURS_RECENTS = 14;
+  var DELAI_BOUTON_MS = 3 * 60 * 1e3;
+  var JOUR_MS = 24 * 60 * 60 * 1e3;
+  var TYPES_LECTEUR = ["ajout", "modification", "retrait", "document-ajout", "document-retrait"];
+  function changementsLecteur(synchro) {
+    return ((synchro == null ? void 0 : synchro.changements) || []).filter((c) => TYPES_LECTEUR.includes(c.type));
+  }
+  function totalLecteur(synchro) {
+    const c = (synchro == null ? void 0 : synchro.compte) || {};
+    return (c.ajouts || 0) + (c.modifications || 0) + (c.retraits || 0) + (c.documentsAjoutes || 0) + (c.documentsRetires || 0);
+  }
+  function lireDernierVu(stockage = globalThis.localStorage) {
+    try {
+      return String((stockage == null ? void 0 : stockage.getItem(CLE_JOURNAL_VU)) || "");
+    } catch (e) {
+      return "";
+    }
+  }
+  function ecrireDernierVu(date, stockage = globalThis.localStorage) {
+    try {
+      if (date) stockage == null ? void 0 : stockage.setItem(CLE_JOURNAL_VU, date);
+    } catch (e) {
+    }
+  }
+  function synchrosNonVues(journal, vu, maintenant = Date.now()) {
+    const seuil = vu || new Date(maintenant - JOURS_RECENTS * JOUR_MS).toISOString();
+    return (journal || []).filter((s) => s.date > seuil && totalLecteur(s) > 0);
+  }
+  function resumerSynchros(synchros) {
+    const r = { ajouts: 0, modifications: 0, retraits: 0, documents: 0 };
+    for (const s of synchros || []) {
+      const c = s.compte || {};
+      r.ajouts += c.ajouts || 0;
+      r.modifications += c.modifications || 0;
+      r.retraits += c.retraits || 0;
+      r.documents += (c.documentsAjoutes || 0) + (c.documentsRetires || 0);
+    }
+    return r;
+  }
+  function totalResume(r) {
+    return r.ajouts + r.modifications + r.retraits + r.documents;
+  }
+  function phraseResume(r) {
+    const s = (n) => n > 1 ? "s" : "";
+    const parties = [];
+    if (r.ajouts) parties.push(`${r.ajouts} nouvelle${s(r.ajouts)} loi${s(r.ajouts)}`);
+    if (r.modifications) parties.push(`${r.modifications} loi${s(r.modifications)} modifi\xE9e${s(r.modifications)}`);
+    if (r.retraits) parties.push(`${r.retraits} loi${s(r.retraits)} retir\xE9e${s(r.retraits)}`);
+    if (r.documents) parties.push(`${r.documents} document${s(r.documents)} ajout\xE9${s(r.documents)} ou retir\xE9${s(r.documents)}`);
+    return parties.join(", ");
+  }
+  function changementsRecents(journal, maintenant = Date.now(), jours = JOURS_RECENTS) {
+    const seuil = new Date(maintenant - jours * JOUR_MS).toISOString();
+    const recents = /* @__PURE__ */ new Map();
+    for (const synchro of journal || []) {
+      if (synchro.date < seuil) continue;
+      for (const c of synchro.changements || []) {
+        if (c.type !== "ajout" && c.type !== "modification") continue;
+        const cle = cleArticle(c.source, c.article);
+        if (c.type === "ajout") recents.set(cle, "ajout");
+        else if (!recents.has(cle)) recents.set(cle, "modification");
+      }
+    }
+    return recents;
+  }
+  function depuis(dateIso, maintenant = Date.now()) {
+    const jours = Math.floor((maintenant - Date.parse(dateIso)) / JOUR_MS);
+    if (!Number.isFinite(jours)) return "";
+    if (jours <= 0) return "aujourd\u2019hui";
+    if (jours === 1) return "hier";
+    return `il y a ${jours} jours`;
+  }
+  function delaiBoutonRestant(journal, dernierClic = 0, maintenant = Date.now()) {
+    const parRegistre = (journal || []).find((s) => s.origine === "registre");
+    const reference = Math.max(parRegistre ? Date.parse(parRegistre.date) || 0 : 0, dernierClic || 0);
+    return Math.max(0, reference + DELAI_BOUTON_MS - maintenant);
+  }
+  function decouper(texte) {
+    return String(texte || "").split(/(\s+)/).filter((morceau) => morceau !== "");
+  }
+  function diffMots(avant, apres) {
+    const a = decouper(avant), b = decouper(apres);
+    let debut = 0;
+    while (debut < a.length && debut < b.length && a[debut] === b[debut]) debut++;
+    let finA = a.length, finB = b.length;
+    while (finA > debut && finB > debut && a[finA - 1] === b[finB - 1]) {
+      finA--;
+      finB--;
+    }
+    const x = a.slice(debut, finA), y = b.slice(debut, finB);
+    if (x.length * y.length > 15e5) return null;
+    const n = x.length, m = y.length;
+    const lcs = Array.from({ length: n + 1 }, () => new Uint32Array(m + 1));
+    for (let i2 = n - 1; i2 >= 0; i2--) {
+      for (let j2 = m - 1; j2 >= 0; j2--) {
+        lcs[i2][j2] = x[i2] === y[j2] ? lcs[i2 + 1][j2 + 1] + 1 : Math.max(lcs[i2 + 1][j2], lcs[i2][j2 + 1]);
+      }
+    }
+    const segments = [];
+    const ajouter = (type, texte) => {
+      if (!texte) return;
+      const dernier = segments[segments.length - 1];
+      if (dernier && dernier.type === type) dernier.texte += texte;
+      else segments.push({ type, texte });
+    };
+    ajouter("egal", a.slice(0, debut).join(""));
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (x[i] === y[j]) {
+        ajouter("egal", x[i]);
+        i++;
+        j++;
+      } else if (lcs[i + 1][j] >= lcs[i][j + 1]) ajouter("retrait", x[i++]);
+      else ajouter("ajout", y[j++]);
+    }
+    while (i < n) ajouter("retrait", x[i++]);
+    while (j < m) ajouter("ajout", y[j++]);
+    ajouter("egal", a.slice(finA).join(""));
+    return segments;
+  }
+
+  // ui/src/journal-codex.jsx
+  var { useEffect: useEffect6, useRef: useRef6, useState: useState4 } = React;
+  var CHAMPS = { titre: "Titre", classification: "Qualification", sanction: "Sanction", texte: "Texte" };
+  var GROUPES2 = [
+    ["ajout", "Nouvelles lois"],
+    ["modification", "Lois modifi\xE9es"],
+    ["retrait", "Lois retir\xE9es"],
+    ["document", "Documents"]
+  ];
+  function BandeauNouveautesCodex({ synchros, onVoir }) {
+    const resume = resumerSynchros(synchros);
+    if (!totalResume(resume)) return null;
+    return /* @__PURE__ */ React.createElement("div", { className: "codex-nouveautes-bandeau", role: "status" }, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, "Le Codex a chang\xE9"), " depuis votre derni\xE8re visite : ", phraseResume(resume), "."), /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onVoir }, "Voir les changements"));
+  }
+  function sigle(codex, source) {
+    var _a, _b;
+    return ((_b = (_a = codex == null ? void 0 : codex.sources) == null ? void 0 : _a.find((s) => s.nom === source)) == null ? void 0 : _b.abrege) || source;
+  }
+  function DiffTexte({ avant, apres }) {
+    const segments = diffMots(avant, apres);
+    if (!segments) {
+      return /* @__PURE__ */ React.createElement("div", { className: "journal-diff" }, /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("strong", null, "Avant")), /* @__PURE__ */ React.createElement("p", { className: "journal-avant" }, avant), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("strong", null, "Apr\xE8s")), /* @__PURE__ */ React.createElement("p", { className: "journal-apres" }, apres));
+    }
+    return /* @__PURE__ */ React.createElement("p", { className: "journal-diff" }, segments.map(
+      (s, i) => s.type === "ajout" ? /* @__PURE__ */ React.createElement("ins", { key: i }, s.texte) : s.type === "retrait" ? /* @__PURE__ */ React.createElement("del", { key: i }, s.texte) : /* @__PURE__ */ React.createElement("span", { key: i }, s.texte)
+    ));
+  }
+  function Entree({ changement: c, codex, onOuvrirArticle }) {
+    var _a, _b, _c, _d, _e, _f;
+    const article = c.article ? articleParCle(codex, c.source, c.article) : null;
+    const libelle = /* @__PURE__ */ React.createElement(React.Fragment, null, sigle(codex, c.source), c.article ? ` \xB7 art. ${c.article}` : "", c.titre ? ` \u2014 ${c.titre}` : "");
+    const lire = article && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button journal-lire", onClick: () => onOuvrirArticle(article) }, "Lire l\u2019article");
+    if (c.type === "document-ajout" || c.type === "document-retrait") {
+      return /* @__PURE__ */ React.createElement("li", { className: `journal-entree journal-${c.type}` }, /* @__PURE__ */ React.createElement("span", null, c.type === "document-ajout" ? "Document ajout\xE9" : "Document retir\xE9", " : ", /* @__PURE__ */ React.createElement("strong", null, c.source)), c.type === "document-retrait" && /* @__PURE__ */ React.createElement("small", null, "Ses articles ne sont plus en vigueur."));
+    }
+    if (c.type === "ajout") {
+      return /* @__PURE__ */ React.createElement("li", { className: "journal-entree journal-ajout" }, /* @__PURE__ */ React.createElement("span", null, libelle, ((_a = c.apres) == null ? void 0 : _a.classification) ? /* @__PURE__ */ React.createElement("small", null, " \xB7 ", c.apres.classification) : null), lire);
+    }
+    if (c.type === "modification") {
+      return /* @__PURE__ */ React.createElement("li", { className: "journal-entree journal-modification" }, /* @__PURE__ */ React.createElement("details", null, /* @__PURE__ */ React.createElement("summary", null, libelle, " ", /* @__PURE__ */ React.createElement("small", null, "\xB7 ", c.champs.map((champ) => CHAMPS[champ] || champ).join(", ").toLowerCase(), " modifi\xE9", c.champs.length > 1 ? "s" : "")), c.champs.filter((champ) => champ !== "texte").map((champ) => {
+        var _a2, _b2;
+        return /* @__PURE__ */ React.createElement("p", { key: champ, className: "journal-champ" }, /* @__PURE__ */ React.createElement("strong", null, CHAMPS[champ] || champ, " :"), " ", /* @__PURE__ */ React.createElement("del", null, ((_a2 = c.avant) == null ? void 0 : _a2[champ]) || "\u2014"), " \u2192 ", /* @__PURE__ */ React.createElement("ins", null, ((_b2 = c.apres) == null ? void 0 : _b2[champ]) || "\u2014"));
+      }), c.champs.includes("texte") && /* @__PURE__ */ React.createElement(DiffTexte, { avant: (_b = c.avant) == null ? void 0 : _b.texte, apres: (_c = c.apres) == null ? void 0 : _c.texte }), lire));
+    }
+    return /* @__PURE__ */ React.createElement("li", { className: "journal-entree journal-retrait" }, /* @__PURE__ */ React.createElement("details", null, /* @__PURE__ */ React.createElement("summary", null, libelle), ((_d = c.avant) == null ? void 0 : _d.sanction) && /* @__PURE__ */ React.createElement("p", { className: "journal-champ" }, /* @__PURE__ */ React.createElement("strong", null, "Sanction :"), " ", c.avant.sanction), /* @__PURE__ */ React.createElement("p", { className: "journal-avant" }, ((_e = c.avant) == null ? void 0 : _e.texte) || "Texte non conserv\xE9.", ((_f = c.avant) == null ? void 0 : _f.tronque) ? " (texte tronqu\xE9)" : "")));
+  }
+  function RapportTechnique({ synchro }) {
+    var _a, _b, _c, _d;
+    const illisibles = (synchro.changements || []).filter((c) => c.type === "document-illisible");
+    return /* @__PURE__ */ React.createElement("details", { className: "journal-rapport" }, /* @__PURE__ */ React.createElement("summary", null, "Compte rendu technique"), /* @__PURE__ */ React.createElement("p", null, synchro.origine === "registre" ? "Lanc\xE9e depuis le registre" : synchro.origine === "editeur" ? "Lanc\xE9e depuis l\u2019\xE9diteur Apps Script" : "Origine non not\xE9e", typeof synchro.duree === "number" ? ` \xB7 ${(synchro.duree / 1e3).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} s` : "", typeof synchro.articles === "number" ? ` \xB7 ${synchro.articles} articles` : "", typeof synchro.documents === "number" ? ` \xB7 ${synchro.documents} documents` : ""), ((_a = synchro.parDocument) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ React.createElement("table", { className: "journal-documents" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Document"), /* @__PURE__ */ React.createElement("th", null, "Articles"), /* @__PURE__ */ React.createElement("th", null, "Alertes de lecture"))), /* @__PURE__ */ React.createElement("tbody", null, synchro.parDocument.map((d) => /* @__PURE__ */ React.createElement("tr", { key: d.source, className: d.illisible ? "journal-illisible" : "" }, /* @__PURE__ */ React.createElement("td", null, d.source, d.illisible ? ` \u2014 illisible : ${d.erreur || "erreur inconnue"} (articles pr\xE9c\xE9dents conserv\xE9s)` : ""), /* @__PURE__ */ React.createElement("td", null, d.articles), /* @__PURE__ */ React.createElement("td", null, d.alertes || ""))))), !((_b = synchro.parDocument) == null ? void 0 : _b.length) && illisibles.map((c) => {
+      var _a2;
+      return /* @__PURE__ */ React.createElement("p", { key: c.source, className: "journal-illisible" }, c.source, " illisible : ", (_a2 = c.apres) == null ? void 0 : _a2.message);
+    }), ((_c = synchro.erreurs) == null ? void 0 : _c.length) > 0 && !((_d = synchro.parDocument) == null ? void 0 : _d.length) && /* @__PURE__ */ React.createElement("ul", null, synchro.erreurs.map((e, i) => /* @__PURE__ */ React.createElement("li", { key: i }, e))));
+  }
+  function Synchro({ synchro, codex, ouverte, officier, onOuvrirArticle }) {
+    const changements = changementsLecteur(synchro);
+    const resume = resumerSynchros([synchro]);
+    const groupe = (c) => c.type.startsWith("document") ? "document" : c.type;
+    return /* @__PURE__ */ React.createElement("section", { className: "journal-synchro" }, /* @__PURE__ */ React.createElement("details", { open: ouverte || void 0 }, /* @__PURE__ */ React.createElement("summary", null, /* @__PURE__ */ React.createElement("span", { className: "journal-date" }, /* @__PURE__ */ React.createElement(DateRP, { value: synchro.date })), /* @__PURE__ */ React.createElement("span", { className: "journal-resume" }, totalResume(resume) ? phraseResume(resume) : "Aucun changement")), GROUPES2.map(([cle, titre]) => {
+      const liste = changements.filter((c) => groupe(c) === cle);
+      return liste.length > 0 && /* @__PURE__ */ React.createElement("div", { key: cle, className: "journal-groupe" }, /* @__PURE__ */ React.createElement("h3", null, titre, " ", /* @__PURE__ */ React.createElement("span", null, liste.length)), /* @__PURE__ */ React.createElement("ul", null, liste.map((c, i) => /* @__PURE__ */ React.createElement(Entree, { key: `${c.type}-${c.source}-${c.article}-${i}`, changement: c, codex, onOuvrirArticle }))));
+    }), synchro.tronque && /* @__PURE__ */ React.createElement("p", { className: "journal-note" }, "Changements trop nombreux : seuls les premiers sont d\xE9taill\xE9s ici."), officier && /* @__PURE__ */ React.createElement(RapportTechnique, { synchro })));
+  }
+  function BoutonSynchroniser({ journal, dernierClic, enCours, onLancer }) {
+    const [maintenant, setMaintenant] = useState4(Date.now());
+    const restant = delaiBoutonRestant(journal, dernierClic, maintenant);
+    useEffect6(() => {
+      if (!restant) return void 0;
+      const minuteur = setInterval(() => setMaintenant(Date.now()), 1e3);
+      return () => clearInterval(minuteur);
+    }, [restant > 0]);
+    const secondes = Math.ceil(restant / 1e3);
+    return /* @__PURE__ */ React.createElement("div", { className: "journal-synchroniser" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: enCours || restant > 0, onClick: onLancer }, enCours ? "Synchronisation en cours\u2026" : "Synchroniser maintenant"), !enCours && restant > 0 && /* @__PURE__ */ React.createElement("small", null, "Nouvelle synchronisation possible dans ", secondes >= 60 ? `${Math.floor(secondes / 60)} min ${secondes % 60} s` : `${secondes} s`, "."));
+  }
+  var INTERVALLE_PROGRESSION = 2e3;
+  function nouveauSuivi() {
+    return `s${Date.now().toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`;
+  }
+  function LigneTrace({ ligne }) {
+    const secondes = typeof ligne.ms === "number" ? `${(ligne.ms / 1e3).toFixed(1)} s` : "";
+    return /* @__PURE__ */ React.createElement("li", { className: `synchro-trace synchro-trace-${ligne.niveau || "info"}` }, /* @__PURE__ */ React.createElement("span", null, secondes), /* @__PURE__ */ React.createElement("span", null, ligne.texte));
+  }
+  function SynchroCodexModal({ serverCall: serverCall2, token, onTermine, onClose }) {
+    var _a;
+    const [etat, setEtat] = useState4({ statut: "encours", lignes: [], resultat: null, erreur: "" });
+    const liste = useRef6(null);
+    const suivi = useRef6(nouveauSuivi());
+    const fermerRef = useRef6(onClose);
+    fermerRef.current = onClose;
+    useEffect6(() => {
+      let vivant = true;
+      const id = suivi.current;
+      const minuteur = setInterval(() => {
+        serverCall2("getProgressionSynchroCodex", token, id).then((p) => {
+          var _a2;
+          if (vivant && ((_a2 = p == null ? void 0 : p.lignes) == null ? void 0 : _a2.length)) setEtat((e) => e.statut === "encours" ? { ...e, lignes: p.lignes } : e);
+        }).catch(() => {
+        });
+      }, INTERVALLE_PROGRESSION);
+      serverCall2("synchroniserCodexRegistre", token, id).then((r2) => {
+        if (!vivant) return;
+        setEtat({ statut: "fait", lignes: r2.traces || [], resultat: r2, erreur: "" });
+        onTermine == null ? void 0 : onTermine(r2);
+      }).catch((e) => {
+        if (vivant) setEtat((etatPrecedent) => ({ ...etatPrecedent, statut: "erreur", erreur: e.message }));
+      }).finally(() => clearInterval(minuteur));
+      return () => {
+        vivant = false;
+        clearInterval(minuteur);
+      };
+    }, []);
+    useEffect6(() => {
+      var _a2, _b;
+      (_b = (_a2 = liste.current) == null ? void 0 : _a2.scrollTo) == null ? void 0 : _b.call(_a2, 0, liste.current.scrollHeight);
+    }, [etat.lignes.length]);
+    useEffect6(() => {
+      function touches(event) {
+        if (event.key === "Escape" && etat.statut !== "encours") {
+          event.preventDefault();
+          fermerRef.current();
+        }
+      }
+      document.addEventListener("keydown", touches);
+      return () => document.removeEventListener("keydown", touches);
+    }, [etat.statut]);
+    const r = etat.resultat;
+    const resume = r && {
+      ajouts: r.changements.ajouts,
+      modifications: r.changements.modifications,
+      retraits: r.changements.retraits,
+      documents: r.changements.documentsAjoutes + r.changements.documentsRetires
+    };
+    return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop synchro-fond", onMouseDown: (event) => {
+      if (event.target === event.currentTarget && etat.statut !== "encours") onClose();
+    } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal synchro-codex", role: "dialog", "aria-modal": "true", "aria-labelledby": "synchro-codex-titre" }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("h2", { id: "synchro-codex-titre", className: "law-modal-title" }, "Synchronisation du Codex"), /* @__PURE__ */ React.createElement("p", { className: "journal-derniere", role: "status" }, etat.statut === "encours" && "En cours : lecture des documents Google, jusqu\u2019\xE0 une minute\u2026", etat.statut === "fait" && `Termin\xE9e en ${(r.duree / 1e3).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} s : ${totalResume(resume) ? phraseResume(resume) : "aucun changement"}.${((_a = r.erreurs) == null ? void 0 : _a.length) ? ` ${r.erreurs.length} document(s) illisible(s), articles pr\xE9c\xE9dents conserv\xE9s.` : ""}`, etat.statut === "erreur" && "Interrompue.")), /* @__PURE__ */ React.createElement("button", { type: "button", "aria-label": "Fermer", className: "law-modal-close", disabled: etat.statut === "encours", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, etat.erreur && /* @__PURE__ */ React.createElement("p", { className: "error", role: "alert" }, etat.erreur), /* @__PURE__ */ React.createElement("ol", { className: "synchro-traces", ref: liste, "aria-live": "polite", "aria-label": "Journal de la synchronisation" }, etat.lignes.map((ligne, i) => /* @__PURE__ */ React.createElement(LigneTrace, { key: i, ligne })), etat.statut === "encours" && !etat.lignes.length && /* @__PURE__ */ React.createElement("li", { className: "synchro-trace synchro-trace-info" }, /* @__PURE__ */ React.createElement("span", null), /* @__PURE__ */ React.createElement("span", null, "Demande envoy\xE9e, en attente du serveur\u2026"))), etat.statut !== "encours" && /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", onClick: onClose }, "Fermer")))));
+  }
+  function JournalCodexModal({ codex, onClose, onOuvrirArticle, officier = false, onSynchroniser = null }) {
+    const dialogue = useRef6(null);
+    const fermerRef = useRef6(onClose);
+    fermerRef.current = onClose;
+    const journal = (codex == null ? void 0 : codex.journal) || [];
+    const dernier = journal[0];
+    useEffect6(() => {
+      var _a;
+      const precedent = document.activeElement, overflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      (_a = dialogue.current) == null ? void 0 : _a.focus();
+      function touches(event) {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          fermerRef.current();
+        }
+      }
+      document.addEventListener("keydown", touches);
+      return () => {
+        var _a2;
+        document.body.style.overflow = overflow;
+        document.removeEventListener("keydown", touches);
+        (_a2 = precedent == null ? void 0 : precedent.focus) == null ? void 0 : _a2.call(precedent);
+      };
+    }, []);
+    return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop", onMouseDown: (event) => {
+      if (event.target === event.currentTarget) onClose();
+    } }, /* @__PURE__ */ React.createElement("div", { className: "law-modal journal-codex", role: "dialog", "aria-modal": "true", "aria-labelledby": "journal-codex-titre", tabIndex: -1, ref: dialogue }, /* @__PURE__ */ React.createElement("div", { className: "law-modal-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "law-modal-number" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("h2", { id: "journal-codex-titre", className: "law-modal-title" }, "Nouveaut\xE9s du Codex"), /* @__PURE__ */ React.createElement("p", { className: "journal-derniere" }, dernier ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Derni\xE8re synchronisation : ", /* @__PURE__ */ React.createElement(DateRP, { value: dernier.date }), " (", depuis(dernier.date), ")") : "Aucune synchronisation n\u2019a encore \xE9t\xE9 not\xE9e.")), /* @__PURE__ */ React.createElement("button", { type: "button", "aria-label": "Fermer les nouveaut\xE9s", className: "law-modal-close", onClick: onClose }, "\xD7")), /* @__PURE__ */ React.createElement("div", { className: "law-modal-body" }, officier && onSynchroniser && /* @__PURE__ */ React.createElement(BoutonSynchroniser, { journal, onLancer: onSynchroniser }), journal.length ? journal.map((synchro, i) => /* @__PURE__ */ React.createElement(Synchro, { key: synchro.date, synchro, codex, ouverte: i === 0, officier, onOuvrirArticle })) : /* @__PURE__ */ React.createElement("p", { className: "journal-note" }, "Les changements appara\xEEtront ici apr\xE8s la prochaine synchronisation."))));
+  }
+
   // ui/src/peines.jsx
-  var { useMemo: useMemo2, useState: useState4 } = React;
+  var { useMemo: useMemo2, useState: useState5 } = React;
   var QUALIFS_FILTRE = ["contravention", "d\xE9lit", "crime"];
   var pluriel2 = (n, singulier, plurielForme) => `${n.toLocaleString("fr-FR")} ${n > 1 ? plurielForme : singulier}`;
   var ROMAINS = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1e3 };
@@ -8477,10 +9032,10 @@ input.champ-impose {
     const etat = usePeines(serverCall2, token, true);
     const codexEtat = useCodex(serverCall2, token, true);
     const peines = etat.peines, codex = codexEtat.codex;
-    const [recherche, setRecherche] = useState4("");
-    const [source, setSource] = useState4("");
-    const [qualification, setQualification] = useState4("");
-    const [lu, setLu] = useState4(null);
+    const [recherche, setRecherche] = useState5("");
+    const [source, setSource] = useState5("");
+    const [qualification, setQualification] = useState5("");
+    const [lu, setLu] = useState5(null);
     const groupes = useMemo2(() => regrouperBareme(peines, codex), [peines, codex]);
     const filtres = useMemo2(() => filtrerBareme(groupes, { recherche, source, qualification }), [groupes, recherche, source, qualification]);
     const grille = useMemo2(() => grilleEchelons(peines), [peines]);
@@ -8629,9 +9184,9 @@ input.champ-impose {
     return chargementEnCours3;
   }
   function useCatalogue(serverCall2, token, actif = true) {
-    const { useEffect: useEffect10, useState: useState10 } = React;
-    const [etat, setEtat] = useState10(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
-    useEffect10(() => {
+    const { useEffect: useEffect11, useState: useState11 } = React;
+    const [etat, setEtat] = useState11(() => ({ objets: actif ? catalogueEnMemoire() : null, statut: actif ? catalogueEnMemoire() ? "pret" : "chargement" : "inactif", erreur: "" }));
+    useEffect11(() => {
       if (!actif) return;
       let vivant = true;
       setEtat((e) => ({ ...e, statut: e.objets ? "pret" : "chargement", erreur: "" }));
@@ -8648,7 +9203,7 @@ input.champ-impose {
   }
 
   // ui/src/saisies.jsx
-  var { useEffect: useEffect6, useRef: useRef6, useState: useState5 } = React;
+  var { useEffect: useEffect7, useRef: useRef7, useState: useState6 } = React;
   var objetsCourants = [
     { id: "skyrim.esm|00000F", nom: "Or", label: "Or (septims)" },
     { id: "skyrim.esm|00000A", nom: "Crochet", label: "Crochets" },
@@ -8674,20 +9229,20 @@ input.champ-impose {
     return existing ? items.map((item) => cleObjetSaisi(item) === key ? { ...item, quantite: total } : item) : [...items, { ...entree, quantite }];
   }
   function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall: serverCall2, catalogue = null, titre = "Saisies sur la personne", masquerListe = false, aideLibre = "Le nom saisi sera conserv\xE9 avec cette incarc\xE9ration, sans ajout au catalogue." }) {
-    const [query, setQuery] = useState5("");
-    const [selected, setSelected] = useState5(null);
-    const [quantity, setQuantity] = useState5("1");
-    const [results, setResults] = useState5([]);
-    const [truncated, setTruncated] = useState5(false);
-    const [status, setStatus] = useState5("");
-    const [error, setError] = useState5("");
-    const [open, setOpen] = useState5(false);
-    const [active, setActive] = useState5(-1);
-    const [free, setFree] = useState5(false);
-    const version = useRef6(0);
-    const input = useRef6(null);
-    const quantityInput = useRef6(null);
-    useEffect6(() => {
+    const [query, setQuery] = useState6("");
+    const [selected, setSelected] = useState6(null);
+    const [quantity, setQuantity] = useState6("1");
+    const [results, setResults] = useState6([]);
+    const [truncated, setTruncated] = useState6(false);
+    const [status, setStatus] = useState6("");
+    const [error, setError] = useState6("");
+    const [open, setOpen] = useState6(false);
+    const [active, setActive] = useState6(-1);
+    const [free, setFree] = useState6(false);
+    const version = useRef7(0);
+    const input = useRef7(null);
+    const quantityInput = useRef7(null);
+    useEffect7(() => {
       const current = ++version.current;
       setResults([]);
       setActive(-1);
@@ -8793,11 +9348,11 @@ input.champ-impose {
         else if (selected || free) add();
       }
     }
-    useEffect6(() => {
+    useEffect7(() => {
       var _a, _b, _c;
       if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`saisie-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
     }, [active, open]);
-    useEffect6(() => {
+    useEffect7(() => {
       var _a;
       if (selected) (_a = quantityInput.current) == null ? void 0 : _a.focus();
     }, [selected]);
@@ -8901,7 +9456,7 @@ input.champ-impose {
   }
 
   // ui/src/inventaire.jsx
-  var { useEffect: useEffect7, useMemo: useMemo3, useRef: useRef7, useState: useState6 } = React;
+  var { useEffect: useEffect8, useMemo: useMemo3, useRef: useRef8, useState: useState7 } = React;
   var LIMITES_COFFRE = { nom: 100, position: 200, description: 1e3 };
   var SEUIL_AJUSTEMENT_MS = 600;
   var COFFRE_INCONNU = "Coffre inconnu";
@@ -8927,27 +9482,27 @@ input.champ-impose {
     return objets.filter((o) => (!coffreId || o.coffreId === coffreId) && termes.every((t) => normaliserTexte(`${o.nom} ${o.id}`).includes(t)));
   }
   function InventairePage({ token, canEdit, serverCall: serverCall2 }) {
-    const [data, setData] = useState6(null);
-    const [error, setError] = useState6("");
-    const [busy, setBusy] = useState6(false);
-    const [coffreFiltre, setCoffreFiltre] = useState6("");
-    const [recherche, setRecherche] = useState6("");
-    const [formCoffre, setFormCoffre] = useState6(null);
-    const [coffreAjout, setCoffreAjout] = useState6("");
-    const [ajoutOuvert, setAjoutOuvert] = useState6(false);
-    const [panier, setPanier] = useState6([]);
-    const [panierEnCours, setPanierEnCours] = useState6(false);
-    const [panierErreur, setPanierErreur] = useState6("");
-    const attente = useRef7({}), envoye = useRef7({}), minuteries = useRef7({});
-    const [ajustements, setAjustements] = useState6({});
+    const [data, setData] = useState7(null);
+    const [error, setError] = useState7("");
+    const [busy, setBusy] = useState7(false);
+    const [coffreFiltre, setCoffreFiltre] = useState7("");
+    const [recherche, setRecherche] = useState7("");
+    const [formCoffre, setFormCoffre] = useState7(null);
+    const [coffreAjout, setCoffreAjout] = useState7("");
+    const [ajoutOuvert, setAjoutOuvert] = useState7(false);
+    const [panier, setPanier] = useState7([]);
+    const [panierEnCours, setPanierEnCours] = useState7(false);
+    const [panierErreur, setPanierErreur] = useState7("");
+    const attente = useRef8({}), envoye = useRef8({}), minuteries = useRef8({});
+    const [ajustements, setAjustements] = useState7({});
     const refleterAjustements = () => {
       const suivant = {};
       for (const [cle, valeur] of Object.entries(attente.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       for (const [cle, valeur] of Object.entries(envoye.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       setAjustements(suivant);
     };
-    useEffect7(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
-    useEffect7(() => {
+    useEffect8(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
+    useEffect8(() => {
       serverCall2("getInventaire", token).then(setData).catch((e) => setError(e.message));
     }, []);
     const catalogue = useCatalogue(serverCall2, token, canEdit);
@@ -9067,7 +9622,7 @@ input.champ-impose {
     } }, "Vider la liste")), /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Les objets s\u2019ajoutent \xE0 la liste sans appel au serveur ; \xAB Ranger \xBB les envoie tous en une seule requ\xEAte. Un objet d\xE9j\xE0 pr\xE9sent dans le coffre voit sa quantit\xE9 augmenter : il n\u2019y a jamais deux lignes pour le m\xEAme objet dans un m\xEAme coffre."))), /* @__PURE__ */ React.createElement("div", { className: "inventaire-filtres" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-filtre-coffre" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-filtre-coffre", value: coffreFiltre, onChange: (e) => setCoffreFiltre(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les coffres"), coffres.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))), /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-recherche" }, "Rechercher un objet"), /* @__PURE__ */ React.createElement("input", { id: "inventaire-recherche", type: "search", placeholder: "Nom ou ID\u2026", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("span", { className: "inventaire-compte", role: "status" }, visibles.length ? `${pluriel3(visibles.length, "objet", "objets")} \xB7 ${pluriel3(totalVisible, "exemplaire", "exemplaires")}` : "Aucun objet")), visibles.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, data.objets.length ? "Aucun objet ne correspond aux filtres." : "Les coffres sont vides.") : /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table inventaire-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Objet"), /* @__PURE__ */ React.createElement("th", null, "Quantit\xE9"), /* @__PURE__ */ React.createElement("th", null, "Coffre"), canEdit && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, visibles.map((o) => /* @__PURE__ */ React.createElement("tr", { key: `${o.coffreId}|${o.cle}` }, /* @__PURE__ */ React.createElement("td", { "data-label": "Objet" }, /* @__PURE__ */ React.createElement("strong", null, o.nom), /* @__PURE__ */ React.createElement("small", { className: "inventaire-objet-id" }, o.libre ? "Hors catalogue" : o.id)), /* @__PURE__ */ React.createElement("td", { "data-label": "Quantit\xE9" }, canEdit ? /* @__PURE__ */ React.createElement("span", { className: `inventaire-quantite${ajustements[cleLigne(o)] ? " inventaire-quantite-attente" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy || quantiteAffichee(o) <= 0, "aria-label": `Retirer un exemplaire de ${o.nom}`, onClick: () => cliquer(o, -1) }, "\u2212"), /* @__PURE__ */ React.createElement("strong", { "aria-live": "polite" }, nombre(quantiteAffichee(o))), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy, "aria-label": `Ajouter un exemplaire de ${o.nom}`, onClick: () => cliquer(o, 1) }, "+")) : /* @__PURE__ */ React.createElement("strong", null, nombre(o.quantite))), /* @__PURE__ */ React.createElement("td", { "data-label": "Coffre" }, canEdit ? /* @__PURE__ */ React.createElement("select", { "aria-label": `Coffre de ${o.nom}`, value: o.coffreId, disabled: busy || Boolean(ajustements[cleLigne(o)]), onChange: (e) => appeler("deplacerInventaire", { coffreId: o.coffreId, versCoffreId: e.target.value, objet: objetDe(o) }) }, !coffresReels.some((c) => c.id === o.coffreId) && /* @__PURE__ */ React.createElement("option", { value: o.coffreId }, COFFRE_INCONNU), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))) : coffreLibelle(o.coffreId)), canEdit && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "danger-button", disabled: busy || Boolean(ajustements[cleLigne(o)]), onClick: () => retirer(o) }, "Retirer")))))))));
   }
   function CoffreForm({ coffre, busy, onSubmit, onCancel }) {
-    const [form, setForm] = useState6({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
+    const [form, setForm] = useState7({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
     const champ = (cle, valeur) => setForm((precedent) => ({ ...precedent, [cle]: valeur }));
     return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: (e) => {
       e.preventDefault();
@@ -9099,7 +9654,7 @@ input.champ-impose {
   }
 
   // ui/src/changes.jsx
-  var { createContext: createContext2, useContext: useContext2, useEffect: useEffect8, useMemo: useMemo4, useRef: useRef8, useState: useState7 } = React;
+  var { createContext: createContext2, useContext: useContext2, useEffect: useEffect9, useMemo: useMemo4, useRef: useRef9, useState: useState8 } = React;
   var ChangesContext = createContext2({ events: [], seen: {}, mark: () => {
   } });
   var sessionSeen = {};
@@ -9111,17 +9666,17 @@ input.champ-impose {
     return `${labels[change.type]} : ${nom(change.avant) || "Sans affectation"} \u2192 ${nom(change.apres) || "Sans affectation"}`;
   }
   function ChangesProvider({ data, children }) {
-    const [seen, setSeen] = useState7(() => {
+    const [seen, setSeen] = useState8(() => {
       try {
         return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) };
       } catch (e) {
         return sessionSeen;
       }
     });
-    const [storageFailed, setStorageFailed] = useState7(false);
-    const [now, setNow] = useState7(Date.now());
+    const [storageFailed, setStorageFailed] = useState8(false);
+    const [now, setNow] = useState8(Date.now());
     const events = useMemo4(() => recentChanges(data == null ? void 0 : data.events, now), [data, now]);
-    useEffect8(() => {
+    useEffect9(() => {
       const timer = setInterval(() => setNow(Date.now()), 6e4);
       const sync = (e) => {
         if (e.key === CHANGE_SEEN_KEY) {
@@ -9157,14 +9712,14 @@ input.champ-impose {
     const { events, seen, mark } = useContext2(ChangesContext);
     const items = events.filter((e) => e.memberId === memberId);
     const unread = items.filter((e) => !seen[e.id]);
-    const [open, setOpen] = useState7(false);
-    const timer = useRef8(null);
+    const [open, setOpen] = useState8(false);
+    const timer = useRef9(null);
     const signature = items.map((e) => e.id).join("|");
     function cancel() {
       clearTimeout(timer.current);
       timer.current = null;
     }
-    useEffect8(() => {
+    useEffect9(() => {
       cancel();
       setOpen(false);
       return cancel;
@@ -9229,11 +9784,11 @@ input.champ-impose {
   }
   function RecentChanges({ onRefresh }) {
     const { events, seen, mark } = useContext2(ChangesContext);
-    const [type, setType] = useState7("");
-    const [onlyUnread, setOnlyUnread] = useState7(false);
-    const [search, setSearch] = useState7("");
-    const [refreshing, setRefreshing] = useState7(false);
-    const [error, setError] = useState7("");
+    const [type, setType] = useState8("");
+    const [onlyUnread, setOnlyUnread] = useState8(false);
+    const [search, setSearch] = useState8("");
+    const [refreshing, setRefreshing] = useState8(false);
+    const [error, setError] = useState8("");
     const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps} ${libelleCorps(e.corps)}`).includes(normalize(search.trim())));
     const unread = events.filter((e) => !seen[e.id]);
@@ -9314,8 +9869,8 @@ input.champ-impose {
     return chargement;
   }
   function useMembresDiscord(serverCall2, token) {
-    const { useCallback, useState: useState10 } = React;
-    const [etat, setEtat] = useState10(() => membresCourants ? { statut: "pret", membres: membresCourants, erreur: "" } : { statut: "inactif", membres: [], erreur: "" });
+    const { useCallback, useState: useState11 } = React;
+    const [etat, setEtat] = useState11(() => membresCourants ? { statut: "pret", membres: membresCourants, erreur: "" } : { statut: "inactif", membres: [], erreur: "" });
     const charger = useCallback((rafraichir = false) => {
       setEtat((e) => ({ ...e, statut: "chargement", erreur: "" }));
       chargerMembresDiscord(serverCall2, token, rafraichir).then((membres) => setEtat({ statut: "pret", membres, erreur: "" })).catch((error) => setEtat((e) => ({ ...e, statut: "erreur", erreur: error.message || String(error) })));
@@ -9324,10 +9879,10 @@ input.champ-impose {
   }
 
   // ui/src/discord.jsx
-  var { useId: useId2, useState: useState8 } = React;
+  var { useId: useId2, useState: useState9 } = React;
   function CompteDiscordField({ value, onChange, discord, rattaches, memberId, anomalie = "", disabled = false }) {
     const idChamp = useId2();
-    const [recherche, setRecherche] = useState8("");
+    const [recherche, setRecherche] = useState9("");
     const membre = value ? membreDiscordParId(discord.membres, value) : null;
     const suggestions = value ? [] : suggestionsDiscord(discord.membres, recherche);
     function choisir(id) {
@@ -9342,7 +9897,7 @@ input.champ-impose {
   }
 
   // ui/src/app.jsx
-  var { useContext: useContext3, useEffect: useEffect9, useMemo: useMemo5, useRef: useRef9, useState: useState9 } = React;
+  var { useContext: useContext3, useEffect: useEffect10, useMemo: useMemo5, useRef: useRef10, useState: useState10 } = React;
   var MoiContext = React.createContext("");
   var CLE_JETON = "guardAuthToken";
   function lireJeton() {
@@ -9414,13 +9969,13 @@ input.champ-impose {
     return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
   }
   function App() {
-    const [token, setToken] = useState9(lireJeton);
-    const [role, setRole] = useState9(null);
-    const [nom, setNom] = useState9("");
-    const [page, setPage] = useState9("organigramme");
-    const [codexFocus, setCodexFocus] = useState9(null);
-    const [discordRetour, setDiscordRetour] = useState9({ statut: "", erreur: "" });
-    useEffect9(() => {
+    const [token, setToken] = useState10(lireJeton);
+    const [role, setRole] = useState10(null);
+    const [nom, setNom] = useState10("");
+    const [page, setPage] = useState10("organigramme");
+    const [codexFocus, setCodexFocus] = useState10(null);
+    const [discordRetour, setDiscordRetour] = useState10({ statut: "", erreur: "" });
+    useEffect10(() => {
       if (!token) return;
       serverCall("getSessionInfo", token).then((i) => {
         if (i.jeton) ecrireJeton(i.jeton);
@@ -9429,7 +9984,7 @@ input.champ-impose {
         if (i.role === ROLE_PUBLIC) setPage("codex");
       }).catch(logout);
     }, [token]);
-    useEffect9(() => {
+    useEffect10(() => {
       lireRetourDiscord().then((retour) => {
         if (!retour) return;
         effacerRetourDiscord();
@@ -9463,7 +10018,7 @@ input.champ-impose {
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
-    const registre = /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
+    const registre = /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement, officier: role === "OFFICIER" }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
     } }), page === "amendes" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
@@ -9479,15 +10034,15 @@ input.champ-impose {
     return { "--member-accent": (style == null ? void 0 : style.background) || "#ae8a4a" };
   }
   function EffectifsPage({ token }) {
-    const [data, setData] = useState9(null);
-    const [search, setSearch] = useState9("");
-    const [activeCorps, setActiveCorps] = useState9("ALL");
-    const [showForm, setShowForm] = useState9(false);
-    const [error, setError] = useState9("");
-    const [success, setSuccess] = useState9("");
+    const [data, setData] = useState10(null);
+    const [search, setSearch] = useState10("");
+    const [activeCorps, setActiveCorps] = useState10("ALL");
+    const [showForm, setShowForm] = useState10(false);
+    const [error, setError] = useState10("");
+    const [success, setSuccess] = useState10("");
     const discord = useMembresDiscord(serverCall, token);
     const rattaches = useMemo5(() => comptesRattaches(data == null ? void 0 : data.rows), [data]);
-    useEffect9(() => {
+    useEffect10(() => {
       serverCall(
         "getEffectifs",
         token
@@ -10019,7 +10574,7 @@ input.champ-impose {
         "En service actif"
       )
     );
-    const [form, setForm] = useState9({
+    const [form, setForm] = useState10({
       prenom: "",
       nom: "",
       grade: "",
@@ -10029,8 +10584,8 @@ input.champ-impose {
       assermente: false,
       discordId: ""
     });
-    const [saving, setSaving] = useState9(false);
-    useEffect9(() => {
+    const [saving, setSaving] = useState10(false);
+    useEffect10(() => {
       if ((discord == null ? void 0 : discord.statut) === "inactif") {
         discord.charger();
       }
@@ -10222,25 +10777,25 @@ input.champ-impose {
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     const memberChanges = useMemberChanges(member.memberId);
-    const [editing, setEditing] = useState9(false);
-    const [discordId, setDiscordId] = useState9(
+    const [editing, setEditing] = useState10(false);
+    const [discordId, setDiscordId] = useState10(
       member.discordId || ""
     );
-    const [grade, setGrade] = useState9(member.grade);
-    const [corps, setCorps] = useState9(member.corps);
-    const [specialite, setSpecialite] = useState9(
+    const [grade, setGrade] = useState10(member.grade);
+    const [corps, setCorps] = useState10(member.corps);
+    const [specialite, setSpecialite] = useState10(
       member.specialite || ""
     );
-    const [status, setStatus] = useState9(member.status);
-    const [assermente, setAssermente] = useState9(
+    const [status, setStatus] = useState10(member.status);
+    const [assermente, setAssermente] = useState10(
       member.assermente
     );
-    const [renommer, setRenommer] = useState9(false);
-    const [nouveauPrenom, setNouveauPrenom] = useState9(member.prenom || "");
-    const [nouveauNom, setNouveauNom] = useState9(member.nom || "");
-    const [saving, setSaving] = useState9(false);
+    const [renommer, setRenommer] = useState10(false);
+    const [nouveauPrenom, setNouveauPrenom] = useState10(member.prenom || "");
+    const [nouveauNom, setNouveauNom] = useState10(member.nom || "");
+    const [saving, setSaving] = useState10(false);
     const sommet = estGradeSommet(member.grade);
-    useEffect9(() => {
+    useEffect10(() => {
       setGrade(
         member.grade
       );
@@ -10272,7 +10827,7 @@ input.champ-impose {
       member.prenom,
       member.nom
     ]);
-    useEffect9(() => {
+    useEffect10(() => {
       if (editing && (discord == null ? void 0 : discord.statut) === "inactif") {
         discord.charger();
       }
@@ -10569,13 +11124,26 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
       saving ? "Enregistrement..." : "Enregistrer"
     ))));
   }
-  function CodexPage({ token, focusArticle, onFocusConsumed, mode = "lecture", onRetenir = null, retenus = [], peinesActif = true }) {
-    const etat = useCodex(serverCall, token, true);
+  function CodexPage({ token, focusArticle, onFocusConsumed, mode = "lecture", onRetenir = null, retenus = [], peinesActif = true, officier = false }) {
+    const [rechargement, setRechargement] = useState10(0);
+    const etat = useCodex(serverCall, token, true, rechargement);
     const data = etat.codex;
+    const [nouveautes, setNouveautes] = useState10(false), [synchro, setSynchro] = useState10(false), [vu, setVu] = useState10(lireDernierVu);
+    const nonVues = useMemo5(() => data ? synchrosNonVues(data.journal, vu) : [], [data, vu]);
+    const recents = useMemo5(() => data ? changementsRecents(data.journal) : /* @__PURE__ */ new Map(), [data]);
+    const ouvrirNouveautes = () => {
+      var _a, _b;
+      setNouveautes(true);
+      const derniere = (_b = (_a = data == null ? void 0 : data.journal) == null ? void 0 : _a[0]) == null ? void 0 : _b.date;
+      if (derniere) {
+        ecrireDernierVu(derniere);
+        setVu(derniere);
+      }
+    };
     const peines = usePeines(serverCall, token, peinesActif).peines;
-    const [search, setSearch] = useState9(""), [family, setFamily] = useState9(""), [source, setSource] = useState9(""), [classification, setClassification] = useState9(""), [selected, setSelected] = useState9(null);
+    const [search, setSearch] = useState10(""), [family, setFamily] = useState10(""), [source, setSource] = useState10(""), [classification, setClassification] = useState10(""), [selected, setSelected] = useState10(null);
     const selection = mode === "selection";
-    useEffect9(() => {
+    useEffect10(() => {
       if (data && focusArticle) {
         setSelected(articleParCle(data, focusArticle.source, focusArticle.article) || focusArticle);
         onFocusConsumed == null ? void 0 : onFocusConsumed();
@@ -10591,7 +11159,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     const estRetenu = (a) => retenus.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === a._cle);
     if (etat.statut === "erreur" && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, etat.erreur);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du Codex...");
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, !selection && /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Biblioth\xE8que juridique de la Garde de Blancherive."))), /* @__PURE__ */ React.createElement("div", { className: "codex-library" }, families.map((f) => /* @__PURE__ */ React.createElement("section", { className: "codex-family", key: f }, /* @__PURE__ */ React.createElement("h2", { className: "codex-family-title" }, f), /* @__PURE__ */ React.createElement("div", { className: "codex-source-list" }, data.sources.filter((s) => s.famille === f && (!selection || s.citable)).map((s) => /* @__PURE__ */ React.createElement("button", { key: s.nom, type: "button", className: `codex-source-button ${source === s.nom ? "active" : ""}`, onClick: () => {
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, !selection && /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Codex & Droit imp\xE9rial"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Biblioth\xE8que juridique de la Garde de Blancherive.")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button codex-nouveautes-bouton", onClick: ouvrirNouveautes }, "Nouveaut\xE9s", nonVues.length > 0 && /* @__PURE__ */ React.createElement("span", { className: "codex-nouveautes-compte", "aria-label": `${nonVues.reduce((n, s) => n + totalLecteur(s), 0)} changements non vus` }, nonVues.reduce((n, s) => n + totalLecteur(s), 0)))), !selection && /* @__PURE__ */ React.createElement(BandeauNouveautesCodex, { synchros: nonVues, onVoir: ouvrirNouveautes }), /* @__PURE__ */ React.createElement("div", { className: "codex-library" }, families.map((f) => /* @__PURE__ */ React.createElement("section", { className: "codex-family", key: f }, /* @__PURE__ */ React.createElement("h2", { className: "codex-family-title" }, f), /* @__PURE__ */ React.createElement("div", { className: "codex-source-list" }, data.sources.filter((s) => s.famille === f && (!selection || s.citable)).map((s) => /* @__PURE__ */ React.createElement("button", { key: s.nom, type: "button", className: `codex-source-button ${source === s.nom ? "active" : ""}`, onClick: () => {
       setFamily(f);
       setSource(source === s.nom ? "" : s.nom);
     } }, s.nom, /* @__PURE__ */ React.createElement("small", null, s.applicabilite))))))), /* @__PURE__ */ React.createElement("div", { className: "codex-controls" }, /* @__PURE__ */ React.createElement("input", { type: "search", placeholder: "Rechercher une loi, un article, un mot...", value: search, onChange: (e) => setSearch(e.target.value) }), /* @__PURE__ */ React.createElement("select", { value: family, onChange: (e) => {
@@ -10604,16 +11172,19 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
           e.preventDefault();
           setSelected(a);
         }
-      }, className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.abrege && a.abrege !== a.source ? `${a.abrege} \xB7 ` : "", a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), (((_a = a.montants) == null ? void 0 : _a.length) > 0 || a.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = a.montants) == null ? void 0 : _b.length) ? a.montants.join(" / ") : a.amende), (((_c = a.dureesCachot) == null ? void 0 : _c.length) > 0 || a.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = a.dureesCachot) == null ? void 0 : _d.length) ? a.dureesCachot.map(formatHours).join(" / ") : formatHours(a.cachot)), /* @__PURE__ */ React.createElement(PuceBareme, { peines, article: a }))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction), selection && /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-card-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: estRetenu(a), onClick: (e) => {
+      }, className: "codex-card", key: `${a.source}-${a.article}-${i}`, onClick: () => setSelected(a) }, /* @__PURE__ */ React.createElement("div", { className: "codex-card-top" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "codex-card-number" }, a.abrege && a.abrege !== a.source ? `${a.abrege} \xB7 ` : "", a.article === "Pr\xE9ambule" ? "Pr\xE9ambule" : `Article ${a.article}`), /* @__PURE__ */ React.createElement("h2", { className: "codex-card-title" }, a.titre), /* @__PURE__ */ React.createElement("div", { className: "law-meta" }, recents.get(a._cle) === "ajout" && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-nouveau" }, "Nouveau"), recents.get(a._cle) === "modification" && /* @__PURE__ */ React.createElement("span", { className: "law-chip law-chip-modifie" }, "Modifi\xE9"), a.famille && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.famille), a.classification && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, a.classification), (((_a = a.montants) == null ? void 0 : _a.length) > 0 || a.amende !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F4B0} ", ((_b = a.montants) == null ? void 0 : _b.length) ? a.montants.join(" / ") : a.amende), (((_c = a.dureesCachot) == null ? void 0 : _c.length) > 0 || a.cachot !== "") && /* @__PURE__ */ React.createElement("span", { className: "law-chip" }, "\u{1F512} ", ((_d = a.dureesCachot) == null ? void 0 : _d.length) ? a.dureesCachot.map(formatHours).join(" / ") : formatHours(a.cachot)), /* @__PURE__ */ React.createElement(PuceBareme, { peines, article: a }))), /* @__PURE__ */ React.createElement("div", { className: "codex-card-source" }, a.source, /* @__PURE__ */ React.createElement("br", null), a.autorite)), a.texte && /* @__PURE__ */ React.createElement("div", { className: "codex-card-text" }, a.texte), a.sanction && /* @__PURE__ */ React.createElement("div", { className: "codex-card-sanction" }, "\u2696 ", a.sanction), selection && /* @__PURE__ */ React.createElement("div", { className: "form-actions codex-card-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: estRetenu(a), onClick: (e) => {
         e.stopPropagation();
         onRetenir(a);
       } }, estRetenu(a) ? "D\xE9j\xE0 retenu" : "Retenir")));
-    })), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), codex: data, peines, onNavigate: setSelected, onRetenir: selection ? onRetenir : null, retenu: selected ? estRetenu(selected) : false }));
+    })), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), codex: data, peines, onNavigate: setSelected, onRetenir: selection ? onRetenir : null, retenu: selected ? estRetenu(selected) : false }), nouveautes && /* @__PURE__ */ React.createElement(JournalCodexModal, { codex: data, officier, onClose: () => setNouveautes(false), onOuvrirArticle: (a) => {
+      setNouveautes(false);
+      setSelected(a);
+    }, onSynchroniser: officier ? () => setSynchro(true) : null }), synchro && /* @__PURE__ */ React.createElement(SynchroCodexModal, { serverCall, token, onTermine: () => setRechargement((n) => n + 1), onClose: () => setSynchro(false) }));
   }
   function CodexPicker({ token, open, onClose, onRetenir, retenus }) {
-    const closeRef = useRef9(onClose);
+    const closeRef = useRef10(onClose);
     closeRef.current = onClose;
-    useEffect9(() => {
+    useEffect10(() => {
       if (!open) return;
       const overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
@@ -10636,8 +11207,8 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
   }
   function OrganigrammePage({ token }) {
     var _a;
-    const [data, setData] = useState9(null), [error, setError] = useState9("");
-    useEffect9(() => {
+    const [data, setData] = useState10(null), [error, setError] = useState10("");
+    useEffect10(() => {
       let active = true;
       serverCall("getOrganigramme", token).then((r) => {
         if (active) setData(r);
@@ -10705,18 +11276,18 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     return chefsDeLigne(codex, row).map((e) => e.chef);
   }
   function useFormulaireRegistre({ cle, initial, vide }) {
-    const [form, setForm] = useState9(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
-    useEffect9(() => {
+    const [form, setForm] = useState10(() => initial ? vide(initial) : { ...lireBrouillon(cle) || {}, ...vide(null), ...lireBrouillon(cle) || {} });
+    useEffect10(() => {
       if (!initial) ecrireBrouillon(cle, form);
     }, [form]);
     return [form, setForm];
   }
   function AmendesPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState9(null), [formData, setFormData] = useState9(null), [selected, setSelected] = useState9(null), [showForm, setShowForm] = useState9(false), [editing, setEditing] = useState9(null), [error, setError] = useState9(""), [deletingRow, setDeletingRow] = useState9(null);
+    const [data, setData] = useState10(null), [formData, setFormData] = useState10(null), [selected, setSelected] = useState10(null), [showForm, setShowForm] = useState10(false), [editing, setEditing] = useState10(null), [error, setError] = useState10(""), [deletingRow, setDeletingRow] = useState10(null);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
-    useEffect9(() => {
+    useEffect10(() => {
       Promise.all([serverCall("getAmendes", token), serverCall("getAmendeFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
@@ -10795,12 +11366,12 @@ ${item.infraction}`)) return;
   function AmendeForm({ token, data, codex, codexStatut, peines = null, peinesStatut = "pret", rows = [], frequents, initial, onSubmit, onCancel, onOpenLaw }) {
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "amende", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, contrevenant: row.contrevenant, chefs: chefsPourFormulaire(codex, row), montant: row.montantRaw === null ? "" : String(row.montantRaw), indetermine: row.montantRaw === null, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", contrevenant: "", chefs: [], montant: "", indetermine: false, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
-    const [submitting, setSubmitting] = useState9(false);
-    const [chefEnCours, setChefEnCours] = useState9(false);
-    const [formError, setFormError] = useState9("");
-    const [picker, setPicker] = useState9(false);
-    const [lu, setLu] = useState9(null);
-    const submittingRef = useRef9(false);
+    const [submitting, setSubmitting] = useState10(false);
+    const [chefEnCours, setChefEnCours] = useState10(false);
+    const [formError, setFormError] = useState10("");
+    const [picker, setPicker] = useState10(false);
+    const [lu, setLu] = useState10(null);
+    const submittingRef = useRef10(false);
     const retenir = (a) => {
       try {
         setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
@@ -10836,11 +11407,11 @@ ${item.infraction}`)) return;
     }, onOpenLaw: setLu, onParcourir: () => setPicker(true), frequents, disabled: submitting, onPendingChange: setChefEnCours, resume: !peines }), /* @__PURE__ */ React.createElement(PropositionBareme, { type: "amende", peines, statut: peinesStatut, chefs: form.chefs, reglages: form.bareme, onReglages: (bareme) => setForm((p) => ({ ...p, bareme })), valeur: form.montant, indetermine: form.indetermine, onAppliquer: (montant) => setForm((p) => ({ ...p, montant, indetermine: false })), historique: ((_a = form.bareme) == null ? void 0 : _a.noble) ? entreesRecentes(rows, form.contrevenant, form.date, { champ: "contrevenant", exclureRow: initial ? initial.row : null }) : null, disabled: submitting }), /* @__PURE__ */ React.createElement(SentenceField, { type: "amende", codex, chefs: form.chefs, value: form.montant, onChange: (montant) => setForm((p) => ({ ...p, montant })), indetermine: form.indetermine, onIndetermineChange: (indetermine) => setForm((p) => ({ ...p, indetermine })), disabled: submitting })), formError && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, formError), /* @__PURE__ */ React.createElement("div", { className: "form-actions" }, /* @__PURE__ */ React.createElement("button", { type: "submit", className: "primary-button" }, submitting ? "Enregistrement\u2026" : initial ? "Enregistrer les modifications" : "Enregistrer"), onCancel && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: onCancel }, "Annuler"))), /* @__PURE__ */ React.createElement(CodexPicker, { token, open: picker, onClose: () => setPicker(false), onRetenir: retenir, retenus: form.chefs }), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, peines, onNavigate: setLu, onRetenir: retenir, retenu: lu ? form.chefs.some((c) => c.libre === void 0 && cleArticle(c.source, c.article) === lu._cle) : false }));
   }
   function PrisonPage({ token, canDelete, onOpenCodex }) {
-    const [data, setData] = useState9(null), [formData, setFormData] = useState9(null), [selected, setSelected] = useState9(null), [showForm, setShowForm] = useState9(false), [editing, setEditing] = useState9(null), [error, setError] = useState9(""), [deletingRow, setDeletingRow] = useState9(null), [saving, setSaving] = useState9(false);
+    const [data, setData] = useState10(null), [formData, setFormData] = useState10(null), [selected, setSelected] = useState10(null), [showForm, setShowForm] = useState10(false), [editing, setEditing] = useState10(null), [error, setError] = useState10(""), [deletingRow, setDeletingRow] = useState10(null), [saving, setSaving] = useState10(false);
     const codexEtat = useCodex(serverCall, token, true);
     const codex = codexEtat.codex;
     const peinesEtat = usePeines(serverCall, token, true);
-    useEffect9(() => {
+    useEffect10(() => {
       Promise.all([serverCall("getPrison", token), serverCall("getPrisonFormData", token)]).then(([r, f]) => {
         setData(r);
         setFormData(f);
@@ -10908,13 +11479,13 @@ ${item.infraction}`)) return;
     var _a;
     const [form, setForm] = useFormulaireRegistre({ cle: "prison", initial, vide: (row) => row ? { date: dateIsoDepuisAffichage(row.date), garde: row.garde, detenu: row.detenu, cellule: row.cellule, chefs: chefsPourFormulaire(codex, row), duree: row.dureeRaw === null ? "" : String(row.dureeRaw), indetermine: row.dureeRaw === null, entree: row.entreeIso || dateIsoDepuisAffichage(row.entree), saisies: row.saisiesListe || [], notes: row.notes, bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } : { date: dateLocaleIso().slice(0, 10), garde: "", detenu: "", cellule: "", chefs: [], duree: "", indetermine: false, entree: dateLocaleIso().slice(0, 16), saisies: [], notes: "", bareme: { choix: {}, noble: false, recidive: false, mode: "cumul" } } });
     const saisiesTexteHistorique = Boolean(initial && initial.saisiesListe === null && initial.saisies);
-    const [submitting, setSubmitting] = useState9(false);
-    const [saisieEnCours, setSaisieEnCours] = useState9(false);
-    const [chefEnCours, setChefEnCours] = useState9(false);
-    const [formError, setFormError] = useState9("");
-    const [picker, setPicker] = useState9(false);
-    const [lu, setLu] = useState9(null);
-    const submittingRef = useRef9(false);
+    const [submitting, setSubmitting] = useState10(false);
+    const [saisieEnCours, setSaisieEnCours] = useState10(false);
+    const [chefEnCours, setChefEnCours] = useState10(false);
+    const [formError, setFormError] = useState10("");
+    const [picker, setPicker] = useState10(false);
+    const [lu, setLu] = useState10(null);
+    const submittingRef = useRef10(false);
     const retenir = (a) => {
       try {
         setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
@@ -10973,9 +11544,9 @@ ${item.infraction}`)) return;
     }
   }
   function PresenceOfficerDashboard({ token }) {
-    const [data, setData] = useState9(null), [error, setError] = useState9("");
-    const [open, setOpen] = useState9(chargerSyntheseOuverte);
-    useEffect9(() => {
+    const [data, setData] = useState10(null), [error, setError] = useState10("");
+    const [open, setOpen] = useState10(chargerSyntheseOuverte);
+    useEffect10(() => {
       serverCall("getPresenceOfficerDashboard", token).then(setData).catch((e) => setError(e.message));
     }, []);
     function basculer() {
@@ -11002,8 +11573,8 @@ ${item.infraction}`)) return;
     return { lundi: s.lundi, prenom: s.prenom, nom: s.nom };
   }
   function PresencesPage({ token, canEdit }) {
-    const [data, setData] = useState9(null), [error, setError] = useState9(""), [weekFilter, setWeekFilter] = useState9(""), [corpsFilter, setCorpsFilter] = useState9(""), [search, setSearch] = useState9("");
-    useEffect9(() => {
+    const [data, setData] = useState10(null), [error, setError] = useState10(""), [weekFilter, setWeekFilter] = useState10(""), [corpsFilter, setCorpsFilter] = useState10(""), [search, setSearch] = useState10("");
+    useEffect10(() => {
       serverCall("getPresences", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement des pr\xE9sences : ", error);
@@ -11031,13 +11602,13 @@ ${item.infraction}`)) return;
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, matchesCorps, searching }) {
     const moi = useContext3(MoiContext);
-    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState9(current);
-    const [seulementImpayes, setSeulementImpayes] = useState9(false);
-    useEffect9(() => {
+    const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState10(current);
+    const [seulementImpayes, setSeulementImpayes] = useState10(false);
+    useEffect10(() => {
       if (searching) setOpen(true);
     }, [searching]);
     const impayes = compteImpayesSemaine(rows, { current, matchesCorps });
-    useEffect9(() => {
+    useEffect10(() => {
       if (!impayes) setSeulementImpayes(false);
     }, [impayes]);
     const visible = (r) => matchesCorps(r) && matchesPerson(r) && (!seulementImpayes || estImpayePresence(r));
@@ -11102,8 +11673,8 @@ ${item.infraction}`)) return;
     }
   }
   function PayePage({ token, canRegler }) {
-    const [data, setData] = useState9(null), [error, setError] = useState9(""), [regles, setRegles] = useState9([]), [busy, setBusy] = useState9(null), [filtre, setFiltre] = useState9(null);
-    useEffect9(() => {
+    const [data, setData] = useState10(null), [error, setError] = useState10(""), [regles, setRegles] = useState10([]), [busy, setBusy] = useState10(null), [filtre, setFiltre] = useState10(null);
+    useEffect10(() => {
       serverCall("getPaye", token).then(setData).catch((e) => setError(e.message));
     }, []);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement de la paye : ", error);
@@ -11137,7 +11708,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("li", { className: s.retard >= 3 ? "paye-semaine-ancienne" : "" }, /* @__PURE__ */ React.createElement(Ligne, { className: canRegler ? void 0 : "paye-semaine-lecture" }, canRegler && /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: false, disabled: busy !== null, onChange: onRegler }), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-numero" }, libelleSemaine(s.lundi), " ", /* @__PURE__ */ React.createElement("small", null, "du ", /* @__PURE__ */ React.createElement(DateRP, { value: s.lundi, jour: false }))), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-jours" }, s.joursPresents, " j"), /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-montant" }, formatSeptims2(s.montant)), s.retard >= 3 && /* @__PURE__ */ React.createElement("span", { className: "paye-semaine-retard" }, s.retard, " semaines de retard")));
   }
   function PayeFinanceur({ f, currentWeek, canRegler, busy, regles, onBasculer }) {
-    const [ouvert, setOuvert] = useState9(true), [copie, setCopie] = useState9(""), [texteVisible, setTexteVisible] = useState9(false);
+    const [ouvert, setOuvert] = useState10(true), [copie, setCopie] = useState10(""), [texteVisible, setTexteVisible] = useState10(false);
     const texte = useMemo5(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();

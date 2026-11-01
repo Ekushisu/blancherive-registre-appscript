@@ -58,7 +58,7 @@ const ctx = vm.createContext({
     formatDate: (date, tz, motif) => motif.startsWith("yyyy-MM-dd'T'") ? date.toISOString().slice(0, 16) : date.toISOString()
   }
 });
-for (const file of ['SyncCodex.js', 'Codex.js', 'Amendes.js', 'Objets.js', 'Prison.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
+for (const file of ['SyncCodex.js', 'Codex.js', 'JournalCodex.js', 'Amendes.js', 'Objets.js', 'Prison.js']) vm.runInContext(fs.readFileSync(`src/${file}`, 'utf8'), ctx);
 ctx.lireCatalogueObjets_ = () => [{ id: 'skyrim.esm|00000F', nom: 'Or', type: 'Objet divers' }];
 const plain = value => JSON.parse(JSON.stringify(value));
 

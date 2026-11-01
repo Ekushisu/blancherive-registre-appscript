@@ -289,3 +289,51 @@ button.nom-effectif:hover{color:var(--seal);text-decoration-style:solid}
 input.champ-impose{background:#efe3c8;color:#594024;cursor:not-allowed}
 /* Dix entrées et plus (officier connecté par Discord) : sur mobile, la barre défile plutôt que d'écraser ses libellés. */
 @media(max-width:900px){.nav.nav-dense{grid-template-columns:repeat(var(--nav-count),minmax(56px,1fr));overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}.nav.nav-dense::-webkit-scrollbar{display:none}}
+
+/* Nouveautés du Codex (journal-codex.jsx) : bandeau, fenêtre des changements, synchronisation en direct. */
+.codex-nouveautes-bandeau{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin:0 0 18px;padding:12px 16px;border:1px solid #c6ad7a;border-left:4px solid var(--gold);border-radius:3px;background:#f6ecd3;color:#594024}
+.codex-nouveautes-bouton{position:relative}
+.codex-nouveautes-bouton .codex-nouveautes-compte{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;margin-left:8px;padding:0 6px;border-radius:10px;background:var(--seal);color:#fff;font-size:11px;font-weight:700}
+.law-chip-nouveau{background:#e4ead2;color:#3f5324;border-color:#b7c48f}
+.law-chip-modifie{background:#f6e7c9;color:#7a5410;border-color:#dcc08a}
+.journal-codex{width:min(960px,100%)}
+.journal-derniere{margin:6px 0 0;color:#87704a;font-size:13px}
+.journal-synchro{margin:0 0 10px}
+.journal-synchro>details{border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.journal-synchro>details>summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;padding:12px 16px;cursor:pointer;font:16px Georgia,serif;color:#49321d}
+.journal-synchro>details>summary:hover{background:#f5ecd8}
+.journal-resume{color:#76603c;font:13px system-ui,sans-serif}
+.journal-groupe{padding:0 16px 14px}
+.journal-groupe h3{display:flex;align-items:baseline;gap:8px;margin:12px 0 8px;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#87704a}
+.journal-groupe h3 span{font-weight:400}
+.journal-groupe ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.journal-entree{padding:9px 12px;border:1px solid #e2d4b6;border-left-width:4px;border-radius:3px;background:#fbf3e1;color:#49321d;line-height:1.5}
+.journal-entree small{color:#87704a}
+.journal-ajout,.journal-document-ajout{border-left-color:#7e9450}
+.journal-modification{border-left-color:#c99a3a}
+.journal-retrait,.journal-document-retrait{border-left-color:#a5432f}
+.journal-entree summary{cursor:pointer}
+.journal-entree>span{display:block}
+.journal-champ{margin:8px 0 0;font-size:14px}
+.journal-diff{margin:8px 0 0;font-size:14px;line-height:1.7;white-space:pre-wrap}
+.journal-diff ins,.journal-champ ins{background:#dfe8c4;color:#2f4214;text-decoration:none;padding:0 2px}
+.journal-diff del,.journal-champ del{background:#f3d2cb;color:#7a2f1f;text-decoration:line-through;padding:0 2px}
+.journal-avant{margin:8px 0 0;color:#6f5a3c;font-size:14px;line-height:1.6;white-space:pre-wrap}
+.journal-lire{display:inline-block;min-height:32px;margin-top:8px;padding:5px 12px;font-size:13px}
+.journal-note{margin:4px 16px 14px;color:#87704a;font-style:italic;font-size:13px}
+.journal-rapport{margin:0 16px 14px;padding:10px 12px;border:1px dashed #d8c39c;border-radius:3px;font-size:13px;color:#594024}
+.journal-rapport summary{cursor:pointer;font-weight:600}
+.journal-rapport p{margin:8px 0}
+.journal-documents{width:100%;border-collapse:collapse;margin-top:8px}
+.journal-documents th,.journal-documents td{padding:4px 6px;border-bottom:1px solid #e9dcc2;text-align:left;vertical-align:top}
+.journal-documents th{font-weight:600;color:#87704a}
+.journal-illisible{color:#7a2f1f}
+.journal-synchroniser{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 18px;padding-bottom:16px;border-bottom:3px double #ccb184}
+.journal-synchroniser small{color:#87704a}
+.synchro-codex{width:min(880px,100%)}
+.synchro-traces{list-style:none;margin:0;padding:12px 14px;max-height:50vh;overflow-y:auto;border:1px solid #d8c39c;border-radius:3px;background:#2d241b;color:#e9dcc2;font:13px/1.6 ui-monospace,Consolas,monospace}
+.synchro-trace{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.synchro-trace>span:first-child{color:#a08a62;text-align:right}
+.synchro-trace-alerte{color:#f0c674}
+.synchro-trace-erreur{color:#f29b8b}
+@media(max-width:600px){.codex-nouveautes-bandeau{padding:10px 12px}.journal-groupe{padding:0 10px 12px}.synchro-trace{grid-template-columns:44px minmax(0,1fr);gap:6px}}

@@ -2,6 +2,38 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Nouveautés du Codex, journal et bouton de synchronisation (1er novembre 2026)
+
+- Demande du propriétaire : prévenir les usagers du Codex des lois changées,
+  retirées ou nouvelles après une synchronisation ; voir lui-même comment
+  elle s'est passée ; journal d'exécution plus bavard ; bouton réservé aux
+  officiers avec trois minutes de délai ; fenêtre avec les traces en direct.
+  Branche `journal-codex`.
+- **Serveur** : `JournalCodex.js` et feuille `JournalCodex` (DATA_MODEL).
+  `synchroniserCodex()` compare l'avant et l'après du cache, écrit le
+  passage (compte rendu, origine, durée, détail par document), et parle à
+  chaque étape dans le journal d'exécution. Un document illisible garde ses
+  articles précédents au lieu de disparaître. `getCodex` renvoie le journal
+  et change de version à chaque passage. `synchroniserCodexRegistre`
+  (OFFICIER, délai de trois minutes sur `CODEX_SYNCHRO_BOUTON`) publie ses
+  traces dans le cache du script, que `getProgressionSynchroCodex` relit.
+- **Interface** : bandeau « Le Codex a changé depuis votre dernière visite »,
+  bouton « Nouveautés » avec compteur, puces « Nouveau » / « Modifié » sur les
+  articles des quatorze derniers jours, fenêtre des nouveautés par passage
+  (différences mot à mot, dernier texte des lois retirées, compte rendu
+  technique pour les officiers), bouton « Synchroniser maintenant » et
+  fenêtre de synchronisation en direct. Le journal est gardé avec le Codex
+  dans `localStorage` ; la dernière visite aussi.
+- Vérifications : 35 suites vertes (`test-journal-codex`,
+  `test-journal-codex-ui` nouveaux). Aperçus `codex-*` régénérés. Aucun
+  `clasp push`.
+- **Mise en service** : relire le `git diff`, `npm run push`, publier le
+  déploiement, puis lancer `synchroniserCodex()` une première fois depuis
+  l'éditeur : elle crée la feuille `JournalCodex` et note l'état de départ
+  (tout le cache actuel n'est pas annoncé comme nouveau : la première
+  comparaison part du cache existant). `CacheService` ne demande aucune
+  autorisation nouvelle.
+
 ### Fiche de service de tout effectif (1er novembre 2026)
 
 - Demande du propriétaire : sans connexion Discord, le Livret de service ne

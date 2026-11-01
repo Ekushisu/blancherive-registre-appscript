@@ -184,13 +184,21 @@ function getCodex(token, versionConnue) {
 
   const cache = lireCacheCodex_(sheet);
 
+  /*
+    Chaque synchronisation ajoute au moins une ligne au journal (JournalCodex.js) :
+    la version change avec lui, et le navigateur reçoit les nouveautés même
+    quand aucun article n'a bougé.
+  */
+  const lignesJournal = nombreLignesJournalCodex_(ss);
+  const version = lignesJournal ? cache.version + "." + lignesJournal : cache.version;
+
   if (
     typeof versionConnue === "string" &&
     versionConnue &&
-    versionConnue === cache.version
+    versionConnue === version
   ) {
     return {
-      version: cache.version,
+      version: version,
       articles: null,
       sources: null
     };
@@ -331,9 +339,11 @@ function getCodex(token, versionConnue) {
     );
 
   return {
-    version: cache.version,
+    version: version,
     articles: articles,
-    sources: sources
+    sources: sources,
+    // Nouveautés du Codex : derniers passages de la synchronisation.
+    journal: lireJournalCodex_(ss)
   };
 }
 
