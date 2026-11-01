@@ -8,6 +8,10 @@
 - Choix : panneau modal par-dessus la page plutôt qu'une sous-page, pour ne
   perdre ni filtres ni position ; pile de fiches avec Retour. Décision du
   propriétaire : pas de Justice pour l'intendance, refusée côté serveur.
+- Puis, à la demande du propriétaire : toutes les fiches chargées au
+  lancement (`getFichesService`), cache en mémoire, mise à jour silencieuse
+  de la fiche ouverte. Serveur réorganisé : une lecture par feuille, un seul
+  calcul pour la fiche seule et le lot.
 - Renommages : `FicheService.js`, `getFicheService`, `fiche.jsx`, classes
   `fiche-*`. La règle d'AGENTS.md qui fermait le Livret aux codes communs
   est remplacée par celle de la fiche.

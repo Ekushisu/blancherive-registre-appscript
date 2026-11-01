@@ -525,14 +525,18 @@ chaque refus précède toute lecture Sheets.
 
 ## Fiche de service
 
-`getFicheService(token, cible)` autorise `GARDE`, `OFFICIER` et `INTENDANT`,
-avant toute ouverture du classeur ; `VISITEUR` est refusé. Décision du
+`getFicheService(token, cible)` et `getFichesService(token)` (toutes les
+fiches, pour le chargement au lancement) autorisent `GARDE`, `OFFICIER` et
+`INTENDANT`, avant toute ouverture du classeur ; `VISITEUR` est refusé. Décision du
 propriétaire, 1er novembre 2026 : par code commun, sur n'importe quel
 effectif, départs compris — ce n'est plus le Livret de service d'une session
 Discord. Pour `INTENDANT`, `justice` vaut `null` : amendes dressées et
 incarcérations ne sont ni lues ni envoyées, l'intendance n'ayant accès ni aux
-Amendes ni à la Prison. Seul le serveur l'impose ; l'interface n'affiche
-simplement pas une section absente. `scripts/test-fiche-service.mjs` vérifie
+Amendes ni à la Prison, dans une fiche seule comme dans le chargement de
+toutes. Seul le serveur l'impose ; l'interface n'affiche simplement pas une
+section absente. Le navigateur garde les fiches en mémoire seulement, jamais
+dans son stockage : rien ne reste sur un ordinateur partagé après la
+déconnexion ou le rechargement. `scripts/test-fiche-service.mjs` vérifie
 les refus, l'ordre des contrôles et l'absence de Justice.
 
 ## Paye

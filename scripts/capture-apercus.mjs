@@ -42,7 +42,8 @@ const reponses = {
   getOrganigramme: () => donnees.organigramme,
   getEffectifs: () => donnees.effectifs,
   getMembresDiscord: () => donnees.membresDiscord,
-  getFicheService: () => donnees.fiche
+  getFicheService: () => donnees.fiche,
+  getFichesService: () => ({ fiches: [donnees.fiche] })
 };
 
 // Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues,

@@ -6860,9 +6860,20 @@ body {
   background-color: var(--paper);
   border-bottom: 1px solid var(--line);
 }
+.fiche-barre-gauche {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
 .fiche-retour {
   min-height: 36px;
   padding: 6px 12px;
+}
+.fiche-maj {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: italic;
 }
 .fiche-fermer {
   min-width: 44px;
@@ -7288,15 +7299,45 @@ input.champ-impose {
     if (n === 1) return "hier";
     return `il y a ${n} jours`;
   }
+  function cleNomFiche(nom) {
+    return String(nom != null ? nom : "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+  }
+  function memoriserFiche(cache, data, depuis) {
+    const fiche = data == null ? void 0 : data.fiche;
+    if (!cache || !fiche) return;
+    const nom = cleNomFiche(fiche.nomComplet);
+    const cles = [fiche.memberId && `id:${fiche.memberId}`, nom && `nom:${nom}`].filter(Boolean);
+    for (const cle of cles) {
+      const actuelle = cache.get(cle);
+      if (!actuelle || actuelle.depuis <= depuis) cache.set(cle, { data, depuis });
+    }
+  }
+  function ficheEnCache(cache, cible) {
+    if (!cache || !cible) return null;
+    const nom = cleNomFiche(cible.nom);
+    return cible.membre && cache.get(`id:${cible.membre}`) || nom && cache.get(`nom:${nom}`) || null;
+  }
   var FicheContext = createContext(null);
-  function FicheProvider({ token, serverCall: serverCall2, children }) {
+  var DELAI_PRECHARGEMENT = 1500;
+  function FicheProvider({ token, serverCall: serverCall2, children, delaiPrechargement = DELAI_PRECHARGEMENT }) {
     const [pile, setPile] = useState2([]);
+    const cache = useRef2(null);
+    if (!cache.current) cache.current = /* @__PURE__ */ new Map();
     const valeur = useMemo(() => ({ ouvrir: (cible) => setPile((p) => [...p, cible]) }), []);
+    useEffect2(() => {
+      const minuteur = setTimeout(() => {
+        const depuis = Date.now();
+        serverCall2("getFichesService", token).then((reponse) => ((reponse == null ? void 0 : reponse.fiches) || []).forEach((data) => memoriserFiche(cache.current, data, depuis))).catch(() => {
+        });
+      }, delaiPrechargement);
+      return () => clearTimeout(minuteur);
+    }, [token]);
     return /* @__PURE__ */ React.createElement(FicheContext.Provider, { value: valeur }, children, pile.length > 0 && /* @__PURE__ */ React.createElement(
       FichePanneau,
       {
         token,
         serverCall: serverCall2,
+        cache: cache.current,
         cible: pile[pile.length - 1],
         profondeur: pile.length,
         onRetour: () => setPile((p) => p.slice(0, -1)),
@@ -7323,20 +7364,25 @@ input.champ-impose {
       contenu
     );
   }
-  function FichePanneau({ token, serverCall: serverCall2, cible, profondeur = 1, onRetour, onFermer }) {
-    const [etat, setEtat] = useState2({ data: null, erreur: "" });
+  function FichePanneau({ token, serverCall: serverCall2, cache = null, cible, profondeur = 1, onRetour, onFermer }) {
+    const [etat, setEtat] = useState2({ data: null, erreur: "", miseAJour: false, avertissement: "" });
     const panneau = useRef2(null);
     const fermerRef = useRef2(onFermer);
     fermerRef.current = onFermer;
     useEffect2(() => {
       var _a, _b;
       let vivant = true;
-      setEtat({ data: null, erreur: "" });
+      const connue = ficheEnCache(cache, cible);
+      setEtat({ data: (connue == null ? void 0 : connue.data) || null, erreur: "", miseAJour: true, avertissement: "" });
       (_b = (_a = panneau.current) == null ? void 0 : _a.scrollTo) == null ? void 0 : _b.call(_a, 0, 0);
+      const depuis = Date.now();
       serverCall2("getFicheService", token, cible).then((data2) => {
-        if (vivant) setEtat({ data: data2, erreur: "" });
+        if (!vivant) return;
+        memoriserFiche(cache, data2, depuis);
+        setEtat({ data: data2, erreur: "", miseAJour: false, avertissement: "" });
       }).catch((e) => {
-        if (vivant) setEtat({ data: null, erreur: e.message });
+        if (!vivant) return;
+        setEtat(connue ? { data: connue.data, erreur: "", miseAJour: false, avertissement: `Mise \xE0 jour impossible : ${e.message}` } : { data: null, erreur: e.message, miseAJour: false, avertissement: "" });
       });
       return () => {
         vivant = false;
@@ -7372,10 +7418,10 @@ input.champ-impose {
         (_a2 = precedent == null ? void 0 : precedent.focus) == null ? void 0 : _a2.call(precedent);
       };
     }, []);
-    const { data, erreur } = etat;
+    const { data, erreur, miseAJour, avertissement } = etat;
     return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop fiche-fond", onMouseDown: (event) => {
       if (event.target === event.currentTarget) onFermer();
-    } }, /* @__PURE__ */ React.createElement("div", { className: "fiche-panneau", role: "dialog", "aria-modal": "true", "aria-labelledby": "fiche-titre", tabIndex: -1, ref: panneau }, /* @__PURE__ */ React.createElement("div", { className: "fiche-barre" }, profondeur > 1 ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button fiche-retour", onClick: onRetour }, "\u2190 Retour") : /* @__PURE__ */ React.createElement("span", null), /* @__PURE__ */ React.createElement("button", { type: "button", className: "fiche-fermer", "aria-label": "Fermer la fiche", onClick: onFermer }, "\xD7")), erreur ? /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, erreur) : data ? /* @__PURE__ */ React.createElement(FicheContenu, { data }) : /* @__PURE__ */ React.createElement("div", { className: "loading", role: "status" }, "Ouverture de la fiche", (cible == null ? void 0 : cible.nom) ? ` de ${cible.nom}` : "", "\u2026")));
+    } }, /* @__PURE__ */ React.createElement("div", { className: "fiche-panneau", role: "dialog", "aria-modal": "true", "aria-labelledby": "fiche-titre", tabIndex: -1, ref: panneau }, /* @__PURE__ */ React.createElement("div", { className: "fiche-barre" }, /* @__PURE__ */ React.createElement("div", { className: "fiche-barre-gauche" }, profondeur > 1 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button fiche-retour", onClick: onRetour }, "\u2190 Retour"), data && (miseAJour || avertissement) && /* @__PURE__ */ React.createElement("span", { className: "fiche-maj", role: "status" }, avertissement || "Mise \xE0 jour\u2026")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "fiche-fermer", "aria-label": "Fermer la fiche", onClick: onFermer }, "\xD7")), erreur ? /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, erreur) : data ? /* @__PURE__ */ React.createElement(FicheContenu, { data }) : /* @__PURE__ */ React.createElement("div", { className: "loading", role: "status" }, "Ouverture de la fiche", (cible == null ? void 0 : cible.nom) ? ` de ${cible.nom}` : "", "\u2026")));
   }
   function Section({ titre, sousTitre, children }) {
     return /* @__PURE__ */ React.createElement("section", { className: "fiche-section" }, /* @__PURE__ */ React.createElement("header", { className: "fiche-section-entete" }, /* @__PURE__ */ React.createElement("h2", null, titre), sousTitre && /* @__PURE__ */ React.createElement("p", null, sousTitre)), children);

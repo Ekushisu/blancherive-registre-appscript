@@ -20,6 +20,13 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
   Organigramme, Effectifs, nouveautés, Présences, gardes inactifs, Paye,
   garde et collecteurs des Amendes, garde de la Prison, chaîne de
   commandement, nom de session Discord. Textes à la troisième personne.
+- **Chargement au lancement** (demande du propriétaire) : `getFichesService`
+  renvoie toutes les fiches en un appel, 1,5 s après le lancement ; cache en
+  mémoire seulement, fiche affichée aussitôt puis rafraîchie en silence par
+  `getFicheService`. Le serveur lit chaque feuille une fois et construit
+  fiche seule et fiches en lot par le même `construireFiche_`. Coût : un
+  appel plus lourd à chaque lancement (toutes les fiches, départs compris),
+  et un recalcul des soldes de Présences, comme à l'ouverture des Présences.
 - Vérifications : 33 suites vertes (`test-fiche-service`, `test-fiche-ui`
   remplacent ceux du Livret). Aperçus `fiche-*` (remplacent `livret-*`) et
   pages aux noms désormais soulignés régénérés. Aucun `clasp push`.

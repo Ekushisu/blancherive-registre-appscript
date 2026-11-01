@@ -9,7 +9,14 @@
   solde et service, justice. Un GARDE n'y lit rien que les Présences, les
   Amendes et la Prison ne lui montrent déjà. L'INTENDANT, qui n'a accès ni
   aux Amendes ni à la Prison, ne reçoit pas la Justice : elle n'est même pas
-  calculée pour lui (`justice: null`). Le visiteur du Codex n'y a jamais accès.
+  lue pour lui (`justice: null`). Le visiteur du Codex n'y a jamais accès.
+
+  Deux entrées, un seul calcul : `getFichesService` renvoie toutes les fiches,
+  chargées en arrière-plan au lancement de l'application (même décision) ;
+  `getFicheService` renvoie celle qu'on ouvre, pour la rafraîchir en silence.
+  Chaque feuille n'est lue qu'une fois par appel, ses lignes rangées par
+  effectif (`lireRegistreFiches_`), puis chaque fiche en est tirée
+  (`construireFiche_`).
 
   L'effectif est désigné par son ID membre quand la page qui l'affiche le
   connaît (Organigramme, Effectifs, nouveautés, chaîne de commandement),
@@ -21,11 +28,12 @@
   (`renommerMembrePresences_`, `renommerGardeRegistres_`).
 */
 const FICHE_DERNIERES = 5;
+const FICHE_ROLES = ["GARDE", "OFFICIER", "INTENDANT"];
 
 
 // `cible` : { membre: ID membre } ou { nom: "Prénom Nom" } ; l'ID prime.
 function getFicheService(token, cible) {
-  const auth = requireRole(token, ["GARDE", "OFFICIER", "INTENDANT"]);
+  const auth = requireRole(token, FICHE_ROLES);
 
   const membre = String((cible && cible.membre) || "").trim();
   const cleNom = cleNomFiche_((cible && cible.nom) || "");
@@ -34,20 +42,58 @@ function getFicheService(token, cible) {
     throw new Error("Effectif non précisé.");
   }
 
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const effectifs = lireEffectifsFiche_(ss);
+  const registre = lireRegistreFiches_(SpreadsheetApp.openById(SPREADSHEET_ID), auth.role);
   const fiche =
-    (membre && effectifs.find(m => m.id === membre)) ||
-    (cleNom && effectifs.find(m => cleNomFiche_(m.nomComplet) === cleNom));
+    (membre && registre.effectifs.find(m => m.id === membre)) ||
+    (cleNom && registre.effectifs.find(m => cleNomFiche_(m.nomComplet) === cleNom));
 
   if (!fiche) {
     throw new Error("Aucune fiche à ce nom dans les Effectifs.");
   }
 
-  const ordre = lireOrdreGradesDiscord_(ss);
+  return construireFiche_(registre, fiche);
+}
+
+
+// Toutes les fiches, pour le chargement au lancement : mêmes droits, même contenu.
+function getFichesService(token) {
+  const auth = requireRole(token, FICHE_ROLES);
+  const registre = lireRegistreFiches_(SpreadsheetApp.openById(SPREADSHEET_ID), auth.role);
 
   return {
+    fiches: registre.effectifs.map(fiche => construireFiche_(registre, fiche))
+  };
+}
+
+
+function cleNomFiche_(valeur) {
+  return normaliserEffectifsWeb_(valeur).replace(/\s+/g, " ").trim();
+}
+
+
+// ============================================================
+// LECTURE — une fois par appel, lignes rangées par effectif
+// ============================================================
+
+function lireRegistreFiches_(ss, role) {
+  // L'intendance n'a accès ni aux Amendes ni à la Prison : rien n'en est lu pour elle.
+  const justice = role !== "INTENDANT";
+  return {
+    effectifs: lireEffectifsFiche_(ss),
+    ordre: lireOrdreGradesDiscord_(ss),
+    journal: lireJournalFiche_(ss),
+    presences: lirePresencesFiche_(ss),
+    amendes: justice ? lireLignesParGardeFiche_(ss, AMENDES_SHEET_NAME, 7) : null,
+    prison: justice ? lireLignesParGardeFiche_(ss, PRISON_SHEET_NAME, 9) : null
+  };
+}
+
+
+function construireFiche_(registre, fiche) {
+  const cle = cleNomFiche_(fiche.nomComplet);
+  return {
     fiche: {
+      memberId: fiche.id,
       prenom: fiche.prenom,
       nom: fiche.nom,
       nomComplet: fiche.nomComplet,
@@ -57,19 +103,38 @@ function getFicheService(token, cible) {
       statut: fiche.statut,
       assermente: fiche.assermente
     },
-    commandement: commandementFiche_(effectifs, fiche, ordre),
-    // Sans ID membre, aucun événement du journal ne peut lui être rattaché.
-    carriere: fiche.id
-      ? lireCarriereFiche_(ss, fiche.id)
-      : { inscription: "", avantJournal: false, evenements: [] },
-    service: lireServiceFiche_(ss, fiche),
-    justice: auth.role === "INTENDANT" ? null : lireJusticeFiche_(ss, fiche)
+    commandement: commandementFiche_(registre.effectifs, fiche, registre.ordre),
+    carriere: carriereFiche_(registre.journal, fiche.id),
+    service: serviceFiche_(registre.presences, fiche),
+    justice: registre.amendes
+      ? {
+          amendes: amendesFiche_(registre.amendes.get(cle) || []),
+          prison: prisonFiche_(registre.prison.get(cle) || [])
+        }
+      : null
   };
 }
 
 
-function cleNomFiche_(valeur) {
-  return normaliserEffectifsWeb_(valeur).replace(/\s+/g, " ").trim();
+// Lignes d'Amendes ou de Prison rangées par garde (colonne B), dans l'ordre de la feuille.
+function lireLignesParGardeFiche_(ss, nomFeuille, largeur) {
+  const parGarde = new Map();
+  const sheet = ss.getSheetByName(nomFeuille);
+  if (!sheet) return parGarde;
+  const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
+  if (lastRow < 2) return parGarde;
+
+  const range = sheet.getRange(2, 1, lastRow - 1, largeur);
+  const values = range.getValues();
+  const display = range.getDisplayValues();
+
+  values.forEach((row, i) => {
+    const cle = cleNomFiche_(display[i][1]);
+    if (!cle) return;
+    if (!parGarde.has(cle)) parGarde.set(cle, []);
+    parGarde.get(cle).push({ row, display: display[i] });
+  });
+  return parGarde;
 }
 
 
@@ -160,21 +225,32 @@ function commandementFiche_(effectifs, fiche, ordre) {
 // CARRIÈRE — journal HistoriqueEffectifs
 // ============================================================
 
+// Ouverture du journal et lignes de chaque membre, dans l'ordre du journal.
+function lireJournalFiche_(ss) {
+  const journal = { ouverture: null, parMembre: new Map() };
+  const sheet = ss.getSheetByName("HistoriqueEffectifs");
+  if (!sheet || sheet.getLastRow() < 2) return journal;
+
+  sheet.getRange(2, 1, sheet.getLastRow() - 1, 8).getValues().forEach(l => {
+    if (l[3] === "initialisation" && !journal.ouverture) journal.ouverture = l;
+    const membre = String(l[2] || "");
+    if (!membre) return;
+    if (!journal.parMembre.has(membre)) journal.parMembre.set(membre, []);
+    journal.parMembre.get(membre).push(l);
+  });
+  return journal;
+}
+
+
 /*
   Inscription : premier événement du membre. S'il date de l'ouverture du
   journal (événement « initialisation »), le membre était déjà là : son
   arrivée réelle est inconnue. Événements : arrivée, grade et corps, du plus
-  récent au plus ancien.
+  récent au plus ancien. Sans ID membre, aucun événement ne lui est rattaché.
 */
-function lireCarriereFiche_(ss, membreId) {
-  const journal = ss.getSheetByName("HistoriqueEffectifs");
-  const vide = { inscription: "", avantJournal: false, evenements: [] };
-  if (!journal || journal.getLastRow() < 2) return vide;
-
-  const lignes = journal.getRange(2, 1, journal.getLastRow() - 1, 8).getValues();
-  const ouverture = lignes.find(l => l[3] === "initialisation");
-  const miens = lignes.filter(l => String(l[2]) === String(membreId));
-  if (!miens.length) return vide;
+function carriereFiche_(journal, membreId) {
+  const miens = (membreId && journal.parMembre.get(String(membreId))) || [];
+  if (!miens.length) return { inscription: "", avantJournal: false, evenements: [] };
 
   const evenements = [];
   miens.forEach(l => {
@@ -193,7 +269,7 @@ function lireCarriereFiche_(ss, membreId) {
   const premier = String(miens[0][1]);
   return {
     inscription: premier,
-    avantJournal: Boolean(ouverture) && String(ouverture[1]) === premier,
+    avantJournal: Boolean(journal.ouverture) && String(journal.ouverture[1]) === premier,
     evenements
   };
 }
@@ -203,8 +279,34 @@ function lireCarriereFiche_(ss, membreId) {
 // SOLDE ET SERVICE — Présences
 // ============================================================
 
-function lireServiceFiche_(ss, fiche) {
-  const lundiCourant = lundiCourantPresence_();
+// Soldes à jour, comme la page Présences (Presences.js), puis lignes rangées par garde.
+function lirePresencesFiche_(ss) {
+  const presences = { lundiCourant: lundiCourantPresence_(), parNom: new Map() };
+  const sheet = ss.getSheetByName(PRESENCES_SHEET_NAME);
+  if (!sheet) return presences;
+
+  mettreAJourSoldesPresences_(ss, sheet);
+  SpreadsheetApp.flush();
+
+  const lastRow = getLastPresenceRowWebApp(sheet);
+  if (lastRow < 2) return presences;
+
+  const range = sheet.getRange(2, 1, lastRow - 1, 15);
+  const values = range.getValues();
+  const display = range.getDisplayValues();
+
+  values.forEach((row, i) => {
+    const cle = cleNomFiche_(display[i][3] + " " + display[i][4]);
+    if (!cle) return;
+    if (!presences.parNom.has(cle)) presences.parNom.set(cle, []);
+    presences.parNom.get(cle).push({ row, display: display[i] });
+  });
+  return presences;
+}
+
+
+function serviceFiche_(presences, fiche) {
+  const lundiCourant = presences.lundiCourant;
   const resultat = {
     lundiCourant,
     exclu: estExcluDesPresences_(fiche.corps, fiche.grade),
@@ -224,30 +326,15 @@ function lireServiceFiche_(ss, fiche) {
   };
   if (resultat.exclu) return resultat;
 
-  const sheet = ss.getSheetByName(PRESENCES_SHEET_NAME);
-  if (!sheet) return resultat;
-
-  // Soldes à jour, comme la page Présences (Presences.js).
-  mettreAJourSoldesPresences_(ss, sheet);
-  SpreadsheetApp.flush();
-
-  const lastRow = getLastPresenceRowWebApp(sheet);
-  if (lastRow < 2) return resultat;
-
-  const cle = cleNomFiche_(fiche.nomComplet);
-  const range = sheet.getRange(2, 1, lastRow - 1, 15);
-  const values = range.getValues();
-  const display = range.getDisplayValues();
   const semaines = [];
 
-  values.forEach((row, i) => {
-    if (cleNomFiche_(display[i][3] + " " + display[i][4]) !== cle) return;
+  (presences.parNom.get(cleNomFiche_(fiche.nomComplet)) || []).forEach(({ row, display }) => {
     const lundi = normaliserLundiPresence_(row[0], lundiCourant);
-    if (!estLundiPresence_(lundi) || estExcluDesPresences_(display[i][1], display[i][2])) return;
+    if (!estLundiPresence_(lundi) || estExcluDesPresences_(display[1], display[2])) return;
     semaines.push({
       lundi,
-      corps: String(display[i][1] || "").trim(),
-      grade: String(display[i][2] || "").trim(),
+      corps: String(display[1] || "").trim(),
+      grade: String(display[2] || "").trim(),
       jours: [5, 6, 7, 8, 9, 10, 11].map(c => row[c] === true),
       joursPresents: Number(row[12]) || 0,
       solde: Number(row[13]) || 0,
@@ -330,37 +417,19 @@ function ecartJoursFiche_(depuis, jusqua) {
 // JUSTICE — Amendes et Prison
 // ============================================================
 
-function lireJusticeFiche_(ss, fiche) {
-  const cle = cleNomFiche_(fiche.nomComplet);
-  return {
-    amendes: lireAmendesFiche_(ss, cle),
-    prison: lirePrisonFiche_(ss, cle)
-  };
-}
-
-
 /*
   Amendes dressées par le membre. À encaisser : non payées, montant fixé ou à
   déterminer. À reverser : payées, pas encore reversées aux trésoriers.
 */
-function lireAmendesFiche_(ss, cle) {
+function amendesFiche_(lignes) {
   const resultat = {
     nombre: 0, total: 0,
     aEncaisser: { nombre: 0, total: 0, aDeterminer: 0 },
     aReverser: { nombre: 0, total: 0 },
     dernieres: []
   };
-  const sheet = ss.getSheetByName(AMENDES_SHEET_NAME);
-  if (!sheet) return resultat;
-  const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
-  if (lastRow < 2) return resultat;
 
-  const range = sheet.getRange(2, 1, lastRow - 1, 7);
-  const values = range.getValues();
-  const display = range.getDisplayValues();
-
-  values.forEach((row, i) => {
-    if (cleNomFiche_(display[i][1]) !== cle) return;
+  lignes.forEach(({ row, display }) => {
     const montant = row[4] === "" || row[4] === null ? null : Number(row[4]);
     const paye = row[5] === true;
     const reverse = row[6] === true;
@@ -376,9 +445,9 @@ function lireAmendesFiche_(ss, cle) {
       if (montant !== null) resultat.aReverser.total += montant;
     }
     resultat.dernieres.push({
-      date: formatDateAmende_(row[0], display[i][0]),
-      contrevenant: nettoyerSaisieUtilisateur(display[i][2]),
-      infraction: nettoyerSaisieUtilisateur(display[i][3]),
+      date: formatDateAmende_(row[0], display[0]),
+      contrevenant: nettoyerSaisieUtilisateur(display[2]),
+      infraction: nettoyerSaisieUtilisateur(display[3]),
       montant,
       paye,
       reverse
@@ -391,26 +460,17 @@ function lireAmendesFiche_(ss, cle) {
 
 
 // Incarcérations prononcées par le membre, et détenus encore en cellule.
-function lirePrisonFiche_(ss, cle) {
+function prisonFiche_(lignes) {
   const resultat = { nombre: 0, enCellule: [], dernieres: [] };
-  const sheet = ss.getSheetByName(PRISON_SHEET_NAME);
-  if (!sheet) return resultat;
-  const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
-  if (lastRow < 2) return resultat;
 
-  const range = sheet.getRange(2, 1, lastRow - 1, 9);
-  const values = range.getValues();
-  const display = range.getDisplayValues();
-
-  values.forEach((row, i) => {
-    if (cleNomFiche_(display[i][1]) !== cle) return;
+  lignes.forEach(({ row, display }) => {
     const detention = {
-      date: formatDatePrison_(row[0], display[i][0]),
-      detenu: nettoyerSaisieUtilisateur(display[i][2]),
-      cellule: nettoyerSaisieUtilisateur(display[i][3]),
-      infraction: nettoyerSaisieUtilisateur(display[i][4]),
-      entree: formatDateTimePrison_(row[6], display[i][6]),
-      sortie: formatDateTimePrison_(row[7], display[i][7]),
+      date: formatDatePrison_(row[0], display[0]),
+      detenu: nettoyerSaisieUtilisateur(display[2]),
+      cellule: nettoyerSaisieUtilisateur(display[3]),
+      infraction: nettoyerSaisieUtilisateur(display[4]),
+      entree: formatDateTimePrison_(row[6], display[6]),
+      sortie: formatDateTimePrison_(row[7], display[7]),
       libere: row[8] === true
     };
     resultat.nombre++;

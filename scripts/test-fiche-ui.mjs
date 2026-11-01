@@ -1,8 +1,8 @@
 // Fiche de service, côté navigateur : libellés (septims, pluriels, carrière,
-// ancienneté du dernier service), nom cliquable, pile des fiches ouvertes et
-// rendu du panneau, avec ses cas particuliers (inactivité, Hird non soldé,
-// rien en attente, intendance sans Justice). React minimal, comme
-// `test-chefs-ui.mjs`.
+// ancienneté du dernier service), nom cliquable, pile des fiches ouvertes,
+// cache (chargement au lancement, mise à jour silencieuse) et rendu du
+// panneau, avec ses cas particuliers (inactivité, Hird non soldé, rien en
+// attente, intendance sans Justice). React minimal, comme `test-chefs-ui.mjs`.
 //
 //   node scripts/test-fiche-ui.mjs
 
@@ -40,7 +40,7 @@ const document = {
   addEventListener: (type, fn) => ecouteurs.add(fn),
   removeEventListener: (type, fn) => ecouteurs.delete(fn)
 };
-const context = vm.createContext({ React, document, exports: {}, console, Intl, Date, Promise });
+const context = vm.createContext({ React, document, exports: {}, console, Intl, Date, Promise, setTimeout, clearTimeout });
 context.module = { exports: context.exports };
 context.globalThis = context;
 const bundle = await build({ entryPoints: ['ui/src/fiche.jsx'], bundle: true, write: false, format: 'cjs',
@@ -116,10 +116,11 @@ assert.ok(!fournisseur.props.children[1], 'Fermer vide la pile');
 // ---------------------------------------------------------------- panneau
 const CIBLE = { membre: 'u-ivar', nom: 'Ivar Œil-Sombre' };
 let fermetures = 0, retours = 0;
-async function rendre(reponse, profondeur = 1) {
+async function rendre(reponse, profondeur = 1, autres = {}) {
   slots = []; effects = []; const appels = [];
   const props = { token: 'jeton', cible: CIBLE, profondeur, onRetour: () => retours++, onFermer: () => fermetures++,
-    serverCall: (nom, ...args) => { appels.push([nom, ...args]); return reponse instanceof Error ? Promise.reject(reponse) : Promise.resolve(reponse); } };
+    serverCall: (nom, ...args) => { appels.push([nom, ...args]); return reponse instanceof Error ? Promise.reject(reponse) : Promise.resolve(reponse); },
+    ...autres };
   for (let i = 0; i < 10; i++) {
     dirty = false; cursor = 0; tree = L.FichePanneau(props);
     effects.splice(0).forEach(fn => fn());
@@ -130,7 +131,7 @@ async function rendre(reponse, profondeur = 1) {
 }
 
 const base = {
-  fiche: { prenom: 'Ivar', nom: 'Œil-Sombre', nomComplet: 'Ivar Œil-Sombre', grade: 'Garde', corps: 'Cap Granite', specialite: '', statut: 'En service actif', assermente: true },
+  fiche: { memberId: 'u-ivar', prenom: 'Ivar', nom: 'Œil-Sombre', nomComplet: 'Ivar Œil-Sombre', grade: 'Garde', corps: 'Cap Granite', specialite: '', statut: 'En service actif', assermente: true },
   commandement: { corps: [{ memberId: 'u-rag', nomComplet: 'Ragnhild Fer-Juste', grade: 'Capitaine', corps: 'Cap Granite' }], etatMajor: [] },
   carriere: { inscription: '2026-10-03T10:00:00.000Z', avantJournal: false, evenements: [] },
   service: { lundiCourant: '2026-10-12', exclu: false, semaineCourante: null, enAttente: [], totalEnAttente: 0, totalPercu: 0,
@@ -213,9 +214,70 @@ assert.ok(!/Jarl/.test(page), 'Aucune mention du Jarl sous régence');
 await rendre({ ...base, fiche: { ...base.fiche, grade: 'Régent impérial', corps: 'État-Major' }, service: { ...base.service, exclu: true, inactif: false } });
 assert.match(text(tree), /Le Régent impérial n’est pas soldé par le registre/);
 
+// ---------------------------------------------------------------- cache
+// Même rapprochement des noms que le serveur (cleNomFiche_).
+assert.equal(L.cleNomFiche(' Ivar \u00A0ŒIL-sombre '), 'ivar œil-sombre');
+assert.equal(L.cleNomFiche('Éloïse  la Brune'), 'eloise la brune');
+const cache = new Map();
+L.memoriserFiche(cache, base, 10);
+assert.equal(L.ficheEnCache(cache, { membre: 'u-ivar' }).data, base, 'Par ID membre');
+assert.equal(L.ficheEnCache(cache, { nom: '  ivar œil-sombre' }).data, base, 'Par nom');
+assert.equal(L.ficheEnCache(cache, { membre: 'u-inconnu', nom: 'Ivar Œil-Sombre' }).data, base, 'ID inconnu : le nom prend le relais');
+assert.equal(L.ficheEnCache(cache, { membre: 'u-autre' }), null);
+const ancienne = { ...base, fiche: { ...base.fiche, statut: 'Réserve' } };
+L.memoriserFiche(cache, ancienne, 5);
+assert.equal(L.ficheEnCache(cache, { membre: 'u-ivar' }).data, base, 'Une réponse plus ancienne n’écrase pas une plus récente');
+
+// Fiche connue : affichée aussitôt, « Mise à jour… », puis remplacée par la réponse.
+let repondre;
+await rendre(null, 1, { cache, serverCall: () => new Promise(r => { repondre = r; }) });
+page = text(tree);
+assert.match(page, /Ivar Œil-Sombre/, 'Affichée sans attendre le serveur');
+assert.match(page, /Mise à jour…/);
+const fraiche = { ...base, fiche: { ...base.fiche, statut: 'Réserve' } };
+repondre(fraiche);
+await new Promise(r => setTimeout(r, 0));
+cursor = 0; tree = L.FichePanneau({ token: 'jeton', cache, cible: CIBLE, serverCall: () => new Promise(() => {}), onFermer() {}, onRetour() {} });
+page = text(tree);
+assert.match(page, /Réserve/, 'Mise à jour silencieuse appliquée');
+assert.doesNotMatch(page, /Mise à jour…/);
+assert.equal(L.ficheEnCache(cache, { membre: 'u-ivar' }).data.fiche.statut, 'Réserve', 'Le cache garde la plus récente');
+
+// Fiche connue, serveur injoignable : elle reste affichée, avec un avertissement.
+await rendre(new Error('Délai dépassé.'), 1, { cache });
+page = text(tree);
+assert.match(page, /Ivar Œil-Sombre/);
+assert.match(page, /Mise à jour impossible : Délai dépassé\./);
+assert.ok(!nodes(tree).some(n => n.props?.role === 'alert'), 'Pas d’écran d’erreur quand la fiche est connue');
+
+// Lancement : toutes les fiches en un appel, après le délai ; une fiche ouverte ensuite est déjà en cache.
+slots = []; effects = []; cursor = 0;
+const appelsLancement = [];
+const serveurLancement = (nom, ...args) => {
+  appelsLancement.push([nom, ...args]);
+  return Promise.resolve(nom === 'getFichesService' ? { fiches: [base] } : base);
+};
+const propsLancement = { token: 'jeton', serverCall: serveurLancement, delaiPrechargement: 0, children: 'page' };
+let lancement = L.FicheProvider(propsLancement);
+effects.splice(0).forEach(fn => fn());
+await new Promise(r => setTimeout(r, 10));
+assert.deepEqual(JSON.parse(JSON.stringify(appelsLancement)), [['getFichesService', 'jeton']]);
+lancement.props.value.ouvrir({ membre: 'u-ivar', nom: 'Ivar Œil-Sombre' });
+cursor = 0; lancement = L.FicheProvider(propsLancement);
+const panneauLance = lancement.props.children[1];
+assert.equal(L.ficheEnCache(panneauLance.props.cache, { membre: 'u-ivar' }).data.fiche.nomComplet, 'Ivar Œil-Sombre');
+// Échec du chargement au lancement : silencieux, rien en cache.
+slots = []; effects = []; cursor = 0;
+let echec = L.FicheProvider({ ...propsLancement, serverCall: () => Promise.reject(new Error('quota')) });
+effects.splice(0).forEach(fn => fn());
+await new Promise(r => setTimeout(r, 10));
+echec.props.value.ouvrir({ membre: 'u-ivar' });
+cursor = 0; echec = L.FicheProvider({ ...propsLancement, serverCall: () => Promise.reject(new Error('quota')) });
+assert.equal(L.ficheEnCache(echec.props.children[1].props.cache, { membre: 'u-ivar' }), null);
+
 // Erreur du serveur : affichée telle quelle.
 await rendre(new Error('Aucune fiche à ce nom dans les Effectifs.'));
 assert.match(text(tree), /Aucune fiche à ce nom dans les Effectifs/);
 assert.ok(nodes(tree).some(n => n.props?.role === 'alert'));
 
-console.log('Fiche de service (navigateur) : libellés, nom cliquable, pile des fiches et rendu du panneau validés.');
+console.log('Fiche de service (navigateur) : libellés, nom cliquable, pile des fiches, cache et rendu du panneau validés.');

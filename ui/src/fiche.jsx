@@ -43,21 +43,73 @@ export function depuisJours(n) {
   return `il y a ${n} jours`;
 }
 
+// ---------------------------------------------------------------- cache
+
+// Même rapprochement que le serveur (`cleNomFiche_`) : sans casse, accents ni espaces superflus.
+export function cleNomFiche(nom) {
+  return String(nom ?? "").trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
+
+/*
+  Fiches connues, en mémoire seulement : perdues au rechargement et à la
+  déconnexion, jamais écrites dans le navigateur, puisqu'elles portent les
+  soldes et les amendes d'autrui. Rangées par ID membre et par nom, comme le
+  serveur les cherche ; `depuis` (heure de la demande) empêche une réponse
+  plus ancienne d'écraser une plus récente.
+*/
+export function memoriserFiche(cache, data, depuis) {
+  const fiche = data?.fiche;
+  if (!cache || !fiche) return;
+  const nom = cleNomFiche(fiche.nomComplet);
+  const cles = [fiche.memberId && `id:${fiche.memberId}`, nom && `nom:${nom}`].filter(Boolean);
+  for (const cle of cles) {
+    const actuelle = cache.get(cle);
+    if (!actuelle || actuelle.depuis <= depuis) cache.set(cle, { data, depuis });
+  }
+}
+
+export function ficheEnCache(cache, cible) {
+  if (!cache || !cible) return null;
+  const nom = cleNomFiche(cible.nom);
+  return (cible.membre && cache.get(`id:${cible.membre}`)) || (nom && cache.get(`nom:${nom}`)) || null;
+}
+
 // ---------------------------------------------------------------- ouverture
 
 const FicheContext = createContext(null);
+// Laisse passer d'abord la page affichée à la connexion.
+const DELAI_PRECHARGEMENT = 1500;
 
 /*
   Pile des fiches ouvertes : un nom cliqué hors du panneau en ouvre une
   première, un supérieur cliqué dans le panneau s'y empile. Sans fournisseur
   (visiteur du Codex), les noms restent du texte.
+
+  Au lancement, toutes les fiches sont chargées en arrière-plan, en un seul
+  appel (décision du propriétaire, 1er novembre 2026) : une fiche s'ouvre
+  alors aussitôt, puis se met à jour en silence. Si ce chargement échoue,
+  chaque fiche se charge simplement à son ouverture.
 */
-export function FicheProvider({ token, serverCall, children }) {
+export function FicheProvider({ token, serverCall, children, delaiPrechargement = DELAI_PRECHARGEMENT }) {
   const [pile, setPile] = useState([]);
+  const cache = useRef(null);
+  if (!cache.current) cache.current = new Map();
   const valeur = useMemo(() => ({ ouvrir: cible => setPile(p => [...p, cible]) }), []);
+
+  useEffect(() => {
+    const minuteur = setTimeout(() => {
+      const depuis = Date.now();
+      serverCall("getFichesService", token)
+        .then(reponse => (reponse?.fiches || []).forEach(data => memoriserFiche(cache.current, data, depuis)))
+        .catch(() => {});
+    }, delaiPrechargement);
+    return () => clearTimeout(minuteur);
+  }, [token]);
+
   return <FicheContext.Provider value={valeur}>
     {children}
-    {pile.length > 0 && <FichePanneau token={token} serverCall={serverCall} cible={pile[pile.length - 1]}
+    {pile.length > 0 && <FichePanneau token={token} serverCall={serverCall} cache={cache.current} cible={pile[pile.length - 1]}
       profondeur={pile.length} onRetour={() => setPile(p => p.slice(0, -1))} onFermer={() => setPile([])} />}
   </FicheContext.Provider>;
 }
@@ -81,19 +133,31 @@ export function NomEffectif({ nom, membre = "", children }) {
 
 // ---------------------------------------------------------------- panneau
 
-export function FichePanneau({ token, serverCall, cible, profondeur = 1, onRetour, onFermer }) {
-  const [etat, setEtat] = useState({ data: null, erreur: "" });
+export function FichePanneau({ token, serverCall, cache = null, cible, profondeur = 1, onRetour, onFermer }) {
+  const [etat, setEtat] = useState({ data: null, erreur: "", miseAJour: false, avertissement: "" });
   const panneau = useRef(null);
   const fermerRef = useRef(onFermer);
   fermerRef.current = onFermer;
 
+  // Fiche déjà chargée : affichée aussitôt, puis rafraîchie en silence.
   useEffect(() => {
     let vivant = true;
-    setEtat({ data: null, erreur: "" });
+    const connue = ficheEnCache(cache, cible);
+    setEtat({ data: connue?.data || null, erreur: "", miseAJour: true, avertissement: "" });
     panneau.current?.scrollTo?.(0, 0);
+    const depuis = Date.now();
     serverCall("getFicheService", token, cible)
-      .then(data => { if (vivant) setEtat({ data, erreur: "" }); })
-      .catch(e => { if (vivant) setEtat({ data: null, erreur: e.message }); });
+      .then(data => {
+        if (!vivant) return;
+        memoriserFiche(cache, data, depuis);
+        setEtat({ data, erreur: "", miseAJour: false, avertissement: "" });
+      })
+      .catch(e => {
+        if (!vivant) return;
+        setEtat(connue
+          ? { data: connue.data, erreur: "", miseAJour: false, avertissement: `Mise à jour impossible : ${e.message}` }
+          : { data: null, erreur: e.message, miseAJour: false, avertissement: "" });
+      });
     return () => { vivant = false; };
   }, [cible]);
 
@@ -114,13 +178,14 @@ export function FichePanneau({ token, serverCall, cible, profondeur = 1, onRetou
     return () => { document.body.style.overflow = overflow; document.removeEventListener("keydown", touches); precedent?.focus?.(); };
   }, []);
 
-  const { data, erreur } = etat;
+  const { data, erreur, miseAJour, avertissement } = etat;
   return <div className="modal-backdrop fiche-fond" onMouseDown={event => { if (event.target === event.currentTarget) onFermer(); }}>
     <div className="fiche-panneau" role="dialog" aria-modal="true" aria-labelledby="fiche-titre" tabIndex={-1} ref={panneau}>
       <div className="fiche-barre">
-        {profondeur > 1
-          ? <button type="button" className="secondary-button fiche-retour" onClick={onRetour}>← Retour</button>
-          : <span />}
+        <div className="fiche-barre-gauche">
+          {profondeur > 1 && <button type="button" className="secondary-button fiche-retour" onClick={onRetour}>← Retour</button>}
+          {data && (miseAJour || avertissement) && <span className="fiche-maj" role="status">{avertissement || "Mise à jour…"}</span>}
+        </div>
         <button type="button" className="fiche-fermer" aria-label="Fermer la fiche" onClick={onFermer}>×</button>
       </div>
       {erreur

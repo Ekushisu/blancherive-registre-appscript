@@ -71,6 +71,12 @@ Principaux modules :
     INTENDANT ; identité, commandement (avec l'ID membre de chaque
     supérieur), carrière (journal `HistoriqueEffectifs`), solde et service
     (Présences), amendes et incarcérations (`justice: null` pour INTENDANT)
+  - `getFichesService(token)` : toutes les fiches, mêmes droits, pour le
+    chargement au lancement
+  - les deux lisent chaque feuille une fois (`lireRegistreFiches_`, lignes
+    rangées par ID membre ou par nom) et construisent chaque fiche par
+    `construireFiche_` : une fiche seule et la même chargée d'un coup sont
+    identiques, ce que `scripts/test-fiche-service.mjs` vérifie
   - réutilise `lireSchemaEffectifsWeb_` (Effectifs.js), `lireOrdreGradesDiscord_`,
     `cleGradeDiscord_` et `DISCORD_SEUIL_OFFICIER` (Discord.js), les helpers de
     lundi de `Presences.js`, `mettreAJourSoldesPresences_`,
@@ -214,7 +220,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
-- `ui/src/fiche.jsx` : fiche de service d'un effectif. `FicheProvider` (autour de l'application, sauf pour le visiteur) tient la pile des fiches ouvertes et affiche `FichePanneau`, panneau modal par-dessus la page ; `NomEffectif` rend un nom cliquable qui ouvre la fiche (ID membre si connu, sinon nom), sans propager le clic, et du texte simple sans fournisseur. Libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
+- `ui/src/fiche.jsx` : fiche de service d'un effectif. `FicheProvider` (autour de l'application, sauf pour le visiteur) tient la pile des fiches ouvertes et affiche `FichePanneau`, panneau modal par-dessus la page ; il charge toutes les fiches 1,5 s après le lancement (`getFichesService`) dans un cache en mémoire, rangé par ID membre et par nom (`memoriserFiche`, `ficheEnCache`, `cleNomFiche` au rapprochement du serveur) ; une fiche connue s'affiche aussitôt, avec « Mise à jour… » le temps que `getFicheService` la rafraîchisse ; `NomEffectif` rend un nom cliquable qui ouvre la fiche (ID membre si connu, sinon nom), sans propager le clic, et du texte simple sans fournisseur. Libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
 - `ui/src/connexion-discord.js` : aller-retour de la connexion Discord — `state` aléatoire gardé dans `sessionStorage` au clic et vérifié une seule fois au retour, lecture du code par `google.script.url.getLocation`, effacement de l'adresse par `google.script.history.replace` ; l'écran de connexion (`navigation.jsx`) met Discord en bouton principal quand `getModesConnexion` le propose, le code d'accès restant en dessous ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 

@@ -367,6 +367,12 @@ quel effectif (`getFicheService`, `FicheService.js`). Lecture seule.
   cliqué dans la fiche ouvre la sienne, « Retour » revient à la précédente,
   Échap ou × ferme. Ce n'est pas une page du menu. Contrevenants et détenus ne
   sont pas des effectifs : leurs noms restent du texte.
+- **Chargement** (décision du propriétaire, 1er novembre 2026) : toutes les
+  fiches sont chargées en arrière-plan au lancement, en un seul appel. Une
+  fiche s'ouvre donc aussitôt, puis se met à jour en silence (« Mise à
+  jour… ») ; si le serveur ne répond pas, elle reste affichée avec
+  l'avertissement « Mise à jour impossible ». Une fiche absente du
+  chargement se charge à son ouverture.
 - **Rattachement** : l'effectif par son ID membre quand la page le connaît,
   sinon par son nom ; les lignes de Présences, Amendes et Prison par le
   « Prénom Nom » de la fiche, sans casse, accents ni espaces superflus. Un membre renommé depuis les Effectifs garde

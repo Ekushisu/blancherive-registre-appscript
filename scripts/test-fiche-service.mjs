@@ -5,7 +5,8 @@
     effectif ; visiteur refusé avant toute lecture du classeur ; effectif
     absent ou non précisé refusé.
   - Effectif désigné par son ID membre, ou par son nom sans casse ni espaces
-    superflus ; l'ID prime.
+    superflus ; l'ID prime. Toutes les fiches d'un coup (`getFichesService`),
+    pour le lancement : un seul appel, même contenu que la fiche seule.
   - Ne renvoie que les données de cet effectif ; pas de Justice pour
     l'intendance.
   - Solde (semaine en cours, en attente, perçue), service (jours, semaines,
@@ -167,9 +168,22 @@ assert.equal(fiche({ membre: 'u-inconnu', nom: 'Eydis la Silencieuse' }).fiche.n
 assert.equal(fiche({ membre: 'u-eydis' }, 'intendant').justice, null);
 assert.equal(fiche({ membre: 'u-eydis' }, 'officier').justice.amendes.nombre, 4);
 
+// ---------------------------------------------------------------- toutes les fiches, au lancement
+ouvertures = 0;
+assert.throws(() => context.getFichesService('visiteur'), /droits nécessaires/);
+assert.equal(ouvertures, 0, 'Refus avant toute lecture du classeur');
+const soldesAvant = soldesMisAJour;
+const toutes = JSON.parse(JSON.stringify(context.getFichesService('code'))).fiches;
+assert.equal(ouvertures, 1, 'Un seul appel, une seule ouverture du classeur');
+assert.equal(soldesMisAJour, soldesAvant + 1, 'Soldes recalculées une fois pour toutes les fiches');
+assert.deepEqual(toutes.map(t => t.fiche.memberId), effectifs.rows.slice(1).map(r => r[7]), 'Tous les effectifs, réserve comprise');
+for (const t of toutes) assert.deepEqual(t, de(t.fiche.memberId), `Même contenu que la fiche seule : ${t.fiche.nomComplet}`);
+assert.ok(JSON.parse(JSON.stringify(context.getFichesService('intendant'))).fiches.every(t => t.justice === null),
+  'Pas de Justice pour l’intendance');
+
 // ---------------------------------------------------------------- fiche et commandement
 let l = de('u-eydis');
-assert.deepEqual(l.fiche, { prenom: 'Eydis', nom: 'la Silencieuse', nomComplet: 'Eydis la Silencieuse', grade: 'Sergent',
+assert.deepEqual(l.fiche, { memberId: 'u-eydis', prenom: 'Eydis', nom: 'la Silencieuse', nomComplet: 'Eydis la Silencieuse', grade: 'Sergent',
   corps: 'Garnison de Rivebois', specialite: 'Pisteuse', statut: 'En service actif', assermente: false });
 assert.deepEqual(l.commandement.corps.map(p => p.nomComplet), ['Brynjar Poing-de-Fer', 'Sigrid Vent-du-Nord'],
   'Supérieurs du corps, en service, à partir de Sergent-Chef, du plus haut au plus bas ; ni réserve, ni subordonné');
