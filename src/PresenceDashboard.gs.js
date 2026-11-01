@@ -258,9 +258,6 @@ function getPresenceOfficerDashboard(token) {
   return {
     lundiCourant: lundiCourant,
 
-    // Grades affichés selon le corps (AliasGrades.js).
-    aliasGrades: lireAliasGrades_(ss),
-
     currentWeekRecoveredFines:
       presenceDashboardRecoveredFines_(ss, now),
 

@@ -345,9 +345,6 @@ function getEffectifs(token) {
     changes: historiqueEffectifsPourRole_(history, "OFFICIER"),
     gradeOrder,
 
-    // Affichage seulement : les options et les valeurs restent les grades réguliers.
-    aliasGrades: lireAliasGrades_(ss),
-
     options: {
       grades: lireOptionsColonneEffectifsWeb_(
         ss,
@@ -759,12 +756,14 @@ function modifierEffectifInterne_(token, data) {
     "grade"
   );
 
+  // Un membre d'un corps dissous le garde tant qu'on ne le mute pas.
   validerOptionEffectifsWeb_(
     ss,
     sheet,
     schema.corps,
     corps,
-    "corps"
+    "corps",
+    currentCorps
   );
 
   if (specialite) {
@@ -1015,6 +1014,18 @@ function lireOptionsColonneEffectifsWeb_(
   zeroBasedColumn,
   type
 ) {
+  /*
+    Corps : la liste de `Données` décide seule (décision du propriétaire,
+    1er novembre 2026). Un corps dissous, retiré de cette liste comme le
+    Hird du Jarl, n'est plus proposé, même si des fiches le portent encore ;
+    ces fiches le gardent (`actuel`, `validerOptionEffectifsWeb_`). Sans
+    liste dans `Données`, la lecture complète ci-dessous reprend.
+  */
+  if (normaliserEffectifsWeb_(type) === "corps") {
+    const corps = listeUniqueEffectifsWeb_(lireListeDonneesEffectifsWeb_(ss, type));
+    if (corps.length) return corps;
+  }
+
   const result = [];
 
   const validation = trouverValidationEffectifsWeb_(
@@ -1099,13 +1110,17 @@ function trouverValidationEffectifsWeb_(
 }
 
 
+// `actuel` : valeur de la fiche modifiée, acceptée telle quelle si elle ne change pas.
 function validerOptionEffectifsWeb_(
   ss,
   sheet,
   zeroBasedColumn,
   value,
-  type
+  type,
+  actuel
 ) {
+  if (actuel !== undefined && value === actuel) return;
+
   const options = lireOptionsColonneEffectifsWeb_(
     ss,
     sheet,
@@ -1344,15 +1359,22 @@ function estReserveEffectifsWeb_(status) {
 
 
 /*
-  Le grade de Jarl ne se donne ni ne se retire depuis le registre
-  (décision du propriétaire, 12 octobre 2026) : le Jarl est inscrit et
-  changé à la main dans la feuille Effectifs. La fiche du Jarl reste
-  modifiable pour le reste. `actuel` : grade de la fiche, vide à l'ajout.
+  Les grades du sommet ne se donnent ni ne se retirent depuis le registre :
+  le Jarl (décision du propriétaire, 12 octobre 2026) et le Régent impérial
+  (1er novembre 2026) sont inscrits et changés à la main dans la feuille
+  Effectifs. Leur fiche reste modifiable pour le reste. `actuel` : grade de
+  la fiche, vide à l'ajout.
 */
 function verifierGradeJarlEffectifsWeb_(grade, actuel) {
   if (estGradeJarl(grade) !== estGradeJarl(actuel)) {
     throw new Error(
       "Le grade de Jarl ne se donne ni ne se retire depuis le registre : il se change dans la feuille Effectifs."
+    );
+  }
+
+  if (estGradeRegent(grade) !== estGradeRegent(actuel)) {
+    throw new Error(
+      "Le grade de Régent impérial ne se donne ni ne se retire depuis le registre : il se change dans la feuille Effectifs."
     );
   }
 }

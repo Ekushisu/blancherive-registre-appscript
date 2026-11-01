@@ -45,7 +45,6 @@ function getLivretService(token) {
       statut: fiche.statut,
       assermente: fiche.assermente
     },
-    aliasGrades: lireAliasGrades_(ss),
     commandement: commandementLivret_(effectifs, fiche, ordre),
     carriere: lireCarriereLivret_(ss, auth.membre),
     service: lireServiceLivret_(ss, fiche),
@@ -101,10 +100,11 @@ function lireEffectifsLivret_(ss) {
   élevé à partir de Sergent-Chef ; puis l'État-Major, sauf pour l'État-Major
   lui-même et le Hird du Jarl, qui ne répond qu'au Jarl. Ordre de `Données!A`.
 
-  Le Jarl, au sommet, est rendu à part (`jarl`) pour tous les autres membres,
-  quel que soit son corps. Le Huscarl est un grade à part, sous l'autorité
-  directe du Jarl : il ne figure dans la chaîne de personne, et la sienne ne
-  compte que le Jarl.
+  Le sommet est rendu à part (`jarl`) pour tous les autres membres, quel que
+  soit leur corps : le Jarl en service actif, à défaut le ou les Régents
+  impériaux. Le Huscarl est un grade à part, sous l'autorité directe du Jarl :
+  il ne figure dans la chaîne de personne, et la sienne ne compte que le Jarl ;
+  sous régence, elle est vide.
 */
 function commandementLivret_(effectifs, fiche, ordre) {
   const actif = normaliserEffectifsWeb_(EFFECTIFS_WEB_ACTIVE_STATUS);
@@ -119,12 +119,13 @@ function commandementLivret_(effectifs, fiche, ordre) {
   const etatMajor = corps => cleGradeDiscord_(corps) === "etatmajor";
   const hird = corps => cleGradeDiscord_(corps).includes("hird");
 
-  if (estGradeJarl(fiche.grade)) return { corps: [], etatMajor: [], jarl: [] };
+  if (estGradeJarl(fiche.grade) || estGradeRegent(fiche.grade)) return { corps: [], etatMajor: [], jarl: [] };
 
   const jarl = enService.filter(m => estGradeJarl(m.grade)).map(presenter);
   if (estGradeHuscarl(fiche.grade)) return { corps: [], etatMajor: [], jarl };
+  const sommet = jarl.length ? jarl : enService.filter(m => estGradeRegent(m.grade)).map(presenter);
 
-  const chaine = enService.filter(m => !estGradeJarl(m.grade) && !estGradeHuscarl(m.grade));
+  const chaine = enService.filter(m => !estGradeJarl(m.grade) && !estGradeRegent(m.grade) && !estGradeHuscarl(m.grade));
 
   const corps = chaine
     .filter(m => memeCorps(m.corps, fiche.corps) && rang(m) < rang(fiche) && rang(m) <= seuil)
@@ -135,7 +136,7 @@ function commandementLivret_(effectifs, fiche, ordre) {
     ? []
     : chaine.filter(m => etatMajor(m.corps)).sort((a, b) => rang(a) - rang(b)).map(presenter);
 
-  return { corps, etatMajor: etatMajorListe, jarl };
+  return { corps, etatMajor: etatMajorListe, jarl: sommet };
 }
 
 

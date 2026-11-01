@@ -182,8 +182,7 @@ Le propriétaire a la main sur le serveur Discord de la Garde depuis octobre
 - **accès OFFICIER à partir de Sergent-Chef** (décision du propriétaire,
   11 octobre 2026) : Sergent-Chef et tout grade placé au-dessus dans l'ordre de
   `Données!A2:A` ouvrent une session OFFICIER, les grades placés en dessous une
-  session GARDE. Le grade régulier fait foi, jamais l'alias : un Enquêteur de
-  l'Inquisition est Sergent-Chef, donc OFFICIER. Proposé : un grade absent de
+  session GARDE. Proposé : un grade absent de
   `Données!A` ouvre une session GARDE ; le seuil est une constante du code, pour
   qu'un changement d'accès passe par une relecture du `git diff`. Le Hird du
   Jarl, le Jarl et le Maréchal suivent la même règle (décision du propriétaire,
@@ -209,8 +208,7 @@ Le propriétaire a la main sur le serveur Discord de la Garde depuis octobre
   quoi les membres pas encore rattachés perdraient les leurs. Le retrait des
   rôles gérés aux comptes non rattachés viendra une fois tout le monde lié ;
 - **le bot renomme les membres sur Discord** (décision du propriétaire,
-  11 octobre 2026). Format à fixer. Le pseudo est un affichage : le grade y
-  passe par `gradeAffiche_`, donc sous son alias pour l'Inquisition. Discord
+  11 octobre 2026). Format retenu plus bas (« Prénom Nom », sans grade). Discord
   limite un pseudo à 32 caractères, et un bot ne peut renommer ni le
   propriétaire du serveur ni un membre dont le rôle est placé au-dessus du
   sien ;
@@ -328,10 +326,12 @@ Rôles du serveur décrits puis relevés par le propriétaire le 11 octobre 2026
   (Sergent-Chef) ;
 - un rôle par grade, du nom du grade, sauf **Garde du domaine** pour le grade
   Garde ;
-- un rôle par corps : Corps des éclaireurs, Brigade de l'Inquisition, Etat
-  major, Garnison des faubourgs, Garnison de Rivebois, Garnison de
-  Bois-de-Chêne, Garnison de Cap Granite, La hird du Jarl (créé le même jour),
-  et **Garde de Fort-Dragon** pour la Cité de Blancherive : c'est le nom de la
+- un rôle par corps : Corps des éclaireurs, Etat major, Garnison des
+  faubourgs, Garnison de Rivebois, Garnison de Bois-de-Chêne, Garnison de Cap
+  Granite, et **Garde de Fort-Dragon** pour la Cité de Blancherive. Le Hird du
+  Jarl, dissous le 1er novembre 2026, n'est plus prérempli, pas plus qu'un corps
+  retiré le même jour ; une ligne déjà écrite dans `RolesDiscord` pour l'un
+  d'eux reste à effacer à la main. La Cité : c'est le nom de la
   garde de la Cité sur le serveur. Un membre de la Cité a donc Garde de
   Blancherive (fonction) et Garde de Fort-Dragon (corps) ;
 - **Réserviste** pour la réserve, seul ; aucun rôle pour un départ.
@@ -346,8 +346,6 @@ Mécanisme (`SynchroDiscord.js`, feuille `RolesDiscord`, voir DATA_MODEL) :
   rattaché et présent sur le serveur, le bot ajoute les rôles gérés qui lui
   reviennent, puis retire les autres rôles gérés. Aucun autre rôle n'est
   touché ; les comptes non rattachés non plus, le temps de la passation ;
-- grade régulier, jamais l'alias : un Inquisiteur reçoit le rôle « Garde »
-  (rôles d'alias à confirmer) ;
 - interrupteur `DISCORD_SYNCHRO` : `SIMULATION` calcule et consigne sans rien
   changer, `ACTIF` applique, toute autre valeur coupe ;
 - passages : après chaque modification d'Effectifs par le registre (hors du

@@ -1,27 +1,20 @@
 import { CHANGE_SEEN_KEY, parseSeenChanges, markChangesSeen, recentChanges } from "./change-state.js";
 import { DateRP } from "./calendrier.jsx";
-import { libelleCorps, libelleGrade } from "./corps.js";
+import { libelleCorps } from "./corps.js";
 
 const { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
-const ChangesContext = createContext({ events: [], seen: {}, mark: () => {}, aliasGrades: null });
+const ChangesContext = createContext({ events: [], seen: {}, mark: () => {} });
 let sessionSeen = {};
 const labels = { arrivee: "Arrivée", nom: "Nom", grade: "Grade", corps: "Mutation" };
 
-/*
-  Un grade s'affiche selon le corps du membre de part et d'autre du
-  changement : celui de la mutation du même événement s'il y en a une,
-  sinon son corps actuel.
-*/
-function describe(change, event, aliasGrades) {
+function describe(change) {
   if (change.type === "arrivee") return "A rejoint les effectifs";
   if (change.type === "nom") return `Renommé : ${change.avant} → ${change.apres}`;
-  const mutation = event.changes.find(c => c.type === "corps");
-  const nom = change.type === "corps" ? libelleCorps
-    : (valeur, cote) => libelleGrade(valeur, mutation ? mutation[cote] : event.corps, aliasGrades);
-  return `${labels[change.type]} : ${nom(change.avant, "avant") || "Sans affectation"} → ${nom(change.apres, "apres") || "Sans affectation"}`;
+  const nom = change.type === "corps" ? libelleCorps : valeur => valeur;
+  return `${labels[change.type]} : ${nom(change.avant) || "Sans affectation"} → ${nom(change.apres) || "Sans affectation"}`;
 }
 
-export function ChangesProvider({ data, aliasGrades = null, children }) {
+export function ChangesProvider({ data, children }) {
   const [seen, setSeen] = useState(() => {
     try { return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) }; }
     catch { return sessionSeen; }
@@ -50,7 +43,7 @@ export function ChangesProvider({ data, aliasGrades = null, children }) {
     catch { setStorageFailed(true); }
     setSeen(next);
   }
-  return <ChangesContext.Provider value={{ events, seen, mark, aliasGrades }}>
+  return <ChangesContext.Provider value={{ events, seen, mark }}>
     {storageFailed && <p className="info-notice">Le navigateur ne permet pas de conserver les éléments vus après fermeture. Ils restent mémorisés pendant cette visite.</p>}
     {children}
   </ChangesContext.Provider>;
@@ -84,7 +77,6 @@ export function useMemberChanges(memberId) {
 }
 
 export function ChangeBadge({ change }) {
-  const { aliasGrades } = useContext(ChangesContext);
   if (!change.items.length) return null;
   return <span className="member-change">
     <button type="button" className={`change-badge ${change.unread ? "change-new" : "change-seen"}`}
@@ -94,7 +86,7 @@ export function ChangeBadge({ change }) {
     </button>
     {change.open && <span className="change-details">
       {change.items.map(event => <span className="change-detail" key={event.id}>
-        <span>{event.changes.map(c => describe(c, event, aliasGrades)).join(" · ")}</span>
+        <span>{event.changes.map(c => describe(c)).join(" · ")}</span>
         <small><DateRP value={event.date}/></small>
       </span>)}
     </span>}
@@ -111,7 +103,7 @@ export function ChangesCount({ people, corps }) {
 }
 
 export function RecentChanges({ onRefresh }) {
-  const { events, seen, mark, aliasGrades } = useContext(ChangesContext);
+  const { events, seen, mark } = useContext(ChangesContext);
   const [type, setType] = useState("");
   const [onlyUnread, setOnlyUnread] = useState(false);
   const [search, setSearch] = useState("");
@@ -142,7 +134,7 @@ export function RecentChanges({ onRefresh }) {
       {!filtered.length && <p role="status">Aucun changement récent ne correspond à cette sélection.</p>}
       <ol className="changes-list">{filtered.map(event => <li key={event.id}>
         <div><strong>{event.nom}</strong> <span>{libelleCorps(event.corps)}</span><small><DateRP value={event.date}/></small>
-          {event.changes.map((change, i) => <div key={i}>{describe(change, event, aliasGrades)}</div>)}
+          {event.changes.map((change, i) => <div key={i}>{describe(change)}</div>)}
         </div>
         <button type="button" className={`change-badge ${seen[event.id] ? "change-seen" : "change-new"}`}
           disabled={Boolean(seen[event.id])} onClick={() => mark([event])}>{seen[event.id] ? "Vu" : "Marquer comme vu"}</button>

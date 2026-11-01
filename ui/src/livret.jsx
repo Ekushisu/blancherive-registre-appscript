@@ -3,7 +3,7 @@
 // 2026). Lecture seule ; le serveur (`getLivretService`) ne renvoie que les
 // données du membre de la session.
 
-import { libelleCorps, libelleGrade } from "./corps.js";
+import { libelleCorps } from "./corps.js";
 import { GradeDescription } from "./grades.jsx";
 import { DateRP } from "./calendrier.jsx";
 import { titreSemaine } from "./semaine.js";
@@ -52,17 +52,18 @@ function Tuile({ valeur, libelle, detail }) {
   return <div className="livret-tuile"><strong>{valeur}</strong><span>{libelle}</span>{detail && <small>{detail}</small>}</div>;
 }
 
-function Personne({ personne, aliasGrades }) {
+function Personne({ personne }) {
   return <li className="livret-personne">
-    <span className="livret-personne-grade">{libelleGrade(personne.grade, personne.corps, aliasGrades)}</span>
+    <span className="livret-personne-grade">{personne.grade}</span>
     <span className="livret-personne-nom">{personne.nomComplet}</span>
   </li>;
 }
 
-// Hors solde : le Jarl, par son grade, et le Hird du Jarl, par son corps.
+// Hors solde : le Jarl et le Régent impérial, par leur grade, et le Hird du Jarl, par son corps.
 function Solde({ s, grade }) {
   if (s.exclu) {
-    const qui = String(grade || "").trim().toLowerCase() === "jarl" ? "Le Jarl" : "Le Hird du Jarl";
+    const cle = String(grade || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const qui = cle === "jarl" ? "Le Jarl" : cle.startsWith("regent") ? "Le Régent impérial" : "Le Hird du Jarl";
     return <Section titre="Solde"><p className="livret-vide">{qui} n’est pas soldé par le registre de la Garde.</p></Section>;
   }
   const courante = s.semaineCourante;
@@ -151,13 +152,15 @@ function Justice({ j }) {
   </Section>;
 }
 
-function Commandement({ cmd, aliasGrades }) {
+// Sommet : le Jarl, ou sous régence le ou les Régents impériaux (LivretService.js).
+function Commandement({ cmd }) {
+  const regence = cmd.jarl?.length > 0 && cmd.jarl.every(p => String(p.grade || "").trim().toLowerCase() !== "jarl");
   return <Section titre="Chaîne de commandement">
     {cmd.corps.length
-      ? <><h3>Dans votre corps</h3><ul className="livret-personnes">{cmd.corps.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>
+      ? <><h3>Dans votre corps</h3><ul className="livret-personnes">{cmd.corps.map(p => <Personne key={p.nomComplet} personne={p} />)}</ul></>
       : <p className="livret-vide">Aucun officier au-dessus de vous dans votre corps.</p>}
-    {cmd.etatMajor.length > 0 && <><h3>État-Major</h3><ul className="livret-personnes">{cmd.etatMajor.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>}
-    {cmd.jarl?.length > 0 && <><h3>Jarl</h3><ul className="livret-personnes">{cmd.jarl.map(p => <Personne key={p.nomComplet} personne={p} aliasGrades={aliasGrades} />)}</ul></>}
+    {cmd.etatMajor.length > 0 && <><h3>État-Major</h3><ul className="livret-personnes">{cmd.etatMajor.map(p => <Personne key={p.nomComplet} personne={p} />)}</ul></>}
+    {cmd.jarl?.length > 0 && <><h3>{regence ? "Régence impériale" : "Jarl"}</h3><ul className="livret-personnes">{cmd.jarl.map(p => <Personne key={p.nomComplet} personne={p} />)}</ul></>}
   </Section>;
 }
 
@@ -188,14 +191,14 @@ export function LivretPage({ token, serverCall }) {
   if (erreur) return <div className="error">{erreur}</div>;
   if (!data) return <div className="loading">Ouverture du livret de service…</div>;
 
-  const { fiche, service: s, justice: j, carriere: c, commandement: cmd, aliasGrades } = data;
+  const { fiche, service: s, justice: j, carriere: c, commandement: cmd } = data;
   return <div className="livret-page">
     <div className="page-header livret-entete">
       <div>
         <p className="eyebrow">Livret de service</p>
         <h1 className="page-title">{fiche.nomComplet}</h1>
         <p className="page-subtitle">
-          {libelleGrade(fiche.grade, fiche.corps, aliasGrades)} · {libelleCorps(fiche.corps)}{fiche.specialite ? ` · ${fiche.specialite}` : ""}
+          {fiche.grade} · {libelleCorps(fiche.corps)}{fiche.specialite ? ` · ${fiche.specialite}` : ""}
         </p>
       </div>
       <div className="livret-badges">
@@ -213,7 +216,7 @@ export function LivretPage({ token, serverCall }) {
       <Solde s={s} grade={fiche.grade} />
       <Service s={s} />
       <Justice j={j} />
-      <Commandement cmd={cmd} aliasGrades={aliasGrades} />
+      <Commandement cmd={cmd} />
       <Carriere c={c} />
     </div>
   </div>;

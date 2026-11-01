@@ -130,7 +130,7 @@ const context = vm.createContext({
   Utilities: { formatDate: () => '' },
   PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) }
 });
-for (const f of ['Code.js', 'Effectifs.js', 'Discord.js', 'AliasGrades.js', 'Organigramme.js', 'Presences.js', 'Paye.js',
+for (const f of ['Code.js', 'Effectifs.js', 'Discord.js', 'Organigramme.js', 'Presences.js', 'Paye.js',
   'PresenceDashboard.gs.js', 'Amendes.js', 'Prison.js', 'LivretService.js']) {
   vm.runInContext(readFileSync(`src/${f}`, 'utf8'), context);
 }
@@ -139,7 +139,6 @@ let aujourdHui = '2026-10-14', lundi = '2026-10-12';
 context.dateCivileStockholm_ = () => aujourdHui;
 context.lundiCourantPresence_ = () => lundi;
 context.mettreAJourSoldesPresences_ = () => { soldesMisAJour++; };
-context.lireAliasGrades_ = () => ({});
 const livret = token => JSON.parse(JSON.stringify(context.getLivretService(token)));
 
 // ---------------------------------------------------------------- accès
@@ -165,6 +164,24 @@ assert.deepEqual(livret('ulfgar').commandement.jarl, jarl);
 assert.deepEqual(livret('huscarl').commandement, { corps: [], etatMajor: [], jarl });
 assert.deepEqual(livret('rorik').commandement.corps, [], 'Le Huscarl n’est pas un supérieur de son corps');
 assert.deepEqual(livret('jarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Jarl n’a pas de supérieur');
+
+// Régence impériale : sans Jarl en service actif, le ou les Régents impériaux
+// prennent le sommet, hors de l'État-Major ; le Huscarl en est détaché.
+const ligneJarl = effectifs.rows.findIndex(r => r[7] === 'u-jarl');
+effectifs.rows[ligneJarl][5] = 'Mort en service';
+effectifs.rows.push(membre('Aurelia', 'Vesuia', 'Régent impérial', 'État-Major', 'En service actif', 'u-reg'));
+sessions.regent = { role: 'OFFICIER', via: 'discord', membre: 'u-reg', nom: 'Aurelia Vesuia' };
+const regence = [{ nomComplet: 'Aurelia Vesuia', grade: 'Régent impérial', corps: 'État-Major' }];
+assert.deepEqual(livret('eydis').commandement.jarl, regence, 'Sous régence, le Régent impérial au sommet');
+assert.deepEqual(livret('eydis').commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive'],
+  'Le Régent impérial n’est pas compté dans l’État-Major');
+assert.deepEqual(livret('huscarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Sous régence, le Huscarl est détaché');
+assert.deepEqual(livret('regent').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Régent impérial n’a pas de supérieur');
+assert.equal(livret('regent').service.exclu, true, 'Le Régent impérial n’est pas soldé');
+effectifs.rows[ligneJarl][5] = 'En service actif';
+assert.deepEqual(livret('eydis').commandement.jarl, jarl, 'Un Jarl en service reprend le sommet, seul');
+effectifs.rows.pop();
+delete sessions.regent;
 
 // ---------------------------------------------------------------- carrière
 assert.equal(l.carriere.inscription, '2026-09-06T12:00:00.000Z');

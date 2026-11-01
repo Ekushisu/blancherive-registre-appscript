@@ -12,8 +12,7 @@
   - À partir du grade : rôle donné, en service actif, à ce grade et à tout
     grade placé au-dessus dans `Données!A` (Lieutenant → Officier de
     Blancherive), sans exception de corps ;
-  - Grade, Corps : rôle du grade régulier, jamais de l'alias, ou du corps, en
-    service actif seulement.
+  - Grade, Corps : rôle du grade ou du corps, en service actif seulement.
   Une case « Rôle Discord » vide : pas de rôle. Plusieurs lignes pour une même
   valeur : plusieurs rôles. Un départ (mort, radié, déserteur, démission, tout
   statut sans ligne) ne reçoit aucun rôle géré.
@@ -61,13 +60,11 @@ const DISCORD_ROLES_SEUIL = ["Officiers de Blancherive", "Officier de Blancheriv
 const DISCORD_ROLES_GRADES_INITIAUX = [["garde", "Garde du domaine"]];
 const DISCORD_ROLES_CORPS_INITIAUX = [
   ["eclaireur", "Corps des éclaireurs"],
-  ["inquisition", "Brigade de l'Inquisition"],
   ["etatmajor", "Etat major"],
   ["faubourg", "Garnison des faubourgs"],
   ["rivebois", "Garnison de Rivebois"],
   ["boisdechene", "Garnison de Bois-de-Chêne"],
   ["capgranite", "Garnison de Cap Granite"],
-  ["hird", "La hird du Jarl"],
   ["cite", "Garde de Fort-Dragon"]
 ];
 

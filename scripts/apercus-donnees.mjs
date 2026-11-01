@@ -20,19 +20,6 @@ const LUNDIS = { 34: "2026-08-17", 35: "2026-08-24", 36: "2026-08-31", 37: "2026
 
 const jours = motif => motif.split("").map(c => c === "x");
 
-// Alias des grades de l'Inquisition, tels que `Données!C` les porte
-// (`lireAliasGrades_`, src/AliasGrades.js) : renvoyés par toutes les lectures
-// qui affichent un grade.
-const ALIAS_GRADES = {
-  Inquisition: {
-    Capitaine: "Grand Inquisiteur",
-    "Lieutenant-Chef": "La Plume",
-    "Sergent-Chef": "Enquêteur",
-    "Caporal-Chef": "Traqueur",
-    Garde: "Inquisiteur"
-  }
-};
-
 function presence(row, semaine, corps, prenom, nom, grade, motif, solde, paye) {
   const j = jours(motif);
   return {
@@ -63,7 +50,7 @@ const lignesPresences = [
   presence(23, 37, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", ".xxxx..", 320, false),
   presence(26, 37, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xxx....", 150, false),
   presence(28, 37, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, false),
-  presence(29, 37, "Inquisition", "Ragnhild", "Fer-Juste", "Capitaine", "xxxx...", 320, false),
+  presence(29, 37, "Garde des Faubourgs", "Ragnhild", "Fer-Juste", "Capitaine", "xxxx...", 320, false),
 
   presence(31, 36, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxxxx", 700, true),
   presence(32, 36, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xxxxx..", 400, false),
@@ -72,7 +59,7 @@ const lignesPresences = [
   presence(35, 36, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxxx.x.", 400, false),
   presence(36, 36, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xx.....", 100, false),
   presence(37, 36, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxxx.", 480, false),
-  presence(38, 36, "Inquisition", "Ragnhild", "Fer-Juste", "Capitaine", "xxxxx..", 400, false),
+  presence(38, 36, "Garde des Faubourgs", "Ragnhild", "Fer-Juste", "Capitaine", "xxxxx..", 400, false),
 
   presence(41, 35, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxxx...", 200, false),
   presence(42, 35, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxx....", 240, false),
@@ -95,8 +82,7 @@ function totauxParCorps(lignes) {
 export const presences = {
   lundiCourant: LUNDI_COURANT,
   rows: lignesPresences,
-  corpsTotals: totauxParCorps(lignesPresences),
-  aliasGrades: ALIAS_GRADES
+  corpsTotals: totauxParCorps(lignesPresences)
 };
 
 const impayesPasses = lignesPresences.filter(
@@ -116,7 +102,6 @@ export const presenceDashboard = {
   pastUnpaidCount: impayesPasses.length,
   pastUnpaidAmount: somme(impayesPasses),
   currentWeekRecoveredFines: 850,
-  aliasGrades: ALIAS_GRADES,
   inactive: [
     {
       nomComplet: "Halvar Sans-Nom",
@@ -177,7 +162,6 @@ function construirePaye() {
   contexte.lundiCourantPresence_ = () => LUNDI_COURANT;
   contexte.estCorpsExcluDesPresences_ = corps =>
     String(corps).toLowerCase().includes("hird");
-  contexte.lireAliasGrades_ = () => ALIAS_GRADES;
 
   return JSON.parse(JSON.stringify(contexte.getPaye("OFFICIER")));
 }
@@ -539,8 +523,10 @@ export const codex = {
 
 /*
   Organigramme : la forme suit `getOrganigramme()` de `src/Organigramme.js`.
-  Les grades couvrent volontairement toute l'échelle, du Jarl à la Recrue, afin
-  que les descriptions de grades soient visibles sur la capture.
+  Les grades couvrent volontairement toute l'échelle, du sommet à la Recrue, afin
+  que les descriptions de grades soient visibles sur la capture. La châtellerie
+  est sous régence impériale : pas de Jarl en service, un Régent au sommet, les
+  Huscarls détachés.
 */
 let idMembre = 0;
 const membre = (prenom, nom, grade, corps) => ({
@@ -554,9 +540,9 @@ const membre = (prenom, nom, grade, corps) => ({
 
 export const organigramme = {
   changes: { events: [] },
-  jarl: membre("Lucius", "Haldor", "Jarl", "État-Major"),
+  jarl: null,
+  regents: [membre("Cassius", "Varo", "Régent impérial", "État-Major")],
   huscarls: [membre("Lydia", "Bras-Fort", "Huscarl", "Cité de Blancherive")],
-  hird: [membre("Ulfgar", "Bouclier-Noir", "Lieutenant", "Hird du Jarl")],
   marechaux: [],
   commandants: [membre("Haldvar", "de Blancherive", "Commander", "État-Major")],
   majorsEtatMajor: [membre("Ingrid", "Main-Leste", "Major", "État-Major")],
@@ -605,7 +591,7 @@ export const organigramme = {
       nom: "Garde des Faubourgs",
       membres: [membre("Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs")]
     },
-    // Le serveur renvoie toujours les sept corps, même vides : l'aperçu
+    // Le serveur renvoie toujours les six corps, même vides : l'aperçu
     // doit montrer la grille à cette densité.
     {
       key: "cap-granite",
@@ -616,26 +602,16 @@ export const organigramme = {
       key: "eclaireurs",
       nom: "Éclaireurs",
       membres: [membre("Runa", "Chante-Lame", "Garde", "Éclaireur")]
-    },
-    {
-      key: "inquisition",
-      nom: "Garde inquisitoriale",
-      membres: [
-        membre("Ragnhild", "Fer-Juste", "Capitaine", "Inquisition"),
-        membre("Ivar", "Œil-Sombre", "Garde", "Inquisition")
-      ]
     }
   ],
-  reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")],
-  aliasGrades: ALIAS_GRADES
+  reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")]
 };
 
 /*
   Effectifs : la forme suit `getEffectifs()` de `src/Effectifs.js`.
   Sept corps sont représentés, afin que la bande d'onglets soit aussi chargée
   qu'en production — c'est à cette densité que les défauts d'affichage mobile
-  apparaissent, pas avec deux corps. « Inquisition » est le libellé de la
-  feuille ; l'interface affiche « Garde inquisitoriale ».
+  apparaissent, pas avec deux corps.
 */
 const CORPS = [
   "Cité de Blancherive",
@@ -643,8 +619,8 @@ const CORPS = [
   "Garnison de Bois-de-Chêne",
   "Garde des Faubourgs",
   "Éclaireur",
-  "Inquisition",
-  "Hird du Jarl"
+  "Cap Granite",
+  "État-Major"
 ];
 
 const GRADES = [
@@ -676,7 +652,6 @@ const discord = n => String(300000000000000000n + BigInt(n));
 export const effectifs = {
   gradeOrder: GRADES,
   changes: { events: [] },
-  aliasGrades: ALIAS_GRADES,
   options: {
     grades: GRADES,
     corps: CORPS,
@@ -697,10 +672,10 @@ export const effectifs = {
     membreEffectif(10, "Frida", "Val-Profond", "Garde", "Garnison de Bois-de-Chêne"),
     membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs"),
     membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse", discordId: discord(12) }),
-    membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "Hird du Jarl"),
+    membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "État-Major"),
     membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true }),
-    membreEffectif(15, "Ragnhild", "Fer-Juste", "Capitaine", "Inquisition"),
-    membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Inquisition", {
+    membreEffectif(15, "Ragnhild", "Fer-Juste", "Capitaine", "Cap Granite"),
+    membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Cap Granite", {
       discordAnomalie: "Identifiant Discord enregistré comme nombre : Sheets en a arrondi les derniers chiffres. Rattacher le compte de nouveau."
     })
   ]
@@ -762,7 +737,6 @@ export const livret = {
     prenom: "Eydis", nom: "la Silencieuse", nomComplet: "Eydis la Silencieuse", grade: "Sergent",
     corps: "Garnison de Rivebois", specialite: "Pisteuse", statut: "En service actif", assermente: true
   },
-  aliasGrades: ALIAS_GRADES,
   commandement: {
     corps: [
       { nomComplet: "Brynjar Poing-de-Fer", grade: "Capitaine", corps: "Garnison de Rivebois" },

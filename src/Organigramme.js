@@ -73,22 +73,6 @@ const ORGANIGRAMME_GARNISONS = [
       "éclaireur",
       "éclaireurs"
     ]
-  },
-
-  /*
-    La feuille écrit « Inquisition » (Données!G) ; l'application
-    affiche « Garde inquisitoriale » (« Brigade des Inquisiteurs »
-    jusqu'au 8 octobre 2026). Le même nom affiché est déclaré pour
-    les autres pages dans `ui/src/corps.js`.
-  */
-
-  {
-    key: "inquisition",
-    label: "Garde inquisitoriale",
-    aliases: [
-      "inquisition",
-      "garde inquisitoriale"
-    ]
   }
 
 ];
@@ -201,56 +185,45 @@ function getOrganigramme(
 
 
   // ==========================================================
-  // JARL
+  // JARL OU RÉGENCE IMPÉRIALE
+  //
+  // Un Jarl en service actif tient le sommet, seul. Sans lui,
+  // le ou les Régents impériaux en service actif le prennent :
+  // la châtellerie est sous régence. Sans l'un ni l'autre, le
+  // poste de Jarl est vacant. Un Jarl mort, radié ou parti ne
+  // s'affiche plus.
   // ==========================================================
 
-  let jarl =
+  const jarl =
     actifs.find(
       personne =>
         estGradeJarl(
           personne.grade
         )
-    );
+    ) || null;
 
 
-  /*
-    Le Jarl n'a pas besoin d'être dans Effectifs.
-
-    Si aucun Jarl n'est trouvé,
-    on affiche Lucius Haldor.
-  */
-
-  if (!jarl) {
-
-    jarl = {
-
-      prenom:
-        "Lucius",
-
-      nom:
-        "Haldor",
-
-      nomComplet:
-        "Lucius Haldor",
-
-      grade:
-        "Jarl",
-
-      corps:
-        "",
-
-      status:
-        ORGANIGRAMME_ACTIVE_STATUS
-
-    };
-  }
+  const regents =
+    jarl
+      ? []
+      : actifs
+          .filter(
+            personne =>
+              estGradeRegent(
+                personne.grade
+              )
+          )
+          .sort(
+            comparerNomsOrganigramme
+          );
 
 
   // ==========================================================
   // HUSCARL
   //
-  // Grade à part, sous l'autorité directe du Jarl, à côté du
-  // Hird : ni dans la chaîne de l'État-Major, ni dans son corps.
+  // Grade à part, sous l'autorité directe du Jarl : ni dans la
+  // chaîne de l'État-Major, ni dans son corps. Sous régence, il
+  // reste à sa place, détaché du sommet.
   // ==========================================================
 
   const huscarls =
@@ -334,37 +307,10 @@ function getOrganigramme(
 
 
   // ==========================================================
-  // HIRD DU JARL
-  //
-  // Branche parallèle directement sous le Jarl.
-  // ==========================================================
-
-  const hird =
-    actifs
-      .filter(
-        personne =>
-          estHirdDuJarl(
-            personne.corps
-          )
-      )
-      .filter(
-        personne =>
-          !estGradeHorsCorps(
-            personne.grade
-          )
-      )
-      .sort(
-        (a, b) =>
-          comparerPersonnesOrganigramme(
-            a,
-            b,
-            ordreGrades
-          )
-      );
-
-
-  // ==========================================================
   // PERSONNEL POUVANT APPARAÎTRE DANS LES CORPS
+  //
+  // Le Hird du Jarl, dissous, n'a plus de branche : un corps
+  // absent d'`ORGANIGRAMME_GARNISONS` n'est pas rendu.
   // ==========================================================
 
   const personnesGarnisons =
@@ -373,12 +319,6 @@ function getOrganigramme(
         personne =>
           !estGradeHorsCorps(
             personne.grade
-          )
-      )
-      .filter(
-        personne =>
-          !estHirdDuJarl(
-            personne.corps
           )
       )
       .filter(
@@ -440,11 +380,11 @@ function getOrganigramme(
     jarl:
       jarl,
 
+    regents:
+      regents,
+
     huscarls:
       huscarls,
-
-    hird:
-      hird,
 
     marechaux:
       marechaux,
@@ -468,11 +408,7 @@ function getOrganigramme(
       garnisons,
 
     reserve:
-      reserve,
-
-    // Grades affichés selon le corps (AliasGrades.js).
-    aliasGrades:
-      lireAliasGrades_(ss)
+      reserve
 
   };
 }
@@ -817,12 +753,40 @@ function estGradeMajor(
 }
 
 
+/*
+  Régent impérial, au masculin comme au féminin. Il gouverne la
+  châtellerie en l'absence de Jarl ; comme lui, il est hors
+  Présences et sans solde, et son grade ne se change que dans la
+  feuille.
+*/
+function estGradeRegent(
+  grade
+) {
+
+  const value =
+    normaliserOrganigramme(
+      grade
+    );
+
+
+  return (
+    value === "regent imperial"
+    ||
+    value === "regente imperiale"
+  );
+}
+
+
 function estGradeCommandementGeneral(
   grade
 ) {
 
   return (
     estGradeJarl(
+      grade
+    )
+    ||
+    estGradeRegent(
       grade
     )
     ||
@@ -865,7 +829,7 @@ function estGradeHuscarl(
 }
 
 
-// Grades rendus hors des corps et du Hird : la chaîne centrale et le Huscarl.
+// Grades rendus hors des corps : le sommet, la chaîne centrale et le Huscarl.
 function estGradeHorsCorps(
   grade
 ) {
@@ -900,24 +864,6 @@ function estEtatMajor(
     value === "etat-major"
     ||
     value === "etat major"
-  );
-}
-
-
-function estHirdDuJarl(
-  corps
-) {
-
-  const value =
-    normaliserOrganigramme(
-      corps
-    );
-
-
-  return (
-    value === "hird du jarl"
-    ||
-    value === "hird"
   );
 }
 

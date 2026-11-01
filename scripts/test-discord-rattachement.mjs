@@ -263,6 +263,39 @@ assert.throws(() => gradeJarl(' jarl ', 'Maréchal'), /ne se donne ni ne se reti
 assert.throws(() => gradeJarl('Maréchal', 'Jarl'), /ne se donne ni ne se retire/, 'Rétrogradation du Jarl');
 gradeJarl('Jarl', 'Jarl'); // le reste de sa fiche reste modifiable
 gradeJarl('Garde', 'Recrue');
+// Régent impérial : comme le Jarl, ni nommé ni destitué par le registre.
+assert.throws(() => gradeJarl('Régent impérial', 'Maréchal'), /Régent impérial ne se donne ni ne se retire/, 'Nomination');
+assert.throws(() => gradeJarl('Maréchal', ' régent impérial '), /Régent impérial ne se donne ni ne se retire/, 'Destitution');
+assert.throws(() => gradeJarl('Jarl', 'Régent impérial'), /ne se donne ni ne se retire/, 'Le Régent ne devient pas Jarl par le registre');
+gradeJarl('Régent impérial', 'Régent impérial');
+
+// Corps proposés : la liste de Données seule. Un corps dissous, retiré de la
+// liste mais encore porté par des fiches, n'est plus proposé ; une fiche le
+// garde tant qu'on ne la mute pas.
+const grille = rows => ({
+  getLastRow: () => rows.length,
+  getLastColumn: () => Math.max(...rows.map(r => r.length)),
+  getRange: (row, col, h = 1, w = 1) => ({
+    getDisplayValues: () => Array.from({ length: h }, (_, i) =>
+      Array.from({ length: w }, (_, j) => String(rows[row - 1 + i]?.[col - 1 + j] ?? ''))),
+    getDataValidations: () => Array.from({ length: h }, () => Array(w).fill(null))
+  })
+});
+const feuilleCorps = grille([['Prénom', 'Corps'], ['Ulfgar', 'Hird du Jarl'], ['Alice', 'Rivebois']]);
+const ssCorps = { getSheetByName: n => (n === 'Données' ? grille([['Grade', 'Corps'], ['Garde', 'Rivebois'], ['', 'Cap Granite']]) : null) };
+assert.deepEqual(Array.from(contexteEffectifs.lireOptionsColonneEffectifsWeb_(ssCorps, feuilleCorps, 1, 'corps')),
+  ['Rivebois', 'Cap Granite'], 'Le Hird, encore porté par une fiche, n’est plus proposé');
+const validerCorps = (valeur, actuel) =>
+  contexteEffectifs.validerOptionEffectifsWeb_(ssCorps, feuilleCorps, 1, valeur, 'corps', actuel);
+assert.throws(() => validerCorps('Hird du Jarl'), /non autorisée/, 'Corps dissous : plus d’ajout');
+assert.throws(() => validerCorps('Hird du Jarl', 'Rivebois'), /non autorisée/, 'Corps dissous : plus de mutation');
+validerCorps('Hird du Jarl', 'Hird du Jarl'); // sa fiche le garde
+validerCorps('Cap Granite', 'Hird du Jarl');
+// Sans liste de corps dans Données, la lecture complète reprend, valeurs de la feuille comprises.
+const ssSansCorps = { getSheetByName: () => grille([['Grade'], ['Garde']]) };
+assert.deepEqual(Array.from(contexteEffectifs.lireOptionsColonneEffectifsWeb_(ssSansCorps, feuilleCorps, 1, 'corps')),
+  ['Hird du Jarl', 'Rivebois']);
+assert.match(modifier, /"corps",\s*currentCorps/, 'La modification transmet le corps actuel de la fiche');
 
 // Renommage : champs absents, rien ; nom vide ou déjà pris, refus ; contrôlé
 // avant le lien Discord, Présences comprises, et Présences écrites avant la fiche.

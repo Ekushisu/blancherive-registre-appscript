@@ -43,8 +43,7 @@ assert.equal(L.pluriel(1, 'jour'), '1 jour');
 assert.equal(L.pluriel(3, 'jour'), '3 jours');
 assert.equal(L.pluriel(2, 'travail', 'travaux'), '2 travaux');
 assert.equal(L.libelleEvenement({ type: 'grade', avant: 'Caporal', apres: 'Sergent' }), 'Élevé au grade de Sergent, auparavant Caporal');
-assert.equal(L.libelleEvenement({ type: 'corps', avant: 'Cité de Blancherive', apres: 'Inquisition' }), 'Affecté à Garde inquisitoriale, venant de Cité de Blancherive',
-  'Nom affiché du corps');
+assert.equal(L.libelleEvenement({ type: 'corps', avant: 'Cité de Blancherive', apres: 'Cap Granite' }), 'Affecté à Cap Granite, venant de Cité de Blancherive');
 assert.equal(L.libelleEvenement({ type: 'arrivee', avant: '', apres: 'Eydis' }), 'Inscription au registre de la Garde');
 assert.equal(L.libelleEvenement({ type: 'nom', avant: 'Eydis Silencieuse', apres: 'Eydis la Silencieuse' }),
   'Nom changé en Eydis la Silencieuse, auparavant Eydis Silencieuse');
@@ -75,9 +74,8 @@ async function rendre(reponse) {
 }
 
 const base = {
-  fiche: { prenom: 'Ivar', nom: 'Œil-Sombre', nomComplet: 'Ivar Œil-Sombre', grade: 'Garde', corps: 'Inquisition', specialite: '', statut: 'En service actif', assermente: true },
-  aliasGrades: { inquisition: { garde: 'Inquisiteur' } },
-  commandement: { corps: [{ nomComplet: 'Ragnhild Fer-Juste', grade: 'Capitaine', corps: 'Inquisition' }], etatMajor: [] },
+  fiche: { prenom: 'Ivar', nom: 'Œil-Sombre', nomComplet: 'Ivar Œil-Sombre', grade: 'Garde', corps: 'Cap Granite', specialite: '', statut: 'En service actif', assermente: true },
+  commandement: { corps: [{ nomComplet: 'Ragnhild Fer-Juste', grade: 'Capitaine', corps: 'Cap Granite' }], etatMajor: [] },
   carriere: { inscription: '2026-10-03T10:00:00.000Z', avantJournal: false, evenements: [] },
   service: { lundiCourant: '2026-10-12', exclu: false, semaineCourante: null, enAttente: [], totalEnAttente: 0, totalPercu: 0,
     derniereSemaineReglee: '', joursTotal: 0, semainesServies: 0, moyenne: 0, serie: 0, dernierJour: '', joursDepuis: null, inactif: true, seuilInactivite: 5 },
@@ -89,7 +87,7 @@ assert.deepEqual(appels, [['getLivretService', 'jeton']]);
 let page = text(tree);
 assert.match(page, /Livret de service/);
 assert.match(page, /Ivar Œil-Sombre/);
-assert.match(page, /Garde inquisitoriale/, 'Corps sous son nom affiché');
+assert.match(page, /Garde · Cap Granite/, 'Grade et corps tels que la feuille les écrit');
 assert.match(page, /Aucun jour de service enregistré à votre nom/, 'Jamais pointé : inactivité signalée');
 assert.match(page, /Aucun pointage cette semaine/);
 assert.match(page, /Aucune solde en attente : vous êtes à jour/);
@@ -121,6 +119,15 @@ await rendre({ ...base, fiche: { ...base.fiche, grade: 'Huscarl', corps: 'Cité 
 page = text(tree);
 assert.match(page, /Aucun officier au-dessus de vous dans votre corps/);
 assert.match(page, /Siddgeir Vent-Doré/, 'Le Jarl dans la chaîne de commandement');
+
+// Régence impériale : le Régent au sommet, sous son titre ; non soldé, comme le Jarl.
+await rendre({ ...base, commandement: { ...base.commandement,
+  jarl: [{ nomComplet: 'Aurelia Vesuia', grade: 'Régent impérial', corps: 'État-Major' }] } });
+page = text(tree);
+assert.match(page, /Régence impériale/);
+assert.ok(!/Jarl/.test(page), 'Aucune mention du Jarl sous régence');
+await rendre({ ...base, fiche: { ...base.fiche, grade: 'Régent impérial', corps: 'État-Major' }, service: { ...base.service, exclu: true, inactif: false } });
+assert.match(text(tree), /Le Régent impérial n’est pas soldé par le registre/);
 
 // Erreur du serveur : affichée telle quelle.
 await rendre(new Error('Le livret de service n’existe que pour une connexion par Discord.'));

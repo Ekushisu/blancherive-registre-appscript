@@ -91,28 +91,23 @@ provider = render(() => ui.ChangesProvider({ data: { events: [event] }, children
 assert.ok(provider.props.value.seen['event-3'], 'Stockage indisponible : repli en mémoire');
 reset();
 
-// Grade affiché selon le corps : alias de l'Inquisition dans le détail d'un
-// changement, avec le corps d'avant et d'après lors d'une mutation simultanée.
-const aliasGrades = { Inquisition: { Garde: 'Inquisiteur', 'Caporal-Chef': 'Traqueur' } };
-provider = render(() => ui.ChangesProvider({ data: { events: [] }, aliasGrades, children: null }));
-assert.equal(provider.props.value.aliasGrades, aliasGrades, 'La table des alias passe par le contexte');
+// Détail d'un changement : grade et corps tels que la feuille les écrit.
 const texte = node => node === null || node === undefined || node === false ? ''
   : typeof node !== 'object' ? String(node)
   : Array.isArray(node) ? node.map(texte).join('') : texte(node.props?.children);
 const detail = evenement => {
-  currentContext = { events: [], seen: {}, mark() {}, aliasGrades };
+  currentContext = { events: [], seen: {}, mark() {} };
   return texte(render(() => ui.ChangeBadge({ change: { items: [evenement], unread: true, open: true, toggle() {} } })));
 };
 const promotion = [{ type: 'grade', avant: 'Garde', apres: 'Caporal-Chef' }];
-assert.match(detail({ ...event, id: 'alias-1', corps: 'Inquisition', changes: promotion }), /Grade : Inquisiteur → Traqueur/);
-assert.match(detail({ ...event, id: 'alias-2', corps: 'Rivebois', changes: promotion }), /Grade : Garde → Caporal-Chef/);
+assert.match(detail({ ...event, id: 'grade-1', corps: 'Rivebois', changes: promotion }), /Grade : Garde → Caporal-Chef/);
 // Renommage : les deux noms, tels quels, jamais pris pour un grade.
-assert.match(detail({ ...event, id: 'nom-1', corps: 'Inquisition', changes: [{ type: 'nom', avant: 'Ivar Œil', apres: 'Ivar Œil-Sombre' }] }),
+assert.match(detail({ ...event, id: 'nom-1', corps: 'Rivebois', changes: [{ type: 'nom', avant: 'Ivar Œil', apres: 'Ivar Œil-Sombre' }] }),
   /Renommé : Ivar Œil → Ivar Œil-Sombre/);
 assert.match(
-  detail({ ...event, id: 'alias-3', corps: 'Inquisition', changes: [...promotion, { type: 'corps', avant: 'Rivebois', apres: 'Inquisition' }] }),
-  /Grade : Garde → Traqueur · Mutation : Rivebois → Garde inquisitoriale/,
-  'Grade d’avant selon le corps d’avant, grade d’après selon le corps d’après'
+  detail({ ...event, id: 'grade-2', corps: 'Cap Granite', changes: [...promotion, { type: 'corps', avant: 'Rivebois', apres: 'Cap Granite' }] }),
+  /Grade : Garde → Caporal-Chef · Mutation : Rivebois → Cap Granite/,
+  'Promotion et mutation du même événement'
 );
 reset();
 console.log('Nouveautés UI : survol 800 ms, annulation, clavier, appui, nouveau badge et persistance validés.');

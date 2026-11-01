@@ -35,12 +35,8 @@ Principaux modules :
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
+  - sommet : `jarl` (Jarl en service actif, ou `null`) et `regents` (Régents impériaux en service actif, seulement sans Jarl) ; `estGradeJarl`, `estGradeRegent` et `estGradeHuscarl` servent aussi à `Effectifs.js` et `LivretService.js`
   - `ORGANIGRAMME_GARNISONS` : corps affichés, leur nom et les libellés de la feuille qui y mènent ; un corps absent n'apparaît pas
-
-- `AliasGrades.js`
-  - `lireAliasGrades_` : alias de grade par corps, lus dans les colonnes « Alias <corps> » de `Données` (« Alias Inquisition ») ; table renvoyée sous `aliasGrades` par `getEffectifs`, `getOrganigramme`, `getPresences`, `getPresenceOfficerDashboard` et `getPaye`
-  - `gradeAffiche_` : grade à afficher pour un membre d'un corps, utilisé par `Amendes.js` pour nommer les collecteurs ; même règle que `libelleGrade` (`ui/src/corps.js`), parité vérifiée par `scripts/test-alias-grades.mjs`
-  - affichage seulement, aucune écriture
 
 - `Effectifs.js`
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
@@ -123,8 +119,8 @@ Principaux modules :
 
 - `Paye.js`
   - regroupement des semaines closes impayées par financeur : argentier de la cour
-    pour Cité de Blancherive / Éclaireurs / État-Major / Faubourgs / Garde
-    inquisitoriale, un Thane pour Rivebois, Bois-de-Chêne et Cap Granite
+    pour Cité de Blancherive / Éclaireurs / État-Major / Faubourgs, un Thane pour
+    Rivebois, Bois-de-Chêne et Cap Granite
   - lecture OFFICIER et INTENDANT ; règlement d'une semaine par les seuls OFFICIER,
     délégué à `ecrirePresenceCellule_` de `Presences.js`
   - n'écrit rien de lui-même et ne touche à aucune colonne autre que `Présences!O`
@@ -213,7 +209,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/catalogue.js` : cache local du catalogue des objets — préchargement à l'ouverture des pages Prison et Inventaire (officier), `localStorage` versionné, recherche en mémoire identique à `rechercherObjets` (parité vérifiée par `scripts/test-catalogue-local.mjs`), hook `useCatalogue` ;
 - `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
-- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (« Inquisition » → « Garde inquisitoriale ») ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS`. Grade affiché d'un membre selon son corps (`libelleGrade`, alias de l'Inquisition), d'après la table `aliasGrades` renvoyée par le serveur ; le corps peut être le libellé de la feuille ou le nom affiché ;
+- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (aucun aujourd'hui) ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS` ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
@@ -272,10 +268,8 @@ quel que soit le prochain rôle ajouté.
 une ancienne valeur (numéro de semaine, cellule au format date) casse la détection
 de la semaine courante.
 
-`Effectifs.js`, `Organigramme.js`, `Presences.js`, `PresenceDashboard.gs.js`,
-`Paye.js` et `Amendes.js` utilisent `lireAliasGrades_` (`AliasGrades.js`) ;
-`Amendes.js` utilise aussi `gradeAffiche_`. Les suites de test qui chargent ces
-fichiers sans `AliasGrades.js` y substituent `lireAliasGrades_`.
+`Effectifs.js` et `LivretService.js` utilisent `estGradeJarl`, `estGradeRegent`
+et `estGradeHuscarl` (`Organigramme.js`).
 
 `Discord.js` utilise `nettoyerEffectifsWeb_`, `normaliserEffectifsWeb_`,
 `EFFECTIFS_WEB_ACTIVE_STATUS` et `EFFECTIFS_WEB_DONNEES_SHEET_NAME`

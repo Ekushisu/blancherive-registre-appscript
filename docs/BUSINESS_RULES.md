@@ -2,29 +2,36 @@
 
 ## Organigramme
 
-- Chaîne verticale : Jarl → Maréchal → Commander → Majors du corps État-Major.
-- Le Hird répond uniquement au Jarl, par une branche directe indépendante du reste de la garde.
-- Le Jarl est inscrit aux Effectifs au grade « Jarl », en tête de `Données!A`, au-dessus du Maréchal (décision du propriétaire, 12 octobre 2026). Le grade de Jarl ne se donne ni ne se retire depuis l'application (décision du propriétaire, 12 octobre 2026) : les formulaires d'ajout et de modification ne le proposent pas, la fiche du Jarl garde son grade figé, et le serveur refuse les deux. Le reste de sa fiche reste modifiable. Un changement de Jarl se fait à la main dans la feuille `Effectifs`. Sans Jarl actif aux Effectifs, l'organigramme affiche Lucius Haldor.
-- Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` et sous son autorité directe (même décision). L'organigramme le place dans la branche « Autorité directe du Jarl », au-dessus du Hird, quel que soit son corps ; il ne figure ni dans son corps, ni dans la chaîne de l'État-Major.
+- Chaîne verticale : sommet → Maréchal → Commander → Majors du corps État-Major.
+- Sommet (décision du propriétaire, 1er novembre 2026), calculé à chaque lecture :
+  - un Jarl en service actif tient le sommet, seul, même si des Régents impériaux sont aussi en service ;
+  - sans Jarl en service actif, la châtellerie est sous régence impériale : le ou les Régents impériaux en service actif prennent le sommet, par ordre alphabétique, sous le titre de leur grade (« Régence impériale » s'ils sont plusieurs) ;
+  - sans l'un ni l'autre, le poste de Jarl est affiché vacant. Aucun nom n'est affiché par défaut : un Jarl mort, radié ou parti disparaît de l'organigramme (Lucius Haldor s'affichait jusque-là en dur).
+- Le Jarl est inscrit aux Effectifs au grade « Jarl », en tête de `Données!A`, au-dessus du Maréchal (décision du propriétaire, 12 octobre 2026). Le Régent impérial l'est au grade « Régent impérial » (« Régente impériale » est reconnu aussi). Ces deux grades ne se donnent ni ne se retirent depuis l'application (décisions du propriétaire, 12 octobre et 1er novembre 2026) : les formulaires d'ajout et de modification ne les proposent pas, leur fiche garde son grade figé, et le serveur refuse les deux. Le reste de la fiche reste modifiable. Un changement se fait à la main dans la feuille `Effectifs`.
+- Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` et sous son autorité directe (même décision). L'organigramme le place dans la branche « Autorité directe du Jarl », à droite du sommet, quel que soit son corps ; il ne figure ni dans son corps, ni dans la chaîne de l'État-Major. Sous régence, les Huscarls gardent leur place mais sont détachés du sommet : ni trait, ni mention « Autorité directe du Jarl ».
+- Le Hird du Jarl est dissous (1er novembre 2026) : il n'a plus de branche dans l'organigramme et n'est plus proposé comme corps. Ses fiches et ses lignes historiques restent.
 - Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
-- Cité de Blancherive, Faubourgs, Cap Granite, Éclaireurs et Garde inquisitoriale (depuis le 7 octobre 2026) répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
+- Cité de Blancherive, Faubourgs, Cap Granite et Éclaireurs répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
 - Un corps n'apparaît dans l'organigramme que s'il est déclaré dans `ORGANIGRAMME_GARNISONS` (`Organigramme.js`) ; ses membres actifs n'y figurent pas autrement. Tout nouveau corps doit y être ajouté.
 
 ## Nom affiché d'un corps
 
-- La feuille garde le libellé de la liste des corps de `Données` ; l'application peut en afficher un autre. Seul cas aujourd'hui, décision du propriétaire du 7 octobre 2026 : « Inquisition » s'affiche « Garde inquisitoriale » (« Brigade des Inquisiteurs » jusqu'au 8 octobre 2026, renommée à la demande du propriétaire).
+- La feuille garde le libellé de la liste des corps de `Données` ; l'application peut en afficher un autre. Aucun corps n'est renommé aujourd'hui.
 - Le nom affiché est déclaré deux fois : `ORGANIGRAMME_GARNISONS` (serveur, organigramme) et `ui/src/corps.js` (toutes les autres pages). `scripts/test-organigramme.mjs` vérifie qu'ils concordent.
 - Seul l'affichage change : les valeurs écrites dans Effectifs et Présences, envoyées au serveur, comparées par les filtres, restent celles de la feuille. Les recherches trouvent les deux noms ; les groupes d'Effectifs, les sections de semaine et la liste des corps des Présences sont triés par nom affiché.
 - Les autres Majors actifs hors État-Major et hors commandement de Rivebois / Bois-de-Chêne sont regroupés à part en bas, à côté de la Réserve.
 - Tous les réservistes, quel que soit leur grade ou corps, apparaissent uniquement dans la Réserve commune.
 
-## Grade affiché selon le corps
+## Grades affichés
 
-- Décision du propriétaire du 8 octobre 2026 : un membre de l'Inquisition voit son grade affiché sous l'alias de l'Inquisition. Les alias sont tenus dans la feuille `Données`, colonne « Alias Inquisition » (C), sur la ligne du grade régulier dont ils sont l'équivalent : Capitaine → Grand Inquisiteur, Lieutenant-Chef → La Plume, Sergent-Chef → Enquêteur, Caporal-Chef → Traqueur, Garde → Inquisiteur. Un grade sans alias garde son nom (Lieutenant, Sergent, Caporal, Cadet, Recrue, et les grades du commandement central).
-- Seul l'affichage change. Effectifs et Présences gardent le grade régulier ; les formulaires d'Effectifs proposent les alias quand le corps choisi est l'Inquisition, mais envoient le grade régulier. L'ordre hiérarchique, les couleurs, les soldes et les descriptions de grade sont ceux du grade régulier.
-- Pages concernées : Effectifs (titres de grade, listes de grade des formulaires, recherche, qui trouve les deux noms), Organigramme (titre « Grand Inquisiteur » de la Garde inquisitoriale, même vacant, groupes de grade, Réserve), Présences (ligne et gardes à surveiller), Paye (détail et récapitulatif copié), panneau des changements, collecteurs des Amendes.
-- Dans le panneau des changements, un grade s'affiche selon le corps du membre de part et d'autre du changement : celui de la mutation du même événement s'il y en a une, sinon son corps actuel. Un changement de grade suivi, plus tard, d'une mutation hors de l'Inquisition s'affiche donc avec les grades réguliers.
-- L'en-tête nomme le corps : une autre colonne « Alias <corps> » de `Données`, le corps écrit comme dans la liste des corps, donnerait ses alias à ce corps sans changement de code. Sans colonne d'alias, l'application affiche les grades réguliers.
+- Un grade s'affiche partout tel que la feuille l'écrit. Les alias de grade par corps ont été retirés le 1er novembre 2026 (décision du propriétaire) ; une colonne « Alias <corps> » laissée dans `Données` n'est plus lue.
+
+## Corps dissous
+
+- Décision du propriétaire, 1er novembre 2026 : les corps proposés et acceptés par les formulaires d'Effectifs sont ceux de la liste `Données!G`, et eux seuls. Dissoudre un corps, c'est le retirer de cette liste.
+- Un corps dissous n'est plus proposé à l'ajout ni à la mutation, même si des fiches le portent encore. Une fiche qui le porte le garde tant qu'on ne la mute pas : le formulaire l'affiche « (corps dissous) », et le serveur accepte la valeur inchangée.
+- Les fiches, les lignes de Présences, les amendes et les incarcérations d'un corps dissous ne sont ni réécrites ni supprimées.
+- Le Hird du Jarl est dissous depuis le 1er novembre 2026.
 
 ## Effectifs
 
@@ -95,7 +102,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - La liste se filtre par semaine, par corps et par personne. Le filtre par corps existe pour l'officier de corps, qui vient pointer ses seuls hommes dans une liste hebdomadaire devenue longue : il masque les autres corps dans chaque semaine affichée et restreint le compte d'impayés de la semaine, afin que le badge parle bien du corps demandé. Une ligne sans corps est regroupée sous « Sans corps », dans la liste déroulante comme dans les sections de semaine, pour qu'aucun garde ne disparaisse entre les deux vues.
 - La semaine courante n'a jamais d'impayés : la solde se règle le lundi pour la semaine précédente, une semaine en cours est donc impayée par construction. Son badge et son filtre « Impayés » ne s'affichent pas. Le tableau de bord OFFICIER et la Paye appliquent déjà la même exclusion ; les trois doivent rester d'accord, sans quoi une alerte permanente cesserait d'être lue.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
-- Le Hird du Jarl (par son corps) et le Jarl (par son grade, quel que soit son corps ; décision du propriétaire, 12 octobre 2026) sont exclus des présences, des calculs de solde, de la Paye et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées. La règle unique est `estExcluDesPresences_(corps, grade)` (`Presences.js`). Le Huscarl, lui, est pointé et soldé comme tout membre.
+- Le Hird du Jarl (par son corps), le Jarl (par son grade, quel que soit son corps ; décision du propriétaire, 12 octobre 2026) et le Régent impérial (par son grade ; 1er novembre 2026) sont exclus des présences, des calculs de solde, de la Paye et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées. La règle unique est `estExcluDesPresences_(corps, grade)` (`Presences.js`). Le Huscarl, lui, est pointé et soldé comme tout membre.
 - Les décrets de la châtellerie sont promulgués et abrogés par dépôt et retrait d'un Google Doc dans le dossier Drive déclaré par `SYNC_CODEX_FOLDERS`. Le dossier fait autorité : la synchronisation suivante reflète son contenu exact. Un décret retiré cesse d'apparaître au Codex et d'être proposé dans les formulaires ; les amendes et incarcérations déjà enregistrées sous ce décret restent inchangées.
 - Depuis le 29 septembre 2026, tout article d'un décret ou d'un texte impérial peut fonder un chef d'accusation, qu'il chiffre ou non sa sanction (voir « Chefs d'accusation »). Les règles antérieures, qui réservaient les formulaires aux sources chiffrées du droit de la châtellerie, sont abrogées.
 - Le barème journalier est défini par grade dans `SoldesGrades`. Initialisation : Commander (alias Commandant) à 100 septims ; autres grades à l'ancienne base `Vue globale!L2` (50 à l'époque ; feuille archivée depuis, l'initialisation ayant eu lieu), sauf Recrue à 0 et Cadet à la moitié (25 actuellement). Le Hird reste à 0 quel que soit le tarif du grade.
@@ -118,19 +125,16 @@ doit-il demander, et à qui. Le registre des Présences est organisé par semain
 puis par corps ; l'argent, lui, vient d'un financeur par corps.
 
 - Financeurs. L'argentier de la cour couvre Cité de Blancherive, Éclaireurs,
-  État-Major, Faubourgs de Blancherive et Garde inquisitoriale ; un Thane
-  couvre chacune des garnisons de Rivebois, Bois-de-Chêne et Cap Granite.
-  Décisions du propriétaire du 7 octobre 2026 pour les Faubourgs, jusque-là
-  payés par leur Thane, et pour la Garde inquisitoriale. Cette coupure ne suit plus celle du
-  reversement des amendes : les Faubourgs et la Garde inquisitoriale reversent à leurs
-  propres collecteurs.
+  État-Major et Faubourgs de Blancherive ; un Thane couvre chacune des
+  garnisons de Rivebois, Bois-de-Chêne et Cap Granite. Décision du
+  propriétaire du 7 octobre 2026 pour les Faubourgs, jusque-là payés par leur
+  Thane. Cette coupure ne suit plus celle du reversement des amendes : les
+  Faubourgs reversent à leurs propres collecteurs.
 - Le rattachement se fait par jeton distinctif recherché dans le libellé du corps,
   et non par égalité, afin d'accepter « Rivebois » comme « Garnison de Rivebois ».
   Le jeton « blancherive » seul n'est jamais utilisé : la Cité et les Faubourgs le
   portent tous les deux. Ils relèvent aujourd'hui du même financeur, mais chacun
   garde son jeton propre, pour qu'un changement futur n'en entraîne pas un autre.
-  La Garde inquisitoriale est reconnue sous le libellé de la feuille (« Inquisition ») comme
-  sous son nom affiché.
 - Un corps ne correspondant à aucun financeur connu n'est jamais écarté. Il est
   regroupé sous « Financeur à déterminer », compté dans le total général et
   affiché en tête comme une anomalie de libellé à corriger. Une solde ne doit pas
@@ -372,9 +376,11 @@ serveur ne renvoie que les données du membre de la session.
   de date d'arrivée réelle.
 - **Chaîne de commandement** : supérieurs en service actif de son corps, à
   partir de Sergent-Chef ; puis l'État-Major, sauf pour l'État-Major et le Hird
-  du Jarl ; puis le Jarl, quel que soit son corps. Le Huscarl n'entre dans la
-  chaîne de personne, et la sienne ne compte que le Jarl ; le Jarl n'en a pas,
-  et sa solde ne figure pas au livret.
+  du Jarl ; puis le sommet, quel que soit son corps : le Jarl, ou sous régence
+  le ou les Régents impériaux (« Régence impériale »). Le Huscarl n'entre dans
+  la chaîne de personne, et la sienne ne compte que le Jarl (vide sous
+  régence) ; le Jarl et le Régent impérial n'en ont pas, et leur solde ne
+  figure pas au livret.
 - **Justice** : amendes dressées (nombre, total), à encaisser (non payées,
   montant fixé ou à déterminer), à reverser (payées, non reversées), cinq
   dernières ; incarcérations prononcées, détenus encore en cellule, cinq
@@ -385,7 +391,7 @@ serveur ne renvoie que les données du membre de la session.
 - GARDE et OFFICIER peuvent consulter / créer ; connecté par Discord, à son propre nom (voir « Saisie à son propre nom »).
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - Seul un OFFICIER peut modifier `Reversé aux trésoriers`.
-- Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps, Faubourgs et Garde inquisitoriale compris, utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.
+- Pour chaque amende, le destinataire du reversement est calculé dynamiquement. Les corps Cité de Blancherive, Éclaireur, Hird du Jarl et État-Major utilisent tous les collecteurs actifs de Cité de Blancherive et d'État-Major ; les autres corps, Faubourgs compris, utilisent leurs collecteurs actifs puis ceux d'État-Major en repli. Les collecteurs sont affichés avec leur grade. La spécialité `Collecteur de la garde` est recherchée parmi toutes les valeurs du chip. L'absence de collecteur est affichée explicitement.
 - Couleurs des lignes : rouge si non payée, gris si payée mais non reversée, vert si payée et reversée.
 - OFFICIER peut supprimer une entrée.
 - La suppression applicative efface le contenu de l'entrée mais doit préserver la structure de la feuille.

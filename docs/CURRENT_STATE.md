@@ -2,6 +2,44 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Régence impériale, Hird dissous, alias de grade retirés (1er novembre 2026)
+
+- Demande du propriétaire : le Jarl Lucius Haldor est mort (« Mort en service »
+  dans la feuille) mais restait affiché ; la châtellerie passe sous régence
+  impériale ; le Hird du Jarl est dissous ; l'Inquisition disparaît de
+  l'application, alias de grade compris. Branche `regence-imperiale`.
+- **Sommet de l'organigramme** : le nom « Lucius Haldor », affiché en dur sans
+  Jarl actif, est retiré. Jarl en service actif seul ; sinon le ou les Régents
+  impériaux en service actif (« Régence impériale » s'ils sont plusieurs) ;
+  sinon poste de Jarl vacant. Sous régence, les Huscarls gardent leur place
+  sans trait ni mention « Autorité directe du Jarl ». Livret : même sommet,
+  chaîne du Huscarl vide sous régence.
+- **Régent impérial** : traité comme le Jarl (décision du propriétaire) — hors
+  Présences et solde (`estExcluDesPresences_`), grade ni donné ni retiré par
+  l'application (`verifierGradeJarlEffectifsWeb_`, listes des formulaires).
+- **Corps dissous** : les corps proposés et acceptés par les Effectifs sont
+  ceux de `Données!G` seuls ; une fiche garde son corps inchangé (« corps
+  dissous » dans le formulaire). Branche du Hird retirée de l'organigramme ;
+  exclusion des Présences et reversement des amendes gardés pour l'historique.
+- **Retrait** : `src/AliasGrades.js`, `libelleGrade`, `gradeAffiche_` et
+  `aliasGrades` dans toutes les réponses ; garnison de l'organigramme, jetons
+  de la Paye, nom affiché et préremplissage des rôles Discord de
+  l'Inquisition ; grille de l'organigramme à six colonnes. Une semaine impayée
+  ancienne d'un corps retiré tomberait sous « Financeur à déterminer », visible
+  et comptée.
+- Vérifications : 33 suites vertes (`test-alias-grades.mjs` supprimé ;
+  régence couverte par `test-organigramme`, `test-livret-service`,
+  `test-livret-ui`, `test-paye` ; corps dissous et grade de Régent par
+  `test-discord-rattachement`). `npm run build` et aperçus régénérés.
+  Aucun `clasp push`, aucun déploiement.
+- **À faire dans la feuille, par le propriétaire** : retirer « Hird du Jarl »
+  et « Inquisition » de `Données!G` ; supprimer la colonne d'alias
+  `Données!C` ; ajouter « Régent impérial » en tête de `Données!A` et
+  inscrire le ou les Régents aux Effectifs ; effacer de `RolesDiscord` les
+  lignes de ces deux corps si la synchronisation tourne encore.
+- **Mise en service** : relire le `git diff`, `npm run push`, publier le
+  déploiement à la main.
+
 ### Connexion Discord retirée, retour aux codes (13 octobre 2026)
 
 - Demande du staff : retour à l'authentification par mot de passe partagé.
@@ -1051,8 +1089,9 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 
 ### Organigramme
 - Implémenté dans `Organigramme.js`.
-- Refonte locale du 5 septembre 2026 : chaîne centrale jusqu'aux Majors de l'État-Major, Hird relié uniquement au Jarl, Capitaines mis en avant et personnel repliable par corps. Hird replié initialement ; garnisons ouvertes.
-- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous l'État-Major central ; les deux garnisons sont rattachées à ce groupe. Les cinq autres corps, dont la Garde inquisitoriale depuis le 7 octobre 2026, restent directement sous l'État-Major.
+- Refonte locale du 5 septembre 2026 : chaîne centrale jusqu'aux Majors de l'État-Major, Capitaines mis en avant et personnel repliable par corps ; garnisons ouvertes. La branche du Hird, reliée au seul Jarl, a disparu avec sa dissolution (1er novembre 2026).
+- Sommet depuis le 1er novembre 2026 : Jarl en service actif, sinon Régents impériaux (régence, Huscarls détachés), sinon poste vacant.
+- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous l'État-Major central ; les deux garnisons sont rattachées à ce groupe. Les quatre autres corps (Cité, Faubourgs, Cap Granite, Éclaireurs) restent directement sous l'État-Major.
 - Autres Majors actifs hors commandement et Réserve commune dans deux blocs en bas. Répartition vérifiée par `node scripts/test-organigramme.mjs`, notamment les variantes de nom de Bois-de-Chêne, les réservistes et les postes vacants. Version Web déployée non mise à jour par cette refonte locale.
 
 ### Effectifs

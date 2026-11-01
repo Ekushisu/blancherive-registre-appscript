@@ -11,19 +11,18 @@
 //
 // Financeurs :
 //   - Argentier de la cour : Cité de Blancherive, Éclaireurs,
-//     État-Major, Faubourgs de Blancherive et Garde
-//     inquisitoriale (« Inquisition » dans la feuille), depuis
-//     le 7 octobre 2026 pour ces deux derniers.
+//     État-Major et Faubourgs de Blancherive (depuis le
+//     7 octobre 2026 pour ces derniers).
 //   - Un Thane par garnison : Rivebois, Bois-de-Chêne,
 //     Cap Granite.
 //
 // Ce rattachement ne suit plus celui du reversement des
 // amendes (`AMENDES_CORPS_REVERSEMENT_MUTUALISES`) : les
-// Faubourgs et l'Inquisition sont payés par l'argentier mais
-// reversent à leurs propres collecteurs.
+// Faubourgs sont payés par l'argentier mais reversent à leurs
+// propres collecteurs.
 //
-// Le Hird du Jarl et le Jarl sont exclus des Présences ; ils le sont
-// ici aussi.
+// Le Hird du Jarl, le Jarl et le Régent impérial sont exclus des
+// Présences (`estExcluDesPresences_`) ; ils le sont ici aussi.
 //
 // Lecture des Présences, colonnes A:O — voir `Presences.js`.
 //
@@ -58,9 +57,7 @@ const PAYE_FINANCEURS = [
       "eclaireur",
       "etat-major",
       "etat major",
-      "faubourg",
-      "inquisition",
-      "inquisitorial"
+      "faubourg"
     ]
   },
 
@@ -179,12 +176,7 @@ function getPaye(token) {
     });
   }
 
-  const resultat = construireResultatPaye_(lignes, lundiCourant);
-
-  // Grades affichés selon le corps (AliasGrades.js).
-  resultat.aliasGrades = lireAliasGrades_(ss);
-
-  return resultat;
+  return construireResultatPaye_(lignes, lundiCourant);
 }
 
 

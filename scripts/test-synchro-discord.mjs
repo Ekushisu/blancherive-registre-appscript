@@ -45,7 +45,7 @@ class Sheet {
 }
 const GRADES = ['Commander', 'Major', 'Capitaine', 'Lieutenant-Chef', 'Lieutenant', 'Sergent-Chef', 'Sergent', 'Caporal', 'Garde', 'Recrue'];
 const CORPS = ['Cité de Blancherive', 'Garnison de Rivebois', 'Garnison de Bois-de-Chêne', 'Garde des Faubourgs',
-  'Éclaireur', 'Inquisition', 'Hird du Jarl', 'État-Major', 'Garnison de Cap Granite'];
+  'Éclaireur', 'État-Major', 'Garnison de Cap Granite'];
 const donnees = new Sheet('Données', [['Grade', '', '', '', '', '', 'Corps'],
   ...Array.from({ length: Math.max(GRADES.length, CORPS.length) }, (_, i) => [GRADES[i] ?? '', '', '', '', '', '', CORPS[i] ?? ''])]);
 const feuilles = new Map([['Données', donnees]]);
@@ -61,16 +61,16 @@ function serveurInitial() {
     role(10, 'Capitaine', 15), role(11, 'Lieutenant', 14), role(12, 'Sergent-Chef', 13), role(13, 'Garde', 6),
     role(14, 'Sergent', 12), role(15, 'Lieutenant-Chef', 16), role(16, 'Major', 18), role(17, 'Commander', 19),
     role(18, 'Caporal', 11), role(19, 'Recrue', 7),
-    role(20, 'Corps des éclaireurs', 8), role(21, "Brigade de l'inquisition", 8), role(22, 'Etat Major', 8),
+    role(20, 'Corps des éclaireurs', 8), role(22, 'Etat Major', 8),
     role(23, 'Garnison des faubourgs', 8), role(24, 'Garnison de Bois-de-Chêne', 8), role(25, 'Garnison de Cap Granite', 8),
     role(30, 'Animation', 3), role(40, 'BlancheriveGarde', 25, { managed: true }), role(41, 'Administration', 30)
   ];
   membres = new Map([
     [BOT, [id(40)]],
-    [id(101), [id(13)]],                       // Ragnhild : Capitaine de l'Inquisition, n'a que « Garde »
+    [id(101), [id(13)]],                       // Ragnhild : Capitaine des Faubourgs, n'a que « Garde »
     [id(102), [id(1), id(14), id(30)]],        // Eydis : Lieutenant, a encore « Sergent » et « Animation »
     [id(103), [id(1), id(12), id(2)]],         // Sven : Sergent-Chef qui porte « Officier » à tort
-    [id(104), []],                             // Ulfgar : Lieutenant du Hird
+    [id(104), []],                             // Ulfgar : Lieutenant du Hird, dissous
     [id(105), [id(1), id(13), id(24)]],        // Olaf : passé en réserve
     [id(106), [id(1), id(2), id(10), id(30)]], // Bjorn : radié
     [id(107), [id(41)]],                       // Inconnu : grade absent de Données, rôle au-dessus du bot
@@ -79,7 +79,7 @@ function serveurInitial() {
   pseudos = new Map([[id(102), 'Eydis'], [id(103), 'Sven'], [id(106), 'Bjorn le Fort'], [id(200), 'Quelqu’un']]);
 }
 const comptes = () => new Map([
-  [id(101), { membre: 'u1', statut: 'En service actif', grade: 'Capitaine', corps: 'Inquisition', nom: 'Ragnhild Fer-Juste' }],
+  [id(101), { membre: 'u1', statut: 'En service actif', grade: 'Capitaine', corps: 'Garde des Faubourgs', nom: 'Ragnhild Fer-Juste' }],
   [id(102), { membre: 'u2', statut: 'En service actif', grade: 'Lieutenant', corps: 'Garnison de Bois-de-Chêne', nom: 'Eydis la Silencieuse' }],
   [id(103), { membre: 'u3', statut: 'En service actif', grade: 'Sergent-Chef', corps: 'Cité de Blancherive', nom: 'Sven' }],
   [id(104), { membre: 'u4', statut: 'en service actif', grade: 'Lieutenant', corps: 'Hird du Jarl', nom: 'Ulfgar' }],
@@ -179,9 +179,9 @@ assert.deepEqual(feuille.rows.filter(r => r[0] === 'Grade').map(r => r[1]), GRAD
 assert.ok(feuille.rows.filter(r => r[0] === 'Grade').every(r => r[2] === r[1]), 'Rôle de grade prérempli au nom du grade');
 const corpsPrerempli = Object.fromEntries(feuille.rows.filter(r => r[0] === 'Corps').map(r => [r[1], r[2]]));
 assert.deepEqual(corpsPrerempli, {
-  'Cité de Blancherive': '', 'Garnison de Rivebois': '', 'Hird du Jarl': '',
+  'Cité de Blancherive': '', 'Garnison de Rivebois': '',
   'Garnison de Bois-de-Chêne': 'Garnison de Bois-de-Chêne', 'Garde des Faubourgs': 'Garnison des faubourgs',
-  'Éclaireur': 'Corps des éclaireurs', 'Inquisition': "Brigade de l'inquisition",
+  'Éclaireur': 'Corps des éclaireurs',
   'État-Major': 'Etat Major', 'Garnison de Cap Granite': 'Garnison de Cap Granite'
 });
 assert.deepEqual(feuille.formats, ['@'], 'Texte brut');
@@ -206,14 +206,14 @@ assert.deepEqual([...rapport.anomalies], [], 'Feuille préremplie sans anomalie 
 const plan = op => Array.from(rapport.operations.filter(o => o.discordId === op && o.methode !== 'patch'),
   o => (o.methode === 'put' ? '+' : '-') + o.libelle).sort();
 const pseudoPrevu = op => Array.from(rapport.operations.filter(o => o.discordId === op && o.methode === 'patch'), o => o.pseudo);
-assert.deepEqual(plan(id(101)), ["+Brigade de l'inquisition", '+Capitaine', '+Garde de Blancherive', '+Officier de Blancherive', '-Garde'].sort(),
-  'Capitaine de l’Inquisition : grade régulier, corps, fonction, Officier ; ancien grade retiré');
+assert.deepEqual(plan(id(101)), ['+Garnison des faubourgs', '+Capitaine', '+Garde de Blancherive', '+Officier de Blancherive', '-Garde'].sort(),
+  'Capitaine des Faubourgs : grade, corps, fonction, Officier ; ancien grade retiré');
 assert.deepEqual(plan(id(102)), ['+Garnison de Bois-de-Chêne', '+Lieutenant', '+Officier de Blancherive', '-Sergent'].sort(),
   'Lieutenant : Officier inclus ; « Animation », non géré, reste');
 assert.deepEqual(plan(id(103)), ['-Officier de Blancherive'],
   'Sergent-Chef : Officier retiré, pas de rôle de corps pour la Cité');
 assert.deepEqual(plan(id(104)), ['+Garde de Blancherive', '+Lieutenant', '+Officier de Blancherive'].sort(),
-  'Hird : même seuil, sans rôle de corps');
+  'Hird, dissous : même seuil, sans rôle de corps');
 assert.deepEqual(plan(id(105)), ['+Réserviste', '-Garde', '-Garde de Blancherive', '-Garnison de Bois-de-Chêne'].sort(),
   'Réserve : Réserviste seul');
 assert.deepEqual(plan(id(106)), ['-Capitaine', '-Garde de Blancherive', '-Officier de Blancherive'].sort(),
@@ -248,7 +248,7 @@ assert.equal(resume.mode, 'SIMULATION');
 assert.equal(resume.prevues, rapport.operations.length);
 const texte = context.decrireRapportSynchroDiscord_(rapport);
 assert.match(texte, /simulation, rien n'est changé/);
-assert.match(texte, /\+ Officier de Blancherive — Ragnhild Fer-Juste \(En service actif, Capitaine, Inquisition\)/);
+assert.match(texte, /\+ Officier de Blancherive — Ragnhild Fer-Juste \(En service actif, Capitaine, Garde des Faubourgs\)/);
 assert.match(texte, /− Officier de Blancherive — Sven/);
 assert.match(texte, /✎ pseudo « Eydis la Silencieuse » — Eydis la Silencieuse \(aujourd'hui : « Eydis »\)/);
 assert.match(texte, /✎ pseudo « effacé » — Bjorn \(aujourd'hui : « Bjorn le Fort »\)/);
@@ -266,7 +266,7 @@ assert.equal(pseudos.get(id(106)), null, 'Pseudo effacé');
 assert.equal(pseudos.get(id(200)), 'Quelqu’un');
 assert.match(context.decrireRapportSynchroDiscord_(rapport), /4 pseudo\(s\) changé\(s\)/);
 assert.equal(JSON.parse(proprietes.DISCORD_SYNCHRO_RAPPORT).pseudos, 4);
-assert.deepEqual(rolesDe(id(101)), ["Brigade de l'inquisition", 'Capitaine', 'Garde de Blancherive', 'Officier de Blancherive']);
+assert.deepEqual(rolesDe(id(101)), ['Capitaine', 'Garde de Blancherive', 'Garnison des faubourgs', 'Officier de Blancherive']);
 assert.deepEqual(rolesDe(id(102)), ['Animation', 'Garde de Blancherive', 'Garnison de Bois-de-Chêne', 'Lieutenant', 'Officier de Blancherive']);
 assert.deepEqual(rolesDe(id(105)), ['Réserviste']);
 assert.deepEqual(rolesDe(id(106)), ['Animation']);
@@ -385,9 +385,9 @@ feuilles.set('Données', new Sheet('Données', [['Grade', '', '', '', '', '', 'C
 feuilles.delete('RolesDiscord');
 const noms = ['Jarl', 'Etat major', 'BlancheriveGarde', 'Officiers de Blancherive', 'Garde de Blancherive', 'Maréchal',
   'Commander', 'Major', 'Capitaine', 'Lieutenant-Chef', 'Lieutenant', 'Sergent-Chef', 'Sergent', 'Caporal-Chef', 'Caporal',
-  'Garde du domaine', 'Cadet', 'Recrue', 'Garde de Fort-Dragon', 'Corps des éclaireurs', 'Brigade de l’Inquisition',
+  'Garde du domaine', 'Cadet', 'Recrue', 'Garde de Fort-Dragon', 'Corps des éclaireurs',
   'Garnison des faubourgs', 'Garnison de Rivebois', 'Garnison de Cap Granite', 'Garnison de Bois-de-Chêne',
-  'La hird du Jarl', 'Réserviste'];
+  'Réserviste'];
 roles = [{ id: G, name: '@everyone', position: 0 },
   ...noms.map((nom, i) => role(600 + i, nom, 100 - i, nom === 'BlancheriveGarde' ? { managed: true } : {}))];
 membres = new Map([[BOT, [id(602)]]]);
@@ -401,8 +401,7 @@ assert.equal(reelle['Grade / Garde'], 'Garde du domaine');
 assert.equal(reelle['Grade / Maréchal'], 'Maréchal');
 assert.equal(reelle['Grade / Jarl'], '', 'Jarl au-dessus du bot : laissé vide');
 assert.equal(reelle['Corps / État-Major'], '', 'Etat major au-dessus du bot : laissé vide');
-assert.equal(reelle['Corps / Inquisition'], 'Brigade de l’Inquisition', 'Nom exact du serveur, apostrophe comprise');
-assert.equal(reelle['Corps / Hird du Jarl'], 'La hird du Jarl');
+assert.equal(reelle['Corps / Garde des Faubourgs'], 'Garnison des faubourgs', 'Nom exact du serveur');
 assert.equal(reelle['Corps / Garnison de Rivebois'], 'Garnison de Rivebois');
 assert.equal(reelle['Corps / Cité de Blancherive'], 'Garde de Fort-Dragon', 'La Cité s’appelle Garde de Fort-Dragon sur le serveur');
 const notesReelles = rapport.notes.join('\n');

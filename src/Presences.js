@@ -35,9 +35,12 @@ const PRESENCES_EFFECTIFS_SHEET_NAME =
 const PRESENCE_EXCLUDED_CORPS =
   "Hird du Jarl";
 
-// Le Jarl n'est ni pointé ni soldé, quel que soit son corps.
-const PRESENCE_EXCLUDED_GRADE =
-  "Jarl";
+// Le Jarl et le Régent impérial ne sont ni pointés ni soldés, quel que soit leur corps.
+const PRESENCE_EXCLUDED_GRADES = [
+  "Jarl",
+  "Régent impérial",
+  "Régente impériale"
+];
 
 const PRESENCE_TIMEZONE =
   "Europe/Stockholm";
@@ -741,13 +744,20 @@ function estGradeExcluDesPresences_(grade) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 
-  return valeur === PRESENCE_EXCLUDED_GRADE.toLowerCase();
+  return PRESENCE_EXCLUDED_GRADES.some(exclu =>
+    exclu
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") === valeur
+  );
 }
 
 /*
-  Hors Présences et hors solde : le Hird du Jarl (par son corps) et le
-  Jarl (par son grade). Seule règle à appeler pour une fiche ou une
-  ligne de Présences.
+  Hors Présences et hors solde : le Hird du Jarl (par son corps), le
+  Jarl et le Régent impérial (par leur grade). Seule règle à appeler
+  pour une fiche ou une ligne de Présences. Le Hird, dissous, ne
+  compte plus de membre actif ; la règle reste pour ses lignes
+  historiques.
 */
 function estExcluDesPresences_(corps, grade) {
   return estCorpsExcluDesPresences_(corps) || estGradeExcluDesPresences_(grade);
@@ -1755,9 +1765,7 @@ function getPresences(
 
   const result = {
     lundiCourant: lundiCourant,
-    rows: rows,
-    // Grades affichés selon le corps de la ligne (AliasGrades.js).
-    aliasGrades: lireAliasGrades_(ss)
+    rows: rows
   };
 
   // Les agrégats financiers sont réservés aux officiers.

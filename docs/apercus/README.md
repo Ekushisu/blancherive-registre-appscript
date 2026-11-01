@@ -37,13 +37,11 @@ Générées par le script, donc rejouables à l’identique :
 
 - `effectifs-1440.png`, `effectifs-390.png` : onglets par corps, vue d'ensemble
   et fiches de service. Le jeu de démonstration couvre sept corps, densité à
-  laquelle les défauts d'affichage mobile apparaissent, dont « Inquisition »
-  affiché « Garde inquisitoriale », ses grades sous leur alias (« Grand
-  Inquisiteur », « Inquisiteur »).
-- `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement,
-  le Huscarl et le Hird sous l'autorité directe du Jarl, les sept corps et
-  garnisons sur la grille à sept colonnes, avec les descriptions de grades et
-  les alias de grade de la Garde inquisitoriale.
+  laquelle les défauts d'affichage mobile apparaissent.
+- `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement
+  sous régence impériale (Régent impérial au sommet, Huscarl détaché), les six
+  corps et garnisons sur la grille à six colonnes, avec les descriptions de
+  grades.
 - `effectifs-ajout-1440.png`, `effectifs-ajout-390.png` : formulaire « Nouveau
   membre », sans grade par défaut, compte Discord cherché parmi les membres du
   serveur.

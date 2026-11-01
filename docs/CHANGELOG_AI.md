@@ -1,5 +1,19 @@
 # Journal de passation IA
 
+## 2026-11-01 — Régence impériale, Hird dissous, Inquisition et alias retirés
+
+- Demande du propriétaire : Jarl mort encore affiché ; régence impériale ;
+  Hird du Jarl dissous mais historique gardé ; Inquisition, mentions et alias
+  à faire disparaître.
+- Décisions : Régent impérial traité comme le Jarl (hors solde, grade figé) ;
+  Jarl actif seul au sommet s'il coexiste avec des Régents ; Huscarls à leur
+  place, sans lien, sous régence ; mécanisme d'alias de grade retiré
+  entièrement. Gardé : `libelleCorps` (table vide), règle générique.
+- Trouvé en route : « Lucius Haldor » était affiché en dur sans Jarl actif ; les
+  corps proposés incluaient toute valeur déjà écrite dans Effectifs, ce qui
+  aurait laissé le Hird proposé après son retrait de `Données`.
+- 33 suites vertes ; aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-10-12 — Renommage : erreur de validation en ligne, correctif
 
 - Le propriétaire a essayé le renommage en ligne : erreur de validation de

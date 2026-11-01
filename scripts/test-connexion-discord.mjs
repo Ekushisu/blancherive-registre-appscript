@@ -37,7 +37,7 @@ let donnees = new Sheet([['Grade'], ...GRADES.map(g => [g])]);
 const entetes = ['Prénom', 'Nom', 'Grade', 'Corps', 'Statut', 'ID membre', 'ID Discord'];
 const fiche = (n, prenom, grade, corps, statut, discord) => [prenom, 'Test', grade, corps, statut, uuid(n), discord];
 const effectifs = new Sheet([entetes,
-  fiche(1, 'Ragnhild', 'Capitaine', 'Inquisition', 'En service actif', id(1)),
+  fiche(1, 'Ragnhild', 'Capitaine', 'Cap Granite', 'En service actif', id(1)),
   fiche(2, 'Eydis', 'Sergent-Chef', 'Garnison de Rivebois', 'En service actif', id(2)),
   fiche(3, 'Sven', 'Sergent', 'Cité de Blancherive', 'En service actif', id(3)),
   fiche(4, 'Ulfgar', 'Lieutenant', 'Hird du Jarl', 'en service ACTIF', id(4)),
@@ -207,7 +207,7 @@ for (const [reponse, attendu] of echecs) {
 configurer(); reponses.push([200, { access_token: 'acces' }], [401, { message: '401: Unauthorized' }]);
 assert.throws(() => context.ouvrirSessionDiscord(CODE), /n'a pas confirmé votre identité/);
 
-// Réussite : officier de l'Inquisition.
+// Réussite : officier de Cap Granite.
 configurer(); connexionReussie(1, 'ragnhild');
 let jeton = context.ouvrirSessionDiscord(` ${CODE} `);
 assert.equal(appels[0].url, 'https://discord.com/api/v10/oauth2/token');

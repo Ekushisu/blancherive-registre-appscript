@@ -16,7 +16,7 @@ import { GradeDescription, GradeInfo } from "./grades.jsx";
 import { libelleSemaine, dateLundi, numeroSemaine, comparerLundisDecroissant } from "./semaine.js";
 import { dateTamriel } from "./calendrier.js";
 import { DateRP } from "./calendrier.jsx";
-import { libelleCorps, libelleGrade } from "./corps.js";
+import { libelleCorps } from "./corps.js";
 import { useMembresDiscord, comptesRattaches } from "./discord.js";
 import { CompteDiscordField } from "./discord.jsx";
 import { lireRetourDiscord, verifierRetourDiscord, effacerRetourDiscord } from "./connexion-discord.js";
@@ -40,9 +40,9 @@ function effacerJeton(){try{localStorage.removeItem(CLE_JETON);}catch{/* stockag
 
 function serverCall(name,...args){return new Promise((resolve,reject)=>{google.script.run.withSuccessHandler(resolve).withFailureHandler(error=>reject(new Error(error?.message||String(error))))[name](...args);});}
 function normalizeSearchText(value){return String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+// Les grades du sommet, Jarl et Régent impérial, ne se donnent ni ne se retirent depuis le registre (Effectifs.js).
+function estGradeSommet(grade){return ["jarl","regent imperial","regente imperiale"].includes(normalizeSearchText(grade).trim());}
 // M\u00eame personne, sans casse, accents ni espaces superflus : comme le serveur rapproche les lignes.
-// Le grade de Jarl ne se donne ni ne se retire depuis le registre (Effectifs.js).
-function estGradeJarl(grade){return normalizeSearchText(grade).trim()==="jarl";}
 function memeNom(a,b){const n=v=>normalizeSearchText(v).replace(/\s+/g," ").trim();return Boolean(n(a))&&n(a)===n(b);}
 function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
 function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(Number(value)||0);}
@@ -198,7 +198,6 @@ function EffectifsPage({token}){
         member.prenom,
         member.nom,
         member.grade,
-        libelleGrade(member.grade,member.corps,data?.aliasGrades),
         member.corps,
         libelleCorps(member.corps),
         member.specialite,
@@ -243,7 +242,6 @@ function EffectifsPage({token}){
         member.prenom,
         member.nom,
         member.grade,
-        libelleGrade(member.grade,member.corps,data?.aliasGrades),
         member.corps,
         libelleCorps(member.corps),
         member.specialite,
@@ -507,7 +505,7 @@ function EffectifsPage({token}){
       ).length;
 
   return(
-    <ChangesProvider data={data.changes} aliasGrades={data.aliasGrades}><div className="effectifs-page">
+    <ChangesProvider data={data.changes}><div className="effectifs-page">
       <div className="page-header">
         <div>
           <h1 className="page-title">
@@ -559,7 +557,6 @@ function EffectifsPage({token}){
       {showForm&&
         <NouvelEffectifForm
           options={data.options}
-          aliasGrades={data.aliasGrades}
           discord={discord}
           rattaches={rattaches}
           initialCorps={
@@ -803,11 +800,7 @@ function EffectifsPage({token}){
                         <span>
                           {group.type==="reserve"
                             ?"Réserve"
-                            :libelleGrade(
-                              group.grade,
-                              corpsGroup.corps,
-                              data.aliasGrades
-                            )
+                            :group.grade
                           }
                         </span>
 
@@ -827,9 +820,6 @@ function EffectifsPage({token}){
                             }
                             options={
                               data.options
-                            }
-                            aliasGrades={
-                              data.aliasGrades
                             }
                             discord={discord}
                             rattaches={rattaches}
@@ -949,9 +939,6 @@ function EffectifsPage({token}){
                       options={
                         data.options
                       }
-                      aliasGrades={
-                        data.aliasGrades
-                      }
                       discord={discord}
                       rattaches={rattaches}
                       showCorps
@@ -1030,7 +1017,6 @@ function EffectifsPage({token}){
 
 function NouvelEffectifForm({
   options,
-  aliasGrades,
   discord,
   rattaches,
   initialCorps,
@@ -1054,7 +1040,7 @@ function NouvelEffectifForm({
     nom:"",
     grade:"",
     corps:
-      initialCorps||
+      (options.corps.includes(initialCorps)?initialCorps:"")||
       options.corps[0]||"",
     specialite:"",
     status:
@@ -1143,21 +1129,14 @@ function NouvelEffectifForm({
               Sélectionner…
             </option>
 
-            {/*
-              Libellé selon le corps choisi (alias de l'Inquisition) ;
-              la valeur envoyée reste le grade régulier. Jamais le Jarl.
-            */}
-            {options.grades.filter(value=>!estGradeJarl(value)).map(
+            {/* Jamais le Jarl ni le Régent impérial : leur grade se change dans la feuille. */}
+            {options.grades.filter(value=>!estGradeSommet(value)).map(
               value=>
                 <option
                   key={value}
                   value={value}
                 >
-                  {libelleGrade(
-                    value,
-                    form.corps,
-                    aliasGrades
-                  )}
+                  {value}
                 </option>
             )}
           </select>
@@ -1348,7 +1327,6 @@ function NouvelEffectifForm({
 function EffectifCard({
   member,
   options,
-  aliasGrades,
   discord,
   rattaches,
   onSave,
@@ -1398,9 +1376,9 @@ function EffectifCard({
   const[saving,setSaving]=
     useState(false);
 
-  // La fiche du Jarl garde son grade ; aucune autre ne peut le prendre.
-  const jarl=
-    estGradeJarl(member.grade);
+  // La fiche du Jarl ou du Régent impérial garde son grade ; aucune autre ne peut le prendre.
+  const sommet=
+    estGradeSommet(member.grade);
 
   useEffect(()=>{
     setGrade(
@@ -1704,10 +1682,10 @@ function EffectifCard({
 
             <select
               value={grade}
-              disabled={jarl}
+              disabled={sommet}
               title={
-                jarl
-                  ?"Le grade de Jarl se change dans la feuille Effectifs."
+                sommet
+                  ?`Le grade de ${member.grade} se change dans la feuille Effectifs.`
                   :undefined
               }
               style={
@@ -1725,22 +1703,14 @@ function EffectifCard({
                 )
               }
             >
-              {/*
-                Libellé selon le corps en cours d'édition ;
-                la valeur envoyée reste le grade régulier.
-                Le Jarl n'est proposé que sur sa propre fiche.
-              */}
-              {options.grades.filter(value=>jarl||!estGradeJarl(value)).map(
+              {/* Le Jarl et le Régent impérial ne sont proposés que sur leur propre fiche. */}
+              {options.grades.filter(value=>sommet||!estGradeSommet(value)).map(
                 value=>
                   <option
                     key={value}
                     value={value}
                   >
-                    {libelleGrade(
-                      value,
-                      corps,
-                      aliasGrades
-                    )}
+                    {value}
                   </option>
               )}
             </select>
@@ -1777,6 +1747,12 @@ function EffectifCard({
                     {libelleCorps(value)}
                   </option>
               )}
+              {/* Corps retiré de Données (dissous) : la fiche le garde tant qu'on ne la mute pas. */}
+              {member.corps&&!options.corps.includes(member.corps)&&
+                <option value={member.corps}>
+                  {libelleCorps(member.corps)} (corps dissous)
+                </option>
+              }
             </select>
           </div>
 
@@ -1988,17 +1964,24 @@ function OrganigrammePage({token}) {
   const localKeys = local?.garnisonKeys || [];
   const directCorps = data.garnisons.filter(g => !localKeys.includes(g.key));
   const localCorps = data.garnisons.filter(g => localKeys.includes(g.key));
-  const alias = data.aliasGrades;
   // Titre du poste : le grade tel que Données!A l'écrit (« Huscarl » ou « Huscarl de Blancherive »).
   const huscarls = data.huscarls || [];
   const titreHuscarl = huscarls[0]?.grade || "Huscarl";
-  return <ChangesProvider data={data.changes} aliasGrades={alias}><div className="org-page">
+  /*
+    Sommet : le Jarl en service actif, à défaut la régence impériale (le serveur
+    ne renvoie de régents qu'en l'absence de Jarl actif), à défaut un poste de
+    Jarl vacant. Sous régence, les Huscarls gardent leur place, sans lien au sommet.
+  */
+  const regents = data.regents || [];
+  const regence = !data.jarl && regents.length > 0;
+  const titreSommet = !regence ? "Jarl" : regents.length > 1 ? "Régence impériale" : regents[0].grade;
+  return <ChangesProvider data={data.changes}><div className="org-page">
     <div className="page-header"><div><h1 className="page-title">Organigramme</h1><p className="page-subtitle">Garde de Blancherive · Chaîne de commandement</p></div><span className="org-seal">Au service de la châtellerie</span></div>
     <RecentChanges onRefresh={async()=>setData(await serverCall("getOrganigramme",token))}/>
-    <section className="org-hierarchy" aria-label="État-Major, Huscarl et Hird du Jarl">
+    <section className="org-hierarchy" aria-label="État-Major et Huscarls">
       <div className="org-command-heading">État-Major</div>
-      <div className="org-sovereign"><CentralGroup personnes={data.jarl?[data.jarl]:[]} grade="Jarl"/></div>
-      <aside className="org-hird-branch"><div className="org-direct-label">Autorité directe du Jarl</div><CentralGroup personnes={huscarls} grade={titreHuscarl}/><OrgCorps title="Hird du Jarl" people={data.hird} aliasGrades={alias} compact/></aside>
+      <div className="org-sovereign"><CentralGroup personnes={regence?regents:data.jarl?[data.jarl]:[]} grade={titreSommet}/></div>
+      <aside className={`org-direct-branch${regence?" org-direct-branch-detachee":""}`}>{!regence&&<div className="org-direct-label">Autorité directe du Jarl</div>}<CentralGroup personnes={huscarls} grade={titreHuscarl}/></aside>
       <div className="org-command-chain"><CentralGroup personnes={data.marechaux} grade="Maréchal"/><CentralGroup personnes={data.commandants} grade="Commander"/><CentralGroup personnes={data.majorsEtatMajor} grade="Major" note="État-Major"/></div>
     </section>
     <section className="org-corps-section" aria-labelledby="org-corps-title">
@@ -2007,11 +1990,11 @@ function OrganigrammePage({token}) {
         {local && <section className="org-local-command" aria-label={local.nom}>
           <div className="org-local-heading"><h3>{local.nom}</h3><p>Sous les ordres directs de l’État-Major central</p></div>
           <CentralGroup personnes={local.majors} grade="Majors" note="Rivebois · Bois-de-Chêne" variante="commandementLocal"/>
-          <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} aliasGrades={alias}/>)}</div>
+          <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
         </section>}
-        {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} aliasGrades={alias}/>)}</div>
+        {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres}/>)}</div>
     </section>
-    <div className="org-detached"><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors} aliasGrades={alias}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve} aliasGrades={alias}/></div>
+    <div className="org-detached"><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve}/></div>
   </div></ChangesProvider>;
 }
 function PersonCard({personne,center=false,showCorps=false}) {
@@ -2023,33 +2006,24 @@ function PersonCard({personne,center=false,showCorps=false}) {
 function CentralGroup({personnes=[],grade,note,variante}) {
   return <section className="org-command-node" aria-label={note?`${grade} — ${note}`:grade}><h3>{grade}{note&&<span>{note}</span>}</h3><GradeDescription grade={grade} variante={variante}/>{personnes.length?personnes.map((p,i)=><PersonCard key={i} personne={p} center/>):<div className="org-vacant">Poste vacant</div>}</section>;
 }
-/*
-  Groupes de grade dans l'ordre reçu du serveur. Le titre est le grade affiché
-  selon le corps : dans la Réserve, tous corps confondus, les Capitaines et les
-  Grands Inquisiteurs forment deux groupes voisins. La description reste celle
-  du grade régulier, dont l'alias est l'équivalent.
-*/
-function RankedPeople({personnes=[],showCorps=false,aliasGrades}) {
+// Groupes de grade dans l'ordre reçu du serveur.
+function RankedPeople({personnes=[],showCorps=false}) {
   if(!personnes.length)return <div className="org-empty">Aucun personnel.</div>;
   const groups=[];
-  personnes.forEach(p=>{const libelle=libelleGrade(p.grade,p.corps,aliasGrades);let g=groups.find(x=>x.grade===p.grade&&x.libelle===libelle);if(!g){g={grade:p.grade,libelle,people:[]};groups.push(g);}g.people.push(p);});
-  return groups.map(g=><section className="org-rank-group" key={`${g.grade}|${g.libelle}`}><h4 className="org-rank-title">{g.libelle}<GradeInfo grade={g.grade} libelle={g.libelle}/><span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
+  personnes.forEach(p=>{let g=groups.find(x=>x.grade===p.grade);if(!g){g={grade:p.grade,people:[]};groups.push(g);}g.people.push(p);});
+  return groups.map(g=><section className="org-rank-group" key={g.grade}><h4 className="org-rank-title">{g.grade}<GradeInfo grade={g.grade}/><span>{g.people.length}</span></h4><div className="org-rank-members">{g.people.map((p,i)=><PersonCard key={i} personne={p} showCorps={showCorps}/>)}</div></section>);
 }
-// « Capitaine » → « Capitaines », « Grand Inquisiteur » → « Grands Inquisiteurs ».
-function plurielGrade(libelle){return libelle.split(" ").map(mot=>/[sxz]$/i.test(mot)?mot:`${mot}s`).join(" ");}
-function OrgCorps({title,people=[],compact=false,aliasGrades}) {
+function OrgCorps({title,people=[]}) {
   const captains=people.filter(p=>normalizeSearchText(p.grade).trim()==="capitaine");
   const others=people.filter(p=>normalizeSearchText(p.grade).trim()!=="capitaine");
-  // Le titre de la garnison suffit à trouver l'alias, même quand le poste est vacant.
-  const capitaine=libelleGrade("Capitaine",title,aliasGrades);
-  return <article className={`org-unit ${compact?"org-unit-hird":""}`}>
+  return <article className="org-unit">
     <header className="org-unit-header"><h3>{title} <ChangesCount people={people}/></h3><span className="org-count" title="Personnel en service actif">{people.length}</span></header>
-    <div className="org-captains"><div className="org-eyebrow">{captains.length>1?plurielGrade(capitaine):capitaine}<GradeInfo grade="Capitaine" libelle={capitaine}/></div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
-    <details className="org-roster" open={compact?undefined:true}><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others} aliasGrades={aliasGrades}/></div></details>
+    <div className="org-captains"><div className="org-eyebrow">{captains.length>1?"Capitaines":"Capitaine"}<GradeInfo grade="Capitaine"/></div>{captains.length?captains.map((p,i)=><PersonCard key={i} personne={p}/>):<div className="org-empty">Poste vacant</div>}</div>
+    <details className="org-roster" open><summary>Personnel <span>{others.length}</span> <ChangesCount people={others}/></summary><div className="org-roster-body"><RankedPeople personnes={others}/></div></details>
   </article>;
 }
-function Independent({title,subtitle,people=[],aliasGrades}) {
-  return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} aliasGrades={aliasGrades} showCorps/></section>;
+function Independent({title,subtitle,people=[]}) {
+  return <section className="org-independent-block"><header><div><h2>{title}</h2><p>{subtitle}</p></div><span className="org-count">{people.length}</span></header><RankedPeople personnes={people} showCorps/></section>;
 }
 function dateIsoDepuisAffichage(valeur){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(String(valeur||"").trim());if(m)return `${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;const iso=/^(\d{4}-\d{2}-\d{2})/.exec(String(valeur||""));return iso?iso[1]:"";}
 function dateLocaleIso(){const now=new Date();return new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString();}
@@ -2205,7 +2179,7 @@ function PresenceOfficerDashboard({token}){
   </section>;
 }
 
-function PresenceOfficerSynthese({data}){return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — ${libelleSemaine(data.lundiCourant).toLowerCase()}`} value={formatSeptims(data.currentWeekTotal)} sub={<>Du <DateRP value={data.lundiCourant} jour={false}/></>}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[libelleGrade(g.grade,g.corps,data.aliasGrades),libelleCorps(g.corps)].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":<>Dernière présence : <DateRP value={g.dernierePresence}/> ({g.joursDepuis} jours)</>}</div></div>)}</div></div></>}
+function PresenceOfficerSynthese({data}){return <><div className="presence-dashboard-cards"><Stat label={`Coût anticipé — ${libelleSemaine(data.lundiCourant).toLowerCase()}`} value={formatSeptims(data.currentWeekTotal)} sub={<>Du <DateRP value={data.lundiCourant} jour={false}/></>}/><Stat label="Déjà réglé cette semaine" value={formatSeptims(data.currentWeekPaid)} sub={`Reste : ${formatSeptims(data.currentWeekRemaining)}`}/><Stat label="Impayés des semaines passées" value={data.pastUnpaidCount} warning/><Stat label="Montant total des impayés" value={formatSeptims(data.pastUnpaidAmount)} danger/><Stat label="Amendes de la semaine déjà reversées" value={formatSeptims(data.currentWeekRecoveredFines)} sub="Amendes datées du lundi au dimanche de la semaine courante."/></div><div className="presence-inactive-panel"><div className="presence-inactive-header"><strong>Gardes à surveiller</strong><span>{data.inactive.length}</span></div><div className="presence-inactive-list">{data.inactive.map((g,i)=><div className="presence-inactive-person" key={i}><div className="presence-inactive-name">{g.nomComplet}</div><div className="presence-inactive-meta">{[g.grade,libelleCorps(g.corps)].filter(Boolean).join(" — ")}</div><div className="presence-inactive-alert">{g.jamaisPresent?"Jamais présent dans le registre":<>Dernière présence : <DateRP value={g.dernierePresence}/> ({g.joursDepuis} jours)</>}</div></div>)}</div></div></>}
 function Stat({label,value,sub,warning,danger}){return<div className={`presence-stat-card ${warning?"presence-stat-warning":""} ${danger?"presence-stat-danger":""}`}><div className="presence-stat-label">{label}</div><div className="presence-stat-value">{value}</div>{sub&&<div className="presence-stat-sub">{sub}</div>}</div>;}
 /*
   Le corps d'appartenance sert d'identité de filtre : une ligne sans corps est
@@ -2222,7 +2196,7 @@ export function corpsPresence(r){return r.corps||"Sans corps";}
 */
 export function identitePresence(s){return {lundi:s.lundi,prenom:s.prenom,nom:s.nom};}
 
-function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[corpsFilter,setCorpsFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.lundi))weeks.set(r.lundi,[]);weeks.get(r.lundi).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>comparerLundisDecroissant(a[0],b[0]));const corpsList=[...new Set(data.rows.map(corpsPresence))].sort((a,b)=>libelleCorps(a).localeCompare(libelleCorps(b),"fr"));const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const matchesCorps=r=>!corpsFilter||corpsPresence(r)===corpsFilter;const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||week===weekFilter)&&rows.some(r=>matchesCorps(r)&&matchesPerson(r)));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>{libelleSemaine(week)} · du {dateTamriel(week,{jour:false})}</option>)}</select><label htmlFor="presence-corps-filter">Corps</label><select id="presence-corps-filter" value={corpsFilter} onChange={e=>setCorpsFilter(e.target.value)}><option value="">Tous les corps</option>{corpsList.map(corps=><option key={corps} value={corps}>{libelleCorps(corps)}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.lundiCourant} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} aliasGrades={data.aliasGrades} matchesPerson={matchesPerson} matchesCorps={matchesCorps} searching={searchTerms.length>0||Boolean(corpsFilter)}/>)}</>}
+function PresencesPage({token,canEdit}){const[data,setData]=useState(null),[error,setError]=useState(""),[weekFilter,setWeekFilter]=useState(""),[corpsFilter,setCorpsFilter]=useState(""),[search,setSearch]=useState("");useEffect(()=>{serverCall("getPresences",token).then(setData).catch(e=>setError(e.message));},[]);if(error)return<div className="error">Erreur de chargement des présences : {error}</div>;if(!data)return<div className="loading">Chargement des présences...</div>;const weeks=new Map();data.rows.forEach(r=>{if(!weeks.has(r.lundi))weeks.set(r.lundi,[]);weeks.get(r.lundi).push(r);});const weekEntries=[...weeks.entries()].sort((a,b)=>comparerLundisDecroissant(a[0],b[0]));const corpsList=[...new Set(data.rows.map(corpsPresence))].sort((a,b)=>libelleCorps(a).localeCompare(libelleCorps(b),"fr"));const searchTerms=normalizeSearchText(search).trim().split(/\s+/).filter(Boolean);const matchesPerson=r=>searchTerms.every(term=>normalizeSearchText(`${r.prenom} ${r.nom}`).includes(term));const matchesCorps=r=>!corpsFilter||corpsPresence(r)===corpsFilter;const filteredWeeks=weekEntries.filter(([week,rows])=>(!weekFilter||week===weekFilter)&&rows.some(r=>matchesCorps(r)&&matchesPerson(r)));return <><div className="page-header"><div><h1 className="page-title">Présences</h1><p className="page-subtitle">Suivi des présences et des soldes.</p></div></div>{canEdit&&<PresenceOfficerDashboard token={token}/>} {!canEdit&&<div className="readonly-notice">🔒 Consultation en lecture seule — seuls les officiers peuvent modifier les présences et le règlement des soldes.</div>}<div className="presence-week-filter"><label htmlFor="presence-week-filter">Semaine</label><select id="presence-week-filter" value={weekFilter} onChange={e=>setWeekFilter(e.target.value)}><option value="">Toutes les semaines</option>{weekEntries.map(([week])=><option key={week} value={week}>{libelleSemaine(week)} · du {dateTamriel(week,{jour:false})}</option>)}</select><label htmlFor="presence-corps-filter">Corps</label><select id="presence-corps-filter" value={corpsFilter} onChange={e=>setCorpsFilter(e.target.value)}><option value="">Tous les corps</option>{corpsList.map(corps=><option key={corps} value={corps}>{libelleCorps(corps)}</option>)}</select><label htmlFor="presence-search">Rechercher une personne</label><input id="presence-search" type="search" placeholder="Prénom ou nom…" value={search} onChange={e=>setSearch(e.target.value)}/></div>{canEdit&&<p className="page-subtitle">Coût total estimé : somme des soldes de tout le corps pour la semaine, paiements inclus, selon les présences enregistrées.</p>}{filteredWeeks.length===0&&<p role="status">Aucune présence ne correspond aux filtres sélectionnés.</p>}{filteredWeeks.map(([w,r])=><WeekSection key={w} week={w} rows={r} currentWeek={data.lundiCourant} canEdit={canEdit} token={token} onRefresh={setData} corpsTotals={data.corpsTotals||[]} matchesPerson={matchesPerson} matchesCorps={matchesCorps} searching={searchTerms.length>0||Boolean(corpsFilter)}/>)}</>}
 /*
   Une solde est impayée si elle est due et non réglée. Une solde nulle — Recrue,
   ou semaine sans présence — n'est pas un impayé : c'est déjà la distinction que
@@ -2248,7 +2222,7 @@ export function compteImpayesSemaine(rows,{current,matchesCorps}={}){
   return rows.filter(r=>retenu(r)&&estImpayePresence(r)).length;
 }
 
-function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,aliasGrades,matchesPerson,matchesCorps,searching}){
+function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,matchesPerson,matchesCorps,searching}){
   const moi=useContext(MoiContext);
   // `week` et `currentWeek` sont des lundis ISO : la semaine courante se
   // reconnaît par égalité de texte, l'année comprise.
@@ -2265,13 +2239,13 @@ function WeekSection({week,rows,currentWeek,canEdit,token,onRefresh,corpsTotals,
       {impayes>0&&<button type="button" className={`week-unpaid-filter ${seulementImpayes?"active":""}`} aria-pressed={seulementImpayes} title={seulementImpayes?"Afficher toute la semaine":"N’afficher que les soldes impayées"} onClick={()=>{setSeulementImpayes(!seulementImpayes);setOpen(true);}}>{seulementImpayes?"Tout afficher":"Impayés"}</button>}
     </div>
     {open&&seulementImpayes&&<p className="week-unpaid-notice" role="status">{libelleSemaine(week)} — {impayes} solde{impayes>1?"s":""} impayée{impayes>1?"s":""} sur {rows.filter(matchesCorps).length}.</p>}
-    {open&&[...groups.entries()].sort(([a],[b])=>libelleCorps(a).localeCompare(libelleCorps(b),"fr")).filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{libelleCorps(corps)}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.lundi===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={`${current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}${memeNom(`${s.prenom} ${s.nom}`,moi)?" row-moi":""}`}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{libelleGrade(s.grade,s.corps,aliasGrades)}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked,identitePresence(s)))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked,identitePresence(s)))}/></td></tr>)}</tbody></table></div></div>)}
+    {open&&[...groups.entries()].sort(([a],[b])=>libelleCorps(a).localeCompare(libelleCorps(b),"fr")).filter(([,soldiers])=>soldiers.some(visible)).map(([corps,soldiers])=><div key={corps}><div className="corps-title presence-corps-title"><span>{libelleCorps(corps)}</span>{canEdit&&<span>Coût total estimé : {formatSeptims(corpsTotals.find(t=>t.lundi===week&&t.corps===corps)?.total||0)}</span>}</div><div className="presence-table-wrap"><table className="presence-table"><thead><tr><th>Garde</th>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><th key={d}>{d}</th>)}<th>Jours</th><th>Solde</th><th>Payé</th></tr></thead><tbody>{soldiers.filter(visible).map(s=><tr key={s.row} className={`${current?"row-current":s.paye?"row-paid":s.soldeRaw>0?"row-unpaid":""}${memeNom(`${s.prenom} ${s.nom}`,moi)?" row-moi":""}`}><td><strong>{s.prenom} {s.nom}</strong><div className="grade">{s.grade}</div></td>{s.jours.map((c,i)=><td key={i}><input type="checkbox" checked={c} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,6+i,e.target.checked,identitePresence(s)))}/></td>)}<td>{s.joursPresents}</td><td>{s.solde}</td><td><input type="checkbox" checked={s.paye} disabled={!canEdit} onChange={async e=>onRefresh(await serverCall("modifierPresence",token,s.row,15,e.target.checked,identitePresence(s)))}/></td></tr>)}</tbody></table></div></div>)}
   </section>;
 }
 
 // Récapitulatif en texte brut, à lire ou à recopier devant le financeur.
 // Il reprend l'ordre de l'écran : montant d'abord, justification ensuite.
-function payeRecapTexte(f,currentWeek,aliasGrades){
+function payeRecapTexte(f,currentWeek){
   const l=["Garde de Blancherive — demande de budget",f.libelle];
   if(f.corps.length)l.push(f.corps.map(libelleCorps).join(" · "));
   l.push("");
@@ -2284,7 +2258,7 @@ function payeRecapTexte(f,currentWeek,aliasGrades){
   f.groupes.forEach(g=>{
     l.push(`${libelleCorps(g.corps)} — ${formatSeptims(g.total)}`);
     g.gardes.forEach(p=>{
-      l.push(`  ${p.nomComplet}${p.grade?` (${libelleGrade(p.grade,p.corps,aliasGrades)})`:""} — ${formatSeptims(p.total)}`);
+      l.push(`  ${p.nomComplet}${p.grade?` (${p.grade})`:""} — ${formatSeptims(p.total)}`);
       p.semaines.forEach(s=>l.push(`    ${libelleSemaine(s.lundi).toLowerCase()} ${du(s.lundi)} · ${s.joursPresents} j · ${formatSeptims(s.montant)}`));
     });
   });
@@ -2368,7 +2342,7 @@ function PayePage({token,canRegler}){
       </div>
     </section>
 
-    {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.lundiCourant} aliasGrades={data.aliasGrades} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
+    {dus.map(f=><PayeFinanceur key={f.cle} f={f} currentWeek={data.lundiCourant} canRegler={canRegler} busy={busy} regles={regles.filter(e=>e.financeur===f.cle)} onBasculer={basculer}/>)}
     {ajour.length>0&&!choisi&&<section className="paye-ajour">
       <h2 className="paye-ajour-titre">À jour — rien à demander</h2>
       <ul className="paye-ajour-liste">{ajour.map(f=><li key={f.cle}><strong>{f.libelle}</strong><span>{f.corps.map(libelleCorps).join(" · ")||"Aucun corps rattaché"}</span>{f.previsionTotal>0&&<em>{formatSeptims(f.previsionTotal)} à prévoir pour la {libelleSemaine(data.lundiCourant).toLowerCase()}</em>}</li>)}</ul>
@@ -2391,9 +2365,9 @@ function PayeSemaine({s,canRegler,busy,onRegler}){
   </li>;
 }
 
-function PayeFinanceur({f,currentWeek,aliasGrades,canRegler,busy,regles,onBasculer}){
+function PayeFinanceur({f,currentWeek,canRegler,busy,regles,onBasculer}){
   const[ouvert,setOuvert]=useState(true),[copie,setCopie]=useState(""),[texteVisible,setTexteVisible]=useState(false);
-  const texte=useMemo(()=>payeRecapTexte(f,currentWeek,aliasGrades),[f,currentWeek,aliasGrades]);
+  const texte=useMemo(()=>payeRecapTexte(f,currentWeek),[f,currentWeek]);
   const anomalie=f.role==="inconnu"&&f.total>0;
   // La carte reste affichée après le règlement de la dernière semaine : le
   // sous-titre doit alors dire que la dette est éteinte, pas nommer une période.
@@ -2428,7 +2402,7 @@ function PayeFinanceur({f,currentWeek,aliasGrades,canRegler,busy,regles,onBascul
       {f.groupes.map(g=><div className="paye-groupe" key={g.corps}>
         <div className="paye-groupe-titre"><span>{libelleCorps(g.corps)}</span><span>{formatSeptims(g.total)}</span></div>
         {g.gardes.map(p=><div className="paye-garde" key={p.cle}>
-          <div className="paye-garde-identite"><strong>{p.nomComplet}</strong><span className="grade">{libelleGrade(p.grade,p.corps,aliasGrades)}</span></div>
+          <div className="paye-garde-identite"><strong>{p.nomComplet}</strong><span className="grade">{p.grade}</span></div>
           <div className="paye-garde-total">{formatSeptims(p.total)}</div>
           <ul className="paye-semaines">{p.semaines.map(s=><PayeSemaine key={s.row} s={s} canRegler={canRegler} busy={busy} onRegler={()=>onBasculer({row:s.row,financeur:f.cle,nomComplet:p.nomComplet,lundi:s.lundi,montant:s.montant,identite:{lundi:s.lundi,prenom:p.prenom,nom:p.nom}},true)}/>)}</ul>
         </div>)}
