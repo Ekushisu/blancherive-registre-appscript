@@ -149,8 +149,8 @@ function lireReversementsAmendes_(ss) {
     const estActif = normaliserReferenceAmendes_(row[statut]) === normaliserReferenceAmendes_(AMENDES_STATUT_ACTIF);
     if (!estCollecteur || !estActif) continue;
     if (!collecteursParCorps.has(corpsGarde)) collecteursParCorps.set(corpsGarde, []);
-    const gradeCollecteur = nettoyerSaisieUtilisateur(row[grade]);
-    collecteursParCorps.get(corpsGarde).push(gradeCollecteur ? `${gradeCollecteur} ${nomComplet}` : nomComplet);
+    // Grade et nom séparés : le nom ouvre la fiche du collecteur.
+    collecteursParCorps.get(corpsGarde).push({ grade: nettoyerSaisieUtilisateur(row[grade]), nom: nomComplet });
   }
   const collecteursEtatMajor = [];
   for (const [corpsGarde, collecteurs] of collecteursParCorps) if (estEtatMajorAmendes_(corpsGarde)) collecteursEtatMajor.push(...collecteurs);
@@ -163,9 +163,9 @@ function lireReversementsAmendes_(ss) {
         : [corpsGarde];
       for (const corpsCollecteur of corpsCollecteurs) collecteurs.push(...(collecteursParCorps.get(corpsCollecteur) || []));
     }
-    const noms = listeUniqueAmendes_(collecteurs);
-    const fallbackEtatMajor = noms.length === 0 && collecteursEtatMajor.length > 0;
-    result.set(cleGarde, { collecteurs: fallbackEtatMajor ? listeUniqueAmendes_(collecteursEtatMajor) : noms, fallbackEtatMajor });
+    const uniques = collecteursUniquesAmendes_(collecteurs);
+    const fallbackEtatMajor = uniques.length === 0 && collecteursEtatMajor.length > 0;
+    result.set(cleGarde, { collecteurs: fallbackEtatMajor ? collecteursUniquesAmendes_(collecteursEtatMajor) : uniques, fallbackEtatMajor });
   }
   return result;
 }
@@ -173,7 +173,8 @@ function lireReversementsAmendes_(ss) {
 function trouverColonneAmendes_(headers, aliases) { const normalizedAliases = aliases.map(normaliserReferenceAmendes_); return headers.findIndex(header => normalizedAliases.includes(header)); }
 function estEtatMajorAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return value === "etat-major" || value === "etat major"; }
 function estCorpsReversementMutualiseAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return AMENDES_CORPS_REVERSEMENT_MUTUALISES.map(normaliserReferenceAmendes_).includes(value) || value === "hird"; }
-function listeUniqueAmendes_(values) { const result = [], seen = new Set(); for (const value of values) { const cleaned = nettoyerSaisieUtilisateur(value), key = normaliserReferenceAmendes_(cleaned); if (!cleaned || seen.has(key)) continue; seen.add(key); result.push(cleaned); } return result; }
+// Collecteurs { grade, nom }, un seul par nom, dans l'ordre de la feuille.
+function collecteursUniquesAmendes_(collecteurs) { const result = [], seen = new Set(); for (const collecteur of collecteurs) { const key = normaliserReferenceAmendes_(collecteur.nom); if (!key || seen.has(key)) continue; seen.add(key); result.push(collecteur); } return result; }
 function contientSpecialiteAmendes_(specialites, specialiteRecherchee) { const recherchee = normaliserReferenceAmendes_(specialiteRecherchee); return String(specialites || "").split(/[,;\n]/).some(specialite => normaliserReferenceAmendes_(specialite) === recherchee); }
 
 
@@ -373,7 +374,7 @@ function imposerGardeSession_(auth, data) {
   Décision du propriétaire, 12 octobre 2026 : un membre renommé depuis les
   Effectifs garde les amendes et incarcérations qu'il a dressées. Seule la
   colonne Garde (B) d'Amendes et de Prison change ; contrevenants, détenus et
-  chefs d'accusation restent tels quels. Une ligne est à lui quand le Livret
+  chefs d'accusation restent tels quels. Une ligne est à lui quand la fiche de service
   la lui rattache : même nom sans casse, accents ni espaces superflus. Le
   nouveau nom s'écrit comme `Données!O` l'écrit (« Prénom Nom »), pour rester
   dans la liste de validation des deux feuilles.

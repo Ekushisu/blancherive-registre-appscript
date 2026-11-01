@@ -227,45 +227,55 @@ body{background-image:linear-gradient(#f4e9cfb8,#f4e9cfb8),url('../assets/papier
 /* Avec Discord, la carte s'allonge et le parchemin, étiré avec elle, grandit ses ornements : le sceau et les coins empiéteraient sur la première et la dernière ligne. */
 .login-card.login-card-discord{padding-top:80px;padding-bottom:125px}
 @media(max-width:600px){.login-card.login-card-discord{padding-top:72px;padding-bottom:118px}}
-/* Livret de service : page personnelle d'une session Discord. */
-.livret-entete{align-items:flex-end;gap:16px}
-.livret-badges{display:flex;flex-wrap:wrap;gap:6px}
-.livret-page>.grade-description{max-width:760px;margin:-6px 0 18px;color:#76603c;font-style:italic;text-align:left}
-.livret-alerte{margin:0 0 18px;padding:12px 16px;border:1px solid #c98f6f;border-left:4px solid #a5432f;border-radius:3px;background:#f6e2d6;color:#7a2f1f}
-.livret-grille{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
-.livret-section{min-width:0;padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow)}
-.livret-section-entete{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:3px double #ccb184}
-.livret-section-entete h2{margin:0;font:400 22px Georgia,serif;color:#49321d}
-.livret-section-entete p{margin:0;color:#87704a;font-size:12px}
-.livret-section h3{margin:18px 0 8px;font-family:inherit;font-size:11px;font-weight:700;line-height:1.4;letter-spacing:.08em;text-transform:uppercase;color:#87704a}
-.livret-semaine{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.livret-jour{display:grid;justify-items:center;gap:4px;padding:8px 2px;border:1px solid #dcc9a6;border-radius:3px;background:#fbf3e1;color:#968165;font-size:11px}
-.livret-jour strong{font:18px Georgia,serif;color:#b9a27a}
-.livret-jour.is-present{background:#e8e9d4;border-color:#a9ae80;color:#5c633e}
-.livret-jour.is-present strong{color:#4f5a2c}
-.livret-ligne-solde{margin:12px 0 0;color:#594024;line-height:1.6}
-.livret-liste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.livret-liste li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 12px;border:1px solid #e2d4b6;border-radius:3px;background:#fbf3e1}
-.livret-liste li>span{display:grid;gap:2px;min-width:0;overflow-wrap:anywhere}
-.livret-liste small{color:#87704a;font-size:11px}
-.livret-amende-etat{justify-items:end;text-align:right;flex-shrink:0}
-.livret-total{margin:10px 0 0;text-align:right;color:#594024}
-.livret-percu{margin:14px 0 0;padding-top:10px;border-top:1px dashed #d8c39c;color:#76603c;font-size:13px}
-.livret-vide{margin:0;color:#87704a;font-style:italic}
-.livret-tuiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
-.livret-tuile{display:grid;align-content:start;gap:2px;padding:12px;border:1px solid #dcc9a6;border-radius:3px;background:#fbf3e1}
-.livret-tuile strong{font:400 28px/1.1 Georgia,serif;color:#49321d}
-.livret-tuile span{color:#76603c;font-size:12px}
-.livret-tuile small{color:#968165;font-size:11px}
-.livret-personnes{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.livret-personne{display:flex;gap:10px;align-items:baseline;padding:8px 12px;border-left:3px solid #bfa473;background:#fbf3e1}
-.livret-personne-grade{min-width:120px;color:#87704a;font-size:12px}
-.livret-personne-nom{font:16px Georgia,serif;color:#49321d}
-.livret-carriere{list-style:none;margin:12px 0 0;padding:0 0 0 14px;border-left:2px solid #d8c39c;display:grid;gap:10px}
-.livret-carriere li{display:grid;gap:2px}
-.livret-carriere li .date-rp{color:#87704a;font-size:12px}
-@media(max-width:900px){.livret-grille{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:600px){.livret-entete{align-items:flex-start}.livret-section{padding:16px 14px}.livret-jour{padding:6px 0;font-size:10px}.livret-personne{flex-direction:column;gap:2px}.livret-personne-grade{min-width:0}}
+/* Fiche de service d'un effectif (fiche.jsx). */
+.fiche-entete{align-items:flex-end;gap:16px}
+.fiche-badges{display:flex;flex-wrap:wrap;gap:6px}
+.fiche-page>.grade-description{max-width:760px;margin:-6px 0 18px;color:#76603c;font-style:italic;text-align:left}
+.fiche-alerte{margin:0 0 18px;padding:12px 16px;border:1px solid #c98f6f;border-left:4px solid #a5432f;border-radius:3px;background:#f6e2d6;color:#7a2f1f}
+.fiche-grille{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+.fiche-section{min-width:0;padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow)}
+.fiche-section-entete{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:3px double #ccb184}
+.fiche-section-entete h2{margin:0;font:400 22px Georgia,serif;color:#49321d}
+.fiche-section-entete p{margin:0;color:#87704a;font-size:12px}
+.fiche-section h3{margin:18px 0 8px;font-family:inherit;font-size:11px;font-weight:700;line-height:1.4;letter-spacing:.08em;text-transform:uppercase;color:#87704a}
+.fiche-semaine{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.fiche-jour{display:grid;justify-items:center;gap:4px;padding:8px 2px;border:1px solid #dcc9a6;border-radius:3px;background:#fbf3e1;color:#968165;font-size:11px}
+.fiche-jour strong{font:18px Georgia,serif;color:#b9a27a}
+.fiche-jour.is-present{background:#e8e9d4;border-color:#a9ae80;color:#5c633e}
+.fiche-jour.is-present strong{color:#4f5a2c}
+.fiche-ligne{margin:12px 0 0;color:#594024;line-height:1.6}
+.fiche-liste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fiche-liste li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 12px;border:1px solid #e2d4b6;border-radius:3px;background:#fbf3e1}
+.fiche-liste li>span{display:grid;gap:2px;min-width:0;overflow-wrap:anywhere}
+.fiche-liste small{color:#87704a;font-size:11px}
+.fiche-amende-etat{justify-items:end;text-align:right;flex-shrink:0}
+.fiche-total{margin:10px 0 0;text-align:right;color:#594024}
+.fiche-percu{margin:14px 0 0;padding-top:10px;border-top:1px dashed #d8c39c;color:#76603c;font-size:13px}
+.fiche-vide{margin:0;color:#87704a;font-style:italic}
+.fiche-tuiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+.fiche-tuile{display:grid;align-content:start;gap:2px;padding:12px;border:1px solid #dcc9a6;border-radius:3px;background:#fbf3e1}
+.fiche-tuile strong{font:400 28px/1.1 Georgia,serif;color:#49321d}
+.fiche-tuile span{color:#76603c;font-size:12px}
+.fiche-tuile small{color:#968165;font-size:11px}
+.fiche-personnes{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fiche-personne{display:flex;gap:10px;align-items:baseline;padding:8px 12px;border-left:3px solid #bfa473;background:#fbf3e1}
+.fiche-personne-grade{min-width:120px;color:#87704a;font-size:12px}
+.fiche-personne-nom{font:16px Georgia,serif;color:#49321d}
+.fiche-carriere{list-style:none;margin:12px 0 0;padding:0 0 0 14px;border-left:2px solid #d8c39c;display:grid;gap:10px}
+.fiche-carriere li{display:grid;gap:2px}
+.fiche-carriere li .date-rp{color:#87704a;font-size:12px}
+@media(max-width:900px){.fiche-grille{grid-template-columns:minmax(0,1fr)}}
+/* Fiche de service : panneau par-dessus la page, ouvert par un nom (fiche.jsx). */
+.fiche-panneau{width:min(1040px,100%);max-height:calc(100dvh - 40px);overflow-y:auto;padding:0 26px 26px;background-color:var(--paper);border:1px solid #b1955f;border-radius:6px;box-shadow:0 25px 70px #0000005c;outline:none}
+.fiche-barre{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 -26px 10px;padding:8px 12px;background-color:var(--paper);border-bottom:1px solid var(--line)}
+.fiche-retour{min-height:36px;padding:6px 12px}
+.fiche-fermer{min-width:44px;min-height:44px;padding:0;border:0;background:transparent;font-size:27px;line-height:1;color:#705533}
+.fiche-page .page-header{margin-top:6px}
+/* Nom d'un effectif : ouvre sa fiche ; souligné discret, comme un renvoi du registre. */
+button.nom-effectif{display:inline;min-height:0;margin:0;padding:0;border:0;border-radius:2px;background:none;font:inherit;color:inherit;text-align:inherit;letter-spacing:inherit;cursor:pointer;text-decoration:underline dotted #9b722d80;text-decoration-thickness:1px;text-underline-offset:3px}
+button.nom-effectif:hover{color:var(--seal);text-decoration-style:solid}
+.org-command-node button.nom-effectif:hover,.session-nom button.nom-effectif:hover{color:#f6dfae}
+@media(max-width:600px){.fiche-fond{padding:0}.fiche-panneau{height:100dvh;max-height:100dvh;padding:0 14px 20px;border:0;border-radius:0}.fiche-barre{margin:0 -14px 8px}.fiche-entete{align-items:flex-start}.fiche-section{padding:16px 14px}.fiche-jour{padding:6px 0;font-size:10px}.fiche-personne{flex-direction:column;gap:2px}.fiche-personne-grade{min-width:0}}
 
 /* Session Discord : nom dans la barre latérale, sa ligne et sa carte repérées. */
 .session-nom{margin:0 0 8px;padding:0 4px;color:#f3e6c8;font:15px Georgia,serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

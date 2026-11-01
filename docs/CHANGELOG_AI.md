@@ -1,5 +1,18 @@
 # Journal de passation IA
 
+## 2026-11-01 — Fiche de service de tout effectif
+
+- Demande du propriétaire : reprendre le Livret de service (Discord seul,
+  son propre membre) pour consulter la fiche de n'importe quel effectif,
+  depuis tout nom affiché ; ergonomie laissée libre.
+- Choix : panneau modal par-dessus la page plutôt qu'une sous-page, pour ne
+  perdre ni filtres ni position ; pile de fiches avec Retour. Décision du
+  propriétaire : pas de Justice pour l'intendance, refusée côté serveur.
+- Renommages : `FicheService.js`, `getFicheService`, `fiche.jsx`, classes
+  `fiche-*`. La règle d'AGENTS.md qui fermait le Livret aux codes communs
+  est remplacée par celle de la fiche.
+- 33 suites vertes ; aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-11-01 — Régence impériale, Hird dissous, Inquisition et alias retirés
 
 - Demande du propriétaire : Jarl mort encore affiché ; régence impériale ;

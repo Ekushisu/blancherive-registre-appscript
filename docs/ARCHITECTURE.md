@@ -35,7 +35,7 @@ Principaux modules :
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
-  - sommet : `jarl` (Jarl en service actif, ou `null`) et `regents` (Régents impériaux en service actif, seulement sans Jarl) ; `estGradeJarl`, `estGradeRegent` et `estGradeHuscarl` servent aussi à `Effectifs.js` et `LivretService.js`
+  - sommet : `jarl` (Jarl en service actif, ou `null`) et `regents` (Régents impériaux en service actif, seulement sans Jarl) ; `estGradeJarl`, `estGradeRegent` et `estGradeHuscarl` servent aussi à `Effectifs.js` et `FicheService.js`
   - `ORGANIGRAMME_GARNISONS` : corps affichés, leur nom et les libellés de la feuille qui y mènent ; un corps absent n'apparaît pas
 
 - `Effectifs.js`
@@ -65,11 +65,12 @@ Principaux modules :
   - `verifierConfigurationDiscord()` : diagnostic à lancer depuis l'éditeur,
     résultat au journal d'exécution, rien de renvoyé, une fois par minute
 
-- `LivretService.js`
-  - `getLivretService(token)` : livret de service d'une session Discord de
-    GARDE ou d'OFFICIER ; fiche, commandement, carrière (journal
-    `HistoriqueEffectifs`), solde et service (Présences), amendes et
-    incarcérations, du seul membre de la session
+- `FicheService.js`
+  - `getFicheService(token, cible)` : fiche de service d'un effectif désigné
+    par `{ membre }` (ID membre) ou `{ nom }`, pour GARDE, OFFICIER et
+    INTENDANT ; identité, commandement (avec l'ID membre de chaque
+    supérieur), carrière (journal `HistoriqueEffectifs`), solde et service
+    (Présences), amendes et incarcérations (`justice: null` pour INTENDANT)
   - réutilise `lireSchemaEffectifsWeb_` (Effectifs.js), `lireOrdreGradesDiscord_`,
     `cleGradeDiscord_` et `DISCORD_SEUIL_OFFICIER` (Discord.js), les helpers de
     lundi de `Presences.js`, `mettreAJourSoldesPresences_`,
@@ -213,7 +214,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
-- `ui/src/livret.jsx` : page « Livret de service » (`LivretPage`), ouverte par défaut à une session Discord de GARDE ou d'OFFICIER ; libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
+- `ui/src/fiche.jsx` : fiche de service d'un effectif. `FicheProvider` (autour de l'application, sauf pour le visiteur) tient la pile des fiches ouvertes et affiche `FichePanneau`, panneau modal par-dessus la page ; `NomEffectif` rend un nom cliquable qui ouvre la fiche (ID membre si connu, sinon nom), sans propager le clic, et du texte simple sans fournisseur. Libellés exportés pour les tests (`septims`, `pluriel`, `libelleEvenement`, `depuisJours`). Dans `app.jsx`, `MoiContext` porte le nom de la session : `WeekSection` et `PersonCard` repèrent la ligne et la carte du membre, `ChampGarde` fige le garde des formulaires Amendes et Prison, la case Payé se grise d'après `encaissement`. À dix entrées ou plus (officier en session Discord), la barre de navigation mobile défile (`nav-dense`) ;
 - `ui/src/connexion-discord.js` : aller-retour de la connexion Discord — `state` aléatoire gardé dans `sessionStorage` au clic et vérifié une seule fois au retour, lecture du code par `google.script.url.getLocation`, effacement de l'adresse par `google.script.history.replace` ; l'écran de connexion (`navigation.jsx`) met Discord en bouton principal quand `getModesConnexion` le propose, le code d'accès restant en dessous ;
 - `ui/index.template.html` : squelette HTML Apps Script.
 
@@ -268,7 +269,7 @@ quel que soit le prochain rôle ajouté.
 une ancienne valeur (numéro de semaine, cellule au format date) casse la détection
 de la semaine courante.
 
-`Effectifs.js` et `LivretService.js` utilisent `estGradeJarl`, `estGradeRegent`
+`Effectifs.js` et `FicheService.js` utilisent `estGradeJarl`, `estGradeRegent`
 et `estGradeHuscarl` (`Organigramme.js`).
 
 `Discord.js` utilise `nettoyerEffectifsWeb_`, `normaliserEffectifsWeb_`,

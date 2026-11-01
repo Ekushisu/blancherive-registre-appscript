@@ -50,9 +50,9 @@
 - Le membre garde son ancienneté : toutes ses lignes de Présences, semaines passées et semaine courante, prennent le nouveau nom. Une ligne est à lui quand elle porte son ancien prénom et son ancien nom, sans casse ni espaces autour. Seuls les noms sont réécrits ; pointages et paiements restent tels quels.
 - Refus, sans rien écrire : nom vide ; nom déjà porté par un autre membre des Effectifs (sans casse ni accents), partis compris puisque la feuille les garde ; lignes de Présences au nouveau nom tombant les mêmes semaines que des lignes à l'ancien nom (deux personnes). D'autres lignes déjà au nouveau nom sont laissées telles quelles : un renommage interrompu se relance et s'achève.
 - Les Présences sont réécrites avant la fiche : si leur verrou ne se libère pas, rien ne diverge. La semaine courante est ensuite régénérée, comme pour un changement de grade.
-- Le journal des Effectifs note le changement (« Nom », avant → après) : badge de nouveauté et ligne de carrière au Livret. Un renommage fait à la main dans la feuille y figure de même.
+- Le journal des Effectifs note le changement (« Nom », avant → après) : badge de nouveauté et ligne de carrière à la fiche de service. Un renommage fait à la main dans la feuille y figure de même.
 - Connecté par Discord, le membre renommé voit sa session fermée et se reconnecte sous son nouveau nom, que portera son jeton. Le bot renomme son pseudo au passage suivant.
-- Les amendes et incarcérations qu'il a dressées passent aussi au nouveau nom (décision du propriétaire, 12 octobre 2026), colonne Garde seule, écrite comme la liste `Données!O`. Une ligne est à lui quand le Livret la lui rattache (sans casse, accents ni espaces superflus). Contrevenants, détenus et chefs d'accusation ne changent pas. Seules ses cases sont écrites ; une validation « refuser » qui y resterait est retirée le temps de l'écriture puis remise.
+- Les amendes et incarcérations qu'il a dressées passent aussi au nouveau nom (décision du propriétaire, 12 octobre 2026), colonne Garde seule, écrite comme la liste `Données!O`. Une ligne est à lui quand la fiche de service la lui rattache (sans casse, accents ni espaces superflus). Contrevenants, détenus et chefs d'accusation ne changent pas. Seules ses cases sont écrites ; une validation « refuser » qui y resterait est retirée le temps de l'écriture puis remise.
 - Ordre des écritures : Présences, puis Amendes et Prison, puis la fiche, dont seules les cases qui changent sont écrites.
 - Incident du 12 octobre 2026, version précédente : la colonne Garde était réécrite en entier et chaque case de la fiche réécrite même inchangée ; une validation « refuser » de la feuille a fait échouer le renommage (« cellule B2 »).
 - L'application ne doit jamais offrir de suppression physique d'un membre.
@@ -349,15 +349,27 @@ connecté ; une session par code commun ne le sait pas.
   amendes dressées à son nom ; un officier, ou une session par code, sur
   toutes. Reversé reste aux officiers.
 
-## Livret de service
+## Fiche de service
 
-Page personnelle, ouverte par défaut à une session Discord de GARDE ou
-d'OFFICIER (`getLivretService`, `LivretService.js`). Lecture seule ; le
-serveur ne renvoie que les données du membre de la session.
+Décision du propriétaire, 1er novembre 2026 : l'ancien Livret de service,
+réservé à son propre membre en session Discord, devient la fiche de n'importe
+quel effectif (`getFicheService`, `FicheService.js`). Lecture seule.
 
-- **Rattachement** : la fiche par l'ID membre du jeton ; les lignes de
-  Présences, Amendes et Prison par le « Prénom Nom » de la fiche, sans casse,
-  accents ni espaces superflus. Un membre renommé depuis les Effectifs garde
+- **Accès** : GARDE, OFFICIER et INTENDANT, par code commun, sur tout
+  effectif, départs compris. Un GARDE n'y lit rien que les Présences, les
+  Amendes et la Prison ne lui montrent déjà. L'INTENDANT ne reçoit pas la
+  section Justice : il n'a accès ni aux Amendes ni à la Prison.
+- **Ouverture** : un clic sur le nom d'un effectif, partout où l'interface
+  l'affiche — Organigramme, Effectifs, nouveautés, Présences et gardes
+  inactifs, Paye, garde et collecteurs des Amendes, garde de la Prison, chaîne
+  de commandement d'une autre fiche. La fiche s'ouvre dans un panneau
+  par-dessus la page, qui garde ses filtres et sa position ; un supérieur
+  cliqué dans la fiche ouvre la sienne, « Retour » revient à la précédente,
+  Échap ou × ferme. Ce n'est pas une page du menu. Contrevenants et détenus ne
+  sont pas des effectifs : leurs noms restent du texte.
+- **Rattachement** : l'effectif par son ID membre quand la page le connaît,
+  sinon par son nom ; les lignes de Présences, Amendes et Prison par le
+  « Prénom Nom » de la fiche, sans casse, accents ni espaces superflus. Un membre renommé depuis les Effectifs garde
   ses Présences, ses amendes et ses incarcérations, réécrites à son nouveau
   nom.
 - **Solde** : semaine en cours (jours pointés, solde, payeur selon
@@ -380,7 +392,7 @@ serveur ne renvoie que les données du membre de la session.
   le ou les Régents impériaux (« Régence impériale »). Le Huscarl n'entre dans
   la chaîne de personne, et la sienne ne compte que le Jarl (vide sous
   régence) ; le Jarl et le Régent impérial n'en ont pas, et leur solde ne
-  figure pas au livret.
+  figure pas à la fiche. Chaque supérieur ouvre sa propre fiche.
 - **Justice** : amendes dressées (nombre, total), à encaisser (non payées,
   montant fixé ou à déterminer), à reverser (payées, non reversées), cinq
   dernières ; incarcérations prononcées, détenus encore en cellule, cinq

@@ -2,6 +2,30 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Fiche de service de tout effectif (1er novembre 2026)
+
+- Demande du propriétaire : sans connexion Discord, le Livret de service ne
+  servait plus ; il devient la fiche de n'importe quel effectif, consultable
+  par GARDE, OFFICIER et INTENDANT, et s'ouvre d'un clic sur le nom.
+  Branche `fiche-personnelle`.
+- **Serveur** : `LivretService.js` → `FicheService.js`, `getLivretService` →
+  `getFicheService(token, { membre } | { nom })`. Plus de condition de
+  session Discord ; effectif cherché par ID membre, sinon par nom. INTENDANT
+  reçoit `justice: null` (décision du propriétaire). Chaque supérieur de la
+  chaîne de commandement porte son ID membre. Collecteurs des Amendes
+  renvoyés en `{ grade, nom }`.
+- **Interface** : `livret.jsx` → `fiche.jsx`. Panneau par-dessus la page
+  (pile des fiches, Retour, Échap, plein écran sur mobile), plus d'entrée
+  « Livret de service » au menu. Noms cliquables (`NomEffectif`) :
+  Organigramme, Effectifs, nouveautés, Présences, gardes inactifs, Paye,
+  garde et collecteurs des Amendes, garde de la Prison, chaîne de
+  commandement, nom de session Discord. Textes à la troisième personne.
+- Vérifications : 33 suites vertes (`test-fiche-service`, `test-fiche-ui`
+  remplacent ceux du Livret). Aperçus `fiche-*` (remplacent `livret-*`) et
+  pages aux noms désormais soulignés régénérés. Aucun `clasp push`.
+- **Mise en service** : relire le `git diff`, `npm run push`, publier le
+  déploiement à la main.
+
 ### Régence impériale, Hird dissous, alias de grade retirés (1er novembre 2026)
 
 - Demande du propriétaire : le Jarl Lucius Haldor est mort (« Mort en service »

@@ -13,6 +13,9 @@ import vm from 'node:vm';
 let slots = [], cursor = 0, effects = [], dirty = false, tree;
 const React = {
   createElement(type, props, ...children) { return { type, props: { ...props, children } }; },
+  // Noms cliquables (fiche.jsx) : sans fiche ouverte, un nom reste du texte.
+  createContext: () => ({ Provider: 'Provider' }),
+  useContext: () => null,
   Fragment: 'fragment',
   useState(initial) {
     const i = cursor++;

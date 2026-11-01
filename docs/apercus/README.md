@@ -41,7 +41,10 @@ Générées par le script, donc rejouables à l’identique :
 - `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement
   sous régence impériale (Régent impérial au sommet, Huscarl détaché), les six
   corps et garnisons sur la grille à six colonnes, avec les descriptions de
-  grades.
+  grades. Les noms, soulignés en pointillé, ouvrent la fiche de service.
+- `fiche-1440.png`, `fiche-390.png` : fiche de service d'un garde, ouverte
+  d'un clic sur son nom dans l'organigramme ; panneau par-dessus la page,
+  plein écran sur mobile. Capture de l'écran seul (`ecranSeul`).
 - `effectifs-ajout-1440.png`, `effectifs-ajout-390.png` : formulaire « Nouveau
   membre », sans grade par défaut, compte Discord cherché parmi les membres du
   serveur.

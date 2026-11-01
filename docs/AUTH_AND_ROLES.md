@@ -155,8 +155,8 @@ propriété `AUTH_DISCORD`. Conséquences, sans suppression de code :
 - `ouvrirSessionDiscord` refuse ;
 - une session Discord déjà ouverte est refusée à l'appel suivant, par
   `verifyAuthToken` ;
-- le Livret de service, la saisie à son propre nom, la case Payé restreinte et
-  le nom de session ne reçoivent plus aucune session Discord : ils restent dans
+- la saisie à son propre nom, la case Payé restreinte et le nom de session ne
+  reçoivent plus aucune session Discord : ils restent dans
   le code, inertes (ils ne se déclenchent que sur `via: "discord"`).
 
 Rétablir la connexion : passer le drapeau à `true`, régler `AUTH_DISCORD` à
@@ -375,9 +375,6 @@ relire et corriger `RolesDiscord`, la protéger, régler `DISCORD_SYNCHRO` à
 
 ### Ce que change une session Discord
 
-- `getLivretService` (Livret de service) : GARDE et OFFICIER, **et seulement en
-  session Discord** — un code commun n'identifie personne et reçoit un refus.
-  Ne renvoie que les données du membre désigné par l'ID membre du jeton.
 - `ajouterAmende`, `ajouterPrison` : en session Discord, le garde inscrit est
   celui de la session, officier compris (`imposerGardeSession_`) ;
   `getAmendeFormData` et `getPrisonFormData` le renvoient sous `gardeImpose`
@@ -385,10 +382,11 @@ relire et corriger `RolesDiscord`, la protéger, régler `DISCORD_SYNCHRO` à
 - `modifierAmendeCheckbox`, case Payé : en session Discord, un GARDE ne la
   change que sur ses propres amendes ; `getAmendes` renvoie `encaissement`
   pour griser les autres cases. Seul le serveur l'impose.
-- Interface : le livret s'ouvre par défaut, le nom s'affiche dans la barre
-  latérale, sa ligne de Présences et sa carte d'Organigramme sont repérées
+- Interface : le nom s'affiche dans la barre latérale et ouvre sa fiche de
+  service, sa ligne de Présences et sa carte d'Organigramme sont repérées
   (« · vous »). Règles métier détaillées : BUSINESS_RULES, « Saisie à son
-  propre nom » et « Livret de service ».
+  propre nom ». La fiche de service ne dépend plus de Discord (voir « Fiche de
+  service » ci-dessous).
 
 ### Session Discord
 
@@ -448,6 +446,7 @@ Règles connues :
 
 ### GARDE
 - Organigramme
+- Fiche de service de tout effectif, en lecture
 - Présences en lecture seule
 - Codex
 - Décrets de peines et amendes, en lecture
@@ -478,7 +477,9 @@ Règles connues :
   la garde possède, sans pouvoir le modifier ;
 - Codex et décrets de peines et amendes en lecture, depuis le 4 octobre 2026
   (décision du propriétaire) : `getCodex` et `getPeinesAmendes` acceptent son
-  rôle.
+  rôle ;
+- fiche de service de tout effectif, depuis le 1er novembre 2026, **sans la
+  section Justice** (voir « Fiche de service » plus bas).
 
 Aucune autre page ne lui est accessible, ni Présences, ni Amendes, ni Prison,
 ni Effectifs. À la différence de `VISITEUR`, `INTENDANT` s'obtient
@@ -521,6 +522,18 @@ au visiteur) ne transporte pas le barème ; la lecture d'un article s'y
 affiche sans lui. Le navigateur ne demande pas le barème pour le visiteur,
 mais seul `requireRole()` le protège. `scripts/test-peines.mjs` vérifie que
 chaque refus précède toute lecture Sheets.
+
+## Fiche de service
+
+`getFicheService(token, cible)` autorise `GARDE`, `OFFICIER` et `INTENDANT`,
+avant toute ouverture du classeur ; `VISITEUR` est refusé. Décision du
+propriétaire, 1er novembre 2026 : par code commun, sur n'importe quel
+effectif, départs compris — ce n'est plus le Livret de service d'une session
+Discord. Pour `INTENDANT`, `justice` vaut `null` : amendes dressées et
+incarcérations ne sont ni lues ni envoyées, l'intendance n'ayant accès ni aux
+Amendes ni à la Prison. Seul le serveur l'impose ; l'interface n'affiche
+simplement pas une section absente. `scripts/test-fiche-service.mjs` vérifie
+les refus, l'ordre des contrôles et l'absence de Justice.
 
 ## Paye
 

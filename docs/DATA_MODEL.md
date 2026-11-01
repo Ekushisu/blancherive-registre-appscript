@@ -21,7 +21,7 @@ La colonne Corps d'`Effectifs` prend ses valeurs dans la liste des corps `Donné
 
 Depuis le 12 octobre 2026 (décision du propriétaire), la liste commence par `Jarl` puis `Huscarl`, au-dessus de `Maréchal`. Leur rang les place au-dessus de Sergent-Chef (session OFFICIER par Discord) et de Lieutenant (rôle Discord « Officiers de Blancherive »). Le grade du Huscarl est reconnu écrit « Huscarl » ou « Huscarl de Blancherive » (`estGradeHuscarl`, `Organigramme.js`). Les lignes s'insèrent dans le bloc des grades (A à C), sans décaler les listes des spécialités (E) et des corps (G).
 
-Le grade « Régent impérial » (1er novembre 2026 ; « Régente impériale » reconnu aussi, `estGradeRegent`, `Organigramme.js`) s'inscrit en tête de `Données!A`, près du Jarl, pour être trié en tête des Effectifs : l'organigramme, le Livret et les Présences le reconnaissent par son nom, pas par son rang.
+Le grade « Régent impérial » (1er novembre 2026 ; « Régente impériale » reconnu aussi, `estGradeRegent`, `Organigramme.js`) s'inscrit en tête de `Données!A`, près du Jarl, pour être trié en tête des Effectifs : l'organigramme, la fiche de service et les Présences le reconnaissent par son nom, pas par son rang.
 
 `Données!C` portait jusqu'au 1er novembre 2026 des alias de grade par corps, en-tête « Alias <corps> ». L'application ne lit plus cette colonne ; elle peut être supprimée de la feuille.
 

@@ -302,7 +302,7 @@ export const amendes = {
       montantRaw: 150,
       paye: true,
       reverse: false,
-      collecteurs: ["Major Ingrid Main-Leste"],
+      collecteurs: [{ grade: "Major", nom: "Ingrid Main-Leste" }],
       fallbackEtatMajor: false
     },
     {
@@ -316,7 +316,7 @@ export const amendes = {
       montantRaw: 300,
       paye: true,
       reverse: true,
-      collecteurs: ["Major Ingrid Main-Leste"],
+      collecteurs: [{ grade: "Major", nom: "Ingrid Main-Leste" }],
       fallbackEtatMajor: false
     },
     {
@@ -729,23 +729,24 @@ export const inventaire = {
 export const sessionInfo = { role: "OFFICIER" };
 
 /*
-  Livret de service : la forme suit `getLivretService()` de
-  `src/LivretService.js`. Eydis, Sergent de Rivebois connectée par Discord.
+  Fiche de service : la forme suit `getFicheService()` de
+  `src/FicheService.js`. Eydis, Sergent de Rivebois, vue par un officier.
 */
-export const livret = {
+export const fiche = {
   fiche: {
     prenom: "Eydis", nom: "la Silencieuse", nomComplet: "Eydis la Silencieuse", grade: "Sergent",
     corps: "Garnison de Rivebois", specialite: "Pisteuse", statut: "En service actif", assermente: true
   },
   commandement: {
     corps: [
-      { nomComplet: "Brynjar Poing-de-Fer", grade: "Capitaine", corps: "Garnison de Rivebois" },
-      { nomComplet: "Sigrid Vent-du-Nord", grade: "Lieutenant-Chef", corps: "Garnison de Rivebois" }
+      { memberId: "demo-5", nomComplet: "Brynjar Poing-de-Fer", grade: "Capitaine", corps: "Garnison de Rivebois" },
+      { memberId: "demo-6", nomComplet: "Sigrid Vent-du-Nord", grade: "Lieutenant-Chef", corps: "Garnison de Rivebois" }
     ],
     etatMajor: [
-      { nomComplet: "Haldvar de Blancherive", grade: "Commander", corps: "État-Major" },
-      { nomComplet: "Torsten Pierre-Grise", grade: "Major", corps: "État-Major" }
-    ]
+      { memberId: "demo-1", nomComplet: "Haldvar de Blancherive", grade: "Commander", corps: "État-Major" },
+      { memberId: "demo-9", nomComplet: "Torsten Pierre-Grise", grade: "Major", corps: "État-Major" }
+    ],
+    jarl: [{ memberId: "demo-reg", nomComplet: "Cassius Varo", grade: "Régent impérial", corps: "État-Major" }]
   },
   carriere: {
     inscription: "2026-09-06T12:00:00.000Z",

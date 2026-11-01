@@ -1,6 +1,7 @@
 import { CHANGE_SEEN_KEY, parseSeenChanges, markChangesSeen, recentChanges } from "./change-state.js";
 import { DateRP } from "./calendrier.jsx";
 import { libelleCorps } from "./corps.js";
+import { NomEffectif } from "./fiche.jsx";
 
 const { createContext, useContext, useEffect, useMemo, useRef, useState } = React;
 const ChangesContext = createContext({ events: [], seen: {}, mark: () => {} });
@@ -133,7 +134,7 @@ export function RecentChanges({ onRefresh }) {
       {error && <p className="error" role="alert">{error}</p>}
       {!filtered.length && <p role="status">Aucun changement récent ne correspond à cette sélection.</p>}
       <ol className="changes-list">{filtered.map(event => <li key={event.id}>
-        <div><strong>{event.nom}</strong> <span>{libelleCorps(event.corps)}</span><small><DateRP value={event.date}/></small>
+        <div><strong><NomEffectif nom={event.nom} membre={event.memberId}/></strong> <span>{libelleCorps(event.corps)}</span><small><DateRP value={event.date}/></small>
           {event.changes.map((change, i) => <div key={i}>{describe(change)}</div>)}
         </div>
         <button type="button" className={`change-badge ${seen[event.id] ? "change-seen" : "change-new"}`}

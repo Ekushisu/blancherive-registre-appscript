@@ -1,35 +1,47 @@
 /*
-  Livret de service : la page personnelle d'un membre connecté par Discord
-  (décisions du propriétaire, 11 octobre 2026). Ouverte par défaut à la
-  connexion Discord ; une session par code n'identifie personne et n'en a pas.
+  Fiche de service : la page d'un effectif, ouverte en cliquant sur son nom
+  partout où le registre l'affiche (décision du propriétaire, 1er novembre
+  2026). Elle reprend le Livret de service, qui n'existait qu'en session
+  Discord et ne montrait que son propre membre.
 
-  Lecture seule. Le serveur ne renvoie que les données du membre de la
-  session, désigné par l'ID membre de son jeton : sa fiche, sa chaîne de
-  commandement, sa carrière, sa solde et son service, ses amendes et ses
-  incarcérations. Un garde voit sa propre solde, jamais celle d'un autre.
+  Lecture seule, pour GARDE, OFFICIER et INTENDANT, sur n'importe quel
+  effectif, départs compris : identité, chaîne de commandement, carrière,
+  solde et service, justice. Un GARDE n'y lit rien que les Présences, les
+  Amendes et la Prison ne lui montrent déjà. L'INTENDANT, qui n'a accès ni
+  aux Amendes ni à la Prison, ne reçoit pas la Justice : elle n'est même pas
+  calculée pour lui (`justice: null`). Le visiteur du Codex n'y a jamais accès.
 
-  Présences, Amendes et Prison désignent un garde par son nom, pas par son ID
-  membre : les lignes sont rapprochées du « Prénom Nom » de la fiche, sans
-  casse, accents ni espaces superflus. Un membre renommé depuis les Effectifs
-  garde ses Présences, ses amendes et ses incarcérations, réécrites à son
-  nouveau nom (`renommerMembrePresences_`, `renommerGardeRegistres_`).
+  L'effectif est désigné par son ID membre quand la page qui l'affiche le
+  connaît (Organigramme, Effectifs, nouveautés, chaîne de commandement),
+  sinon par son nom (Présences, Paye, Amendes, Prison). Présences, Amendes et
+  Prison désignent elles aussi un garde par son nom : les lignes sont
+  rapprochées du « Prénom Nom » de la fiche, sans casse, accents ni espaces
+  superflus. Un membre renommé depuis les Effectifs garde ses Présences, ses
+  amendes et ses incarcérations, réécrites à son nouveau nom
+  (`renommerMembrePresences_`, `renommerGardeRegistres_`).
 */
-const LIVRET_DERNIERES = 5;
+const FICHE_DERNIERES = 5;
 
 
-function getLivretService(token) {
-  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
+// `cible` : { membre: ID membre } ou { nom: "Prénom Nom" } ; l'ID prime.
+function getFicheService(token, cible) {
+  const auth = requireRole(token, ["GARDE", "OFFICIER", "INTENDANT"]);
 
-  if (auth.via !== "discord" || !auth.membre) {
-    throw new Error("Le livret de service n'existe que pour une connexion par Discord.");
+  const membre = String((cible && cible.membre) || "").trim();
+  const cleNom = cleNomFiche_((cible && cible.nom) || "");
+
+  if (!membre && !cleNom) {
+    throw new Error("Effectif non précisé.");
   }
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const effectifs = lireEffectifsLivret_(ss);
-  const fiche = effectifs.find(membre => membre.id === auth.membre);
+  const effectifs = lireEffectifsFiche_(ss);
+  const fiche =
+    (membre && effectifs.find(m => m.id === membre)) ||
+    (cleNom && effectifs.find(m => cleNomFiche_(m.nomComplet) === cleNom));
 
   if (!fiche) {
-    throw new Error("Votre fiche est introuvable dans les Effectifs : prévenir un officier.");
+    throw new Error("Aucune fiche à ce nom dans les Effectifs.");
   }
 
   const ordre = lireOrdreGradesDiscord_(ss);
@@ -45,15 +57,18 @@ function getLivretService(token) {
       statut: fiche.statut,
       assermente: fiche.assermente
     },
-    commandement: commandementLivret_(effectifs, fiche, ordre),
-    carriere: lireCarriereLivret_(ss, auth.membre),
-    service: lireServiceLivret_(ss, fiche),
-    justice: lireJusticeLivret_(ss, fiche)
+    commandement: commandementFiche_(effectifs, fiche, ordre),
+    // Sans ID membre, aucun événement du journal ne peut lui être rattaché.
+    carriere: fiche.id
+      ? lireCarriereFiche_(ss, fiche.id)
+      : { inscription: "", avantJournal: false, evenements: [] },
+    service: lireServiceFiche_(ss, fiche),
+    justice: auth.role === "INTENDANT" ? null : lireJusticeFiche_(ss, fiche)
   };
 }
 
 
-function cleNomLivret_(valeur) {
+function cleNomFiche_(valeur) {
   return normaliserEffectifsWeb_(valeur).replace(/\s+/g, " ").trim();
 }
 
@@ -62,7 +77,7 @@ function cleNomLivret_(valeur) {
 // FICHE ET COMMANDEMENT
 // ============================================================
 
-function lireEffectifsLivret_(ss) {
+function lireEffectifsFiche_(ss) {
   const sheet = ss.getSheetByName(EFFECTIFS_WEB_SHEET_NAME);
   if (!sheet) throw new Error('Feuille "Effectifs" introuvable.');
 
@@ -106,14 +121,15 @@ function lireEffectifsLivret_(ss) {
   il ne figure dans la chaîne de personne, et la sienne ne compte que le Jarl ;
   sous régence, elle est vide.
 */
-function commandementLivret_(effectifs, fiche, ordre) {
+function commandementFiche_(effectifs, fiche, ordre) {
   const actif = normaliserEffectifsWeb_(EFFECTIFS_WEB_ACTIVE_STATUS);
   const rang = membre => {
     const index = ordre.indexOf(cleGradeDiscord_(membre.grade));
     return index < 0 ? Infinity : index;
   };
   const seuil = ordre.indexOf(cleGradeDiscord_(DISCORD_SEUIL_OFFICIER));
-  const presenter = membre => ({ nomComplet: membre.nomComplet, grade: membre.grade, corps: membre.corps });
+  // L'ID membre permet d'ouvrir la fiche d'un supérieur depuis celle-ci.
+  const presenter = membre => ({ memberId: membre.id, nomComplet: membre.nomComplet, grade: membre.grade, corps: membre.corps });
   const enService = effectifs.filter(m => m.id !== fiche.id && normaliserEffectifsWeb_(m.statut) === actif);
   const memeCorps = (a, b) => cleGradeDiscord_(a) === cleGradeDiscord_(b);
   const etatMajor = corps => cleGradeDiscord_(corps) === "etatmajor";
@@ -150,7 +166,7 @@ function commandementLivret_(effectifs, fiche, ordre) {
   arrivée réelle est inconnue. Événements : arrivée, grade et corps, du plus
   récent au plus ancien.
 */
-function lireCarriereLivret_(ss, membreId) {
+function lireCarriereFiche_(ss, membreId) {
   const journal = ss.getSheetByName("HistoriqueEffectifs");
   const vide = { inscription: "", avantJournal: false, evenements: [] };
   if (!journal || journal.getLastRow() < 2) return vide;
@@ -187,7 +203,7 @@ function lireCarriereLivret_(ss, membreId) {
 // SOLDE ET SERVICE — Présences
 // ============================================================
 
-function lireServiceLivret_(ss, fiche) {
+function lireServiceFiche_(ss, fiche) {
   const lundiCourant = lundiCourantPresence_();
   const resultat = {
     lundiCourant,
@@ -218,14 +234,14 @@ function lireServiceLivret_(ss, fiche) {
   const lastRow = getLastPresenceRowWebApp(sheet);
   if (lastRow < 2) return resultat;
 
-  const cle = cleNomLivret_(fiche.nomComplet);
+  const cle = cleNomFiche_(fiche.nomComplet);
   const range = sheet.getRange(2, 1, lastRow - 1, 15);
   const values = range.getValues();
   const display = range.getDisplayValues();
   const semaines = [];
 
   values.forEach((row, i) => {
-    if (cleNomLivret_(display[i][3] + " " + display[i][4]) !== cle) return;
+    if (cleNomFiche_(display[i][3] + " " + display[i][4]) !== cle) return;
     const lundi = normaliserLundiPresence_(row[0], lundiCourant);
     if (!estLundiPresence_(lundi) || estExcluDesPresences_(display[i][1], display[i][2])) return;
     semaines.push({
@@ -269,7 +285,7 @@ function lireServiceLivret_(ss, fiche) {
     }
     s.jours.forEach((present, jour) => {
       if (!present) return;
-      const date = decalerDateLivret_(s.lundi, jour);
+      const date = decalerDateFiche_(s.lundi, jour);
       if (!resultat.dernierJour || date > resultat.dernierJour) resultat.dernierJour = date;
     });
   });
@@ -281,14 +297,14 @@ function lireServiceLivret_(ss, fiche) {
   // Série : semaines consécutives servies, la semaine en cours comprise si
   // elle compte déjà un jour, sinon à partir de la précédente.
   const servies = new Set(semaines.filter(s => s.joursPresents > 0).map(s => s.lundi));
-  let semaine = servies.has(lundiCourant) ? lundiCourant : decalerDateLivret_(lundiCourant, -7);
+  let semaine = servies.has(lundiCourant) ? lundiCourant : decalerDateFiche_(lundiCourant, -7);
   while (servies.has(semaine)) {
     resultat.serie++;
-    semaine = decalerDateLivret_(semaine, -7);
+    semaine = decalerDateFiche_(semaine, -7);
   }
 
   if (resultat.dernierJour) {
-    resultat.joursDepuis = ecartJoursLivret_(resultat.dernierJour, dateCivileStockholm_());
+    resultat.joursDepuis = ecartJoursFiche_(resultat.dernierJour, dateCivileStockholm_());
   }
   resultat.inactif =
     normaliserEffectifsWeb_(fiche.statut) === normaliserEffectifsWeb_(EFFECTIFS_WEB_ACTIVE_STATUS) &&
@@ -298,14 +314,14 @@ function lireServiceLivret_(ss, fiche) {
 }
 
 
-function decalerDateLivret_(iso, jours) {
+function decalerDateFiche_(iso, jours) {
   const date = new Date(iso + "T00:00:00Z");
   date.setUTCDate(date.getUTCDate() + jours);
   return date.toISOString().slice(0, 10);
 }
 
 
-function ecartJoursLivret_(depuis, jusqua) {
+function ecartJoursFiche_(depuis, jusqua) {
   return Math.round((new Date(jusqua + "T00:00:00Z") - new Date(depuis + "T00:00:00Z")) / 86400000);
 }
 
@@ -314,11 +330,11 @@ function ecartJoursLivret_(depuis, jusqua) {
 // JUSTICE — Amendes et Prison
 // ============================================================
 
-function lireJusticeLivret_(ss, fiche) {
-  const cle = cleNomLivret_(fiche.nomComplet);
+function lireJusticeFiche_(ss, fiche) {
+  const cle = cleNomFiche_(fiche.nomComplet);
   return {
-    amendes: lireAmendesLivret_(ss, cle),
-    prison: lirePrisonLivret_(ss, cle)
+    amendes: lireAmendesFiche_(ss, cle),
+    prison: lirePrisonFiche_(ss, cle)
   };
 }
 
@@ -327,7 +343,7 @@ function lireJusticeLivret_(ss, fiche) {
   Amendes dressées par le membre. À encaisser : non payées, montant fixé ou à
   déterminer. À reverser : payées, pas encore reversées aux trésoriers.
 */
-function lireAmendesLivret_(ss, cle) {
+function lireAmendesFiche_(ss, cle) {
   const resultat = {
     nombre: 0, total: 0,
     aEncaisser: { nombre: 0, total: 0, aDeterminer: 0 },
@@ -344,7 +360,7 @@ function lireAmendesLivret_(ss, cle) {
   const display = range.getDisplayValues();
 
   values.forEach((row, i) => {
-    if (cleNomLivret_(display[i][1]) !== cle) return;
+    if (cleNomFiche_(display[i][1]) !== cle) return;
     const montant = row[4] === "" || row[4] === null ? null : Number(row[4]);
     const paye = row[5] === true;
     const reverse = row[6] === true;
@@ -369,13 +385,13 @@ function lireAmendesLivret_(ss, cle) {
     });
   });
 
-  resultat.dernieres = resultat.dernieres.reverse().slice(0, LIVRET_DERNIERES);
+  resultat.dernieres = resultat.dernieres.reverse().slice(0, FICHE_DERNIERES);
   return resultat;
 }
 
 
 // Incarcérations prononcées par le membre, et détenus encore en cellule.
-function lirePrisonLivret_(ss, cle) {
+function lirePrisonFiche_(ss, cle) {
   const resultat = { nombre: 0, enCellule: [], dernieres: [] };
   const sheet = ss.getSheetByName(PRISON_SHEET_NAME);
   if (!sheet) return resultat;
@@ -387,7 +403,7 @@ function lirePrisonLivret_(ss, cle) {
   const display = range.getDisplayValues();
 
   values.forEach((row, i) => {
-    if (cleNomLivret_(display[i][1]) !== cle) return;
+    if (cleNomFiche_(display[i][1]) !== cle) return;
     const detention = {
       date: formatDatePrison_(row[0], display[i][0]),
       detenu: nettoyerSaisieUtilisateur(display[i][2]),
@@ -403,6 +419,6 @@ function lirePrisonLivret_(ss, cle) {
   });
 
   resultat.enCellule.reverse();
-  resultat.dernieres = resultat.dernieres.reverse().slice(0, LIVRET_DERNIERES);
+  resultat.dernieres = resultat.dernieres.reverse().slice(0, FICHE_DERNIERES);
   return resultat;
 }

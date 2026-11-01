@@ -6614,23 +6614,23 @@ body {
     padding-bottom: 118px;
   }
 }
-.livret-entete {
+.fiche-entete {
   align-items: flex-end;
   gap: 16px;
 }
-.livret-badges {
+.fiche-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
-.livret-page > .grade-description {
+.fiche-page > .grade-description {
   max-width: 760px;
   margin: -6px 0 18px;
   color: #76603c;
   font-style: italic;
   text-align: left;
 }
-.livret-alerte {
+.fiche-alerte {
   margin: 0 0 18px;
   padding: 12px 16px;
   border: 1px solid #c98f6f;
@@ -6639,13 +6639,13 @@ body {
   background: #f6e2d6;
   color: #7a2f1f;
 }
-.livret-grille {
+.fiche-grille {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   align-items: start;
 }
-.livret-section {
+.fiche-section {
   min-width: 0;
   padding: 20px;
   background: var(--surface);
@@ -6653,7 +6653,7 @@ body {
   border-radius: 4px;
   box-shadow: var(--shadow);
 }
-.livret-section-entete {
+.fiche-section-entete {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -6663,17 +6663,17 @@ body {
   padding-bottom: 10px;
   border-bottom: 3px double #ccb184;
 }
-.livret-section-entete h2 {
+.fiche-section-entete h2 {
   margin: 0;
   font: 400 22px Georgia, serif;
   color: #49321d;
 }
-.livret-section-entete p {
+.fiche-section-entete p {
   margin: 0;
   color: #87704a;
   font-size: 12px;
 }
-.livret-section h3 {
+.fiche-section h3 {
   margin: 18px 0 8px;
   font-family: inherit;
   font-size: 11px;
@@ -6683,12 +6683,12 @@ body {
   text-transform: uppercase;
   color: #87704a;
 }
-.livret-semaine {
+.fiche-semaine {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
 }
-.livret-jour {
+.fiche-jour {
   display: grid;
   justify-items: center;
   gap: 4px;
@@ -6699,31 +6699,31 @@ body {
   color: #968165;
   font-size: 11px;
 }
-.livret-jour strong {
+.fiche-jour strong {
   font: 18px Georgia, serif;
   color: #b9a27a;
 }
-.livret-jour.is-present {
+.fiche-jour.is-present {
   background: #e8e9d4;
   border-color: #a9ae80;
   color: #5c633e;
 }
-.livret-jour.is-present strong {
+.fiche-jour.is-present strong {
   color: #4f5a2c;
 }
-.livret-ligne-solde {
+.fiche-ligne {
   margin: 12px 0 0;
   color: #594024;
   line-height: 1.6;
 }
-.livret-liste {
+.fiche-liste {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   gap: 6px;
 }
-.livret-liste li {
+.fiche-liste li {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6733,44 +6733,44 @@ body {
   border-radius: 3px;
   background: #fbf3e1;
 }
-.livret-liste li > span {
+.fiche-liste li > span {
   display: grid;
   gap: 2px;
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.livret-liste small {
+.fiche-liste small {
   color: #87704a;
   font-size: 11px;
 }
-.livret-amende-etat {
+.fiche-amende-etat {
   justify-items: end;
   text-align: right;
   flex-shrink: 0;
 }
-.livret-total {
+.fiche-total {
   margin: 10px 0 0;
   text-align: right;
   color: #594024;
 }
-.livret-percu {
+.fiche-percu {
   margin: 14px 0 0;
   padding-top: 10px;
   border-top: 1px dashed #d8c39c;
   color: #76603c;
   font-size: 13px;
 }
-.livret-vide {
+.fiche-vide {
   margin: 0;
   color: #87704a;
   font-style: italic;
 }
-.livret-tuiles {
+.fiche-tuiles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
   gap: 10px;
 }
-.livret-tuile {
+.fiche-tuile {
   display: grid;
   align-content: start;
   gap: 2px;
@@ -6779,26 +6779,26 @@ body {
   border-radius: 3px;
   background: #fbf3e1;
 }
-.livret-tuile strong {
+.fiche-tuile strong {
   font: 400 28px/1.1 Georgia, serif;
   color: #49321d;
 }
-.livret-tuile span {
+.fiche-tuile span {
   color: #76603c;
   font-size: 12px;
 }
-.livret-tuile small {
+.fiche-tuile small {
   color: #968165;
   font-size: 11px;
 }
-.livret-personnes {
+.fiche-personnes {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   gap: 6px;
 }
-.livret-personne {
+.fiche-personne {
   display: flex;
   gap: 10px;
   align-items: baseline;
@@ -6806,16 +6806,16 @@ body {
   border-left: 3px solid #bfa473;
   background: #fbf3e1;
 }
-.livret-personne-grade {
+.fiche-personne-grade {
   min-width: 120px;
   color: #87704a;
   font-size: 12px;
 }
-.livret-personne-nom {
+.fiche-personne-nom {
   font: 16px Georgia, serif;
   color: #49321d;
 }
-.livret-carriere {
+.fiche-carriere {
   list-style: none;
   margin: 12px 0 0;
   padding: 0 0 0 14px;
@@ -6823,35 +6823,114 @@ body {
   display: grid;
   gap: 10px;
 }
-.livret-carriere li {
+.fiche-carriere li {
   display: grid;
   gap: 2px;
 }
-.livret-carriere li .date-rp {
+.fiche-carriere li .date-rp {
   color: #87704a;
   font-size: 12px;
 }
 @media (max-width: 900px) {
-  .livret-grille {
+  .fiche-grille {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.fiche-panneau {
+  width: min(1040px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 0 26px 26px;
+  background-color: var(--paper);
+  border: 1px solid #b1955f;
+  border-radius: 6px;
+  box-shadow: 0 25px 70px #0000005c;
+  outline: none;
+}
+.fiche-barre {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -26px 10px;
+  padding: 8px 12px;
+  background-color: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.fiche-retour {
+  min-height: 36px;
+  padding: 6px 12px;
+}
+.fiche-fermer {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 27px;
+  line-height: 1;
+  color: #705533;
+}
+.fiche-page .page-header {
+  margin-top: 6px;
+}
+button.nom-effectif {
+  display: inline;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted #9b722d80;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+button.nom-effectif:hover {
+  color: var(--seal);
+  text-decoration-style: solid;
+}
+.org-command-node button.nom-effectif:hover,
+.session-nom button.nom-effectif:hover {
+  color: #f6dfae;
+}
 @media (max-width: 600px) {
-  .livret-entete {
+  .fiche-fond {
+    padding: 0;
+  }
+  .fiche-panneau {
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0 14px 20px;
+    border: 0;
+    border-radius: 0;
+  }
+  .fiche-barre {
+    margin: 0 -14px 8px;
+  }
+  .fiche-entete {
     align-items: flex-start;
   }
-  .livret-section {
+  .fiche-section {
     padding: 16px 14px;
   }
-  .livret-jour {
+  .fiche-jour {
     padding: 6px 0;
     font-size: 10px;
   }
-  .livret-personne {
+  .fiche-personne {
     flex-direction: column;
     gap: 2px;
   }
-  .livret-personne-grade {
+  .fiche-personne-grade {
     min-width: 0;
   }
 }
@@ -6963,9 +7042,386 @@ input.champ-impose {
     }
   }
 
+  // ui/src/corps.js
+  var NOMS_AFFICHES_CORPS = {};
+  var normaliser = (valeur) => String(valeur || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  function libelleCorps(corps) {
+    return NOMS_AFFICHES_CORPS[normaliser(corps)] || corps;
+  }
+
+  // ui/src/grades.jsx
+  var { useEffect, useId, useRef, useState } = React;
+  var cleGrade = (value) => String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
+  var DESCRIPTIONS = {
+    jarl: "Moyenne noblesse. D\xE9tient le pouvoir judiciaire de la ch\xE2tellerie.",
+    huscarl: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
+    huscarldeblancherive: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
+    marechal: "Petite noblesse, si\xE8ge \xE0 la haute cour de la ch\xE2tellerie. Orchestre les affaires militaires et celles de la garde.",
+    commander: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
+    commandant: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
+    major: "Seconde le Commander dans l'exercice de la garde et des affaires militaires de Blancherive.",
+    capitaine: "Commande un corps de garde ou une garnison dans l'exercice de la garde et des arm\xE9es.",
+    lieutenantchef: "Seconde le capitaine de corps ou de garnison dans son exercice.",
+    lieutenant: "Commande des patrouilles et seconde le commandement du corps ou de la garnison. Intendant de son corps ou de sa garnison.",
+    sergentchef: "Commande des patrouilles, veille au respect du r\xE8glement et aide \xE0 l'intendance journali\xE8re du corps ou de la garnison.",
+    sergent: "Seconde le sergent-chef.",
+    caporalchef: "Commande des bin\xF4mes ou trin\xF4mes de patrouille, ou un d\xE9tachement d'une patrouille plus large, au sein du corps ou de la garnison. Veille \xE0 la remont\xE9e d'information dans la hi\xE9rarchie, accompagne et observe les recrues et les cadets.",
+    caporal: "Commande des bin\xF4mes ou trin\xF4mes. Veille \xE0 la remont\xE9e d'information dans la hi\xE9rarchie, accompagne et observe les recrues et les cadets.",
+    garde: "Garde de la ch\xE2tellerie.",
+    cadet: "Garde en formation de la ch\xE2tellerie. Asserment\xE9, mais ne peut exercer son pouvoir sans l'accompagnement d'un garde.",
+    recrue: "Prospect de la garde, en tenue civile. Non asserment\xE9, mis \xE0 l'\xE9preuve par les gardes."
+  };
+  var VARIANTES = {
+    commandementLocal: "Supervise les garnisons locales des deux thaneries."
+  };
+  function descriptionGrade(grade, variante) {
+    if (variante && VARIANTES[variante]) return VARIANTES[variante];
+    const cle = cleGrade(grade).replace(/s$/, "");
+    return DESCRIPTIONS[cle] || DESCRIPTIONS[cleGrade(grade)] || "";
+  }
+  function GradeDescription({ grade, variante }) {
+    const texte = descriptionGrade(grade, variante);
+    if (!texte) return null;
+    return /* @__PURE__ */ React.createElement("p", { className: "grade-description" }, texte);
+  }
+  function GradeInfo({ grade, variante }) {
+    const texte = descriptionGrade(grade, variante);
+    const [open, setOpen] = useState(false);
+    const wrap = useRef(null);
+    const id = useId();
+    useEffect(() => {
+      if (!open) return void 0;
+      const dehors = (event) => {
+        var _a;
+        if (!((_a = wrap.current) == null ? void 0 : _a.contains(event.target))) setOpen(false);
+      };
+      const touches = (event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          setOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", dehors);
+      document.addEventListener("keydown", touches);
+      return () => {
+        document.removeEventListener("mousedown", dehors);
+        document.removeEventListener("keydown", touches);
+      };
+    }, [open]);
+    if (!texte) return null;
+    return /* @__PURE__ */ React.createElement("span", { className: "grade-info", ref: wrap }, /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "grade-info-button",
+        "aria-expanded": open,
+        "aria-controls": open ? id : void 0,
+        "aria-label": `R\xF4le du grade ${grade}`,
+        onClick: (event) => {
+          event.stopPropagation();
+          setOpen((value) => !value);
+        }
+      },
+      "\u24D8"
+    ), open && /* @__PURE__ */ React.createElement("span", { className: "grade-info-panel", id, role: "note" }, texte));
+  }
+
+  // ui/src/calendrier.js
+  var MOIS_TAMRIEL = [
+    "Prim\xE9toile",
+    "Clairciel",
+    "Semailles",
+    "Ondepluie",
+    "Plantaisons",
+    "Mi-l'An",
+    "Hautz\xE9nith",
+    "Vifazur",
+    "\xC2trefeu",
+    "Soufflegivre",
+    "Sombreciel",
+    "Soir\xE9toile"
+  ];
+  var JOURS_TAMRIEL = ["Sundas", "Morndas", "Tirdas", "Middas", "Turdas", "Fredas", "Loredas"];
+  var ERE = 4;
+  var DECALAGE_ANNEE = 1800;
+  var FUSEAU = "Europe/Stockholm";
+  var pad = (value) => String(value).padStart(2, "0");
+  function lireDate(valeur) {
+    if (valeur instanceof Date) {
+      if (Number.isNaN(valeur.getTime())) return null;
+      return champsInstant(valeur);
+    }
+    const texte = String(valeur != null ? valeur : "").trim();
+    if (!texte) return null;
+    let m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texte);
+    if (m) return valider({ annee: +m[1], mois: +m[2], jour: +m[3] });
+    m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ T](\d{1,2}):(\d{2}))?$/.exec(texte);
+    if (m) {
+      const champs = { annee: +m[3], mois: +m[2], jour: +m[1] };
+      if (m[4] !== void 0) {
+        champs.heure = +m[4];
+        champs.minute = +m[5];
+      }
+      return valider(champs);
+    }
+    if (/^\d{4}-\d{2}-\d{2}T/.test(texte)) {
+      const date = new Date(texte);
+      return Number.isNaN(date.getTime()) ? null : champsInstant(date);
+    }
+    return null;
+  }
+  function champsInstant(date) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en", {
+      timeZone: FUSEAU,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(date).map((p) => [p.type, p.value]));
+    return { annee: +parts.year, mois: +parts.month, jour: +parts.day, heure: +parts.hour, minute: +parts.minute };
+  }
+  function valider(champs) {
+    const date = new Date(Date.UTC(champs.annee, champs.mois - 1, champs.jour));
+    const ok = date.getUTCFullYear() === champs.annee && date.getUTCMonth() === champs.mois - 1 && date.getUTCDate() === champs.jour && (champs.heure === void 0 || champs.heure >= 0 && champs.heure < 24 && champs.minute >= 0 && champs.minute < 60);
+    return ok ? champs : null;
+  }
+  function jourSemaineTamriel(champs) {
+    return JOURS_TAMRIEL[new Date(Date.UTC(champs.annee, champs.mois - 1, champs.jour)).getUTCDay()];
+  }
+  function anneeTamriel(annee) {
+    return `${ERE}E ${annee - DECALAGE_ANNEE}`;
+  }
+  function dateTamriel(valeur, { jour = true, heure = true } = {}) {
+    const champs = lireDate(valeur);
+    if (!champs) return String(valeur != null ? valeur : "");
+    const parties = [];
+    if (jour) parties.push(jourSemaineTamriel(champs));
+    parties.push(String(champs.jour), MOIS_TAMRIEL[champs.mois - 1], anneeTamriel(champs.annee));
+    let texte = parties.join(" ");
+    if (heure && champs.heure !== void 0) texte += ` \xB7 ${pad(champs.heure)}:${pad(champs.minute)}`;
+    return texte;
+  }
+  function dateReelle(valeur) {
+    const champs = lireDate(valeur);
+    if (!champs) return String(valeur != null ? valeur : "");
+    let texte = `${pad(champs.jour)}/${pad(champs.mois)}/${champs.annee}`;
+    if (champs.heure !== void 0) texte += ` ${pad(champs.heure)}:${pad(champs.minute)}`;
+    return texte;
+  }
+
+  // ui/src/calendrier.jsx
+  function DateRP({ value, jour = true, heure = true }) {
+    if (!lireDate(value)) return /* @__PURE__ */ React.createElement(React.Fragment, null, value != null ? value : "");
+    const reelle = dateReelle(value);
+    return /* @__PURE__ */ React.createElement("span", { className: "date-rp", title: `Calendrier r\xE9el : ${reelle}`, "aria-label": `${dateTamriel(value, { jour, heure })} (${reelle})` }, dateTamriel(value, { jour, heure }));
+  }
+
+  // ui/src/semaine.js
+  var LUNDI_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
+  function parserLundi(lundi) {
+    const match = LUNDI_REGEX.exec(String(lundi || "").trim());
+    if (!match) return null;
+    const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+    const pad2 = (value) => String(value).padStart(2, "0");
+    const retour = `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`;
+    return retour === match[0] ? date : null;
+  }
+  function semaineIso(lundi) {
+    const date = parserLundi(lundi);
+    if (!date) return null;
+    const jeudi = new Date(date.getTime() + 3 * 864e5);
+    const annee = jeudi.getUTCFullYear();
+    const ordinal = Math.floor((jeudi.getTime() - Date.UTC(annee, 0, 1)) / 864e5) + 1;
+    return { annee, semaine: Math.floor((ordinal - 1) / 7) + 1 };
+  }
+  function numeroSemaine(lundi) {
+    const iso = semaineIso(lundi);
+    return iso ? iso.semaine : null;
+  }
+  function libelleSemaine(lundi) {
+    const numero = numeroSemaine(lundi);
+    return numero === null ? String(lundi || "") : `Semaine ${numero}`;
+  }
+  function dateLundi(lundi) {
+    const date = parserLundi(lundi);
+    if (!date) return "";
+    const pad2 = (value) => String(value).padStart(2, "0");
+    return `${pad2(date.getUTCDate())}/${pad2(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`;
+  }
+  function titreSemaine(lundi) {
+    const date = dateLundi(lundi);
+    return date ? `${libelleSemaine(lundi)} \xB7 du ${date}` : libelleSemaine(lundi);
+  }
+  function comparerLundisDecroissant(a, b) {
+    const lundiA = parserLundi(a) !== null;
+    const lundiB = parserLundi(b) !== null;
+    if (lundiA !== lundiB) return lundiA ? -1 : 1;
+    return String(b || "").localeCompare(String(a || ""));
+  }
+
+  // ui/src/fiche.jsx
+  var { createContext, useContext, useEffect: useEffect2, useMemo, useRef: useRef2, useState: useState2 } = React;
+  var JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  function septims(valeur) {
+    const n = Number(valeur) || 0;
+    return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
+  }
+  function pluriel(n, singulier, plurielForme = singulier + "s") {
+    return `${new Intl.NumberFormat("fr-FR").format(Number(n) || 0)} ${Math.abs(Number(n) || 0) > 1 ? plurielForme : singulier}`;
+  }
+  function libelleEvenement(evenement) {
+    if (evenement.type === "grade") {
+      return `\xC9lev\xE9 au grade de ${evenement.apres}${evenement.avant ? `, auparavant ${evenement.avant}` : ""}`;
+    }
+    if (evenement.type === "corps") {
+      return `Affect\xE9 \xE0 ${libelleCorps(evenement.apres)}${evenement.avant ? `, venant de ${libelleCorps(evenement.avant)}` : ""}`;
+    }
+    if (evenement.type === "arrivee") return "Inscription au registre de la Garde";
+    if (evenement.type === "nom") return `Nom chang\xE9 en ${evenement.apres}, auparavant ${evenement.avant}`;
+    return evenement.apres || evenement.type;
+  }
+  function depuisJours(n) {
+    if (n === null || n === void 0) return "";
+    if (n <= 0) return "aujourd\u2019hui";
+    if (n === 1) return "hier";
+    return `il y a ${n} jours`;
+  }
+  var FicheContext = createContext(null);
+  function FicheProvider({ token, serverCall: serverCall2, children }) {
+    const [pile, setPile] = useState2([]);
+    const valeur = useMemo(() => ({ ouvrir: (cible) => setPile((p) => [...p, cible]) }), []);
+    return /* @__PURE__ */ React.createElement(FicheContext.Provider, { value: valeur }, children, pile.length > 0 && /* @__PURE__ */ React.createElement(
+      FichePanneau,
+      {
+        token,
+        serverCall: serverCall2,
+        cible: pile[pile.length - 1],
+        profondeur: pile.length,
+        onRetour: () => setPile((p) => p.slice(0, -1)),
+        onFermer: () => setPile([])
+      }
+    ));
+  }
+  function NomEffectif({ nom, membre = "", children }) {
+    const fiche = useContext(FicheContext);
+    const libelle = String(nom || "").trim();
+    const contenu = children != null ? children : libelle;
+    if (!fiche || !libelle) return /* @__PURE__ */ React.createElement(React.Fragment, null, contenu);
+    return /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "nom-effectif",
+        title: `Fiche de ${libelle}`,
+        onClick: (event) => {
+          event.stopPropagation();
+          fiche.ouvrir({ membre: String(membre || ""), nom: libelle });
+        }
+      },
+      contenu
+    );
+  }
+  function FichePanneau({ token, serverCall: serverCall2, cible, profondeur = 1, onRetour, onFermer }) {
+    const [etat, setEtat] = useState2({ data: null, erreur: "" });
+    const panneau = useRef2(null);
+    const fermerRef = useRef2(onFermer);
+    fermerRef.current = onFermer;
+    useEffect2(() => {
+      var _a, _b;
+      let vivant = true;
+      setEtat({ data: null, erreur: "" });
+      (_b = (_a = panneau.current) == null ? void 0 : _a.scrollTo) == null ? void 0 : _b.call(_a, 0, 0);
+      serverCall2("getFicheService", token, cible).then((data2) => {
+        if (vivant) setEtat({ data: data2, erreur: "" });
+      }).catch((e) => {
+        if (vivant) setEtat({ data: null, erreur: e.message });
+      });
+      return () => {
+        vivant = false;
+      };
+    }, [cible]);
+    useEffect2(() => {
+      var _a;
+      const precedent = document.activeElement, overflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      (_a = panneau.current) == null ? void 0 : _a.focus();
+      function touches(event) {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          fermerRef.current();
+        }
+        if (event.key !== "Tab" || !panneau.current) return;
+        const controles = [...panneau.current.querySelectorAll("button:not(:disabled),a[href]")];
+        const premier = controles[0], dernier = controles[controles.length - 1];
+        if (event.shiftKey && document.activeElement === premier) {
+          event.preventDefault();
+          dernier == null ? void 0 : dernier.focus();
+        } else if (!event.shiftKey && document.activeElement === dernier) {
+          event.preventDefault();
+          premier == null ? void 0 : premier.focus();
+        }
+      }
+      document.addEventListener("keydown", touches);
+      return () => {
+        var _a2;
+        document.body.style.overflow = overflow;
+        document.removeEventListener("keydown", touches);
+        (_a2 = precedent == null ? void 0 : precedent.focus) == null ? void 0 : _a2.call(precedent);
+      };
+    }, []);
+    const { data, erreur } = etat;
+    return /* @__PURE__ */ React.createElement("div", { className: "modal-backdrop fiche-fond", onMouseDown: (event) => {
+      if (event.target === event.currentTarget) onFermer();
+    } }, /* @__PURE__ */ React.createElement("div", { className: "fiche-panneau", role: "dialog", "aria-modal": "true", "aria-labelledby": "fiche-titre", tabIndex: -1, ref: panneau }, /* @__PURE__ */ React.createElement("div", { className: "fiche-barre" }, profondeur > 1 ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button fiche-retour", onClick: onRetour }, "\u2190 Retour") : /* @__PURE__ */ React.createElement("span", null), /* @__PURE__ */ React.createElement("button", { type: "button", className: "fiche-fermer", "aria-label": "Fermer la fiche", onClick: onFermer }, "\xD7")), erreur ? /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, erreur) : data ? /* @__PURE__ */ React.createElement(FicheContenu, { data }) : /* @__PURE__ */ React.createElement("div", { className: "loading", role: "status" }, "Ouverture de la fiche", (cible == null ? void 0 : cible.nom) ? ` de ${cible.nom}` : "", "\u2026")));
+  }
+  function Section({ titre, sousTitre, children }) {
+    return /* @__PURE__ */ React.createElement("section", { className: "fiche-section" }, /* @__PURE__ */ React.createElement("header", { className: "fiche-section-entete" }, /* @__PURE__ */ React.createElement("h2", null, titre), sousTitre && /* @__PURE__ */ React.createElement("p", null, sousTitre)), children);
+  }
+  function Tuile({ valeur, libelle, detail }) {
+    return /* @__PURE__ */ React.createElement("div", { className: "fiche-tuile" }, /* @__PURE__ */ React.createElement("strong", null, valeur), /* @__PURE__ */ React.createElement("span", null, libelle), detail && /* @__PURE__ */ React.createElement("small", null, detail));
+  }
+  function Personne({ personne }) {
+    return /* @__PURE__ */ React.createElement("li", { className: "fiche-personne" }, /* @__PURE__ */ React.createElement("span", { className: "fiche-personne-grade" }, personne.grade), /* @__PURE__ */ React.createElement("span", { className: "fiche-personne-nom" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: personne.nomComplet, membre: personne.memberId })));
+  }
+  function Solde({ s, grade }) {
+    if (s.exclu) {
+      const cle = String(grade || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const qui = cle === "jarl" ? "Le Jarl" : cle.startsWith("regent") ? "Le R\xE9gent imp\xE9rial" : "Le Hird du Jarl";
+      return /* @__PURE__ */ React.createElement(Section, { titre: "Solde" }, /* @__PURE__ */ React.createElement("p", { className: "fiche-vide" }, qui, " n\u2019est pas sold\xE9 par le registre de la Garde."));
+    }
+    const courante = s.semaineCourante;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Solde", sousTitre: titreSemaine(s.lundiCourant) }, /* @__PURE__ */ React.createElement("div", { className: "fiche-semaine", "aria-label": "Jours de service de la semaine en cours" }, JOURS.map((jour, i) => {
+      var _a;
+      const present = Boolean((_a = courante == null ? void 0 : courante.jours) == null ? void 0 : _a[i]);
+      return /* @__PURE__ */ React.createElement("div", { key: jour, className: `fiche-jour ${present ? "is-present" : ""}` }, /* @__PURE__ */ React.createElement("span", null, jour), /* @__PURE__ */ React.createElement("strong", { "aria-label": present ? "en service" : "absent" }, present ? "\u2713" : "\xB7"));
+    })), /* @__PURE__ */ React.createElement("p", { className: "fiche-ligne" }, courante ? /* @__PURE__ */ React.createElement(React.Fragment, null, pluriel(courante.joursPresents, "jour"), " de service cette semaine \xB7 ", /* @__PURE__ */ React.createElement("strong", null, septims(courante.solde)), " \xB7 ", courante.financeur) : "Aucun pointage cette semaine."), /* @__PURE__ */ React.createElement("h3", null, "Soldes en attente"), s.enAttente.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("ul", { className: "fiche-liste" }, s.enAttente.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.lundi }, /* @__PURE__ */ React.createElement("span", null, titreSemaine(e.lundi), /* @__PURE__ */ React.createElement("small", null, pluriel(e.joursPresents, "jour"), " \xB7 ", e.financeur)), /* @__PURE__ */ React.createElement("strong", null, septims(e.solde))))), /* @__PURE__ */ React.createElement("p", { className: "fiche-total" }, "En attente : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalEnAttente)))) : /* @__PURE__ */ React.createElement("p", { className: "fiche-vide" }, "Aucune solde en attente."), /* @__PURE__ */ React.createElement("p", { className: "fiche-percu" }, "Soldes per\xE7ues : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalPercu)), s.derniereSemaineReglee && /* @__PURE__ */ React.createElement(React.Fragment, null, " \xB7 derni\xE8re semaine r\xE9gl\xE9e : ", titreSemaine(s.derniereSemaineReglee))));
+  }
+  function Service({ s }) {
+    if (s.exclu) return null;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Service" }, /* @__PURE__ */ React.createElement("div", { className: "fiche-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: s.joursTotal, libelle: "jours de service" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.semainesServies, libelle: "semaines servies" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: new Intl.NumberFormat("fr-FR").format(s.moyenne), libelle: "jours par semaine", detail: "en moyenne" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.serie, libelle: s.serie > 1 ? "semaines de suite" : "semaine de suite", detail: "s\xE9rie en cours" })), /* @__PURE__ */ React.createElement("p", { className: "fiche-ligne" }, "Dernier service : ", s.dernierJour ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(DateRP, { value: s.dernierJour, heure: false }), " (", depuisJours(s.joursDepuis), ")") : "aucun service enregistr\xE9."));
+  }
+  function Justice({ j }) {
+    const a = j.amendes, p = j.prison;
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Justice" }, /* @__PURE__ */ React.createElement("div", { className: "fiche-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: a.nombre, libelle: a.nombre > 1 ? "amendes dress\xE9es" : "amende dress\xE9e", detail: septims(a.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aEncaisser.nombre, libelle: "\xE0 encaisser", detail: `${septims(a.aEncaisser.total)}${a.aEncaisser.aDeterminer ? ` \xB7 ${a.aEncaisser.aDeterminer} \xE0 d\xE9terminer` : ""}` }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aReverser.nombre, libelle: "\xE0 reverser", detail: septims(a.aReverser.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: p.nombre, libelle: p.nombre > 1 ? "incarc\xE9rations" : "incarc\xE9ration" })), p.enCellule.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Encore en cellule"), /* @__PURE__ */ React.createElement("ul", { className: "fiche-liste" }, p.enCellule.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.detenu, /* @__PURE__ */ React.createElement("small", null, "Cellule ", d.cellule || "?", " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("small", null, d.sortie ? /* @__PURE__ */ React.createElement(React.Fragment, null, "sortie pr\xE9vue ", /* @__PURE__ */ React.createElement(DateRP, { value: d.sortie })) : "dur\xE9e \xE0 d\xE9terminer"))))), /* @__PURE__ */ React.createElement("h3", null, "Derni\xE8res amendes"), a.dernieres.length ? /* @__PURE__ */ React.createElement("ul", { className: "fiche-liste" }, a.dernieres.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.contrevenant, /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: d.date, jour: false, heure: false }), " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("span", { className: "fiche-amende-etat" }, /* @__PURE__ */ React.createElement("strong", null, d.montant === null ? "\xC0 d\xE9terminer" : septims(d.montant)), /* @__PURE__ */ React.createElement("small", null, d.reverse ? "Revers\xE9e" : d.paye ? "Pay\xE9e, \xE0 reverser" : "\xC0 encaisser"))))) : /* @__PURE__ */ React.createElement("p", { className: "fiche-vide" }, "Aucune amende dress\xE9e."));
+  }
+  function Commandement({ cmd }) {
+    var _a, _b;
+    const regence = ((_a = cmd.jarl) == null ? void 0 : _a.length) > 0 && cmd.jarl.every((p) => String(p.grade || "").trim().toLowerCase() !== "jarl");
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Cha\xEEne de commandement" }, cmd.corps.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Dans son corps"), /* @__PURE__ */ React.createElement("ul", { className: "fiche-personnes" }, cmd.corps.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))) : /* @__PURE__ */ React.createElement("p", { className: "fiche-vide" }, "Aucun sup\xE9rieur dans son corps."), cmd.etatMajor.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("ul", { className: "fiche-personnes" }, cmd.etatMajor.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))), ((_b = cmd.jarl) == null ? void 0 : _b.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, regence ? "R\xE9gence imp\xE9riale" : "Jarl"), /* @__PURE__ */ React.createElement("ul", { className: "fiche-personnes" }, cmd.jarl.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))));
+  }
+  function Carriere({ c }) {
+    return /* @__PURE__ */ React.createElement(Section, { titre: "Carri\xE8re" }, /* @__PURE__ */ React.createElement("p", { className: "fiche-ligne" }, c.avantJournal ? "D\xE9j\xE0 au service de la Garde \xE0 l\u2019ouverture du registre, en septembre 2026." : c.inscription ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Inscription au registre le ", /* @__PURE__ */ React.createElement(DateRP, { value: c.inscription, heure: false }), ".") : "Inscription non retrouv\xE9e au journal des Effectifs."), c.evenements.length ? /* @__PURE__ */ React.createElement("ol", { className: "fiche-carriere" }, c.evenements.map((e, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement(DateRP, { value: e.date, heure: false }), /* @__PURE__ */ React.createElement("span", null, libelleEvenement(e))))) : /* @__PURE__ */ React.createElement("p", { className: "fiche-vide" }, "Aucune promotion ni mutation depuis l\u2019ouverture du journal."));
+  }
+  function FicheContenu({ data }) {
+    const { fiche, service: s, justice: j, carriere: c, commandement: cmd } = data;
+    return /* @__PURE__ */ React.createElement("div", { className: "fiche-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header fiche-entete" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Fiche de service"), /* @__PURE__ */ React.createElement("h1", { className: "page-title", id: "fiche-titre" }, fiche.nomComplet), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, fiche.grade, " \xB7 ", libelleCorps(fiche.corps), fiche.specialite ? ` \xB7 ${fiche.specialite}` : "")), /* @__PURE__ */ React.createElement("div", { className: "fiche-badges" }, /* @__PURE__ */ React.createElement("span", { className: "effectif-badge" }, fiche.statut || "Sans statut"), /* @__PURE__ */ React.createElement("span", { className: `effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}` }, fiche.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"))), /* @__PURE__ */ React.createElement(GradeDescription, { grade: fiche.grade }), s.inactif && /* @__PURE__ */ React.createElement("div", { className: "fiche-alerte", role: "status" }, s.joursDepuis === null ? "Aucun jour de service enregistr\xE9 \xE0 son nom." : `Aucun service depuis ${s.joursDepuis} jours : au-del\xE0 de ${s.seuilInactivite}, son nom remonte au tableau des officiers.`), /* @__PURE__ */ React.createElement("div", { className: "fiche-grille" }, /* @__PURE__ */ React.createElement(Solde, { s, grade: fiche.grade }), /* @__PURE__ */ React.createElement(Service, { s }), j && /* @__PURE__ */ React.createElement(Justice, { j }), /* @__PURE__ */ React.createElement(Commandement, { cmd }), /* @__PURE__ */ React.createElement(Carriere, { c })));
+  }
+
   // ui/src/navigation.jsx
   var paths = {
-    livret: "M6 3h11a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1M5 19a2 2 0 0 1 2-2h12M9 7h6M9 11h4",
     organigramme: "M12 3v6M5 15v-4h14v4M3 15h4v5H3zM10 15h4v5h-4zM17 15h4v5h-4zM9 3h6v5H9z",
     effectifs: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3a4 4 0 0 1 0 8M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0",
     presences: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2M8 15l3 3 5-5",
@@ -6983,14 +7439,13 @@ input.champ-impose {
   }
   var ROLE_PUBLIC = "VISITEUR";
   var LIBELLES_ROLE = { OFFICIER: "Officier", GARDE: "Garde", INTENDANT: "Intendant", [ROLE_PUBLIC]: "Visiteur" };
-  var LIBELLES_MOBILES = { livret: "Livret", organigramme: "Hi\xE9rarchie", peines: "Peines" };
+  var LIBELLES_MOBILES = { organigramme: "Hi\xE9rarchie", peines: "Peines" };
   function Header({ role, nom = "", page, onPage, onLogout }) {
-    const livret = nom && (role === "GARDE" || role === "OFFICIER") ? [["livret", "Livret de service"]] : [];
-    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"], ["inventaire", "Inventaire"], ["codex", "Codex"], ["peines", "Peines et amendes"]] : [...livret, ["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"], ["inventaire", "Inventaire"]] : [], ["codex", "Codex"], ["peines", "Peines et amendes"], ["amendes", "Amendes"], ["prison", "Prison"]];
+    const pages = role === ROLE_PUBLIC ? [["codex", "Codex"]] : role === "INTENDANT" ? [["organigramme", "Organigramme"], ["paye", "Paye"], ["inventaire", "Inventaire"], ["codex", "Codex"], ["peines", "Peines et amendes"]] : [["organigramme", "Organigramme"], ...role === "OFFICIER" ? [["effectifs", "Effectifs"]] : [], ["presences", "Pr\xE9sences"], ...role === "OFFICIER" ? [["paye", "Paye"], ["inventaire", "Inventaire"]] : [], ["codex", "Codex"], ["peines", "Peines et amendes"], ["amendes", "Amendes"], ["prison", "Prison"]];
     return /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-seal" }, /* @__PURE__ */ React.createElement("img", { src: sceau_default, alt: "" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "brand-overline" }, "Ch\xE2tellerie de"), /* @__PURE__ */ React.createElement("strong", null, "Blancherive"), /* @__PURE__ */ React.createElement("span", { className: "brand-caption" }, "Registre de la Garde"))), /* @__PURE__ */ React.createElement("div", { className: "nav-caption" }, "Le registre"), /* @__PURE__ */ React.createElement("nav", { className: `nav${pages.length >= 10 ? " nav-dense" : ""}`, "aria-label": "Navigation principale", style: { "--nav-count": pages.length } }, pages.map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, type: "button", "aria-label": label, "aria-current": page === key ? "page" : void 0, className: page === key ? "active" : "", onClick: () => {
       onPage(key);
       window.scrollTo(0, 0);
-    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, nom && /* @__PURE__ */ React.createElement("div", { className: "session-nom", title: `Connect\xE9 par Discord : ${nom}` }, nom), /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge", title: nom ? `Connect\xE9 : ${nom}` : void 0 }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
+    } }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: key }), /* @__PURE__ */ React.createElement("span", { className: "nav-label-full" }, label), /* @__PURE__ */ React.createElement("span", { className: "nav-label-mobile" }, LIBELLES_MOBILES[key] || label)))), /* @__PURE__ */ React.createElement("div", { className: "nav-footer" }, nom && /* @__PURE__ */ React.createElement("div", { className: "session-nom", title: `Connect\xE9 par Discord : ${nom}` }, /* @__PURE__ */ React.createElement(NomEffectif, { nom })), /* @__PURE__ */ React.createElement("a", { className: "external-link", href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial ", /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2197")), /* @__PURE__ */ React.createElement("div", { className: "session-summary" }, /* @__PURE__ */ React.createElement("span", { className: "role-badge", title: nom ? `Connect\xE9 : ${nom}` : void 0 }, /* @__PURE__ */ React.createElement("span", { className: "session-dot" }), LIBELLES_ROLE[role] || "Garde"), /* @__PURE__ */ React.createElement("button", { className: "logout", onClick: onLogout, "aria-label": role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter", title: role === ROLE_PUBLIC ? "Quitter la consultation" : "Se d\xE9connecter" }, /* @__PURE__ */ React.createElement(RegistreIcon, { name: "exit" })))));
   }
   function Login({ onLogin, serverCall: serverCall2, discordRetour = {} }) {
     const [password, setPassword] = React.useState("");
@@ -7287,7 +7742,7 @@ input.champ-impose {
   }
 
   // ui/src/chefs.jsx
-  var { useEffect, useRef, useState } = React;
+  var { useEffect: useEffect3, useRef: useRef3, useState: useState3 } = React;
   var GROUPES = [["", "Tout le Codex"], ["blancherive", "Blancherive"], ["imperial", "Imp\xE9rial"], ["decrets", "D\xE9crets"]];
   var QUALIFS = [["", "Toutes"], ["contravention", "Contravention"], ["d\xE9lit", "D\xE9lit"], ["crime", "Crime"]];
   var RACCOURCIS_CACHOT = [[0.5, "30 min"], [1, "1 h"], [2, "2 h"], [6, "6 h"], [12, "12 h"], [24, "24 h"]];
@@ -7301,14 +7756,14 @@ input.champ-impose {
   }
   function ChefsField({ codex, value, onChange, onOpenLaw, onParcourir, frequents = [], disabled, onPendingChange = () => {
   }, statut = "pret", resume = true }) {
-    const [query, setQuery] = useState("");
-    const [groupe, setGroupe] = useState("");
-    const [qualif, setQualif] = useState("");
-    const [libre, setLibre] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [active, setActive] = useState(-1);
-    const [error, setError] = useState("");
-    const input = useRef(null);
+    const [query, setQuery] = useState3("");
+    const [groupe, setGroupe] = useState3("");
+    const [qualif, setQualif] = useState3("");
+    const [libre, setLibre] = useState3(false);
+    const [open, setOpen] = useState3(false);
+    const [active, setActive] = useState3(-1);
+    const [error, setError] = useState3("");
+    const input = useRef3(null);
     const recherche = codex && !libre && query.trim() ? (() => {
       try {
         return rechercherArticlesLocal(codex, query, { groupe, classification: qualif });
@@ -7317,10 +7772,10 @@ input.champ-impose {
       }
     })() : null;
     const results = (recherche == null ? void 0 : recherche.articles) || [];
-    useEffect(() => {
+    useEffect3(() => {
       setActive(-1);
     }, [query, groupe, qualif, libre]);
-    useEffect(() => {
+    useEffect3(() => {
       var _a, _b, _c;
       if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`chef-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
     }, [active, open]);
@@ -7756,100 +8211,8 @@ input.champ-impose {
     return etat;
   }
 
-  // ui/src/calendrier.js
-  var MOIS_TAMRIEL = [
-    "Prim\xE9toile",
-    "Clairciel",
-    "Semailles",
-    "Ondepluie",
-    "Plantaisons",
-    "Mi-l'An",
-    "Hautz\xE9nith",
-    "Vifazur",
-    "\xC2trefeu",
-    "Soufflegivre",
-    "Sombreciel",
-    "Soir\xE9toile"
-  ];
-  var JOURS_TAMRIEL = ["Sundas", "Morndas", "Tirdas", "Middas", "Turdas", "Fredas", "Loredas"];
-  var ERE = 4;
-  var DECALAGE_ANNEE = 1800;
-  var FUSEAU = "Europe/Stockholm";
-  var pad = (value) => String(value).padStart(2, "0");
-  function lireDate(valeur) {
-    if (valeur instanceof Date) {
-      if (Number.isNaN(valeur.getTime())) return null;
-      return champsInstant(valeur);
-    }
-    const texte = String(valeur != null ? valeur : "").trim();
-    if (!texte) return null;
-    let m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texte);
-    if (m) return valider({ annee: +m[1], mois: +m[2], jour: +m[3] });
-    m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ T](\d{1,2}):(\d{2}))?$/.exec(texte);
-    if (m) {
-      const champs = { annee: +m[3], mois: +m[2], jour: +m[1] };
-      if (m[4] !== void 0) {
-        champs.heure = +m[4];
-        champs.minute = +m[5];
-      }
-      return valider(champs);
-    }
-    if (/^\d{4}-\d{2}-\d{2}T/.test(texte)) {
-      const date = new Date(texte);
-      return Number.isNaN(date.getTime()) ? null : champsInstant(date);
-    }
-    return null;
-  }
-  function champsInstant(date) {
-    const parts = Object.fromEntries(new Intl.DateTimeFormat("en", {
-      timeZone: FUSEAU,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23"
-    }).formatToParts(date).map((p) => [p.type, p.value]));
-    return { annee: +parts.year, mois: +parts.month, jour: +parts.day, heure: +parts.hour, minute: +parts.minute };
-  }
-  function valider(champs) {
-    const date = new Date(Date.UTC(champs.annee, champs.mois - 1, champs.jour));
-    const ok = date.getUTCFullYear() === champs.annee && date.getUTCMonth() === champs.mois - 1 && date.getUTCDate() === champs.jour && (champs.heure === void 0 || champs.heure >= 0 && champs.heure < 24 && champs.minute >= 0 && champs.minute < 60);
-    return ok ? champs : null;
-  }
-  function jourSemaineTamriel(champs) {
-    return JOURS_TAMRIEL[new Date(Date.UTC(champs.annee, champs.mois - 1, champs.jour)).getUTCDay()];
-  }
-  function anneeTamriel(annee) {
-    return `${ERE}E ${annee - DECALAGE_ANNEE}`;
-  }
-  function dateTamriel(valeur, { jour = true, heure = true } = {}) {
-    const champs = lireDate(valeur);
-    if (!champs) return String(valeur != null ? valeur : "");
-    const parties = [];
-    if (jour) parties.push(jourSemaineTamriel(champs));
-    parties.push(String(champs.jour), MOIS_TAMRIEL[champs.mois - 1], anneeTamriel(champs.annee));
-    let texte = parties.join(" ");
-    if (heure && champs.heure !== void 0) texte += ` \xB7 ${pad(champs.heure)}:${pad(champs.minute)}`;
-    return texte;
-  }
-  function dateReelle(valeur) {
-    const champs = lireDate(valeur);
-    if (!champs) return String(valeur != null ? valeur : "");
-    let texte = `${pad(champs.jour)}/${pad(champs.mois)}/${champs.annee}`;
-    if (champs.heure !== void 0) texte += ` ${pad(champs.heure)}:${pad(champs.minute)}`;
-    return texte;
-  }
-
-  // ui/src/calendrier.jsx
-  function DateRP({ value, jour = true, heure = true }) {
-    if (!lireDate(value)) return /* @__PURE__ */ React.createElement(React.Fragment, null, value != null ? value : "");
-    const reelle = dateReelle(value);
-    return /* @__PURE__ */ React.createElement("span", { className: "date-rp", title: `Calendrier r\xE9el : ${reelle}`, "aria-label": `${dateTamriel(value, { jour, heure })} (${reelle})` }, dateTamriel(value, { jour, heure }));
-  }
-
   // ui/src/bareme.jsx
-  var { useEffect: useEffect2, useRef: useRef2 } = React;
+  var { useEffect: useEffect4, useRef: useRef4 } = React;
   function classeQualification(qualification) {
     return ["contravention", "d\xE9lit", "crime"].includes(qualification) ? qualification : "autre";
   }
@@ -7886,8 +8249,8 @@ input.champ-impose {
     const p = propositionBareme(peines, chefs, r);
     const montant = type === "amende";
     const proposee = montant ? p.total.amende : p.total.cachot;
-    const derniere = useRef2(void 0);
-    useEffect2(() => {
+    const derniere = useRef4(void 0);
+    useEffect4(() => {
       const precedente = derniere.current;
       derniere.current = proposee;
       if (indetermine || precedente === proposee) return;
@@ -7912,7 +8275,7 @@ input.champ-impose {
   }
 
   // ui/src/article.jsx
-  var { useEffect: useEffect3, useRef: useRef3 } = React;
+  var { useEffect: useEffect5, useRef: useRef5 } = React;
   function normalizeSearchText(value) {
     return String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
@@ -7952,9 +8315,9 @@ input.champ-impose {
   }
   function LawModal({ article, onClose, onOpenCodex, codex = null, peines = null, onNavigate = null, onRetenir = null, retenu = false }) {
     var _a, _b, _c, _d;
-    const closeRef = useRef3(onClose);
+    const closeRef = useRef5(onClose);
     closeRef.current = onClose;
-    useEffect3(() => {
+    useEffect5(() => {
       var _a2;
       if (!article) return;
       const previous = document.activeElement, overflow = document.body.style.overflow;
@@ -7996,9 +8359,9 @@ input.champ-impose {
   }
 
   // ui/src/peines.jsx
-  var { useMemo, useState: useState2 } = React;
+  var { useMemo: useMemo2, useState: useState4 } = React;
   var QUALIFS_FILTRE = ["contravention", "d\xE9lit", "crime"];
-  var pluriel = (n, singulier, plurielForme) => `${n.toLocaleString("fr-FR")} ${n > 1 ? plurielForme : singulier}`;
+  var pluriel2 = (n, singulier, plurielForme) => `${n.toLocaleString("fr-FR")} ${n > 1 ? plurielForme : singulier}`;
   var ROMAINS = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1e3 };
   function numeroTri2(article) {
     if (article === "*") return -1;
@@ -8068,15 +8431,15 @@ input.champ-impose {
     const etat = usePeines(serverCall2, token, true);
     const codexEtat = useCodex(serverCall2, token, true);
     const peines = etat.peines, codex = codexEtat.codex;
-    const [recherche, setRecherche] = useState2("");
-    const [source, setSource] = useState2("");
-    const [qualification, setQualification] = useState2("");
-    const [lu, setLu] = useState2(null);
-    const groupes = useMemo(() => regrouperBareme(peines, codex), [peines, codex]);
-    const filtres = useMemo(() => filtrerBareme(groupes, { recherche, source, qualification }), [groupes, recherche, source, qualification]);
-    const grille = useMemo(() => grilleEchelons(peines), [peines]);
-    const horsCodex = useMemo(() => voirAnomalies ? lignesHorsCodex(peines, codex) : [], [peines, codex, voirAnomalies]);
-    const comptes = useMemo(() => {
+    const [recherche, setRecherche] = useState4("");
+    const [source, setSource] = useState4("");
+    const [qualification, setQualification] = useState4("");
+    const [lu, setLu] = useState4(null);
+    const groupes = useMemo2(() => regrouperBareme(peines, codex), [peines, codex]);
+    const filtres = useMemo2(() => filtrerBareme(groupes, { recherche, source, qualification }), [groupes, recherche, source, qualification]);
+    const grille = useMemo2(() => grilleEchelons(peines), [peines]);
+    const horsCodex = useMemo2(() => voirAnomalies ? lignesHorsCodex(peines, codex) : [], [peines, codex, voirAnomalies]);
+    const comptes = useMemo2(() => {
       const comptes2 = {};
       for (const q of QUALIFS_FILTRE) comptes2[q] = groupes.reduce((n, g) => n + g.articles.filter((a) => a.niveaux.some((l) => l.qualification === q)).length, 0);
       return comptes2;
@@ -8090,11 +8453,11 @@ input.champ-impose {
       var _a;
       setLu(a.codex || { source: a.source, article: a.article, titre: a.titre, abrege: ((_a = groupes.find((g) => g.source === a.source)) == null ? void 0 : _a.abrege) || "", texte: "", _cle: a.cle });
     }
-    return /* @__PURE__ */ React.createElement("div", { className: "peines-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "D\xE9crets de peines et amendes"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Bar\xE8me des sanctions de la Garde, article par article, dans les fourchettes du droit imp\xE9rial. Le bar\xE8me propose ; l\u2019autorit\xE9 appr\xE9cie."))), etat.statut === "erreur" && /* @__PURE__ */ React.createElement("div", { className: "error" }, "Bar\xE8me non actualis\xE9 : ", etat.erreur, ". La derni\xE8re version connue est affich\xE9e."), voirAnomalies && /* @__PURE__ */ React.createElement(AnomaliesBareme, { anomalies: peines.anomalies, horsCodex }), /* @__PURE__ */ React.createElement("div", { className: "peines-fourchettes", role: "group", "aria-label": "Fourchettes imp\xE9riales \u2014 filtrer par qualification" }, QUALIFS_FILTRE.map((q) => /* @__PURE__ */ React.createElement("button", { key: q, type: "button", className: `peines-fourchette peines-fourchette-${q} ${qualification === q ? "actif" : ""}`, "aria-pressed": qualification === q, onClick: () => setQualification(qualification === q ? "" : q) }, /* @__PURE__ */ React.createElement("span", { className: "peines-fourchette-libelle" }, FOURCHETTES[q].libelle), /* @__PURE__ */ React.createElement("strong", null, FOURCHETTES[q].fourchette), /* @__PURE__ */ React.createElement("small", null, FOURCHETTES[q].peines), /* @__PURE__ */ React.createElement("span", { className: "peines-fourchette-compte" }, pluriel(comptes[q], "article", "articles"))))), /* @__PURE__ */ React.createElement(PrincipesBareme, { grille }), /* @__PURE__ */ React.createElement("div", { className: "peines-filtres" }, /* @__PURE__ */ React.createElement("label", { className: "sr-only", htmlFor: "peines-recherche" }, "Rechercher dans le bar\xE8me"), /* @__PURE__ */ React.createElement("input", { id: "peines-recherche", type: "search", placeholder: "Article, intitul\xE9, sigle\u2026 (\xAB vol \xBB, \xAB cpl 16 \xBB)", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("label", { className: "sr-only", htmlFor: "peines-source" }, "Source"), /* @__PURE__ */ React.createElement("select", { id: "peines-source", value: source, onChange: (e) => setSource(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les textes"), groupes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g.source, value: g.source }, g.abrege ? `${g.abrege} \u2014 ` : "", g.source))), /* @__PURE__ */ React.createElement("select", { "aria-label": "Qualification", value: qualification, onChange: (e) => setQualification(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes qualifications"), ["contravention", "d\xE9lit", "crime", "sp\xE9ciale", "renvoi"].map((q) => /* @__PURE__ */ React.createElement("option", { key: q, value: q }, libelleQualification(q)))), filtre && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => {
+    return /* @__PURE__ */ React.createElement("div", { className: "peines-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "D\xE9crets de peines et amendes"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Bar\xE8me des sanctions de la Garde, article par article, dans les fourchettes du droit imp\xE9rial. Le bar\xE8me propose ; l\u2019autorit\xE9 appr\xE9cie."))), etat.statut === "erreur" && /* @__PURE__ */ React.createElement("div", { className: "error" }, "Bar\xE8me non actualis\xE9 : ", etat.erreur, ". La derni\xE8re version connue est affich\xE9e."), voirAnomalies && /* @__PURE__ */ React.createElement(AnomaliesBareme, { anomalies: peines.anomalies, horsCodex }), /* @__PURE__ */ React.createElement("div", { className: "peines-fourchettes", role: "group", "aria-label": "Fourchettes imp\xE9riales \u2014 filtrer par qualification" }, QUALIFS_FILTRE.map((q) => /* @__PURE__ */ React.createElement("button", { key: q, type: "button", className: `peines-fourchette peines-fourchette-${q} ${qualification === q ? "actif" : ""}`, "aria-pressed": qualification === q, onClick: () => setQualification(qualification === q ? "" : q) }, /* @__PURE__ */ React.createElement("span", { className: "peines-fourchette-libelle" }, FOURCHETTES[q].libelle), /* @__PURE__ */ React.createElement("strong", null, FOURCHETTES[q].fourchette), /* @__PURE__ */ React.createElement("small", null, FOURCHETTES[q].peines), /* @__PURE__ */ React.createElement("span", { className: "peines-fourchette-compte" }, pluriel2(comptes[q], "article", "articles"))))), /* @__PURE__ */ React.createElement(PrincipesBareme, { grille }), /* @__PURE__ */ React.createElement("div", { className: "peines-filtres" }, /* @__PURE__ */ React.createElement("label", { className: "sr-only", htmlFor: "peines-recherche" }, "Rechercher dans le bar\xE8me"), /* @__PURE__ */ React.createElement("input", { id: "peines-recherche", type: "search", placeholder: "Article, intitul\xE9, sigle\u2026 (\xAB vol \xBB, \xAB cpl 16 \xBB)", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("label", { className: "sr-only", htmlFor: "peines-source" }, "Source"), /* @__PURE__ */ React.createElement("select", { id: "peines-source", value: source, onChange: (e) => setSource(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les textes"), groupes.map((g) => /* @__PURE__ */ React.createElement("option", { key: g.source, value: g.source }, g.abrege ? `${g.abrege} \u2014 ` : "", g.source))), /* @__PURE__ */ React.createElement("select", { "aria-label": "Qualification", value: qualification, onChange: (e) => setQualification(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes qualifications"), ["contravention", "d\xE9lit", "crime", "sp\xE9ciale", "renvoi"].map((q) => /* @__PURE__ */ React.createElement("option", { key: q, value: q }, libelleQualification(q)))), filtre && /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => {
       setRecherche("");
       setSource("");
       setQualification("");
-    } }, "Effacer les filtres")), /* @__PURE__ */ React.createElement("p", { className: "codex-count", role: "status" }, pluriel(nbArticles, "article", "articles"), " \xB7 ", pluriel(nbNiveaux, "niveau", "niveaux"), " de peine"), !filtres.length && /* @__PURE__ */ React.createElement("p", { className: "peines-vide" }, "Aucun article du bar\xE8me ne correspond. Un article absent du bar\xE8me se sanctionne \xE0 l\u2019appr\xE9ciation de l\u2019autorit\xE9."), filtres.map((g) => /* @__PURE__ */ React.createElement("section", { className: "peines-source", key: g.source, "aria-labelledby": `peines-${g.source}` }, /* @__PURE__ */ React.createElement("h2", { className: "peines-source-titre", id: `peines-${g.source}` }, g.abrege && /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, g.abrege), g.source, /* @__PURE__ */ React.createElement("small", null, pluriel(g.articles.length, "article", "articles"))), /* @__PURE__ */ React.createElement("div", { className: "peines-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "peines-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Article"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Niveau"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Qualification"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Amende"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Cachot"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Rachat noble"))), g.articles.map((a) => /* @__PURE__ */ React.createElement("tbody", { key: a.cle, className: "peines-article" }, a.niveaux.map((n, i) => /* @__PURE__ */ React.createElement("tr", { key: n._index, className: `peines-niveau-${classeQualification(n.qualification)}` }, i === 0 && /* @__PURE__ */ React.createElement("th", { scope: "rowgroup", rowSpan: a.niveaux.length, className: "peines-article-cellule" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-link", onClick: () => lire(a), title: "Lire l\u2019article et son bar\xE8me" }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, a.article === "*" ? "Tout le texte" : `${g.abrege || ""} art. ${a.article}`.trim()), /* @__PURE__ */ React.createElement("span", { className: "peines-article-titre" }, a.article === "*" ? n.niveau : a.titre)), voirAnomalies && !a.codex && a.article !== "*" && codex && /* @__PURE__ */ React.createElement("span", { className: "peines-alerte" }, "Introuvable au Codex")), /* @__PURE__ */ React.createElement("td", { "data-label": "Niveau" }, /* @__PURE__ */ React.createElement("span", { className: "peines-niveau" }, n.niveau), n.complements && /* @__PURE__ */ React.createElement("span", { className: "peines-complement" }, n.complements), n.observations && /* @__PURE__ */ React.createElement("span", { className: "peines-observation" }, n.observations), voirAnomalies && n.avertissements.length > 0 && /* @__PURE__ */ React.createElement("span", { className: "peines-alerte", title: n.avertissements.join("\n") }, "\u26A0 ", n.avertissements[0], n.avertissements.length > 1 ? ` (+${n.avertissements.length - 1})` : "")), /* @__PURE__ */ React.createElement("td", { "data-label": "Qualification" }, /* @__PURE__ */ React.createElement(PuceQualification, { niveau: n })), /* @__PURE__ */ React.createElement("td", { "data-label": "Amende", className: "peines-montant" }, n._renvoi ? "\u2014" : n.amende ? formatSeptims(n.amende) : n._pm ? "Peine maximale" : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Cachot", className: "peines-montant" }, n.cachot ? formatDuree(n.cachot) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Rachat noble" }, /* @__PURE__ */ React.createElement(NobleNiveau, { niveau: n })))))))))), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, peines, onNavigate: (lu == null ? void 0 : lu.source) && articleParCle(codex, lu.source, lu.article) ? setLu : null, onOpenCodex: lu && articleParCle(codex, lu.source, lu.article) ? onOpenCodex : null }));
+    } }, "Effacer les filtres")), /* @__PURE__ */ React.createElement("p", { className: "codex-count", role: "status" }, pluriel2(nbArticles, "article", "articles"), " \xB7 ", pluriel2(nbNiveaux, "niveau", "niveaux"), " de peine"), !filtres.length && /* @__PURE__ */ React.createElement("p", { className: "peines-vide" }, "Aucun article du bar\xE8me ne correspond. Un article absent du bar\xE8me se sanctionne \xE0 l\u2019appr\xE9ciation de l\u2019autorit\xE9."), filtres.map((g) => /* @__PURE__ */ React.createElement("section", { className: "peines-source", key: g.source, "aria-labelledby": `peines-${g.source}` }, /* @__PURE__ */ React.createElement("h2", { className: "peines-source-titre", id: `peines-${g.source}` }, g.abrege && /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, g.abrege), g.source, /* @__PURE__ */ React.createElement("small", null, pluriel2(g.articles.length, "article", "articles"))), /* @__PURE__ */ React.createElement("div", { className: "peines-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "peines-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Article"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Niveau"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Qualification"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Amende"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Cachot"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Rachat noble"))), g.articles.map((a) => /* @__PURE__ */ React.createElement("tbody", { key: a.cle, className: "peines-article" }, a.niveaux.map((n, i) => /* @__PURE__ */ React.createElement("tr", { key: n._index, className: `peines-niveau-${classeQualification(n.qualification)}` }, i === 0 && /* @__PURE__ */ React.createElement("th", { scope: "rowgroup", rowSpan: a.niveaux.length, className: "peines-article-cellule" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "law-link", onClick: () => lire(a), title: "Lire l\u2019article et son bar\xE8me" }, /* @__PURE__ */ React.createElement("span", { className: "chef-ref" }, a.article === "*" ? "Tout le texte" : `${g.abrege || ""} art. ${a.article}`.trim()), /* @__PURE__ */ React.createElement("span", { className: "peines-article-titre" }, a.article === "*" ? n.niveau : a.titre)), voirAnomalies && !a.codex && a.article !== "*" && codex && /* @__PURE__ */ React.createElement("span", { className: "peines-alerte" }, "Introuvable au Codex")), /* @__PURE__ */ React.createElement("td", { "data-label": "Niveau" }, /* @__PURE__ */ React.createElement("span", { className: "peines-niveau" }, n.niveau), n.complements && /* @__PURE__ */ React.createElement("span", { className: "peines-complement" }, n.complements), n.observations && /* @__PURE__ */ React.createElement("span", { className: "peines-observation" }, n.observations), voirAnomalies && n.avertissements.length > 0 && /* @__PURE__ */ React.createElement("span", { className: "peines-alerte", title: n.avertissements.join("\n") }, "\u26A0 ", n.avertissements[0], n.avertissements.length > 1 ? ` (+${n.avertissements.length - 1})` : "")), /* @__PURE__ */ React.createElement("td", { "data-label": "Qualification" }, /* @__PURE__ */ React.createElement(PuceQualification, { niveau: n })), /* @__PURE__ */ React.createElement("td", { "data-label": "Amende", className: "peines-montant" }, n._renvoi ? "\u2014" : n.amende ? formatSeptims(n.amende) : n._pm ? "Peine maximale" : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Cachot", className: "peines-montant" }, n.cachot ? formatDuree(n.cachot) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Rachat noble" }, /* @__PURE__ */ React.createElement(NobleNiveau, { niveau: n })))))))))), /* @__PURE__ */ React.createElement(LawModal, { article: lu, onClose: () => setLu(null), codex, peines, onNavigate: (lu == null ? void 0 : lu.source) && articleParCle(codex, lu.source, lu.article) ? setLu : null, onOpenCodex: lu && articleParCle(codex, lu.source, lu.article) ? onOpenCodex : null }));
   }
   function PrincipesBareme({ grille }) {
     return /* @__PURE__ */ React.createElement("details", { className: "peines-principes" }, /* @__PURE__ */ React.createElement("summary", null, "Comment lire ce bar\xE8me \u2014 \xE9chelons, cumul, r\xE9cidive et noblesse"), /* @__PURE__ */ React.createElement("div", { className: "peines-principes-corps" }, /* @__PURE__ */ React.createElement("section", null, /* @__PURE__ */ React.createElement("h3", null, "\xC9chelons"), /* @__PURE__ */ React.createElement("div", { className: "peines-echelons-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "peines-echelons" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { scope: "col" }, "\xC9chelon"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Qualification"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Amende"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Cachot"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Rachat noble"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Articles"))), /* @__PURE__ */ React.createElement("tbody", null, grille.map((e) => /* @__PURE__ */ React.createElement("tr", { key: e.code }, /* @__PURE__ */ React.createElement("th", { scope: "row" }, e.code), /* @__PURE__ */ React.createElement("td", null, libelleQualification(e.qualification)), /* @__PURE__ */ React.createElement("td", null, e.amende ? formatSeptims(e.amende) : e.code === "PM" ? "Mort, bannissement" : "\u2014"), /* @__PURE__ */ React.createElement("td", null, e.cachot ? formatDuree(e.cachot) : "\u2014"), /* @__PURE__ */ React.createElement("td", null, e.nobiliaire ? formatSeptims(e.nobiliaire) : "\u2014"), /* @__PURE__ */ React.createElement("td", null, e.articles, e.ajustes > 0 && /* @__PURE__ */ React.createElement("span", { className: "peines-ajustes", title: "Niveaux dont les valeurs s\u2019\xE9cartent de l\u2019\xE9chelon" }, " \xB7 ", e.ajustes, " ajust\xE9", e.ajustes > 1 ? "s" : ""))))))), /* @__PURE__ */ React.createElement("p", { className: "peines-note" }, "Chaque article est rang\xE9 dans la fourchette de sa qualification selon la gravit\xE9 des faits. Le cachot ne vient qu\u2019aux d\xE9lits graves et aux crimes : la classification imp\xE9riale r\xE9serve l\u2019emprisonnement aux crimes.")), /* @__PURE__ */ React.createElement("section", null, /* @__PURE__ */ React.createElement("h3", null, "R\xE8gles d\u2019application"), /* @__PURE__ */ React.createElement("ul", { className: "peines-regles" }, /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Fourchettes imp\xE9riales."), " Contravention jusqu\u2019\xE0 500 septims, d\xE9lit de 500 \xE0 2 500, crime au-del\xE0 (Corpus Juriscivilis, principes g\xE9n\xE9raux)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Plusieurs chefs."), " Des faits distincts cumulent leurs peines ; un m\xEAme fait qualifi\xE9 par plusieurs textes n\u2019est puni qu\u2019une fois, selon la qualification la plus rigoureuse (Code p\xE9nal local, art. 3)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "R\xE9cidive."), " Peine encourue multipli\xE9e par deux, compt\xE9e depuis la derni\xE8re condamnation (Corpus Proceduralis)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Tentative et complicit\xE9."), " Punies comme l\u2019infraction consomm\xE9e et comme son auteur (Corpus Proceduralis)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Travaux."), " La classification imp\xE9riale admet des travaux l\xE9gers \xE0 la place d\u2019une amende contraventionnelle, des travaux forc\xE9s \xE0 la place d\u2019une amende d\xE9lictuelle."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Peine maximale."), " Mort ou bannissement d\xE9finitif et saisie des biens, prononc\xE9s seulement sur verdict public et motiv\xE9 du magistrat (Corpus Proceduralis, art. 11)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "R\xE9paration."), " La r\xE9paration du dommage due \xE0 la victime s\u2019ajoute \xE0 la peine (Code civil local, art. 18 et 19)."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Comp\xE9tence."), " Une autorit\xE9 imp\xE9riale peut se saisir d\u2019une infraction imp\xE9riale (Corpus Proceduralis, art. 1) ; le Codex Penitus rel\xE8ve des seules juridictions imp\xE9riales.")), /* @__PURE__ */ React.createElement("h3", null, "Noblesse \u2014 De Re Nobilitatis"), /* @__PURE__ */ React.createElement("ul", { className: "peines-regles" }, /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Art. 8."), " Une contravention ou un d\xE9lit isol\xE9 sur sept jours n\u2019est pas poursuivi : il faut une nouvelle infraction de m\xEAme nature dans ce d\xE9lai."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Art. 9."), " Une amende doit toujours \xEAtre propos\xE9e, sauf crime de sang : le cachot se rach\xE8te par l\u2019amende nobiliaire de chaque niveau."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Art. 10."), " Seuls l\u2019amende, le bannissement, l\u2019emprisonnement, la d\xE9ch\xE9ance et la mise \xE0 mort honorable s\u2019appliquent \xE0 un noble : pas de travaux forc\xE9s."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Art. 12."), " Emprisonnement, mise \xE0 mort et d\xE9ch\xE9ance exigent une d\xE9cision conjointe avec l\u2019autorit\xE9 souveraine du noble, Jarl ou consul."), /* @__PURE__ */ React.createElement("li", null, /* @__PURE__ */ React.createElement("strong", null, "Art. 4."), " Les manquements aux devoirs de la noblesse sont punis jusqu\u2019\xE0 5 000 septims, avec remboursement des sommes dues et bannissement.")))));
@@ -8103,7 +8466,7 @@ input.champ-impose {
     const total = anomalies.length + horsCodex.length;
     if (!total) return null;
     const ecartees = anomalies.filter((a) => a.grave).length;
-    return /* @__PURE__ */ React.createElement("details", { className: "peines-anomalies", open: ecartees > 0 }, /* @__PURE__ */ React.createElement("summary", null, "\u26A0 ", pluriel(total, "point", "points"), " \xE0 v\xE9rifier dans la feuille PeinesAmendes", ecartees ? ` \u2014 ${pluriel(ecartees, "ligne \xE9cart\xE9e", "lignes \xE9cart\xE9es")} des propositions` : ""), /* @__PURE__ */ React.createElement("ul", null, anomalies.map((a, i) => /* @__PURE__ */ React.createElement("li", { key: `a-${i}` }, /* @__PURE__ */ React.createElement("strong", null, "Ligne ", a.ligne), " \u2014 ", a.grave ? "\xE9cart\xE9e : " : "", a.message)), horsCodex.map((l) => /* @__PURE__ */ React.createElement("li", { key: `c-${l.ligne}` }, /* @__PURE__ */ React.createElement("strong", null, "Ligne ", l.ligne), " \u2014 ", l.article === "*" ? `source \xAB ${l.source} \xBB` : `${l.source}, art. ${l.article}`, " : introuvable au Codex. V\xE9rifiez le num\xE9ro ou le nom de la source, ou relancez la synchronisation du Codex."))), /* @__PURE__ */ React.createElement("p", null, "Une ligne \xE9cart\xE9e n\u2019est propos\xE9e nulle part ; une ligne avec un avertissement reste propos\xE9e telle quelle. La feuille se corrige dans Sheets."));
+    return /* @__PURE__ */ React.createElement("details", { className: "peines-anomalies", open: ecartees > 0 }, /* @__PURE__ */ React.createElement("summary", null, "\u26A0 ", pluriel2(total, "point", "points"), " \xE0 v\xE9rifier dans la feuille PeinesAmendes", ecartees ? ` \u2014 ${pluriel2(ecartees, "ligne \xE9cart\xE9e", "lignes \xE9cart\xE9es")} des propositions` : ""), /* @__PURE__ */ React.createElement("ul", null, anomalies.map((a, i) => /* @__PURE__ */ React.createElement("li", { key: `a-${i}` }, /* @__PURE__ */ React.createElement("strong", null, "Ligne ", a.ligne), " \u2014 ", a.grave ? "\xE9cart\xE9e : " : "", a.message)), horsCodex.map((l) => /* @__PURE__ */ React.createElement("li", { key: `c-${l.ligne}` }, /* @__PURE__ */ React.createElement("strong", null, "Ligne ", l.ligne), " \u2014 ", l.article === "*" ? `source \xAB ${l.source} \xBB` : `${l.source}, art. ${l.article}`, " : introuvable au Codex. V\xE9rifiez le num\xE9ro ou le nom de la source, ou relancez la synchronisation du Codex."))), /* @__PURE__ */ React.createElement("p", null, "Une ligne \xE9cart\xE9e n\u2019est propos\xE9e nulle part ; une ligne avec un avertissement reste propos\xE9e telle quelle. La feuille se corrige dans Sheets."));
   }
 
   // ui/src/brouillon.js
@@ -8239,7 +8602,7 @@ input.champ-impose {
   }
 
   // ui/src/saisies.jsx
-  var { useEffect: useEffect4, useRef: useRef4, useState: useState3 } = React;
+  var { useEffect: useEffect6, useRef: useRef6, useState: useState5 } = React;
   var objetsCourants = [
     { id: "skyrim.esm|00000F", nom: "Or", label: "Or (septims)" },
     { id: "skyrim.esm|00000A", nom: "Crochet", label: "Crochets" },
@@ -8265,20 +8628,20 @@ input.champ-impose {
     return existing ? items.map((item) => cleObjetSaisi(item) === key ? { ...item, quantite: total } : item) : [...items, { ...entree, quantite }];
   }
   function SaisiesField({ token, value, onChange, onPendingChange, disabled, serverCall: serverCall2, catalogue = null, titre = "Saisies sur la personne", masquerListe = false, aideLibre = "Le nom saisi sera conserv\xE9 avec cette incarc\xE9ration, sans ajout au catalogue." }) {
-    const [query, setQuery] = useState3("");
-    const [selected, setSelected] = useState3(null);
-    const [quantity, setQuantity] = useState3("1");
-    const [results, setResults] = useState3([]);
-    const [truncated, setTruncated] = useState3(false);
-    const [status, setStatus] = useState3("");
-    const [error, setError] = useState3("");
-    const [open, setOpen] = useState3(false);
-    const [active, setActive] = useState3(-1);
-    const [free, setFree] = useState3(false);
-    const version = useRef4(0);
-    const input = useRef4(null);
-    const quantityInput = useRef4(null);
-    useEffect4(() => {
+    const [query, setQuery] = useState5("");
+    const [selected, setSelected] = useState5(null);
+    const [quantity, setQuantity] = useState5("1");
+    const [results, setResults] = useState5([]);
+    const [truncated, setTruncated] = useState5(false);
+    const [status, setStatus] = useState5("");
+    const [error, setError] = useState5("");
+    const [open, setOpen] = useState5(false);
+    const [active, setActive] = useState5(-1);
+    const [free, setFree] = useState5(false);
+    const version = useRef6(0);
+    const input = useRef6(null);
+    const quantityInput = useRef6(null);
+    useEffect6(() => {
       const current = ++version.current;
       setResults([]);
       setActive(-1);
@@ -8384,11 +8747,11 @@ input.champ-impose {
         else if (selected || free) add();
       }
     }
-    useEffect4(() => {
+    useEffect6(() => {
       var _a, _b, _c;
       if (active >= 0 && open) (_c = (_b = (_a = input.current) == null ? void 0 : _a.ownerDocument.getElementById(`saisie-option-${active}`)) == null ? void 0 : _b.scrollIntoView) == null ? void 0 : _c.call(_b, { block: "nearest" });
     }, [active, open]);
-    useEffect4(() => {
+    useEffect6(() => {
       var _a;
       if (selected) (_a = quantityInput.current) == null ? void 0 : _a.focus();
     }, [selected]);
@@ -8492,7 +8855,7 @@ input.champ-impose {
   }
 
   // ui/src/inventaire.jsx
-  var { useEffect: useEffect5, useMemo: useMemo2, useRef: useRef5, useState: useState4 } = React;
+  var { useEffect: useEffect7, useMemo: useMemo3, useRef: useRef7, useState: useState6 } = React;
   var LIMITES_COFFRE = { nom: 100, position: 200, description: 1e3 };
   var SEUIL_AJUSTEMENT_MS = 600;
   var COFFRE_INCONNU = "Coffre inconnu";
@@ -8500,7 +8863,7 @@ input.champ-impose {
     return String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
   var nombre = (value) => Number(value || 0).toLocaleString("fr-FR");
-  var pluriel2 = (n, singulier, plurielForme) => `${nombre(n)} ${n > 1 ? plurielForme : singulier}`;
+  var pluriel3 = (n, singulier, plurielForme) => `${nombre(n)} ${n > 1 ? plurielForme : singulier}`;
   function coffresAffiches(data) {
     const connus = new Set(data.coffres.map((c) => c.id));
     const orphelins = /* @__PURE__ */ new Map();
@@ -8518,32 +8881,32 @@ input.champ-impose {
     return objets.filter((o) => (!coffreId || o.coffreId === coffreId) && termes.every((t) => normaliserTexte(`${o.nom} ${o.id}`).includes(t)));
   }
   function InventairePage({ token, canEdit, serverCall: serverCall2 }) {
-    const [data, setData] = useState4(null);
-    const [error, setError] = useState4("");
-    const [busy, setBusy] = useState4(false);
-    const [coffreFiltre, setCoffreFiltre] = useState4("");
-    const [recherche, setRecherche] = useState4("");
-    const [formCoffre, setFormCoffre] = useState4(null);
-    const [coffreAjout, setCoffreAjout] = useState4("");
-    const [ajoutOuvert, setAjoutOuvert] = useState4(false);
-    const [panier, setPanier] = useState4([]);
-    const [panierEnCours, setPanierEnCours] = useState4(false);
-    const [panierErreur, setPanierErreur] = useState4("");
-    const attente = useRef5({}), envoye = useRef5({}), minuteries = useRef5({});
-    const [ajustements, setAjustements] = useState4({});
+    const [data, setData] = useState6(null);
+    const [error, setError] = useState6("");
+    const [busy, setBusy] = useState6(false);
+    const [coffreFiltre, setCoffreFiltre] = useState6("");
+    const [recherche, setRecherche] = useState6("");
+    const [formCoffre, setFormCoffre] = useState6(null);
+    const [coffreAjout, setCoffreAjout] = useState6("");
+    const [ajoutOuvert, setAjoutOuvert] = useState6(false);
+    const [panier, setPanier] = useState6([]);
+    const [panierEnCours, setPanierEnCours] = useState6(false);
+    const [panierErreur, setPanierErreur] = useState6("");
+    const attente = useRef7({}), envoye = useRef7({}), minuteries = useRef7({});
+    const [ajustements, setAjustements] = useState6({});
     const refleterAjustements = () => {
       const suivant = {};
       for (const [cle, valeur] of Object.entries(attente.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       for (const [cle, valeur] of Object.entries(envoye.current)) suivant[cle] = (suivant[cle] || 0) + valeur;
       setAjustements(suivant);
     };
-    useEffect5(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
-    useEffect5(() => {
+    useEffect7(() => () => Object.values(minuteries.current).forEach(clearTimeout), []);
+    useEffect7(() => {
       serverCall2("getInventaire", token).then(setData).catch((e) => setError(e.message));
     }, []);
     const catalogue = useCatalogue(serverCall2, token, canEdit);
-    const coffres = useMemo2(() => data ? coffresAffiches(data) : [], [data]);
-    const visibles = useMemo2(() => data ? filtrerObjets(data.objets, coffreFiltre, recherche) : [], [data, coffreFiltre, recherche]);
+    const coffres = useMemo3(() => data ? coffresAffiches(data) : [], [data]);
+    const visibles = useMemo3(() => data ? filtrerObjets(data.objets, coffreFiltre, recherche) : [], [data, coffreFiltre, recherche]);
     const totalVisible = visibles.reduce((somme, o) => somme + o.quantite, 0);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, "Erreur de chargement de l\u2019inventaire : ", error);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de l\u2019inventaire...");
@@ -8633,7 +8996,7 @@ input.champ-impose {
     }
     return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Inventaire"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Ce que contiennent les coffres de la garde \xE0 Fort-Dragon, coffre par coffre.")), canEdit && /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: busy, onClick: () => {
       setFormCoffre(formCoffre && !formCoffre.id ? null : { nom: "", position: "", description: "" });
-    } }, formCoffre && !formCoffre.id ? "Fermer" : "+ Nouveau coffre")), !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent ranger, retirer ou d\xE9placer des objets."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), formCoffre && /* @__PURE__ */ React.createElement(CoffreForm, { coffre: formCoffre, busy, onCancel: () => setFormCoffre(null), onSubmit: enregistrerCoffre }), coffres.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, canEdit ? "Aucun coffre enregistr\xE9. Cr\xE9ez le premier coffre pour commencer l\u2019inventaire." : "Aucun coffre enregistr\xE9 pour le moment.") : /* @__PURE__ */ React.createElement("div", { className: "inventaire-coffres", role: "group", "aria-label": "Coffres" }, coffres.map((c) => /* @__PURE__ */ React.createElement("article", { key: c.id, className: `inventaire-coffre${coffreFiltre === c.id ? " actif" : ""}${c.inconnu ? " inventaire-coffre-inconnu" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "inventaire-coffre-selection", "aria-pressed": coffreFiltre === c.id, onClick: () => setCoffreFiltre(coffreFiltre === c.id ? "" : c.id) }, /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-nom" }, c.nom), c.position && /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-position" }, c.position), c.description && /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-description" }, c.description), /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-compte" }, c.nbObjets ? `${pluriel2(c.nbObjets, "objet", "objets")} \xB7 ${pluriel2(c.total, "exemplaire", "exemplaires")}` : "Vide")), canEdit && !c.inconnu && /* @__PURE__ */ React.createElement("div", { className: "inventaire-coffre-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy, onClick: () => setFormCoffre({ id: c.id, nom: c.nom, position: c.position, description: c.description }) }, "Modifier"))))), canEdit && coffresReels.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "form-card inventaire-ajout" }, /* @__PURE__ */ React.createElement("div", { className: "inventaire-ajout-entete" }, /* @__PURE__ */ React.createElement("h2", null, "Ranger un objet"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => setAjoutOuvert(!ajoutOuvert), "aria-expanded": ajoutOuvert }, ajoutOuvert ? "Replier" : "D\xE9plier")), ajoutOuvert && /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: busy }, /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-coffre-ajout" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-coffre-ajout", value: coffreAjout, onChange: (e) => setCoffreAjout(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom, c.position ? ` \u2014 ${c.position}` : "")))), /* @__PURE__ */ React.createElement(
+    } }, formCoffre && !formCoffre.id ? "Fermer" : "+ Nouveau coffre")), !canEdit && /* @__PURE__ */ React.createElement("div", { className: "readonly-notice" }, "\u{1F512} Consultation en lecture seule \u2014 seuls les officiers peuvent ranger, retirer ou d\xE9placer des objets."), error && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, error), formCoffre && /* @__PURE__ */ React.createElement(CoffreForm, { coffre: formCoffre, busy, onCancel: () => setFormCoffre(null), onSubmit: enregistrerCoffre }), coffres.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, canEdit ? "Aucun coffre enregistr\xE9. Cr\xE9ez le premier coffre pour commencer l\u2019inventaire." : "Aucun coffre enregistr\xE9 pour le moment.") : /* @__PURE__ */ React.createElement("div", { className: "inventaire-coffres", role: "group", "aria-label": "Coffres" }, coffres.map((c) => /* @__PURE__ */ React.createElement("article", { key: c.id, className: `inventaire-coffre${coffreFiltre === c.id ? " actif" : ""}${c.inconnu ? " inventaire-coffre-inconnu" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "inventaire-coffre-selection", "aria-pressed": coffreFiltre === c.id, onClick: () => setCoffreFiltre(coffreFiltre === c.id ? "" : c.id) }, /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-nom" }, c.nom), c.position && /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-position" }, c.position), c.description && /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-description" }, c.description), /* @__PURE__ */ React.createElement("span", { className: "inventaire-coffre-compte" }, c.nbObjets ? `${pluriel3(c.nbObjets, "objet", "objets")} \xB7 ${pluriel3(c.total, "exemplaire", "exemplaires")}` : "Vide")), canEdit && !c.inconnu && /* @__PURE__ */ React.createElement("div", { className: "inventaire-coffre-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy, onClick: () => setFormCoffre({ id: c.id, nom: c.nom, position: c.position, description: c.description }) }, "Modifier"))))), canEdit && coffresReels.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "form-card inventaire-ajout" }, /* @__PURE__ */ React.createElement("div", { className: "inventaire-ajout-entete" }, /* @__PURE__ */ React.createElement("h2", null, "Ranger un objet"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", onClick: () => setAjoutOuvert(!ajoutOuvert), "aria-expanded": ajoutOuvert }, ajoutOuvert ? "Replier" : "D\xE9plier")), ajoutOuvert && /* @__PURE__ */ React.createElement("fieldset", { className: "form-fieldset", disabled: busy }, /* @__PURE__ */ React.createElement("div", { className: "form-grid" }, /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-coffre-ajout" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-coffre-ajout", value: coffreAjout, onChange: (e) => setCoffreAjout(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom, c.position ? ` \u2014 ${c.position}` : "")))), /* @__PURE__ */ React.createElement(
       SaisiesField,
       {
         token,
@@ -8652,13 +9015,13 @@ input.champ-impose {
           setPanierErreur("");
         }
       }
-    )), panierErreur && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, panierErreur), /* @__PURE__ */ React.createElement("div", { className: "form-actions inventaire-panier-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: busy || !panier.length, onClick: rangerPanier }, busy ? "Rangement\u2026" : panier.length ? `Ranger ${pluriel2(panier.length, "objet", "objets")} \xB7 ${pluriel2(panierTotal, "exemplaire", "exemplaires")}${coffreAjout ? ` dans ${coffreLibelle(coffreAjout)}` : ""}` : "Ranger la liste"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy || !panier.length, onClick: () => {
+    )), panierErreur && /* @__PURE__ */ React.createElement("div", { className: "error", role: "alert" }, panierErreur), /* @__PURE__ */ React.createElement("div", { className: "form-actions inventaire-panier-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "primary-button", disabled: busy || !panier.length, onClick: rangerPanier }, busy ? "Rangement\u2026" : panier.length ? `Ranger ${pluriel3(panier.length, "objet", "objets")} \xB7 ${pluriel3(panierTotal, "exemplaire", "exemplaires")}${coffreAjout ? ` dans ${coffreLibelle(coffreAjout)}` : ""}` : "Ranger la liste"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: busy || !panier.length, onClick: () => {
       setPanier([]);
       setPanierErreur("");
-    } }, "Vider la liste")), /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Les objets s\u2019ajoutent \xE0 la liste sans appel au serveur ; \xAB Ranger \xBB les envoie tous en une seule requ\xEAte. Un objet d\xE9j\xE0 pr\xE9sent dans le coffre voit sa quantit\xE9 augmenter : il n\u2019y a jamais deux lignes pour le m\xEAme objet dans un m\xEAme coffre."))), /* @__PURE__ */ React.createElement("div", { className: "inventaire-filtres" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-filtre-coffre" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-filtre-coffre", value: coffreFiltre, onChange: (e) => setCoffreFiltre(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les coffres"), coffres.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))), /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-recherche" }, "Rechercher un objet"), /* @__PURE__ */ React.createElement("input", { id: "inventaire-recherche", type: "search", placeholder: "Nom ou ID\u2026", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("span", { className: "inventaire-compte", role: "status" }, visibles.length ? `${pluriel2(visibles.length, "objet", "objets")} \xB7 ${pluriel2(totalVisible, "exemplaire", "exemplaires")}` : "Aucun objet")), visibles.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, data.objets.length ? "Aucun objet ne correspond aux filtres." : "Les coffres sont vides.") : /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table inventaire-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Objet"), /* @__PURE__ */ React.createElement("th", null, "Quantit\xE9"), /* @__PURE__ */ React.createElement("th", null, "Coffre"), canEdit && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, visibles.map((o) => /* @__PURE__ */ React.createElement("tr", { key: `${o.coffreId}|${o.cle}` }, /* @__PURE__ */ React.createElement("td", { "data-label": "Objet" }, /* @__PURE__ */ React.createElement("strong", null, o.nom), /* @__PURE__ */ React.createElement("small", { className: "inventaire-objet-id" }, o.libre ? "Hors catalogue" : o.id)), /* @__PURE__ */ React.createElement("td", { "data-label": "Quantit\xE9" }, canEdit ? /* @__PURE__ */ React.createElement("span", { className: `inventaire-quantite${ajustements[cleLigne(o)] ? " inventaire-quantite-attente" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy || quantiteAffichee(o) <= 0, "aria-label": `Retirer un exemplaire de ${o.nom}`, onClick: () => cliquer(o, -1) }, "\u2212"), /* @__PURE__ */ React.createElement("strong", { "aria-live": "polite" }, nombre(quantiteAffichee(o))), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy, "aria-label": `Ajouter un exemplaire de ${o.nom}`, onClick: () => cliquer(o, 1) }, "+")) : /* @__PURE__ */ React.createElement("strong", null, nombre(o.quantite))), /* @__PURE__ */ React.createElement("td", { "data-label": "Coffre" }, canEdit ? /* @__PURE__ */ React.createElement("select", { "aria-label": `Coffre de ${o.nom}`, value: o.coffreId, disabled: busy || Boolean(ajustements[cleLigne(o)]), onChange: (e) => appeler("deplacerInventaire", { coffreId: o.coffreId, versCoffreId: e.target.value, objet: objetDe(o) }) }, !coffresReels.some((c) => c.id === o.coffreId) && /* @__PURE__ */ React.createElement("option", { value: o.coffreId }, COFFRE_INCONNU), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))) : coffreLibelle(o.coffreId)), canEdit && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "danger-button", disabled: busy || Boolean(ajustements[cleLigne(o)]), onClick: () => retirer(o) }, "Retirer")))))))));
+    } }, "Vider la liste")), /* @__PURE__ */ React.createElement("p", { className: "saisie-help" }, "Les objets s\u2019ajoutent \xE0 la liste sans appel au serveur ; \xAB Ranger \xBB les envoie tous en une seule requ\xEAte. Un objet d\xE9j\xE0 pr\xE9sent dans le coffre voit sa quantit\xE9 augmenter : il n\u2019y a jamais deux lignes pour le m\xEAme objet dans un m\xEAme coffre."))), /* @__PURE__ */ React.createElement("div", { className: "inventaire-filtres" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-filtre-coffre" }, "Coffre"), /* @__PURE__ */ React.createElement("select", { id: "inventaire-filtre-coffre", value: coffreFiltre, onChange: (e) => setCoffreFiltre(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous les coffres"), coffres.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))), /* @__PURE__ */ React.createElement("label", { htmlFor: "inventaire-recherche" }, "Rechercher un objet"), /* @__PURE__ */ React.createElement("input", { id: "inventaire-recherche", type: "search", placeholder: "Nom ou ID\u2026", value: recherche, onChange: (e) => setRecherche(e.target.value) }), /* @__PURE__ */ React.createElement("span", { className: "inventaire-compte", role: "status" }, visibles.length ? `${pluriel3(visibles.length, "objet", "objets")} \xB7 ${pluriel3(totalVisible, "exemplaire", "exemplaires")}` : "Aucun objet")), visibles.length === 0 ? /* @__PURE__ */ React.createElement("p", { className: "inventaire-vide" }, data.objets.length ? "Aucun objet ne correspond aux filtres." : "Les coffres sont vides.") : /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table inventaire-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Objet"), /* @__PURE__ */ React.createElement("th", null, "Quantit\xE9"), /* @__PURE__ */ React.createElement("th", null, "Coffre"), canEdit && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, visibles.map((o) => /* @__PURE__ */ React.createElement("tr", { key: `${o.coffreId}|${o.cle}` }, /* @__PURE__ */ React.createElement("td", { "data-label": "Objet" }, /* @__PURE__ */ React.createElement("strong", null, o.nom), /* @__PURE__ */ React.createElement("small", { className: "inventaire-objet-id" }, o.libre ? "Hors catalogue" : o.id)), /* @__PURE__ */ React.createElement("td", { "data-label": "Quantit\xE9" }, canEdit ? /* @__PURE__ */ React.createElement("span", { className: `inventaire-quantite${ajustements[cleLigne(o)] ? " inventaire-quantite-attente" : ""}` }, /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy || quantiteAffichee(o) <= 0, "aria-label": `Retirer un exemplaire de ${o.nom}`, onClick: () => cliquer(o, -1) }, "\u2212"), /* @__PURE__ */ React.createElement("strong", { "aria-live": "polite" }, nombre(quantiteAffichee(o))), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy, "aria-label": `Ajouter un exemplaire de ${o.nom}`, onClick: () => cliquer(o, 1) }, "+")) : /* @__PURE__ */ React.createElement("strong", null, nombre(o.quantite))), /* @__PURE__ */ React.createElement("td", { "data-label": "Coffre" }, canEdit ? /* @__PURE__ */ React.createElement("select", { "aria-label": `Coffre de ${o.nom}`, value: o.coffreId, disabled: busy || Boolean(ajustements[cleLigne(o)]), onChange: (e) => appeler("deplacerInventaire", { coffreId: o.coffreId, versCoffreId: e.target.value, objet: objetDe(o) }) }, !coffresReels.some((c) => c.id === o.coffreId) && /* @__PURE__ */ React.createElement("option", { value: o.coffreId }, COFFRE_INCONNU), coffresReels.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.nom))) : coffreLibelle(o.coffreId)), canEdit && /* @__PURE__ */ React.createElement("td", { "data-label": "Actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "danger-button", disabled: busy || Boolean(ajustements[cleLigne(o)]), onClick: () => retirer(o) }, "Retirer")))))))));
   }
   function CoffreForm({ coffre, busy, onSubmit, onCancel }) {
-    const [form, setForm] = useState4({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
+    const [form, setForm] = useState6({ nom: coffre.nom || "", position: coffre.position || "", description: coffre.description || "" });
     const champ = (cle, valeur) => setForm((precedent) => ({ ...precedent, [cle]: valeur }));
     return /* @__PURE__ */ React.createElement("form", { className: "form-card", onSubmit: (e) => {
       e.preventDefault();
@@ -8689,16 +9052,9 @@ input.champ-impose {
     return (events || []).filter((e) => Date.parse(e.date) >= now - CHANGE_MAX_AGE);
   }
 
-  // ui/src/corps.js
-  var NOMS_AFFICHES_CORPS = {};
-  var normaliser = (valeur) => String(valeur || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-  function libelleCorps(corps) {
-    return NOMS_AFFICHES_CORPS[normaliser(corps)] || corps;
-  }
-
   // ui/src/changes.jsx
-  var { createContext, useContext, useEffect: useEffect6, useMemo: useMemo3, useRef: useRef6, useState: useState5 } = React;
-  var ChangesContext = createContext({ events: [], seen: {}, mark: () => {
+  var { createContext: createContext2, useContext: useContext2, useEffect: useEffect8, useMemo: useMemo4, useRef: useRef8, useState: useState7 } = React;
+  var ChangesContext = createContext2({ events: [], seen: {}, mark: () => {
   } });
   var sessionSeen = {};
   var labels = { arrivee: "Arriv\xE9e", nom: "Nom", grade: "Grade", corps: "Mutation" };
@@ -8709,17 +9065,17 @@ input.champ-impose {
     return `${labels[change.type]} : ${nom(change.avant) || "Sans affectation"} \u2192 ${nom(change.apres) || "Sans affectation"}`;
   }
   function ChangesProvider({ data, children }) {
-    const [seen, setSeen] = useState5(() => {
+    const [seen, setSeen] = useState7(() => {
       try {
         return { ...sessionSeen, ...parseSeenChanges(localStorage.getItem(CHANGE_SEEN_KEY)) };
       } catch (e) {
         return sessionSeen;
       }
     });
-    const [storageFailed, setStorageFailed] = useState5(false);
-    const [now, setNow] = useState5(Date.now());
-    const events = useMemo3(() => recentChanges(data == null ? void 0 : data.events, now), [data, now]);
-    useEffect6(() => {
+    const [storageFailed, setStorageFailed] = useState7(false);
+    const [now, setNow] = useState7(Date.now());
+    const events = useMemo4(() => recentChanges(data == null ? void 0 : data.events, now), [data, now]);
+    useEffect8(() => {
       const timer = setInterval(() => setNow(Date.now()), 6e4);
       const sync = (e) => {
         if (e.key === CHANGE_SEEN_KEY) {
@@ -8752,17 +9108,17 @@ input.champ-impose {
     return /* @__PURE__ */ React.createElement(ChangesContext.Provider, { value: { events, seen, mark } }, storageFailed && /* @__PURE__ */ React.createElement("p", { className: "info-notice" }, "Le navigateur ne permet pas de conserver les \xE9l\xE9ments vus apr\xE8s fermeture. Ils restent m\xE9moris\xE9s pendant cette visite."), children);
   }
   function useMemberChanges(memberId) {
-    const { events, seen, mark } = useContext(ChangesContext);
+    const { events, seen, mark } = useContext2(ChangesContext);
     const items = events.filter((e) => e.memberId === memberId);
     const unread = items.filter((e) => !seen[e.id]);
-    const [open, setOpen] = useState5(false);
-    const timer = useRef6(null);
+    const [open, setOpen] = useState7(false);
+    const timer = useRef8(null);
     const signature = items.map((e) => e.id).join("|");
     function cancel() {
       clearTimeout(timer.current);
       timer.current = null;
     }
-    useEffect6(() => {
+    useEffect8(() => {
       cancel();
       setOpen(false);
       return cancel;
@@ -8818,7 +9174,7 @@ input.champ-impose {
     ), change.open && /* @__PURE__ */ React.createElement("span", { className: "change-details" }, change.items.map((event) => /* @__PURE__ */ React.createElement("span", { className: "change-detail", key: event.id }, /* @__PURE__ */ React.createElement("span", null, event.changes.map((c) => describe(c)).join(" \xB7 ")), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date }))))));
   }
   function ChangesCount({ people, corps }) {
-    const { events, seen } = useContext(ChangesContext);
+    const { events, seen } = useContext2(ChangesContext);
     const ids = people ? new Set(people.map((p) => p.memberId)) : null;
     const count = new Set(events.filter(
       (e) => !seen[e.id] && (!ids || ids.has(e.memberId)) && (corps === void 0 || e.corps === corps)
@@ -8826,12 +9182,12 @@ input.champ-impose {
     return count ? /* @__PURE__ */ React.createElement("span", { className: "changes-count" }, count, " nouveaut\xE9", count > 1 ? "s" : "") : null;
   }
   function RecentChanges({ onRefresh }) {
-    const { events, seen, mark } = useContext(ChangesContext);
-    const [type, setType] = useState5("");
-    const [onlyUnread, setOnlyUnread] = useState5(false);
-    const [search, setSearch] = useState5("");
-    const [refreshing, setRefreshing] = useState5(false);
-    const [error, setError] = useState5("");
+    const { events, seen, mark } = useContext2(ChangesContext);
+    const [type, setType] = useState7("");
+    const [onlyUnread, setOnlyUnread] = useState7(false);
+    const [search, setSearch] = useState7("");
+    const [refreshing, setRefreshing] = useState7(false);
+    const [error, setError] = useState7("");
     const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const filtered = events.filter((e) => (!type || e.changes.some((c) => c.type === type)) && (!onlyUnread || !seen[e.id]) && normalize(`${e.nom} ${e.corps} ${libelleCorps(e.corps)}`).includes(normalize(search.trim())));
     const unread = events.filter((e) => !seen[e.id]);
@@ -8845,7 +9201,7 @@ input.champ-impose {
       } finally {
         setRefreshing(false);
       }
-    } }, refreshing ? "Actualisation\u2026" : "Actualiser"), /* @__PURE__ */ React.createElement("label", null, "Type ", /* @__PURE__ */ React.createElement("select", { value: type, onChange: (e) => setType(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous"), Object.entries(labels).map(([key, label]) => /* @__PURE__ */ React.createElement("option", { value: key, key }, label)))), /* @__PURE__ */ React.createElement("label", null, "Personne ou corps ", /* @__PURE__ */ React.createElement("input", { type: "search", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: onlyUnread, onChange: (e) => setOnlyUnread(e.target.checked) }), " Non vus uniquement"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !unread.length, onClick: () => mark(unread) }, "Tout marquer comme vu")), error && /* @__PURE__ */ React.createElement("p", { className: "error", role: "alert" }, error), !filtered.length && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucun changement r\xE9cent ne correspond \xE0 cette s\xE9lection."), /* @__PURE__ */ React.createElement("ol", { className: "changes-list" }, filtered.map((event) => /* @__PURE__ */ React.createElement("li", { key: event.id }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, event.nom), " ", /* @__PURE__ */ React.createElement("span", null, libelleCorps(event.corps)), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date })), event.changes.map((change, i) => /* @__PURE__ */ React.createElement("div", { key: i }, describe(change)))), /* @__PURE__ */ React.createElement(
+    } }, refreshing ? "Actualisation\u2026" : "Actualiser"), /* @__PURE__ */ React.createElement("label", null, "Type ", /* @__PURE__ */ React.createElement("select", { value: type, onChange: (e) => setType(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tous"), Object.entries(labels).map(([key, label]) => /* @__PURE__ */ React.createElement("option", { value: key, key }, label)))), /* @__PURE__ */ React.createElement("label", null, "Personne ou corps ", /* @__PURE__ */ React.createElement("input", { type: "search", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ React.createElement("label", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: onlyUnread, onChange: (e) => setOnlyUnread(e.target.checked) }), " Non vus uniquement"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "secondary-button", disabled: !unread.length, onClick: () => mark(unread) }, "Tout marquer comme vu")), error && /* @__PURE__ */ React.createElement("p", { className: "error", role: "alert" }, error), !filtered.length && /* @__PURE__ */ React.createElement("p", { role: "status" }, "Aucun changement r\xE9cent ne correspond \xE0 cette s\xE9lection."), /* @__PURE__ */ React.createElement("ol", { className: "changes-list" }, filtered.map((event) => /* @__PURE__ */ React.createElement("li", { key: event.id }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement(NomEffectif, { nom: event.nom, membre: event.memberId })), " ", /* @__PURE__ */ React.createElement("span", null, libelleCorps(event.corps)), /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: event.date })), event.changes.map((change, i) => /* @__PURE__ */ React.createElement("div", { key: i }, describe(change)))), /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -8855,126 +9211,6 @@ input.champ-impose {
       },
       seen[event.id] ? "Vu" : "Marquer comme vu"
     ))))));
-  }
-
-  // ui/src/grades.jsx
-  var { useEffect: useEffect7, useId, useRef: useRef7, useState: useState6 } = React;
-  var cleGrade = (value) => String(value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
-  var DESCRIPTIONS = {
-    jarl: "Moyenne noblesse. D\xE9tient le pouvoir judiciaire de la ch\xE2tellerie.",
-    huscarl: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
-    huscarldeblancherive: "Garde personnel du Jarl, li\xE9 \xE0 lui par serment. Grade \xE0 part, sous son autorit\xE9 directe.",
-    marechal: "Petite noblesse, si\xE8ge \xE0 la haute cour de la ch\xE2tellerie. Orchestre les affaires militaires et celles de la garde.",
-    commander: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
-    commandant: "Commandant en chef des arm\xE9es et de la garde de Blancherive. Supervise les garnisons et les corps de garde.",
-    major: "Seconde le Commander dans l'exercice de la garde et des affaires militaires de Blancherive.",
-    capitaine: "Commande un corps de garde ou une garnison dans l'exercice de la garde et des arm\xE9es.",
-    lieutenantchef: "Seconde le capitaine de corps ou de garnison dans son exercice.",
-    lieutenant: "Commande des patrouilles et seconde le commandement du corps ou de la garnison. Intendant de son corps ou de sa garnison.",
-    sergentchef: "Commande des patrouilles, veille au respect du r\xE8glement et aide \xE0 l'intendance journali\xE8re du corps ou de la garnison.",
-    sergent: "Seconde le sergent-chef.",
-    caporalchef: "Commande des bin\xF4mes ou trin\xF4mes de patrouille, ou un d\xE9tachement d'une patrouille plus large, au sein du corps ou de la garnison. Veille \xE0 la remont\xE9e d'information dans la hi\xE9rarchie, accompagne et observe les recrues et les cadets.",
-    caporal: "Commande des bin\xF4mes ou trin\xF4mes. Veille \xE0 la remont\xE9e d'information dans la hi\xE9rarchie, accompagne et observe les recrues et les cadets.",
-    garde: "Garde de la ch\xE2tellerie.",
-    cadet: "Garde en formation de la ch\xE2tellerie. Asserment\xE9, mais ne peut exercer son pouvoir sans l'accompagnement d'un garde.",
-    recrue: "Prospect de la garde, en tenue civile. Non asserment\xE9, mis \xE0 l'\xE9preuve par les gardes."
-  };
-  var VARIANTES = {
-    commandementLocal: "Supervise les garnisons locales des deux thaneries."
-  };
-  function descriptionGrade(grade, variante) {
-    if (variante && VARIANTES[variante]) return VARIANTES[variante];
-    const cle = cleGrade(grade).replace(/s$/, "");
-    return DESCRIPTIONS[cle] || DESCRIPTIONS[cleGrade(grade)] || "";
-  }
-  function GradeDescription({ grade, variante }) {
-    const texte = descriptionGrade(grade, variante);
-    if (!texte) return null;
-    return /* @__PURE__ */ React.createElement("p", { className: "grade-description" }, texte);
-  }
-  function GradeInfo({ grade, variante }) {
-    const texte = descriptionGrade(grade, variante);
-    const [open, setOpen] = useState6(false);
-    const wrap = useRef7(null);
-    const id = useId();
-    useEffect7(() => {
-      if (!open) return void 0;
-      const dehors = (event) => {
-        var _a;
-        if (!((_a = wrap.current) == null ? void 0 : _a.contains(event.target))) setOpen(false);
-      };
-      const touches = (event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          setOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", dehors);
-      document.addEventListener("keydown", touches);
-      return () => {
-        document.removeEventListener("mousedown", dehors);
-        document.removeEventListener("keydown", touches);
-      };
-    }, [open]);
-    if (!texte) return null;
-    return /* @__PURE__ */ React.createElement("span", { className: "grade-info", ref: wrap }, /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "grade-info-button",
-        "aria-expanded": open,
-        "aria-controls": open ? id : void 0,
-        "aria-label": `R\xF4le du grade ${grade}`,
-        onClick: (event) => {
-          event.stopPropagation();
-          setOpen((value) => !value);
-        }
-      },
-      "\u24D8"
-    ), open && /* @__PURE__ */ React.createElement("span", { className: "grade-info-panel", id, role: "note" }, texte));
-  }
-
-  // ui/src/semaine.js
-  var LUNDI_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
-  function parserLundi(lundi) {
-    const match = LUNDI_REGEX.exec(String(lundi || "").trim());
-    if (!match) return null;
-    const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
-    const pad2 = (value) => String(value).padStart(2, "0");
-    const retour = `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`;
-    return retour === match[0] ? date : null;
-  }
-  function semaineIso(lundi) {
-    const date = parserLundi(lundi);
-    if (!date) return null;
-    const jeudi = new Date(date.getTime() + 3 * 864e5);
-    const annee = jeudi.getUTCFullYear();
-    const ordinal = Math.floor((jeudi.getTime() - Date.UTC(annee, 0, 1)) / 864e5) + 1;
-    return { annee, semaine: Math.floor((ordinal - 1) / 7) + 1 };
-  }
-  function numeroSemaine(lundi) {
-    const iso = semaineIso(lundi);
-    return iso ? iso.semaine : null;
-  }
-  function libelleSemaine(lundi) {
-    const numero = numeroSemaine(lundi);
-    return numero === null ? String(lundi || "") : `Semaine ${numero}`;
-  }
-  function dateLundi(lundi) {
-    const date = parserLundi(lundi);
-    if (!date) return "";
-    const pad2 = (value) => String(value).padStart(2, "0");
-    return `${pad2(date.getUTCDate())}/${pad2(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`;
-  }
-  function titreSemaine(lundi) {
-    const date = dateLundi(lundi);
-    return date ? `${libelleSemaine(lundi)} \xB7 du ${date}` : libelleSemaine(lundi);
-  }
-  function comparerLundisDecroissant(a, b) {
-    const lundiA = parserLundi(a) !== null;
-    const lundiB = parserLundi(b) !== null;
-    if (lundiA !== lundiB) return lundiA ? -1 : 1;
-    return String(b || "").localeCompare(String(a || ""));
   }
 
   // ui/src/discord.js
@@ -9042,10 +9278,10 @@ input.champ-impose {
   }
 
   // ui/src/discord.jsx
-  var { useId: useId2, useState: useState7 } = React;
+  var { useId: useId2, useState: useState8 } = React;
   function CompteDiscordField({ value, onChange, discord, rattaches, memberId, anomalie = "", disabled = false }) {
     const idChamp = useId2();
-    const [recherche, setRecherche] = useState7("");
+    const [recherche, setRecherche] = useState8("");
     const membre = value ? membreDiscordParId(discord.membres, value) : null;
     const suggestions = value ? [] : suggestionsDiscord(discord.membres, recherche);
     function choisir(id) {
@@ -9059,85 +9295,8 @@ input.champ-impose {
     })), recherche.trim() && !suggestions.length && discord.statut === "pret" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Aucun membre du serveur ne correspond.")), anomalie && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur", role: "alert" }, anomalie), discord.statut === "chargement" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide" }, "Chargement des membres du serveur\u2026"), discord.statut === "erreur" && /* @__PURE__ */ React.createElement("small", { className: "compte-discord-aide compte-discord-erreur" }, discord.erreur, " ", /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger() }, "R\xE9essayer")), discord.statut === "pret" && !value && /* @__PURE__ */ React.createElement("button", { type: "button", className: "compte-discord-lien", onClick: () => discord.charger(true) }, "Actualiser la liste du serveur"));
   }
 
-  // ui/src/livret.jsx
-  var { useEffect: useEffect8, useState: useState8 } = React;
-  var JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-  function septims(valeur) {
-    const n = Number(valeur) || 0;
-    return `${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n) > 1 ? "s" : ""}`;
-  }
-  function pluriel3(n, singulier, plurielForme = singulier + "s") {
-    return `${new Intl.NumberFormat("fr-FR").format(Number(n) || 0)} ${Math.abs(Number(n) || 0) > 1 ? plurielForme : singulier}`;
-  }
-  function libelleEvenement(evenement) {
-    if (evenement.type === "grade") {
-      return `\xC9lev\xE9 au grade de ${evenement.apres}${evenement.avant ? `, auparavant ${evenement.avant}` : ""}`;
-    }
-    if (evenement.type === "corps") {
-      return `Affect\xE9 \xE0 ${libelleCorps(evenement.apres)}${evenement.avant ? `, venant de ${libelleCorps(evenement.avant)}` : ""}`;
-    }
-    if (evenement.type === "arrivee") return "Inscription au registre de la Garde";
-    if (evenement.type === "nom") return `Nom chang\xE9 en ${evenement.apres}, auparavant ${evenement.avant}`;
-    return evenement.apres || evenement.type;
-  }
-  function depuisJours(n) {
-    if (n === null || n === void 0) return "";
-    if (n <= 0) return "aujourd\u2019hui";
-    if (n === 1) return "hier";
-    return `il y a ${n} jours`;
-  }
-  function Section({ titre, sousTitre, children }) {
-    return /* @__PURE__ */ React.createElement("section", { className: "livret-section" }, /* @__PURE__ */ React.createElement("header", { className: "livret-section-entete" }, /* @__PURE__ */ React.createElement("h2", null, titre), sousTitre && /* @__PURE__ */ React.createElement("p", null, sousTitre)), children);
-  }
-  function Tuile({ valeur, libelle, detail }) {
-    return /* @__PURE__ */ React.createElement("div", { className: "livret-tuile" }, /* @__PURE__ */ React.createElement("strong", null, valeur), /* @__PURE__ */ React.createElement("span", null, libelle), detail && /* @__PURE__ */ React.createElement("small", null, detail));
-  }
-  function Personne({ personne }) {
-    return /* @__PURE__ */ React.createElement("li", { className: "livret-personne" }, /* @__PURE__ */ React.createElement("span", { className: "livret-personne-grade" }, personne.grade), /* @__PURE__ */ React.createElement("span", { className: "livret-personne-nom" }, personne.nomComplet));
-  }
-  function Solde({ s, grade }) {
-    if (s.exclu) {
-      const cle = String(grade || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const qui = cle === "jarl" ? "Le Jarl" : cle.startsWith("regent") ? "Le R\xE9gent imp\xE9rial" : "Le Hird du Jarl";
-      return /* @__PURE__ */ React.createElement(Section, { titre: "Solde" }, /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, qui, " n\u2019est pas sold\xE9 par le registre de la Garde."));
-    }
-    const courante = s.semaineCourante;
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Solde", sousTitre: titreSemaine(s.lundiCourant) }, /* @__PURE__ */ React.createElement("div", { className: "livret-semaine", "aria-label": "Jours de service de la semaine en cours" }, JOURS.map((jour, i) => {
-      var _a;
-      const present = Boolean((_a = courante == null ? void 0 : courante.jours) == null ? void 0 : _a[i]);
-      return /* @__PURE__ */ React.createElement("div", { key: jour, className: `livret-jour ${present ? "is-present" : ""}` }, /* @__PURE__ */ React.createElement("span", null, jour), /* @__PURE__ */ React.createElement("strong", { "aria-label": present ? "en service" : "absent" }, present ? "\u2713" : "\xB7"));
-    })), /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, courante ? /* @__PURE__ */ React.createElement(React.Fragment, null, pluriel3(courante.joursPresents, "jour"), " de service cette semaine \xB7 ", /* @__PURE__ */ React.createElement("strong", null, septims(courante.solde)), " \xE0 recevoir de ", courante.financeur) : "Aucun pointage cette semaine."), /* @__PURE__ */ React.createElement("h3", null, "Soldes en attente"), s.enAttente.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, s.enAttente.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.lundi }, /* @__PURE__ */ React.createElement("span", null, titreSemaine(e.lundi), /* @__PURE__ */ React.createElement("small", null, pluriel3(e.joursPresents, "jour"), " \xB7 ", e.financeur)), /* @__PURE__ */ React.createElement("strong", null, septims(e.solde))))), /* @__PURE__ */ React.createElement("p", { className: "livret-total" }, "\xC0 r\xE9clamer : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalEnAttente)))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune solde en attente : vous \xEAtes \xE0 jour."), /* @__PURE__ */ React.createElement("p", { className: "livret-percu" }, "Soldes per\xE7ues : ", /* @__PURE__ */ React.createElement("strong", null, septims(s.totalPercu)), s.derniereSemaineReglee && /* @__PURE__ */ React.createElement(React.Fragment, null, " \xB7 derni\xE8re semaine r\xE9gl\xE9e : ", titreSemaine(s.derniereSemaineReglee))));
-  }
-  function Service({ s }) {
-    if (s.exclu) return null;
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Service" }, /* @__PURE__ */ React.createElement("div", { className: "livret-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: s.joursTotal, libelle: "jours de service" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.semainesServies, libelle: "semaines servies" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: new Intl.NumberFormat("fr-FR").format(s.moyenne), libelle: "jours par semaine", detail: "en moyenne" }), /* @__PURE__ */ React.createElement(Tuile, { valeur: s.serie, libelle: s.serie > 1 ? "semaines de suite" : "semaine de suite", detail: "s\xE9rie en cours" })), /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, "Dernier service : ", s.dernierJour ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(DateRP, { value: s.dernierJour, heure: false }), " (", depuisJours(s.joursDepuis), ")") : "aucun service enregistr\xE9."));
-  }
-  function Justice({ j }) {
-    const a = j.amendes, p = j.prison;
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Justice" }, /* @__PURE__ */ React.createElement("div", { className: "livret-tuiles" }, /* @__PURE__ */ React.createElement(Tuile, { valeur: a.nombre, libelle: a.nombre > 1 ? "amendes dress\xE9es" : "amende dress\xE9e", detail: septims(a.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aEncaisser.nombre, libelle: "\xE0 encaisser", detail: `${septims(a.aEncaisser.total)}${a.aEncaisser.aDeterminer ? ` \xB7 ${a.aEncaisser.aDeterminer} \xE0 d\xE9terminer` : ""}` }), /* @__PURE__ */ React.createElement(Tuile, { valeur: a.aReverser.nombre, libelle: "\xE0 reverser", detail: septims(a.aReverser.total) }), /* @__PURE__ */ React.createElement(Tuile, { valeur: p.nombre, libelle: p.nombre > 1 ? "incarc\xE9rations" : "incarc\xE9ration" })), p.enCellule.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Encore en cellule"), /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, p.enCellule.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.detenu, /* @__PURE__ */ React.createElement("small", null, "Cellule ", d.cellule || "?", " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("small", null, d.sortie ? /* @__PURE__ */ React.createElement(React.Fragment, null, "sortie pr\xE9vue ", /* @__PURE__ */ React.createElement(DateRP, { value: d.sortie })) : "dur\xE9e \xE0 d\xE9terminer"))))), /* @__PURE__ */ React.createElement("h3", null, "Derni\xE8res amendes"), a.dernieres.length ? /* @__PURE__ */ React.createElement("ul", { className: "livret-liste" }, a.dernieres.map((d, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement("span", null, d.contrevenant, /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement(DateRP, { value: d.date, jour: false, heure: false }), " \xB7 ", d.infraction)), /* @__PURE__ */ React.createElement("span", { className: "livret-amende-etat" }, /* @__PURE__ */ React.createElement("strong", null, d.montant === null ? "\xC0 d\xE9terminer" : septims(d.montant)), /* @__PURE__ */ React.createElement("small", null, d.reverse ? "Revers\xE9e" : d.paye ? "Pay\xE9e, \xE0 reverser" : "\xC0 encaisser"))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune amende dress\xE9e."));
-  }
-  function Commandement({ cmd }) {
-    var _a, _b;
-    const regence = ((_a = cmd.jarl) == null ? void 0 : _a.length) > 0 && cmd.jarl.every((p) => String(p.grade || "").trim().toLowerCase() !== "jarl");
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Cha\xEEne de commandement" }, cmd.corps.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "Dans votre corps"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.corps.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucun officier au-dessus de vous dans votre corps."), cmd.etatMajor.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.etatMajor.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))), ((_b = cmd.jarl) == null ? void 0 : _b.length) > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h3", null, regence ? "R\xE9gence imp\xE9riale" : "Jarl"), /* @__PURE__ */ React.createElement("ul", { className: "livret-personnes" }, cmd.jarl.map((p) => /* @__PURE__ */ React.createElement(Personne, { key: p.nomComplet, personne: p })))));
-  }
-  function Carriere({ c }) {
-    return /* @__PURE__ */ React.createElement(Section, { titre: "Carri\xE8re" }, /* @__PURE__ */ React.createElement("p", { className: "livret-ligne-solde" }, c.avantJournal ? "D\xE9j\xE0 au service de la Garde \xE0 l\u2019ouverture du registre, en septembre 2026." : c.inscription ? /* @__PURE__ */ React.createElement(React.Fragment, null, "Inscrit au registre le ", /* @__PURE__ */ React.createElement(DateRP, { value: c.inscription, heure: false }), ".") : "Inscription non retrouv\xE9e au journal des Effectifs."), c.evenements.length ? /* @__PURE__ */ React.createElement("ol", { className: "livret-carriere" }, c.evenements.map((e, i) => /* @__PURE__ */ React.createElement("li", { key: i }, /* @__PURE__ */ React.createElement(DateRP, { value: e.date, heure: false }), /* @__PURE__ */ React.createElement("span", null, libelleEvenement(e))))) : /* @__PURE__ */ React.createElement("p", { className: "livret-vide" }, "Aucune promotion ni mutation depuis l\u2019ouverture du journal."));
-  }
-  function LivretPage({ token, serverCall: serverCall2 }) {
-    const [data, setData] = useState8(null);
-    const [erreur, setErreur] = useState8("");
-    useEffect8(() => {
-      serverCall2("getLivretService", token).then(setData).catch((e) => setErreur(e.message));
-    }, []);
-    if (erreur) return /* @__PURE__ */ React.createElement("div", { className: "error" }, erreur);
-    if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Ouverture du livret de service\u2026");
-    const { fiche, service: s, justice: j, carriere: c, commandement: cmd } = data;
-    return /* @__PURE__ */ React.createElement("div", { className: "livret-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header livret-entete" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "eyebrow" }, "Livret de service"), /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, fiche.nomComplet), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, fiche.grade, " \xB7 ", libelleCorps(fiche.corps), fiche.specialite ? ` \xB7 ${fiche.specialite}` : "")), /* @__PURE__ */ React.createElement("div", { className: "livret-badges" }, /* @__PURE__ */ React.createElement("span", { className: "effectif-badge" }, fiche.statut || "Sans statut"), /* @__PURE__ */ React.createElement("span", { className: `effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}` }, fiche.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"))), /* @__PURE__ */ React.createElement(GradeDescription, { grade: fiche.grade }), s.inactif && /* @__PURE__ */ React.createElement("div", { className: "livret-alerte", role: "status" }, s.joursDepuis === null ? "Aucun jour de service enregistr\xE9 \xE0 votre nom." : `Aucun service depuis ${s.joursDepuis} jours : au-del\xE0 de ${s.seuilInactivite}, votre nom remonte au tableau des officiers.`), /* @__PURE__ */ React.createElement("div", { className: "livret-grille" }, /* @__PURE__ */ React.createElement(Solde, { s, grade: fiche.grade }), /* @__PURE__ */ React.createElement(Service, { s }), /* @__PURE__ */ React.createElement(Justice, { j }), /* @__PURE__ */ React.createElement(Commandement, { cmd }), /* @__PURE__ */ React.createElement(Carriere, { c })));
-  }
-
   // ui/src/app.jsx
-  var { useContext: useContext2, useEffect: useEffect9, useMemo: useMemo4, useRef: useRef8, useState: useState9 } = React;
+  var { useContext: useContext3, useEffect: useEffect9, useMemo: useMemo5, useRef: useRef9, useState: useState9 } = React;
   var MoiContext = React.createContext("");
   var CLE_JETON = "guardAuthToken";
   function lireJeton() {
@@ -9222,7 +9381,6 @@ input.champ-impose {
         setRole(i.role);
         setNom(i.nom || "");
         if (i.role === ROLE_PUBLIC) setPage("codex");
-        else if (i.nom && (i.role === "GARDE" || i.role === "OFFICIER")) setPage("livret");
       }).catch(logout);
     }, [token]);
     useEffect9(() => {
@@ -9259,7 +9417,7 @@ input.champ-impose {
       setToken(t);
     } });
     if (!role) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement...");
-    return /* @__PURE__ */ React.createElement(MoiContext.Provider, { value: nom }, /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "livret" && nom && (role === "GARDE" || role === "OFFICIER") && /* @__PURE__ */ React.createElement(LivretPage, { token, serverCall }), page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
+    const registre = /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("a", { className: "skip-link", href: "#main-content" }, "Aller au contenu"), /* @__PURE__ */ React.createElement(Header, { role, nom, page, onPage: setPage, onLogout: logout }), /* @__PURE__ */ React.createElement("main", { className: "content", id: "main-content", tabIndex: -1 }, page === "organigramme" && !publicSeulement && /* @__PURE__ */ React.createElement(OrganigrammePage, { token }), page === "effectifs" && role === "OFFICIER" && /* @__PURE__ */ React.createElement(EffectifsPage, { token }), page === "presences" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PresencesPage, { token, canEdit: role === "OFFICIER" }), page === "paye" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PayePage, { token, canRegler: role === "OFFICIER" }), page === "inventaire" && (role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(InventairePage, { token, canEdit: role === "OFFICIER", serverCall }), page === "codex" && ["GARDE", "OFFICIER", "INTENDANT", ROLE_PUBLIC].includes(role) && /* @__PURE__ */ React.createElement(CodexPage, { token, focusArticle: codexFocus, onFocusConsumed: () => setCodexFocus(null), peinesActif: !publicSeulement }), page === "peines" && (role === "GARDE" || role === "OFFICIER" || intendantSeulement) && /* @__PURE__ */ React.createElement(PeinesPage, { token, serverCall, voirAnomalies: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
     } }), page === "amendes" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(AmendesPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
@@ -9268,7 +9426,8 @@ input.champ-impose {
     } }), page === "prison" && !publicSeulement && !intendantSeulement && /* @__PURE__ */ React.createElement(PrisonPage, { token, canDelete: role === "OFFICIER", onOpenCodex: (a) => {
       setCodexFocus(a);
       setPage("codex");
-    } }), /* @__PURE__ */ React.createElement("footer", { className: "registry-footer" }, /* @__PURE__ */ React.createElement("span", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("a", { href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197")))));
+    } }), /* @__PURE__ */ React.createElement("footer", { className: "registry-footer" }, /* @__PURE__ */ React.createElement("span", null, "Garde de Blancherive"), /* @__PURE__ */ React.createElement("a", { href: "https://registre-imperial.lovable.app/", target: "_blank", rel: "noopener noreferrer" }, "Registre imp\xE9rial \u2197"))));
+    return /* @__PURE__ */ React.createElement(MoiContext.Provider, { value: nom }, publicSeulement ? registre : /* @__PURE__ */ React.createElement(FicheProvider, { token, serverCall }, registre));
   }
   function effectifsAccent(style) {
     return { "--member-accent": (style == null ? void 0 : style.background) || "#ae8a4a" };
@@ -9281,7 +9440,7 @@ input.champ-impose {
     const [error, setError] = useState9("");
     const [success, setSuccess] = useState9("");
     const discord = useMembresDiscord(serverCall, token);
-    const rattaches = useMemo4(() => comptesRattaches(data == null ? void 0 : data.rows), [data]);
+    const rattaches = useMemo5(() => comptesRattaches(data == null ? void 0 : data.rows), [data]);
     useEffect9(() => {
       serverCall(
         "getEffectifs",
@@ -9292,7 +9451,7 @@ input.champ-impose {
         )
       );
     }, []);
-    const activeRows = useMemo4(() => {
+    const activeRows = useMemo5(() => {
       if (!data) {
         return [];
       }
@@ -9300,7 +9459,7 @@ input.champ-impose {
         (member) => !member.terminalGroup
       );
     }, [data]);
-    const terminalRows = useMemo4(() => {
+    const terminalRows = useMemo5(() => {
       if (!data) {
         return [];
       }
@@ -9310,7 +9469,7 @@ input.champ-impose {
         )
       );
     }, [data]);
-    const corpsTabs = useMemo4(() => {
+    const corpsTabs = useMemo5(() => {
       if (!data) {
         return [];
       }
@@ -9331,7 +9490,7 @@ input.champ-impose {
       data,
       activeRows
     ]);
-    const filteredActive = useMemo4(() => {
+    const filteredActive = useMemo5(() => {
       const q = normalizeSearchText2(
         search
       );
@@ -9362,7 +9521,7 @@ input.champ-impose {
       search,
       activeCorps
     ]);
-    const filteredTerminal = useMemo4(() => {
+    const filteredTerminal = useMemo5(() => {
       const q = normalizeSearchText2(
         search
       );
@@ -9386,7 +9545,7 @@ input.champ-impose {
       terminalRows,
       search
     ]);
-    const groupedByCorps = useMemo4(() => {
+    const groupedByCorps = useMemo5(() => {
       if (!data) {
         return [];
       }
@@ -9484,7 +9643,7 @@ input.champ-impose {
       data,
       filteredActive
     ]);
-    const terminalGroups = useMemo4(() => {
+    const terminalGroups = useMemo5(() => {
       if (!data) {
         return [];
       }
@@ -10133,7 +10292,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
       setNouveauPrenom(member.prenom || "");
       setNouveauNom(member.nom || "");
     }
-    return /* @__PURE__ */ React.createElement("article", { className: `effectif-row ${editing ? "is-editing" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "effectif-monogram", "aria-hidden": "true" }, [member.prenom, member.nom].filter(Boolean).map((value) => String(value).trim().charAt(0)).join("").toLocaleUpperCase("fr") || "G"), /* @__PURE__ */ React.createElement("div", { className: "effectif-identity" }, /* @__PURE__ */ React.createElement("div", { className: "effectif-name" }, member.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), /* @__PURE__ */ React.createElement("div", { className: "effectif-badges" }, showCorps && member.corps && /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement("article", { className: `effectif-row ${editing ? "is-editing" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "effectif-monogram", "aria-hidden": "true" }, [member.prenom, member.nom].filter(Boolean).map((value) => String(value).trim().charAt(0)).join("").toLocaleUpperCase("fr") || "G"), /* @__PURE__ */ React.createElement("div", { className: "effectif-identity" }, /* @__PURE__ */ React.createElement("div", { className: "effectif-name" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: member.nomComplet, membre: member.memberId }), /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), /* @__PURE__ */ React.createElement("div", { className: "effectif-badges" }, showCorps && member.corps && /* @__PURE__ */ React.createElement(
       "span",
       {
         className: "effectif-badge",
@@ -10376,9 +10535,9 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
         onFocusConsumed == null ? void 0 : onFocusConsumed();
       }
     }, [data, focusArticle]);
-    const families = useMemo4(() => data ? [...new Set(data.sources.filter((s) => !selection || s.citable).map((s) => s.famille))] : [], [data, selection]);
-    const classes = useMemo4(() => data ? [...new Set(data.articles.map((a) => a.classification).filter(Boolean))].sort() : [], [data]);
-    const filtered = useMemo4(() => {
+    const families = useMemo5(() => data ? [...new Set(data.sources.filter((s) => !selection || s.citable).map((s) => s.famille))] : [], [data, selection]);
+    const classes = useMemo5(() => data ? [...new Set(data.articles.map((a) => a.classification).filter(Boolean))].sort() : [], [data]);
+    const filtered = useMemo5(() => {
       if (!data) return [];
       const q = normalizeSearchText2(search);
       return data.articles.filter((a) => (!selection || a.citable) && (!family || a.famille === family) && (!source || a.source === source) && (!classification || a.classification === classification) && (!q || normalizeSearchText2([a.article, a.abrege, a.titre, a.source, a.famille, a.classification, a.autorite, a.applicabilite, a.texte, a.sanction].join(" ")).includes(q)));
@@ -10406,7 +10565,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     })), /* @__PURE__ */ React.createElement(LawModal, { article: selected, onClose: () => setSelected(null), codex: data, peines, onNavigate: setSelected, onRetenir: selection ? onRetenir : null, retenu: selected ? estRetenu(selected) : false }));
   }
   function CodexPicker({ token, open, onClose, onRetenir, retenus }) {
-    const closeRef = useRef8(onClose);
+    const closeRef = useRef9(onClose);
     closeRef.current = onClose;
     useEffect9(() => {
       if (!open) return;
@@ -10458,9 +10617,9 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
   }
   function PersonCard({ personne, center = false, showCorps = false }) {
     const memberChanges = useMemberChanges(personne == null ? void 0 : personne.memberId);
-    const moi = useContext2(MoiContext);
+    const moi = useContext3(MoiContext);
     if (!personne) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}${memeNom(personne.nomComplet, moi) ? " org-person-moi" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, personne.nomComplet, /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, libelleCorps(personne.corps)));
+    return /* @__PURE__ */ React.createElement("div", { className: `org-person ${center ? "center" : ""}${memeNom(personne.nomComplet, moi) ? " org-person-moi" : ""}`, ...memberChanges.hoverProps }, /* @__PURE__ */ React.createElement("div", { className: "org-person-name" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: personne.nomComplet, membre: personne.memberId }), /* @__PURE__ */ React.createElement(ChangeBadge, { change: memberChanges })), showCorps && personne.corps && /* @__PURE__ */ React.createElement("div", { className: "org-person-corps" }, libelleCorps(personne.corps)));
   }
   function CentralGroup({ personnes = [], grade, note, variante }) {
     return /* @__PURE__ */ React.createElement("section", { className: "org-command-node", "aria-label": note ? `${grade} \u2014 ${note}` : grade }, /* @__PURE__ */ React.createElement("h3", null, grade, note && /* @__PURE__ */ React.createElement("span", null, note)), /* @__PURE__ */ React.createElement(GradeDescription, { grade, variante }), personnes.length ? personnes.map((p, i) => /* @__PURE__ */ React.createElement(PersonCard, { key: i, personne: p, center: true })) : /* @__PURE__ */ React.createElement("div", { className: "org-vacant" }, "Poste vacant"));
@@ -10517,7 +10676,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
         setFormData(f);
       }).catch((e) => setError(e.message));
     }, []);
-    const frequents = useMemo4(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
+    const frequents = useMemo5(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
     if (!data || !formData) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement des amendes...");
     const openLaw = (a) => {
@@ -10565,7 +10724,7 @@ ${item.infraction}`)) return;
       }
     } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "Contrevenant"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Montant"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"), /* @__PURE__ */ React.createElement("th", null, "Revers\xE9"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => {
       var _a, _b;
-      return /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde, /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.join(" ou "), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, disabled: Boolean((_a = data.encaissement) == null ? void 0 : _a.restreint) && !memeNom(i.garde, data.encaissement.garde), title: ((_b = data.encaissement) == null ? void 0 : _b.restreint) && !memeNom(i.garde, data.encaissement.garde) ? "Seul le garde qui a dress\xE9 l\u2019amende, ou un officier, peut la marquer pay\xE9e." : void 0, onChange: async (e) => {
+      return /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.paye && i.reverse ? "fine-reversed" : i.paye ? "fine-paid" : "fine-unpaid" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: i.garde }), /* @__PURE__ */ React.createElement("div", { className: "fine-recipient" }, i.collecteurs.length ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u21B3 \xC0 reverser \xE0 : ", i.collecteurs.map((c, k) => /* @__PURE__ */ React.createElement(React.Fragment, { key: c.nom }, k > 0 && " ou ", c.grade ? `${c.grade} ` : "", /* @__PURE__ */ React.createElement(NomEffectif, { nom: c.nom }))), i.fallbackEtatMajor ? " (\xC9tat-Major)" : "") : "\u21B3 Aucun collecteur d\xE9sign\xE9")), /* @__PURE__ */ React.createElement("td", { "data-label": "Contrevenant" }, i.contrevenant), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Montant" }, i.montant || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Pay\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.paye, disabled: Boolean((_a = data.encaissement) == null ? void 0 : _a.restreint) && !memeNom(i.garde, data.encaissement.garde), title: ((_b = data.encaissement) == null ? void 0 : _b.restreint) && !memeNom(i.garde, data.encaissement.garde) ? "Seul le garde qui a dress\xE9 l\u2019amende, ou un officier, peut la marquer pay\xE9e." : void 0, onChange: async (e) => {
         try {
           setData(await serverCall("modifierAmendeCheckbox", token, i.row, 6, e.target.checked));
         } catch (x) {
@@ -10595,7 +10754,7 @@ ${item.infraction}`)) return;
     const [formError, setFormError] = useState9("");
     const [picker, setPicker] = useState9(false);
     const [lu, setLu] = useState9(null);
-    const submittingRef = useRef8(false);
+    const submittingRef = useRef9(false);
     const retenir = (a) => {
       try {
         setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
@@ -10642,7 +10801,7 @@ ${item.infraction}`)) return;
       }).catch((e) => setError(e.message));
     }, []);
     const catalogue = useCatalogue(serverCall, token, true);
-    const frequents = useMemo4(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
+    const frequents = useMemo5(() => chefsFrequents(codex, data == null ? void 0 : data.rows), [codex, data]);
     if (error && !data) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
     if (!data || !formData) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de la prison...");
     const openLaw = (a) => {
@@ -10691,7 +10850,7 @@ ${item.infraction}`)) return;
       } finally {
         setSaving(false);
       }
-    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, i.garde), /* @__PURE__ */ React.createElement("td", { "data-label": "D\xE9tenu" }, i.detenu), /* @__PURE__ */ React.createElement("td", { "data-label": "Cellule" }, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Dur\xE9e" }, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Entr\xE9e" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.entree, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Sortie pr\xE9vue" }, i.sortie ? /* @__PURE__ */ React.createElement(DateRP, { value: i.sortie, jour: false }) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Lib\xE9r\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
+    } }), /* @__PURE__ */ React.createElement("div", { className: "registry" }, /* @__PURE__ */ React.createElement("div", { className: "registry-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "registry-table prison-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Date"), /* @__PURE__ */ React.createElement("th", null, "Garde"), /* @__PURE__ */ React.createElement("th", null, "D\xE9tenu"), /* @__PURE__ */ React.createElement("th", null, "Cellule"), /* @__PURE__ */ React.createElement("th", null, "Chefs d\u2019accusation"), /* @__PURE__ */ React.createElement("th", null, "Dur\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Entr\xE9e"), /* @__PURE__ */ React.createElement("th", null, "Sortie pr\xE9vue"), /* @__PURE__ */ React.createElement("th", null, "Lib\xE9r\xE9"), /* @__PURE__ */ React.createElement("th", null, "Saisies"), /* @__PURE__ */ React.createElement("th", null, "Notes"), canDelete && /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, data.rows.map((i) => /* @__PURE__ */ React.createElement("tr", { key: i.row, className: i.libere ? "prison-released" : "prison-active" }, /* @__PURE__ */ React.createElement("td", { "data-label": "Date" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.date, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Garde" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: i.garde })), /* @__PURE__ */ React.createElement("td", { "data-label": "D\xE9tenu" }, i.detenu), /* @__PURE__ */ React.createElement("td", { "data-label": "Cellule" }, i.cellule || "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Chefs" }, /* @__PURE__ */ React.createElement(ChefsChips, { entrees: chefsDeLigne(codex, i), onOpenLaw: openLaw })), /* @__PURE__ */ React.createElement("td", { "data-label": "Dur\xE9e" }, i.duree || "\xC0 d\xE9terminer"), /* @__PURE__ */ React.createElement("td", { "data-label": "Entr\xE9e" }, /* @__PURE__ */ React.createElement(DateRP, { value: i.entree, jour: false })), /* @__PURE__ */ React.createElement("td", { "data-label": "Sortie pr\xE9vue" }, i.sortie ? /* @__PURE__ */ React.createElement(DateRP, { value: i.sortie, jour: false }) : "\u2014"), /* @__PURE__ */ React.createElement("td", { "data-label": "Lib\xE9r\xE9", className: "cell-center" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: i.libere, onChange: async (e) => {
       try {
         setData(await serverCall("modifierPrisonLibere", token, i.row, e.target.checked));
       } catch (x) {
@@ -10709,7 +10868,7 @@ ${item.infraction}`)) return;
     const [formError, setFormError] = useState9("");
     const [picker, setPicker] = useState9(false);
     const [lu, setLu] = useState9(null);
-    const submittingRef = useRef8(false);
+    const submittingRef = useRef9(false);
     const retenir = (a) => {
       try {
         setForm((p) => ({ ...p, chefs: ajouterChef(p.chefs, chefDepuisArticle(a)) }));
@@ -10785,7 +10944,7 @@ ${item.infraction}`)) return;
     return /* @__PURE__ */ React.createElement("section", { className: "presence-synthese" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "presence-synthese-toggle", onClick: basculer, "aria-expanded": open, "aria-controls": "presence-synthese-corps" }, /* @__PURE__ */ React.createElement("span", null, "Synth\xE8se de la garde"), /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-meta" }, error ? /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "Indisponible") : aSurveiller > 0 && /* @__PURE__ */ React.createElement("span", { className: "presence-synthese-alerte" }, "\u26A0 ", aSurveiller, " \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, open ? "\u25BE" : "\u25B8"))), open && /* @__PURE__ */ React.createElement("div", { id: "presence-synthese-corps", className: "presence-synthese-corps" }, error ? /* @__PURE__ */ React.createElement("div", { className: "error" }, error) : !data ? /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement du tableau de bord...") : /* @__PURE__ */ React.createElement(PresenceOfficerSynthese, { data })));
   }
   function PresenceOfficerSynthese({ data }) {
-    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 ${libelleSemaine(data.lundiCourant).toLowerCase()}`, value: formatSeptims2(data.currentWeekTotal), sub: /* @__PURE__ */ React.createElement(React.Fragment, null, "Du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims2(data.currentWeekPaid), sub: `Reste : ${formatSeptims2(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims2(data.pastUnpaidAmount), danger: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Amendes de la semaine d\xE9j\xE0 revers\xE9es", value: formatSeptims2(data.currentWeekRecoveredFines), sub: "Amendes dat\xE9es du lundi au dimanche de la semaine courante." })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, g.nomComplet), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [g.grade, libelleCorps(g.corps)].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : /* @__PURE__ */ React.createElement(React.Fragment, null, "Derni\xE8re pr\xE9sence : ", /* @__PURE__ */ React.createElement(DateRP, { value: g.dernierePresence }), " (", g.joursDepuis, " jours)")))))));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "presence-dashboard-cards" }, /* @__PURE__ */ React.createElement(Stat, { label: `Co\xFBt anticip\xE9 \u2014 ${libelleSemaine(data.lundiCourant).toLowerCase()}`, value: formatSeptims2(data.currentWeekTotal), sub: /* @__PURE__ */ React.createElement(React.Fragment, null, "Du ", /* @__PURE__ */ React.createElement(DateRP, { value: data.lundiCourant, jour: false })) }), /* @__PURE__ */ React.createElement(Stat, { label: "D\xE9j\xE0 r\xE9gl\xE9 cette semaine", value: formatSeptims2(data.currentWeekPaid), sub: `Reste : ${formatSeptims2(data.currentWeekRemaining)}` }), /* @__PURE__ */ React.createElement(Stat, { label: "Impay\xE9s des semaines pass\xE9es", value: data.pastUnpaidCount, warning: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Montant total des impay\xE9s", value: formatSeptims2(data.pastUnpaidAmount), danger: true }), /* @__PURE__ */ React.createElement(Stat, { label: "Amendes de la semaine d\xE9j\xE0 revers\xE9es", value: formatSeptims2(data.currentWeekRecoveredFines), sub: "Amendes dat\xE9es du lundi au dimanche de la semaine courante." })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-panel" }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-header" }, /* @__PURE__ */ React.createElement("strong", null, "Gardes \xE0 surveiller"), /* @__PURE__ */ React.createElement("span", null, data.inactive.length)), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-list" }, data.inactive.map((g, i) => /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-person", key: i }, /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-name" }, /* @__PURE__ */ React.createElement(NomEffectif, { nom: g.nomComplet })), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-meta" }, [g.grade, libelleCorps(g.corps)].filter(Boolean).join(" \u2014 ")), /* @__PURE__ */ React.createElement("div", { className: "presence-inactive-alert" }, g.jamaisPresent ? "Jamais pr\xE9sent dans le registre" : /* @__PURE__ */ React.createElement(React.Fragment, null, "Derni\xE8re pr\xE9sence : ", /* @__PURE__ */ React.createElement(DateRP, { value: g.dernierePresence }), " (", g.joursDepuis, " jours)")))))));
   }
   function Stat({ label, value, sub, warning, danger }) {
     return /* @__PURE__ */ React.createElement("div", { className: `presence-stat-card ${warning ? "presence-stat-warning" : ""} ${danger ? "presence-stat-danger" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "presence-stat-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "presence-stat-value" }, value), sub && /* @__PURE__ */ React.createElement("div", { className: "presence-stat-sub" }, sub));
@@ -10825,7 +10984,7 @@ ${item.infraction}`)) return;
     return rows.filter((r) => retenu(r) && estImpayePresence(r)).length;
   }
   function WeekSection({ week, rows, currentWeek, canEdit, token, onRefresh, corpsTotals, matchesPerson, matchesCorps, searching }) {
-    const moi = useContext2(MoiContext);
+    const moi = useContext3(MoiContext);
     const groups = /* @__PURE__ */ new Map(), current = week === currentWeek, [open, setOpen] = useState9(current);
     const [seulementImpayes, setSeulementImpayes] = useState9(false);
     useEffect9(() => {
@@ -10846,7 +11005,7 @@ ${item.infraction}`)) return;
       setOpen(true);
     } }, seulementImpayes ? "Tout afficher" : "Impay\xE9s")), open && seulementImpayes && /* @__PURE__ */ React.createElement("p", { className: "week-unpaid-notice", role: "status" }, libelleSemaine(week), " \u2014 ", impayes, " solde", impayes > 1 ? "s" : "", " impay\xE9e", impayes > 1 ? "s" : "", " sur ", rows.filter(matchesCorps).length, "."), open && [...groups.entries()].sort(([a], [b]) => libelleCorps(a).localeCompare(libelleCorps(b), "fr")).filter(([, soldiers]) => soldiers.some(visible)).map(([corps, soldiers]) => {
       var _a;
-      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(corps)), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: `${current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : ""}${memeNom(`${s.prenom} ${s.nom}`, moi) ? " row-moi" : ""}` }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, s.prenom, " ", s.nom), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
+      return /* @__PURE__ */ React.createElement("div", { key: corps }, /* @__PURE__ */ React.createElement("div", { className: "corps-title presence-corps-title" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(corps)), canEdit && /* @__PURE__ */ React.createElement("span", null, "Co\xFBt total estim\xE9 : ", formatSeptims2(((_a = corpsTotals.find((t) => t.lundi === week && t.corps === corps)) == null ? void 0 : _a.total) || 0))), /* @__PURE__ */ React.createElement("div", { className: "presence-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "presence-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Garde"), ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => /* @__PURE__ */ React.createElement("th", { key: d }, d)), /* @__PURE__ */ React.createElement("th", null, "Jours"), /* @__PURE__ */ React.createElement("th", null, "Solde"), /* @__PURE__ */ React.createElement("th", null, "Pay\xE9"))), /* @__PURE__ */ React.createElement("tbody", null, soldiers.filter(visible).map((s) => /* @__PURE__ */ React.createElement("tr", { key: s.row, className: `${current ? "row-current" : s.paye ? "row-paid" : s.soldeRaw > 0 ? "row-unpaid" : ""}${memeNom(`${s.prenom} ${s.nom}`, moi) ? " row-moi" : ""}` }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement(NomEffectif, { nom: `${s.prenom} ${s.nom}` })), /* @__PURE__ */ React.createElement("div", { className: "grade" }, s.grade)), s.jours.map((c, i) => /* @__PURE__ */ React.createElement("td", { key: i }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: c, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 6 + i, e.target.checked, identitePresence(s))) }))), /* @__PURE__ */ React.createElement("td", null, s.joursPresents), /* @__PURE__ */ React.createElement("td", null, s.solde), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: s.paye, disabled: !canEdit, onChange: async (e) => onRefresh(await serverCall("modifierPresence", token, s.row, 15, e.target.checked, identitePresence(s))) }))))))));
     }));
   }
   function payeRecapTexte(f, currentWeek) {
@@ -10933,7 +11092,7 @@ ${item.infraction}`)) return;
   }
   function PayeFinanceur({ f, currentWeek, canRegler, busy, regles, onBasculer }) {
     const [ouvert, setOuvert] = useState9(true), [copie, setCopie] = useState9(""), [texteVisible, setTexteVisible] = useState9(false);
-    const texte = useMemo4(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
+    const texte = useMemo5(() => payeRecapTexte(f, currentWeek), [f, currentWeek]);
     const anomalie = f.role === "inconnu" && f.total > 0;
     const periode = f.semaines.length === 0 ? "plus rien en attente" : f.semaines.length > 1 ? `semaines ${numeroSemaine(f.semaines[0])} \xE0 ${numeroSemaine(f.semaines[f.semaines.length - 1])}` : libelleSemaine(f.semaines[0]).toLowerCase();
     async function copier() {
@@ -10941,7 +11100,7 @@ ${item.infraction}`)) return;
       setCopie(ok ? "R\xE9capitulatif copi\xE9." : "Copie impossible ici \u2014 le texte est affich\xE9 ci-dessous.");
       if (!ok) setTexteVisible(true);
     }
-    return /* @__PURE__ */ React.createElement("section", { className: `paye-card${anomalie ? " paye-card-anomalie" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "paye-card-header" }, /* @__PURE__ */ React.createElement("div", { className: "paye-card-identite" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-financeur" }, f.libelle), /* @__PURE__ */ React.createElement("p", { className: "paye-corps" }, f.corps.map(libelleCorps).join(" \xB7 ") || "Aucun corps rattach\xE9")), /* @__PURE__ */ React.createElement("div", { className: "paye-card-montant" }, /* @__PURE__ */ React.createElement("span", { className: "paye-montant-label" }, "\xC0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-montant" }, formatSeptims2(f.total)), /* @__PURE__ */ React.createElement("span", { className: "paye-montant-meta" }, f.total > 0 ? `${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""} \xB7 ${periode}` : "Plus rien en attente"))), anomalie && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte", role: "alert" }, "\u26A0 Ces corps ne correspondent \xE0 aucun financeur connu. V\xE9rifiez leur libell\xE9 dans la feuille Pr\xE9sences avant de pr\xE9senter la demande : le montant est bien d\xFB, mais son payeur reste \xE0 \xE9tablir."), !anomalie && f.retardMax >= 3 && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte" }, "\u26A0 La plus ancienne semaine due remonte \xE0 ", f.retardMax, " semaines."), /* @__PURE__ */ React.createElement("div", { className: "paye-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-copier", onClick: copier }, "Copier le r\xE9capitulatif"), f.groupes.length > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-detail", onClick: () => setOuvert(!ouvert), "aria-expanded": ouvert }, ouvert ? "Masquer le d\xE9tail" : "Voir le d\xE9tail"), copie && /* @__PURE__ */ React.createElement("span", { className: "paye-copie", role: "status" }, copie)), texteVisible && /* @__PURE__ */ React.createElement("textarea", { className: "paye-texte", readOnly: true, rows: 10, value: texte, "aria-label": `R\xE9capitulatif pour ${f.libelle}` }), ouvert && /* @__PURE__ */ React.createElement("div", { className: "paye-detail" }, f.groupes.map((g) => /* @__PURE__ */ React.createElement("div", { className: "paye-groupe", key: g.corps }, /* @__PURE__ */ React.createElement("div", { className: "paye-groupe-titre" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(g.corps)), /* @__PURE__ */ React.createElement("span", null, formatSeptims2(g.total))), g.gardes.map((p) => /* @__PURE__ */ React.createElement("div", { className: "paye-garde", key: p.cle }, /* @__PURE__ */ React.createElement("div", { className: "paye-garde-identite" }, /* @__PURE__ */ React.createElement("strong", null, p.nomComplet), /* @__PURE__ */ React.createElement("span", { className: "grade" }, p.grade)), /* @__PURE__ */ React.createElement("div", { className: "paye-garde-total" }, formatSeptims2(p.total)), /* @__PURE__ */ React.createElement("ul", { className: "paye-semaines" }, p.semaines.map((s) => /* @__PURE__ */ React.createElement(PayeSemaine, { key: s.row, s, canRegler, busy, onRegler: () => onBasculer({ row: s.row, financeur: f.cle, nomComplet: p.nomComplet, lundi: s.lundi, montant: s.montant, identite: { lundi: s.lundi, prenom: p.prenom, nom: p.nom } }, true) })))))))), regles.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "paye-regles" }, /* @__PURE__ */ React.createElement("span", { className: "paye-regles-titre" }, "R\xE9gl\xE9 \xE0 l'instant"), /* @__PURE__ */ React.createElement("ul", null, regles.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.row }, /* @__PURE__ */ React.createElement("span", null, e.nomComplet, " \u2014 ", libelleSemaine(e.lundi).toLowerCase(), " \u2014 ", formatSeptims2(e.montant)), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy !== null, onClick: () => onBasculer(e, false) }, "Annuler"))))), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("p", { className: "paye-prevision" }, "\xC0 pr\xE9voir pour la ", libelleSemaine(currentWeek).toLowerCase(), ", encore en cours : ", /* @__PURE__ */ React.createElement("strong", null, formatSeptims2(f.previsionTotal)), " pour ", f.previsionGardes, " garde", f.previsionGardes > 1 ? "s" : "", ". Non compris dans le montant \xE0 demander."));
+    return /* @__PURE__ */ React.createElement("section", { className: `paye-card${anomalie ? " paye-card-anomalie" : ""}` }, /* @__PURE__ */ React.createElement("header", { className: "paye-card-header" }, /* @__PURE__ */ React.createElement("div", { className: "paye-card-identite" }, /* @__PURE__ */ React.createElement("h2", { className: "paye-financeur" }, f.libelle), /* @__PURE__ */ React.createElement("p", { className: "paye-corps" }, f.corps.map(libelleCorps).join(" \xB7 ") || "Aucun corps rattach\xE9")), /* @__PURE__ */ React.createElement("div", { className: "paye-card-montant" }, /* @__PURE__ */ React.createElement("span", { className: "paye-montant-label" }, "\xC0 demander"), /* @__PURE__ */ React.createElement("strong", { className: "paye-montant" }, formatSeptims2(f.total)), /* @__PURE__ */ React.createElement("span", { className: "paye-montant-meta" }, f.total > 0 ? `${f.nbGardes} garde${f.nbGardes > 1 ? "s" : ""} \xB7 ${periode}` : "Plus rien en attente"))), anomalie && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte", role: "alert" }, "\u26A0 Ces corps ne correspondent \xE0 aucun financeur connu. V\xE9rifiez leur libell\xE9 dans la feuille Pr\xE9sences avant de pr\xE9senter la demande : le montant est bien d\xFB, mais son payeur reste \xE0 \xE9tablir."), !anomalie && f.retardMax >= 3 && /* @__PURE__ */ React.createElement("p", { className: "paye-alerte" }, "\u26A0 La plus ancienne semaine due remonte \xE0 ", f.retardMax, " semaines."), /* @__PURE__ */ React.createElement("div", { className: "paye-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-copier", onClick: copier }, "Copier le r\xE9capitulatif"), f.groupes.length > 0 && /* @__PURE__ */ React.createElement("button", { type: "button", className: "paye-bouton-detail", onClick: () => setOuvert(!ouvert), "aria-expanded": ouvert }, ouvert ? "Masquer le d\xE9tail" : "Voir le d\xE9tail"), copie && /* @__PURE__ */ React.createElement("span", { className: "paye-copie", role: "status" }, copie)), texteVisible && /* @__PURE__ */ React.createElement("textarea", { className: "paye-texte", readOnly: true, rows: 10, value: texte, "aria-label": `R\xE9capitulatif pour ${f.libelle}` }), ouvert && /* @__PURE__ */ React.createElement("div", { className: "paye-detail" }, f.groupes.map((g) => /* @__PURE__ */ React.createElement("div", { className: "paye-groupe", key: g.corps }, /* @__PURE__ */ React.createElement("div", { className: "paye-groupe-titre" }, /* @__PURE__ */ React.createElement("span", null, libelleCorps(g.corps)), /* @__PURE__ */ React.createElement("span", null, formatSeptims2(g.total))), g.gardes.map((p) => /* @__PURE__ */ React.createElement("div", { className: "paye-garde", key: p.cle }, /* @__PURE__ */ React.createElement("div", { className: "paye-garde-identite" }, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement(NomEffectif, { nom: p.nomComplet })), /* @__PURE__ */ React.createElement("span", { className: "grade" }, p.grade)), /* @__PURE__ */ React.createElement("div", { className: "paye-garde-total" }, formatSeptims2(p.total)), /* @__PURE__ */ React.createElement("ul", { className: "paye-semaines" }, p.semaines.map((s) => /* @__PURE__ */ React.createElement(PayeSemaine, { key: s.row, s, canRegler, busy, onRegler: () => onBasculer({ row: s.row, financeur: f.cle, nomComplet: p.nomComplet, lundi: s.lundi, montant: s.montant, identite: { lundi: s.lundi, prenom: p.prenom, nom: p.nom } }, true) })))))))), regles.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "paye-regles" }, /* @__PURE__ */ React.createElement("span", { className: "paye-regles-titre" }, "R\xE9gl\xE9 \xE0 l'instant"), /* @__PURE__ */ React.createElement("ul", null, regles.map((e) => /* @__PURE__ */ React.createElement("li", { key: e.row }, /* @__PURE__ */ React.createElement("span", null, e.nomComplet, " \u2014 ", libelleSemaine(e.lundi).toLowerCase(), " \u2014 ", formatSeptims2(e.montant)), /* @__PURE__ */ React.createElement("button", { type: "button", disabled: busy !== null, onClick: () => onBasculer(e, false) }, "Annuler"))))), f.previsionTotal > 0 && /* @__PURE__ */ React.createElement("p", { className: "paye-prevision" }, "\xC0 pr\xE9voir pour la ", libelleSemaine(currentWeek).toLowerCase(), ", encore en cours : ", /* @__PURE__ */ React.createElement("strong", null, formatSeptims2(f.previsionTotal)), " pour ", f.previsionGardes, " garde", f.previsionGardes > 1 ? "s" : "", ". Non compris dans le montant \xE0 demander."));
   }
 
   // ui/src/main.jsx

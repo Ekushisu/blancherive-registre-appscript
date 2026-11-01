@@ -1,15 +1,18 @@
 /*
-  Livret de service (`src/LivretService.js`).
+  Fiche de service (`src/FicheService.js`).
 
-  - Réservé à une session Discord de GARDE ou d'OFFICIER : code commun,
-    intendance, visiteur et fiche introuvable refusés.
-  - Ne renvoie que les données du membre de la session ; lignes rapprochées
-    par le nom, sans casse ni espaces superflus.
+  - GARDE, OFFICIER et INTENDANT, par code commun, sur n'importe quel
+    effectif ; visiteur refusé avant toute lecture du classeur ; effectif
+    absent ou non précisé refusé.
+  - Effectif désigné par son ID membre, ou par son nom sans casse ni espaces
+    superflus ; l'ID prime.
+  - Ne renvoie que les données de cet effectif ; pas de Justice pour
+    l'intendance.
   - Solde (semaine en cours, en attente, perçue), service (jours, semaines,
     moyenne, série, dernier jour, inactivité), carrière (journal), chaîne de
     commandement, amendes et incarcérations.
 
-    node scripts/test-livret-service.mjs
+    node scripts/test-fiche-service.mjs
 */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -54,6 +57,7 @@ const sessions = {
   huscarl: { role: 'OFFICIER', via: 'discord', membre: 'u-hus', nom: 'Lydia Bras-Fort' },
   fantome: { role: 'GARDE', via: 'discord', membre: 'u-absent', nom: 'Fantôme' },
   code: { role: 'GARDE', via: 'code' },
+  officier: { role: 'OFFICIER', via: 'code' },
   intendant: { role: 'INTENDANT', via: 'code' }
 };
 
@@ -118,7 +122,7 @@ const feuilles = new Map([['Effectifs', effectifs], ['Données', donnees], ['His
   ['Présences', presences], ['Amendes', amendes], ['Prison', prison]]);
 const ss = { getSheetByName: n => feuilles.get(n) || null };
 
-let soldesMisAJour = 0;
+let soldesMisAJour = 0, ouvertures = 0;
 const context = vm.createContext({
   console, Date, Math, JSON,
   requireRole(token, roles) {
@@ -126,12 +130,12 @@ const context = vm.createContext({
     if (!auth || !roles.includes(auth.role)) throw Error("Vous n'avez pas les droits nécessaires.");
     return auth;
   },
-  SpreadsheetApp: { openById: () => ss, flush() {} },
+  SpreadsheetApp: { openById: () => { ouvertures++; return ss; }, flush() {} },
   Utilities: { formatDate: () => '' },
   PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) }
 });
 for (const f of ['Code.js', 'Effectifs.js', 'Discord.js', 'Organigramme.js', 'Presences.js', 'Paye.js',
-  'PresenceDashboard.gs.js', 'Amendes.js', 'Prison.js', 'LivretService.js']) {
+  'PresenceDashboard.gs.js', 'Amendes.js', 'Prison.js', 'FicheService.js']) {
   vm.runInContext(readFileSync(`src/${f}`, 'utf8'), context);
 }
 // Horloge et effets de bord fixés : mercredi 14 octobre 2026.
@@ -139,49 +143,64 @@ let aujourdHui = '2026-10-14', lundi = '2026-10-12';
 context.dateCivileStockholm_ = () => aujourdHui;
 context.lundiCourantPresence_ = () => lundi;
 context.mettreAJourSoldesPresences_ = () => { soldesMisAJour++; };
-const livret = token => JSON.parse(JSON.stringify(context.getLivretService(token)));
+const fiche = (cible, token = 'code') => JSON.parse(JSON.stringify(context.getFicheService(token, cible)));
+const de = membre => fiche({ membre });
 
 // ---------------------------------------------------------------- accès
-assert.throws(() => context.getLivretService('code'), /n'existe que pour une connexion par Discord/);
-assert.throws(() => context.getLivretService('intendant'), /droits nécessaires/);
-assert.throws(() => context.getLivretService('visiteur'), /droits nécessaires/);
-assert.throws(() => context.getLivretService('fantome'), /fiche est introuvable/);
+assert.throws(() => context.getFicheService('visiteur', { membre: 'u-eydis' }), /droits nécessaires/);
+assert.equal(ouvertures, 0, 'Refus avant toute lecture du classeur');
+assert.throws(() => context.getFicheService('code', {}), /Effectif non précisé/);
+assert.throws(() => context.getFicheService('code'), /Effectif non précisé/);
+assert.equal(ouvertures, 0);
+assert.throws(() => de('u-absent'), /Aucune fiche à ce nom/);
+assert.throws(() => fiche({ nom: 'Fantôme' }), /Aucune fiche à ce nom/);
+// Par code commun, pour les trois rôles de service, sans session Discord.
+for (const role of ['code', 'officier', 'intendant']) {
+  assert.equal(fiche({ membre: 'u-bryn' }, role).fiche.nomComplet, 'Brynjar Poing-de-Fer', role);
+}
+// Par le nom, comme les Présences, les Amendes et la Prison l'écrivent ; l'ID prime.
+assert.equal(fiche({ nom: '  eydis  LA silencieuse ' }).fiche.nomComplet, 'Eydis la Silencieuse');
+assert.equal(fiche({ membre: 'u-bryn', nom: 'Eydis la Silencieuse' }).fiche.nomComplet, 'Brynjar Poing-de-Fer');
+assert.equal(fiche({ membre: 'u-inconnu', nom: 'Eydis la Silencieuse' }).fiche.nomComplet, 'Eydis la Silencieuse',
+  'ID inconnu : le nom prend le relais');
+// L'intendance n'a accès ni aux Amendes ni à la Prison : pas de Justice.
+assert.equal(fiche({ membre: 'u-eydis' }, 'intendant').justice, null);
+assert.equal(fiche({ membre: 'u-eydis' }, 'officier').justice.amendes.nombre, 4);
 
 // ---------------------------------------------------------------- fiche et commandement
-let l = livret('eydis');
+let l = de('u-eydis');
 assert.deepEqual(l.fiche, { prenom: 'Eydis', nom: 'la Silencieuse', nomComplet: 'Eydis la Silencieuse', grade: 'Sergent',
   corps: 'Garnison de Rivebois', specialite: 'Pisteuse', statut: 'En service actif', assermente: false });
 assert.deepEqual(l.commandement.corps.map(p => p.nomComplet), ['Brynjar Poing-de-Fer', 'Sigrid Vent-du-Nord'],
   'Supérieurs du corps, en service, à partir de Sergent-Chef, du plus haut au plus bas ; ni réserve, ni subordonné');
 assert.deepEqual(l.commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive'],
   'Le Jarl, même inscrit à l’État-Major, est rendu à part');
-const jarl = [{ nomComplet: 'Siddgeir Vent-Doré', grade: 'Jarl', corps: 'État-Major' }];
+const jarl = [{ memberId: 'u-jarl', nomComplet: 'Siddgeir Vent-Doré', grade: 'Jarl', corps: 'État-Major' }];
 assert.deepEqual(l.commandement.jarl, jarl, 'Le Jarl au sommet de chaque chaîne');
-assert.deepEqual(livret('haldvar').commandement, { corps: [], etatMajor: [], jarl }, 'L’État-Major ne se voit pas lui-même');
-assert.deepEqual(livret('ulfgar').commandement.etatMajor, [], 'Le Hird ne répond qu’au Jarl');
-assert.deepEqual(livret('ulfgar').commandement.jarl, jarl);
+assert.deepEqual(de('u-hal').commandement, { corps: [], etatMajor: [], jarl }, 'L’État-Major ne se voit pas lui-même');
+assert.deepEqual(de('u-ulf').commandement.etatMajor, [], 'Le Hird ne répond qu’au Jarl');
+assert.deepEqual(de('u-ulf').commandement.jarl, jarl);
 // Le Huscarl ne répond qu'au Jarl et n'entre dans la chaîne de personne.
-assert.deepEqual(livret('huscarl').commandement, { corps: [], etatMajor: [], jarl });
-assert.deepEqual(livret('rorik').commandement.corps, [], 'Le Huscarl n’est pas un supérieur de son corps');
-assert.deepEqual(livret('jarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Jarl n’a pas de supérieur');
+assert.deepEqual(de('u-hus').commandement, { corps: [], etatMajor: [], jarl });
+assert.deepEqual(de('u-ror').commandement.corps, [], 'Le Huscarl n’est pas un supérieur de son corps');
+assert.deepEqual(de('u-jarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Jarl n’a pas de supérieur');
 
 // Régence impériale : sans Jarl en service actif, le ou les Régents impériaux
 // prennent le sommet, hors de l'État-Major ; le Huscarl en est détaché.
 const ligneJarl = effectifs.rows.findIndex(r => r[7] === 'u-jarl');
 effectifs.rows[ligneJarl][5] = 'Mort en service';
 effectifs.rows.push(membre('Aurelia', 'Vesuia', 'Régent impérial', 'État-Major', 'En service actif', 'u-reg'));
-sessions.regent = { role: 'OFFICIER', via: 'discord', membre: 'u-reg', nom: 'Aurelia Vesuia' };
-const regence = [{ nomComplet: 'Aurelia Vesuia', grade: 'Régent impérial', corps: 'État-Major' }];
-assert.deepEqual(livret('eydis').commandement.jarl, regence, 'Sous régence, le Régent impérial au sommet');
-assert.deepEqual(livret('eydis').commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive'],
+const regence = [{ memberId: 'u-reg', nomComplet: 'Aurelia Vesuia', grade: 'Régent impérial', corps: 'État-Major' }];
+assert.equal(de('u-jarl').fiche.statut, 'Mort en service', 'Un départ garde sa fiche');
+assert.deepEqual(de('u-eydis').commandement.jarl, regence, 'Sous régence, le Régent impérial au sommet');
+assert.deepEqual(de('u-eydis').commandement.etatMajor.map(p => p.nomComplet), ['Haldvar de Blancherive'],
   'Le Régent impérial n’est pas compté dans l’État-Major');
-assert.deepEqual(livret('huscarl').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Sous régence, le Huscarl est détaché');
-assert.deepEqual(livret('regent').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Régent impérial n’a pas de supérieur');
-assert.equal(livret('regent').service.exclu, true, 'Le Régent impérial n’est pas soldé');
+assert.deepEqual(de('u-hus').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Sous régence, le Huscarl est détaché');
+assert.deepEqual(de('u-reg').commandement, { corps: [], etatMajor: [], jarl: [] }, 'Le Régent impérial n’a pas de supérieur');
+assert.equal(de('u-reg').service.exclu, true, 'Le Régent impérial n’est pas soldé');
 effectifs.rows[ligneJarl][5] = 'En service actif';
-assert.deepEqual(livret('eydis').commandement.jarl, jarl, 'Un Jarl en service reprend le sommet, seul');
+assert.deepEqual(de('u-eydis').commandement.jarl, jarl, 'Un Jarl en service reprend le sommet, seul');
 effectifs.rows.pop();
-delete sessions.regent;
 
 // ---------------------------------------------------------------- carrière
 assert.equal(l.carriere.inscription, '2026-09-06T12:00:00.000Z');
@@ -210,7 +229,7 @@ assert.equal(s.seuilInactivite, 5);
 
 // Dix jours plus tard, sans pointage : inactivité signalée, série depuis la semaine passée.
 aujourdHui = '2026-10-25'; lundi = '2026-10-19';
-const tard = livret('eydis').service;
+const tard = de('u-eydis').service;
 assert.equal(tard.semaineCourante, null);
 assert.equal(tard.joursDepuis, 12);
 assert.equal(tard.inactif, true);
@@ -219,13 +238,13 @@ assert.equal(tard.enAttente.length, 3, 'La semaine du 12/10 est close à son tou
 aujourdHui = '2026-10-14'; lundi = '2026-10-12';
 
 // Le Hird n'est pas soldé par le registre.
-const hird = livret('ulfgar').service;
+const hird = de('u-ulf').service;
 assert.equal(hird.exclu, true);
 assert.equal(hird.semaineCourante, null);
 assert.equal(hird.joursTotal, 0);
 // Le Jarl non plus, quel que soit son corps ; le Huscarl l'est.
-assert.equal(livret('jarl').service.exclu, true);
-assert.equal(livret('huscarl').service.exclu, false);
+assert.equal(de('u-jarl').service.exclu, true);
+assert.equal(de('u-hus').service.exclu, false);
 
 // ---------------------------------------------------------------- justice
 const a = l.justice.amendes;
@@ -248,7 +267,7 @@ for (const autre of ['999', 'Contrevenant de Brynjar', 'Détenu de Brynjar', 'Li
 
 // ---------------------------------------------------------------- renommage d'un garde
 // Colonne Garde d'Amendes et de Prison : les seules cases de ce garde, lignes
-// rapprochées comme le Livret ; contrevenants, détenus et autres gardes intacts.
+// rapprochées comme la fiche de service ; contrevenants, détenus et autres gardes intacts.
 const garde = sheet => sheet.rows.slice(1).map(r => r[1]);
 const contrevenants = amendes.rows.map(r => r[2]).join('|');
 // Validation « refuser » sur toute la colonne, liste des gardes actifs : ni le
@@ -272,4 +291,4 @@ assert.equal(context.renommerGardeRegistres_(ss, 'Eydis la Silencieuse', 'Eydis 
 assert.deepEqual(garde(amendes), [...Array(4).fill('Eydis Brise-Nuit'), 'Brynjar Poing-de-Fer', 'Garde Parti']);
 assert.equal(context.renommerGardeRegistres_(ss, 'Personne', 'Quelqu’un'), 0);
 
-console.log('Livret de service : accès, fiche, commandement, carrière, solde, service, justice et confidentialité validés.');
+console.log('Fiche de service : accès par rôle, désignation par ID ou nom, commandement, carrière, solde, service, justice et cloisonnement validés.');

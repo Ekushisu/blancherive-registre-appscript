@@ -42,7 +42,7 @@ const reponses = {
   getOrganigramme: () => donnees.organigramme,
   getEffectifs: () => donnees.effectifs,
   getMembresDiscord: () => donnees.membresDiscord,
-  getLivretService: () => donnees.livret
+  getFicheService: () => donnees.fiche
 };
 
 // Chaque aperçu : le libellé du bouton de navigation, les largeurs voulues,
@@ -61,17 +61,16 @@ const apercus = {
       })
     }
   },
-  // Session Discord d'un garde : le livret s'ouvre de lui-même.
-  livret: {
-    attendre: ".livret-grille",
+  // Fiche de service, ouverte d'un clic sur un nom de l'organigramme.
+  fiche: {
+    nav: "Organigramme",
+    attendre: ".org-hierarchy",
     largeurs: [390, 1440],
-    reponses: { getSessionInfo: () => ({ role: "GARDE", nom: "Eydis la Silencieuse" }) }
-  },
-  // Officier connecté par Discord : dix entrées dans la barre inférieure mobile.
-  "livret-officier": {
-    attendre: ".livret-grille",
-    largeurs: [390],
-    reponses: { getSessionInfo: () => ({ role: "OFFICIER", nom: "Eydis la Silencieuse" }) }
+    ecranSeul: true,
+    async preparer(page) {
+      await page.locator(".org-person-name .nom-effectif", { hasText: "Eydis la Silencieuse" }).first().click();
+      await page.waitForSelector(".fiche-grille");
+    }
   },
   organigramme: {
     nav: "Organigramme",
@@ -415,7 +414,8 @@ try {
       }
 
       const fichier = path.join(outDir, `${nom}-${largeur}.png`);
-      await page.screenshot({ path: fichier, fullPage: true });
+      // Un panneau fixe (fiche) ne couvre que l'écran : capture de l'écran seul.
+      await page.screenshot({ path: fichier, fullPage: apercu.ecranSeul !== true });
       ecrits.push(path.relative(rootDir, fichier));
       await context.close();
     }
