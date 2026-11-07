@@ -13,7 +13,8 @@ Elle sert de registre opérationnel pour :
 - les décrets de peines et amendes : le barème des sanctions article par article ;
 - les amendes ;
 - la prison ;
-- l'inventaire des coffres de Fort-Dragon : quels objets, en quelle quantité, dans quel coffre.
+- l'inventaire des coffres de Fort-Dragon : quels objets, en quelle quantité, dans quel coffre ;
+- les permis de chasse : qui a le droit de chasser sur les terres de la châtellerie.
 
 Le backend est Google Apps Script et le stockage principal est un Google Spreadsheet lié au projet.
 
@@ -32,6 +33,7 @@ Feuilles métier connues :
 - `Coffres`
 - `Inventaire`
 - `PeinesAmendes`
+- `PermisChasse`
 
 ## Principes
 

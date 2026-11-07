@@ -123,6 +123,8 @@ lignes = [
   ligne(36, 'Bois-de-Chêne', 'Garde', 'Kjell', 'Bras-Long', 3, 240, false),
   ligne(36, 'Faubourgs de Blancherive', 'Garde', 'Sif', 'Pied-Sûr', 4, 320, false),
   ligne(36, 'Cap Granite', 'Garde', 'Ulf', 'Œil-Clair', 2, 160, false),
+  // L'Académie militaire est soldée comme tout corps, par l'argentier de la cour.
+  ligne(36, 'Académie militaire de Blancherive', 'Caporal', 'Hrolf', 'Main-Sage', 5, 400, false),
   ligne(36, 'Hird du Jarl', 'Garde', 'Hirdman', '', 7, 999, false),
   // Le Régent impérial, comme le Jarl, n'est pas soldé, quel que soit son corps.
   ligne(36, 'État-Major', 'Régent impérial', 'Aurelia', 'Vesuia', 7, 777, false)
@@ -132,21 +134,21 @@ let paye = lirePaye('OFFICIER');
 
 assert.equal(
   financeur(paye, 'argentier').total,
-  1640,
-  'Cité, Éclaireur, État-Major et Faubourgs relèvent du même argentier'
+  2040,
+  'Académie, Cité, Éclaireur, État-Major et Faubourgs relèvent du même argentier'
 );
-assert.equal(financeur(paye, 'argentier').nbGardes, 4);
+assert.equal(financeur(paye, 'argentier').nbGardes, 5);
 assert.deepEqual(
   financeur(paye, 'argentier').corps,
-  ['Cité de Blancherive', 'Éclaireur', 'État-Major', 'Faubourgs de Blancherive']
+  ['Académie militaire de Blancherive', 'Cité de Blancherive', 'Éclaireur', 'État-Major', 'Faubourgs de Blancherive']
 );
 assert.equal(financeur(paye, 'thane-rivebois').total, 400, '« Garnison de Rivebois » est reconnu');
 assert.equal(financeur(paye, 'thane-bois-de-chene').total, 240);
 assert.equal(financeur(paye, 'thane-faubourgs'), undefined, 'Les Faubourgs n’ont plus de Thane payeur');
 assert.equal(financeur(paye, 'thane-cap-granite').total, 160);
 assert.equal(financeur(paye, 'a-determiner'), undefined, 'Aucun corps non classé ici');
-assert.equal(paye.totalADemander, 2440, 'Le Hird et le Régent impérial sont exclus de la demande');
-assert.equal(paye.nbGardesDus, 7);
+assert.equal(paye.totalADemander, 2840, 'Le Hird et le Régent impérial sont exclus de la demande');
+assert.equal(paye.nbGardesDus, 8);
 
 
 // ============================================================

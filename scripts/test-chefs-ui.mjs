@@ -76,7 +76,7 @@ assert.equal(props.value[0].titre, 'Injure');
 assert.equal(id('chef-recherche').props.value, '', 'Recherche effacée après ajout');
 assert.equal(pending, false);
 assert.ok(text(tree).includes('contravention'), 'Résumé de qualification');
-assert.ok(text(tree).includes('500 septims'));
+assert.ok(text(tree).includes('100 septims'), 'Fourchette impériale révisée de la contravention');
 props.resume = false; render();
 assert.ok(!text(tree).includes('Qualification la plus grave'), 'Résumé retiré quand le barème le remplace');
 delete props.resume; render();

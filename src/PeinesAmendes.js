@@ -8,8 +8,11 @@
 //
 // Décision du propriétaire du 4 octobre 2026, sur l'avis du magistrat de
 // Blancherive : les quatre codes de la châtellerie ne chiffrant aucune peine,
-// on se réfère aux fourchettes impériales du Corpus Juriscivilis
-// (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà).
+// on se réfère aux fourchettes impériales du Corpus Juriscivilis. Révisées
+// par l'Empire et relues le 3 novembre 2026 : contravention jusqu'à 100
+// septims, délit jusqu'à 500, crime jusqu'à 1 000, amendes non cumulables.
+// Le barème initial est reconstruit le même jour sur le Code pénal local
+// réécrit (39 articles) et le De Re Nobilitatis réécrit (18 articles).
 //
 // Feuille PeinesAmendes, créée et initialisée à la première consultation si
 // elle n'existe pas, ou si elle existe entièrement vide. Une feuille déjà
@@ -26,7 +29,7 @@
 //   G  Amende (septims)            entier
 //   H  Cachot (heures)             nombre, fraction admise
 //   I  Amende nobiliaire (septims) amende proposée à un noble à la place du
-//                                  cachot (De Re Nobilitatis, art. 9)
+//                                  cachot (De Re Nobilitatis, art. 13)
 //   J  Crime de sang               « oui » : aucune amende de substitution
 //   K  Peines complémentaires      confiscation, remise en état, restitution…
 //   L  Observations                renvois, réserves, conditions du texte
@@ -66,15 +69,19 @@ const PEINES_CACHOT_MAX_HEURES = 24 * 366;
 // ============================================================
 
 /*
-  Fourchettes du Corpus Juriscivilis Imperialis, principes généraux :
-  contravention jusqu'à 500 septims (amende simple ou travaux légers), délit
-  de 500 à 2 500 (amende élevée ou travaux forcés), crime au-delà de 2 500
-  (amende forte, emprisonnement ou peine de mort).
+  Fourchettes du Corpus Juriscivilis Imperialis, classification des
+  infractions (texte impérial révisé, lu le 3 novembre 2026) : contravention
+  jusqu'à 100 septims (amende simple ou travaux légers), délit jusqu'à 500
+  (amende élevée ou travaux forcés), crime jusqu'à 1 000 (amende forte,
+  emprisonnement ou peine de mort). « Les amendes ne sont pas cumulables. »
+
+  Avant cette révision, le texte donnait 500, 2 500 et au-delà : la première
+  grille du 4 octobre 2026 (50 à 12 000 septims) en découlait.
 */
 const PEINES_FOURCHETTES = {
-  contravention: { min: 1, max: 500 },
-  délit: { min: 500, max: 2500 },
-  crime: { min: 2501, max: null }
+  contravention: { min: 1, max: 100 },
+  délit: { min: 100, max: 500 },
+  crime: { min: 500, max: 1000 }
 };
 
 /*
@@ -88,34 +95,37 @@ const PEINES_FOURCHETTES = {
   sur verdict public et motivé du magistrat (Corpus Proceduralis, art. 11).
   Elle ne se chiffre pas.
 
-  Délits resserrés au bas de leur fourchette, à la demande du propriétaire
-  (4 octobre 2026) : le barème d'origine, de 750 à 2 250 septims, était jugé
-  trop sévère. Les crimes sont inchangés.
+  Grille arrêtée par le propriétaire le 3 novembre 2026 sur les nouvelles
+  fourchettes ; les durées de cachot sont celles du 4 octobre 2026.
 */
 const PEINES_ECHELONS = {
-  C1: { qualification: "Contravention", amende: 50 },
-  C2: { qualification: "Contravention", amende: 150 },
-  C3: { qualification: "Contravention", amende: 300 },
-  C4: { qualification: "Contravention", amende: 500 },
-  D1: { qualification: "Délit", amende: 500 },
-  D2: { qualification: "Délit", amende: 750 },
-  D3: { qualification: "Délit", amende: 1000, cachot: 0.5 },
-  D4: { qualification: "Délit", amende: 1250, cachot: 1 },
-  K1: { qualification: "Crime", amende: 3000, cachot: 1 },
-  K2: { qualification: "Crime", amende: 5000, cachot: 2 },
-  K3: { qualification: "Crime", amende: 8000, cachot: 4 },
-  K4: { qualification: "Crime", amende: 12000, cachot: 6 },
+  C1: { qualification: "Contravention", amende: 25 },
+  C2: { qualification: "Contravention", amende: 50 },
+  C3: { qualification: "Contravention", amende: 75 },
+  C4: { qualification: "Contravention", amende: 100 },
+  D1: { qualification: "Délit", amende: 150 },
+  D2: { qualification: "Délit", amende: 250 },
+  D3: { qualification: "Délit", amende: 375, cachot: 0.5 },
+  D4: { qualification: "Délit", amende: 500, cachot: 1 },
+  K1: { qualification: "Crime", amende: 600, cachot: 1 },
+  K2: { qualification: "Crime", amende: 750, cachot: 2 },
+  K3: { qualification: "Crime", amende: 900, cachot: 4 },
+  K4: { qualification: "Crime", amende: 1000, cachot: 6 },
   PM: { qualification: "Crime" }
 };
 
 /*
   Noblesse. Un noble reconnu coupable doit toujours se voir proposer une
-  amende, sauf crime de sang (De Re Nobilitatis, art. 9) : le cachot est
-  racheté à 1 000 septims l'heure, sans sortir de la fourchette délictuelle
-  pour un délit. Taux retenu à l'initialisation ; la colonne I fait foi
-  ensuite et se corrige ligne par ligne.
+  amende, sauf crime de sang (De Re Nobilitatis, art. 13) : le cachot est
+  racheté par une amende égale au plafond impérial de la qualification
+  (500 septims pour un délit, 1 000 pour un crime), décision du propriétaire
+  du 3 novembre 2026. Valeur retenue à l'initialisation ; la colonne I fait
+  foi ensuite et se corrige ligne par ligne.
 */
-const PEINES_RACHAT_NOBLE_PAR_HEURE = 1000;
+function rachatNoblePeine_(qualification) {
+  const fourchette = PEINES_FOURCHETTES[String(qualification || "").toLowerCase()];
+  return fourchette ? fourchette.max : "";
+}
 
 const PEINES_SOURCES = {
   CPL: "Code pénal local de Blancherive",
@@ -132,9 +142,9 @@ const PEINES_SOURCES = {
 
 const PEINES_VERDICT = "Verdict public et motivé du magistrat (Corpus Proceduralis, art. 11).";
 const PEINES_PEINE_MAXIMALE = "Mort ou bannissement définitif du territoire, saisie des biens.";
-const PEINES_CONFISCATION_84 = "Saisie et confiscation des ressources, objets et découvertes (art. 84).";
-const PEINES_PRODUIT = "Confiscation possible du produit de l’infraction.";
-const PEINES_RESTITUTION = "Restitution du bien ou de sa valeur (Code civil local, art. 19).";
+const PEINES_RESTITUTION = "Restitution du bien ou de sa valeur (Code civil local, art. 11).";
+const PEINES_REPARATION = "Remise en état ou réparation du tort causé (Code civil local, art. 11).";
+const PEINES_SAISIE_GIBIER = "Saisie du gibier et des produits obtenus sans droit (art. 33).";
 const PEINES_TITRE_CORPS = "Le titre qualifie de crime, le corps de l’article de délit : qualification à trancher par le magistrat.";
 
 /*
@@ -142,147 +152,101 @@ const PEINES_TITRE_CORPS = "Le titre qualifie de crime, le corps de l’article 
    peines complémentaires, observations, options]
 
   options : { sang: true } pour un crime de sang ; { amende } pour une
-  sanction spéciale chiffrée hors échelon.
+  sanction spéciale chiffrée hors échelon (aucune aujourd'hui).
+
+  Code pénal local de Blancherive réécrit (39 articles, lu le 3 novembre
+  2026 ; le document ne porte pas d'article 29) : les art. 1 et 2 sont des
+  dispositions générales, sans barème. Les niveaux suivent le corps de chaque
+  article : cas de base, puis requalifications et formes aggravées qu'il
+  prévoit. Le De Re Nobilitatis réécrit ne chiffre plus les manquements
+  nobiliaires (art. 14 : amende prononcée par un juge compétent) : plus de
+  ligne « Spéciale ».
 */
 const PEINES_INITIALES = [
   // ----- Code pénal local de Blancherive -----
-  ["CPL", "4", "Refus d’obtempérer à une injonction locale", "", "D1", "", "Ordre verbal ou gestuel donné dans l’instant ; l’inexécution d’une mise en demeure écrite relève de l’art. 95. Avec violences ou menaces contre un contrôle : art. 72."],
-  ["CPL", "5", "Entrave à l’action des autorités locales", "", "D2", "", "Subsidiaire : moyens non couverts par les art. 6, 17 ou 25."],
-  ["CPL", "6", "Entrave à un contrôle de sécurité", "", "D2", "", "Porte sur le contenu du contrôle ; le refus de s’y soumettre relève de l’art. 4."],
-  ["CPL", "7", "Usurpation d’un signe officiel local", "", "C4", "Confiscation des effets constituant l’infraction (art. 7)."],
-  ["CPL", "7", "Usurpation d’un signe officiel local", "Requalification en délit — pour obtenir un avantage ou tromper un tiers", "D2", "Confiscation des effets constituant l’infraction (art. 7)."],
-  ["CPL", "8", "Usurpation d’une fonction locale", "", "D3", "", "L’usurpation d’une fonction impériale centrale relève du Codex Penitus, art. 5."],
-  ["CPL", "8", "Usurpation d’une fonction locale", "Requalification en crime — fonction d’un membre de la Cour, ou décision souveraine prise de fait", "K2"],
-  ["CPL", "9", "Propos irrespectueux envers une autorité locale", "", "C2", "", "Sans menace ni contestation organisée ; sinon art. 11 ou 12."],
-  ["CPL", "10", "Provocation à l’irrespect de l’autorité locale", "", "D1"],
-  ["CPL", "11", "Contestation publique de l’autorité de la châtellerie", "", "D1", "", "La critique de bonne foi, la contestation respectueuse et l’exercice des voies de recours ne sont pas punissables."],
-  ["CPL", "12", "Outrage aggravé envers une autorité locale", "", "D2"],
-  ["CPL", "13", "Atteinte organisée à l’autorité locale", "", "K3"],
-  ["CPL", "13", "Atteinte organisée à l’autorité locale", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
-  ["CPL", "14", "Lèse-majesté locale", "Atteinte à un membre de la Cour", "K2"],
-  ["CPL", "14", "Lèse-majesté locale", "Atteinte au Jarl", "K3", "", "Gradation selon la personne visée, laissée à l’appréciation du magistrat."],
-  ["CPL", "15", "Sédition contre la châtellerie", "", "K3"],
-  ["CPL", "15", "Sédition contre la châtellerie", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
-  ["CPL", "15-1", "Trahison", "", "K4", "", "Article non rédigé à ce jour : sans définition de l’infraction, l’élément légal manque. Aucune poursuite sur ce seul fondement avant sa rédaction par la Cour."],
-  ["CPL", "15-1", "Trahison", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT + " Article non rédigé à ce jour."],
-  ["CPL", "16", "Injure", "", "C2"],
-  ["CPL", "17", "Diffamation", "", "D1", "", "La critique de bonne foi et la dénonciation fondée sur des éléments sérieux ne sont pas punissables."],
-  ["CPL", "18", "Dénonciation calomnieuse", "Imputation d’une contravention", "C3", "", "La sanction dépend de l’infraction imputée : l’échelon suit sa qualification."],
-  ["CPL", "18", "Dénonciation calomnieuse", "Imputation d’un délit", "D2"],
-  ["CPL", "18", "Dénonciation calomnieuse", "Imputation d’un crime", "K1"],
-  ["CPL", "19", "Chantage", "", "D2", "", "La simple menace d’engager une procédure légale n’est pas un chantage."],
-  ["CPL", "20", "Menaces", "", "D1"],
-  ["CPL", "21", "Harcèlement moral", "", "D2"],
-  ["CPL", "21", "Harcèlement moral", "Requalification en crime — en réunion, ou dans une relation d’autorité, de dépendance ou de service", "K1"],
-  ["CPL", "22", "Faux témoignage", "", "K2", "", "L’erreur, l’oubli ou la rétractation spontanée avant la décision ne sont pas punissables."],
-  ["CPL", "23", "Atteinte à la mémoire des défunts", "", "D1", "", "La profanation relève du Corpus Juriscivilis, art. 10."],
-  ["CPL", "24", "Mise en danger d’autrui", "", "C3"],
-  ["CPL", "24", "Mise en danger d’autrui", "Requalification en délit — monture, engin, sortilège ou substance dangereuse", "D1"],
-  ["CPL", "25", "Refus d’assistance à personne en péril", "", "D1", "", "Alerter immédiatement les autorités vaut assistance lorsque l’intervention directe est dangereuse ou impossible."],
-  ["CPL", "26", "Blessures causées par négligence grave", "", "D2", "", "Les violences volontaires relèvent du Corpus Juriscivilis, art. 5."],
-  ["CPL", "27", "Atteinte à la pudeur", "", "D2"],
-  ["CPL", "27", "Atteinte à la pudeur", "Forme aggravée — sous menace, sur une personne vulnérable ou en réunion", "D4"],
-  ["CPL", "28", "Exhibition obscène", "", "C2"],
-  ["CPL", "28", "Exhibition obscène", "Requalification en délit — pour provoquer, choquer ou attirer un attroupement", "D1"],
-  ["CPL", "29", "Administration clandestine d’une substance", "", "K2"],
-  ["CPL", "30", "Privation abusive de liberté", "", "D2", "", "La séquestration relève du Corpus Juriscivilis, art. 14."],
-  ["CPL", "30", "Privation abusive de liberté", "Forme aggravée — par une personne ayant autorité ou tutelle, ou au-delà d’une journée", "D4"],
-  ["CPL", "31", "Dégradation d’un bien", "", "D1"],
-  ["CPL", "32", "Destruction d’un bien", "", "D2"],
-  ["CPL", "33", "Altération d’un bien", "", "D1"],
-  ["CPL", "34", "Contamination d’un bien", "", "D1"],
-  ["CPL", "34", "Contamination d’un bien", "Forme aggravée — bien destiné à la consommation, aux soins ou à l’approvisionnement", "D3"],
-  ["CPL", "35", "Déplacement ou dissimulation d’un bien", "", "C2", "Restitution du bien (Code civil local, art. 19)."],
-  ["CPL", "36", "Atteinte à un bien placé sous scellés", "", "D2"],
-  ["CPL", "37", "Dégradation d’un bien protégé", "", "D3", "", "Bien d’intérêt historique, religieux, artistique ou patrimonial."],
-  ["CPL", "38", "Détention locale irrégulière", "", "D1", "Saisie ou confiscation possible du bien (art. 42).", "Licence relevant exclusivement de la châtellerie (art. 38 et 42)."],
-  ["CPL", "39", "Recel local d’un bien réglementé", "", "D2", "Saisie ou confiscation possible du bien (art. 42)."],
-  ["CPL", "40", "Mise en circulation d’un bien localement interdit", "", "D3", "Saisie ou confiscation possible du bien (art. 42)."],
-  ["CPL", "41", "Violation des conditions d’une licence locale", "", "C2", "Saisie ou confiscation possible du bien (art. 42)."],
-  ["CPL", "43", "Intrusion dans une propriété privée locale", "", "C2", "", "Sans préjudice du Corpus Juriscivilis, art. 4."],
-  ["CPL", "44", "Occupation illégitime d’une propriété privée", "", "D1"],
-  ["CPL", "45", "Usage non autorisé d’une propriété privée causant préjudice", "", "K1", "", "Crime si le préjudice est significatif ; à défaut, art. 44."],
-  ["CPL", "46", "Dégradation d’un bien public local", "", "D2", "", "Bien également affecté à l’Empire : qualifications impériales possibles."],
-  ["CPL", "47", "Occupation illégitime d’un lieu public local", "", "C2", "Confiscation possible des biens occupés illicitement (art. 47)."],
-  ["CPL", "48", "Entrave à une infrastructure publique locale", "", "D1"],
-  ["CPL", "49", "Trouble volontaire à l’ordre public", "", "C2"],
-  ["CPL", "50", "Fausse alerte locale", "", "C3", "", "Délit (art. 52) si elle provoque une évacuation ou mobilise la garde ou les secours."],
-  ["CPL", "51", "Usage frauduleux d’un signal officiel local", "", "C3", "", "Délit (art. 52) si l’usage provoque une évacuation ou mobilise la garde ou les secours."],
-  ["CPL", "52", "Alerte gravement perturbatrice", "", "D2", "", "Évacuation, fermeture de zone, intervention des secours, déplacement de moyens ou engagement de la garde."],
-  ["CPL", "53", "Abandon de déchets ou d’objets", "", "C1", "Remise en état ou nettoyage (art. 53)."],
-  ["CPL", "54", "Souillure de l’espace public", "", "C2"],
-  ["CPL", "55", "Nuisances olfactives", "", "C1"],
-  ["CPL", "56", "Mendicité troublant l’ordre public", "", "C1", "", "L’appel à la charité respectueux de l’ordre public, notamment par les cultes reconnus, n’est pas visé."],
-  ["CPL", "57", "Dissimulation irrégulière du visage", "", "C1", "", "Exceptions : climat, santé, activité professionnelle, coutume autorisée ou nécessité légitime."],
-  ["CPL", "58", "Refus d’identification", "Refus de décliner son identité", "C2"],
-  ["CPL", "58", "Refus d’identification", "Fausse identité ou identité d’un tiers (délit)", "D1", "", "Délit par renvoi au Corpus Juriscivilis, art. 1."],
-  ["CPL", "59", "Dissimulation magique de la présence", "", "C2"],
-  ["CPL", "59", "Dissimulation magique de la présence", "Requalification en délit — pendant un contrôle officiel ou dans une propriété publique", "D1"],
-  ["CPL", "60", "Dissimulation frauduleuse", "Valeur ou somme éludée jusqu’à 500 septims", "C3", "", "Qualification selon la valeur de l’objet ou le montant éludé, aux seuils impériaux. L’objet dont la détention est elle-même interdite reste poursuivi pour cette infraction."],
-  ["CPL", "60", "Dissimulation frauduleuse", "Valeur ou somme éludée de 500 à 2 500 septims", "D2"],
-  ["CPL", "60", "Dissimulation frauduleuse", "Valeur ou somme éludée au-delà de 2 500 septims", "K1"],
-  ["CPL", "61", "Obstruction d’une voie publique locale", "", "C2", "", "Crime (art. 63) pour un passage stratégique."],
-  ["CPL", "62", "Atteinte à une balise de sécurité locale", "", "D1"],
-  ["CPL", "63", "Obstruction d’un passage stratégique local", "", "K1", "", "Passage nécessaire aux secours, au ravitaillement, à la défense ou à l’évacuation."],
-  ["CPL", "64", "Fraude commerciale locale", "", "D2", PEINES_PRODUIT],
-  ["CPL", "65", "Commerce interdit", "", "D2", PEINES_PRODUIT],
-  ["CPL", "66", "Exploitation clandestine locale", "", "D2", PEINES_PRODUIT],
-  ["CPL", "67", "Poursuite d’une exploitation fermée administrativement", "", "D3", PEINES_PRODUIT],
-  ["CPL", "68", "Mise en danger par exploitation", "", "K1"],
-  ["CPL", "69", "Refus de présentation des documents d’exploitation", "", "D1"],
-  ["CPL", "70", "Dissimulation ou falsification de documents d’exploitation", "", "K1"],
-  ["CPL", "71", "Entrave à une inspection locale", "", "D2"],
-  ["CPL", "72", "Opposition violente à un contrôle local", "", "K2", "", "Sans préjudice des autres infractions commises, violences comprises."],
-  ["CPL", "73", "Dissimulation de bénéfices d’une exploitation locale", "", "D2", "Paiement des sommes éludées.", "Sans préjudice du Codex Penitus, art. 19, pour les sommes dues à l’Empire."],
-  ["CPL", "74", "Chasse sans droit", "", "C2", PEINES_CONFISCATION_84],
-  ["CPL", "75", "Chasse dangereuse", "", "D1"],
-  ["CPL", "76", "Exploitation illicite des ressources cynégétiques", "", "D1", "Saisie et confiscation des ressources et de leurs produits (art. 76 et 84)."],
-  ["CPL", "77", "Chasse d’espèces protégées", "", "D2", PEINES_CONFISCATION_84],
-  ["CPL", "78", "Exploitation illicite de la flore locale", "", "D1", PEINES_CONFISCATION_84],
-  ["CPL", "79", "Atteinte aux espèces végétales protégées", "", "D2", PEINES_CONFISCATION_84],
-  ["CPL", "80", "Dégradation volontaire de l’environnement local", "", "K1", "Remise en état (art. 80)."],
-  ["CPL", "81", "Expédition sans autorisation à Blancherive", "", "C3", PEINES_CONFISCATION_84],
-  ["CPL", "82", "Exploitation illicite d’un site ou de ruines locaux", "", "D2", PEINES_CONFISCATION_84, "Site reconnu comme installation impériale : qualifications du Codex Penitus."],
-  ["CPL", "83", "Trafic d’objets issus d’une expédition locale", "", "K1", PEINES_CONFISCATION_84],
-  ["CPL", "85", "Altération magique de la volonté", "", "D3", "", "Sans préjudice du Corpus Juriscivilis, art. 11."],
-  ["CPL", "86", "Influence magique frauduleuse", "Qualification du corps de l’article (délit)", "D4", "Saisie ou restitution du produit de l’infraction (art. 86).", PEINES_TITRE_CORPS],
-  ["CPL", "86", "Influence magique frauduleuse", "Qualification du titre (crime)", "K1", "Saisie ou restitution du produit de l’infraction (art. 86).", PEINES_TITRE_CORPS],
-  ["CPL", "87", "Invocation dangereuse", "", "K2"],
-  ["CPL", "88", "Libération d’une créature dangereuse", "", "K2"],
-  ["CPL", "89", "Expérience magique dangereuse", "", "D3"],
-  ["CPL", "90", "Poursuite d’une expérience interdite", "Qualification du corps de l’article (délit)", "D4", "", PEINES_TITRE_CORPS + " L’ordre d’interruption doit reposer sur un risque caractérisé."],
-  ["CPL", "90", "Poursuite d’une expérience interdite", "Qualification du titre (crime)", "K1", "", PEINES_TITRE_CORPS],
-  ["CPL", "91", "Pratique magique catastrophique", "", "K4"],
-  ["CPL", "91", "Pratique magique catastrophique", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
-  ["CPL", "92", "Contournement d’une interdiction magique locale", "", "D2"],
-  ["CPL", "93", "Violation d’une mesure exceptionnelle locale", "Mesure qualifiée de contravention par l’acte", "C3", "", "La qualification et la peine fixées par l’acte qui proclame la mesure priment sur le barème."],
-  ["CPL", "93", "Violation d’une mesure exceptionnelle locale", "Mesure qualifiée de délit par l’acte", "D2", "", "La qualification et la peine fixées par l’acte qui proclame la mesure priment sur le barème."],
-  ["CPL", "93", "Violation d’une mesure exceptionnelle locale", "Mesure qualifiée de crime par l’acte", "K1", "", "La qualification et la peine fixées par l’acte qui proclame la mesure priment sur le barème."],
-  ["CPL", "95", "Non-respect d’une mise en demeure administrative", "", "D1", "", "La régularité de la mise en demeure peut être contestée devant le magistrat."],
+  ["CPL", "3", "Des ordres et sommations légitimes", "", "D1", "", "L’ordre doit relever de la charge de l’officiel et ne saurait imposer un acte contraire aux lois. Envers une autorité impériale : Corpus Juriscivilis, art. 2."],
+  ["CPL", "4", "Des entraves à l’autorité locale", "", "D2", "", "Visite de marchandises, contrôle ou inspection ; la dissimulation volontaire d’objets recherchés peut constituer l’entrave."],
+  ["CPL", "4", "Des entraves à l’autorité locale", "Requalification en crime — annoncée par le titre, non définie par le corps", "K1", "", PEINES_TITRE_CORPS],
+  ["CPL", "5", "De l’usurpation des marques", "Port sans droit des marques, livrées ou insignes de la Cour", "C2", "Confiscation des effets constituant l’infraction."],
+  ["CPL", "5", "De l’usurpation des marques", "Requalification en délit — usage pour tromper ou obtenir un avantage, ou se faire passer pour un officier de Blancherive", "D2", "Confiscation des effets constituant l’infraction."],
+  ["CPL", "5", "De l’usurpation des marques", "Requalification en crime — usurpation d’une charge de la Cour, ou exercice frauduleux d’un pouvoir réservé au Jarl", "K2", "", "L’usurpation d’une fonction impériale relève du Codex Penitus."],
+  ["CPL", "6", "Des outrages à l’autorité locale", "Injure grossière adressée publiquement à une autorité locale dans sa charge", "C2", "", "La critique des décisions du Jarl, exprimée sans menace ni entrave, n’est pas un outrage."],
+  ["CPL", "6", "Des outrages à l’autorité locale", "Requalification en délit — humiliation grave, menace ou outrage troublant l’exercice de la charge", "D2"],
+  ["CPL", "7", "De la sédition", "", "K4", "", "Le simple désaccord avec le Jarl n’est pas une sédition."],
+  ["CPL", "7", "De la sédition", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
+  ["CPL", "8", "De la trahison", "", "K4", "", "Faute volontaire, dirigée contre la sûreté de Blancherive ou de ses habitants. Envers l’Empire : Codex Penitus."],
+  ["CPL", "8", "De la trahison", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
+  ["CPL", "9", "De l’insubordination", "", "D1", "", "Officier ou serviteur de la châtellerie. Le refus d’un ordre manifestement contraire aux lois n’est pas puni ; un simple défaut de déférence ne suffit pas."],
+  ["CPL", "10", "Des injures et calomnies", "Injures portant volontairement atteinte à l’honneur d’autrui", "C1", "", "Les propos tenus de bonne foi pour dénoncer un méfait ne sont pas punis."],
+  ["CPL", "10", "Des injures et calomnies", "Requalification en délit — accusation publique de faits que l’on sait mensongers, afin de nuire", "D2"],
+  ["CPL", "11", "Des accusations mensongères", "Faits faussement imputés de nature contraventionnelle", "C3", "", "La qualification suit la gravité des faits faussement imputés (art. 11)."],
+  ["CPL", "11", "Des accusations mensongères", "Faits faussement imputés de nature délictuelle ou criminelle", "D3"],
+  ["CPL", "12", "Du faux témoignage", "", "K2", "", "L’erreur, l’oubli ou le retrait spontané du mensonge avant la sentence ne constituent pas un faux témoignage."],
+  ["CPL", "13", "Du chantage et des menaces", "", "D3", "", "Annoncer de bonne foi une plainte légitime n’est pas un chantage."],
+  ["CPL", "14", "Des persécutions", "", "D3", "", "Actes répétés troublant gravement la vie ou la tranquillité d’une personne."],
+  ["CPL", "14", "Des persécutions", "Requalification en crime — en groupe, ou en abusant d’une autorité sur la victime", "K1"],
+  ["CPL", "15", "De la mise en péril et des blessures", "Exposition d’autrui à un danger prévisible par imprudence grave", "C3", "", "Blessures volontaires : Corpus Juriscivilis, art. 5."],
+  ["CPL", "15", "De la mise en péril et des blessures", "Requalification en délit — usage dangereux d’une monture, d’un objet, d’une substance ou de magie", "D2"],
+  ["CPL", "16", "Des atteintes à la pudeur", "Exhibition volontairement obscène sur les places ou voies fréquentées", "C3"],
+  ["CPL", "16", "Des atteintes à la pudeur", "Requalification en délit — geste imposé portant gravement atteinte à l’intimité, ou exhibition visant un trouble grave", "D3", "", "Sans préjudice des crimes impériaux."],
+  ["CPL", "17", "Des substances données à l’insu d’autrui", "", "K2"],
+  ["CPL", "18", "De la rétention abusive", "", "D3", "", "Hors séquestration punie par l’Empire (Corpus Juriscivilis, art. 14)."],
+  ["CPL", "18", "De la rétention abusive", "Forme aggravée — abus d’autorité ou rétention prolongée", "D4"],
+  ["CPL", "19", "Des dommages aux biens", "", "D2", PEINES_REPARATION],
+  ["CPL", "19", "Des dommages aux biens", "Forme aggravée — biens anciens, sacrés ou précieux ; vivres, remèdes ou réserves rendus impropres à l’usage", "D4", PEINES_REPARATION],
+  ["CPL", "20", "Du vol", "", "D2", PEINES_RESTITUTION, "Valeur particulièrement élevée ou objet sous licence : Corpus Juriscivilis, art. 6 (crime)."],
+  ["CPL", "21", "Des scellés de justice", "", "D2"],
+  ["CPL", "22", "Des biens dont l’usage est soumis à permission", "Manquement aux seules conditions d’une permission accordée", "C2", "", "Les biens relevant exclusivement de l’Empire (équipements dwemers et Orsimer, armes éthérées) suivent leurs décrets."],
+  ["CPL", "22", "Des biens dont l’usage est soumis à permission", "Requalification en délit — usage sans permission, commerce de marchandises interdites par édit, activité soumise à permission non obtenue", "D2", "Saisie des marchandises illicites."],
+  ["CPL", "22", "Des biens dont l’usage est soumis à permission", "Requalification en crime — recel ou mise en vente sciemment pratiqués", "K1", "Saisie des marchandises illicites.", "Le titre ne retient que contravention et délit, le corps qualifie ce cas de crime : à trancher par le magistrat."],
+  ["CPL", "23", "De l’occupation des possessions d’autrui", "Occupation sans droit d’une place ou d’un ouvrage de Blancherive, en empêchant son usage ordinaire", "C2", "", "L’intrusion simple relève du Corpus Juriscivilis, art. 4."],
+  ["CPL", "23", "De l’occupation des possessions d’autrui", "Occupation ou rétention sans droit des terres, demeures et biens d’autrui", "D2"],
+  ["CPL", "23", "De l’occupation des possessions d’autrui", "Requalification en crime — usage causant sciemment un dommage considérable", "K1", PEINES_REPARATION],
+  ["CPL", "24", "Des voies et ouvrages de Blancherive", "Obstruction volontaire d’une route, d’un pont ou d’un passage ouvert aux voyageurs", "C2"],
+  ["CPL", "24", "Des voies et ouvrages de Blancherive", "Requalification en délit — bornes ou repères détruits ou déplacés, usage d’un ouvrage de la châtellerie empêché", "D2"],
+  ["CPL", "24", "Des voies et ouvrages de Blancherive", "Requalification en crime — entrave sciente à un passage nécessaire aux secours, au ravitaillement ou à la défense", "K2"],
+  ["CPL", "25", "Des fausses alertes", "Fausse alerte, ou usage sans droit des signaux réservés à la garde", "C3"],
+  ["CPL", "25", "Des fausses alertes", "Requalification en délit — levée des gardes, évacuation des habitants ou fermeture des portes provoquées", "D3"],
+  ["CPL", "26", "De la salubrité des lieux", "", "C1", "Nettoyage et remise en état des lieux."],
+  ["CPL", "26", "De la salubrité des lieux", "Requalification en délit — atteinte grave aux eaux ou aux approvisionnements", "D3", "Remise en état des lieux."],
+  ["CPL", "27", "De la mendicité", "Insistance après refus, ou passage barré pour obtenir l’aumône", "C1", "", "La demande d’aumône paisible est permise."],
+  ["CPL", "28", "De la dissimulation", "Refus de décliner son identité lors d’une vérification légitime", "C2", "", "Se couvrir le visage ou user de magie sans dessein frauduleux n’est pas puni par ce seul fait."],
+  ["CPL", "28", "De la dissimulation", "Requalification en délit — marchandise, arme ou bien caché par ruse ou magie pour le soustraire à une recherche, une saisie ou un droit", "D2", "", "Sans préjudice de l’infraction liée au bien lui-même."],
+  ["CPL", "30", "Des exploitations sans droit", "", "D2", "", "Y compris l’exploitation poursuivie après un ordre légitime de fermeture."],
+  ["CPL", "30", "Des exploitations sans droit", "Forme aggravée — activité périlleuse pour les citoyens", "D4"],
+  ["CPL", "31", "Des livres de comptes et droits dus", "", "D2", "", "Un simple oubli ou un retard de paiement, sans fraude, ne suffit pas ; les droits impayés restent exigibles (Code du commerce local, art. 9)."],
+  ["CPL", "32", "Des faux livres d’exploitation", "", "K1"],
+  ["CPL", "33", "De la chasse et du gibier", "Chasse sans droit sur les terres de Blancherive", "C2", PEINES_SAISIE_GIBIER, "Permis de chasse : Code du commerce local, art. 12."],
+  ["CPL", "33", "De la chasse et du gibier", "Requalification en délit — espèce protégée abattue sciemment, ou vente du produit d’une chasse interdite", "D2", PEINES_SAISIE_GIBIER],
+  ["CPL", "34", "Des végétaux protégés", "", "D1"],
+  ["CPL", "35", "Des expéditions et des lieux gardés", "Expédition sans la permission spéciale exigée par édit", "C2"],
+  ["CPL", "35", "Des expéditions et des lieux gardés", "Requalification en délit — fouille, pillage ou exploitation sans droit d’un tombeau, d’une ruine ou d’un lieu ancien gardé par Blancherive", "D3", "", "Les lieux relevant de l’Empire demeurent de son ressort (décret sur les recherches archéologiques)."],
+  ["CPL", "36", "Du trafic des découvertes", "", "K2", "Saisie des biens, restitués à leurs propriétaires légitimes ou attribués à la châtellerie."],
+  ["CPL", "37", "De l’emprise magique sur autrui", "", "K2"],
+  ["CPL", "37", "De l’emprise magique sur autrui", "Forme aggravée — influence employée pour obtenir un bien, un renseignement ou un consentement", "K3"],
+  ["CPL", "38", "Des créatures dangereuses", "", "K3"],
+  ["CPL", "39", "Des expériences magiques périlleuses", "", "D3", "", PEINES_TITRE_CORPS],
+  ["CPL", "39", "Des expériences magiques périlleuses", "Requalification en crime — selon le titre de l’article", "K1", "", "Y compris la pratique poursuivie après l’ordre d’une autorité légitime de l’interrompre."],
 
   // ----- Code du commerce local de Blancherive -----
-  ["CCoL", "10", "Réserves limitées et non-concurrence", "Dépassement des réserves autorisées", "C2", "Confiscation immédiate des marchandises concernées (art. 10).", "Qualification non précisée par le texte : contravention retenue par le barème. Poursuites possibles au titre du Code pénal local, art. 38 et 73."],
-  ["CCoL", "12", "Exploitation sans concession", "", "D2", PEINES_PRODUIT, "Sans préjudice du Code pénal local, art. 69, 70 et 73."],
-  ["CCoL", "13", "Fraude et manquements aux obligations", "Fraude fiscale, comptabilité inexacte ou refus de présenter les documents", "D2", "", "Le texte renvoie aux « articles 42 à 46 du Code pénal local », étrangers à la matière : voir les art. 69 à 73 de ce code."],
-  ["CCoL", "13", "Fraude et manquements aux obligations", "Ouverture minimale non respectée après mise en demeure restée sans effet", "D1"],
-  ["CCoL", "14", "Vente à la sauvette", "", "D1", "Confiscation possible des marchandises (art. 14).", "Les art. 38, 64, 65 et 66 du Code pénal local s’appliquent s’ils répriment plus sévèrement."],
+  ["CCoL", "17", "Des ventes sans droit et des tromperies", "", "D2", "Saisies et confiscations décidées par le juge (art. 17).", "Commerce, vente à la sauvette ou étal sans permission ni droit de place ; tromperie sur les droits commerciaux ; refus de présenter les livres exigés. Un retard de paiement ou une fermeture occasionnelle ne constitue pas, à lui seul, une fraude."],
 
   // ----- Corpus Juriscivilis Imperialis -----
-  ["CJI", "1", "Usurpation d'identité", "", "C3"],
+  ["CJI", "1", "Usurpation d'identité", "", "C2"],
   ["CJI", "1", "Usurpation d'identité", "Requalification en délit — qualité noble ou fonction officielle", "D2"],
-  ["CJI", "2", "Refus d'obtempérer", "", "C2", "", "Envers une autorité de Blancherive, le Code pénal local, art. 4 (délit), prévaut (art. 3 de ce code)."],
+  ["CJI", "2", "Refus d'obtempérer", "", "C2", "", "Envers une autorité de Blancherive, le Code pénal local, art. 3 (délit), prévaut."],
   ["CJI", "2", "Refus d'obtempérer", "Requalification en délit — usage de violence, de magie ou de potions", "D2"],
   ["CJI", "3", "Atteinte à la paix de l’Empereur", "", "C2"],
   ["CJI", "4", "Intrusion", "Propriété privée", "C2"],
   ["CJI", "4", "Intrusion", "Requalification en délit — propriété publique de l’Empire ou d’une châtellerie", "D1"],
   ["CJI", "5", "Violences et agressions", "Contusions ou blessures légères", "D2", "", "Crime avec une circonstance de l’art. 8 : arme ou magie, réunion, représentant de l’autorité, mutilation."],
   ["CJI", "5", "Violences et agressions", "Incapacité ou séquelles", "D4"],
-  ["CJI", "6", "Vol, escroquerie", "Bien ou service d’une valeur jusqu’à 500 septims", "D1", PEINES_RESTITUTION, "Valeur « particulièrement élevée » : au-delà de 2 500 septims, seuil criminel de la classification impériale."],
-  ["CJI", "6", "Vol, escroquerie", "Bien ou service d’une valeur de 500 à 2 500 septims", "D2", PEINES_RESTITUTION],
-  ["CJI", "6", "Vol, escroquerie", "Requalification en crime — valeur au-delà de 2 500 septims, ou objet sous licence", "K1", PEINES_RESTITUTION],
-  ["CJI", "7", "Recel", "Bien d’une valeur jusqu’à 500 septims", "D1", PEINES_RESTITUTION],
-  ["CJI", "7", "Recel", "Bien d’une valeur de 500 à 2 500 septims", "D2", PEINES_RESTITUTION],
-  ["CJI", "7", "Recel", "Requalification en crime — valeur au-delà de 2 500 septims, ou objet sous licence", "K1", PEINES_RESTITUTION],
+  ["CJI", "6", "Vol, escroquerie", "Bien ou service d’une valeur jusqu’à 100 septims", "D1", PEINES_RESTITUTION, "Valeur « particulièrement élevée » : au-delà de 500 septims, seuil criminel de la classification impériale."],
+  ["CJI", "6", "Vol, escroquerie", "Bien ou service d’une valeur de 100 à 500 septims", "D2", PEINES_RESTITUTION],
+  ["CJI", "6", "Vol, escroquerie", "Requalification en crime — valeur au-delà de 500 septims, ou objet sous licence", "K1", PEINES_RESTITUTION],
+  ["CJI", "7", "Recel", "Bien d’une valeur jusqu’à 100 septims", "D1", PEINES_RESTITUTION],
+  ["CJI", "7", "Recel", "Bien d’une valeur de 100 à 500 septims", "D2", PEINES_RESTITUTION],
+  ["CJI", "7", "Recel", "Requalification en crime — valeur au-delà de 500 septims, ou objet sous licence", "K1", PEINES_RESTITUTION],
   ["CJI", "8", "Circonstances aggravantes", "Vol, escroquerie ou recel aggravés", "K1", PEINES_RESTITUTION, "Cité avec l’art. 6 ou 7 pour un même fait : seule la qualification aggravée est retenue."],
   ["CJI", "8", "Circonstances aggravantes", "Violences aggravées — arme ou magie, réunion, ou contre un représentant de l’autorité", "K2", "", "Cité avec l’art. 5 pour un même fait : seule la qualification aggravée est retenue.", { sang: true }],
   ["CJI", "8", "Circonstances aggravantes", "Violences avec mutilation", "K3", "", "", { sang: true }],
@@ -302,11 +266,6 @@ const PEINES_INITIALES = [
   ["CJI", "16", "Créatures profanes et abominations", "", "K3", "", "Vampires, lycanthropes et créatures assimilées se maintenant parmi la population."],
   ["CJI", "16", "Créatures profanes et abominations", "Peine maximale", "PM", PEINES_PEINE_MAXIMALE, PEINES_VERDICT],
   ["CJI", "17", "Abus de pouvoir et corruption", "", "K2", "", "Corruption active comme passive."],
-
-  // ----- De Re Nobilitatis -----
-  ["DRN", "4", "Devoirs et Obligations", "Manquement isolé", "Spéciale", "Remboursement des sommes dues.", "Plafond : 5 000 septims, cumulés avec le remboursement des sommes dues et un bannissement temporaire ou définitif.", { amende: 1000 }],
-  ["DRN", "4", "Devoirs et Obligations", "Manquement grave — convocation judiciaire ignorée, impôt non acquitté, Jarl non soutenu", "Spéciale", "Remboursement des sommes dues.", "", { amende: 2500 }],
-  ["DRN", "4", "Devoirs et Obligations", "Manquement grave et réitéré", "Spéciale", "Remboursement des sommes dues ; bannissement temporaire ou définitif des terres du Jarl.", "", { amende: 5000 }],
 
   // ----- Décrets impériaux -----
   ["ORS", "4", "Sanctions — port et fabrication irréguliers", "Port d’une armure Orsimer sans rite", "C4", "Saisie de l’armure (art. 4).", "Qualification non précisée par le décret : retenue par le barème. Les armes Orsimer ne sont pas visées."],
@@ -446,14 +405,7 @@ function construireBaremeInitial_() {
 
     const amende = echelon.amende || "";
     const cachot = echelon.cachot || "";
-    let nobiliaire = "";
-
-    if (cachot && !options.sang) {
-      nobiliaire = amende + cachot * PEINES_RACHAT_NOBLE_PAR_HEURE;
-      if (echelon.qualification === "Délit") {
-        nobiliaire = Math.min(nobiliaire, PEINES_FOURCHETTES["délit"].max);
-      }
-    }
+    const nobiliaire = cachot && !options.sang ? rachatNoblePeine_(echelon.qualification) : "";
 
     return [source, article, intitule, niveau, echelon.qualification, code, amende, cachot, nobiliaire, options.sang ? "oui" : "", complements, observations];
   });
@@ -591,8 +543,8 @@ function controlerFourchettePeine_(qualification, echelon, amende, cachot, nobil
     }
   }
 
-  if (qualification === "délit" && nobiliaire !== null && nobiliaire > fourchette.max) {
-    avertissements.push(`Amende nobiliaire de ${nobiliaire} septims au-delà du plafond délictuel de 2 500 septims.`);
+  if (fourchette && fourchette.max !== null && nobiliaire !== null && nobiliaire > fourchette.max) {
+    avertissements.push(`Amende nobiliaire de ${nobiliaire} septims au-delà du plafond impérial ${libelleFourchettePeine_(qualification)}.`);
   }
 
   if (qualification === "contravention" && cachot !== null) {
@@ -604,11 +556,11 @@ function controlerFourchettePeine_(qualification, echelon, amende, cachot, nobil
   }
 
   if (cachot !== null && !sang && nobiliaire === null) {
-    avertissements.push("Amende nobiliaire manquante : un noble doit toujours se voir proposer une amende hors crime de sang (De Re Nobilitatis, art. 9).");
+    avertissements.push("Amende nobiliaire manquante : un noble doit toujours se voir proposer une amende hors crime de sang (De Re Nobilitatis, art. 13).");
   }
 
   if (sang && nobiliaire !== null) {
-    avertissements.push("Crime de sang : aucune amende de substitution n’est due à un noble (De Re Nobilitatis, art. 9).");
+    avertissements.push("Crime de sang : aucune amende de substitution n’est due à un noble (De Re Nobilitatis, art. 13).");
   }
 
   if (nobiliaire !== null && amende !== null && nobiliaire < amende) {
@@ -624,9 +576,9 @@ function controlerFourchettePeine_(qualification, echelon, amende, cachot, nobil
 
 function libelleFourchettePeine_(qualification) {
   return {
-    contravention: "des contraventions (jusqu’à 500 septims)",
-    "délit": "des délits (de 500 à 2 500 septims)",
-    crime: "des crimes (au-delà de 2 500 septims)"
+    contravention: "des contraventions (jusqu’à 100 septims)",
+    "délit": "des délits (de 100 à 500 septims)",
+    crime: "des crimes (de 500 à 1 000 septims)"
   }[qualification];
 }
 

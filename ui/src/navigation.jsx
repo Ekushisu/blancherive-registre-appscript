@@ -13,6 +13,7 @@ const paths={
   amendes:'M6 3h12v18l-3-2-3 2-3-2-3 2V3M9 7h6M9 11h6M9 15h3',
   prison:'M4 21V5l8-3 8 3v16M2 21h20M8 8v13M12 8v13M16 8v13M4 12h16',
   inventaire:'M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10H3zM3 12h18M12 10v3M10 12h4v4h-4z',
+  permis:'M3 21L19 5M19 5h-6M19 5v6M6 8L16 18M6 8Q16 8 16 18',
   shield:'M12 2l8 3v6c0 5-4 9-8 11-4-2-8-6-8-11V5l8-3zM8 12l3 3 5-6',
   exit:'M9 4H4v16h5M14 8l4 4-4 4M8 12h13'
 };
@@ -22,20 +23,21 @@ export function RegistreIcon({name}) {return <svg viewBox="0 0 24 24" fill="none
 export const ROLE_PUBLIC="VISITEUR";
 const LIBELLES_ROLE={OFFICIER:"Officier",GARDE:"Garde",INTENDANT:"Intendant",[ROLE_PUBLIC]:"Visiteur"};
 // Libellés courts de la barre inférieure, où chaque entrée dispose de 45 px.
-const LIBELLES_MOBILES={organigramme:"Hiérarchie",peines:"Peines"};
+const LIBELLES_MOBILES={organigramme:"Hiérarchie",peines:"Peines",permis:"Permis"};
 
 export function Header({role,nom="",page,onPage,onLogout}) {
   // VISITEUR ne consulte que le Codex. INTENDANT est un code remis hors de la
   // garde — argentier, Thanes, cuisines — et n'a que l'effectif, la paye,
   // l'inventaire, le Codex et les décrets de peines et amendes, toujours sans
   // droit d'écriture. L'inventaire des coffres est une affaire d'officiers et
-  // d'intendance : le GARDE ne le voit pas. La fiche de service d'un effectif
-  // n'est pas une page du menu : elle s'ouvre en cliquant sur son nom.
+  // d'intendance : le GARDE ne le voit pas. Les permis de chasse sont tenus par
+  // la garde (GARDE et OFFICIER), pas par l'intendance. La fiche de service
+  // d'un effectif n'est pas une page du menu : elle s'ouvre en cliquant sur son nom.
   const pages=role===ROLE_PUBLIC
     ?[["codex","Codex"]]
     :role==="INTENDANT"
     ?[["organigramme","Organigramme"],["paye","Paye"],["inventaire","Inventaire"],["codex","Codex"],["peines","Peines et amendes"]]
-    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["peines","Peines et amendes"],["amendes","Amendes"],["prison","Prison"]];
+    :[["organigramme","Organigramme"],...(role==="OFFICIER"?[["effectifs","Effectifs"]]:[]),["presences","Présences"],...(role==="OFFICIER"?[["paye","Paye"],["inventaire","Inventaire"]]:[]),["codex","Codex"],["peines","Peines et amendes"],["amendes","Amendes"],["prison","Prison"],["permis","Permis de chasse"]];
   return <header className="topbar">
     <div className="brand"><span className="brand-seal"><img src={sceau} alt=""/></span><div><span className="brand-overline">Châtellerie de</span><strong>Blancherive</strong><span className="brand-caption">Registre de la Garde</span></div></div>
     <div className="nav-caption">Le registre</div>

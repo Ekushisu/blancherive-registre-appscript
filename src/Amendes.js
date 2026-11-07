@@ -149,8 +149,9 @@ function lireReversementsAmendes_(ss) {
     const estActif = normaliserReferenceAmendes_(row[statut]) === normaliserReferenceAmendes_(AMENDES_STATUT_ACTIF);
     if (!estCollecteur || !estActif) continue;
     if (!collecteursParCorps.has(corpsGarde)) collecteursParCorps.set(corpsGarde, []);
-    // Grade et nom séparés : le nom ouvre la fiche du collecteur.
-    collecteursParCorps.get(corpsGarde).push({ grade: nettoyerSaisieUtilisateur(row[grade]), nom: nomComplet });
+    // Grade et nom séparés : le nom ouvre la fiche du collecteur. Le corps
+    // sert au grade affiché (alias de l'Académie, ui/src/corps.js).
+    collecteursParCorps.get(corpsGarde).push({ grade: nettoyerSaisieUtilisateur(row[grade]), nom: nomComplet, corps: nettoyerSaisieUtilisateur(row[corps]) });
   }
   const collecteursEtatMajor = [];
   for (const [corpsGarde, collecteurs] of collecteursParCorps) if (estEtatMajorAmendes_(corpsGarde)) collecteursEtatMajor.push(...collecteurs);
@@ -173,7 +174,7 @@ function lireReversementsAmendes_(ss) {
 function trouverColonneAmendes_(headers, aliases) { const normalizedAliases = aliases.map(normaliserReferenceAmendes_); return headers.findIndex(header => normalizedAliases.includes(header)); }
 function estEtatMajorAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return value === "etat-major" || value === "etat major"; }
 function estCorpsReversementMutualiseAmendes_(corps) { const value = normaliserReferenceAmendes_(corps); return AMENDES_CORPS_REVERSEMENT_MUTUALISES.map(normaliserReferenceAmendes_).includes(value) || value === "hird"; }
-// Collecteurs { grade, nom }, un seul par nom, dans l'ordre de la feuille.
+// Collecteurs { grade, nom, corps }, un seul par nom, dans l'ordre de la feuille.
 function collecteursUniquesAmendes_(collecteurs) { const result = [], seen = new Set(); for (const collecteur of collecteurs) { const key = normaliserReferenceAmendes_(collecteur.nom); if (!key || seen.has(key)) continue; seen.add(key); result.push(collecteur); } return result; }
 function contientSpecialiteAmendes_(specialites, specialiteRecherchee) { const recherchee = normaliserReferenceAmendes_(specialiteRecherchee); return String(specialites || "").split(/[,;\n]/).some(specialite => normaliserReferenceAmendes_(specialite) === recherchee); }
 

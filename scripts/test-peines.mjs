@@ -95,12 +95,12 @@ assert.equal(ecritures, ecrituresRefus, 'Aucune écriture sur une feuille inconn
 sheets.set('PeinesAmendes', feuille);
 
 // ---------------------------------------------------------------- lecture d'une ligne
-const ligne = plain(premiere.lignes.find(l => l.source === SOURCES.CPL && l.article === '21' && l.qualification === 'crime'));
+const ligne = plain(premiere.lignes.find(l => l.source === SOURCES.CPL && l.article === '14' && l.qualification === 'crime'));
 assert.deepEqual(
   { niveau: ligne.niveau, echelon: ligne.echelon, amende: ligne.amende, cachot: ligne.cachot, nobiliaire: ligne.nobiliaire, sang: ligne.sang },
-  { niveau: 'Requalification en crime — en réunion, ou dans une relation d’autorité, de dépendance ou de service', echelon: 'K1', amende: 3000, cachot: 1, nobiliaire: 4000, sang: false }
+  { niveau: 'Requalification en crime — en groupe, ou en abusant d’une autorité sur la victime', echelon: 'K1', amende: 600, cachot: 1, nobiliaire: 1000, sang: false }
 );
-assert.equal(ligne.ligne, feuille.rows.findIndex(r => r[1] === '21' && r[4] === 'Crime') + 1, 'Numéro de ligne physique');
+assert.equal(ligne.ligne, feuille.rows.findIndex(r => r[1] === '14' && r[4] === 'Crime') + 1, 'Numéro de ligne physique');
 const meurtre = premiere.lignes.find(l => l.source === SOURCES.CJI && l.article === '12' && l.echelon === 'K3');
 assert.equal(meurtre.sang, true);
 assert.equal(meurtre.nobiliaire, null, 'Crime de sang : pas d’amende de substitution');
@@ -117,33 +117,35 @@ function lireAvec(lignesSupplementaires) {
 }
 const CPL = SOURCES.CPL;
 let r = lireAvec([
-  [CPL, '16', 'Injure', '', 'Contravention', 'C2', 150],
-  [CPL, '16', 'Injure', 'Cas de base', 'Contravention', 'C2', 200],
-  [CPL, '17', 'Diffamation', '', 'Délit', 'D1', 'abc'],
-  [CPL, '18', '', '', 'Infraction', 'D1', 750],
-  ['', '19', '', '', 'Délit', 'D2', 1250],
-  [CPL, '20', 'Menaces', '', 'Délit', 'D1', 3000],
-  [CPL, '21', '', '', 'délit', 'K1', 1250, 1],
-  [CPL, '22', '', '', 'Crime', 'K2', 5000, 2, 4000, 'oui'],
-  [CPL, '23', '', '', 'Contravention', 'C1', 50, 0.5],
+  [CPL, '10', 'Injures', '', 'Contravention', 'C2', 50],
+  [CPL, '10', 'Injures', 'Cas de base', 'Contravention', 'C2', 75],
+  [CPL, '13', 'Chantage', '', 'Délit', 'D1', 'abc'],
+  [CPL, '18', '', '', 'Infraction', 'D1', 250],
+  ['', '19', '', '', 'Délit', 'D2', 250],
+  [CPL, '20', 'Vol', '', 'Délit', 'D1', 3000],
+  [CPL, '21', '', '', 'délit', 'K1', 500, 1],
+  [CPL, '12', '', '', 'Crime', 'K2', 750, 2, 1000, 'oui'],
+  [CPL, '26', '', '', 'Contravention', 'C1', 25, 0.5],
   [CPL, '*', '', 'Renvoi', 'Renvoi', '', 100],
   [CPL, '24', '', '', 'Délit', 'D1', '1,5'],
   [CPL, '25', '', '', 'Crime', 'K1', '', 9999],
+  [CPL, '17', '', '', 'Crime', 'K2', 750, 2, 1500],
   ['', '', '', '', '', '', '']
 ]);
 const graves = r.anomalies.filter(a => a.grave).map(a => a.ligne);
 assert.deepEqual(graves, [3, 4, 5, 6, 12, 13], 'Doublon, amende illisible, qualification inconnue, source vide, amende décimale, cachot démesuré : écartés');
 assert.ok(r.anomalies.find(a => a.ligne === 3).message.includes('ligne 2'), 'Le doublon renvoie à la première ligne');
-assert.equal(r.lignes.length, 6, 'Les lignes lisibles restent, la ligne vide est sautée');
+assert.equal(r.lignes.length, 7, 'Les lignes lisibles restent, la ligne vide est sautée');
 const message = (n, motif) => assert.ok(r.anomalies.some(a => a.ligne === n && !a.grave && motif.test(a.message)), `Ligne ${n} : ${motif}`);
-message(7, /hors de la fourchette impériale des délits/);
-message(8, /Amende nobiliaire manquante/);
+message(7, /hors de la fourchette impériale des délits \(de 100 à 500 septims\)/);
+message(8, /Amende nobiliaire manquante.*art\. 13/);
 message(8, /incohérent/);
 message(9, /Crime de sang/);
 message(10, /Cachot pour une contravention/);
 message(11, /renvoi/i);
+message(14, /Amende nobiliaire de 1500 septims au-delà du plafond impérial des crimes/);
 assert.equal(r.lignes.find(l => l.article === '*').amende, null, 'Montant d’une ligne de renvoi ignoré');
-assert.equal(r.lignes.find(l => l.article === '16').niveau, 'Cas de base', 'Niveau vide : cas de base');
+assert.equal(r.lignes.find(l => l.article === '10').niveau, 'Cas de base', 'Niveau vide : cas de base');
 
 // ---------------------------------------------------------------- cohérence du barème initial avec les textes
 const documents = documentsLocaux();
@@ -157,15 +159,16 @@ for (const l of lignes) {
   assert.ok(articlesParSource.get(l.source).has(l.article), `${l.source}, art. ${l.article} introuvable dans la copie locale`);
 }
 
-// Fourchettes impériales et rachat nobiliaire (1 000 septims l'heure, plafond délictuel).
+// Fourchettes impériales révisées (100 / 500 / 1 000) et rachat nobiliaire au plafond de la qualification.
+assert.deepEqual(plain(vm.runInContext('PEINES_FOURCHETTES', ctx)), { contravention: { min: 1, max: 100 }, 'délit': { min: 100, max: 500 }, crime: { min: 500, max: 1000 } });
+assert.equal(lignes.some(l => l.qualification === 'spéciale'), false, 'Plus de sanction spéciale : le De Re Nobilitatis ne chiffre plus les manquements nobiliaires');
 for (const l of lignes) {
-  if (l.qualification === 'contravention') { assert.ok(l.amende >= 1 && l.amende <= 500, `${l.article} ${l.niveau}`); assert.equal(l.cachot, null); }
-  if (l.qualification === 'délit') assert.ok(l.amende >= 500 && l.amende <= 2500, `${l.article} ${l.niveau}`);
-  if (l.qualification === 'crime' && l.echelon !== 'PM') assert.ok(l.amende > 2500 && l.cachot > 0, `${l.article} ${l.niveau}`);
+  if (l.qualification === 'contravention') { assert.ok(l.amende >= 1 && l.amende <= 100, `${l.article} ${l.niveau}`); assert.equal(l.cachot, null); }
+  if (l.qualification === 'délit') assert.ok(l.amende > 100 && l.amende <= 500, `${l.article} ${l.niveau}`);
+  if (l.qualification === 'crime' && l.echelon !== 'PM') assert.ok(l.amende > 500 && l.amende <= 1000 && l.cachot > 0, `${l.article} ${l.niveau}`);
   if (l.echelon === 'PM') assert.deepEqual([l.amende, l.cachot, l.nobiliaire], [null, null, null], 'Peine maximale non chiffrée');
   if (l.cachot && !l.sang) {
-    const attendu = Math.min(l.amende + l.cachot * 1000, l.qualification === 'délit' ? 2500 : Infinity);
-    assert.equal(l.nobiliaire, attendu, `Rachat nobiliaire ${l.source} art. ${l.article} ${l.niveau}`);
+    assert.equal(l.nobiliaire, l.qualification === 'délit' ? 500 : 1000, `Rachat nobiliaire ${l.source} art. ${l.article} ${l.niveau}`);
   }
   if (!l.cachot) assert.equal(l.nobiliaire, null);
   if (ECHELONS[l.echelon]) {
@@ -184,8 +187,9 @@ for (const source of [SOURCES.CPL, SOURCES.CJI, SOURCES.CCoL]) {
 }
 
 // Le premier niveau d'un article suit la qualification du Codex ; un article à
-// double qualification propose les deux. Exceptions : titre et corps divergent.
-const divergents = new Set([`${CPL}|86`, `${CPL}|90`]);
+// double qualification propose les deux. Exception : titre et corps divergent
+// (art. 39, crime au titre, délit au corps).
+const divergents = new Set([`${CPL}|39`]);
 const niveauxDe = (source, article) => lignes.filter(l => l.source === source && l.article === article);
 for (const [source, articles] of articlesParSource) {
   for (const a of articles.values()) {
@@ -200,9 +204,13 @@ for (const [source, articles] of articlesParSource) {
     }
   }
 }
-for (const article of ['86', '90']) {
+for (const article of ['4', '39']) {
   assert.deepEqual(niveauxDe(CPL, article).map(n => n.qualification), ['délit', 'crime'], `Art. ${article} : corps (délit) puis titre (crime)`);
 }
+// Dispositions générales du Code pénal local : sans barème. Le document saute l'article 29.
+assert.deepEqual(['1', '2', '29'].map(a => niveauxDe(CPL, a).length), [0, 0, 0]);
+assert.equal(articlesParSource.get(CPL).has('29'), false, 'Pas d’article 29 dans le texte');
+assert.equal(lignes.some(l => l.source === SOURCES.DRN), false, 'De Re Nobilitatis : plus de ligne, l’art. 14 ne chiffre rien');
 
 // Crimes de sang du droit impérial : meurtre, assassinat, torture, violences aggravées.
 const sang = new Set(lignes.filter(l => l.sang).map(l => `${l.source}|${l.article}`));

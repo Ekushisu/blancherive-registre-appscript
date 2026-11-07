@@ -53,6 +53,7 @@ const PAYE_FINANCEURS = [
     libelle: "Argentier de la cour",
     role: "argentier",
     jetons: [
+      "academie",
       "cite de blancherive",
       "eclaireur",
       "etat-major",

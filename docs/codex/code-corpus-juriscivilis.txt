@@ -1,11 +1,10 @@
 ﻿CORPUS JURISCIVILIS IMPERIALIS  
-Code Pénal Impérial Bordeciel
-
-
+Code Pénal Impérial 
    
         PRÉAMBULE
-Par l'autorité de l'Empereur de Tamriel, Seigneur de Cyrodiil et Souverain de tous les territoires impériaux, sur avis du Conseil des Anciens  et de  la Chancellerie Impérial de Bordeciel sous délégation du Gouverneur de Bordeciel: Qu'il soit connu dans toutes les provinces, tous les comtés et tous les territoires soumis à la juridiction impériale que le présent Corpus Juriscivilis constitue le code pénal de référence du Gouvernement Impérial pour la province de Bordeciel. Le présent Code s'applique à l'ensemble des citoyens, résidents, passants et sujets de l'Empire. Les châtelleries sont libres de promulguer des lois supplémentaires conformément à leurs coutumes, dans le respect des présentes dispositions. Aucune coutume locale, ordonnance de fief ou privilège personnel ne peut prévaloir sur les dispositions du présent Code, sauf lorsque celui-ci accorde expressément un pouvoir discrétionnaire aux autorités locales.
-L'ignorance de ces lois ne saurait constituer un moyen de défense devant aucun tribunal de l'Empire
+Par l’autorité de l’Empereur de Tamriel, Seigneur de Cyrodiil et Souverain de l’ensemble des territoires impériaux, sur avis du Conseil des Anciens et de la Chancellerie Impériale : qu’il soit connu dans toutes les provinces, tous les comtés, toutes les cités et tous les territoires soumis à la juridiction impériale que le présent Corpus Juriscivilis constitue le code pénal de référence de l’Empire.
+Le présent Code s’applique à l’ensemble des citoyens, résidents, voyageurs, passants et sujets se trouvant sur les terres relevant de l’autorité impériale.
+Les provinces, comtés, châtelleries et autres autorités locales demeurent libres de promulguer des lois, ordonnances et règlements supplémentaires conformément à leurs coutumes et prérogatives, sous réserve du respect des présentes dispositions. Aucune coutume locale, ordonnance provinciale, loi de fief, privilège personnel ou décision d’une autorité subordonnée ne saurait prévaloir sur les dispositions du présent Code, sauf lorsque celui-ci accorde expressément un pouvoir discrétionnaire ou une compétence particulière aux autorités locales. L’ignorance de ces lois ne saurait constituer un moyen de défense devant aucun tribunal de l’Empire.
 
 
 
@@ -29,9 +28,10 @@ Une infraction est constituée lorsque trois éléments sont réunis
  
 Classification des infractions
 Les infractions sont classées en trois catégories selon leur gravité :
-• Contraventions : Infractions mineures. Amende simple ou travaux légers. Jusqu’à 500 septimes
-• Délits : infractions de gravité moyenne. Amende élevée ou travaux forcés. Entre 500 et 2500 septimes
-• Crimes : Infractions les plus graves. Amende forte, emprisonnement ou peine de mort.  Plus de 2500 septimes
+• Contraventions : Infractions mineures. Amende simple ou travaux légers. Jusqu’à 100 septims.
+• Délits : Infractions de gravité moyenne. Amende élevée ou travaux forcés. Jusqu’à 500 septims.
+• Crimes : Infractions les plus graves. Amende forte, emprisonnement ou peine de mort.  Jusqu’à 1000 septims.
+Les amendes ne sont pas cumulables. 
  
 Des sanctions
 Toute juridiction impériale habilitée peut, selon les circonstances et la gravité des faits, prononcer les sanctions suivantes :
@@ -92,35 +92,27 @@ Article 7 — Recel  [Délit]
 Constitue un recel le fait de transporter, détenir, commercialiser, transformer ou dissimuler un bien provenant d’une infraction, en ne pouvant ignorer raisonnablement son origine ou son statut illicite.
 Sanction : Devient un crime si l’objet en question à une valeur particulièrement élevée, ou s’il s’agit d’un objet sous licence.
  
-
-
-
-
-
-
-
-
-
-
 Article 8 — Circonstances aggravantes [Aggravation]
 Les infractions prévues aux articles 5, 6 et 7 constituent un crime  lorsqu’elles sont commises soit :
 •           À main armée ou avec usage de magie ;
+
+
 •           En réunion (deux personnes ou plus) ;
 •           À l’encontre d’un représentant de l’Empire (administrateur, légionnaire ou garde Local) dans l’exercice de ses fonctions.
 •           En cas de mutilation
  
 Article 9 — Pratique de culte non autorisé  [Délit]
-Le fait de pratiquer, organiser ou promouvoir un culte, un rituel ou une croyance religieuse non reconnue par l’Empire est interdit sur le territoire de Bordeciel.
+Le fait de pratiquer, organiser ou promouvoir un culte, un rituel ou une croyance religieuse non reconnue par l’Empire est interdit sur le territoire Impérial.
 Toutefois, certains cultes, y compris daedriques, peuvent faire l’objet d’une tolérance conditionnelle, dès lors que leur pratique ne porte atteinte ni à l’ordre public, ni à la sécurité des personnes, ni aux lois impériales.
 Sont notamment tolérés les cultes dont les pratiques :
 • N’impliquent aucune violence, contrainte ou atteinte à l’intégrité physique ou mentale d’autrui ;
 • N’encouragent ni meurtre, ni sacrifice, ni crime, ni rébellion contre l’autorité impériale ;
 • Ne font pas usage de magie interdite, coercitive ou de rituels occultes dangereux (notamment pactes de sang ou invocations instables) ;
 • Ne troublent pas la paix publique ou ne provoquent pas de désordre manifeste.
-
-
 La simple possession d’objets, symboles ou reliques liés à un culte toléré ne constitue pas une infraction.
 En revanche, toute pratique cultuelle, devient illicite et constitue un délit dès lors qu’elle contrevient aux conditions ci-dessus.
+
+
 Sanction : Devient un crime si le culte est daedrique et qu’il ne respecte pas la tolérance conditionnelle
 
 
@@ -138,7 +130,13 @@ Sanction : Devient un crime en cas d’usage dangereux, offensif, coercitif ou a
 dommages matériels.
 
 
-   
+ 
+
+
+
+
+
+
          TITRE III — CRIMES
 
 
@@ -174,16 +172,4 @@ Article 17 — Abus de pouvoir et corruption  [Crime]
 Le fait, pour toute personne investie d’une autorité publique, d’un pouvoir ou d’une fonction, d’en user de manière détournée, excessive ou illégitime à des fins personnelles, ou de solliciter, accepter ou offrir un avantage en vue d’influencer une décision, une action ou une omission relevant de ses fonctions.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-                                      Corpus Juriscivilis Imperialis — Code Pénal Impérial de Bordeciel
+                                      Corpus Juriscivilis Imperialis — Code Pénal Impérial

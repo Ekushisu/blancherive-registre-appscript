@@ -452,6 +452,7 @@ Règles connues :
 - Décrets de peines et amendes, en lecture
 - Amendes (création et statut `Payé`)
 - Prison
+- Permis de chasse (consultation et délivrance)
 
 ### OFFICIER
 - tout ce qui précède ;
@@ -467,7 +468,8 @@ Règles connues :
   Libéré) ;
 - règlement d'une semaine depuis la page Paye ;
 - inventaire des coffres : création et modification des coffres, quantités,
-  rangement groupé, déplacements.
+  rangement groupé, déplacements ;
+- révocation d'un permis de chasse.
 
 ### INTENDANT
 - Organigramme en lecture, comme un GARDE : c'est de là que les cuisines de la
@@ -482,7 +484,7 @@ Règles connues :
   section Justice** (voir « Fiche de service » plus bas).
 
 Aucune autre page ne lui est accessible, ni Présences, ni Amendes, ni Prison,
-ni Effectifs. À la différence de `VISITEUR`, `INTENDANT` s'obtient
+ni Effectifs, ni Permis de chasse. À la différence de `VISITEUR`, `INTENDANT` s'obtient
 par un mot de passe et n'ouvre aucune fonction au public. La navigation ne lui propose que ses cinq pages, et
 chaque API refuse son rôle côté serveur.
 
@@ -571,6 +573,17 @@ de ces listes : la page n'existe pas pour lui, ni en lecture ni en écriture.
 L'interface cache la page au GARDE et les commandes à l'INTENDANT, mais seul
 `requireRole()` protège réellement. `scripts/test-inventaire.mjs` vérifie que
 chaque refus précède toute lecture Sheets.
+
+## Permis de chasse
+
+`getPermisChasse` et `ajouterPermisChasse` autorisent `GARDE` et `OFFICIER`.
+`revoquerPermisChasse` n'autorise que `OFFICIER`, avant toute ouverture du
+classeur, et exige en outre l'identité affichée de la ligne (`attendu` :
+prénom, nom, date) ; elle refuse d'écrire si la ligne a changé. `INTENDANT` et
+le rôle public n'apparaissent dans aucune de ces listes. L'interface cache le
+bouton Révoquer au GARDE, mais seul `requireRole()` protège réellement.
+`scripts/test-permis-chasse.mjs` vérifie que chaque refus précède toute lecture
+Sheets.
 
 ## Discord
 

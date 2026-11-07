@@ -35,11 +35,15 @@ const PRESENCES_EFFECTIFS_SHEET_NAME =
 const PRESENCE_EXCLUDED_CORPS =
   "Hird du Jarl";
 
-// Le Jarl et le Régent impérial ne sont ni pointés ni soldés, quel que soit leur corps.
+// Le Jarl, le Régent impérial et le Huscarl (garde personnel du Jarl ou d'un
+// thane, décision du propriétaire du 3 novembre 2026) ne sont ni pointés ni
+// soldés, quel que soit leur corps.
 const PRESENCE_EXCLUDED_GRADES = [
   "Jarl",
   "Régent impérial",
-  "Régente impériale"
+  "Régente impériale",
+  "Huscarl",
+  "Huscarl de Blancherive"
 ];
 
 const PRESENCE_TIMEZONE =

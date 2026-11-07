@@ -700,6 +700,7 @@ function extraireArticlesCodex_(document, config) {
 
   let current = null;
   let preamble = [];
+  let apresIntertitre = false;
 
   function terminerArticle() {
     if (!current) {
@@ -728,12 +729,14 @@ function extraireArticlesCodex_(document, config) {
 
     // Les intertitres du document ne font partie ni du texte ni des sanctions.
     if (estIntertitreCodex_(paragraph)) {
+      apresIntertitre = estSectionRomaineCodex_(paragraph);
       continue;
     }
 
     const heading = reconnaitreArticleCodex_(paragraph);
 
     if (heading) {
+      apresIntertitre = false;
       terminerArticle();
 
       current = {
@@ -743,6 +746,22 @@ function extraireArticlesCodex_(document, config) {
       };
 
       continue;
+    }
+
+    /*
+      De Argentaria fait suivre chaque section latine (« II. IURA
+      ARGENTARIARUM ») de sa traduction sur la ligne suivante (« Des droits des
+      établissements bancaires »). Cette ligne appartient à la section, pas au
+      dernier article ni au préambule. Seules ces sections sont concernées :
+      après « PRÉAMBULE » ou « Titre VII — … », la ligne suivante est du texte
+      (« Par l'autorité du Gouverneur impérial, » ouvre plusieurs décrets).
+    */
+    if (apresIntertitre) {
+      apresIntertitre = false;
+
+      if (estSousTitreIntertitreCodex_(paragraph)) {
+        continue;
+      }
     }
 
     if (!current) {
@@ -798,18 +817,53 @@ function extraireArticlesCodex_(document, config) {
 // ============================================================
 
 function estIntertitreCodex_(text) {
-  return /^(?:titre|chapitre|section|livre|partie)\s+(?:[IVXLCDM]+|\d+|préliminaire|preliminaire)(?:\s*[—–:\-]\s*\S.*)?$/i.test(String(text || "").trim());
+  const ligne = String(text || "").trim();
+
+  if (/^(?:titre|chapitre|section|livre|partie)\s+(?:[IVXLCDM]+|\d+|préliminaire|preliminaire)(?:\s*[—–:\-]\s*\S.*)?$/i.test(ligne)) {
+    return true;
+  }
+
+  // Le mot « PRÉAMBULE » seul sur sa ligne est un titre, pas du texte.
+  if (/^pr[ée]ambule$/i.test(ligne)) {
+    return true;
+  }
+
+  return estSectionRomaineCodex_(ligne);
+}
+
+
+/*
+  Section numérotée en chiffres romains et intitulée en capitales,
+  « I. DE CERTIFICATIONE » (De Argentaria). Une ligne qui contient une
+  minuscule est du texte, même si elle commence par un numéro romain.
+*/
+function estSectionRomaineCodex_(text) {
+  return /^[IVXLCDM]+\s*[.)]\s*[^a-zà-ÿ]*[A-ZÀ-Ý][^a-zà-ÿ]*$/.test(String(text || "").trim());
+}
+
+
+// La traduction qui suit une section romaine : courte, sans ponctuation finale.
+function estSousTitreIntertitreCodex_(text) {
+  return estTitreProbableCodex_(text) && !/[.,;:!?…]$/.test(String(text || "").trim());
 }
 
 
 function reconnaitreArticleCodex_(text) {
+  /*
+    Puce ou ornement saisi devant le numéro : « ■ Article I — … » dans De
+    Argentaria, où le carré est du texte et non la puce d'une liste (celle-ci
+    n'est pas rendue par `getText()`). Sans cette tolérance, le décret entier
+    revenait en un seul préambule.
+  */
+  const ligne = String(text || "").replace(/^(?:[■▪●◆◼►▶•▸‣*]\s*)+/, "");
+
   const patterns = [
     /^ARTICLE\s+([0-9]+(?:[.\-][0-9]+)*|[IVXLCDM]+)\s*(?:[—–:\-]\s*(.*))?$/i,
     /^ART\.?\s+([0-9]+(?:[.\-][0-9]+)*|[IVXLCDM]+)\s*(?:[—–:\-]\s*(.*))?$/i
   ];
 
   for (const pattern of patterns) {
-    const match = text.match(pattern);
+    const match = ligne.match(pattern);
 
     if (match) {
       return {
@@ -903,7 +957,8 @@ function finaliserArticleCodex_(article, config) {
 */
 function separerClassificationTitreCodex_(titre) {
   const texte = String(titre || "").trim();
-  const match = texte.match(/^(.*?)\s*(?:\(([^()]+)\)|\[([^\[\]]+)\])\s*$/);
+  // Parenthèse fermante doublée tolérée : « (Contravention / Délit)) » dans le Code pénal local.
+  const match = texte.match(/^(.*?)\s*(?:\(([^()]+)\)+|\[([^\[\]]+)\]+)\s*$/);
 
   if (!match) {
     return { titre: texte, classification: "" };
@@ -947,7 +1002,50 @@ function normaliserClassificationCodex_(valeur) {
     "aggravation": "Circonstance aggravante"
   };
 
-  return table[brut] || "";
+  if (table[brut]) {
+    return table[brut];
+  }
+
+  /*
+    Plusieurs qualifications dans un même titre, séparées par une barre, une
+    virgule ou « ou » : « (Contravention / Délit) », « (délit, crime ) »,
+    « (Contravention / Délit / Crime) » (Code pénal local de Blancherive,
+    novembre 2026). Deux qualifications voisines gardent leur forme connue ;
+    trois, ou contravention et crime sans délit, valent une qualification
+    variable. Une précision après la qualification (« contravention en cas
+    d'abus ») ne la change pas.
+  */
+  const parts = brut.split(/\s*(?:\/|,|;|\bou\b|\bet\b)\s*/).filter(Boolean);
+  const rangs = { contravention: 1, "délit": 2, "delit": 2, crime: 3 };
+  const retenus = [];
+
+  for (const part of parts) {
+    const mot = (part.match(/^(contravention|délit|delit|crime)\b/) || [])[1];
+
+    if (!mot || !/^(contravention|délit|delit|crime)(\s+en\s+cas\s+d'[\wéè]+)?$/.test(part)) {
+      return "";
+    }
+
+    if (retenus.indexOf(rangs[mot]) < 0) {
+      retenus.push(rangs[mot]);
+    }
+  }
+
+  retenus.sort();
+
+  if (retenus.length === 1) {
+    return { 1: "Contravention", 2: "Délit", 3: "Crime" }[retenus[0]];
+  }
+
+  if (retenus.join(",") === "1,2") {
+    return "Contravention ou délit";
+  }
+
+  if (retenus.join(",") === "2,3") {
+    return "Délit ou crime";
+  }
+
+  return retenus.length ? "Qualification variable" : "";
 }
 
 

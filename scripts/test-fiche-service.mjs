@@ -256,9 +256,10 @@ const hird = de('u-ulf').service;
 assert.equal(hird.exclu, true);
 assert.equal(hird.semaineCourante, null);
 assert.equal(hird.joursTotal, 0);
-// Le Jarl non plus, quel que soit son corps ; le Huscarl l'est.
+// Le Jarl non plus, quel que soit son corps ; ni le Huscarl (3 novembre 2026).
 assert.equal(de('u-jarl').service.exclu, true);
-assert.equal(de('u-hus').service.exclu, false);
+assert.equal(de('u-hus').service.exclu, true);
+assert.equal(de('u-hus').service.joursTotal, 0);
 
 // ---------------------------------------------------------------- justice
 const a = l.justice.amendes;

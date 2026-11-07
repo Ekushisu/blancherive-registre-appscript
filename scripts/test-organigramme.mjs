@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
-import { NOMS_AFFICHES_CORPS, libelleCorps } from '../ui/src/corps.js';
+import { NOMS_AFFICHES_CORPS, ALIAS_GRADES_CORPS, libelleCorps, libelleGrade } from '../ui/src/corps.js';
 
 const person = (nomComplet, grade, corps, status = 'En service actif') =>
   ({ nomComplet, prenom: nomComplet, nom: '', grade, corps, status });
@@ -28,10 +28,21 @@ const people = [
   person('Ancien Jarl', 'Jarl', 'État-Major', 'Mort en service'),
   // Un Jarl en service tient le sommet seul : le Régent impérial n'est alors rendu nulle part.
   person('Régent', 'Régent impérial', 'État-Major'),
-  // Le Huscarl est rendu sous le sommet, quel que soit son corps.
+  // Un Huscarl de l'État-Major est rendu sous le sommet ; un Huscarl d'un
+  // autre corps, au bas de la colonne de son corps ; un Huscarl du Hird,
+  // dissous, nulle part.
+  person('Huscarl central', 'Huscarl de Blancherive', 'État-Major'),
   person('Huscarl', 'Huscarl', 'Cité de Blancherive'),
   person('Huscarl titré', 'Huscarl de Blancherive', 'Hird du Jarl'),
-  person('Huscarl réserviste', 'Huscarl', 'Cité de Blancherive', 'Réserve')
+  person('Huscarl réserviste', 'Huscarl', 'Cité de Blancherive', 'Réserve'),
+  // Académie militaire de Blancherive : corps hors des garnisons, rendu à part
+  // (`academie`). Son chef est le Sergent-Chef ; un Major de l'Académie rejoint
+  // les Majors hors commandement ; un radié n'est rendu nulle part.
+  person('Chef Académie', 'Sergent-Chef', 'Académie militaire de Blancherive'),
+  person('Instructeur', 'Caporal', 'Académie Militaire'),
+  person('Élève', 'Recrue', 'Académie militaire de Blancherive'),
+  person('Major Académie', 'Major', 'Académie militaire de Blancherive'),
+  person('Ancien élève', 'Garde', 'Académie militaire de Blancherive', 'Radié')
 ];
 const DONNEES = [
   ['Grades'],
@@ -77,7 +88,7 @@ context.lireOrdreGradesOrganigramme = () => new Map([['capitaine', 0], ['garde',
 const data = context.getOrganigramme('test-token');
 const names = list => Array.from(list, p => p.nomComplet).sort();
 assert.deepEqual(names(data.majorsEtatMajor), ['Central', 'Central bis']);
-assert.deepEqual(names(data.majors), ['Détaché', 'Major du Hird']);
+assert.deepEqual(names(data.majors), ['Détaché', 'Major Académie', 'Major du Hird']);
 assert.deepEqual(names(data.commandementLocal.majors), ['Major Chêne', 'Major Chêne alias', 'Major Rivebois']);
 assert.deepEqual(Array.from(data.commandementLocal.garnisonKeys), ['rivebois', 'bois-de-chene']);
 assert.deepEqual(Array.from(data.garnisons.filter(g => !data.commandementLocal.garnisonKeys.includes(g.key)), g => g.key).sort(), ['cap-granite', 'cite', 'eclaireurs', 'faubourgs']);
@@ -86,13 +97,30 @@ assert.equal(data.hird, undefined, 'Plus de branche du Hird');
 // Le Jarl en service tient le sommet ; un Jarl mort ne s'affiche plus.
 assert.equal(data.jarl.nomComplet, 'Jarl réel');
 assert.deepEqual(Array.from(data.regents), [], 'Avec un Jarl en service, pas de régence');
-assert.deepEqual(names(data.huscarls), ['Huscarl', 'Huscarl titré']);
-assert.ok(!names(data.garnisons.find(g => g.key === 'cite').membres).includes('Huscarl'), 'Le Huscarl n’est pas dans son corps');
+assert.deepEqual(names(data.huscarls), ['Huscarl central'], 'Seul le Huscarl de l’État-Major est sous le Jarl');
+const cite = data.garnisons.find(g => g.key === 'cite');
+assert.ok(!names(cite.membres).includes('Huscarl'), 'Le Huscarl n’est pas dans le personnel de son corps');
+assert.deepEqual(names(cite.huscarls), ['Huscarl'], 'Le Huscarl d’un corps est rendu à part dans sa colonne');
+for (const g of data.garnisons.filter(g => g.key !== 'cite')) assert.deepEqual(names(g.huscarls), [], g.key);
 for (const grade of ['Huscarl', ' huscarl de Blancherive ', 'HUSCARL']) assert.ok(context.estGradeHuscarl(grade), grade);
 for (const grade of ['Huscarls', 'Garde', '']) assert.ok(!context.estGradeHuscarl(grade), grade);
 for (const grade of ['Régent impérial', ' REGENT IMPERIAL ', 'Régente impériale']) assert.ok(context.estGradeRegent(grade), grade);
 for (const grade of ['Régent', 'Régence impériale', 'Jarl', '']) assert.ok(!context.estGradeRegent(grade), grade);
 assert.equal(data.garnisons.length, 6);
+// Académie militaire : hors des garnisons, chef Sergent-Chef, personnel trié par grade.
+assert.equal(data.academie.key, 'academie');
+assert.equal(data.academie.nom, 'Académie militaire de Blancherive');
+assert.deepEqual(names(data.academie.chefs), ['Chef Académie'], 'Le Sergent-Chef dirige l’Académie');
+assert.deepEqual(names(data.academie.membres), ['Instructeur', 'Élève'], 'Le reste du personnel, Major exclu');
+for (const g of data.garnisons) for (const absent of ['Chef Académie', 'Instructeur', 'Élève']) assert.ok(!names([...g.membres, ...g.huscarls]).includes(absent), `${absent} hors de ${g.key}`);
+for (const grade of ['Sergent-Chef', ' sergent chef ', 'SERGENT-CHEF']) assert.ok(context.estGradeSergentChef(grade), grade);
+for (const grade of ['Sergent', 'Sergent-Chef adjoint', 'Caporal-Chef', '']) assert.ok(!context.estGradeSergentChef(grade), grade);
+for (const corps of ['Académie militaire de Blancherive', 'academie militaire', 'ACADÉMIE']) assert.ok(context.estAcademie(corps), corps);
+for (const corps of ['Cité de Blancherive', 'État-Major', '']) assert.ok(!context.estAcademie(corps), corps);
+// Les alias de grade (ui/src/corps.js) reconnaissent les mêmes libellés de corps
+// que l'organigramme, son nom affiché compris.
+for (const entree of ALIAS_GRADES_CORPS) for (const corps of entree.corps) assert.ok(context.estAcademie(corps), `« ${corps} » : alias de grade sur un corps connu de l'organigramme`);
+assert.equal(libelleGrade('Sergent-Chef', data.academie.nom), 'Sergent-Instructeur', 'Le nom de l’organigramme porte les alias');
 // Les autres pages tiennent leurs noms affichés dans ui/src/corps.js : chaque
 // corps qui y est renommé doit porter le même nom dans l'organigramme.
 // Une constante de premier niveau n'est pas une propriété du contexte vm.
@@ -106,9 +134,10 @@ assert.equal(libelleCorps('Rivebois'), 'Rivebois', 'Un corps sans nom affiché g
 assert.equal(libelleCorps(''), '');
 assert.deepEqual(Array.from(data.garnisons.find(g => g.key === 'rivebois').membres, p => p.grade), ['Capitaine', 'Garde']);
 const displayed = [data.jarl, ...data.regents, ...data.huscarls, ...data.marechaux, ...data.commandants, ...data.majorsEtatMajor,
-  ...data.commandementLocal.majors, ...data.majors, ...data.reserve, ...data.garnisons.flatMap(g => g.membres)];
+  ...data.commandementLocal.majors, ...data.majors, ...data.reserve, ...data.garnisons.flatMap(g => [...g.membres, ...g.huscarls]),
+  ...data.academie.chefs, ...data.academie.membres];
 assert.equal(new Set(names(displayed)).size, displayed.length, 'Aucun membre en double');
-for (const absent of ['Ancien', 'Ancien local', 'Ancien Jarl', 'Hird', 'Régent']) assert.ok(!names(displayed).includes(absent), absent);
+for (const absent of ['Ancien', 'Ancien local', 'Ancien Jarl', 'Hird', 'Régent', 'Huscarl titré', 'Ancien élève']) assert.ok(!names(displayed).includes(absent), absent);
 
 // Régence impériale : sans Jarl en service, le ou les Régents impériaux
 // prennent le sommet, par ordre alphabétique ; les Huscarls restent à leur place.
@@ -120,7 +149,8 @@ context.lireEffectifsOrganigramme = () => [
 const regence = context.getOrganigramme('test-token');
 assert.equal(regence.jarl, null, 'Jarl mort : plus de Jarl au sommet');
 assert.deepEqual(Array.from(regence.regents, p => p.nomComplet), ['Autre Régente', 'Régent']);
-assert.deepEqual(names(regence.huscarls), ['Huscarl', 'Huscarl titré']);
+assert.deepEqual(names(regence.huscarls), ['Huscarl central']);
+assert.deepEqual(names(regence.garnisons.find(g => g.key === 'cite').huscarls), ['Huscarl']);
 assert.ok(!names(regence.garnisons.find(g => g.key === 'cite').membres).includes('Autre Régente'), 'Le Régent n’est pas dans son corps');
 assert.ok(!names(regence.majorsEtatMajor).includes('Régent'));
 
@@ -129,6 +159,10 @@ const empty = context.getOrganigramme('test-token');
 assert.equal(empty.jarl, null, 'Sans Jarl ni Régent, le poste est vacant');
 assert.equal(empty.regents.length, 0);
 assert.equal(empty.huscarls.length, 0, 'Poste de Huscarl vacant');
+assert.ok(empty.garnisons.every(g => g.huscarls.length === 0));
+assert.equal(empty.academie.nom, 'Académie militaire de Blancherive', 'L’Académie est toujours rendue');
+assert.equal(empty.academie.chefs.length, 0, 'Direction vacante');
+assert.equal(empty.academie.membres.length, 0);
 assert.equal(empty.majorsEtatMajor.length, 0);
 assert.equal(empty.reserve.length, 0);
 assert.equal(empty.commandementLocal.majors.length, 0);

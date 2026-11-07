@@ -1,22 +1,14 @@
-
-
-
-
-
-
 Lois Fondamentales
-Châtellerie de Blancherive 
+Châtellerie de Blancherive
 Sommaire
 
-
-Préambule
+Préambule
 
 Sous l’autorité de l’Empire et dans le respect des compétences impériales, les présentes Lois fondamentales organisent la Châtellerie de Blancherive. Elles reconnaissent l’autorité du Jarl, protègent la continuité du domaine et renvoient, pour toute matière non réglée, aux lois impériales et aux textes locaux en vigueur.
 Cette loi fondamentale est placée au-dessus de tout l'ordonnancement juridique dans la châtellerie de Blancherive.
 
 Il dispose ce qui suit ;
-- Titre I — Du Jarl et de la continuité de la Châtellerie
--
+ Titre I — Du Jarl et de la continuité de la Châtellerie
 
 Article 1 — Du Jarl
 Le Jarl est le seigneur de la Châtellerie, protecteur de ses habitants et gardien des serments prêtés sous son autorité. Il veille à la paix, à la justice, à la défense et à la prospérité du domaine. Il représente la châtellerie de Blancherive. Il assume le pouvoir exécutif. Il est la plus haute autorité de la chatellerie.
@@ -27,28 +19,19 @@ Article 3 — De la dignité et des registres
 Les titres nobiliaires et les qualités de noble sont reconnus et inscrits conformément au Code de la noblesse impériale. La Châtellerie tient ses registres locaux et transmet, lorsque la loi l’exige, les informations utiles aux registres impériaux.
 Article 4 — De l’ouverture de la succession
 La succession à la charge de Jarl s’ouvre dès qu’est constatée la vacance définitive de celle-ci. La vacance est notamment constituée par le décès du Jarl, son abdication ou son absence prolongée, lorsque celle-ci rend impossible l’exercice de ses fonctions et est reconnue par l’autorité compétente.
-La qualité d’héritier présomptif ne confère pas de plein droit la charge de Jarl. Elle vaut toutefois candidature à la succession, sans formalité supplémentaire, sous réserve de l’examen du Thing.
 Le nouveau Jarl est désigné par le Thing conformément à l’article 7. La charge ne peut être tenue pour transmise qu’à la suite de cette désignation et de sa reconnaissance selon les règles applicables.
 
-
-
-
 Article 5 — De la régence en cas d’empêchement du Jarl
-Lorsque le Jarl est vivant, mais empêché d’exercer ses fonctions en raison d’une incapacité temporaire, une régence peut être instituée afin d’assurer la continuité du gouvernement. Le régent exerce les fonctions nécessaires à l’administration de la châtellenie, mais se limite à l’expédition des affaires courantes. Il ne peut prendre de décisions durables engageant la châtellenie, sauf nécessité urgente ou habilitation expresse prévue par la loi. La régence prend fin lorsque le Jarl est en mesure de reprendre ses fonctions. Si le Jarl décède pendant la régence, la vacance de la charge est constatée et la succession s’ouvre conformément à l’article 4. Le régent demeure alors en fonction à titre provisoire, dans les limites prévues au présent article, jusqu’à la désignation du nouveau Jarl.
+Lorsque le Jarl est vivant, mais empêché d’exercer ses fonctions en raison d’une incapacité temporaire, une régence peut être instituée afin d’assurer la continuité du gouvernement. Le régent exerce les fonctions nécessaires à l’administration de la Châtellerie, mais se limite à l’expédition des affaires courantes. Il ne peut prendre de décisions durables engageant la Châtellerie, sauf nécessité urgente ou habilitation expresse prévue par la loi. La régence prend fin lorsque le Jarl est en mesure de reprendre ses fonctions. Si le Jarl décède pendant la régence, la vacance de la charge est constatée et la succession s’ouvre conformément à l’article 4. Le régent demeure alors en fonction à titre provisoire, dans les limites prévues au présent article, jusqu’à la désignation du nouveau Jarl.
 Article 6 — De la régence en cas de vacance et des candidatures
-En cas de vacance de la charge de Jarl, le régent ou, à défaut, l’autorité provisoire compétente assure la continuité de l’administration et se limite à l’expédition des affaires courantes. Il convoque le Thing conformément à l’article 7 afin qu’il soit procédé à la désignation d’un nouveau Jarl. La régence reçoit les actes de candidature et vérifie que les candidats remplissent les conditions prévues par le présent article. Est recevable à présenter sa candidature toute personne qui :
--a au moin un ascendant nordique ;
--réside régulièrement dans la châtellenie ;
--possède régulièrement la citoyenneté de Blancherive ;
--appartient à la noblesse ou à servi la châtellerie ;
--justifie d’un soutien suffisant selon les modalités établies par la régence.
-L’héritier présomptif est réputé candidat de plein droit. Cette qualité ne lui donne toutefois aucune priorité dans le choix final, qui appartient au Thing. La régence statue sur la recevabilité des candidatures au regard des conditions prévues par la loi. Elle ne peut écarter une candidature recevable pour la seule raison qu’elle préférerait un autre prétendant. En cas de contestation, celle-ci est portée devant l’autorité compétente conformément aux règles applicables.
--Titre II — Du Thing et de la Cour du Jarl-
+En cas de vacance de la charge de Jarl, le régent ou, à défaut, l’autorité provisoire compétente assure la continuité de l’administration et se limite à l’expédition des affaires courantes. Il convoque le Thing conformément à l’article 7 afin qu’il soit procédé à la désignation d’un nouveau Jarl, dont l'éligibilité se détermine selons le décret impérial relatif à l'élection des jarls de bordeciel.
+Les candidatures réputées comme acceptables aux suffrages du Thing sont celles communiquées par le Conseil des Anciens à l'issue de son examen souverain. Aucune candidature extérieure à la liste arrêtée ne peut être étudiée et mise aux voix.
+Titre II — Du Thing et de la Cour du Jarl
 Article 7 — Du Thing
 Le Thing représente le peuple de la chatellerie. A ce titre, il est la seule assemblée publique de consultation, de proclamation et, lorsque la loi le prévoit, de choix ou de consentement. Il est convoqué de droit par le régent lorsque la chatellerie n’a plus de Jarl afin de procéder à la désignation d’un nouveau Jarl selon les modalités prévues infra. Il peut également être convoqué par le Jarl en exercice pour se prononcer sur tout sujet voulu par le Jarl; a cet occasion le Jarl détermine si la voie du Thing est consultative ou impérative.
 Le Thing ne se substitue ni au Jarl, ni aux juridictions indépendantes, ni aux autorités impériales.
 Article 7-1 — De la composition du Thing
-Le Thing se compose de : 
+Le Thing se compose de :
 -Un citoyen de blancherive élu par ses paires
 -Un citoyen représentant de chaque corps de métiers constitués élu par ses paires; un mineur, un bûcheron, un forgerons, un cuisinier ou un tavernier, un chasseur, un enchanteur, un alchimiste et un couturier
 -Les seigneurs bannerets de blancherive
@@ -63,7 +46,7 @@ Le Jarl se doit au minimum de nommer à sa cour les fonctions suivantes : un Cha
 Article 10 — Des serments et de la responsabilité
 Toute personne investie d’une charge prête, lorsqu’un texte ou un acte l’exige, serment de fidélité au Jarl, à l’Empire et aux lois. Elle rend compte de sa gestion, respecte les décisions de justice et répond de ses fautes selon le droit applicable. Les nobles demeurent soumis aux devoirs prévus par le Code de la noblesse impériale.
 
--Titre III — De l’administration de la Châtellerie-
+Titre III — De l’administration de la Châtellerie
 Article 11 — De l’organisation administrative
 Le Jarl dirige l’administration de la Châtellerie. Il peut, par actes publiés, instituer des offices ou ministères, déléguer des compétences et fixer des procédures, sans dessaisir les autorités dont la compétence est réservée par la loi ou par l’Empire.
 Article 12 — Des affaires civiles et de la citoyenneté
@@ -76,7 +59,7 @@ Article 15 — De la garde et de la défense
 Le Jarl assure, dans les limites du droit impérial, la protection du territoire et des habitants. Une garde, des gardes-chasse ou d’autres services de défense peuvent être institués par acte compétent. Les réquisitions de défense doivent être nécessaires, légales et proportionnées; l’organisation militaire impériale et les compétences de la Légion prévalent lorsqu’elles s’appliquent.
 Article 16 — Des offices spécialisés
 Des offices chargés de la chasse, des métiers, des travaux, des relations extérieures ou de tout autre domaine peuvent être institués par acte du Jarl ou par la loi. Chaque office reçoit une mission écrite et publie, lorsque cela est requis, ses règles d’autorisation, de contrôle et de recours. Aucun office institué ne peut créer une infraction ou une peine sans base légale.
--Titre IV — De la justice et de l’ordre juridique-
+Titre IV — De la justice et de l’ordre juridique
 
 Article 17 — De l’indépendance de la justice
 Les magistrats et autorités judiciaires statuent selon le droit, les faits et les preuves, sans recevoir d’ordre du Jarl ou de l’administration dans une affaire particulière. Le Jarl garantit l’accès à la justice et l’exécution des décisions, mais ne peut se substituer au magistrat.
@@ -97,9 +80,9 @@ Ces méthodes sont conciliées autant que possible. L’interprétation retenue 
 Article 21 — De la paix publique et des décisions
 Toute personne présente sur le territoire doit respecter les lois, les injonctions légitimes et les décisions définitives. La garde et les autorités habilitées peuvent agir dans les cas et selon les conditions prévus par le droit. Toute mesure de contrainte doit être nécessaire et rester soumise au contrôle de l’autorité judiciaire compétente.
 
--Titre V — De la loi, de l’Empire et des dispositions finales-
+Titre V — De la loi, de l’Empire et des dispositions finales
 Article 22 — De l’adoption des normes locales
-Les lois, ordonnances et règlements locaux sont adoptés par le Jarl, publiés et rendus accessibles. Ils précisent leur date d’entrée en vigueur 
+Les lois, ordonnances et règlements locaux sont adoptés par le Jarl, publiés et rendus accessibles. Ils précisent leur date d’entrée en vigueur
 Article 23 — De la hiérarchie des normes
 En cas de contradiction, les normes impériales et les engagements de l’Empire prévalent sur les normes locales. À défaut de règle locale applicable, le droit impérial peut s’appliquer à titre supplétif lorsqu’il est compatible avec les institutions et les lois de Blancherive.
 Article 24 — De la représentation auprès de l’Empire
@@ -108,9 +91,3 @@ Article 25 — De la révision et de l’entrée en vigueur
 Les présentes Lois fondamentales entrent en vigueur après leur promulgation régulière. Elles ne peuvent être complétées ou révisées uniquement par le Thing.
 — Lois fondamentales de la Châtellerie de Blancherive —
 Adopté par la Cour de Blancherive, Province impériale de Bordeciel.
- 
-  
-
-
-
-

@@ -24,9 +24,9 @@ const cleGrade = value =>
 const DESCRIPTIONS = {
   jarl: "Moyenne noblesse. Détient le pouvoir judiciaire de la châtellerie.",
   huscarl:
-    "Garde personnel du Jarl, lié à lui par serment. Grade à part, sous son autorité directe.",
+    "Garde personnel lié par serment : au Jarl, sous son autorité directe, à l'État-Major ; au thane local dans un corps de garde. Grade à part, hors présences et solde.",
   huscarldeblancherive:
-    "Garde personnel du Jarl, lié à lui par serment. Grade à part, sous son autorité directe.",
+    "Garde personnel lié par serment : au Jarl, sous son autorité directe, à l'État-Major ; au thane local dans un corps de garde. Grade à part, hors présences et solde.",
   marechal:
     "Petite noblesse, siège à la haute cour de la châtellerie. Orchestre les affaires militaires et celles de la garde.",
   commander:
@@ -43,6 +43,12 @@ const DESCRIPTIONS = {
   sergentchef:
     "Commande des patrouilles, veille au respect du règlement et aide à l'intendance journalière du corps ou de la garnison.",
   sergent: "Seconde le sergent-chef.",
+  // Alias de l'Académie militaire de Blancherive (ui/src/corps.js) : Sergent
+  // et Sergent-Chef, Caporal et Caporal-Chef. Le Sergent-Chef dirige l'Académie.
+  sergentinstructeur:
+    "Sergent ou Sergent-Chef de l'Académie militaire de Blancherive : dirige l'instruction des recrues et des cadets, veille au respect du règlement. Le Sergent-Chef est à la tête de l'Académie.",
+  instructeur:
+    "Caporal ou Caporal-Chef de l'Académie militaire de Blancherive : forme les recrues et les cadets, les accompagne et les observe, veille à la remontée d'information dans la hiérarchie.",
   caporalchef:
     "Commande des binômes ou trinômes de patrouille, ou un détachement d'une patrouille plus large, au sein du corps ou de la garnison. Veille à la remontée d'information dans la hiérarchie, accompagne et observe les recrues et les cadets.",
   caporal:

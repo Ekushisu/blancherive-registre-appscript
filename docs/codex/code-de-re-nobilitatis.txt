@@ -1,22 +1,33 @@
 ﻿DE RE NOBILITATIS  
-Code de la noblesse de Bordeciel
+Code de la noblesse Impériale
 
 
  
         PRÉAMBULE
-Par l'autorité de l'Empereur de Tamriel, Seigneur de Cyrodiil et Souverain de tous les territoires impériaux, sur avis du Conseil des Anciens  et de  la Chancellerie Impériale de Bordeciel sous délégation du Gouverneur de Bordeciel:
-Qu'il soit connu dans toutes les provinces, tous les comtés et tous les territoires soumis à la juridiction impériale que le présent Code constitue la législation de référence du Gouvernement Impérial en matière de noblesse.
-Le présent Code s'applique à l'ensemble des nobles reconnus par l'Empire. Les châtelleries sont libres de promulguer des règlements supplémentaires conformément à leurs coutumes, dans le respect des présentes dispositions.
-Aucune coutume locale, ordonnance de fief ou privilège personnel ne peut prévaloir sur les dispositions du présent Code, sauf lorsque celui-ci accorde expressément un pouvoir discrétionnaire aux autorités locales.
-L'ignorance de ces lois ne saurait constituer un moyen de défense devant aucun tribunal de l'Empire.
+Par l'autorité de l'Empereur de Tamriel, Seigneur de Cyrodiil et Souverain des territoires soumis à l'autorité impériale, sur avis du Conseil des Anciens, 
+Le présent Code détermine les qualités, rangs, droits, devoirs et conditions de reconnaissance de la noblesse.
+Aucune coutume locale, ordonnance de fief ou privilège personnel ne peut prévaloir sur les dispositions du présent Code, sauf lorsqu'une disposition du présent Code reconnaît expressément un pouvoir aux autorités compétentes.
+Le présent Code s’applique rétroactivement aux dispositions de l’ancien Code. 
 
 
 
 
-  
 
-TITRE I — DE LA NOBLESSE
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                    
                TITRE I — DE LA NOBLESSE
 
@@ -29,59 +40,15 @@ TITRE I — DE LA NOBLESSE
 
 
 
-Article 1 — De la Noblesse
-Nul ne peut se prévaloir d'un titre de noblesse s'il n'est pas inscrit dans le Registre officiel. Il doit officiellement se présenter pour vérifier son titre, si une autorité le lui demande, dans le cas contraire il ne pourra être traité comme un noble.
-L'Empire et les Châtelleries tiennent chacun leur propre registre répertoriant le nom, le titre et la lignée de tous les nobles reconnus. Ce registre doit être public pour être opposable.
+Article 1 — Des formes de noblesse existantes
 
 
-Article 2 — Adoubement (Anoblissement)
-Seuls peuvent conférer un titre de noblesse au sein de l’Empire, en Bordeciel, le Haut Roi ou la Haute Reine, les Jarls, ainsi que le Gouverneur Impérial.
-Le nombre d’anoblissements est strictement limité à deux (2) par mois et par châtellerie, est exclu de cette limitation le Gouverneur concernant la noblesse de droit.
-
-
-
-
-
-
-Tout anoblissement doit obligatoirement faire l’objet d’une cérémonie publique. Il doit être consigné dans le registre officiel et porté à la connaissance des administrés.
-Tout noble nouvellement anoblie peut étendre son statut à sa famille selon les modalités suivantes :
- Il lui est permis de désigner un (1) membres de sa famille, liés par le sang, afin qu’ils bénéficient du statut de noble par filiation.
-Par ailleurs, toute personne unie par mariage à un noble reconnu peut acquérir le statut de noble consort. Ce statut est automatiquement révoqué en cas de dissolution du mariage.
-Les personnes bénéficiant de la noblesse par lien du sang ou par consort doivent obligatoirement se déclarer et être inscrites au registre officiel pour que leur statut soit reconnu.
- 
-Article 3 — Droits et Privilèges
-Les membres de la noblesse impériale bénéficient d’un droit au privilège de représentation devant les juridictions de l’Empire, d’un droit d’audience prioritaire ainsi que d’une présomption de crédibilité accrue dans le cadre des procédures les concernant. Ainsi que du droit d’avoir et d’entretenir une cour.
-
-
-Article 4 — Devoirs et Obligations
-Tout membre de la noblesse impériale est tenu à un devoir de fidélité envers l’Empire, ainsi qu’envers le Haut Roi ou la Haute Reine, et le Jarl dont il relève. Il est également tenu de remplir les obligations inhérentes à son rang, notamment de soutenir et défendre son Jarl, sauf lorsqu’il relève directement de l’administration impériale, de s’acquitter 
-
-
-des impôts qui lui incombent, et de répondre à toute convocation judiciaire en se présentant devant la justice dans un délai raisonnable.
-Tout manquement à ces devoirs et obligations peut entraîner une sanction pouvant aller jusqu’à une amende de cinq mille (5000) septims, cumulée, le cas échéant, avec le remboursement des sommes dues, ainsi qu’un bannissement temporaire ou définitif des terres relevant de sa juridiction.
-
-
-Article 5 — Noble de droit
-Sont reconnus comme nobles de droit, du seul fait de leur charge et pour toute la durée de son exercice :
-* le Haut Roi ou la Haute Reine, les Jarls, les Thanes, les Seigneurs, le Gouverneur et le Vice-Gouverneur, le Légat, le Consul, les Tribuns, le Grand Chancelier Impérial, le Grand Émissaire Impérial, le Grand Argentier Impérial, tout représentant d’une assemblée gouvernante dûment consacré par le Gouverneur, le Héraut des Compagnons, l’archimage ainsi que les Huscarls.
-La qualité de noble de droit est strictement attachée à l’exercice de la fonction. Elle est acquise dès la nomination effective à ladite charge et cesse immédiatement lorsque celle-ci n’est plus exercée.
-Toutefois, toute personne ayant bénéficié de la noblesse de droit et ayant fait l’objet d’un anoblissement formel, antérieurement ou durant l’exercice de ses fonctions, conserve de manière permanente la qualité de noble après la cessation de celles-ci.
-
-
-
-
-
-
-Tout titre ou fonction ne figurant pas expressément dans la présente disposition ne saurait conférer la qualité de noble au regard du droit impérial.
-
-
-Article 6 — Classification de la Noblesse
-La noblesse impériale est structurée en trois ordres distincts.
-* Relèvent de la petite noblesse : les Huscarls, les Seigneurs, les Thanes, les représentants d’assemblées gouvernantes reconnus, les Tribuns, le Grand Chancelier Impérial ainsi que le Grand Émissaire Impérial.
-* Relèvent de la moyenne noblesse : les Légats, les Consuls, les Jarls, le Héraut des Compagnons, l’archimage
-* Relèvent de la haute noblesse : le Haut Roi ou la Haute Reine, le Gouverneur Impérial ainsi que le Vice-Gouverneur.
-Dans le cadre des procédures judiciaires, et en l’absence de preuves matérielles tangibles, la parole d’un noble voit sa crédibilité appréciée à proportion de son rang au sein de la hiérarchie nobiliaire.
- 
+La noblesse reconnue par l’empire est exclusivement constituée des titres prévus par le présent Code. Les autres titres, dénominations ou appellations ne confèrent aucune qualité nobiliaire et ne peuvent être considérés que comme des appellations honorifiques ou dépourvues de valeur nobiliaire.
+L'Empire et les Châtelleries tiennent chacun un registre des nobles reconnus relevant de leur autorité. Ces registres doivent être tenus à jour. Toute personne se prévalant d'une qualité nobiliaire doit nécessairement être inscrite sur l’un de ces registres. 
+La noblesse de Bordeciel est divisée en trois catégories distinctes :
+* La Noblesse de Fonction ;
+* La Noblesse Personnelle ;
+* La Noblesse territoriale.
 
 
 
@@ -94,67 +61,105 @@ Dans le cadre des procédures judiciaires, et en l’absence de preuves matérie
 
 
 
+Article 2 — De la noblesse de Fonction
+La noblesse de fonction résulte de l'exercice d'une charge déterminée. Elle est attachée à la fonction exercée et cesse avec celle-ci, sauf si son titulaire bénéficie par ailleurs d'une noblesse personnelle.
+Sont reconnus comme relevant de la noblesse de fonction les titulaires des charges suivantes :
+* Général ;
+* Consul impérial ;
+* Grand pontife du culte impérial ;
+* Légat impérial ;
+* Grand Chancelier Impérial & Chambellan de Châtellerie ;
+* Grand Émissaire Impérial & Intendant de Châtellerie ;
+* Grand Argentier Impérial & Argentier de Châtellerie;
+* Huscarl / Serre de Bruma & Gardes prétoriens ;
+
+
+Le huscarl et la Serre de Bruma est un noble de fonction attaché personnellement au service d’un Jarl, d’un Comte ou d’un Thane, d’un Baron. Chaque Jarl, Comte ou Thane, Baron ne peut avoir qu’un seul huscarl ou serre à la fois. 
+
+
+    Article 3 — De la Noblesse Personnelle
+La noblesse personnelle est attachée à la personne du noble et résulte d'un anoblissement prononcé conformément aux dispositions du présent Code. 
+En principe, la personne anoblie à titre personnel reçoit la dignité de Patricien ou de Patricienne. Cette dignité est strictement individuelle.
+
+
+
+
+Par dérogation, toute personne anoblie à titre personnel peut recevoir la dignité de Banneret, de Patriarche, de Grand Chevalier ou de Hersir lorsqu’elle est à la tête d’une maison, d’un clan ou d’un ost dévoué au service de son suzerain ; le cas échéant, son conjoint ainsi que son héritier ou son héritière désigné(e) sont de plein droit inscrits au registre de la noblesse  en qualité de patricien ou de patricienne, cette inscription devant être rayée en cas de divorce ou de déshéritage.
+Le Patriarche ou Grand Chevalier peut en outre demander à son suzerain l’anoblissement d’un (1) membre supplémentaire de sa maison/clan/ost, sans que celui-ci soit imputé au quota d’anoblissements de l’autorité suzeraine, laquelle peut toutefois refuser la demande pour un motif raisonnable.
+
+
+Article 4 — De la Noblesse territoriale
+La noblesse territoriale est attachée à un territoire donné sur lequel le noble a autorité ; elle correspond donc aux qualités de Thane, Jarl et Haut-Roi.
+* Sont reconnus comme relevant de la noblesse territoriale les  :
+* Haut-Roi ou Gouverneur et Vice-Gouverneur le cas échéant dont le territoire est Bordeciel et les terres rattachées ;
+* Jarl, dont le territoire est une châtellerie ;
+* Comte, dont le territoire est un comté ;
+* Thane, dont le territoire est une thanerie ;
+* Baron, dont le territoire est une baronnie.
+Les dénominations de Seigneur, Baron, Comte, Duc ou toute autre dénomination non prévue par le présent Code ne constituent pas des titres de Noblesse territoriale.
+
+
+Le Thane/Baron administre un territoire qui lui est confié par son Jarl/Comte dans le cadre d'un contrat vassalique. Il n'est pas propriétaire de ce territoire.
+Le Jarl possède une Châtellerie et jure allégeance à un Haut-Roi ou au Gouverneur Impérial et demeure soumis à l'Empire par son serment.
+Le Gouverneur est l'autorité administrative principale de l'Empire en Bordeciel et répond au Conseil des Anciens. 
+Le Haut-Roi est le suzerain de Bordeciel et l’ensemble de la province devant Sa Majesté impériale, représenté par le Conseil des Anciens.
+Article 5 — De la hiérarchie nobiliaire
+La noblesse est organisée selon quatre degrés hiérarchiques : la Noblesse Supérieure, la Haute Noblesse, la Moyenne Noblesse et la Petite Noblesse.
+Relèvent de la Noblesse Supérieure (classé par préséance des rangs) :
+* le Haut-Roi/le Gouverneur/le Vice-Gouverneur ;
+* les Jarls/comtes ;
+* leurs conjoints ;  
+
+
+Relèvent de la Haute Noblesse (classé par préséance des rangs) : 
+* le Général ;
+* le Consul ;
+* le Grand pontife du culte des Huits ;
+* les descendants directs de sang (1er degré) d’un membre de la Noblesse Supérieure ;
 
 
 
 
 
 
-      
-             TITRE II — DE LA PROCÉDURE PARTICULIÈRE  
+Relèvent de la Moyenne Noblesse (Égaux en rang)  :
+* le Légat ;
+* le Commandant des Prétoriens ;
+* le Commandant du Penitus Oculatus ;
+* le Grand Chancelier impérial ;
+* le Grand Argentier impérial ;
+* le Grand Émissaire impérial ;
+* les Thanes/barons ;
 
 
- 
-Article 7 — Soumission à la Loi
-L’ensemble des lois impériales ainsi que les lois et coutumes locales s'appliquent pleinement à la noblesse selon les dispositions du présent code.
+Relèvent de la Petite Noblesse (Égaux en rang)  :
+* les Patriciens/Patriciennes ;
+* les Huscarls, Serre de Bruma ;
+* les Gardes prétoriens ;
+* les Maîtres / Maîtresses de Châtellerie (soit Intendant, Chambellan et Argentier);
 
 
-Article 8 — Infractions Mineures
-Dans un souci de stabilité des charges et de continuité de l’autorité nobiliaire, les contraventions ainsi que les délits prévus  dans le Corpus Juriscivilis, et par extension des législations locales équivalentes, ne peuvent donner lieu à des poursuites à l’encontre d’un noble lorsqu’ils constituent un fait isolé sur une période de sept jours.
-Toute infraction isolée au cours de cette période est réputée éteinte et ne peut donner lieu à aucune action ultérieure, a part si elle est suivie d’une nouvelle infraction de même nature dans cette période, auquel cas le noble peut être poursuivi.
+Article 6 — Des prédicats nobiliaires
+Les prédicats attachés aux qualités et rangs reconnus par le présent Code sont les suivants :
+* Haut-Roi/Haute-Reine : Sa Majesté ;
+* Gouverneur/Vice-Gouverneur : Son Altesse ;
+* Jarl/Comte : Sa Grandeur ;
+* Thane : Sa Seigneurie ;
+* Noblesse de fonction : Son Excellence ;
+* Noblesse personnelle : Monseigneur / Ma Dame ;
+Ces prédicats sont attachés aux qualités et rangs auxquels ils correspondent.
 
 
-Article 9 — Amende Favorables
-Lorsqu'un noble est déclaré coupable d’une infraction commune, il doit toujours se voir proposer une amende, sauf en cas de crime de sang.
-
-
-
-
-Article 10 — Les Sanctions
-Les membres de la noblesse ne peuvent se voir appliquer que les sanctions expressément prévues par le présent code.
-À ce titre, les peines susceptibles d’être prononcées à leur encontre sont l’amende, le bannissement temporaire ou définitif, la peine d’emprisonnement, la déchéance du titre nobiliaire, ainsi que, dans les cas les plus graves, la mise à mort honorable.
-
-
-Article 11 — Déchéance
-La déchéance ne peut intervenir que dans le cadre d'une violation des articles 10, 11, 12 et 14 du codex penitus imperialis.
-
-
-Article 12 — Prononcé des Peines
-Les peines privatives de liberté, de mort ainsi que les mesures de déchéance nobiliaire ne peuvent être prononcées qu’à l’issue d’une décision conjointe.
-Cette décision doit être prise avec l’accord de l’autorité souveraine du noble visé (Jarl ou consul), dans le cas d’absence d’accord, le Haut-Roi s’il s’agit d’un noble local ou le Gouverneur pour un noble impérial décident.
-En toute hypothèse, ces sanctions ne peuvent être prononcées que s’il est établi avec certitude qu’elles ne portent atteinte ni à l’autorité de l’Empire, ni à la stabilité de la région concernée.
-Un noble qui serait condamné à mort dispose toujours du droit d'exprimer ses dernières volontés. Elles peuvent être testamentaires.
-
-
-
-
-
-
-
-
-              DISPOSITION PARTICULIÈRE  
+             TITRE II — DE L'ANOBLISSEMENT  
 
 
  
-
-
-Article 13 — Statut des Émissaires du Domaine Aldmeri
-Le Premier Émissaire et le Second Émissaire du Thalmor, en raison de leur statut diplomatique et de leur représentation officielle du Domaine Aldmeri sur le territoire de Bordeciel, sont reconnus comme nobles de droit au sens du présent Code pour toute la durée de leur mission.
-À ce titre, ils sont assimilés à la haute noblesse impériale et bénéficient de l’ensemble des droits, privilèges et garanties attachés à ce rang, notamment en matière de procédure, de représentation et de crédibilité.
-Toutefois, par dérogation expresse :
-Ils ne disposent d’aucune prérogative en matière d’adoubement ou d’anoblissement telle que prévue à l’article 2 du présent Code ;
-Ils ne sont pas soumis au devoir de fidélité envers l’Empire, le Haut Roi ou les autorités locales tel que prévu à l’article 4.
-Leur statut est strictement limité à l’exercice de leurs fonctions diplomatiques et ne saurait être interprété comme une intégration à la hiérarchie nobiliaire impériale en dehors de ce cadre.
+Article 7 — De l'anoblissement et de ses formalités
+Peuvent conférer la noblesse, dans les limites prévues par le présent Code, le Haut-Roi ou la Haute-Reine, les Jarl et le Gouverneur Impérial ainsi que son Vice-Gouverneur le cas échéant.
+Tout anoblissement doit faire l'objet d'une cérémonie publique. L'autorité procédant à l'anoblissement doit remettre à la personne anoblie une lettre d'anoblissement établissant précisément la qualité nobiliaire qui lui est conférée. Une copie de cette lettre doit être transmise à l'Empire et conservée dans le registre nobiliaire compétent.
+Les Châtelleries et l'Empire doivent tenir à jour leurs registres des nobles reconnus.
+Tout anoblissement établissant un lien de vassalité doit également faire l'objet d'un contrat vassalique écrit. Ce contrat établit le lien entre le noble et son suzerain ainsi que les obligations qui en résultent.
+Pour la noblesse territoriale, le contrat vassalique constitue une formalité essentielle et obligatoire. Toute nomination d'un Thane doit donc faire l'objet d'un contrat vassalique conclu avec son Jarl.
 
 
 
@@ -163,8 +168,328 @@ Leur statut est strictement limité à l’exercice de leurs fonctions diplomati
 
 
 
+Article 8 — Des quotas d'anoblissement
+Le nombre d’anoblissements pouvant être conférés est limité à deux (2) par mois pour chaque Jarl au sein de sa châtellerie, Comte au sein de son comté, ainsi qu’à deux (2) par mois pour le Gouverneur et le Vice-Gouverneur et deux (2) par mois pour le Haut-Roi. 
+La noblesse de fonction peut être anoblie en qualité de patricien/patricienne sans être imputée au quota, à condition que la personne concernée exerce une fonction conférant la noblesse depuis au moins six semaines. 
 
 
-Procédure exceptionnelle — Haut Roi ou Gouverneur accusé
-En cas d'accusation portée contre le Haut Roi ou la Haute Reine, une procédure exceptionnelle est mise en place :
-L'affaire est portée devant l'assemblée des Jarls, en présence du Gouverneur Impérial (ou du Consul dans le cas où c’est ce dernier qui est accusé), l’assemblée est présidé par le Chancelier Impérial qui délibèrent conjointement de façon exceptionnelle de comment seras conduite la procédure
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              TITRE III - DES CLANS ET DES NOBLESSES EXTÉRIEURES  
+
+
+Article 9 - Des Clans et Familles
+Les Clans ne constituent pas, en eux-mêmes, des entités nobiliaires.
+La reconnaissance d'un Clan, de son ancienneté ou de sa notoriété ne confère pas à celui-ci la qualité de noble. Seuls les membres du Clan qui ont acquis ou reçu individuellement une qualité nobiliaire conformément au présent Code sont reconnus comme nobles.
+Un Clan, une Maison ou une Famille peut être reconnu auprès de l'Empire ou d'une Châtellerie sans que cette reconnaissance confère, en elle-même, la noblesse à l'ensemble de ses membres. 
+Lorsqu'un chef de Clan ou de Maison de Famille est anobli et reconnu comme Patriarche ou Matriarche, les dispositions relatives à cette qualité lui sont applicables. Cette reconnaissance nécessite une patente officielle provenant soit de l’Empire ou d’une Châtellerie et la noblesse ne s’étend pas à tous les membres, mais seulement ceux qui disposent du droit de la qualité nobiliaire.  Un praticien membre d’un Clan, une Maison ou une Famille ne peut être élevé à la qualité de patriarche. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Article 10 - Des noblesses extérieures
+Les personnes nées nobles ou se présentant comme nobles en vertu d’une noblesse extérieure à Bordeciel ne sont pas reconnues comme nobles par le seul fait de leur naissance, de leur famille ou de leur titre extérieur.
+Toute famille ou tout noble issu d’un autre royaume impérial que Bordeciel doit établir légalement sa qualité nobiliaire auprès du Gouvernorat, selon les moyens de preuve prévus dans les leges impériales. 
+Toute personne extérieure souhaitant être reconnue comme noble en Bordeciel doit, sous réserve des dispositions relatives à la reconnaissance des noblesses étrangères, acquérir ou faire reconnaître cette qualité par le Gouvernorat, selon les moyens de preuve prévus par les leges impériales.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             TITRE IV - DE LA NOBLESSE TERRITORIALE  
+
+
+
+
+
+
+
+
+Article 11 -  De la possession des terres
+Les Thanes, Jarls, Gouverneurs, Vices-Gouverneurs et Haut-Rois sont les seuls rangs reconnus comme relevant de la noblesse territoriale et pouvant être reconnus comme possesseurs ou administrateurs d'une terre selon les dispositions du présent Code.
+Hormis les mises à disposition spéciales de lieux-dits à certaines factions, aucun autre mode ne permet d'être reconnu comme possesseur d'une terre, d'un château ou d'un territoire.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             TITRE V - DES DROITS ET DEVOIRS DE LA NOBLESSE  
+
+
+
+
+
+
+Article 12 -  Des droits, privilèges et devoirs
+Les membres de la noblesse bénéficient des droits et privilèges attachés à leur qualité ou à leur rang conformément au présent Code.
+Ils disposent notamment d'un droit de représentation devant les juridictions de l'Empire, d'un droit d'audience prioritaire, d’un droit de traitement administratif prioritaire et préférentiel,  ainsi que du droit d'avoir et d'entretenir une maisonnée (serviteurs/adjoints/gardes et etc).
+La noblesse territoriale dispose du droit d’entretenir et maintenir une cour au sein du fief. 
+Tout noble est tenu à un devoir de fidélité envers l'Empire ainsi qu'envers l'autorité dont il relève. En échange, le suzerain de ce noble a un devoir de protection envers son vassal. 
+Le noble est tenu de respecter l’ensemble des obligations inhérentes à sa qualité, notamment celles découlant de son lien vassalique, lorsqu’un tel lien existe. Il doit, en toutes circonstances, se comporter avec respect, dignité et honneur, conformément aux exigences attachées à son rang. 
+Toute personne qui acquiert une qualité nobiliaire bénéficie de plein droit de la citoyenneté correspondant à l’autorité dont elle relève.
+Ainsi, tout noble relevant d’une châtellerie acquiert de plein droit la citoyenneté de ladite châtellerie. Tout noble relevant directement de 
+
+
+
+
+l’Empire en Bordeciel et en les terres rattachées, ainsi que le Haut-Roi de Bordeciel, acquiert de plein droit la citoyenneté de Bordeciel et des terres rattachées.
+Tout noble demeure soumis aux lois impériales et aux dispositions applicables dans son territoire.
+Tout consort d’un ou d’une noble est noble de plein droit, dès la célébration du mariage, et conserve cette qualité pendant toute la durée de celui-ci. 
+Tout membre d’un Clan, d’une Famille ou d’une Maison noble, ainsi que leur maisonnée, et qui n’est pas noble en vertu du présent Code dispose d’un droit de protection limité du suzerain de son patriarche.
+La qualité nobiliaire ne fait pas obstacle à l'application de la justice impériale.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          TITRE VI - DE LA PROCÉDURE PARTICULIÈRE  
+
+
+
+
+Article 13  -  De la soumission à la loi et des infractions mineures
+L'ensemble des lois impériales ainsi que les lois et coutumes locales applicables s'imposent aux membres de la noblesse.
+Dans un souci de stabilité des charges et de continuité de l'autorité nobiliaire, les contraventions ainsi que les délits prévus dans le Corpus Juriscivilis Imperialis, et par extension les législations locales équivalentes, ne peuvent donner lieu à des poursuites à l'encontre d'un noble lorsqu'ils constituent un fait isolé sur une période de sept jours.
+Toute infraction isolée au cours de cette période est réputée éteinte et ne peut donner lieu à aucune action ultérieure, sauf si elle est suivie d'une nouvelle infraction de même nature durant cette période, auquel cas le noble peut être poursuivi.
+Lorsqu'un noble est déclaré coupable d'une infraction commune, une amende doit toujours lui être proposée, sauf en cas de crime de sang.
+
+
+Article 14 - Des sanctions et de la déchéance
+Les membres de la noblesse ne peuvent se voir appliquer que les sanctions prévues par la législation impériale et par le présent Code.
+Les peines susceptibles d'être prononcées à leur encontre comprennent notamment l'amende, le bannissement temporaire ou définitif, 
+
+
+
+
+l'emprisonnement, la déchéance du titre nobiliaire ainsi que, dans les cas les plus graves et lorsque la loi le prévoit, la peine capitale.
+Tout manquement aux dispositions de la présente loi, notamment à toute obligation nobiliaire qui y est prévue, peut être sanctionné par une amende prononcée par un juge compétent. 
+La déchéance de la noblesse supérieure, territoriale ou patricienne ne peut intervenir que dans le cadre d'une violation des dispositions des articles 10 à 14 prévues par le Codex Penitus Imperialis auxquelles le présent Code reconnaît cet effet.
+
+
+Article 15 - Du prononcé des peines
+Les peines privatives de liberté, les peines de mort ainsi que les mesures de déchéance nobiliaire ne peuvent être prononcées qu'à l'issue d'une décision conjointe suzeraine et impériale. Cette décision doit être prise avec l'accord de l'autorité souveraine du noble visé, notamment son Jarl ou l'autorité impériale dont il relève.
+En cas d'absence d'accord, le Haut-Roi intervient lorsqu'il s'agit d'un noble relevant de l'autorité locale, tandis que le Gouverneur et le Vice-Gouverneur le cas échéant intervient lorsqu'il s'agit d'un noble relevant directement de l'Empire.
+Un noble condamné à mort dispose toujours du droit d'exprimer ses dernières volontés. Celles-ci peuvent être testamentaires.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               TITRE VII - DE L'ADOUBEMENT  
+
+
+
+
+
+
+Article 16 - De l'adoubement
+Le titre de chevalier est exclusivement réservé aux personnes ayant été adoubées en vertu des dispositions impériales en vigueur. La chevalerie et la noblesse constituent deux dignités distinctes. Ainsi, l’adoubement ne confère pas la qualité de noble. 
+La Noblesse supérieure peut procéder à deux adoubements au maximum sur une période de deux semaines. 
+Tout autre personne disposant du droit d’adoubement, ne peut en réaliser qu’un seul au cours d’une période de deux semaines. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           DISPOSITIONS PARTICULIÈRES  
+
+
+
+
+
+
+
+
+
+
+
+
+Article 17 - Statut des Émissaires du Domaine Aldmeri
+Le Premier Émissaire et le Second Émissaire du Thalmor, en raison de leur statut diplomatique et de leur représentation officielle du Domaine Aldmeri sur le territoire de Bordeciel et des terres rattachées, sont reconnus comme nobles de Fonction pour la durée de leur mission.
+Cette qualité est strictement attachée à l'exercice de leur fonction diplomatique. Ils ne disposent d'aucun pouvoir d'anoblissement en vertu de leur fonction.
+Ils ne sont pas soumis, dans le cadre de leur mission diplomatique, au devoir de fidélité envers l'Empire, le Haut-Roi ou les autorités locales.
+Leur qualité nobiliaire ne constitue pas une intégration permanente à la Noblesse Personnelle ou à la Noblesse territoriale. 
+
+
+Article 18 - Procédure exceptionnelle concernant le Haut-Roi ou la Haute-Reine
+En cas d'accusation portée contre le Haut-Roi ou la Haute-Reine, l'affaire est portée devant l'assemblée des Jarls, en présence du Gouverneur Impérial ou le Vice-Gouverneur le cas échéant.
+Lorsque le Gouverneur Impérial est lui-même mis en cause tout comme le Vice-Gouverneur, le Consul intervient en cette qualité. L'assemblée est présidée par le grand chancelier Impérial.
+
+
+Les autorités réunies délibèrent conjointement et exceptionnellement sur les modalités selon lesquelles la procédure doit être conduite.
+Les autorités réunies délibèrent conjointement et exceptionnellement sur les modalités selon lesquelles la procédure doit être conduite.

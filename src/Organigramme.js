@@ -79,6 +79,34 @@ const ORGANIGRAMME_GARNISONS = [
 
 
 // ============================================================
+// ACADÉMIE MILITAIRE DE BLANCHERIVE
+//
+// Corps spécial (décision du propriétaire, 3 novembre 2026),
+// hors des garnisons : rendu au bas de l'organigramme dans un
+// encart détaché, comme les Majors hors commandement. Son chef
+// n'est pas un Capitaine mais un Sergent-Chef. Ses membres sont
+// pointés et soldés comme ceux de tout corps (Presences.js,
+// Paye.js : financeur argentier). Les alias de ses grades
+// (Instructeur, Sergent-Instructeur) ne vivent que dans
+// l'interface (ui/src/corps.js) : le serveur rend le grade de
+// la feuille.
+// ============================================================
+
+const ORGANIGRAMME_ACADEMIE = {
+  key: "academie",
+  label: "Académie militaire de Blancherive",
+  aliases: [
+    "academie militaire de blancherive",
+    "académie militaire de blancherive",
+    "academie militaire",
+    "académie militaire",
+    "academie",
+    "académie"
+  ]
+};
+
+
+// ============================================================
 // API WEB
 // ============================================================
 
@@ -221,9 +249,13 @@ function getOrganigramme(
   // ==========================================================
   // HUSCARL
   //
-  // Grade à part, sous l'autorité directe du Jarl : ni dans la
-  // chaîne de l'État-Major, ni dans son corps. Sous régence, il
-  // reste à sa place, détaché du sommet.
+  // Grade à part. Un Huscarl de l'État-Major est le garde
+  // personnel du Jarl, sous son autorité directe : rendu ici,
+  // hors de la chaîne de l'État-Major. Sous régence, il reste à
+  // sa place, détaché du sommet. Un Huscarl d'un autre corps
+  // protège le thane local : il est rendu au bas de la colonne
+  // de son corps (`garnison.huscarls`), décision du propriétaire
+  // du 3 novembre 2026.
   // ==========================================================
 
   const huscarls =
@@ -232,6 +264,10 @@ function getOrganigramme(
         personne =>
           estGradeHuscarl(
             personne.grade
+          )
+          &&
+          estEtatMajor(
+            personne.corps
           )
       )
       .sort(
@@ -310,14 +346,15 @@ function getOrganigramme(
   // PERSONNEL POUVANT APPARAÎTRE DANS LES CORPS
   //
   // Le Hird du Jarl, dissous, n'a plus de branche : un corps
-  // absent d'`ORGANIGRAMME_GARNISONS` n'est pas rendu.
+  // absent d'`ORGANIGRAMME_GARNISONS` n'est pas rendu. Les
+  // Huscarls d'un corps y figurent, à part de son personnel.
   // ==========================================================
 
   const personnesGarnisons =
     actifs
       .filter(
         personne =>
-          !estGradeHorsCorps(
+          !estGradeCommandementGeneral(
             personne.grade
           )
       )
@@ -337,13 +374,23 @@ function getOrganigramme(
     ORGANIGRAMME_GARNISONS.map(
       garnison => {
 
-        const membres =
+        const personnesCorps =
           personnesGarnisons
             .filter(
               personne =>
                 correspondAGarnison(
                   personne.corps,
                   garnison
+                )
+            );
+
+
+        const membres =
+          personnesCorps
+            .filter(
+              personne =>
+                !estGradeHuscarl(
+                  personne.grade
                 )
             )
             .sort(
@@ -356,6 +403,20 @@ function getOrganigramme(
             );
 
 
+        // Gardiens des thanes locaux, rendus sous tout le personnel du corps.
+        const huscarlsCorps =
+          personnesCorps
+            .filter(
+              personne =>
+                estGradeHuscarl(
+                  personne.grade
+                )
+            )
+            .sort(
+              comparerNomsOrganigramme
+            );
+
+
         return {
 
           key:
@@ -365,12 +426,74 @@ function getOrganigramme(
             garnison.label,
 
           membres:
-            membres
+            membres,
+
+          huscarls:
+            huscarlsCorps
 
         };
 
       }
     );
+
+
+  // ==========================================================
+  // ACADÉMIE MILITAIRE
+  //
+  // Hors des garnisons. Son chef est le Sergent-Chef (`chefs`,
+  // par nom) ; le reste du personnel est trié par grade
+  // (`membres`). Un Major de l'Académie rejoint, comme ceux des
+  // corps directs, les Majors hors commandement.
+  // ==========================================================
+
+  const personnesAcademie =
+    personnesGarnisons
+      .filter(
+        personne =>
+          estAcademie(
+            personne.corps
+          )
+      );
+
+
+  const academie = {
+
+    key:
+      ORGANIGRAMME_ACADEMIE.key,
+
+    nom:
+      ORGANIGRAMME_ACADEMIE.label,
+
+    chefs:
+      personnesAcademie
+        .filter(
+          personne =>
+            estGradeSergentChef(
+              personne.grade
+            )
+        )
+        .sort(
+          comparerNomsOrganigramme
+        ),
+
+    membres:
+      personnesAcademie
+        .filter(
+          personne =>
+            !estGradeSergentChef(
+              personne.grade
+            )
+        )
+        .sort(
+          (a, b) =>
+            comparerPersonnesOrganigramme(
+              a,
+              b,
+              ordreGrades
+            )
+        )
+
+  };
 
 
   return {
@@ -406,6 +529,9 @@ function getOrganigramme(
 
     garnisons:
       garnisons,
+
+    academie:
+      academie,
 
     reserve:
       reserve
@@ -829,19 +955,21 @@ function estGradeHuscarl(
 }
 
 
-// Grades rendus hors des corps : le sommet, la chaîne centrale et le Huscarl.
-function estGradeHorsCorps(
+// Chef de l'Académie militaire : « Sergent-Chef » (ou « Sergent Chef »).
+function estGradeSergentChef(
   grade
 ) {
 
+  const value =
+    normaliserOrganigramme(
+      grade
+    );
+
+
   return (
-    estGradeCommandementGeneral(
-      grade
-    )
+    value === "sergent-chef"
     ||
-    estGradeHuscarl(
-      grade
-    )
+    value === "sergent chef"
   );
 }
 
@@ -849,6 +977,17 @@ function estGradeHorsCorps(
 // ============================================================
 // CORPS SPÉCIAUX
 // ============================================================
+
+function estAcademie(
+  corps
+) {
+
+  return correspondAGarnison(
+    corps,
+    ORGANIGRAMME_ACADEMIE
+  );
+}
+
 
 function estEtatMajor(
   corps

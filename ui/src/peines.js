@@ -14,12 +14,14 @@ import { cleArticle, normaliserTexteCodex, rangQualification } from './codex.js'
 export const CLE_PEINES_LOCAL = 'blancherive.peines.v1';
 export const ORDRE_ECHELONS = ['C1', 'C2', 'C3', 'C4', 'D1', 'D2', 'D3', 'D4', 'K1', 'K2', 'K3', 'K4', 'PM'];
 export const QUALIFICATIONS_BAREME = ['contravention', 'délit', 'crime', 'spéciale', 'renvoi'];
+// Corpus Juriscivilis, classification des infractions (texte révisé, lu le
+// 3 novembre 2026). Les amendes n'y sont pas cumulables.
 export const FOURCHETTES = {
-  contravention: { libelle: 'Contravention', fourchette: 'jusqu’à 500 septims', peines: 'Amende simple ou travaux légers' },
-  'délit': { libelle: 'Délit', fourchette: 'de 500 à 2 500 septims', peines: 'Amende élevée ou travaux forcés' },
-  crime: { libelle: 'Crime', fourchette: 'au-delà de 2 500 septims', peines: 'Amende forte, emprisonnement ou peine de mort' }
+  contravention: { libelle: 'Contravention', fourchette: 'jusqu’à 100 septims', peines: 'Amende simple ou travaux légers' },
+  'délit': { libelle: 'Délit', fourchette: 'de 100 à 500 septims', peines: 'Amende élevée ou travaux forcés' },
+  crime: { libelle: 'Crime', fourchette: 'de 500 à 1 000 septims', peines: 'Amende forte, emprisonnement ou peine de mort' }
 };
-// Délai de l'article 8 du De Re Nobilitatis : une contravention ou un délit
+// Délai de l'article 13 du De Re Nobilitatis : une contravention ou un délit
 // isolé sur sept jours n'est pas poursuivi contre un noble.
 export const JOURS_FAIT_ISOLE_NOBLE = 7;
 
@@ -91,7 +93,7 @@ export function niveauxArticle(peines, source, article) {
 
 /*
   Valeur d'un niveau pour un contrevenant donné. Un noble rachète le cachot
-  par l'amende nobiliaire, sauf crime de sang (De Re Nobilitatis, art. 9) ; la
+  par l'amende nobiliaire, sauf crime de sang (De Re Nobilitatis, art. 13) ; la
   récidive double la peine encourue (Corpus Proceduralis, définitions).
 */
 export function valeurNiveau(niveau, { noble = false, recidive = false } = {}) {
@@ -116,12 +118,15 @@ export function comparerGravite(a, b) {
 
 /*
   Proposition d'un formulaire. Chaque chef retient un de ses niveaux (`choix`,
-  indexé par la clé de l'article, le premier par défaut). Des faits distincts
-  cumulent leurs peines ; un même fait qualifié deux fois n'en garde que la
-  qualification la plus rigoureuse (Code pénal local, art. 3).
+  indexé par la clé de l'article, le premier par défaut). Les amendes ne sont
+  pas cumulables (Corpus Juriscivilis, classification des infractions) : avec
+  plusieurs chefs, la proposition est celle du niveau le plus grave, et le
+  cachot suit la même règle. Le mode « peines cumulées » du 4 octobre 2026 a
+  été retiré le 3 novembre 2026 ; un réglage `mode` encore présent dans un
+  brouillon est ignoré.
 */
 export function propositionBareme(peines, chefs, reglages = {}) {
-  const { choix = {}, noble = false, recidive = false, mode = 'cumul' } = reglages;
+  const { choix = {}, noble = false, recidive = false } = reglages;
   const lignes = (chefs || []).map(chef => {
     if (chef.libre !== undefined) return { chef, libre: true, niveaux: [], renvois: [], niveau: null, valeur: null };
     const cle = cleArticle(chef.source, chef.article);
@@ -133,23 +138,18 @@ export function propositionBareme(peines, chefs, reglages = {}) {
     return { chef, cle, niveaux, renvois: tous.filter(n => n._renvoi), index, niveau, valeur: niveau ? valeurNiveau(niveau, { noble, recidive }) : null };
   });
   const retenues = lignes.filter(l => l.niveau);
-  const cumul = retenues.reduce((t, l) => ({ amende: t.amende + (l.valeur.amende || 0), cachot: t.cachot + (l.valeur.cachot || 0) }), { amende: 0, cachot: 0 });
   const plusGrave = retenues.reduce((g, l) => !g || comparerGravite(l.niveau, g.niveau) > 0 ? l : g, null);
-  const grave = plusGrave ? { amende: plusGrave.valeur.amende || 0, cachot: plusGrave.valeur.cachot || 0 } : { amende: 0, cachot: 0 };
-  const total = mode === 'grave' ? grave : cumul;
+  const total = plusGrave ? { amende: plusGrave.valeur.amende || 0, cachot: plusGrave.valeur.cachot || 0 } : { amende: 0, cachot: 0 };
   return {
     lignes,
-    mode: mode === 'grave' ? 'grave' : 'cumul',
     total: { amende: total.amende || null, cachot: total.cachot || null },
-    cumul: { amende: cumul.amende || null, cachot: cumul.cachot || null },
-    grave: { amende: grave.amende || null, cachot: grave.cachot || null },
     plusGrave,
     qualification: plusGrave ? plusGrave.niveau.qualification : '',
     retenues: retenues.length,
     peineMaximale: retenues.some(l => l.niveau._pm),
     sang: retenues.some(l => l.niveau.sang),
     rachat: retenues.some(l => l.valeur.rachat),
-    // Article 8 du De Re Nobilitatis : contraventions et délits seulement.
+    // Article 13 du De Re Nobilitatis : contraventions et délits seulement.
     mineur: retenues.length > 0 && retenues.every(l => l.niveau.qualification === 'contravention' || l.niveau.qualification === 'délit'),
     sansBareme: lignes.filter(l => !l.libre && !l.niveaux.length && !l.renvois.length).length,
     libres: lignes.filter(l => l.libre).length,
@@ -203,7 +203,7 @@ export function grilleEchelons(peines) {
     const peine = l => `${l.amende}|${l.cachot}`;
     const reference = plusFrequente(lignes.map(peine));
     const modele = lignes.find(l => peine(l) === reference);
-    // Un crime de sang n'a pas de rachat par principe (art. 9) : ce n'est pas un écart.
+    // Un crime de sang n'a pas de rachat par principe (art. 13) : ce n'est pas un écart.
     const rachetables = lignes.filter(l => peine(l) === reference && !l.sang);
     const nobiliaire = rachetables.length ? plusFrequente(rachetables.map(l => l.nobiliaire)) : null;
     const ajustes = lignes.filter(l => peine(l) !== reference || (!l.sang && l.nobiliaire !== nobiliaire)).length;
@@ -222,7 +222,7 @@ export function grilleEchelons(peines) {
 
 /*
   Entrées d'un registre au nom d'une personne dans les sept jours qui
-  précèdent une date (De Re Nobilitatis, art. 8). Les dates du registre sont
+  précèdent une date (De Re Nobilitatis, art. 13). Les dates du registre sont
   au format jj/mm/aaaa ; une date illisible n'est jamais retenue.
 */
 export function entreesRecentes(rows, nom, dateIso, { champ = 'contrevenant', exclureRow = null, jours = JOURS_FAIT_ISOLE_NOBLE } = {}) {

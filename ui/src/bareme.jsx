@@ -17,13 +17,13 @@ export function PuceQualification({ niveau }) {
 
 /*
   Rachat nobiliaire d'un niveau : l'amende proposée à un noble à la place du
-  cachot (De Re Nobilitatis, art. 9), sauf crime de sang.
+  cachot (De Re Nobilitatis, art. 13), sauf crime de sang.
 */
 export function NobleNiveau({ niveau }) {
   if (niveau._renvoi) return '—';
-  if (niveau.sang) return <span className="bareme-sang" title="De Re Nobilitatis, art. 9 : pas d’amende de substitution pour un crime de sang.">Sans rachat (crime de sang)</span>;
-  if (niveau.nobiliaire) return <span title="Amende proposée à un noble à la place du cachot (De Re Nobilitatis, art. 9).">{formatSeptims(niveau.nobiliaire)}</span>;
-  if (niveau._pm) return <span title="De Re Nobilitatis, art. 10 et 12.">Décision conjointe</span>;
+  if (niveau.sang) return <span className="bareme-sang" title="De Re Nobilitatis, art. 13 : pas d’amende de substitution pour un crime de sang.">Sans rachat (crime de sang)</span>;
+  if (niveau.nobiliaire) return <span title="Amende proposée à un noble à la place du cachot (De Re Nobilitatis, art. 13).">{formatSeptims(niveau.nobiliaire)}</span>;
+  if (niveau._pm) return <span title="De Re Nobilitatis, art. 14 et 15.">Décision conjointe</span>;
   return <span className="bareme-muet" title="Sans cachot, rien à racheter : le noble paie l’amende ordinaire.">—</span>;
 }
 
@@ -75,12 +75,13 @@ function valeurLisible(valeur, type) {
 /*
   Proposition du barème dans les formulaires Amendes (`type="amende"`) et
   Prison (`type="cachot"`). Chaque chef retient un de ses niveaux ; la
-  récidive double la peine, un noble rachète le cachot. La proposition remplit
+  récidive double la peine, un noble rachète le cachot ; plusieurs chefs ne
+  cumulent pas leurs amendes (Corpus Juriscivilis). La proposition remplit
   le champ de sentence tant que l'autorité ne l'a pas modifié elle-même :
   une valeur saisie à la main n'est jamais écrasée.
 */
 export function PropositionBareme({ type, peines, statut = 'pret', chefs, reglages, onReglages, valeur, indetermine, onAppliquer, historique = null, disabled }) {
-  const r = { choix: {}, noble: false, recidive: false, mode: 'cumul', ...(reglages || {}) };
+  const r = { choix: {}, noble: false, recidive: false, ...(reglages || {}) };
   const p = propositionBareme(peines, chefs, r);
   const montant = type === 'amende';
   const proposee = montant ? p.total.amende : p.total.cachot;
@@ -127,10 +128,7 @@ export function PropositionBareme({ type, peines, statut = 'pret', chefs, reglag
       <label className="saisie-free-toggle"><input type="checkbox" checked={r.recidive} disabled={disabled} onChange={e => regler({ recidive: e.target.checked })}/><span>Récidive — peine doublée</span></label>
       <label className="saisie-free-toggle"><input type="checkbox" checked={r.noble} disabled={disabled} onChange={e => regler({ noble: e.target.checked })}/><span>{montant ? 'Contrevenant noble' : 'Détenu noble'}</span></label>
     </div>
-    {p.retenues > 1 && <div className="chefs-filtre-groupe bareme-mode" role="group" aria-label="Calcul de la proposition">
-      <button type="button" className={`chefs-filtre ${p.mode === 'cumul' ? 'active' : ''}`} aria-pressed={p.mode === 'cumul'} disabled={disabled} onClick={() => regler({ mode: 'cumul' })}>Faits distincts — peines cumulées</button>
-      <button type="button" className={`chefs-filtre ${p.mode === 'grave' ? 'active' : ''}`} aria-pressed={p.mode === 'grave'} disabled={disabled} onClick={() => regler({ mode: 'grave' })}>Même fait — qualification la plus rigoureuse</button>
-    </div>}
+    {p.retenues > 1 && <p className="bareme-note">Plusieurs chefs : les amendes ne sont pas cumulables (Corpus Juriscivilis), la proposition suit le niveau le plus grave.</p>}
     <div className="bareme-total" role="status">
       {proposee !== null
         ? <span>Proposition du barème : <strong>{montant ? formatSeptims(proposee) : `${formatDuree(proposee)} de cachot`}</strong>{r.recidive ? ' (récidive comprise)' : ''}</span>
@@ -151,24 +149,25 @@ export function PropositionBareme({ type, peines, statut = 'pret', chefs, reglag
 }
 
 /*
-  Rappels du De Re Nobilitatis pour un contrevenant noble : fait isolé sur
-  sept jours (art. 8), amende toujours proposée hors crime de sang (art. 9),
-  décision conjointe pour l'emprisonnement et la peine capitale (art. 12).
+  Rappels du De Re Nobilitatis (texte réécrit, lu le 3 novembre 2026) pour un
+  contrevenant noble : fait isolé sur sept jours et amende toujours proposée
+  hors crime de sang (art. 13), sanctions admises (art. 14), décision
+  conjointe pour l'emprisonnement et la peine capitale (art. 15).
 */
 function NoticeNoble({ p, montant, historique }) {
   return <div className="bareme-noble">
     <strong>Noblesse — De Re Nobilitatis</strong>
     <ul>
       {p.mineur && <li>
-        Art. 8 : une contravention ou un délit isolé sur {JOURS_FAIT_ISOLE_NOBLE} jours n’est pas poursuivi ; il faut une nouvelle infraction de même nature dans ce délai.
+        Art. 13 : une contravention ou un délit isolé sur {JOURS_FAIT_ISOLE_NOBLE} jours n’est pas poursuivi ; il faut une nouvelle infraction de même nature dans ce délai.
         {historique && (historique.length
           ? <> Inscrit à ce nom ces {JOURS_FAIT_ISOLE_NOBLE} derniers jours : {historique.map((row, i) => <React.Fragment key={row.row}>{i ? ' ; ' : ''}<DateRP value={row.date} jour={false}/>{row.infraction ? ` — ${row.infraction}` : ''}</React.Fragment>)}.</>
           : ` Aucune entrée à ce nom dans ce registre ces ${JOURS_FAIT_ISOLE_NOBLE} derniers jours.`)}
       </li>}
-      {p.rachat && <li>Art. 9 : le cachot est remplacé par l’amende nobiliaire{montant ? ', comprise dans la proposition' : ' ; la proposition ne compte plus de cachot'}.</li>}
-      {p.sang && <li>Art. 9 : crime de sang, aucune amende de substitution n’est due.</li>}
-      {(p.total.cachot || p.peineMaximale) && <li>Art. 12 : l’emprisonnement{p.peineMaximale ? ', la mise à mort honorable' : ''} d’un noble exige une décision conjointe avec le Jarl.</li>}
-      <li>Art. 10 : pas de travaux forcés pour un noble.</li>
+      {p.rachat && <li>Art. 13 : le cachot est remplacé par l’amende nobiliaire{montant ? ', comprise dans la proposition' : ' ; la proposition ne compte plus de cachot'}.</li>}
+      {p.sang && <li>Art. 13 : crime de sang, aucune amende de substitution n’est due.</li>}
+      {(p.total.cachot || p.peineMaximale) && <li>Art. 15 : l’emprisonnement{p.peineMaximale ? ', la peine capitale' : ''} d’un noble exige une décision conjointe suzeraine et impériale, avec l’accord du Jarl.</li>}
+      <li>Art. 14 : seules les sanctions prévues par la loi impériale et le Code de la noblesse s’appliquent à un noble.</li>
     </ul>
   </div>;
 }

@@ -45,10 +45,11 @@ export function rangQualification(classification) {
   return 0;
 }
 export const QUALIFICATIONS = ['', 'contravention', 'délit', 'crime'];
+// Corpus Juriscivilis, classification des infractions (texte révisé, lu le 3 novembre 2026).
 export const BAREME_IMPERIAL = {
-  contravention: 'jusqu’à 500 septims',
-  'délit': 'de 500 à 2 500 septims',
-  crime: 'au-delà de 2 500 septims'
+  contravention: 'jusqu’à 100 septims',
+  'délit': 'de 100 à 500 septims',
+  crime: 'de 500 à 1 000 septims'
 };
 
 function numeroTri(article) {

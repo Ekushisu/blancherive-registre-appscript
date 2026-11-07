@@ -57,6 +57,56 @@ assert.equal(listes[2].article, '2');
 assert.equal(listes[3].article, 'I', 'Les articles en chiffres romains sont reconnus');
 assert.equal(listes[2].texte, 'La fabrication et la détention sont interdites.');
 
+/*
+  De Argentaria, réécrit (novembre 2026) : le carré « ■ » devant chaque article
+  est désormais du texte saisi, et chaque section latine (« I. DE
+  CERTIFICATIONE ») est suivie de sa traduction. Le décret revenait en un seul
+  préambule portant tout le document.
+*/
+const argentaria = extract([
+  'DE ARGENTARIA',
+  'Décret relatif aux établissements bancaires de Bordeciel',
+  'PRÉAMBULE',
+  'L’Empereur légifère.',
+  'I. DE CERTIFICATIONE',
+  'De la détermination et de la certification des établissements bancaires',
+  '■ Article I — Définition et certification',
+  'Est reconnue comme activité de garde de fonds l’entreposage.',
+  '■ Article II — Du registre bancaire et de la transparence',
+  'La BCIB tient le registre.',
+  'II. IURA ARGENTARIARUM',
+  'Des droits des établissements bancaires',
+  '■ Article III — Du droit à l’assistance',
+  'Toute banque peut demander l’assistance de la BCIB.'
+]);
+assert.deepEqual(Array.from(argentaria, a => [a.article, a.titre]), [
+  ['Préambule', 'Préambule'],
+  ['I', 'Définition et certification'],
+  ['II', 'Du registre bancaire et de la transparence'],
+  ['III', 'Du droit à l’assistance']
+]);
+assert.equal(argentaria[0].texte,
+  'DE ARGENTARIA\nDécret relatif aux établissements bancaires de Bordeciel\nL’Empereur légifère.',
+  'Le mot PRÉAMBULE seul est un titre, pas du texte');
+assert.equal(argentaria[2].texte, 'La BCIB tient le registre.',
+  'La traduction d’une section latine n’est pas du texte d’article');
+
+// Après « PRÉAMBULE » ou un intertitre classique, la ligne suivante reste du texte.
+const ouverture = extract([
+  'PRÉAMBULE',
+  'Par l’autorité du Gouverneur impérial de Bordeciel, Maximus Tyrellius,',
+  'Sur avis de la Chancellerie,',
+  'Titre II — Suite',
+  'Il est établi ce qui suit',
+  'Article 1 — Un',
+  'Texte.'
+]);
+assert.equal(ouverture[0].texte,
+  'Par l’autorité du Gouverneur impérial de Bordeciel, Maximus Tyrellius,\nSur avis de la Chancellerie,\nIl est établi ce qui suit');
+assert.equal(context.estIntertitreCodex_('IV. DE OFFICIIS PECUNIARIIS'), true);
+assert.equal(context.estIntertitreCodex_('II. Les banques sont tenues de coopérer.'), false,
+  'Une ligne en minuscules est du texte, même numérotée en chiffres romains');
+
 // Documents à onglets : `getBody()` ne retourne que le premier.
 const onglet = (lines, enfants = []) => ({
   asDocumentTab: () => ({ getBody: () => corps(lines) }),
@@ -174,6 +224,41 @@ assert.deepEqual(Array.from(qualifies, a => [a.titre, a.classification]), [
   ['Invocation dangereuse', 'Crime'],
   ['Dispositions finales', '']
 ]);
+/*
+  Code pénal local réécrit (novembre 2026) : plusieurs qualifications dans
+  le titre, séparées par une barre ou une virgule ; parenthèse fermante
+  doublée ; précision après la qualification. Un titre dont la parenthèse
+  mêle autre chose n'est pas qualifié par elle.
+*/
+const multiples = extract([
+  'Article 4 — Des entraves à l’autorité locale  (délit, crime )',
+  'Quiconque empêche la garde commet un délit.',
+  'Article 5 — De l’usurpation des marques  (contravention, délit, crime)',
+  'Porter sans droit les marques est d’ordre contraventionnel.',
+  'Article 10 — Des injures et calomnies  (Contravention / Délit)',
+  'Les injures constituent une contravention.',
+  'Article 11 — Des accusations mensongères  (Contravention / Délit))',
+  'Quiconque dénonce sciemment un méfait inventé doit en répondre.',
+  'Article 14 — Des persécutions (Délit / Crime)',
+  'Quiconque tourmente une personne commet un délit.',
+  'Article 23 — De l’occupation des possessions d’autrui  (Contravention / Délit / Crime)',
+  'Occuper sans droit constitue un délit.',
+  'Article 27 — De la mendicité  (Contravention en cas d’abus)',
+  'La demande d’aumône est permise.',
+  'Article 40 — Des renvois (délit ou art. 12)',
+  'Texte sans qualification.'
+]);
+assert.deepEqual(Array.from(multiples, a => [a.titre, a.classification]), [
+  ['Des entraves à l’autorité locale', 'Délit ou crime'],
+  ['De l’usurpation des marques', 'Qualification variable'],
+  ['Des injures et calomnies', 'Contravention ou délit'],
+  ['Des accusations mensongères', 'Contravention ou délit'],
+  ['Des persécutions', 'Délit ou crime'],
+  ['De l’occupation des possessions d’autrui', 'Qualification variable'],
+  ['De la mendicité', 'Contravention'],
+  ['Des renvois (délit ou art. 12)', '']
+]);
+
 // Les codes impériaux gardent leur classification entre crochets.
 assert.equal(extract(['Article 61 — Nécromancie', 'Sanction — 500 septims. [Crime]'])[0].classification, 'Crime');
 

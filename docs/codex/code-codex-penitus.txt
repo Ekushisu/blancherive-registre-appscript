@@ -1,10 +1,13 @@
-﻿CODEX PENITUS IMPERIALIS  
-Code de protection de l’Autorité impériale directe en Bordeciel
+﻿F
+
+
+CODEX PENITUS IMPERIALIS  
+Code de protection de l’Autorité impériale directe 
 
 
  
         PRÉAMBULE
-Le présent code a pour objet de garantir la sûreté de l’Empire dans ses provinces, de protéger ses représentants directs, ses forces armées, ses agents de renseignement, ainsi que l’exécution de ses missions, ordres, archives et intérêts.
+Le présent code a pour objet de garantir la sûreté de l’Empire dans ses provinces, de protéger ses représentants directs, ses forces armées, ses agents de Frenseignement, ainsi que l’exécution de ses missions, ordres, archives et intérêts.
 Il réprime toute atteinte portée à l’autorité impériale directe ; la connaissance et le jugement des infractions qu’il prévoit relèvent exclusivement des juridictions impériales.
 Eu égard au statut particulier de la noblesse impériale, aucune déchéance, destitution ou privation durable de droits nobiliaires ne saurait être prononcée sur le seul fondement du présent code, ces matières relevant du Code de la Noblesse.
 
@@ -20,6 +23,8 @@ Eu égard au statut particulier de la noblesse impériale, aucune déchéance, d
 
 
   
+
+
 
 
 
@@ -156,25 +161,24 @@ Sont considérées comme installations impériales centrales : Les forts officie
 
 
 Article 16 — Définition et exclusions
-Ne sont pas considérés comme installations impériales au sens du présent code : Les forteresses orques ; Les grottes et sites naturels ; Les mines, exploitées ou non ; Les ruines dwemers ou nordiques ; Les camps ou places fortifiées non reconnues officiellement. Ces lieux ne peuvent être assimilés à des possessions impériales du seul fait de leur occupation.
+Ne sont pas considérés comme installations impériales au sens du présent code : Les forteresses orcs ; Les grottes et sites naturels ; Les mines, exploitées ou non ; Les ruines dwemers ou nordiques ; Les camps ou places fortifiées non reconnues officiellement. Ces lieux ne peuvent être assimilés à des possessions impériales du seul fait de leur occupation.
 
 
 Article 16 bis — Régime de propriété et limites impériales
-L’Empire ne peut revendiquer la propriété des lieux suivants sans accord explicite de leurs détenteurs légitimes : Les forteresses orques ; Les campements indépendants ; Les lieux de culte, notamment daedriques ; Les ruines dwemers ou nordiques.
+L’Empire ne peut revendiquer la propriété des lieux suivants sans accord explicite de leurs détenteurs légitimes : Les forteresses orcs ; Les campements indépendants ; Les lieux de culte, notamment daedriques ; Les ruines dwemers ou nordiques.
 
 
 
 
 
 
-Article 16 ter — Régime des forteresses orques et fiscalité locale
-Les forteresses orques ne constituent pas des possessions de l’Empire ni des châtelleries. Elles conservent leur autonomie propre et ne peuvent être revendiquées comme propriété par une autorité locale ou impériale sans accord explicite. Toutefois, lorsqu’une forteresse orque est établie sur le territoire d’une châtellerie, l’autorité locale conserve un droit de perception fiscale, sous forme d’impôts ou de redevances, conformément aux usages en vigueur.
-Ce droit fiscal ne saurait être interprété comme un droit de propriété, de contrôle ou d’administration sur ladite forteresse.
+Article 16 ter — Régime des forteresses orcs et fiscalité locale
+Les forteresses orcs ne constituent pas des possessions de l’Empire ni des châtelleries. Elles conservent leur autonomie propre et ne peuvent être revendiquées comme propriété par une autorité locale ou impériale sans accord explicite. Lorsqu’une forteresse orc est établie sur le territoire d’une châtellerie, l’autorité locale ne possède aucun droit de perception fiscale. 
 
 
 Article 16 quater — Limitation des droits des autorités locales
 En l’absence de conquête reconnue, de cession officielle ou d’un transfert validé par l’Empire :
-Les autorités locales ne peuvent vendre, céder ou aliéner les forteresses orques ;
+Les autorités locales ne peuvent vendre, céder ou aliéner les forteresses orcs ;
 Elles ne disposent sur ces lieux que d’un droit fiscal ou de redevance, conformément aux usages locaux. 
 
 

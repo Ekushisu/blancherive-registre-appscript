@@ -1,146 +1,116 @@
-
-
-
-
-
 CODE DU COMMERCE LOCAL
 CHÂTELLERIE DE BLANCHERIVE
-SOMMAIRE
 
+TITRE I — DES MARCHANDS ET DE LEURS PERMISSIONS
 
-Préambule
+Article 1 — Des trois manières de commercer
+Il est permis de commercer sur les terres de Blancherive selon trois usages : en itinérance sur les routes, à l’étal dans les cités et faubourgs, ou dans un commerce concédé par la châtellerie.
+La permission donnée pour l’un de ces usages ne vaut pas pour les autres. Les marchandises défendues par les lois de l’Empire ou les édits du Jarl demeurent interdites.
 
-Considérant qu'il appartient à la Châtellerie de Blancherive d'organiser l'activité commerciale sur son territoire, de veiller à l'ordre public économique et de préserver les intérêts de ses citoyens ;
-Considérant que les commerces, échoppes et exploitations implantés sur le territoire de la Châtellerie sont, sauf titre légitime contraire, la propriété de celle-ci, à laquelle ils demeurent attachés ;
-Considérant que les concessions d'exploitation accordées par la Châtellerie ne constituent jamais des droits acquis au profit de leurs titulaires et demeurent à tout moment révocables ou modifiables ;
-Considérant que l'ouverture de commerces, l'octroi de concessions et l'exploitation des étals et échoppes relèvent de l'autorité administrative de la Châtellerie et doivent s'exercer dans le respect des droits reconnus aux citoyens ;
-Considérant que le présent Code s'inscrit dans l'ordre juridique de l'Empire et doit être interprété conformément au Corpus Juriscivilis Imperialis, au Codex Penitus Imperialis et aux Codes locaux de la Châtellerie ;
+Article 2 — Des marchands itinérants
+Tout citoyen peut vendre en itinérance sur les routes reliant les cités et villages de Blancherive. Les marchands étrangers doivent obtenir une permission et se faire inscrire auprès des officiers de la châtellerie, moyennant un droit en septims par semaine, fixé par Décret.
+La règle s’applique également aux caravanes khajiits, sans faveur ni dispense particulière.
+Pour établir un étal en cité ou dans les faubourgs, le marchand itinérant doit obtenir le droit de place prévu à l’article suivant.
 
+Article 3 — Des étals et des droits de place
+L’étal est autorisé dans les cités, sur un emplacement libre annoncé lors de sa location ou auprès du Thane local, ainsi que dans les faubourgs aux lieux permis. Le droit est de cinquante septims par jour ou de deux cent cinquante septims par semaine.
+La location ouvre droit à l’usage d’un tonneau pour le commerce, sans conférer la propriété du lieu ni des installations de la châtellerie.
+Nul ne peut dresser un étal devant la boutique d’autrui ou barrer le passage sans permission.
 
-Il dispose ce qui suit ;
+Article 4 — Des concessions de boutique
+Les boutiques, échoppes et locaux dont la châtellerie est propriétaire sont confiés à un patron par concession personnelle. Elle accorde l’exploitation du lieu, non sa propriété.
+Aucun loyer n’est dû pour cette concession. Elle ne peut être vendue, cédée ni transmise ; elle s’éteint au décès ou au départ définitif du titulaire. La Cour attribue alors une nouvelle concession.
+Le patron doit être citoyen de Blancherive, sauf permission particulière du Jarl. La concession peut être supprimée pour un manquement grave dûment établi, après avoir entendu son titulaire, sauf péril immédiat.
 
+Article 5 — Des compagnons et employés de boutique
+Les employés d’un commerce concédé doivent posséder la citoyenneté de Blancherive. Le patron veille au paiement des droits de citoyenneté de ses employés lors de la remise de ses propres deniers.
+Il peut acquitter ces droits pour leur compte ou en retenir le montant convenu sur leur rémunération ; cette seconde pratique doit être portée à la connaissance des intéressés. Ce devoir de remise ne rend pas le patron personnellement débiteur des sommes qu’il n’a pas promis de prendre à sa charge.
 
--TITRE I — DES PRINCIPES GÉNÉRAUX DU COMMERCE LOCAL-
-Article 1 — Champ d’application
-Le présent Code régit l'exercice de toute activité commerciale, artisanale ou d'échange exercée à titre habituel sur le territoire de la Châtellerie de Blancherive, qu'elle soit sédentaire, itinérante ou occasionnelle.
-Il s'applique aux personnes physiques, qu'elles soient citoyennes de la Châtellerie ou qu'elles y exercent à titre temporaire, sous réserve des conventions et traités en vigueur.
-Il ne fait pas obstacle à l'application des dispositions du Corpus Juriscivilis Imperialis, du Codex Penitus Imperialis, du Code pénal local et du Code civil local lorsque les mêmes faits relèvent également de leur champ d'application.
-Article 2 — Propriété des commerces de la Châtellerie
-Sauf titre légitime de propriété privée régulièrement établi, les locaux, étals, échoppes, installations et aménagements commerciaux situés sur le territoire de la Châtellerie appartiennent à celle-ci et font partie de son domaine.
-Le titulaire d'un commerce ne dispose, sur les lieux qu'il occupe, que d'un droit d'usage, révocable, dans les conditions fixées par le présent Code, par les règlements pris pour son application et par l'acte de concession.
-La cessation de l'activité, l'extinction ou le retrait de la concession entraînent de plein droit la remise des lieux à la Châtellerie, libres de toute occupation.
-Article 3 — Concessions d'exploitation — Absence de droits acquis
-L'ouverture et l'exploitation d'un commerce à Blancherive sont subordonnées à l'obtention d'une concession délivrée par l'autorité compétente de la Châtellerie.
-La concession est personnelle et révocable. Elle ne confère aucun droit acquis à son titulaire, ne peut être cédée sans l'accord exprès de l'autorité concédante et ne constitue jamais un titre de propriété sur le fonds de commerce.
-Elle peut être retirée, suspendue ou modifiée à tout moment, dans l'intérêt de l'ordre public, de la salubrité, de la sécurité ou de l'intérêt économique de la Châtellerie, selon les modalités prévues par les règlements en vigueur.
-Article 4 — Réserve aux citoyens de la Châtellerie
-Sauf autorisation expresse et préalable de l'autorité compétente, les concessions d'exploitation de commerces sédentaires et d'échoppes sont réservées aux citoyens inscrits au registre officiel de la Châtellerie de Blancherive.
-L'autorité compétente peut toutefois, par décision motivée, accorder une concession à une personne non citoyenne, notamment dans le cadre d'un contrat d'approvisionnement, d'un marché public ou d'une activité d'intérêt local.
-La présente disposition ne porte pas atteinte aux droits des fournisseurs extérieurs intervenant dans le cadre de l'exécution d'un contrat conformément à l'article 4 du Code civil local.
--
-TITRE II — DES OBLIGATIONS DES COMMERÇANTS-
-Article 5 — Redevance et caractère éventuellement payant
+Article 6 — Des bazars et de la nature des boutiques
+Seuls les bazars peuvent offrir habituellement des marchandises de toutes sortes, dans les limites des interdictions en vigueur. Les autres commerces demeurent attachés à la nature des métiers pour lesquels ils ont reçu concession.
+La Cour peut préciser les marchandises réservées à certains métiers par édit rendu public ; une telle réserve ne saurait être créée par une simple instruction non proclamée.
 
- Toute concession d'exploitation donne lieu au paiement d'une redevance, d'une taxe ou d'un droit d'étal, dont le montant, la périodicité et les modalités sont fixés par les règlements de la Châtellerie.
-La redevance est due même en cas de fermeture temporaire autorisée, sauf décision contraire de l'autorité concédante.
-Le défaut de paiement dans les délais prescrits peut entraîner la suspension ou le retrait de la concession, sans préjudice des poursuites prévues par le Code pénal local en cas de dissimulation de bénéfices. 
-Article 6 — Obligations fiscales
+TITRE II — DES DENIERS DUS À BLANCHERIVE
+Article 7 — Du droit de commerce et de son assiette
+Les concessions contribuent aux coffres de la châtellerie par un droit calculé sur les recettes de leur commerce, après les déductions permises à l’article suivant. Les taux sont les suivants :
 
- Tout commerçant ou exploitant établi à Blancherive est tenu de s'acquitter des impôts, taxes et redevances dus à la Châtellerie dans les délais et selon les modalités fixés par la réglementation en vigueur.
-Il tient à jour un registre de ses transactions et de ses bénéfices et le tient à la disposition de toute autorité compétente lors des contrôles prévus par le Code pénal local.
-Toute dissimulation volontaire de bénéfices, de volumes produits ou de transactions est sanctionnée conformément à l'article 73 du Code pénal local.
- 
-Article 7 — Ouverture minimale et continuité de l'exploitation
+Métiers et commerces
+Droit sur les recettes
 
- Sauf autorisation expresse de l'autorité compétente, tout commerce concessionné à Blancherive doit être ouvert au public au moins deux (2) heures entre le dix-neuvième (19e) et le vingt-deuxième (22e) sablier de chaque journée d'exploitation.
-L'autorité compétente peut, par décision motivée, accorder des dérogations temporaires à cette obligation, notamment en cas de force majeure, de travaux, d'intempéries ou de circonstances sanitaires dûment constatées.
-Le titulaire qui, sans autorisation, ferme son commerce au-delà du délai prévu par le présent article s'expose à une mise en demeure, puis, en cas de récidive, à la suspension ou au retrait de la concession.
- 
-Article 8 — Absence prolongée
+Fermier ; menuisier
+20 %
 
- Toute fermeture dépassant sept jours doit être signalée à l’administration, accompagnée d’un motif valable et, si nécessaire, d’une date prévisionnelle de réouverture.
--TITRE III — DES COMMERCES ITINÉRANTS ET DES ÉCHOPPES-
-Article 9 — Régime des commerces itinérants et des échoppes
+Mineur ; chasseur
+15 %
 
- L'exercice d'une activité commerciale itinérante ou l'installation ponctuelle d'une échoppe sur le territoire de la Châtellerie sont soumis à un paiement unique, préalable à l'activité, dont le montant est fixé par les règlements en vigueur.
-Ce paiement donne droit à un droit d'occupation strictement personnel et limité dans le temps. Il ne constitue ni une concession, ni un titre d'exploitation durable, et n'ouvre aucun droit acquis au bénéfice de son titulaire.
-L'activité itinérante ou l'échoppe ne peut, en aucun cas, se voir reconnaître un fonds de commerce, un droit de suite ou une quelconque priorité de réinstallation.
-Article 10 — Réserves limitées et non-concurrence
- Afin de ne pas concurrencer activement les commerces sédentaires concessions de la Châtellerie, les exploitants itinérants et les échoppes sont soumis à des réserves limitées en quantité et en nature de marchandises.
-L'autorité compétente fixe, par règlement, la liste des denrées, biens et services pouvant être proposés à titre itinérant, ainsi que les quantités maximales autorisées par jour d'exploitation.
-Le non-respect de ces réserves constitue une infraction au présent Code et expose son auteur à la confiscation immédiate des marchandises concernées et, le cas échéant, aux poursuites prévues par les articles 73 et 38 du Code pénal local.
-Article 11 — Emplacements autorisés
+Forge ; couture ; alchimie
+20 %
 
- L'installation d'une échoppe ou l'exercice d'une activité itinérante ne peut avoir lieu que sur les emplacements préalablement autorisés par l'autorité compétente et aux dates et heures qu'elle détermine.
-L'installation sur tout emplacement non autorisé, notamment sur la voie publique devant un commerce concessionné, constitue une entrave à l'exploitation de celui-ci et est sanctionnée comme telle.
--TITRE IV — DES MANQUEMENTS ET DES SANCTIONS-
-Article 12 — Exploitation sans concession (délit)
-Le fait d'exploiter un commerce, un étal ou une échoppe sans disposer de la concession, de l'autorisation ou du paiement unique requis par le présent Code constitue une infraction délictuelle locale.
-Le produit de l'infraction peut être confisqué à titre accessoire, sans préjudice des poursuites prévues par les articles 69, 70 et 73  du Code pénal local.
-Article 13 — Fraude et manquements aux obligations (délit)
-Le fait, pour un commerçant ou un exploitant, de se soustraire frauduleusement à ses obligations fiscales, de tenir une comptabilité inexacte ou de refuser la présentation des documents requis lors d'un contrôle est puni conformément aux articles 42 à 46 du Code pénal local.
-Constitue également un manquement le fait d'enfreindre l'obligation d'ouverture minimale prévue à l'article 7 du présent Code, après mise en demeure restée sans effet.
-Article 14 — Vente à la sauvette (délit)
-Constitue une vente à la sauvette le fait d'exposer, de mettre en vente ou de vendre des marchandises ou des services sur la voie publique ou dans tout lieu non autorisé, en l'absence de toute concession, autorisation ou paiement unique.
-La vente à la sauvette constitue un délit local, puni des peines prévues par le Code pénal local. Les marchandises offertes, exposées ou proposées à la vente peuvent être confisquées à titre accessoire.
-Le présent article s'applique sans préjudice de l'application des articles 38, 64, 65 et 66  du Code pénal local lorsqu'ils répriment les mêmes faits de manière plus complète ou plus sévère.
--TITRE V — DE L'ARTICULATION AVEC LE DROIT IMPÉRIAL ET LOCAL-
-Article 15 — Renvoi au Code pénal local
-Les infractions au présent Code qui sont également constitutives d'une infraction prévue par le Code pénal local de la Châtellerie de Blancherive sont jugées selon la qualification la plus rigoureuse, conformément au Titre préliminaire du Code pénal local.
-Lorsque les mêmes faits sont prévus à la fois par le présent Code et par le Code pénal local, celui-ci est appliqué dans ses dispositions propres afin d'éviter tout doublon.
-Article 16 — Renvoi au Code civil local et au droit impérial
-Les rapports civils nés de l'activité commerciale  baux, contrats, responsabilité, litiges  sont régis par le Code civil local de la Châtellerie de Blancherive et, à titre supplétif, par le Corpus Juriscivilis Imperialis.
-Les atteintes graves à l'ordre public économique, aux intérêts de l'Empire ou à l'autorité impériale directe relèvent du Codex Penitus Imperialis et sont soumises à la juridiction impériale compétente.
- 
-Article 17 — Dispositions interprétatives
-Les définitions des termes « commerce », « échoppe », « marchandise » et « service » retenues par le présent Code s'entendent dans le sens communément admis dans la Châtellerie, sauf disposition législative contraire.
-En cas de silence du présent Code, il est fait application des principes généraux du droit local et, à titre supplétif, du droit impérial.
-Article 18 — Règlementation d'application
-L'autorité compétente de la Châtellerie arrête les règlements nécessaires à l'application du présent Code, notamment :
--le montant des redevances, taxes et paiements uniques ;
--la liste et la quotité des réserves applicables aux commerces itinérants ;
--les emplacements autorisés pour les échoppes ;
-- les dérogations applicables relatives aux horaires d'ouverture.
-Article 19 — Entrée en vigueur
-Le présent Code entre en vigueur à la date de son adoption par la Cour de Blancherive. Il est porté à la connaissance des citoyens et affiché dans les lieux accoutumés de la Châtellerie.
-Les concessions et autorisations délivrées antérieurement demeurent régies par leurs actes respectifs, sous réserve de leur conformité au présent Code.
-Article 20 — Dispositions finales
-Toutes dispositions antérieures contraires au présent Code sont abrogées dans la mesure où elles concernaient l'activité commerciale sur le territoire de la Châtellerie de Blancherive et où elles entreraient en contradiction avec le présent code..
-Le présent Code sera exécuté comme loi de la Châtellerie.
- 
+Taverne
+15 %
+
+Enchanteur
+0 %
+
+Bazar
+20 %
+
+Article 8 — Des matières premières et des achats déductibles
+Le marchand peut retrancher de ses recettes taxables le prix des matières premières achetées pour son activité auprès d’un commerce agréé de Blancherive. Le droit est calculé sur le solde ainsi obtenu, sans qu’il puisse devenir négatif.
+Le marchand garde de quoi justifier ces achats si le Maître Intendant ou l’Argentier lui en demande compte. Il n’a pas à remettre les factures à chaque paiement en l’absence de vérification.
+Les commerces agréés sont fixés par Décret.
+
+Article 9 — De la remise des deniers et du retard
+Les deniers du commerce sont remis le dimanche ou le lundi à Fort-Dragon ou auprès du Thane local. Passé le lundi, les sommes dues sont majorées une seule fois de dix pour cent.
+Le retard de paiement n’établit pas à lui seul une fraude. Les droits impayés restent exigibles et peuvent donner lieu aux mesures prévues par la loi.
+Article 10 — Des livres de comptes et de leur examen
+Chaque commerçant tient un livre fidèle de ses ventes et de ses dépenses liées à l’activité. Il présente ses comptes et pièces utiles lorsqu’un officier régulièrement chargé de cette tâche les lui demande.
+La remise ordinaire du droit ne nécessite pas une déclaration détaillée des ventes ni le dépôt systématique des factures. Les vérifications sont conduites par l’Argentier ou par le Maître Intendant dans les limites des charges que le Jarl leur confère.
+Dissimuler volontairement des ventes ou falsifier ses livres pour réduire les droits dus constitue une fraude.
+
+TITRE III — DE LA TENUE DES COMMERCES
+Article 11 — Des absences prolongées
+Le patron qui prévoit de fermer sa boutique plus de sept jours en avertit l’Intendant, lui en indique la raison et, autant que possible, la date de reprise.
+L’absence justifiée n’emporte pas à elle seule retrait de concession. Le commerce durablement abandonné sans motif peut être repris par la Cour après sommation.
+
+Article 12 — Des permissions propres à certains métiers
+La chasse donne lieu à un permis personnel de cinquante septims, acquitté une seule fois. Le permis d’enchantement est personnel, coûte mille septims une seule fois et comprend le droit de chasse.
+Ces permissions ne peuvent être cédées ni revendues. Elles s’ajoutent aux permissions commerciales exigées pour tenir boutique ou étal, lorsqu’elles sont nécessaires.
+
+Article 13 — Des marchandises interdites
+Nul ne peut vendre des marchandises dont le commerce est défendu par les lois impériales ou par un édit de Blancherive régulièrement proclamé.
+Une liste des marchandises soumises à interdiction ou à permission particulière doit être tenue à la disposition des marchands. Aucun objet nouveau n’est déclaré prohibé par le présent article : la liste reste à établir à partir des actes en vigueur.
+
+TITRE IV — DE LA PROBITÉ DES MARCHANDS ET DU MAÎTRE INTENDANT
+
+Article 14 — De la loyauté des échanges et des faux titres
+Nul marchand ne doit tromper les acheteurs sur l’origine, la qualité ou la nature de ses marchandises.
+Se prétendre à tort membre d’une compagnie ou d’une coopérative agréée, ou se faire passer pour le titulaire d’une boutique ou d’un office commercial dont on n’a pas reçu la charge, constitue une tromperie lorsque cette qualité est invoquée pour vendre ou obtenir un avantage.
+Les marchands peuvent fixer leurs prix. Il appartient toutefois à la Cour d’examiner les ventes répétées à perte sciemment pratiquées dans le dessein d’écarter un concurrent. Une simple remise ou une baisse des prix ne suffit pas à établir un manquement.
+
+Article 15 — De la charge du Maître Intendant
+Le Maître Intendant est un membre de la Cour, nommé par le Jarl. Il tient de celui-ci, par délégation de son autorité, la surveillance des commerces de Blancherive, la garde des usages marchands et la charge de concilier leurs différends.
+À ce titre, le Maître Intendant peut visiter les boutiques, étals et lieux voués au commerce pendant leur activité, vérifier les permissions accordées et requérir la présentation des livres de comptes, factures et autres pièces utiles à la vérification des droits dus à la châtellerie. Il peut entendre les marchands sur les manquements constatés et conduire les conciliations prévues à l’article 17.
+Le Maître Intendant porte ses constatations à la Cour et, s’il y a lieu, à la justice. Il ne perçoit pas les deniers à la place de l’Argentier, n’attribue ni ne retire les concessions à la place de la Cour et ne rend aucun jugement par sa seule charge. Ses visites ne l’autorisent ni à fouiller les demeures privées ni à saisir des biens sans autre fondement légal.
+
+Article 16 — De la conciliation des querelles commerciales
+Avant de porter leur querelle devant la justice, les marchands peuvent demander au Maître Intendant de les réunir et de rechercher un accord. La conciliation est libre et ne prive aucune partie du droit de saisir les magistrats.
+Tout accord obtenu doit être consenti par les parties et peut être consigné dans leurs livres ou un écrit conservé par la Cour. À défaut d’accord, l’affaire suit son cours devant la justice.
+
+TITRE V — DES MANQUEMENTS ET DES DISPOSITIONS FINALES
+Article 17 — Des ventes sans droit et des tromperies (Délit)
+Tenir commerce, vendre à la sauvette ou exploiter un étal sans la permission ou le droit de place requis constitue un délit. Il en va de même d’une tromperie volontaire portant sur les droits commerciaux ou d’un refus délibéré de présenter des livres dont la communication est légalement exigée.
+La vente sans droit n’autorise pas automatiquement la confiscation de toute la marchandise. Le juge décide des saisies et confiscations prévues par les lois applicables. Un retard de paiement ou une fermeture occasionnelle ne constitue pas, à lui seul, une fraude.
+Les autres méfaits déjà réprimés par les lois impériales ou pénales locales sont poursuivis sous leurs qualifications propres.
+
+Article 18 — Des avertissements et de la perte des permissions
+Pour le manquement établi aux devoirs d’une concession ou d’une permission, la Cour peut adresser un avertissement, exiger la régularisation, suspendre l’activité ou retirer le droit accordé selon la gravité de la faute.
+Sauf fraude grave ou danger immédiat, le titulaire est d’abord averti et appelé à s’expliquer. Les mesures doivent être liées au manquement constaté ; elles ne dispensent pas des poursuites lorsque les faits constituent aussi une infraction pénale.
+
+Article 19 — Des anciens édits commerciaux
+La présente loi a vocation à réunir les règles jusqu’ici dispersées dans le Code du commerce et les décrets locaux de son application. À son entrée en vigueur, les règles locales antérieures qu’elle remplace devront être abrogées par un acte les désignant clairement.
+Les concessions et permis régulièrement accordés demeurent valables, sous réserve des conditions qui les régissent. Les tarifs et formalités anciens ne doivent plus être appliqués lorsqu’ils sont expressément remplacés par les présentes dispositions.
+Les édits impériaux et les règles propres aux biens réservés à l’Empire demeurent applicables.
+
 — Code local du commerce de la Châtellerie de Blancherive —
 Adopté par la Cour de Blancherive, Province impériale de Bordeciel.
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 ﻿JUSTICIA MILITARIS  
-Code de Justice Militaire de Bordeciel
+Code de Justice Militaire 
 
 
 
@@ -54,7 +54,7 @@ Les juges disposent d'une large marge d'appréciation afin d'adapter la sanction
 *  La rétrogradation d'un ou plusieurs grades ;
 *  La mise aux arrêts (simples ou de rigueur) ;
 *  La privation totale ou partielle de solde et primes pour une durée ne pouvant excéder deux semaines ;
-*  Mutation hors de Bordeciel ;
+*  Mutation ;
 *  L'exclusion définitive de la Légion (radiation des rangs) ;
 *  La peine de mort.
 

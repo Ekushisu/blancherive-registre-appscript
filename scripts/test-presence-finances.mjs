@@ -72,10 +72,12 @@ assert.equal(context.presenceDashboardRecoveredFines_(ss, new Date('2026-01-01')
 fineRows = [];
 assert.equal(context.presenceDashboardRecoveredFines_(ss, new Date()), 0);
 assert.throws(() => context.presenceDashboardRecoveredFines_({ getSheetByName: () => null }, new Date()), /introuvable/);
-// Surveillance d'inactivité : ni le Hird ni le Jarl, quel que soit son corps.
+// Surveillance d'inactivité : ni le Hird, ni le Jarl, ni le Huscarl, quel que soit leur corps.
+// L'Académie militaire, corps spécial, est pointée comme les autres.
 const EFFECTIFS = [
   ['Prénom', 'Nom', 'Grade', 'Corps', 'Statut'],
   ['Alice', 'Nord', 'Garde', 'Rivebois', 'En service actif'],
+  ['Hrolf', 'Main-Sage', 'Sergent-Chef', 'Académie militaire de Blancherive', 'En service actif'],
   ['Hird', '', 'Garde', 'Hird', 'En service actif'],
   ['Souverain', '', 'Jarl', 'État-Major', 'En service actif'],
   ['Huscarl', '', 'Huscarl', 'Cité de Blancherive', 'En service actif']
@@ -85,5 +87,6 @@ const gardes = context.presenceDashboardReadActiveGuards_({
   getLastColumn: () => EFFECTIFS[0].length,
   getRange: (row, col, height) => ({ getDisplayValues: () => EFFECTIFS.slice(row - 1, row - 1 + height) })
 });
-assert.deepEqual(Array.from(gardes, g => g.nomComplet), ['Alice Nord', 'Huscarl']);
+assert.deepEqual(Array.from(gardes, g => g.nomComplet), ['Alice Nord', 'Hrolf Main-Sage']);
+for (const grade of ['Sergent-Chef', 'Sergent', 'Caporal-Chef', 'Caporal', 'Recrue']) assert.equal(context.estGradeExcluDesPresences_(grade), false, grade);
 console.log('Finances des présences : autorisations, totaux et semaines validés.');

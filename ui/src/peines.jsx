@@ -204,12 +204,12 @@ export function PeinesPage({ token, serverCall, voirAnomalies = false, onOpenCod
 
 /*
   Mode d'emploi du barème, replié par défaut : la grille des échelons telle
-  que la feuille l'applique, les règles de cumul et de récidive, et les
-  règles propres à la noblesse.
+  que la feuille l'applique, les règles d'application (plusieurs chefs,
+  récidive, peine maximale), et les règles propres à la noblesse.
 */
 function PrincipesBareme({ grille }) {
   return <details className="peines-principes">
-    <summary>Comment lire ce barème — échelons, cumul, récidive et noblesse</summary>
+    <summary>Comment lire ce barème — échelons, récidive et noblesse</summary>
     <div className="peines-principes-corps">
       <section>
         <h3>Échelons</h3>
@@ -231,22 +231,20 @@ function PrincipesBareme({ grille }) {
       <section>
         <h3>Règles d’application</h3>
         <ul className="peines-regles">
-          <li><strong>Fourchettes impériales.</strong> Contravention jusqu’à 500 septims, délit de 500 à 2 500, crime au-delà (Corpus Juriscivilis, principes généraux).</li>
-          <li><strong>Plusieurs chefs.</strong> Des faits distincts cumulent leurs peines ; un même fait qualifié par plusieurs textes n’est puni qu’une fois, selon la qualification la plus rigoureuse (Code pénal local, art. 3).</li>
+          <li><strong>Fourchettes impériales.</strong> Contravention jusqu’à 100 septims, délit jusqu’à 500, crime jusqu’à 1 000 (Corpus Juriscivilis, classification des infractions, texte révisé lu le 3 novembre 2026).</li>
+          <li><strong>Plusieurs chefs.</strong> Les amendes ne sont pas cumulables (Corpus Juriscivilis) : la proposition suit le niveau le plus grave des chefs retenus ; les autres chefs restent inscrits au registre.</li>
           <li><strong>Récidive.</strong> Peine encourue multipliée par deux, comptée depuis la dernière condamnation (Corpus Proceduralis).</li>
           <li><strong>Tentative et complicité.</strong> Punies comme l’infraction consommée et comme son auteur (Corpus Proceduralis).</li>
           <li><strong>Travaux.</strong> La classification impériale admet des travaux légers à la place d’une amende contraventionnelle, des travaux forcés à la place d’une amende délictuelle.</li>
           <li><strong>Peine maximale.</strong> Mort ou bannissement définitif et saisie des biens, prononcés seulement sur verdict public et motivé du magistrat (Corpus Proceduralis, art. 11).</li>
-          <li><strong>Réparation.</strong> La réparation du dommage due à la victime s’ajoute à la peine (Code civil local, art. 18 et 19).</li>
+          <li><strong>Réparation.</strong> La réparation du tort due à la victime s’ajoute à la peine et reste distincte d’elle (Code civil local, art. 10 et 11).</li>
           <li><strong>Compétence.</strong> Une autorité impériale peut se saisir d’une infraction impériale (Corpus Proceduralis, art. 1) ; le Codex Penitus relève des seules juridictions impériales.</li>
         </ul>
         <h3>Noblesse — De Re Nobilitatis</h3>
         <ul className="peines-regles">
-          <li><strong>Art. 8.</strong> Une contravention ou un délit isolé sur sept jours n’est pas poursuivi : il faut une nouvelle infraction de même nature dans ce délai.</li>
-          <li><strong>Art. 9.</strong> Une amende doit toujours être proposée, sauf crime de sang : le cachot se rachète par l’amende nobiliaire de chaque niveau.</li>
-          <li><strong>Art. 10.</strong> Seuls l’amende, le bannissement, l’emprisonnement, la déchéance et la mise à mort honorable s’appliquent à un noble : pas de travaux forcés.</li>
-          <li><strong>Art. 12.</strong> Emprisonnement, mise à mort et déchéance exigent une décision conjointe avec l’autorité souveraine du noble, Jarl ou consul.</li>
-          <li><strong>Art. 4.</strong> Les manquements aux devoirs de la noblesse sont punis jusqu’à 5 000 septims, avec remboursement des sommes dues et bannissement.</li>
+          <li><strong>Art. 13.</strong> Une contravention ou un délit isolé sur sept jours n’est pas poursuivi : il faut une nouvelle infraction de même nature dans ce délai. Une amende doit toujours être proposée, sauf crime de sang : le cachot se rachète par l’amende nobiliaire de chaque niveau, égale au plafond impérial de la qualification.</li>
+          <li><strong>Art. 14.</strong> Seules les sanctions prévues par la loi impériale et le Code de la noblesse s’appliquent : amende, bannissement, emprisonnement, déchéance, peine capitale quand la loi le prévoit. Les manquements aux devoirs nobiliaires valent une amende fixée par le juge, sans barème.</li>
+          <li><strong>Art. 15.</strong> Emprisonnement, peine capitale et déchéance exigent une décision conjointe suzeraine et impériale, avec l’accord du Jarl du noble.</li>
         </ul>
       </section>
     </div>

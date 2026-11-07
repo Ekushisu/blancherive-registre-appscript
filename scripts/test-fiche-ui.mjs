@@ -191,11 +191,12 @@ assert.ok(!nodes(tree).some(n => n.props?.role === 'status'));
 // Jarl : non soldé, quel que soit son corps ; Huscarl : le Jarl pour seul supérieur.
 await rendre({ ...base, fiche: { ...base.fiche, grade: 'Jarl', corps: 'État-Major' }, service: { ...base.service, exclu: true, inactif: false } });
 assert.match(text(tree), /Le Jarl n’est pas soldé par le registre/);
-await rendre({ ...base, fiche: { ...base.fiche, grade: 'Huscarl', corps: 'Cité de Blancherive' },
+await rendre({ ...base, fiche: { ...base.fiche, grade: 'Huscarl', corps: 'Cité de Blancherive' }, service: { ...base.service, exclu: true, inactif: false },
   commandement: { corps: [], etatMajor: [], jarl: [{ memberId: 'u-jarl', nomComplet: 'Siddgeir Vent-Doré', grade: 'Jarl', corps: 'État-Major' }] } });
 page = text(tree);
 assert.match(page, /Aucun supérieur dans son corps/);
 assert.match(page, /Siddgeir Vent-Doré/, 'Le Jarl dans la chaîne de commandement');
+assert.match(page, /Le Huscarl n’est pas soldé par le registre/);
 
 // Les supérieurs ouvrent leur fiche, par leur ID membre.
 contexte = { ouvrir: cible => ouvertes.push(cible) };
