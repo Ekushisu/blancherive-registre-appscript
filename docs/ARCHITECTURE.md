@@ -35,8 +35,9 @@ Principaux modules :
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
-  - sommet : `jarl` (Jarl en service actif, ou `null`) et `regents` (Régents impériaux en service actif, seulement sans Jarl) ; `estGradeJarl`, `estGradeRegent` et `estGradeHuscarl` servent aussi à `Effectifs.js` et `FicheService.js`
+  - sommet : `jarl` (Jarl en service actif, ou `null`) et `regents` (Régents impériaux en service actif, seulement sans Jarl) ; `huscarls` : les seuls Huscarls de l'État-Major ; chaque garnison porte `membres` (personnel trié par grade) et `huscarls` (Huscarls du corps, par nom) ; `estGradeJarl`, `estGradeRegent` et `estGradeHuscarl` servent aussi à `Effectifs.js` et `FicheService.js`
   - `ORGANIGRAMME_GARNISONS` : corps affichés, leur nom et les libellés de la feuille qui y mènent ; un corps absent n'apparaît pas
+  - `ORGANIGRAMME_ACADEMIE` : l'Académie militaire de Blancherive, corps spécial hors des garnisons, renvoyée sous `academie` (`chefs` : Sergents-Chefs par nom, `membres` : le reste trié par grade) ; `estGradeSergentChef`, `estAcademie`
 
 - `Effectifs.js`
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
@@ -155,7 +156,7 @@ Principaux modules :
   - `synchroniserCodex()` (éditeur) et `synchroniserCodexDepuis_(origine, suivi)` : lecture document par document avec traces, articles d'un document illisible conservés, puis journal
   - lecture par `getText()`, qui couvre les listes à puces et les tableaux,
     et parcours des onglets par `getTabs()` quand l'exécution les expose
-  - extraction des documents juridiques
+  - extraction des documents juridiques : `reconnaitreArticleCodex_` tolère une puce saisie devant « Article » (« ■ Article I — … », De Argentaria) ; `estIntertitreCodex_` écarte les intertitres (« Titre VII — … »), le mot « PRÉAMBULE » seul et les sections romaines en capitales (« I. DE CERTIFICATIONE », `estSectionRomaineCodex_`), dont la ligne de traduction qui suit est sautée (`estSousTitreIntertitreCodex_`)
   - alimentation du cache juridique `SyncCodex!A:J`, des métadonnées `R:Y` (source, famille, autorité, applicabilité, local, lien, sigle, citable) et des anciennes listes d'infractions `SyncCodex!L:O`, que l'application ne lit plus
   - choix de sanctions contextualisés en JSON dans M/O : n'alimentent plus que les suggestions de montant/durée du Codex et des formulaires, sans contrainte
   - `abregerSourceCodex_` : sigle d'une source (déclaré ou dérivé du nom)
@@ -169,8 +170,10 @@ Principaux modules :
     amende ou une incarcération se saisit au nom de la session
 
 - `Prison.js`
-  - registre des incarcérations : lecture A:L, ajout et modification (OFFICIER) sous verrou, durée libre ou vide, sortie prévue recalculée
+  - registre des incarcérations : lecture A:S, ajout et modification (OFFICIER) sous verrou, durée libre ou vide, sortie prévue recalculée
   - saisies structurées dans la colonne J ; une modification qui n'envoie pas de saisies la laisse intacte (saisies historiques en texte)
+  - sortie de détention en acte : `prononcerSortiePrison` (GARDE, OFFICIER ; issue de `PRISON_ISSUES`, destination, « remis à », date, garde signataire, motif), `annulerSortiePrison` (OFFICIER), `ajouterNotePrison` ; chemin commun `ecrireActePrison_` (verrou, identité affichée, garde reconnu ou imposé par la session, colonnes M:S créées au besoin, événement ajouté au journal `Prison!S`)
+  - `getPrisonFormData` sert les gardes, le garde imposé et les issues ; `getPrison` renvoie `acteSortie` et `journal` par ligne
 
 - `Objets.js`
   - recherche GARDE / OFFICIER dans `Objets!A:C`, trois caractères minimum, quinze suggestions maximum
@@ -185,8 +188,16 @@ Principaux modules :
   - le bloc `Inventaire!A:D` est relu et réécrit en entier sous verrou de script
   - les objets viennent du catalogue `Objets` par `lireCatalogueObjets_`, nom figé à l'entrée en stock comme dans `Prison!J`
 
+- `PermisChasse.js`
+  - feuille `PermisChasse` (Prénom, Nom, Date de délivrance), créée avec ses en-têtes à la première consultation
+  - `getPermisChasse` et `ajouterPermisChasse` : GARDE et OFFICIER ; `revoquerPermisChasse(token, row, attendu)` : OFFICIER seul, identité de ligne exigée
+  - une personne (prénom et nom, sans casse ni accents) n'a qu'un permis ; la date est une date de cellule, renvoyée en `yyyy-MM-dd`, jamais dans l'avenir
+  - la révocation réécrit le bloc `A:C` compacté sous verrou de script ; la délivrance écrit une ligne
+  - utilise `nettoyerSaisieUtilisateur`, `parseDateInput` et `AMENDES_TIMEZONE` (`Amendes.js`)
+
 - `PeinesAmendes.js`
   - feuille `PeinesAmendes` : barème des sanctions article par article (niveaux, qualification, échelon, amende, cachot, rachat nobiliaire, crime de sang), créée et initialisée depuis `PEINES_INITIALES` à la première consultation si elle manque ou est entièrement vide, jamais réécrite ensuite
+  - fourchettes impériales (`PEINES_FOURCHETTES`, 100 / 500 / 1 000 septims depuis le Corpus Juriscivilis révisé, lu le 3 novembre 2026) et échelons (`PEINES_ECHELONS`) codés ici seulement ; le rachat nobiliaire initial vaut le plafond de la qualification (`rachatNoblePeine_`)
   - `getPeinesAmendes(token, versionConnue)` : GARDE, OFFICIER et INTENDANT, versionné par empreinte MD5 comme le Codex ; lignes illisibles écartées et signalées dans `anomalies` avec leur ligne physique, lignes hors fourchette gardées avec leurs `avertissements`
   - le barème propose, il n'impose pas : `Amendes.js` et `Prison.js` ne lisent pas cette feuille
 
@@ -207,9 +218,12 @@ Le source frontend est dans `ui/` :
 - `ui/src/main.jsx` : point d'entrée React ;
 - `ui/src/app.jsx` : composants de l'interface ;
 - `ui/src/saisies.jsx` : autocomplétion et liste des objets saisis ;
+- `ui/src/registre.jsx` : ligne de détail d'une incarcération dans le tableau de la Prison (`DetailsPrison`) — saisies en jetons repliés au-delà de huit (`SaisiesResume`, texte historique rendu tel quel), motif d'incarcération en prose avec retours à la ligne et repli au-delà de 320 caractères ou quatre lignes (`NotesDepliables`), acte de sortie et journal ; rien si l'entrée n'a ni saisies, ni notes, ni acte, ni journal ;
+- `ui/src/sortie.jsx` : état d'une incarcération (`EtatSortie`, `libelleEtat`), dialogues d'acte (`SortieDialog` avec champs selon l'issue et avertissement de libération anticipée, `AnnulationDialog`, `NoteDialog` ; garde signataire imposé en session Discord), résumé de l'acte (`ResumeSortie`) et journal (`JournalPrison`) ;
+- `ui/src/cellules.jsx` : choix de la cellule (`ChampCellule`) — saisie libre, suggestions 1 à 4 (les lettres du croquis sont des coffres), plan simplifié cliquable avec ses portes de la prison de Fort Dragon (`PlanCellules`) et croquis original embarqué (`ui/assets/plan-prison.jpg`) ;
 - `ui/src/codex.js` : cache local du Codex (`localStorage` versionné, hook `useCodex`), recherche en mémoire des articles citables (`rechercherArticlesLocal`), helpers de chefs d'accusation (`ajouterChef`, `chefsPourServeur`, `chefsDeLigne`, `chefsFrequents`, `qualificationMax`) et résolution des libellés antérieurs ;
 - `ui/src/chefs.jsx` : champ à jetons des chefs d'accusation (`ChefsField`), champ de sentence libre ou à déterminer (`SentenceField`), résumé de qualification et jetons du registre (`ChefsChips`), communs aux formulaires Amendes/Prison ;
-- `ui/src/peines.js` : cache local du barème des peines (`localStorage` versionné, hook `usePeines`), niveaux d'un article (`niveauxArticle`, repli sur la ligne « * » de sa source), valeur d'un niveau pour un noble ou un récidiviste (`valeurNiveau`), proposition d'un formulaire (`propositionBareme` : cumul des faits distincts ou qualification la plus rigoureuse), grille des échelons, entrées d'une personne sur sept jours ;
+- `ui/src/peines.js` : cache local du barème des peines (`localStorage` versionné, hook `usePeines`), niveaux d'un article (`niveauxArticle`, repli sur la ligne « * » de sa source), valeur d'un niveau pour un noble ou un récidiviste (`valeurNiveau`), proposition d'un formulaire (`propositionBareme` : niveau le plus grave des chefs retenus, les amendes n'étant pas cumulables), grille des échelons, entrées d'une personne sur sept jours ;
 - `ui/src/bareme.jsx` : niveaux d'un article (`NiveauxBareme`, `BaremeArticle` dans la lecture d'un article), puce de résumé des cartes du Codex, bloc de proposition des formulaires Amendes et Prison (`PropositionBareme`) ;
 - `ui/src/peines.jsx` : page « Décrets de peines et amendes » ;
 - `ui/src/article.jsx` : lecture d'un article en popup (`LawModal`), commune au Codex, aux registres, aux formulaires et à la page des décrets, avec le barème de l'article ;
@@ -223,8 +237,9 @@ Le source frontend est dans `ui/` :
 - `ui/src/calendrier.js` et `calendrier.jsx` : calendrier tamrielien pour l'affichage (`dateTamriel`, `dateReelle`, `lireDate`, composant `DateRP`). Lit les formats que le serveur renvoie (`yyyy-MM-dd`, ISO avec heure, `dd/MM/yyyy`, `dd/MM/yyyy HH:mm`) et rend « Loredas 26 Âtrefeu 4E 226 » avec la date réelle en info-bulle ; une valeur non reconnue est rendue telle quelle. Les données, l'API et les champs de saisie restent en calendrier réel ;
 - `ui/src/catalogue.js` : cache local du catalogue des objets — préchargement à l'ouverture des pages Prison et Inventaire (officier), `localStorage` versionné, recherche en mémoire identique à `rechercherObjets` (parité vérifiée par `scripts/test-catalogue-local.mjs`), hook `useCatalogue` ;
 - `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
+- `ui/src/permis.jsx` : page Permis de chasse — formulaire de délivrance (prénom, nom facultatif, date du jour par défaut), recherche par prénom en mémoire (`filtrerPermis`), tableau des permis avec bouton Révoquer pour l'officier ; contrôle du formulaire (`validerPermis`) identique aux règles du serveur ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
-- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (aucun aujourd'hui) ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS` ;
+- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (aucun aujourd'hui) ; grade affiché selon le corps (`libelleGrade`, table `ALIAS_GRADES_CORPS` : Instructeur et Sergent-Instructeur à l'Académie militaire) ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS` et `ORGANIGRAMME_ACADEMIE` (`scripts/test-organigramme.mjs`, `scripts/test-alias-grades.mjs`) ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;
@@ -258,6 +273,7 @@ Pages :
 - Prison
 - Inventaire (OFFICIER et INTENDANT ; écriture réservée aux OFFICIER ; invisible pour GARDE)
 - Peines et amendes (GARDE, OFFICIER et INTENDANT, lecture ; le barème se corrige dans Sheets)
+- Permis de chasse (GARDE et OFFICIER ; révocation réservée aux OFFICIER ; invisible pour INTENDANT)
 
 Le rôle INTENDANT ne se voit proposer que l'Organigramme, la Paye, l'Inventaire, le Codex
 et les Décrets de peines et amendes, tous en lecture. La
@@ -328,6 +344,9 @@ et, déclaré dans `Objets.js`, `lireSaisiesPrisonStructurees_`.
   ne sont plus lues par l'application, mais encore régénérées une version ;
 - `abregerSourceCodex_` (`SyncCodex.js`) pour le sigle d'une source ;
 - `Données!O2:O` pour la liste des gardes actifs.
+
+`PermisChasse.js` utilise `nettoyerSaisieUtilisateur`, `parseDateInput` et
+`AMENDES_TIMEZONE` (`Amendes.js`) ; sa suite de test charge donc `Amendes.js`.
 
 `PeinesAmendes.js` utilise `nettoyerSaisieUtilisateur` (`Amendes.js`) et
 `cleArticleCodex_` (`Codex.js`) : une ligne du barème désigne un article par

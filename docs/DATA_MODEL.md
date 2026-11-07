@@ -23,7 +23,7 @@ Depuis le 12 octobre 2026 (décision du propriétaire), la liste commence par `J
 
 Le grade « Régent impérial » (1er novembre 2026 ; « Régente impériale » reconnu aussi, `estGradeRegent`, `Organigramme.js`) s'inscrit en tête de `Données!A`, près du Jarl, pour être trié en tête des Effectifs : l'organigramme, la fiche de service et les Présences le reconnaissent par son nom, pas par son rang.
 
-`Données!C` portait jusqu'au 1er novembre 2026 des alias de grade par corps, en-tête « Alias <corps> ». L'application ne lit plus cette colonne ; elle peut être supprimée de la feuille.
+`Données!C` portait jusqu'au 1er novembre 2026 des alias de grade par corps, en-tête « Alias <corps> ». L'application ne lit plus cette colonne ; elle peut être supprimée de la feuille. Les seuls alias restants (Instructeur, Sergent-Instructeur, à l'Académie militaire de Blancherive) vivent dans le code (`ui/src/corps.js`), jamais dans le classeur, où le grade reste régulier.
 
 `Données!O2:O` contient la liste triée des gardes actifs utilisée par les formulaires Amendes et Prison. Cette liste est produite dans la feuille par la formule :
 
@@ -140,7 +140,7 @@ Feuille créée par la première synchronisation après le 1er novembre 2026, é
 Un texte trop long pour une cellule est tronqué et marqué `tronque`. `getCodex` ne renvoie que les douze derniers passages, 150 changements au plus chacun. La propriété de script `CODEX_SYNCHRO_BOUTON` (heure du dernier lancement par le bouton) et l'entrée de cache `CODEX_SYNCHRO_PROGRESSION` (traces du passage en cours, dix minutes) sont techniques.
 
 - Nouvelle feuille `SoldesGrades`, créée automatiquement : A `Grade`, B `Solde journalière (septims)`. Une ligne `Par défaut` reprend l'ancienne base ; les grades de `Données!A2:A` sont initialisés au tarif précédent, sauf Commander (alias Commandant), à 100. Recrue et Cadet restent respectivement à 0 et à la moitié de l'ancienne base lors de l'initialisation. L'initialisation n'a lieu que sur une feuille vide : une feuille existante n'acquiert pas de ligne `Cadet` toute seule.
-- Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird et le Jarl restent exclus indépendamment du barème : le Jarl n'a pas besoin de ligne. Le Huscarl est soldé au tarif de sa ligne, à défaut à celui de `Par défaut`. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
+- Les valeurs de `SoldesGrades` sont modifiables dans Sheets. Le Hird, le Jarl, le Régent impérial et le Huscarl (depuis le 3 novembre 2026) restent exclus indépendamment du barème : aucun n'a besoin de ligne, et une ligne `Huscarl` existante est sans effet. Aucun déplacement ni réemploi de colonne technique de Présences ou Données.
 - La formule N de la semaine courante contient le tarif journalier numérique du grade de la ligne, multiplié par M. Le barème est appliqué au chargement des Présences/du tableau de bord et lors des générations/réparations de formules.
 - Les anciennes références à `Vue globale!L2` des semaines passées sont remplacées par sa valeur au moment de la migration, sans modifier le résultat. Les autres formules et montants historiques sont conservés. Les formules sont restaurées en R1C1 lors des réordonnancements de lignes, pour conserver leurs références relatives.
 
@@ -227,22 +227,45 @@ Les listes structurées sont affichées en lignes « Nom × quantité » dans la
 Les cellules historiques ou non reconnues comme liste structurée restent affichées
 en texte. Aucun déplacement de colonne et aucune conversion des anciennes lignes.
 
-Colonnes A:L :
+Colonnes A:S :
 
 | Colonne | Contenu |
 |---|---|
 | A | Date |
 | B | Garde — réécrite au renommage d'un membre (`renommerGardeRegistres_`, `Amendes.js`) |
 | C | Détenu |
-| D | Cellule |
+| D | Cellule — texte libre ; l'interface propose 1 à 4 d'après le plan de Fort Dragon (`ui/src/cellules.jsx`) |
 | E | Infraction — libellé lisible des chefs d'accusation |
 | F | Durée prévue — heures, vide pour « À déterminer » |
 | G | Heure d'entrée |
 | H | Heure de sortie prévue — vide si la durée est à déterminer |
-| I | Libéré |
+| I | Libéré — vrai dès qu'un acte de sortie est écrit ; une ligne antérieure peut être cochée sans acte |
 | J | Saisies sur la personne |
-| K | Motif / Notes |
+| K | Motif / Notes — motif d'incarcération, écrit à la création et par la modification |
 | L | Chefs d'accusation (JSON) — colonne technique, même forme qu'Amendes!H |
+| M | Sortie — issue : code de `PRISON_ISSUES` (`Prison.js`) : `LIBERATION`, `LIBERATION_ANTICIPEE`, `TRANSFERT_EMPIRE`, `TRANSFERT_THALMOR`, `TRANSFERT_CHATELLERIE`, `TRANSFERT_ORDRE`, `EVASION`, `DECES` |
+| N | Sortie — destination : nom de la châtellerie ou de l'ordre (ces deux transferts seulement) |
+| O | Sortie — remis à : personne qui reçoit le détenu (tout transfert) |
+| P | Sortie — date et heure effectives |
+| Q | Sortie — garde ayant prononcé l'acte (nom affiché ; non réécrit au renommage) |
+| R | Sortie — motif, obligatoire |
+| S | Journal (JSON) — colonne technique, voir ci-dessous |
+
+Les colonnes M:S sont créées avec leur en-tête à la première écriture d'un
+acte (`garantirColonnesSortiePrison_`). Une annulation de sortie vide M:R et
+décoche I ; le journal n'est jamais vidé autrement que par la suppression de
+la ligne (A:S).
+
+### Journal (Prison!S)
+
+Liste JSON d'événements, du plus ancien au plus récent, écrite par la seule
+`ecrireActePrison_` : `[{"quand":"dd/MM/yyyy HH:mm","type":"sortie","qui":"Garde",
+"issue":"TRANSFERT_ORDRE","destination":"Garde de l'Aube","remisA":"Isran",
+"date":"dd/MM/yyyy HH:mm","texte":"motif"}, {"type":"note",…}, {"type":"annulation",…}]`.
+`type` vaut `sortie`, `annulation` (avec l'`issue` annulée) ou `note`. Un
+événement ne se modifie ni ne s'efface ; une cellule illisible se lit comme un
+journal vide et la prochaine écriture la remplace. Limite 45 000 caractères :
+au-delà, l'acte est refusé.
 
 ## Objets
 
@@ -299,14 +322,38 @@ nombre. Une ligne invalide — coffre ou nom vide, quantité non entière ou nul
 bloque la page en nommant sa ligne physique, plutôt que d'être ignorée en
 silence.
 
+## PermisChasse
+
+Registre des permis de chasse, créé le 2 novembre 2026. Feuille créée
+automatiquement, avec ses en-têtes, à la première consultation de la page si
+elle n'existe pas. Une feuille existante n'est jamais réécrite ; des en-têtes
+différents arrêtent la page avec un message explicite.
+
+| Colonne | Contenu |
+|---|---|
+| A | Prénom — obligatoire, 60 caractères maximum, format texte |
+| B | Nom — facultatif, 80 caractères maximum, format texte |
+| C | Date de délivrance — date de cellule au format `dd/MM/yyyy` ; une valeur texte `dd/MM/yyyy` ou `yyyy-MM-dd` saisie à la main est lue aussi |
+
+Aucune colonne d'échéance : un permis vaut à vie. Aucune colonne de garde
+délivrant (décision du propriétaire, 2 novembre 2026). Une personne, prénom et
+nom confondus sans casse ni accents, n'a qu'une ligne. La révocation retire la
+ligne et réécrit le bloc A:C compacté sous verrou de script, sans ligne
+fantôme ; la délivrance écrit une ligne après la dernière occupée. Une ligne
+sans prénom ou sans date lisible bloque la page en nommant sa ligne physique.
+
 ## PeinesAmendes
 
-Barème des sanctions article par article, créé le 4 octobre 2026. Feuille
-créée et initialisée par l'application à la première consultation
-(`getPeinesAmendes`) si elle manque, ou si elle existe entièrement vide ; le
-contenu initial est `PEINES_INITIALES` de `src/PeinesAmendes.js`. Une
-feuille remplie n'est jamais réécrite : elle se corrige dans Sheets, comme
-`SoldesGrades`. Des en-têtes différents arrêtent la lecture avec un message
+Barème des sanctions article par article, créé le 4 octobre 2026, reconstruit
+le 3 novembre 2026 sur les textes révisés (fourchettes impériales 100 / 500 /
+1 000 septims, Code pénal local de 39 articles). Feuille créée et initialisée
+par l'application à la première consultation (`getPeinesAmendes`) si elle
+manque, ou si elle existe entièrement vide ; le contenu initial est
+`PEINES_INITIALES` de `src/PeinesAmendes.js`. Une feuille remplie n'est
+jamais réécrite : elle se corrige dans Sheets, comme `SoldesGrades`. Pour
+passer à un nouveau barème initial, le propriétaire vide la feuille (ou la
+supprime) après avoir noté ses corrections manuelles : elle est recréée à la
+consultation suivante. Des en-têtes différents arrêtent la lecture avec un message
 explicite. Une ligne par niveau de peine ; un article peut en avoir
 plusieurs (cas de base, forme aggravée, requalification, peine maximale).
 
@@ -316,11 +363,11 @@ plusieurs (cas de base, forme aggravée, requalification, peine maximale).
 | B | Article — numéro au Codex (`SyncCodex!B`), texte brut ; `*` vise tous les articles de la source qui n'ont pas de ligne propre |
 | C | Intitulé — titre de l'article, pour la lecture de la feuille ; l'application affiche le titre du Codex quand elle le connaît |
 | D | Niveau — cas visé ; vide : « Cas de base ». Unique par source et article |
-| E | Qualification — `Contravention`, `Délit`, `Crime`, `Spéciale` (sanction chiffrée hors fourchette, De Re Nobilitatis art. 4) ou `Renvoi` (compétence d'une autre juridiction, sans peine locale) |
+| E | Qualification — `Contravention`, `Délit`, `Crime`, `Spéciale` (sanction chiffrée hors fourchette ; aucune au barème initial depuis le 3 novembre 2026, le De Re Nobilitatis réécrit ne chiffrant plus les manquements nobiliaires) ou `Renvoi` (compétence d'une autre juridiction, sans peine locale) |
 | F | Échelon — `C1`-`C4`, `D1`-`D4`, `K1`-`K4`, `PM` (peine maximale, non chiffrée) ; repère de lecture et de contrôle |
 | G | Amende (septims) — entier strictement positif, ou vide |
 | H | Cachot (heures) — nombre strictement positif, fraction admise, un an au plus, ou vide |
-| I | Amende nobiliaire (septims) — amende proposée à un noble à la place du cachot (De Re Nobilitatis, art. 9) ; vide sans cachot ou pour un crime de sang |
+| I | Amende nobiliaire (septims) — amende proposée à un noble à la place du cachot (De Re Nobilitatis, art. 13) ; à l'initialisation, le plafond impérial de la qualification ; vide sans cachot ou pour un crime de sang |
 | J | Crime de sang — `oui` : aucune amende de substitution pour un noble |
 | K | Peines complémentaires — confiscation, restitution, remise en état… |
 | L | Observations — renvois, réserves, conditions du texte |
@@ -332,8 +379,8 @@ numérique ou supérieure à un an, niveau en double — est écartée des
 propositions et signalée dans `anomalies` avec son numéro de ligne physique.
 Une ligne lisible mais douteuse est gardée et signalée : amende hors de la
 fourchette impériale de sa qualification, cachot pour une contravention,
-rachat nobiliaire manquant ou supérieur au plafond délictuel, rachat donné à
-un crime de sang, échelon incohérent avec la qualification, montants sur une
+rachat nobiliaire manquant ou supérieur au plafond impérial de sa
+qualification, rachat donné à un crime de sang, échelon incohérent avec la qualification, montants sur une
 ligne de renvoi (ignorés). La page affiche ces signalements aux OFFICIER, et
 ceux des articles que le Codex ne connaît plus.
 

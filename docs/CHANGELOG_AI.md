@@ -1,5 +1,110 @@
 # Journal de passation IA
 
+## 2026-11-07 — Sortie de détention en acte, journal, plan des cellules
+
+- Constat du propriétaire : des libérations sans motif, aucun moyen
+  d'officialiser un transfert à l'Empire ou au Thalmor, trop peu de contrôle
+  sur les notes. Décisions : issues fermées (libération, anticipée, transferts
+  Empire / Thalmor / châtellerie nommée / ordre nommé, évasion, décès),
+  « Remis à » obligatoire pour tout transfert, motif obligatoire, GARDE et
+  OFFICIER prononcent, `modifierPrisonLibere` retirée, plan des cellules
+  (croquis) comme aide au choix de la cellule.
+- `Prison.js` : colonnes M:S, `prononcerSortiePrison`, `annulerSortiePrison`
+  (OFFICIER), `ajouterNotePrison`, `ecrireActePrison_`, `PRISON_ISSUES` ;
+  `getPrison` renvoie `acteSortie` et `journal` ; `supprimerPrison` vide A:S.
+  `FicheService.js` : `transferes`. Interface : `ui/src/sortie.jsx`,
+  `ui/src/cellules.jsx` (+ `ui/assets/plan-prison.jpg`), `registre.jsx`,
+  page Prison d'`app.jsx`, styles. Docs (modèle, règles, architecture,
+  AGENTS, état courant, aperçus). Tests : deux suites nouvelles, trois
+  adaptées. Aucun push ni déploiement.
+
+## 2026-11-03 — Académie militaire de Blancherive, corps spécial à alias
+
+- Décision du propriétaire : corps « Académie militaire de Blancherive »,
+  dirigé par un Sergent-Chef, rendu en bas de l'organigramme dans un encart
+  détaché comme les Majors hors commandement ; pointé et soldé comme tout
+  corps. Alias dans le code : Instructeur (Caporal, Caporal-Chef) et
+  Sergent-Instructeur (Sergent, Sergent-Chef).
+- `ORGANIGRAMME_ACADEMIE` et `academie` (`getOrganigramme`), jeton
+  `academie` chez l'argentier (`PAYE_FINANCEURS`, hypothèse à confirmer),
+  `libelleGrade` / `ALIAS_GRADES_CORPS` (`ui/src/corps.js`) appliqués à
+  toutes les pages, descriptions des alias. Tests (`test-alias-grades.mjs`
+  nouveau), 39 suites vertes, build, aperçus régénérés. Aucun push ni
+  déploiement. Le corps est à ajouter à `Données!G` par le propriétaire.
+
+## 2026-11-03 — Huscarls des corps dans leur colonne, hors Présences
+
+- Décision du propriétaire : seul le Huscarl de l'État-Major reste affilié au
+  Jarl ; celui d'un autre corps descend au bas de la colonne de son corps,
+  séparé, « Protègent les thanes locaux » ; aucun Huscarl n'est pointé.
+- `getOrganigramme` : `huscarls` limité à l'État-Major, `garnison.huscarls`
+  par corps ; `PRESENCE_EXCLUDED_GRADES` étendu aux deux graphies du grade.
+  Fiche de service et description du grade ajustées. Tests mis à jour, aperçus
+  de l'organigramme régénérés. 38 suites vertes, build. Aucun push ni
+  déploiement.
+
+## 2026-11-03 — Tableaux Amendes et Prison lisibles, zone morte des grands écrans
+
+- Constat du propriétaire (capture) : une incarcération à vingt saisies et
+  un long procès-verbal faisait dérouler la Prison sur plusieurs écrans, la
+  colonne Actions était rognée, et un écran 2K laissait une zone morte à
+  droite. Causes : colonnes à parts égales sans largeurs, notes sans
+  retours à la ligne, largeur minimale de 1 650 px, plafond de 1 700 px du
+  contenu au-delà de 1 800 px.
+- Choix : saisies et notes sortent des colonnes pour une ligne de détail
+  sous chaque incarcération (`ui/src/registre.jsx`), jetons repliés au-delà
+  de huit, notes repliées au-delà de 320 caractères ou quatre lignes ;
+  largeurs de colonnes fixées par `colgroup` sur les deux registres ; plafond
+  du contenu porté à 2 300 px. Rien de dupliqué pour les fiches mobiles : la
+  section `tbody` devient la fiche.
+- Test `test-registre-ui.mjs`, 38 suites vertes, build, aperçus Prison et
+  Amendes régénérés. Aucun push ni déploiement.
+
+## 2026-11-03 — Barème reconstruit sur les textes révisés
+
+- Demande du propriétaire : aligner le barème sur les nouvelles règles de
+  l'Empire. Constat : le Corpus Juriscivilis révisé divise les fourchettes
+  (100 / 500 / 1 000 septims) et interdit le cumul des amendes ; le De Re
+  Nobilitatis est réécrit (18 articles, plus de plafond chiffré) ; le Code
+  pénal local de Blancherive est réécrit (39 articles, plusieurs
+  qualifications par titre). Copies locales rafraîchies, celles de Blancherive
+  par la vue mobile des Google Docs.
+- Choix validés par le propriétaire : échelons 25 à 100, 150 à 500, 600 à
+  1 000 ; rachat nobiliaire au plafond de la qualification ; qualification la
+  plus rigoureuse seule, mode cumulé retiré. Barème initial réécrit sur les
+  nouveaux textes (106 niveaux, 60 articles) ; extraction des titres à
+  plusieurs qualifications dans `SyncCodex.js`.
+- 37 suites vertes, build. Aucun push ni déploiement. À faire par le
+  propriétaire : push, publication, synchronisation du Codex, puis vidage de
+  la feuille `PeinesAmendes` pour la recréer (voir CURRENT_STATE).
+
+## 2026-11-03 — De Argentaria découpé en articles
+
+- Constat du propriétaire : De Argentaria ne rendait qu'un préambule portant
+  tout le décret. Cause : le document réécrit fait précéder chaque article
+  d'un carré saisi (« ■ Article I — … ») et chaque section latine (« I. DE
+  CERTIFICATIONE ») de sa traduction.
+- Choix : la reconnaissance d'un article ignore une puce saisie ; le mot
+  « PRÉAMBULE » seul et les sections romaines en capitales sont des
+  intertitres ; seule la ligne qui suit une section romaine est sautée, celle
+  qui suit « PRÉAMBULE » reste du texte. Mesuré sur toutes les copies locales :
+  rien d'autre ne change que ces titres.
+- Suite `test-sync-codex` verte. Aucun push ni déploiement ; le Codex se met
+  à jour au prochain passage de la synchronisation.
+
+## 2026-11-02 — Registre des permis de chasse
+
+- Demande du propriétaire : page Permis de chasse pour les codes garde et
+  officier ; entrée réduite au prénom, au nom facultatif et à la date de
+  délivrance ; permis à vie ; recherche par prénom ; révocation sur la ligne,
+  par les officiers seuls ; pas de trace du garde délivrant.
+- Choix : révoquer retire la ligne (pas d'état « révoqué » conservé, le
+  propriétaire ayant assimilé révocation et suppression) ; une personne n'a
+  qu'un permis, un homonyme se distingue par son nom ; date de cellule dans
+  la feuille, `yyyy-MM-dd` dans l'API ; révocation sous identité de ligne et
+  bloc compacté, comme l'Inventaire. Hors intendance et visiteur.
+- 37 suites vertes ; build ; aperçus régénérés. Aucun push ni déploiement.
+
 ## 2026-11-01 — Nouveautés du Codex, journal des synchronisations
 
 - Demande du propriétaire : notifier les usagers du Codex des lois changées,

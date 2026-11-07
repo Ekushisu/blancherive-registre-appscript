@@ -36,12 +36,16 @@ un message explicite plutôt que de laisser un écran de chargement muet.
 Générées par le script, donc rejouables à l’identique :
 
 - `effectifs-1440.png`, `effectifs-390.png` : onglets par corps, vue d'ensemble
-  et fiches de service. Le jeu de démonstration couvre sept corps, densité à
-  laquelle les défauts d'affichage mobile apparaissent.
+  et fiches de service. Le jeu de démonstration couvre huit corps, densité à
+  laquelle les défauts d'affichage mobile apparaissent ; l'Académie militaire
+  montre l'alias de grade (« Sergent-Instructeur », le grade de la feuille en
+  rappel).
 - `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement
   sous régence impériale (Régent impérial au sommet, Huscarl détaché), les six
   corps et garnisons sur la grille à six colonnes, avec les descriptions de
-  grades. Les noms, soulignés en pointillé, ouvrent la fiche de service.
+  grades ; en bas, l'encart détaché de l'Académie militaire (Sergent-Instructeur
+  en tête, Instructeurs groupés) à côté des Majors hors commandement et de la
+  Réserve. Les noms, soulignés en pointillé, ouvrent la fiche de service.
 - `fiche-1440.png`, `fiche-390.png` : fiche de service d'un garde, ouverte
   d'un clic sur son nom dans l'organigramme ; panneau par-dessus la page,
   plein écran sur mobile. Capture de l'écran seul (`ecranSeul`).
@@ -63,13 +67,25 @@ Générées par le script, donc rejouables à l’identique :
 La table `apercus` et les données de démonstration sont communes : les captures
 Présences et Paye décrivent le même registre, donc les impayés repérés semaine
 par semaine sont exactement ceux que la Paye regroupe par financeur.
-- `prison-1440.png`, `prison-390.png` : registre et fiches mobiles.
+- `prison-1440.png`, `prison-390.png` : registre et fiches mobiles. La
+  première incarcération du jeu de démonstration porte quatorze saisies et
+  un procès-verbal sur plusieurs lignes : c'est elle qui montre la ligne de
+  détail (jetons repliés derrière « + 6 autres », notes « Tout afficher »).
 - `prison-formulaire-390.png` : nouvelle incarcération, saisies sur la personne.
+- `prison-cellules-1440.png`, `prison-cellules-390.png` : champ Cellule avec
+  le plan de Fort Dragon déplié (cellules 1 à 4, portes d'entrée et de sortie).
+- `prison-sortie-1440.png`, `prison-sortie-390.png` : dialogue « Prononcer la
+  sortie » rempli pour un transfert à une châtellerie (nom, remis à, motif).
 - `inventaire-1440.png`, `inventaire-390.png` : coffres, formulaire « Ranger un
   objet » déplié, tableau des stocks avec boutons + / −, coffre déroulant et
   retrait.
 - `inventaire-intendant-1440.png` : la même page vue par un INTENDANT —
   navigation à cinq entrées, aucune commande.
+- `permis-1440.png`, `permis-390.png` : registre des permis de chasse vu par un
+  officier — recherche par prénom, tableau et bouton Révoquer ; fiches sur
+  téléphone.
+- `permis-garde-1440.png` : la même page vue par un GARDE, formulaire
+  « Nouveau permis » ouvert — bandeau explicatif, aucun bouton Révoquer.
 - `peines-1440.png`, `peines-390.png` : décrets de peines et amendes, filtrés sur
   le Corpus Juriscivilis — fourchettes, niveaux, rachat nobiliaire, crimes de
   sang, peine maximale ; fiches sur téléphone.
@@ -96,7 +112,7 @@ restent valables comme référence visuelle mais ne se régénèrent pas avec la
 commande ci-dessus.
 
 - `connexion-ordinateur.png`, `connexion-mobile.png` : entrée dans le registre.
-- `amendes-1440.png`, `amendes-390.png` : tableau et fiches mobiles.
+- `amendes-1440.png`, `amendes-390.png` : tableau à colonnes fixées et fiches mobiles.
 - `codex-1440.png`, `codex-390.png` : lecture du Codex, bandeau des
   nouveautés et puces « Nouveau » / « Modifié » sur les articles récents.
 - `codex-nouveautes-1440.png`, `codex-nouveautes-390.png` : fenêtre

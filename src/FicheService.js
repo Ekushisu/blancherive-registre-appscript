@@ -84,7 +84,7 @@ function lireRegistreFiches_(ss, role) {
     journal: lireJournalFiche_(ss),
     presences: lirePresencesFiche_(ss),
     amendes: justice ? lireLignesParGardeFiche_(ss, AMENDES_SHEET_NAME, 7) : null,
-    prison: justice ? lireLignesParGardeFiche_(ss, PRISON_SHEET_NAME, 9) : null
+    prison: justice ? lireLignesParGardeFiche_(ss, PRISON_SHEET_NAME, PRISON_SORTIE_COLONNES.issue) : null
   };
 }
 
@@ -459,9 +459,10 @@ function amendesFiche_(lignes) {
 }
 
 
-// Incarcérations prononcées par le membre, et détenus encore en cellule.
+// Incarcérations prononcées par le membre, détenus encore en cellule, et
+// détenus transférés à une autre autorité (acte de sortie, Prison!M).
 function prisonFiche_(lignes) {
-  const resultat = { nombre: 0, enCellule: [], dernieres: [] };
+  const resultat = { nombre: 0, transferes: 0, enCellule: [], dernieres: [] };
 
   lignes.forEach(({ row, display }) => {
     const detention = {
@@ -471,9 +472,11 @@ function prisonFiche_(lignes) {
       infraction: nettoyerSaisieUtilisateur(display[4]),
       entree: formatDateTimePrison_(row[6], display[6]),
       sortie: formatDateTimePrison_(row[7], display[7]),
-      libere: row[8] === true
+      libere: row[8] === true,
+      issue: nettoyerSaisieUtilisateur(display[PRISON_SORTIE_COLONNES.issue - 1])
     };
     resultat.nombre++;
+    if (/^TRANSFERT_/.test(detention.issue)) resultat.transferes++;
     if (!detention.libere) resultat.enCellule.push(detention);
     resultat.dernieres.push(detention);
   });

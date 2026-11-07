@@ -2,6 +2,252 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Sortie de détention en acte, journal de la Prison, plan des cellules (7 novembre 2026)
+
+- Décision du propriétaire : la sortie d'un détenu n'est plus une case
+  cochée sans trace. Issues : libération, libération anticipée, transferts à
+  l'Empire, au Thalmor, à une châtellerie (nommée) ou à un ordre (nommé),
+  évasion, décès ; tout transfert nomme la personne à qui le détenu est
+  remis ; motif obligatoire partout ; GARDE et OFFICIER prononcent toutes les
+  issues ; `modifierPrisonLibere` retirée.
+- **Serveur** (`Prison.js`) : colonnes M:S (issue, destination, remis à,
+  date, garde, motif, journal JSON) créées au besoin ; `prononcerSortiePrison`
+  (refus d'une ligne déjà close, sortie jamais avant l'entrée, libération avant
+  la sortie prévue requalifiée en anticipée), `annulerSortiePrison`
+  (OFFICIER, motif, vide M:R et décoche I, journal conservé),
+  `ajouterNotePrison` (note datée, signée, définitive) ; chemin commun
+  `ecrireActePrison_` (verrou, identité `attendu`, garde reconnu dans
+  `Données!O` ou imposé par la session Discord). `modifierPrison` et le
+  renommage ne touchent pas M:S ; `supprimerPrison` vide A:S.
+  `getPrisonFormData` sert `issues`. Fiche de service : `transferes`.
+- **Interface** : colonne « Sortie » (pastille d'état) et colonne Actions pour
+  tous (Sortie…, + Note ; Annuler la sortie, Modifier, Supprimer pour
+  l'officier) ; dialogues `ui/src/sortie.jsx` ; ligne de détail avec l'acte
+  et le journal ; champ Cellule avec suggestions et plan cliquable de Fort
+  Dragon (`ui/src/cellules.jsx`, croquis embarqué, 63 Ko) : salles en
+  quinconce et portes relevées sur le croquis (entrée et sortie en doré),
+  cellules 1 à 4 seules, les lettres A à H étant des coffres.
+- Tests : `test-prison-sortie.mjs`, `test-sortie-ui.mjs` nouveaux ;
+  `test-registre-ui`, `test-chefs`, `test-saisies-ui` adaptés. Build et
+  aperçus régénérés (prison, prison-cellules, prison-sortie). Aucun push ni
+  déploiement.
+
+### Académie militaire de Blancherive, corps spécial à alias (3 novembre 2026)
+
+- Décision du propriétaire : nouveau corps « Académie militaire de
+  Blancherive », dirigé par un Sergent-Chef et non un Capitaine, rendu en bas
+  de l'organigramme dans un encart séparé comme les Majors hors commandement ;
+  ses membres restent pointés et soldés selon les mêmes critères que tout
+  corps. Alias dans le code : Caporal et Caporal-Chef → « Instructeur »,
+  Sergent et Sergent-Chef → « Sergent-Instructeur ».
+- **Serveur** (`Organigramme.js`) : `ORGANIGRAMME_ACADEMIE` (libellés
+  reconnus : « Académie militaire de Blancherive », « Académie militaire »,
+  « Académie »), hors d'`ORGANIGRAMME_GARNISONS` ; `getOrganigramme` renvoie
+  `academie` (`chefs` : Sergents-Chefs par nom, `membres` : le reste trié
+  par grade), toujours présent ; un Major de l'Académie rejoint `majors`.
+  `Paye.js` : jeton `academie` chez l'argentier de la cour (hypothèse
+  retenue faute d'indication, à changer dans `PAYE_FINANCEURS` si un thane
+  paie). `Presences.js` inchangé : rien n'exclut l'Académie. `Amendes.js` :
+  les collecteurs portent leur `corps`, pour le grade affiché.
+- **Interface** : `libelleGrade(grade, corps)` et `ALIAS_GRADES_CORPS`
+  (`ui/src/corps.js`), affichage seul, appliqués aux Effectifs (en-tête de
+  groupe `GradeAffiche` avec le grade de la feuille en rappel, recherche),
+  à l'Organigramme (`OrgAcademie`, encart `org-independent-block` ; direction
+  « Sergent-Instructeur », `RankedPeople` groupé par grade affiché), aux
+  Présences, à la Paye, au tableau de bord, aux collecteurs des Amendes et à
+  la fiche de service. Descriptions des deux alias dans `grades.jsx`. Les
+  encarts du bas passent en grille `auto-fit` (trois, deux puis une colonne).
+- **Classeur** : le propriétaire ajoute « Académie militaire de Blancherive »
+  à `Données!G` pour que les Effectifs le proposent ; aucune colonne d'alias
+  n'est à créer.
+- Tests : `test-organigramme.mjs` (encart, chef, Major, radié, accord des
+  libellés avec `ALIAS_GRADES_CORPS`), `test-alias-grades.mjs` (nouveau),
+  `test-paye.mjs`, `test-presence-finances.mjs`. 39 suites vertes, build,
+  aperçus Organigramme et Effectifs régénérés. Aucun push ni déploiement.
+
+### Huscarls des corps dans leur colonne, hors Présences (3 novembre 2026)
+
+- Décision du propriétaire : seul un Huscarl de l'État-Major est affilié au
+  Jarl en haut de l'organigramme ; un Huscarl d'un autre corps apparaît dans
+  la colonne de son corps, sous tous les autres grades, un peu séparé, avec
+  la mention qu'il protège les thanes locaux. Et un Huscarl n'est plus
+  comptabilisé dans les Présences.
+- **Serveur** (`Organigramme.js`) : `huscarls` ne retient que les Huscarls
+  actifs dont le corps est l'État-Major ; chaque garnison renvoie `membres`
+  (sans Huscarl, trié par grade) et `huscarls` (par nom). Un Huscarl du Hird,
+  dissous, n'est rendu nulle part. `estGradeHorsCorps` retirée (seule
+  utilisatrice : ce filtre). `Presences.js` : « Huscarl » et « Huscarl de
+  Blancherive » rejoignent `PRESENCE_EXCLUDED_GRADES`, donc hors Présences,
+  solde (`SoldesGrades.js` à 0), Paye, tableau de bord et surveillance
+  d'inactivité ; les lignes de Présences déjà écrites restent, ignorées. La
+  fiche de service le dit (`service.exclu`, « Le Huscarl n'est pas soldé par
+  le registre de la Garde ») ; sa chaîne de commandement (le Jarl seul) est
+  inchangée.
+- **Interface** (`app.jsx`, `OrgCorps`) : bloc « Huscarl(s) — Protègent les
+  thanes locaux » au bas de la colonne, après le personnel, compté dans
+  l'effectif du corps ; description du grade (`grades.jsx`) réécrite. Aperçus
+  de l'organigramme régénérés : Lydia Bras-Fort passe à l'État-Major, Jorund
+  Main-Ferme, Huscarl de la Cité, au bas de sa colonne.
+- Tests : `test-organigramme.mjs` (Huscarl central, Huscarl de la Cité, Huscarl
+  du Hird absent, aucun doublon), `test-presence-finances.mjs`,
+  `test-soldes-grades.mjs`, `test-fiche-service.mjs`, `test-fiche-ui.mjs`.
+  38 suites vertes, build. Aucun push ni déploiement.
+
+### Tableaux Amendes et Prison lisibles, zone morte des grands écrans (3 novembre 2026)
+
+- Constat du propriétaire : une incarcération richement documentée (une
+  vingtaine de saisies, un procès-verbal de plusieurs paragraphes) étirait
+  la Prison sur plusieurs écrans, les douze colonnes se partageant la largeur
+  à parts égales (`table-layout:fixed` sans largeurs), les retours à la ligne
+  des notes étant perdus, et la largeur minimale de 1 650 px rognant la
+  colonne Actions même en 1440. Sur un écran 2K, le contenu s'arrêtait à
+  1 700 px (`max-width` de `.content` au-delà de 1 800 px) : zone morte à
+  droite.
+- **Prison** (`app.jsx`, `ui/src/registre.jsx`) : une section `tbody` par
+  incarcération ; la ligne principale garde dix colonnes aux largeurs fixées
+  par `colgroup` (Date, Garde, Détenu, Cellule, Chefs, Durée, Entrée, Sortie
+  prévue, Libéré, Actions), et une ligne de détail sur toute la largeur porte
+  les saisies et les notes, absente quand l'entrée n'en a pas. Saisies
+  structurées en jetons « nom × quantité » (saisie libre en pointillés,
+  marquée « (libre) »), huit visibles puis « + N autres » ; saisie historique
+  en texte rendue telle quelle. Notes en prose, retours à la ligne conservés
+  (`white-space:pre-line`), repliées à quatre lignes au-delà de 320 caractères
+  ou quatre lignes, « Tout afficher » / « Réduire ». Aucune donnée en double :
+  sur téléphone la section entière devient la fiche, saisies et notes y
+  prennent une ligne libellée comme les autres cellules. Largeur minimale
+  ramenée à 1 100 px : Actions visible en 1440 sans défilement.
+- **Amendes** : mêmes largeurs fixées par `colgroup` (classe `amendes-table`),
+  chefs d'accusation à 27 %, une ligne par amende inchangée.
+- **Tableaux** : les dates `DateRP` se replient dans leur colonne (elles
+  débordaient en `nowrap`), cellules à 12 × 10 px, boutons Modifier et
+  Supprimer à 12 px sur une ligne.
+- **Grands écrans** (`theme.css`) : plafond de `.content` porté de 1 700 à
+  2 300 px au-delà de 1 800 px de large ; un écran 2K est rempli, un 4K garde
+  une marge.
+- Serveur inchangé : `getPrison` renvoyait déjà `saisiesListe`. Test
+  `scripts/test-registre-ui.mjs` (repli des jetons, texte historique, seuil
+  des notes, ligne absente sans détail, `colSpan`). Aperçus Prison et Amendes
+  régénérés, avec une incarcération de démonstration à quatorze saisies.
+  38 suites vertes, build. Aucun push ni déploiement.
+
+### Barème reconstruit sur les textes révisés de l'Empire et de Blancherive (3 novembre 2026)
+
+- Demande du propriétaire : mettre le barème des peines en accord avec les
+  nouvelles règles de l'Empire, dont il ne retrouvait plus la source. Trouvée
+  dans le Corpus Juriscivilis, « Classification des infractions » : le Google
+  Doc révisé donne contravention jusqu'à 100 septims, délit jusqu'à 500, crime
+  jusqu'à 1 000 (au lieu de 500, 2 500 et au-delà), et ajoute « Les amendes ne
+  sont pas cumulables ». Les autres textes relus le même jour : De Re
+  Nobilitatis réécrit (18 articles ; fait isolé et amende du noble à l'art. 13,
+  sanctions à l'art. 14 sans plafond chiffré, décision conjointe à l'art. 15),
+  Codex Penitus et Justicia Militaris retouchés, Corpus Proceduralis et décrets
+  inchangés ; et le Code pénal local de Blancherive **réécrit** : 39 articles
+  (sans article 29) au lieu de 96, titres « Des … » portant souvent plusieurs
+  qualifications, art. 1 et 2 de dispositions générales. Code civil réécrit en
+  12 articles, Loi fondamentale en 28, Code du commerce en 19 (art. 17 seul
+  qualifié).
+- Décisions du propriétaire : échelons 25 / 50 / 75 / 100, 150 / 250 / 375 /
+  500, 600 / 750 / 900 / 1 000, peine maximale inchangée, cachots inchangés ;
+  rachat nobiliaire égal au plafond de la qualification (500 ou 1 000) ;
+  plusieurs chefs ne proposent que la qualification la plus rigoureuse, le mode
+  « peines cumulées » disparaît.
+- **Copies locales** (`docs/codex/`) : neuf fichiers rafraîchis. Les textes de
+  Blancherive, dont l'export est interdit (HTTP 401), viennent de la vue mobile
+  `/mobilebasic`, qui rend le document entier (la page de lecture n'en charge
+  que le début). README du dossier mis à jour.
+- **Extraction** (`SyncCodex.js`) : `normaliserClassificationCodex_` lit les
+  titres à plusieurs qualifications séparées par une barre, une virgule ou
+  « ou » (« (Contravention / Délit) » → Contravention ou délit, « (délit,
+  crime ) » → Délit ou crime, trois qualifications → Qualification variable,
+  « (Contravention en cas d'abus) » → Contravention) ; parenthèse fermante
+  doublée tolérée. Sans cela, le corps décidait : l'usurpation des marques
+  passait pour un crime, les injures pour un délit. Mesuré sur les copies
+  locales : les 36 articles qualifiés du nouveau Code pénal local le sont
+  correctement.
+- **Serveur** (`PeinesAmendes.js`) : `PEINES_FOURCHETTES` (1-100, 100-500,
+  500-1 000), `PEINES_ECHELONS`, `rachatNoblePeine_` (plafond de la
+  qualification, remplace le taux horaire), contrôle du rachat contre le
+  plafond de toute qualification (plus seulement le délit), libellés et renvois
+  à l'art. 13 du De Re Nobilitatis. `PEINES_INITIALES` réécrit : 106 niveaux
+  pour 60 articles — Code pénal local art. 3 à 39 (niveaux suivant le corps de
+  chaque article : cas de base, requalifications, formes aggravées, peine
+  maximale pour sédition et trahison), Code du commerce art. 17, Corpus
+  Juriscivilis art. 1 à 17 (seuils du vol et du recel à 100 et 500 septims),
+  décret Orsimer art. 4, cinq renvois. Plus de ligne De Re Nobilitatis ni de
+  qualification « Spéciale ». Points laissés au magistrat dans les
+  observations : art. 4 et 39 (titre crime, corps délit), art. 22 (recel
+  qualifié de crime par le corps seul).
+- **Interface** : fourchettes (`FOURCHETTES`, `BAREME_IMPERIAL`) ;
+  `propositionBareme` ne cumule plus (niveau le plus grave, un réglage `mode`
+  de brouillon ignoré) ; les deux boutons de mode des formulaires remplacés par
+  le rappel du non-cumul ; renvois nobiliaires aux art. 13, 14, 15 ; mode
+  d'emploi de la page Peines réécrit (fourchettes, non-cumul, réparation au
+  Code civil art. 10 et 11, noblesse). Données d'aperçu des registres alignées
+  sur la nouvelle numérotation (art. 3, 6, 10, 15, 20) ; aperçus non
+  régénérés.
+- **Vérifications** : `test-sync-codex` (nouveaux titres), `test-peines`
+  (fourchettes, rachat, divergences art. 4 et 39, absence de l'art. 29 et du
+  De Re Nobilitatis), `test-peines-ui` (non-cumul, art. 14 et 10),
+  `test-chefs-ui` (fourchette) adaptés ; 37 suites vertes ; `npm run build`
+  passe. Aucun push, aucun déploiement, aucune synchronisation du Codex.
+
+**Mise en service, dans l'ordre** : relire le `git diff`, `npm run push`,
+publier le déploiement à la main ; lancer `synchroniserCodex()` (éditeur ou
+bouton des officiers) pour que le Codex porte les textes réécrits — sans elle,
+le barème cite des articles (CPL 3 à 39) que le Codex en ligne ne connaît pas
+sous ces titres et la page Peines les signale « hors Codex » ; noter les
+corrections faites à la main dans `PeinesAmendes` depuis le 4 octobre, puis
+vider entièrement la feuille (ou la supprimer) ; ouvrir la page « Peines et
+amendes » pour la recréer avec la nouvelle grille ; relancer la
+synchronisation si le journal du Codex a besoin d'une passe propre. Les
+amendes et incarcérations déjà enregistrées gardent montants, durées et chefs
+figés.
+
+### De Argentaria découpé en articles (3 novembre 2026)
+
+- Constat du propriétaire : le décret « De Argentaria » ne rendait qu'un seul
+  article, le préambule, portant tout le document. Le document a été réécrit :
+  chaque article commence par un carré saisi (« ■ Article I — … »), que
+  `reconnaitreArticleCodex_` refusait, et chaque section latine (« I. DE
+  CERTIFICATIONE ») est suivie de sa traduction française.
+- `reconnaitreArticleCodex_` ignore une puce ou un ornement saisi devant
+  « Article ». `estIntertitreCodex_` écarte en plus le mot « PRÉAMBULE » seul
+  et les sections romaines en capitales (`estSectionRomaineCodex_`) ; la ligne
+  de traduction qui suit une telle section est sautée
+  (`estSousTitreIntertitreCodex_`), jamais la ligne qui suit « PRÉAMBULE » ou
+  un intertitre classique (« Par l'autorité du Gouverneur impérial, » ouvre
+  plusieurs décrets).
+- Mesuré sur les copies locales : De Argentaria rend ses 24 entrées, sans titre
+  de section dans le texte des articles ; les autres documents perdent
+  seulement le mot « PRÉAMBULE » en tête de leur préambule.
+- Vérifié par `node scripts/test-sync-codex.mjs`. Le Codex se met à jour au
+  prochain passage de `synchroniserCodex()`. Aucun push ni déploiement.
+
+### Registre des permis de chasse (2 novembre 2026)
+
+- Demande du propriétaire : une page « Permis de chasse » accessible par le
+  code des gardes et celui des officiers ; une entrée = prénom, nom
+  facultatif, date de délivrance, rien d'autre (le garde délivrant n'est pas
+  noté, décision du propriétaire) ; permis valables à vie ; barre de recherche
+  par prénom ; bouton de révocation sur la ligne, réservé aux officiers.
+- **Serveur** : `src/PermisChasse.js`, feuille `PermisChasse` (DATA_MODEL)
+  créée à la première consultation. `getPermisChasse` et `ajouterPermisChasse`
+  (GARDE, OFFICIER), `revoquerPermisChasse(token, row, attendu)` (OFFICIER,
+  identité de ligne exigée). Une personne n'a qu'un permis ; date jamais dans
+  l'avenir ; révocation = ligne retirée, bloc compacté sous verrou.
+- **Interface** : `ui/src/permis.jsx`, entrée « Permis de chasse » après
+  Prison pour GARDE et OFFICIER (« Permis » sur mobile ; la barre mobile de
+  l'officier passe à dix entrées et défile). Formulaire « Nouveau permis »
+  avec la date du jour, recherche en mémoire, tableau devenant des fiches sur
+  téléphone, bouton Révoquer pour l'officier seul, bandeau explicatif pour le
+  garde.
+- Vérifications : 37 suites vertes (`test-permis-chasse`, `test-permis-ui`
+  nouveaux). Aperçus `permis-1440`, `permis-390`, `permis-garde-1440`
+  nouveaux, les autres régénérés (navigation). Aucun `clasp push`.
+- **Mise en service** : relire le `git diff`, `npm run push` (le nouveau
+  fichier `PermisChasse.js` part avec les autres), publier le déploiement à la
+  main. La feuille se crée à la première ouverture de la page.
+
 ### Nouveautés du Codex, journal et bouton de synchronisation (1er novembre 2026)
 
 - Demande du propriétaire : prévenir les usagers du Codex des lois changées,

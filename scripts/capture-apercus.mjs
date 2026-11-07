@@ -32,6 +32,7 @@ const reponses = {
   getPresenceOfficerDashboard: () => donnees.presenceDashboard,
   getPaye: () => donnees.paye,
   getInventaire: () => donnees.inventaire,
+  getPermisChasse: () => donnees.permisChasse,
   getPrison: () => donnees.prison,
   getPrisonFormData: () => donnees.prisonForm,
   getCatalogueObjets: () => donnees.catalogueObjets,
@@ -204,6 +205,22 @@ const apercus = {
     largeurs: [1440],
     reponses: { getSessionInfo: () => ({ role: "INTENDANT" }) }
   },
+  permis: {
+    nav: "Permis de chasse",
+    attendre: ".permis-table",
+    largeurs: [390, 1440]
+  },
+  // La même page vue par un GARDE : il délivre, mais aucun bouton Révoquer.
+  "permis-garde": {
+    nav: "Permis de chasse",
+    attendre: ".permis-table",
+    largeurs: [1440],
+    reponses: { getSessionInfo: () => ({ role: "GARDE" }) },
+    async preparer(page) {
+      await page.getByRole("button", { name: "+ Nouveau permis" }).click();
+      await page.waitForSelector("#permis-prenom");
+    }
+  },
   "prison-formulaire": {
     nav: "Prison",
     attendre: ".prison-table",
@@ -211,6 +228,33 @@ const apercus = {
     async preparer(page) {
       await page.getByRole("button", { name: "+ Nouvelle incarcération" }).click();
       await page.waitForSelector(".form-card");
+    }
+  },
+  // Choix de la cellule : plan de la prison déplié sous le champ.
+  "prison-cellules": {
+    nav: "Prison",
+    attendre: ".prison-table",
+    largeurs: [390, 1440],
+    async preparer(page) {
+      await page.getByRole("button", { name: "+ Nouvelle incarcération" }).click();
+      await page.waitForSelector(".form-card");
+      await page.getByRole("button", { name: "Plan", exact: true }).click();
+      await page.waitForSelector(".plan-prison");
+    }
+  },
+  // Acte de sortie : dialogue ouvert sur un transfert à une châtellerie.
+  "prison-sortie": {
+    nav: "Prison",
+    attendre: ".prison-table",
+    largeurs: [390, 1440],
+    async preparer(page) {
+      await page.getByRole("button", { name: "Sortie…" }).first().click();
+      await page.waitForSelector(".acte-dialogue");
+      await page.getByLabel("Issue").selectOption("TRANSFERT_CHATELLERIE");
+      await page.getByLabel("Châtellerie").fill("Châtellerie de Solitude");
+      await page.getByLabel("Remis à").fill("Capitaine Aldis");
+      await page.getByLabel("Garde signataire").selectOption("Brynjar Poing-de-Fer");
+      await page.getByLabel("Motif").fill("Ordre du Jarl : le détenu est réclamé par Solitude pour y répondre d'un vol antérieur.");
     }
   },
   amendes: {

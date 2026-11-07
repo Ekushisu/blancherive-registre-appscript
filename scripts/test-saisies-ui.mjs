@@ -113,7 +113,7 @@ const formSource = app.slice(app.indexOf('function dateIsoDepuisAffichage('),app
 const formBundle = await build({stdin:{contents:formSource+'\nexport { PrisonForm };',loader:'jsx'},write:false,format:'cjs',jsxFactory:'React.createElement'});
 context.exports={}; context.module={exports:context.exports};
 const ChefsField=()=>null;
-Object.assign(context,{useState:React.useState,useRef:React.useRef,useEffect:React.useEffect,useMemo:(fn)=>fn(),SaisiesField,ChefsField,SentenceField:()=>null,CodexPicker:()=>null,LawModal:()=>null,Field:()=>{},formatHours:()=>'',serverCall:props.serverCall,
+Object.assign(context,{useState:React.useState,useRef:React.useRef,useEffect:React.useEffect,useMemo:(fn)=>fn(),SaisiesField,ChefsField,ChampCellule:()=>null,SentenceField:()=>null,CodexPicker:()=>null,LawModal:()=>null,Field:()=>{},formatHours:()=>'',serverCall:props.serverCall,
   chefsPourServeur:c=>c,ajouterChef:(l,c)=>[...l,c],chefDepuisArticle:a=>a,cleArticle:()=>'',lireBrouillon:()=>null,ecrireBrouillon:()=>{},effacerBrouillon:()=>{},chefsDeLigne:()=>[],useCodex:()=>({codex:null,statut:'pret'}),useCatalogue:()=>({objets:null}),chefsFrequents:()=>[],DateRP:()=>null,ChefsChips:()=>null,
   PropositionBareme:()=>null,usePeines:()=>({peines:null,statut:'pret'}),entreesRecentes:()=>[]});
 vm.runInContext(formBundle.outputFiles[0].text,context);

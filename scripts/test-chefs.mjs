@@ -252,8 +252,10 @@ assert.throws(() => ctx.ajouterPrison('GARDE', { ...basePrison, chefs: undefined
 for (const duree of [-1, 0, 'abc', ' ', {}, 24 * 400]) {
   assert.throws(() => ctx.ajouterPrison('GARDE', { ...basePrison, duree }), /durée/i, `durée ${String(duree)}`);
 }
-assert.deepEqual(plain(ctx.getPrisonFormData('GARDE')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: '' });
-assert.deepEqual(plain(ctx.getPrisonFormData('OFFICIER@Ulfgar')), { gardes: ['Rorik', 'Ulfgar'], gardeImpose: 'Ulfgar' });
+const formPrison = plain(ctx.getPrisonFormData('GARDE'));
+assert.deepEqual([formPrison.gardes, formPrison.gardeImpose], [['Rorik', 'Ulfgar'], '']);
+assert.ok(formPrison.issues.some(i => i.code === 'TRANSFERT_CHATELLERIE'), 'Issues de sortie servies au formulaire');
+assert.equal(plain(ctx.getPrisonFormData('OFFICIER@Ulfgar')).gardeImpose, 'Ulfgar');
 let lecture = plain(ctx.getPrison('GARDE'));
 assert.equal(lecture.rows[0].chefs, null);
 assert.equal(lecture.rows[0].saisiesListe, null, 'Saisies historiques en texte : pas de liste');

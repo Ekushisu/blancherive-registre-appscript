@@ -16,6 +16,13 @@
 // J  Saisies sur la personne
 // K  Motif / Notes
 // L  Chefs d'accusation (JSON) — colonne technique
+// M  Sortie — issue (code de PRISON_ISSUES)
+// N  Sortie — destination (châtellerie ou ordre)
+// O  Sortie — remis à (personne qui reçoit le détenu)
+// P  Sortie — date effective
+// Q  Sortie — garde ayant prononcé l'acte
+// R  Sortie — motif
+// S  Journal (JSON) — notes et actes datés, signés, à ajout seul
 //
 // Helpers partagés provenant de Amendes.js :
 //
@@ -61,7 +68,7 @@ function getPrison(token) {
     return { rows: [] };
   }
 
-  const largeur = Math.min(PRISON_CHEFS_COLUMN, sheet.getMaxColumns());
+  const largeur = Math.min(PRISON_LARGEUR, sheet.getMaxColumns());
   const range = sheet.getRange(2, 1, lastRow - 1, largeur);
   const values = range.getValues();
   const display = range.getDisplayValues();
@@ -110,7 +117,11 @@ function getPrison(token) {
       // Liste structurée pour le formulaire de modification ; null pour une
       // saisie historique en texte, que le formulaire laisse intacte.
       saisiesListe: lireSaisiesPrisonStructurees_(displayRow[9]),
-      notes: nettoyerSaisieUtilisateur(displayRow[10])
+      notes: nettoyerSaisieUtilisateur(displayRow[10]),
+      // Acte de sortie (M:R) et journal (S) ; null et [] pour une ligne
+      // antérieure à cette version, cochée ou non.
+      acteSortie: lireSortiePrison_(valueRow, displayRow),
+      journal: lireJournalPrison_(displayRow[PRISON_SORTIE_COLONNES.journal - 1])
     });
   }
 
@@ -137,7 +148,9 @@ function getPrisonFormData(token) {
   return {
     gardes: lireColonneTechnique(donneesSheet, 15),
     // Session Discord : le garde est celui qui saisit (Auth.js).
-    gardeImpose: gardeImposeSession_(auth)
+    gardeImpose: gardeImposeSession_(auth),
+    // Issues possibles d'une détention, dans l'ordre proposé au registre.
+    issues: PRISON_ISSUES.map(issue => Object.assign({}, issue))
   };
 }
 
@@ -203,7 +216,8 @@ function ajouterPrisonVerrouille_(token, saisie, objets) {
 /*
   Modifie tout ce que le formulaire de création saisit : date, garde, détenu,
   cellule, chefs d'accusation, durée, entrée, saisies et notes. La sortie
-  prévue est recalculée. La case Libéré n'est pas touchée.
+  prévue est recalculée. La case Libéré, l'acte de sortie et le journal
+  (I, M:S) ne sont pas touchés.
 
   `data.saisies` absent : la colonne J est conservée telle quelle. C'est le
   cas d'une incarcération antérieure dont les saisies sont en texte libre ;
@@ -425,42 +439,358 @@ function validerDureePrison_(value) {
 
 
 // ============================================================
-// LIBÉRATION
+// SORTIE DE DÉTENTION — acte complet, jamais une simple case
 // ============================================================
+//
+// Décision du propriétaire, 7 novembre 2026 : la sortie d'un détenu est un
+// acte qui porte son issue, la personne à qui il est remis (transferts), la
+// date effective, le garde qui la prononce et un motif obligatoire. La case
+// Libéré (I) reste écrite pour la fiche de service et les anciennes lignes,
+// mais ne se bascule plus seule : `modifierPrisonLibere` a été retirée.
+//
+// Les issues vivent ici, fermées : chacune porte un comportement (nom de la
+// châtellerie ou de l'ordre, personne destinataire). Ne pas les déplacer
+// dans une feuille.
 
-function modifierPrisonLibere(token, row, checked) {
-  requireRole(token, ["GARDE", "OFFICIER"]);
+const PRISON_SORTIE_COLONNES = {
+  issue: 13,       // M
+  destination: 14, // N  nom de la châtellerie ou de l'ordre
+  remisA: 15,      // O  personne à qui le détenu est remis
+  date: 16,        // P  date et heure effectives
+  garde: 17,       // Q  garde ayant prononcé la sortie
+  motif: 18,       // R
+  journal: 19      // S  journal (JSON)
+};
+const PRISON_SORTIE_ENTETES = {
+  issue: "Sortie — issue",
+  destination: "Sortie — destination",
+  remisA: "Sortie — remis à",
+  date: "Sortie — date",
+  garde: "Sortie — garde",
+  motif: "Sortie — motif",
+  journal: "Journal (JSON)"
+};
+const PRISON_LARGEUR = 19;
 
+// `transfert` : la personne qui reçoit le détenu (`remisA`) est exigée.
+// `destination` : libellé du champ qui nomme la châtellerie ou l'ordre, vide
+// quand l'issue n'en demande pas ; `destinationNom` sert aux phrases.
+const PRISON_ISSUES = [
+  { code: "LIBERATION", libelle: "Libération", transfert: false, destination: "", destinationNom: "" },
+  { code: "LIBERATION_ANTICIPEE", libelle: "Libération anticipée", transfert: false, destination: "", destinationNom: "" },
+  { code: "TRANSFERT_EMPIRE", libelle: "Transfert à l'Empire", transfert: true, destination: "", destinationNom: "" },
+  { code: "TRANSFERT_THALMOR", libelle: "Transfert au Thalmor", transfert: true, destination: "", destinationNom: "" },
+  { code: "TRANSFERT_CHATELLERIE", libelle: "Transfert à une châtellerie", transfert: true, destination: "Châtellerie", destinationNom: "la châtellerie" },
+  { code: "TRANSFERT_ORDRE", libelle: "Transfert à un ordre", transfert: true, destination: "Ordre", destinationNom: "l'ordre" },
+  { code: "EVASION", libelle: "Évasion", transfert: false, destination: "", destinationNom: "" },
+  { code: "DECES", libelle: "Décès en détention", transfert: false, destination: "", destinationNom: "" }
+];
+
+const PRISON_MOTIF_MAX = 2000;
+const PRISON_NOTE_MAX = 2000;
+const PRISON_NOM_MAX = 200;
+const PRISON_JOURNAL_MAX = 45000;
+
+
+function trouverIssuePrison_(code) {
+  const propre = nettoyerSaisieUtilisateur(code);
+  return PRISON_ISSUES.find(issue => issue.code === propre) || null;
+}
+
+
+function libelleIssuePrison_(code) {
+  const issue = trouverIssuePrison_(code);
+  return issue ? issue.libelle : nettoyerSaisieUtilisateur(code);
+}
+
+
+/*
+  Prononce la sortie d'un détenu. GARDE et OFFICIER, pour toute issue
+  (décision du propriétaire, 7 novembre 2026).
+
+  `data` : { issue, destination, remisA, date, garde, motif, attendu }.
+  - `issue` : code de `PRISON_ISSUES`.
+  - `destination` : nom de la châtellerie ou de l'ordre, exigé pour ces deux
+    transferts seulement.
+  - `remisA` : personne à qui le détenu est remis, exigée pour tout transfert.
+  - `date` : `yyyy-MM-ddTHH:mm`, jamais avant l'entrée.
+  - `garde` : auteur de l'acte, dans `Données!O` ; imposé en session Discord.
+  - `motif` : obligatoire, quelle que soit l'issue.
+  - `attendu` : garde et détenu affichés, comme pour `modifierPrison`.
+
+  Une libération prononcée avant la sortie prévue est enregistrée comme
+  libération anticipée. Une incarcération déjà close est refusée : l'officier
+  annule d'abord l'acte (`annulerSortiePrison`).
+*/
+function prononcerSortiePrison(token, row, data) {
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
+  if (!data) throw new Error("Données de sortie manquantes.");
+
+  const issue = trouverIssuePrison_(data.issue);
+  if (!issue) throw new Error("Choisissez l'issue de la détention.");
+
+  const destination = nettoyerSaisieUtilisateur(data.destination);
+  const remisA = nettoyerSaisieUtilisateur(data.remisA);
+  const motif = nettoyerSaisieUtilisateur(data.motif);
+
+  if (issue.destination && !destination) {
+    throw new Error(`Indiquez le nom de ${issue.destinationNom} qui reçoit le détenu.`);
+  }
+  if (destination.length > PRISON_NOM_MAX) throw new Error(`Le nom de la destination est limité à ${PRISON_NOM_MAX} caractères.`);
+  if (issue.transfert && !remisA) {
+    throw new Error("Indiquez le nom de la personne à qui le détenu est remis.");
+  }
+  if (remisA.length > PRISON_NOM_MAX) throw new Error(`Le nom de la personne destinataire est limité à ${PRISON_NOM_MAX} caractères.`);
+  if (!motif) throw new Error("Le motif de la sortie est obligatoire.");
+  if (motif.length > PRISON_MOTIF_MAX) throw new Error(`Le motif est limité à ${PRISON_MOTIF_MAX} caractères.`);
+
+  const dateSortie = parseDateTimeLocalPrison_(data.date, "de sortie");
+  const attendu = lireIdentiteAttendue_(data.attendu, ["garde", "detenu"]);
+
+  return ecrireActePrison_(token, auth, row, data, attendu, function (ligne, auteur) {
+    if (ligne.valeurs[8] === true || String(ligne.affiche[PRISON_SORTIE_COLONNES.issue - 1] || "").trim()) {
+      throw new Error("Cette incarcération est déjà close. Un officier doit annuler la sortie avant d'en prononcer une autre.");
+    }
+
+    const entree = ligne.valeurs[6];
+    if (entree instanceof Date && !isNaN(entree.getTime()) && dateSortie.getTime() < entree.getTime()) {
+      throw new Error("La sortie ne peut pas précéder l'entrée en cellule.");
+    }
+
+    let code = issue.code;
+    const prevue = ligne.valeurs[7];
+    if (code === "LIBERATION" && prevue instanceof Date && !isNaN(prevue.getTime()) && dateSortie.getTime() < prevue.getTime()) {
+      code = "LIBERATION_ANTICIPEE";
+    }
+
+    const destinationRetenue = issue.destination ? destination : "";
+    const remisARetenu = issue.transfert ? remisA : "";
+
+    const evenement = {
+      quand: horodatageJournalPrison_(new Date()),
+      type: "sortie",
+      qui: auteur,
+      issue: code,
+      destination: destinationRetenue,
+      remisA: remisARetenu,
+      date: formatDateTimePrison_(dateSortie, ""),
+      texte: motif
+    };
+
+    return {
+      cases: [
+        [9, true],
+        [PRISON_SORTIE_COLONNES.issue, code],
+        [PRISON_SORTIE_COLONNES.destination, destinationRetenue],
+        [PRISON_SORTIE_COLONNES.remisA, remisARetenu],
+        [PRISON_SORTIE_COLONNES.date, dateSortie],
+        [PRISON_SORTIE_COLONNES.garde, auteur],
+        [PRISON_SORTIE_COLONNES.motif, motif]
+      ],
+      evenement
+    };
+  });
+}
+
+
+/*
+  Annule une sortie : OFFICIER seul, motif obligatoire. Le détenu redevient en
+  cellule ; les colonnes de sortie sont vidées, le journal garde l'acte annulé.
+  `data` : { garde, motif, attendu }.
+*/
+function annulerSortiePrison(token, row, data) {
+  const auth = requireRole(token, ["OFFICIER"]);
+  if (!data) throw new Error("Données d'annulation manquantes.");
+
+  const motif = nettoyerSaisieUtilisateur(data.motif);
+  if (!motif) throw new Error("Le motif de l'annulation est obligatoire.");
+  if (motif.length > PRISON_MOTIF_MAX) throw new Error(`Le motif est limité à ${PRISON_MOTIF_MAX} caractères.`);
+
+  const attendu = lireIdentiteAttendue_(data.attendu, ["garde", "detenu"]);
+
+  return ecrireActePrison_(token, auth, row, data, attendu, function (ligne, auteur) {
+    const issueActuelle = String(ligne.affiche[PRISON_SORTIE_COLONNES.issue - 1] || "").trim();
+
+    if (ligne.valeurs[8] !== true && !issueActuelle) {
+      throw new Error("Cette incarcération n'est pas close : rien à annuler.");
+    }
+
+    const evenement = {
+      quand: horodatageJournalPrison_(new Date()),
+      type: "annulation",
+      qui: auteur,
+      issue: issueActuelle,
+      texte: motif
+    };
+
+    return {
+      cases: [
+        [9, false],
+        [PRISON_SORTIE_COLONNES.issue, ""],
+        [PRISON_SORTIE_COLONNES.destination, ""],
+        [PRISON_SORTIE_COLONNES.remisA, ""],
+        [PRISON_SORTIE_COLONNES.date, ""],
+        [PRISON_SORTIE_COLONNES.garde, ""],
+        [PRISON_SORTIE_COLONNES.motif, ""]
+      ],
+      evenement
+    };
+  });
+}
+
+
+/*
+  Ajoute une note datée et signée au journal d'une incarcération. GARDE et
+  OFFICIER ; une note ne se modifie ni ne s'efface. `data` : { garde, texte,
+  attendu }.
+*/
+function ajouterNotePrison(token, row, data) {
+  const auth = requireRole(token, ["GARDE", "OFFICIER"]);
+  if (!data) throw new Error("Données de note manquantes.");
+
+  const texte = nettoyerSaisieUtilisateur(data.texte);
+  if (!texte) throw new Error("La note est vide.");
+  if (texte.length > PRISON_NOTE_MAX) throw new Error(`Une note est limitée à ${PRISON_NOTE_MAX} caractères.`);
+
+  const attendu = lireIdentiteAttendue_(data.attendu, ["garde", "detenu"]);
+
+  return ecrireActePrison_(token, auth, row, data, attendu, function (ligne, auteur) {
+    return {
+      cases: [],
+      evenement: {
+        quand: horodatageJournalPrison_(new Date()),
+        type: "note",
+        qui: auteur,
+        texte
+      }
+    };
+  });
+}
+
+
+/*
+  Chemin commun des actes : verrou, ligne existante et non vide, identité
+  affichée, auteur reconnu dans `Données!O` (imposé en session Discord), puis
+  écriture des seules cases demandées et de l'événement en fin de journal.
+  `construire(ligne, auteur)` renvoie { cases: [[colonne, valeur]], evenement }.
+*/
+function ecrireActePrison_(token, auth, row, data, attendu, construire) {
   row = Number(row);
+  if (!Number.isInteger(row) || row < 2) throw new Error("Ligne de prison invalide.");
 
-  if (!Number.isInteger(row) || row < 2) {
-    throw new Error("Ligne de prison invalide.");
+  const gardeSaisi = nettoyerSaisieUtilisateur(imposerGardeSession_(auth, data).garde);
+  if (!gardeSaisi) throw new Error("Indiquez le garde qui signe cet acte.");
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const feuilles = ouvrirFeuillesPrison_(ss);
+    const sheet = feuilles.prison;
+
+    const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
+    if (row > lastRow) throw new Error("Cette incarcération n'existe plus.");
+
+    garantirColonnesSortiePrison_(sheet);
+
+    const range = sheet.getRange(row, 1, 1, PRISON_LARGEUR);
+    const ligne = { valeurs: range.getValues()[0], affiche: range.getDisplayValues()[0] };
+
+    if (!ligne.affiche.slice(0, 5).some(value => String(value || "").trim())) {
+      throw new Error("Cette ligne d'incarcération est vide.");
+    }
+
+    verifierIdentiteRegistre_(
+      { garde: ligne.affiche[1], detenu: ligne.affiche[2] },
+      attendu,
+      "Cette incarcération a changé depuis son affichage. Rechargez le registre avant d'agir."
+    );
+
+    if (trouverValeurTechniqueBrute(feuilles.donnees, 15, gardeSaisi) === null) {
+      throw new Error("Le garde qui signe n'est pas reconnu.");
+    }
+
+    const acte = construire(ligne, gardeSaisi);
+    const journal = lireJournalPrison_(ligne.affiche[PRISON_SORTIE_COLONNES.journal - 1]);
+    journal.push(acte.evenement);
+    const journalJson = JSON.stringify(journal);
+    if (journalJson.length > PRISON_JOURNAL_MAX) {
+      throw new Error("Le journal de cette incarcération est plein.");
+    }
+
+    acte.cases.forEach(function (c) {
+      sheet.getRange(row, c[0]).setValue(c[1]);
+    });
+    sheet.getRange(row, PRISON_SORTIE_COLONNES.date).setNumberFormat("dd/MM/yyyy HH:mm");
+    sheet.getRange(row, PRISON_SORTIE_COLONNES.journal).setValue(journalJson);
+
+    SpreadsheetApp.flush();
+  } finally {
+    lock.releaseLock();
   }
-
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(PRISON_SHEET_NAME);
-
-  if (!sheet) {
-    throw new Error("Feuille Prison introuvable.");
-  }
-
-  const lastRow = getLastNonEmptyRowInColumn(sheet, 1);
-
-  if (row > lastRow) {
-    throw new Error("Cette incarcération n'existe plus.");
-  }
-
-  const rowData = sheet.getRange(row, 1, 1, 5).getDisplayValues()[0];
-
-  if (!rowData.some(value => String(value || "").trim())) {
-    throw new Error("Cette ligne d'incarcération est vide.");
-  }
-
-  sheet.getRange(row, 9).setValue(Boolean(checked));
-
-  SpreadsheetApp.flush();
 
   return getPrison(token);
+}
+
+
+function garantirColonnesSortiePrison_(sheet) {
+  garantirColonnesRegistre_(sheet, PRISON_CHEFS_COLUMN, PRISON_CHEFS_HEADER);
+  Object.keys(PRISON_SORTIE_COLONNES).forEach(function (cle) {
+    garantirColonnesRegistre_(sheet, PRISON_SORTIE_COLONNES[cle], PRISON_SORTIE_ENTETES[cle]);
+  });
+}
+
+
+// Sortie d'une ligne telle que le registre l'affiche ; null tant qu'aucune
+// issue n'est écrite (anciennes lignes cochées comprises).
+function lireSortiePrison_(valueRow, displayRow) {
+  const c = PRISON_SORTIE_COLONNES;
+  const code = nettoyerSaisieUtilisateur(displayRow[c.issue - 1]);
+  if (!code) return null;
+  const issue = trouverIssuePrison_(code);
+  return {
+    issue: code,
+    libelle: libelleIssuePrison_(code),
+    transfert: issue ? issue.transfert : false,
+    destination: nettoyerSaisieUtilisateur(displayRow[c.destination - 1]),
+    remisA: nettoyerSaisieUtilisateur(displayRow[c.remisA - 1]),
+    date: formatDateTimePrison_(valueRow[c.date - 1], displayRow[c.date - 1]),
+    garde: nettoyerSaisieUtilisateur(displayRow[c.garde - 1]),
+    motif: nettoyerSaisieUtilisateur(displayRow[c.motif - 1])
+  };
+}
+
+
+// Journal d'une ligne : liste d'événements { quand, type, qui, texte, ... }.
+// Une cellule illisible vaut un journal vide, jamais une erreur de lecture.
+function lireJournalPrison_(texte) {
+  const brut = String(texte === undefined || texte === null ? "" : texte).trim();
+  if (!brut) return [];
+  try {
+    const liste = JSON.parse(brut);
+    if (!Array.isArray(liste)) return [];
+    return liste.filter(e => e && typeof e === "object").map(function (e) {
+      const evenement = {
+        quand: nettoyerSaisieUtilisateur(e.quand),
+        type: nettoyerSaisieUtilisateur(e.type),
+        qui: nettoyerSaisieUtilisateur(e.qui),
+        texte: nettoyerSaisieUtilisateur(e.texte)
+      };
+      ["issue", "destination", "remisA", "date"].forEach(function (cle) {
+        if (e[cle] !== undefined) evenement[cle] = nettoyerSaisieUtilisateur(e[cle]);
+      });
+      if (evenement.issue) evenement.libelle = libelleIssuePrison_(evenement.issue);
+      return evenement;
+    });
+  } catch (error) {
+    return [];
+  }
+}
+
+
+function horodatageJournalPrison_(date) {
+  return Utilities.formatDate(date, PRISON_TIMEZONE, "dd/MM/yyyy HH:mm");
 }
 
 
@@ -490,7 +820,7 @@ function supprimerPrison(token, row) {
     throw new Error("Cette incarcération n'existe plus.");
   }
 
-  const largeur = Math.min(PRISON_CHEFS_COLUMN, sheet.getMaxColumns());
+  const largeur = Math.min(PRISON_LARGEUR, sheet.getMaxColumns());
   const values = sheet.getRange(row, 1, 1, largeur).getDisplayValues()[0];
 
   if (!values.some(value => String(value || "").trim())) {
@@ -499,7 +829,7 @@ function supprimerPrison(token, row) {
 
   /*
     Même principe que pour Amendes :
-    on conserve physiquement la ligne Sheet mais on vide A:L.
+    on conserve physiquement la ligne Sheet mais on vide A:S, journal compris.
   */
   sheet.getRange(row, 1, 1, largeur).clearContent();
 
@@ -513,12 +843,13 @@ function supprimerPrison(token, row) {
 // HELPERS PRISON
 // ============================================================
 
-function parseDateTimeLocalPrison_(value) {
+function parseDateTimeLocalPrison_(value, libelle) {
+  const quoi = libelle || "d'entrée";
   const input = nettoyerSaisieUtilisateur(value);
   const match = input.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
 
   if (!match) {
-    throw new Error("Format d'heure d'entrée invalide.");
+    throw new Error(`Format d'heure ${quoi} invalide.`);
   }
 
   const year = Number(match[1]);
@@ -536,7 +867,7 @@ function parseDateTimeLocalPrison_(value) {
     result.getHours() !== hour ||
     result.getMinutes() !== minute
   ) {
-    throw new Error("Date ou heure d'entrée invalide.");
+    throw new Error(`Date ou heure ${quoi} invalide.`);
   }
 
   return result;

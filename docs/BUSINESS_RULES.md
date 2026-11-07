@@ -8,11 +8,12 @@
   - sans Jarl en service actif, la châtellerie est sous régence impériale : le ou les Régents impériaux en service actif prennent le sommet, par ordre alphabétique, sous le titre de leur grade (« Régence impériale » s'ils sont plusieurs) ;
   - sans l'un ni l'autre, le poste de Jarl est affiché vacant. Aucun nom n'est affiché par défaut : un Jarl mort, radié ou parti disparaît de l'organigramme (Lucius Haldor s'affichait jusque-là en dur).
 - Le Jarl est inscrit aux Effectifs au grade « Jarl », en tête de `Données!A`, au-dessus du Maréchal (décision du propriétaire, 12 octobre 2026). Le Régent impérial l'est au grade « Régent impérial » (« Régente impériale » est reconnu aussi). Ces deux grades ne se donnent ni ne se retirent depuis l'application (décisions du propriétaire, 12 octobre et 1er novembre 2026) : les formulaires d'ajout et de modification ne les proposent pas, leur fiche garde son grade figé, et le serveur refuse les deux. Le reste de la fiche reste modifiable. Un changement se fait à la main dans la feuille `Effectifs`.
-- Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` et sous son autorité directe (même décision). L'organigramme le place dans la branche « Autorité directe du Jarl », à droite du sommet, quel que soit son corps ; il ne figure ni dans son corps, ni dans la chaîne de l'État-Major. Sous régence, les Huscarls gardent leur place mais sont détachés du sommet : ni trait, ni mention « Autorité directe du Jarl ».
+- Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` (même décision). Depuis le 3 novembre 2026 (décision du propriétaire), son corps décide de sa place à l'organigramme : un Huscarl de l'État-Major est le garde personnel du Jarl, rendu dans la branche « Autorité directe du Jarl », à droite du sommet, hors de la chaîne de l'État-Major ; un Huscarl d'un autre corps protège les thanes locaux et figure au bas de la colonne de son corps, sous tout le personnel, dans un bloc à part portant la mention « Protègent les thanes locaux », compté dans l'effectif du corps. Sous régence, les Huscarls de l'État-Major gardent leur place mais sont détachés du sommet : ni trait, ni mention « Autorité directe du Jarl ». Dans les deux cas le Huscarl n'est ni pointé ni soldé.
 - Le Hird du Jarl est dissous (1er novembre 2026) : il n'a plus de branche dans l'organigramme et n'est plus proposé comme corps. Ses fiches et ses lignes historiques restent.
 - Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
 - Cité de Blancherive, Faubourgs, Cap Granite et Éclaireurs répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
 - Un corps n'apparaît dans l'organigramme que s'il est déclaré dans `ORGANIGRAMME_GARNISONS` (`Organigramme.js`) ; ses membres actifs n'y figurent pas autrement. Tout nouveau corps doit y être ajouté.
+- L'Académie militaire de Blancherive (décision du propriétaire, 3 novembre 2026) est un corps spécial, hors des garnisons : déclarée dans `ORGANIGRAMME_ACADEMIE`, elle est rendue en bas de l'organigramme dans un encart détaché, à côté des Majors hors commandement et de la Réserve, toujours affichée même vide. Son chef n'est pas un Capitaine mais un Sergent-Chef, rendu en tête de l'encart (« Sergent-Instructeur ») ; le reste du personnel suit, groupé par grade affiché. Un Major de l'Académie rejoint les Majors hors commandement, comme ceux des corps directs. Ses membres sont pointés dans les Présences et soldés dans la Paye selon les mêmes critères que tout corps ; son financeur est l'argentier de la cour (jeton `academie`, `PAYE_FINANCEURS`). Le corps doit figurer dans `Données!G` pour être proposé aux Effectifs.
 
 ## Nom affiché d'un corps
 
@@ -24,7 +25,8 @@
 
 ## Grades affichés
 
-- Un grade s'affiche partout tel que la feuille l'écrit. Les alias de grade par corps ont été retirés le 1er novembre 2026 (décision du propriétaire) ; une colonne « Alias <corps> » laissée dans `Données` n'est plus lue.
+- Un grade s'affiche tel que la feuille l'écrit, sauf à l'Académie militaire de Blancherive (décision du propriétaire, 3 novembre 2026) : Caporal et Caporal-Chef s'y affichent « Instructeur », Sergent et Sergent-Chef « Sergent-Instructeur ». La table vit dans le code (`ALIAS_GRADES_CORPS`, `libelleGrade`, `ui/src/corps.js`), jamais dans le classeur : les alias par colonne de `Données` ont été retirés le 1er novembre 2026, et une colonne « Alias <corps> » laissée dans `Données` n'est plus lue.
+- L'alias ne touche que l'affichage : Effectifs (en-tête de groupe, le grade de la feuille en rappel ; la recherche trouve les deux noms), Organigramme (groupes par grade affiché : Caporal et Caporal-Chef forment un seul groupe « Instructeur »), Présences, Paye (détail et récapitulatif copié), tableau de bord, collecteurs des Amendes et fiche de service (en-tête, description et chaîne de commandement). La feuille, les formulaires, les tris, les regroupements du serveur, les rôles Discord et la carrière de la fiche gardent le grade régulier. Les deux alias ont leur description de grade (`grades.jsx`).
 
 ## Corps dissous
 
@@ -102,7 +104,7 @@ sont regroupés en groupes trans-corps à la fin de la page.
 - La liste se filtre par semaine, par corps et par personne. Le filtre par corps existe pour l'officier de corps, qui vient pointer ses seuls hommes dans une liste hebdomadaire devenue longue : il masque les autres corps dans chaque semaine affichée et restreint le compte d'impayés de la semaine, afin que le badge parle bien du corps demandé. Une ligne sans corps est regroupée sous « Sans corps », dans la liste déroulante comme dans les sections de semaine, pour qu'aucun garde ne disparaisse entre les deux vues.
 - La semaine courante n'a jamais d'impayés : la solde se règle le lundi pour la semaine précédente, une semaine en cours est donc impayée par construction. Son badge et son filtre « Impayés » ne s'affichent pas. Le tableau de bord OFFICIER et la Paye appliquent déjà la même exclusion ; les trois doivent rester d'accord, sans quoi une alerte permanente cesserait d'être lue.
 - Le cumul des amendes dans le tableau de bord OFFICIER porte sur les amendes datées de la semaine courante, du lundi au dimanche, et cochées Payé et Reversé. La date de reversement n'est pas suivie.
-- Le Hird du Jarl (par son corps), le Jarl (par son grade, quel que soit son corps ; décision du propriétaire, 12 octobre 2026) et le Régent impérial (par son grade ; 1er novembre 2026) sont exclus des présences, des calculs de solde, de la Paye et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées. La règle unique est `estExcluDesPresences_(corps, grade)` (`Presences.js`). Le Huscarl, lui, est pointé et soldé comme tout membre.
+- Le Hird du Jarl (par son corps), le Jarl (par son grade, quel que soit son corps ; décision du propriétaire, 12 octobre 2026) et le Régent impérial (par son grade ; 1er novembre 2026) sont exclus des présences, des calculs de solde, de la Paye et de la surveillance d'inactivité. Les lignes historiques ne sont pas supprimées. Le Huscarl l'est de même, par son grade, quel que soit son corps (3 novembre 2026) : ses lignes de Présences antérieures restent, ignorées par la Paye. La règle unique est `estExcluDesPresences_(corps, grade)` (`Presences.js`).
 - Les décrets de la châtellerie sont promulgués et abrogés par dépôt et retrait d'un Google Doc dans le dossier Drive déclaré par `SYNC_CODEX_FOLDERS`. Le dossier fait autorité : la synchronisation suivante reflète son contenu exact. Un décret retiré cesse d'apparaître au Codex et d'être proposé dans les formulaires ; les amendes et incarcérations déjà enregistrées sous ce décret restent inchangées.
 - Depuis le 29 septembre 2026, tout article d'un décret ou d'un texte impérial peut fonder un chef d'accusation, qu'il chiffre ou non sa sanction (voir « Chefs d'accusation »). Les règles antérieures, qui réservaient les formulaires aux sources chiffrées du droit de la châtellerie, sont abrogées.
 - Le barème journalier est défini par grade dans `SoldesGrades`. Initialisation : Commander (alias Commandant) à 100 septims ; autres grades à l'ancienne base `Vue globale!L2` (50 à l'époque ; feuille archivée depuis, l'initialisation ayant eu lieu), sauf Recrue à 0 et Cadet à la moitié (25 actuellement). Le Hird reste à 0 quel que soit le tarif du grade.
@@ -193,7 +195,8 @@ quatre codes de Blancherive, qui ne chiffrent aucune peine.
 - **La sentence est à l'appréciation de l'autorité** : montant en septims
   (entier strictement positif) ou durée de cachot en heures (fraction admise),
   saisis librement. Le barème impérial par qualification (contravention
-  jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà) est rappelé à titre
+  jusqu'à 100 septims, délit jusqu'à 500, crime jusqu'à 1 000 : Corpus
+  Juriscivilis révisé par l'Empire, lu le 3 novembre 2026) est rappelé à titre
   indicatif, jamais imposé. Les montants ou durées que citent encore certains
   articles sont proposés en raccourcis, sans contrainte. Depuis le 4 octobre
   2026, le décret des peines propose en outre une peine par article (voir
@@ -222,85 +225,102 @@ contraventions, délits et crimes. Le barème qui en découle, article par
 article, est tenu dans la feuille `PeinesAmendes` (voir DATA_MODEL). Il
 **propose** une peine ; la sentence reste à l'appréciation de l'autorité.
 
-- **Fourchettes impériales.** Contravention jusqu'à 500 septims (amende simple
-  ou travaux légers) ; délit de 500 à 2 500 (amende élevée ou travaux forcés) ;
-  crime au-delà de 2 500 (amende forte, emprisonnement ou peine de mort).
+Le 3 novembre 2026, l'Empire ayant révisé le Corpus Juriscivilis (fourchettes
+divisées par cinq à douze, amendes déclarées non cumulables) et Blancherive
+ayant réécrit son Code pénal local (39 articles au lieu de 96), le barème
+initial a été reconstruit en entier sur les nouveaux textes, grille arrêtée par
+le propriétaire le même jour.
+
+- **Fourchettes impériales** (Corpus Juriscivilis, classification des
+  infractions, texte révisé). Contravention jusqu'à 100 septims (amende simple
+  ou travaux légers) ; délit jusqu'à 500 (amende élevée ou travaux forcés) ;
+  crime jusqu'à 1 000 (amende forte, emprisonnement ou peine de mort). « Les
+  amendes ne sont pas cumulables. » Avant la révision : 500, 2 500 et au-delà.
 - **Échelons.** Chaque article est rangé dans la fourchette de sa
   qualification selon la gravité des faits. Valeurs à l'initialisation :
 
   | Échelon | Amende | Cachot | Rachat noble |
   |---|---|---|---|
-  | C1 · C2 · C3 · C4 | 50 · 150 · 300 · 500 | — | — |
-  | D1 · D2 | 500 · 750 | — | — |
-  | D3 | 1 000 | 30 min | 1 500 |
-  | D4 | 1 250 | 1 h | 2 250 |
-  | K1 | 3 000 | 1 h | 4 000 |
-  | K2 | 5 000 | 2 h | 7 000 |
-  | K3 | 8 000 | 4 h | 12 000 |
-  | K4 | 12 000 | 6 h | 18 000 |
+  | C1 · C2 · C3 · C4 | 25 · 50 · 75 · 100 | — | — |
+  | D1 · D2 | 150 · 250 | — | — |
+  | D3 | 375 | 30 min | 500 |
+  | D4 | 500 | 1 h | 500 |
+  | K1 | 600 | 1 h | 1 000 |
+  | K2 | 750 | 2 h | 1 000 |
+  | K3 | 900 | 4 h | 1 000 |
+  | K4 | 1 000 | 6 h | 1 000 |
   | PM | peine maximale : mort ou bannissement définitif, saisie des biens | | |
 
-  Les délits sont resserrés au bas de leur fourchette, de 500 à 1 250 septims,
-  à la demande du propriétaire du 4 octobre 2026 : la première grille, de 750
-  à 2 250, était jugée trop sévère. Les crimes n'ont pas changé.
+  Les durées de cachot sont celles du 4 octobre 2026. Première grille (4
+  octobre 2026, fourchettes 500 / 2 500) : contraventions 50 à 500, délits 500
+  à 1 250 (resserrés le jour même, de 750 à 2 250 jugés trop sévères), crimes
+  3 000 à 12 000, rachat nobiliaire à 1 000 septims l'heure de cachot.
 
   Le cachot ne vient qu'aux délits graves et aux crimes : la classification
   impériale réserve l'emprisonnement aux crimes, et la juridiction peut le
   prononcer « selon les circonstances et la gravité des faits ». La peine
   maximale n'est prononcée que sur verdict public et motivé du magistrat
   (Corpus Proceduralis, art. 11) et ne se chiffre pas.
-- **Portée.** Toutes les infractions qualifiées du Code pénal local, y compris
-  les doubles qualifications et les qualifications variables ; les infractions
-  du Code du commerce local (art. 10, 12, 13, 14) ; le Corpus Juriscivilis,
-  art. 1 à 17 — vol, violences, meurtre… que le code local laisse au droit
-  impérial et que les autorités locales peuvent juger (Corpus Proceduralis,
-  art. 1) ; les manquements nobiliaires (De Re Nobilitatis, art. 4) ; le port
+- **Portée.** Toutes les infractions qualifiées du Code pénal local réécrit
+  (art. 3 à 39, le texte ne portant pas d'article 29), y compris les doubles
+  et triples qualifications ; l'infraction du Code du commerce local (art. 17,
+  ventes sans droit et tromperies) ; le Corpus Juriscivilis, art. 1 à 17 —
+  vol, violences, meurtre… que le code local laisse au droit impérial et que
+  les autorités locales peuvent juger (Corpus Proceduralis, art. 1) ; le port
   et la fabrication irréguliers d'équipements Orsimer (décret, art. 4). Sans
-  barème : dispositions générales, mesures accessoires, Loi fondamentale, Code
-  civil, autres décrets ; la sentence y est laissée à l'appréciation.
+  barème : les dispositions générales du Code pénal local (art. 1 et 2), la Loi
+  fondamentale, le Code civil, les autres décrets, et les manquements aux
+  devoirs nobiliaires, que le De Re Nobilitatis réécrit ne chiffre plus (art.
+  14 : amende prononcée par un juge compétent) ; la sentence y est laissée à
+  l'appréciation.
 - **Renvois.** Codex Penitus (juridictions impériales exclusives), Justicia
   Militaris (légionnaires en service), Decretum de Restitutione Bonorum
   Imperii (juges impériaux), décret dwemer art. 5 (procès impérial à
   Markarth), armes éthérées art. 2 : une ligne `Renvoi` dit la conduite à
   tenir, sans peine locale.
 - **Niveaux.** Un article a plusieurs niveaux quand son texte en prévoit :
-  forme aggravée, requalification (« devient un délit si… »), qualification
-  variable (dénonciation calomnieuse selon l'infraction imputée, dissimulation
-  frauduleuse selon la valeur, mesure exceptionnelle selon l'acte qui la
-  proclame), peine maximale pour les crimes les plus graves. Vol et recel
-  (Corpus Juriscivilis, art. 6 et 7) : valeur jusqu'à 500 septims, de 500 à
-  2 500, au-delà ou objet sous licence ; la « valeur particulièrement élevée »
-  qui fait le crime est lue au seuil criminel de la classification impériale.
+  forme aggravée, requalification (« constitue un délit… », « est punie comme
+  crime »), gradation selon les faits (accusations mensongères selon la
+  gravité des faits imputés, usurpation des marques du port à l'exercice d'un
+  pouvoir du Jarl), peine maximale pour les crimes les plus graves (sédition,
+  trahison, meurtre, assassinat, abominations). Vol et recel (Corpus
+  Juriscivilis, art. 6 et 7) : valeur jusqu'à 100 septims, de 100 à 500,
+  au-delà ou objet sous licence ; la « valeur particulièrement élevée » qui
+  fait le crime est lue au seuil criminel de la classification impériale.
 - **Points laissés au magistrat**, signalés dans les observations du barème :
-  CPL art. 86 et 90, qualifiés de crime par leur titre et de délit par leur
-  corps (deux niveaux proposés) ; CPL art. 15-1 Trahison, non rédigé, donc
-  sans élément légal ; CCoL art. 13, qui renvoie à des articles du Code pénal
-  sans rapport avec la matière ; qualifications choisies par le barème pour
-  CCoL art. 10 et le décret Orsimer, que les textes ne qualifient pas ;
-  gradation de la lèse-majesté selon la personne visée, Cour ou Jarl.
-- **Plusieurs chefs.** Des faits distincts cumulent leurs peines. Un même fait
-  qualifié par plusieurs textes n'est puni que selon la qualification la plus
-  rigoureuse (Code pénal local, art. 3). Le formulaire propose le cumul et
-  bascule sur la qualification la plus rigoureuse d'un clic.
+  CPL art. 39 (expériences magiques), crime au titre et délit au corps, et
+  art. 4 (entraves), dont le titre annonce un crime que le corps ne définit
+  pas (deux niveaux proposés) ; CPL art. 22, dont le corps qualifie de crime
+  un recel que le titre ne retient pas ; qualification choisie par le barème
+  pour le décret Orsimer, que le texte ne qualifie pas.
+- **Plusieurs chefs.** Les amendes ne sont pas cumulables (Corpus
+  Juriscivilis, classification des infractions) : la proposition est celle du
+  niveau le plus grave des chefs retenus, le cachot suivant la même règle, et
+  les autres chefs restent inscrits au registre. Le mode « faits distincts —
+  peines cumulées » du 4 octobre 2026 a été retiré le 3 novembre 2026 ; un
+  réglage de cumul encore présent dans un brouillon est ignoré.
 - **Récidive** : peine encourue doublée. **Tentative et complicité** : punies
   comme l'infraction consommée et comme son auteur (Corpus Proceduralis).
-- **Noblesse (De Re Nobilitatis).**
-  - Art. 8 : une contravention ou un délit isolé sur sept jours n'est pas
+- **Noblesse (De Re Nobilitatis**, texte réécrit en 18 articles, lu le
+  3 novembre 2026 ; l'ancien texte numérotait ces règles 8, 9, 10 et 12).
+  - Art. 13 : une contravention ou un délit isolé sur sept jours n'est pas
     poursuivi contre un noble. Le formulaire le rappelle et cite les entrées
-    du même nom des sept jours précédents dans le registre ouvert.
-  - Art. 9 : une amende doit toujours lui être proposée, sauf crime de sang.
-    Le cachot se rachète par l'amende nobiliaire du niveau : 1 000 septims
-    l'heure à l'initialisation, sans dépasser 2 500 pour un délit. Crimes de
-    sang retenus : meurtre, assassinat, torture et mutilation, violences
-    aggravées (Corpus Juriscivilis, art. 8, 12, 13, 14).
-  - Art. 10 : pas de travaux forcés pour un noble.
-  - Art. 12 : emprisonnement, mise à mort et déchéance sur décision conjointe
-    avec le Jarl.
-  - Art. 4 : manquements aux devoirs de la noblesse, jusqu'à 5 000 septims
-    (1 000, 2 500 et 5 000 selon la gravité), avec remboursement et
-    bannissement.
+    du même nom des sept jours précédents dans le registre ouvert. Une amende
+    doit toujours lui être proposée, sauf crime de sang : le cachot se rachète
+    par l'amende nobiliaire du niveau, égale à l'initialisation au plafond
+    impérial de la qualification (500 septims pour un délit, 1 000 pour un
+    crime ; décision du propriétaire du 3 novembre 2026). Crimes de sang
+    retenus : meurtre, assassinat, torture et mutilation, violences aggravées
+    (Corpus Juriscivilis, art. 8, 12, 13, 14).
+  - Art. 14 : seules les sanctions prévues par la loi impériale et le Code
+    s'appliquent à un noble (amende, bannissement, emprisonnement, déchéance,
+    peine capitale quand la loi le prévoit). Les manquements aux devoirs
+    nobiliaires valent une amende fixée par le juge : plus de ligne chiffrée au
+    barème (l'ancien art. 4 plafonnait à 5 000 septims).
+  - Art. 15 : emprisonnement, peine capitale et déchéance sur décision
+    conjointe suzeraine et impériale, avec l'accord du Jarl du noble.
 - **Formulaires Amendes et Prison.** Un bloc « Barème des peines » propose un
-  niveau par chef, la récidive, la noblesse et le mode de calcul. La
+  niveau par chef, la récidive et la noblesse. La
   proposition remplit le montant (Amendes) ou la durée (Prison) tant que le
   champ est vide ou porte encore la proposition précédente : une valeur
   saisie par l'autorité n'est jamais écrasée, « Reprendre la proposition » la
@@ -323,8 +343,9 @@ article, est tenu dans la feuille `PeinesAmendes` (voir DATA_MODEL). Il
   création saisit se modifie : date, garde, contrevenant ou détenu, chefs
   d'accusation, montant ou durée, et pour la Prison la cellule, l'entrée, les
   saisies et les notes. La sortie prévue est recalculée.
-- Les cases Payé, Reversé et Libéré ne changent pas par ce chemin : elles
-  gardent leur commande dans le registre et leur règle de rôle.
+- Les cases Payé et Reversé, l'acte de sortie et le journal de la Prison ne
+  changent pas par ce chemin : ils gardent leur commande dans le registre et
+  leur règle de rôle.
 - La ligne n'est réécrite que si elle porte encore le garde et le contrevenant
   (ou le détenu) que l'officier avait sous les yeux ; sinon le serveur refuse
   et demande de recharger. Le numéro de ligne seul ne désigne pas une entrée.
@@ -420,7 +441,45 @@ quel effectif (`getFicheService`, `FicheService.js`). Lecture seule.
 - GARDE et OFFICIER peuvent consulter / créer.
 - La liste des gardes provient de `Données!O2:O`, dérivée des membres actifs d'`Effectifs`.
 - OFFICIER peut supprimer une entrée.
-- `Libéré` est modifiable depuis le registre.
+
+### Sortie de détention (décision du propriétaire, 7 novembre 2026)
+
+- La sortie d'un détenu est un **acte**, prononcé depuis le registre
+  (`prononcerSortiePrison`), jamais une case cochée. Il porte une issue, la
+  date et l'heure effectives, le garde signataire et un **motif obligatoire**,
+  quelle que soit l'issue.
+- Issues (`PRISON_ISSUES`, `Prison.js`, liste fermée dans le code) :
+  libération, libération anticipée, transfert à l'Empire, transfert au
+  Thalmor, transfert à une châtellerie (nom de la châtellerie exigé),
+  transfert à un ordre (nom de l'ordre exigé), évasion, décès en détention.
+- Tout transfert exige le nom de la **personne à qui le détenu est remis**
+  (« Remis à »). Les deux transferts nommés exigent en plus la destination.
+- GARDE et OFFICIER prononcent toutes les issues, transferts compris.
+- Une libération prononcée avant la sortie prévue (`Prison!H`) est enregistrée
+  comme libération anticipée. La sortie ne peut pas précéder l'entrée.
+- Le garde signataire est celui de la session Discord, imposé par le serveur
+  (`imposerGardeSession_`) ; par code commun, il se choisit dans `Données!O`
+  et doit y figurer. L'identité de ligne affichée (garde, détenu) est exigée,
+  comme pour la modification.
+- Une incarcération close ne se prononce pas deux fois : un **OFFICIER**
+  annule d'abord la sortie (`annulerSortiePrison`, motif obligatoire). Le
+  détenu redevient en cellule, les colonnes de sortie sont vidées, le journal
+  garde l'acte annulé. Une ligne antérieure cochée sans acte s'annule de même.
+- Les **notes** s'ajoutent au journal (`ajouterNotePrison`, GARDE et
+  OFFICIER), datées et signées ; aucune ne se modifie ni ne s'efface. La
+  colonne `Motif / Notes` (K) reste le motif d'incarcération, modifiable par
+  l'officier via le formulaire.
+- Le registre affiche l'état (en cellule, libéré, transféré…) et, dans la
+  ligne de détail, l'acte de sortie puis le journal. Une ligne antérieure
+  cochée sans acte s'affiche « Libéré (sans détail) » ; aucune migration.
+- La fiche de service compte les détenus transférés (`transferes`) à partir
+  de l'issue ; « encore en cellule » reste lu sur `Libéré`.
+- Choix de la cellule : texte libre, avec les cellules 1 à 4 du plan de
+  Fort Dragon proposées en suggestion et sur un plan cliquable
+  (`ui/src/cellules.jsx`, croquis du propriétaire embarqué, salles en
+  quinconce et portes relevées, entrée et sortie en doré). Les lettres A à H
+  du croquis sont des coffres : jamais proposées (décision du propriétaire,
+  7 novembre 2026). Le serveur n'en vérifie rien.
 - Les objets saisis sont sélectionnés dans le catalogue, avec une quantité entière
   strictement positive. Plusieurs ajouts du même ID cumulent les quantités.
 - Maximum 100 objets différents ; quantités et sommes doivent être des entiers
@@ -491,6 +550,33 @@ garde à Fort-Dragon.
   d'elle-même dans un coffre, et une restitution n'en sort rien. Ce rattachement
   serait une décision métier à prendre explicitement.
 
+## Permis de chasse
+
+Demande du propriétaire, 2 novembre 2026. La page dit qui a le droit de
+chasser sur les terres de la châtellerie.
+
+- GARDE et OFFICIER consultent et délivrent. Seul l'OFFICIER révoque : le code
+  des gardes ne retire aucune entrée. INTENDANT et le visiteur public n'y ont
+  pas accès ; la navigation ne la propose pas, le routage ne la rend pas, et
+  chaque fonction serveur refuse leur rôle.
+- Une entrée porte le prénom, le nom (facultatif : bien des habitants n'en ont
+  pas) et la date de délivrance, et rien d'autre. Le garde qui délivre n'est
+  pas noté (décision du propriétaire).
+- Un permis vaut à vie : pas d'échéance, pas de renouvellement. Il ne cesse
+  que par révocation, qui retire la ligne du registre ; la personne peut
+  recevoir un nouveau permis ensuite.
+- Une même personne n'a qu'un permis : un second enregistrement au même
+  prénom et nom, sans casse ni accents, est refusé en nommant le permis
+  existant et sa date. Deux homonymes se distinguent par leur nom.
+- La date de délivrance est celle du jour par défaut et ne peut pas être dans
+  l'avenir ; une date passée est acceptée pour inscrire un permis ancien.
+- La recherche se fait par prénom, le nom compris, mot par mot, sans casse ni
+  accents, dans le navigateur. Le registre est trié du plus récent au plus
+  ancien, puis par prénom et nom.
+- La révocation exige l'identité affichée de la ligne : une page restée
+  ouverte pendant qu'un autre garde a modifié le registre ne révoque jamais un
+  autre permis que celui qu'elle montre.
+
 ## Codex
 
 - Les documents juridiques restent la source de vérité.
@@ -500,4 +586,4 @@ garde à Fort-Dragon.
 - **Nouveautés** (décision du propriétaire, 1er novembre 2026) : chaque synchronisation note ce qu'elle a changé — lois nouvelles, modifiées (avec les champs touchés et la différence du texte), retirées (leur dernier texte reste lisible), documents ajoutés ou retirés — et tous ceux qui consultent le Codex en sont prévenus, visiteur compris : bandeau en tête de page depuis la dernière visite, bouton « Nouveautés » avec le nombre de changements non vus, puces « Nouveau » et « Modifié » sur les articles des quatorze derniers jours. Un article est le même d'une synchronisation à l'autre par sa source et son numéro : un titre corrigé est une modification. Un document que la synchronisation n'a pas pu lire garde ses articles et n'est pas annoncé retiré ; il est signalé aux officiers.
 - **Synchronisation depuis le registre** (même décision) : un officier peut la lancer depuis les Nouveautés, au plus une fois toutes les trois minutes pour ce bouton, et suit les traces du serveur en direct ; l'éditeur Apps Script n'est pas soumis à ce délai.
 - Depuis le 27 septembre 2026, le droit de la châtellerie est constitué des quatre codes adoptés par la Cour de Blancherive (Loi fondamentale, Code pénal local, Code civil local, Code du commerce local). L'ancien Codex Judiciaire est caduc : il ne figure plus au Codex et ne fonde plus aucune sanction nouvelle. Les amendes et incarcérations enregistrées sous son empire restent inchangées.
-- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 500 septims, délit de 500 à 2 500, crime au-delà). Depuis le 29 septembre 2026, ses articles sont cités comme chefs d'accusation et la sentence est laissée à l'appréciation de l'autorité, le barème n'étant qu'un rappel. Décision du 4 octobre 2026 : un barème article par article, dans ces fourchettes, est tenu dans la feuille `PeinesAmendes` et proposé par les formulaires sans être imposé (voir « Décrets de peines et amendes »). L'imposer côté serveur reste une décision métier à prendre explicitement.
+- Le Code pénal local qualifie ses infractions (contravention, délit, crime) sans chiffrer les peines, qu'il renvoie au barème impérial (contravention jusqu'à 100 septims, délit jusqu'à 500, crime jusqu'à 1 000 depuis la révision impériale lue le 3 novembre 2026 ; auparavant 500, 2 500 et au-delà). Depuis le 29 septembre 2026, ses articles sont cités comme chefs d'accusation et la sentence est laissée à l'appréciation de l'autorité, le barème n'étant qu'un rappel. Décision du 4 octobre 2026 : un barème article par article, dans ces fourchettes, est tenu dans la feuille `PeinesAmendes` et proposé par les formulaires sans être imposé (voir « Décrets de peines et amendes »). L'imposer côté serveur reste une décision métier à prendre explicitement.

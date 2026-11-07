@@ -204,14 +204,50 @@ export const codexComplet = codexLocal();
 
 export const prison = {
   rows: [
+    // Incarcération richement documentée : une longue liste de saisies, dont
+    // des saisies libres, et un procès-verbal sur plusieurs lignes. C'est le
+    // cas qui faisait dérouler le registre sur plusieurs écrans.
+    {
+      row: 7,
+      date: "15/09/2026",
+      garde: "Brynjar Poing-de-Fer",
+      detenu: "Zghrahz",
+      cellule: "Cellule II",
+      infraction: "CPL art. 5 — Des troubles à l'ordre public ; CPL art. 20 — Du vol",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"5","titre":"Des troubles à l'ordre public","classification":"contravention","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"20","titre":"Du vol","classification":"délit","abrege":"CPL"}],
+      duree: "24 h",
+      dureeRaw: 24,
+      entree: "15/09/2026 00:10",
+      entreeIso: "2026-09-15T00:10",
+      sortie: "16/09/2026 00:10",
+      libere: false,
+      saisies: "Or × 750\nCrochet × 12\nTorche × 3\nÉpée d'acier × 1\nMora tapinella × 28 (saisie libre)\nMousse barbue × 3 (saisie libre)\nMycène des marais × 4 (saisie libre)\nŒuf de fauvette × 1 (saisie libre)\nOreille d'elfe × 7 (saisie libre)\nPerche argentée × 1 (saisie libre)\nPoisson de rivière × 1 (saisie libre)\nQueue de ragnard × 4 (saisie libre)\nTige de charbon × 66 (saisie libre)\nTruffe de Namira × 2 (saisie libre)",
+      saisiesListe: [
+        { id: "skyrim.esm|00000F", nom: "Or", quantite: 750 },
+        { id: "skyrim.esm|00000A", nom: "Crochet", quantite: 12 },
+        { id: "skyrim.esm|01D4EC", nom: "Torche", quantite: 3 },
+        { id: "skyrim.esm|013989", nom: "Épée d'acier", quantite: 1 },
+        { id: "", nom: "Mora tapinella", quantite: 28, libre: true },
+        { id: "", nom: "Mousse barbue", quantite: 3, libre: true },
+        { id: "", nom: "Mycène des marais", quantite: 4, libre: true },
+        { id: "", nom: "Œuf de fauvette", quantite: 1, libre: true },
+        { id: "", nom: "Oreille d'elfe", quantite: 7, libre: true },
+        { id: "", nom: "Perche argentée", quantite: 1, libre: true },
+        { id: "", nom: "Poisson de rivière", quantite: 1, libre: true },
+        { id: "", nom: "Queue de ragnard", quantite: 4, libre: true },
+        { id: "", nom: "Tige de charbon", quantite: 66, libre: true },
+        { id: "", nom: "Truffe de Namira", quantite: 2, libre: true }
+      ],
+      notes: "Date : 14 septembre, aux alentours de minuit\nLieu : Bois-de-Chêne\nGardes présents : Brynjar Poing-de-Fer, Rolf Écu-Fendu\nTémoins : le Thane Garbosh gro-Mak, Askelad Premier-du-Gré\n\nL'individu faisait déjà l'objet d'une consigne d'arrestation à vue, sur ordre du Thane, à la suite de plusieurs incidents survenus à Bois-de-Chêne : troubles répétés à l'ordre public, délit de fuite, usurpation de marque. Interpellé à la sortie de l'auberge, il a tenté de s'enfuir par les écuries avant d'être rattrapé. Les objets saisis seront restitués à la sortie, à l'exception de l'or, retenu en garantie de l'amende à venir."
+    },
     {
       row: 4,
       date: "14/09/2026",
       garde: "Sigrid Vent-du-Nord",
       detenu: "Marcurio le Cadet",
-      cellule: "Cellule II",
-      infraction: "CPL art. 24 — Vol simple",
-      chefs: [{"source":"Code pénal local de Blancherive","article":"24","titre":"Vol simple","classification":"délit","abrege":"CPL"}],
+      cellule: "2",
+      infraction: "CPL art. 20 — Du vol",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"20","titre":"Du vol","classification":"délit","abrege":"CPL"}],
       duree: "6 h",
       dureeRaw: 6,
       entree: "14/09/2026 18:30",
@@ -220,16 +256,20 @@ export const prison = {
       libere: false,
       saisies: "Dague d'acier × 1\nOr × 40",
       saisiesListe: [{ id: "skyrim.esm|0001397E", nom: "Dague d'acier", quantite: 1 }, { id: "skyrim.esm|00000F", nom: "Or", quantite: 40 }],
-      notes: "Pris sur le fait au marché. Objets restitués à la sortie."
+      notes: "Pris sur le fait au marché.",
+      acteSortie: null,
+      journal: [
+        { quand: "14/09/2026 22:40", type: "note", qui: "Rolf Écu-Fendu", texte: "Visite du Thane : le détenu reste en cellule jusqu'au terme." }
+      ]
     },
     {
       row: 5,
       date: "13/09/2026",
       garde: "Rolf Écu-Fendu",
       detenu: "Anoriath",
-      cellule: "Cellule I",
-      infraction: "CPL art. 31 — Rixe sur la voie publique ; CPL art. 16 — Injure",
-      chefs: [{"source":"Code pénal local de Blancherive","article":"31","titre":"Rixe sur la voie publique","classification":"délit","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"16","titre":"Injure","classification":"contravention","abrege":"CPL"}],
+      cellule: "A",
+      infraction: "CPL art. 15 — De la mise en péril et des blessures ; CPL art. 10 — Des injures et calomnies",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"15","titre":"De la mise en péril et des blessures","classification":"délit","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"10","titre":"Des injures et calomnies","classification":"contravention","abrege":"CPL"}],
       duree: "2 h",
       dureeRaw: 2,
       entree: "13/09/2026 21:05",
@@ -238,7 +278,11 @@ export const prison = {
       libere: true,
       saisies: "",
       saisiesListe: [],
-      notes: ""
+      notes: "",
+      acteSortie: { issue: "LIBERATION_ANTICIPEE", libelle: "Libération anticipée", transfert: false, destination: "", remisA: "", date: "13/09/2026 22:30", garde: "Sigrid Vent-du-Nord", motif: "Blessé soigné et excuses présentées à la victime ; relâché sur décision du Sergent de garde." },
+      journal: [
+        { quand: "13/09/2026 22:31", type: "sortie", qui: "Sigrid Vent-du-Nord", issue: "LIBERATION_ANTICIPEE", libelle: "Libération anticipée", destination: "", remisA: "", date: "13/09/2026 22:30", texte: "Blessé soigné et excuses présentées à la victime ; relâché sur décision du Sergent de garde." }
+      ]
     },
     {
       row: 6,
@@ -253,10 +297,15 @@ export const prison = {
       entree: "11/09/2026 09:15",
       entreeIso: "2026-09-11T09:15",
       sortie: "",
-      libere: false,
+      libere: true,
       saisies: "Amulette de Talos",
       saisiesListe: null,
-      notes: "Détention sur ordre direct de l'État-Major, durée en attente."
+      notes: "Détention sur ordre direct de l'État-Major, durée en attente.",
+      acteSortie: { issue: "TRANSFERT_THALMOR", libelle: "Transfert au Thalmor", transfert: true, destination: "", remisA: "Justiciar Ondolemar", date: "12/09/2026 16:00", garde: "Brynjar Poing-de-Fer", motif: "Réquisition de l'ambassade, contresignée par le Capitaine. Amulette remise avec le détenu." },
+      journal: [
+        { quand: "11/09/2026 09:20", type: "note", qui: "Brynjar Poing-de-Fer", texte: "Refuse de répondre. Attente des ordres de l'État-Major." },
+        { quand: "12/09/2026 16:05", type: "sortie", qui: "Brynjar Poing-de-Fer", issue: "TRANSFERT_THALMOR", libelle: "Transfert au Thalmor", destination: "", remisA: "Justiciar Ondolemar", date: "12/09/2026 16:00", texte: "Réquisition de l'ambassade, contresignée par le Capitaine. Amulette remise avec le détenu." }
+      ]
     }
   ]
 };
@@ -284,6 +333,18 @@ export const prisonForm = {
     "Rolf Écu-Fendu",
     "Ingrid Main-Leste",
     "Astrid Œil-de-Faucon"
+  ],
+  gardeImpose: "",
+  // Issues d'une détention, telles que `getPrisonFormData` les sert (`PRISON_ISSUES`, Prison.js).
+  issues: [
+    { code: "LIBERATION", libelle: "Libération", transfert: false, destination: "", destinationNom: "" },
+    { code: "LIBERATION_ANTICIPEE", libelle: "Libération anticipée", transfert: false, destination: "", destinationNom: "" },
+    { code: "TRANSFERT_EMPIRE", libelle: "Transfert à l'Empire", transfert: true, destination: "", destinationNom: "" },
+    { code: "TRANSFERT_THALMOR", libelle: "Transfert au Thalmor", transfert: true, destination: "", destinationNom: "" },
+    { code: "TRANSFERT_CHATELLERIE", libelle: "Transfert à une châtellerie", transfert: true, destination: "Châtellerie", destinationNom: "la châtellerie" },
+    { code: "TRANSFERT_ORDRE", libelle: "Transfert à un ordre", transfert: true, destination: "Ordre", destinationNom: "l'ordre" },
+    { code: "EVASION", libelle: "Évasion", transfert: false, destination: "", destinationNom: "" },
+    { code: "DECES", libelle: "Décès en détention", transfert: false, destination: "", destinationNom: "" }
   ]
 };
 
@@ -296,8 +357,8 @@ export const amendes = {
       date: "14/09/2026",
       garde: "Astrid Œil-de-Faucon",
       contrevenant: "Belethor",
-      infraction: "CPL art. 9 — Propos irrespectueux envers une autorité locale ; CPL art. 16 — Injure",
-      chefs: [{"source":"Code pénal local de Blancherive","article":"9","titre":"Propos irrespectueux envers une autorité locale","classification":"contravention","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"16","titre":"Injure","classification":"contravention","abrege":"CPL"}],
+      infraction: "CPL art. 6 — Des outrages à l’autorité locale ; CPL art. 10 — Des injures et calomnies",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"6","titre":"Des outrages à l’autorité locale","classification":"contravention","abrege":"CPL"}, {"source":"Code pénal local de Blancherive","article":"10","titre":"Des injures et calomnies","classification":"contravention","abrege":"CPL"}],
       montant: "150",
       montantRaw: 150,
       paye: true,
@@ -324,8 +385,8 @@ export const amendes = {
       date: "09/09/2026",
       garde: "Sigrid Vent-du-Nord",
       contrevenant: "Nazeem",
-      infraction: "CPL art. 4 — Refus d’obtempérer à une injonction locale",
-      chefs: [{"source":"Code pénal local de Blancherive","article":"4","titre":"Refus d’obtempérer à une injonction locale","classification":"délit","abrege":"CPL"}],
+      infraction: "CPL art. 3 — Des ordres et sommations légitimes",
+      chefs: [{"source":"Code pénal local de Blancherive","article":"3","titre":"Des ordres et sommations légitimes","classification":"délit","abrege":"CPL"}],
       montant: "",
       montantRaw: null,
       paye: false,
@@ -572,8 +633,11 @@ export const codex = {
   Organigramme : la forme suit `getOrganigramme()` de `src/Organigramme.js`.
   Les grades couvrent volontairement toute l'échelle, du sommet à la Recrue, afin
   que les descriptions de grades soient visibles sur la capture. La châtellerie
-  est sous régence impériale : pas de Jarl en service, un Régent au sommet, les
-  Huscarls détachés.
+  est sous régence impériale : pas de Jarl en service, un Régent au sommet, le
+  Huscarl de l'État-Major détaché. Un Huscarl de la Cité est rendu au bas de
+  la colonne de son corps, gardien des thanes locaux. L'Académie militaire,
+  corps hors des garnisons, est rendue en bas dans un encart détaché : son
+  Sergent-Chef s'affiche « Sergent-Instructeur », ses Caporaux « Instructeur ».
 */
 let idMembre = 0;
 const membre = (prenom, nom, grade, corps) => ({
@@ -589,7 +653,7 @@ export const organigramme = {
   changes: { events: [] },
   jarl: null,
   regents: [membre("Cassius", "Varo", "Régent impérial", "État-Major")],
-  huscarls: [membre("Lydia", "Bras-Fort", "Huscarl", "Cité de Blancherive")],
+  huscarls: [membre("Lydia", "Bras-Fort", "Huscarl", "État-Major")],
   marechaux: [],
   commandants: [membre("Haldvar", "de Blancherive", "Commander", "État-Major")],
   majorsEtatMajor: [membre("Ingrid", "Main-Leste", "Major", "État-Major")],
@@ -631,7 +695,8 @@ export const organigramme = {
         membre("Rolf", "Écu-Fendu", "Capitaine", "Cité de Blancherive"),
         membre("Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
         membre("Eirik", "Barbe-Rousse", "Garde", "Cité de Blancherive")
-      ]
+      ],
+      huscarls: [membre("Jorund", "Main-Ferme", "Huscarl", "Cité de Blancherive")]
     },
     {
       key: "faubourgs",
@@ -651,12 +716,23 @@ export const organigramme = {
       membres: [membre("Runa", "Chante-Lame", "Garde", "Éclaireur")]
     }
   ],
+  academie: {
+    key: "academie",
+    nom: "Académie militaire de Blancherive",
+    chefs: [membre("Hrolf", "Main-Sage", "Sergent-Chef", "Académie militaire de Blancherive")],
+    membres: [
+      membre("Tove", "Œil-de-Lynx", "Caporal-Chef", "Académie militaire de Blancherive"),
+      membre("Askel", "Pas-Lourd", "Caporal", "Académie militaire de Blancherive"),
+      membre("Yrsa", "Mains-Froides", "Cadet", "Académie militaire de Blancherive"),
+      membre("Finn", "Sans-Ombre", "Recrue", "Académie militaire de Blancherive")
+    ]
+  },
   reserve: [membre("Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive")]
 };
 
 /*
   Effectifs : la forme suit `getEffectifs()` de `src/Effectifs.js`.
-  Sept corps sont représentés, afin que la bande d'onglets soit aussi chargée
+  Huit corps sont représentés, afin que la bande d'onglets soit aussi chargée
   qu'en production — c'est à cette densité que les défauts d'affichage mobile
   apparaissent, pas avec deux corps.
 */
@@ -667,7 +743,8 @@ const CORPS = [
   "Garde des Faubourgs",
   "Éclaireur",
   "Cap Granite",
-  "État-Major"
+  "État-Major",
+  "Académie militaire de Blancherive"
 ];
 
 const GRADES = [
@@ -724,7 +801,12 @@ export const effectifs = {
     membreEffectif(15, "Ragnhild", "Fer-Juste", "Capitaine", "Cap Granite"),
     membreEffectif(16, "Ivar", "Œil-Sombre", "Garde", "Cap Granite", {
       discordAnomalie: "Identifiant Discord enregistré comme nombre : Sheets en a arrondi les derniers chiffres. Rattacher le compte de nouveau."
-    })
+    }),
+    // Académie militaire : le grade de la feuille reste Sergent-Chef / Caporal ;
+    // l'interface affiche l'alias, le grade régulier en rappel.
+    membreEffectif(17, "Hrolf", "Main-Sage", "Sergent-Chef", "Académie militaire de Blancherive"),
+    membreEffectif(18, "Tove", "Œil-de-Lynx", "Caporal-Chef", "Académie militaire de Blancherive"),
+    membreEffectif(19, "Finn", "Sans-Ombre", "Recrue", "Académie militaire de Blancherive", { assermente: false })
   ]
 };
 
@@ -771,6 +853,19 @@ export const inventaire = {
     coffreNom: coffresDemo.find(c => c.id === coffreId).nom,
     id, nom, libre: !id, quantite
   }))
+};
+
+// Permis de chasse : même forme que `getPermisChasse` de `src/PermisChasse.js`,
+// les plus récents d'abord. Le nom est facultatif.
+export const permisChasse = {
+  permis: [
+    { row: 7, prenom: "Lydia", nom: "", date: "2026-10-30" },
+    { row: 4, prenom: "Sven", nom: "Fer-Froid", date: "2026-10-18" },
+    { row: 6, prenom: "Faendal", nom: "", date: "2026-10-18" },
+    { row: 3, prenom: "Élodie", nom: "de Rivebois", date: "2026-09-27" },
+    { row: 5, prenom: "Hadvar", nom: "Pied-Sûr", date: "2026-09-12" },
+    { row: 2, prenom: "Ralof", nom: "de Rivebois", date: "2026-08-03" }
+  ]
 };
 
 export const sessionInfo = { role: "OFFICIER" };
@@ -820,15 +915,16 @@ export const fiche = {
       aEncaisser: { nombre: 2, total: 100, aDeterminer: 1 },
       aReverser: { nombre: 1, total: 200 },
       dernieres: [
-        { date: "04/10/2026", contrevenant: "Ysolda", infraction: "CPL art. 16 — Injure", montant: 50, paye: true, reverse: true },
-        { date: "03/10/2026", contrevenant: "Heimskr", infraction: "CPL art. 16 — Injure", montant: 200, paye: true, reverse: false },
-        { date: "02/10/2026", contrevenant: "Belethor", infraction: "CPL art. 4 — Refus d’obtempérer", montant: null, paye: false, reverse: false },
-        { date: "01/10/2026", contrevenant: "Nazeem", infraction: "CPL art. 16 — Injure", montant: 100, paye: false, reverse: false }
+        { date: "04/10/2026", contrevenant: "Ysolda", infraction: "CPL art. 10 — Des injures et calomnies", montant: 50, paye: true, reverse: true },
+        { date: "03/10/2026", contrevenant: "Heimskr", infraction: "CPL art. 10 — Des injures et calomnies", montant: 200, paye: true, reverse: false },
+        { date: "02/10/2026", contrevenant: "Belethor", infraction: "CPL art. 3 — Des ordres et sommations légitimes", montant: null, paye: false, reverse: false },
+        { date: "01/10/2026", contrevenant: "Nazeem", infraction: "CPL art. 10 — Des injures et calomnies", montant: 100, paye: false, reverse: false }
       ]
     },
     prison: {
       nombre: 3,
-      enCellule: [{ date: "06/10/2026", detenu: "Belethor", cellule: "III", infraction: "CPL art. 4 — Refus d’obtempérer", entree: "06/10/2026 10:00", sortie: "16/10/2026 10:00", libere: false }],
+      transferes: 1,
+      enCellule: [{ date: "06/10/2026", detenu: "Belethor", cellule: "III", infraction: "CPL art. 3 — Des ordres et sommations légitimes", entree: "06/10/2026 10:00", sortie: "16/10/2026 10:00", libere: false }],
       dernieres: []
     }
   }

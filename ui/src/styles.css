@@ -14,14 +14,13 @@
 .saisie-help{font-size:12px;color:#555;margin:8px 0}
 .saisies-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px}
 .saisies-list li{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #ddd;background:#fafafa;border-radius:7px;padding:9px 12px}
-.saisies-cell{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:600px){.saisie-search{flex-basis:100%}.saisie-quantity{flex:1}.saisies-list li{align-items:flex-start}}
     .login-page{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:24px;background:linear-gradient(135deg,#ded7c5,#f3efe4)}.login-card{width:100%;max-width:420px;background:#fff;border-radius:14px;padding:28px;box-shadow:0 10px 35px rgba(0,0,0,.12)}.login-card input{width:100%;padding:12px;margin-bottom:12px;border:1px solid #bbb;border-radius:7px}
     .primary-button,.secondary-button,.danger-button{border-radius:7px;padding:9px 12px}.primary-button{border:0;background:#333;color:#fff;padding:11px 16px}.secondary-button{border:1px solid #aaa;background:#fff;color:#333}.danger-button{border:1px solid #c98282;background:#fff4f4;color:#a62d2d;font-size:12px;font-weight:700}.primary-button:disabled,.secondary-button:disabled,.danger-button:disabled{opacity:.5;cursor:default}
     .topbar{min-height:64px;background:#242424;color:#fff;display:flex;align-items:center;padding:0 22px;gap:22px;position:sticky;top:0;z-index:50}.brand{font-weight:700;white-space:nowrap}.nav{display:flex;gap:6px;flex:1}.nav button{border:0;background:transparent;color:#ccc;padding:10px 12px;border-radius:6px;white-space:nowrap}.nav button:hover,.nav button.active{background:#444;color:#fff}.external-link{color:#ddd;border:1px solid #777;border-radius:6px;padding:7px 10px;white-space:nowrap;text-decoration:none;font-size:13px}.external-link:hover{background:#444;color:#fff}.role-badge{font-size:12px;padding:5px 8px;border-radius:20px;background:#555}.logout{background:transparent;color:#ddd;border:1px solid #777;border-radius:6px;padding:7px 10px}
     .content{max-width:1800px;margin:auto;padding:24px}.page-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}.page-title{margin:0}.page-subtitle{margin:5px 0 0;color:#777;font-size:14px}.loading{padding:40px;text-align:center}.error,.success,.info-notice,.readonly-notice{padding:10px 12px;border-radius:7px;margin-bottom:16px}.error{background:#f4cccc;color:#8a0000}.success{background:#e2f0d9;color:#35652f}.info-notice,.readonly-notice{background:#e8eef5;border:1px solid #bcc9d8;color:#41566f;font-size:13px}
     .form-card{background:#fff;border:1px solid #ccc;border-radius:12px;padding:18px;margin-bottom:24px}.form-fieldset{border:0;padding:0;margin:0;min-width:0}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.field-wide{grid-column:span 2}.field-full{grid-column:1/-1}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;min-height:40px;border:1px solid #aaa;border-radius:7px;background:#fff;padding:8px 10px}.field textarea{min-height:85px;resize:vertical}.form-actions{display:flex;gap:10px;margin-top:16px}
-    .registry{background:#fff;border:1px solid #ccc;border-radius:12px;overflow:hidden}.registry-table-wrap,.presence-table-wrap{overflow-x:auto}.registry-table,.presence-table{width:100%;border-collapse:collapse;min-width:1050px}.registry-table{table-layout:fixed;min-width:1100px}.registry-table th,.registry-table td,.presence-table th,.presence-table td{padding:9px;border-bottom:1px solid #ececec;vertical-align:middle}.registry-table th,.presence-table th{background:#f6f6f6;font-size:12px;text-align:left}.cell-center{text-align:center!important}.actions-column{width:90px;text-align:center!important}.fine-unpaid{background:#f4cccc}.fine-paid{background:#e5e5e5}.fine-reversed{background:#e2f0d9}.prison-table{min-width:1650px}.prison-active{background:#f4cccc}.prison-released{background:#e5e5e5}
+    .registry{background:#fff;border:1px solid #ccc;border-radius:12px;overflow:hidden}.registry-table-wrap,.presence-table-wrap{overflow-x:auto}.registry-table,.presence-table{width:100%;border-collapse:collapse;min-width:1050px}.registry-table{table-layout:fixed;min-width:1100px}.registry-table th,.registry-table td,.presence-table th,.presence-table td{padding:9px;border-bottom:1px solid #ececec;vertical-align:middle}.registry-table th,.presence-table th{background:#f6f6f6;font-size:12px;text-align:left}.cell-center{text-align:center!important}.actions-column{width:90px;text-align:center!important}.fine-unpaid{background:#f4cccc}.fine-paid{background:#e5e5e5}.fine-reversed{background:#e2f0d9}.prison-table{min-width:1100px}.prison-active{background:#f4cccc}.prison-released{background:#e5e5e5}
     .law-link{border:0;background:transparent;color:#315d8a;padding:0;text-align:left;text-decoration:underline dotted;text-underline-offset:3px}.law-info-row{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap}.law-info-button{border:1px solid #b7c4d0;background:#eef3f7;color:#35546d;border-radius:7px;padding:6px 9px;font-size:12px}
     .modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}.law-modal{width:min(820px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,.35)}.law-modal-header{padding:18px 20px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:18px}.law-modal-number{color:#666;font-size:13px}.law-modal-title{margin:0;font-size:21px}.law-modal-close{border:0;background:transparent;font-size:27px;color:#777}.law-modal-body{padding:20px}.law-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}.law-chip{display:inline-flex;border-radius:30px;padding:5px 9px;background:#ececec;color:#555;font-size:12px}.law-chip-local{background:#e6f0e6;color:#3f6542}.law-source-info{border:1px solid #ddd;background:#fafafa;border-radius:9px;padding:12px 14px;margin-bottom:18px;font-size:13px;line-height:1.6}.law-text{white-space:pre-wrap;line-height:1.6;margin-bottom:20px}.law-sanction-box{background:#f6f6f6;border-left:4px solid #555;border-radius:6px;padding:13px 15px;margin-top:14px}.law-warning{margin-top:16px;padding:11px 13px;background:#fff2cc;border:1px solid #e0cc80;border-radius:7px;color:#6c5810}
     .codex-library{display:grid;gap:16px;margin-bottom:20px}.codex-family{background:#fff;border:1px solid #ccc;border-radius:12px;padding:15px}.codex-family-title{margin:0 0 12px;font-size:16px}.codex-source-list{display:flex;flex-wrap:wrap;gap:8px}.codex-source-button{border:1px solid #bbb;background:#f7f7f7;border-radius:8px;padding:8px 11px;text-align:left}.codex-source-button.active{background:#333;border-color:#333;color:#fff}.codex-source-button small{display:block;opacity:.7;margin-top:2px}.codex-controls{background:#fff;border:1px solid #ccc;border-radius:12px;padding:16px;margin-bottom:18px;display:grid;grid-template-columns:minmax(280px,1fr) 210px 210px;gap:12px}.codex-controls input,.codex-controls select{width:100%;min-height:42px;border:1px solid #aaa;border-radius:7px;padding:8px 10px;background:#fff}.codex-count{margin-bottom:12px;color:#777;font-size:13px}.codex-list{display:grid;gap:12px}.codex-card{background:#fff;border:1px solid #ccc;border-radius:11px;padding:15px;cursor:pointer}.codex-card-top{display:flex;justify-content:space-between;gap:15px}.codex-card-number{color:#777;font-size:12px;font-weight:700;text-transform:uppercase}.codex-card-title{margin:3px 0 6px;font-size:17px}.codex-card-source{color:#888;font-size:11px;text-align:right}.codex-card-text{margin-top:10px;color:#555;font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.codex-card-sanction{margin-top:10px;color:#555;font-size:12px;font-weight:700}
@@ -660,12 +659,17 @@
 .org-corps-grid > .org-unit{position:relative;overflow:visible}
 .org-corps-grid > .org-unit:before{content:"";position:absolute;top:-23px;left:50%;width:1px;height:22px;background:var(--org-line)}
 .org-corps-grid > .org-unit-header{border-radius:11px 11px 0 0;min-height:75px}
-.org-detached{margin-top:36px;padding-top:28px;border-top:1px solid #d9d9cf;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* Encarts détachés du bas : Académie militaire, Majors hors commandement, Réserve. Trois colonnes quand la place le permet, sinon deux, puis une. */
+.org-detached{margin-top:36px;padding-top:28px;border-top:1px solid #d9d9cf;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;align-items:start}
 .org-independent-block{padding:20px;background:#eeeee8;border:1px solid #dcdcd2;border-radius:12px}
 .org-independent-block header{display:flex;justify-content:space-between;gap:15px;margin-bottom:20px}
 .org-independent-block h2{font-size:16px;color:#424c40;margin:0 0 5px}
 .org-independent-block p{font-size:12px;color:var(--org-muted);margin:0}
 .org-independent-block .org-rank-members{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+.org-academie-direction{margin:-6px 0 16px;padding:12px 14px;background:#fafbf8;border:1px solid #e3e3d8;border-radius:8px}
+.org-academie-direction .org-eyebrow{display:flex;align-items:center;gap:6px}
+.org-academie-direction .org-person-name{font-size:14px}
+.grade-regulier{margin-left:8px;font-weight:400;font-size:11px;opacity:.75}
 /* Sous 1400 px, les six colonnes deviendraient trop étroites : arbre sur deux colonnes. */
 @media(max-width:1400px){
 .org-corps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
@@ -855,6 +859,16 @@
     .inventaire-ajout .form-grid{align-items:end}
     @media(max-width:600px){.inventaire-filtres{display:grid;grid-template-columns:1fr;gap:8px}.inventaire-filtres input{min-width:0}.inventaire-coffres{grid-template-columns:1fr}}
 
+    /* Permis de chasse : une barre de recherche et un tableau, qui réutilise
+       .registry-table et devient donc des fiches sur téléphone. */
+    .permis-filtres{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+    .permis-filtres label{font-size:13px;font-weight:700}
+    .permis-filtres input{flex:1;min-width:200px;min-height:38px;border:1px solid #aaa;border-radius:7px;padding:7px 10px;background:#fff}
+    .permis-compte{font-size:13px;color:#666;margin-left:auto}
+    .permis-table{min-width:520px}
+    .permis-vide{padding:28px;text-align:center;color:#666}
+    @media(max-width:600px){.permis-filtres{display:grid;grid-template-columns:1fr;gap:8px}.permis-filtres input{min-width:0}.permis-compte{margin-left:0}.registry-table td[data-label="Titulaire"]{font-weight:700}}
+
 /* --- Chefs d'accusation : champ à jetons, filtres, sélecteur Codex --- */
 .chefs-field h3{font-size:15px;margin:4px 0 12px}
 .chefs-filtres{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:12px}
@@ -993,3 +1007,52 @@
   .peines-fourchette-compte{margin-top:4px;font-size:11px}
   .bareme-option-valeur{grid-column:2;text-align:left;white-space:normal}
 }
+
+/* Registres Amendes et Prison : largeurs de colonnes fixées (table-layout:fixed),
+   et ligne de détail sous chaque incarcération pour les saisies et les notes.
+   Sans cela, les douze colonnes se partageaient la largeur à parts égales et
+   une entrée richement documentée s'étirait sur plusieurs écrans. */
+.amendes-table .col-date{width:12%}.amendes-table .col-garde{width:18%}.amendes-table .col-contrevenant{width:12%}.amendes-table .col-chefs{width:27%}.amendes-table .col-montant{width:9%}.amendes-table .col-paye{width:6%}.amendes-table .col-reverse{width:7%}.amendes-table .col-actions{width:9%}
+.prison-table .col-date{width:10%}.prison-table .col-garde{width:12%}.prison-table .col-detenu{width:10%}.prison-table .col-cellule{width:6%}.prison-table .col-chefs{width:16%}.prison-table .col-duree{width:9%}.prison-table .col-entree{width:12%}.prison-table .col-sortie{width:12%}.prison-table .col-libere{width:4%}.prison-table .col-actions{width:9%}
+.registry-table tbody.registry-entry tr:not(:last-child) td{border-bottom:0;padding-bottom:6px}
+.registry-table td.registry-details-cell{padding-top:0}
+.registry-details-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:10px 28px;align-items:start}
+.registry-details-bloc:only-child{grid-column:1/-1}
+.registry-details-label{margin:0 0 6px;font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:#796244}
+.saisies-jetons{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.saisie-jeton{display:inline-flex;gap:5px;align-items:baseline;padding:3px 9px;border:1px solid #d2bd93;border-radius:3px;background:#f5ecd8;font-size:12px;line-height:1.4;max-width:100%}
+.saisie-jeton-nom{overflow-wrap:anywhere}
+.saisie-jeton-quantite{color:#72501f;font-weight:600;white-space:nowrap}
+.saisie-jeton-libre{border-style:dashed}
+.saisie-jeton-libre .saisie-jeton-nom:after{content:" (libre)";color:#8a7556;font-size:11px}
+.saisies-texte{white-space:pre-wrap}
+.notes-texte{white-space:pre-line;line-height:1.55}
+.notes-texte-replie{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.registre-depli{border:0;background:transparent;padding:4px 0;margin-top:2px;color:#72501f;font:inherit;font-size:12px;font-weight:600;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;min-height:32px}
+.registre-vide{color:#8a7556}
+/* Huscarls d'un corps : gardiens des thanes locaux, sous tout le personnel. */
+.org-huscarls{padding:12px 16px 14px;border-top:1px dashed #cfd3c8;background:#f6f4ec}
+.org-huscarls .org-eyebrow{display:flex;align-items:center;gap:6px}
+.org-huscarls-compte{margin-left:auto;font-weight:400;color:#71776c;letter-spacing:0}
+.org-huscarls-note{margin:3px 0 4px;font-size:11px;font-style:italic;color:var(--org-muted)}
+.org-huscarls .org-person + .org-person{border-top:1px solid #ebe9df}
+
+/* Prison : état de sortie, actes (sortie, annulation, note), journal, plan des cellules. */
+.prison-table .col-date{width:9%}.prison-table .col-garde{width:11%}.prison-table .col-detenu{width:10%}.prison-table .col-cellule{width:6%}.prison-table .col-chefs{width:15%}.prison-table .col-duree{width:7%}.prison-table .col-entree{width:10%}.prison-table .col-sortie{width:11%}.prison-table .col-etat{width:9%}.prison-table .col-actions{width:12%}
+.etat-sortie{display:inline-block;padding:3px 8px;border-radius:3px;font-size:12px;font-weight:600;line-height:1.3}
+.etat-cellule{background:#8a0000;color:#fff}.etat-libere{background:#e2f0d9;color:#35652f}.etat-transfert{background:#e8eef5;color:#41566f;border:1px solid #bcc9d8}.etat-evasion{background:#fff2cc;color:#6c5810;border:1px solid #e0cc80}.etat-deces{background:#444;color:#eee}
+.acte-dialogue{width:min(640px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,.35);margin:0}
+.acte-entete{padding:18px 20px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:18px}.acte-entete h2{margin:0;font-size:20px}.acte-sujet{margin:4px 0 0;color:#666;font-size:13px}
+.acte-dialogue .form-fieldset{padding:18px 20px}.acte-champs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}.acte-champs .field-full,.acte-champs .acte-notice{grid-column:1/-1}.acte-notice{margin:0}
+.acte-aide{display:block;margin-top:4px;color:#666;font-size:12px}
+@media(max-width:600px){.acte-champs{grid-template-columns:1fr}}
+.sortie-resume{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 18px}.sortie-resume div{display:flex;flex-direction:column;gap:2px}.sortie-resume dt{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#8a7556}.sortie-resume dd{margin:0;line-height:1.45}.sortie-resume .sortie-motif{grid-column:1/-1}.sortie-resume .sortie-motif dd{white-space:pre-line}
+.registry-details-journal{grid-column:1/-1}
+.journal-prison{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid #d2bd93}.journal-evt{position:relative;padding:0 0 10px 10px}.journal-evt:last-child{padding-bottom:0}.journal-evt:before{content:"";position:absolute;left:-19px;top:5px;width:8px;height:8px;border-radius:50%;background:#d2bd93}.journal-evt-sortie:before{background:#35652f}.journal-evt-annulation:before{background:#8a0000}
+.journal-entete{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:#666}.journal-type{font-weight:600;color:#72501f}.journal-resume{font-size:13px;margin-top:2px;font-weight:600}.journal-texte{white-space:pre-line;line-height:1.5;margin-top:2px}
+.champ-cellule-ligne{display:flex;gap:8px}.champ-cellule-ligne input{flex:1;min-width:0}.champ-cellule-plan{white-space:nowrap}.champ-cellule-aide{display:block;margin-top:4px;color:#666;font-size:12px}
+.plan-prison-cadre{margin-top:10px;padding:10px;border:1px solid #d2bd93;border-radius:8px;background:#f5ecd8}.plan-prison{display:block;width:100%;max-width:380px;margin:0 auto}
+.plan-salle rect{fill:#fff;stroke:#5a4a2f;stroke-width:3}.plan-cellule rect{fill:#fbf4e6;cursor:pointer}.plan-cellule:hover rect,.plan-cellule:focus rect{fill:#f1dfb5}.plan-cellule.plan-choisi rect{fill:#d9b24c}.plan-cellule:focus{outline:none}
+.plan-numero{font-size:22px;font-weight:700;fill:#72501f;pointer-events:none}.plan-libelle{font-size:10px;fill:#8a7556;pointer-events:none}.plan-exterieur{font-size:11px;font-style:italic;fill:#8a7556}
+.plan-porte{fill:#fbf4e6;stroke:#5a4a2f;stroke-width:1.2;pointer-events:none}.plan-porte-principale{fill:#d9b24c}
+.plan-prison-legende{margin:8px 0 0;font-size:12px;color:#666}.plan-prison-croquis{display:block;width:100%;max-width:640px;margin:8px auto 0;border-radius:6px}

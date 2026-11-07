@@ -5,7 +5,7 @@
 // précédente. Lecture seule ; le serveur (`getFicheService`) décide de ce que
 // chaque rôle reçoit : pas de Justice pour l'intendance.
 
-import { libelleCorps } from "./corps.js";
+import { libelleCorps, libelleGrade } from "./corps.js";
 import { GradeDescription } from "./grades.jsx";
 import { DateRP } from "./calendrier.jsx";
 import { titreSemaine } from "./semaine.js";
@@ -212,16 +212,16 @@ function Tuile({ valeur, libelle, detail }) {
 
 function Personne({ personne }) {
   return <li className="fiche-personne">
-    <span className="fiche-personne-grade">{personne.grade}</span>
+    <span className="fiche-personne-grade">{libelleGrade(personne.grade, personne.corps)}</span>
     <span className="fiche-personne-nom"><NomEffectif nom={personne.nomComplet} membre={personne.memberId} /></span>
   </li>;
 }
 
-// Hors solde : le Jarl et le Régent impérial, par leur grade, et le Hird du Jarl, par son corps.
+// Hors solde : le Jarl, le Régent impérial et le Huscarl, par leur grade, et le Hird du Jarl, par son corps.
 function Solde({ s, grade }) {
   if (s.exclu) {
     const cle = String(grade || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const qui = cle === "jarl" ? "Le Jarl" : cle.startsWith("regent") ? "Le Régent impérial" : "Le Hird du Jarl";
+    const qui = cle === "jarl" ? "Le Jarl" : cle.startsWith("regent") ? "Le Régent impérial" : cle.startsWith("huscarl") ? "Le Huscarl" : "Le Hird du Jarl";
     return <Section titre="Solde"><p className="fiche-vide">{qui} n’est pas soldé par le registre de la Garde.</p></Section>;
   }
   const courante = s.semaineCourante;
@@ -282,7 +282,7 @@ function Justice({ j }) {
       <Tuile valeur={a.nombre} libelle={a.nombre > 1 ? "amendes dressées" : "amende dressée"} detail={septims(a.total)} />
       <Tuile valeur={a.aEncaisser.nombre} libelle="à encaisser" detail={`${septims(a.aEncaisser.total)}${a.aEncaisser.aDeterminer ? ` · ${a.aEncaisser.aDeterminer} à déterminer` : ""}`} />
       <Tuile valeur={a.aReverser.nombre} libelle="à reverser" detail={septims(a.aReverser.total)} />
-      <Tuile valeur={p.nombre} libelle={p.nombre > 1 ? "incarcérations" : "incarcération"} />
+      <Tuile valeur={p.nombre} libelle={p.nombre > 1 ? "incarcérations" : "incarcération"} detail={p.transferes ? `${p.transferes} transféré${p.transferes > 1 ? "s" : ""}` : undefined} />
     </div>
 
     {p.enCellule.length > 0 && <>
@@ -347,7 +347,7 @@ export function FicheContenu({ data }) {
         <p className="eyebrow">Fiche de service</p>
         <h1 className="page-title" id="fiche-titre">{fiche.nomComplet}</h1>
         <p className="page-subtitle">
-          {fiche.grade} · {libelleCorps(fiche.corps)}{fiche.specialite ? ` · ${fiche.specialite}` : ""}
+          {libelleGrade(fiche.grade, fiche.corps)} · {libelleCorps(fiche.corps)}{fiche.specialite ? ` · ${fiche.specialite}` : ""}
         </p>
       </div>
       <div className="fiche-badges">
@@ -355,7 +355,7 @@ export function FicheContenu({ data }) {
         <span className={`effectif-badge ${fiche.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}`}>{fiche.assermente ? "✓ Assermenté" : "Non assermenté"}</span>
       </div>
     </div>
-    <GradeDescription grade={fiche.grade} />
+    <GradeDescription grade={libelleGrade(fiche.grade, fiche.corps)} />
     {s.inactif && <div className="fiche-alerte" role="status">
       {s.joursDepuis === null
         ? "Aucun jour de service enregistré à son nom."
