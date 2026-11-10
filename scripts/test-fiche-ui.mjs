@@ -57,7 +57,7 @@ assert.equal(L.pluriel(1, 'jour'), '1 jour');
 assert.equal(L.pluriel(3, 'jour'), '3 jours');
 assert.equal(L.pluriel(2, 'travail', 'travaux'), '2 travaux');
 assert.equal(L.libelleEvenement({ type: 'grade', avant: 'Caporal', apres: 'Sergent' }), 'Élevé au grade de Sergent, auparavant Caporal');
-assert.equal(L.libelleEvenement({ type: 'corps', avant: 'Cité de Blancherive', apres: 'Cap Granite' }), 'Affecté à Cap Granite, venant de Cité de Blancherive');
+assert.equal(L.libelleEvenement({ type: 'corps', avant: 'Cité de Blancherive', apres: 'Cap Granite' }), 'Affecté à Cap Granite, venant de Garde de Fort-Dragon');
 assert.equal(L.libelleEvenement({ type: 'arrivee', avant: '', apres: 'Eydis' }), 'Inscription au registre de la Garde');
 assert.equal(L.libelleEvenement({ type: 'nom', avant: 'Eydis Silencieuse', apres: 'Eydis la Silencieuse' }),
   'Nom changé en Eydis la Silencieuse, auparavant Eydis Silencieuse');

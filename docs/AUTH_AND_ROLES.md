@@ -326,12 +326,13 @@ Rôles du serveur décrits puis relevés par le propriétaire le 11 octobre 2026
   (Sergent-Chef) ;
 - un rôle par grade, du nom du grade, sauf **Garde du domaine** pour le grade
   Garde ;
-- un rôle par corps : Corps des éclaireurs, Etat major, Garnison des
-  faubourgs, Garnison de Rivebois, Garnison de Bois-de-Chêne, Garnison de Cap
-  Granite, et **Garde de Fort-Dragon** pour la Cité de Blancherive. Le Hird du
-  Jarl, dissous le 1er novembre 2026, n'est plus prérempli, pas plus qu'un corps
-  retiré le même jour ; une ligne déjà écrite dans `RolesDiscord` pour l'un
-  d'eux reste à effacer à la main. La Cité : c'est le nom de la
+- un rôle par corps : Corps des éclaireurs, Etat major, Garnison de
+  Rivebois, Garnison de Bois-de-Chêne, Garnison de Cap Granite, et **Garde de
+  Fort-Dragon** pour la Cité de Blancherive. Le Hird du Jarl, dissous le
+  1er novembre 2026, n'est plus prérempli, pas plus qu'un corps retiré le même
+  jour ni les Faubourgs de Blancherive, dissous le 7 novembre 2026 ; une ligne
+  déjà écrite dans `RolesDiscord` pour l'un d'eux (« Garnison des
+  faubourgs ») reste à effacer à la main. La Cité : c'est le nom de la
   garde de la Cité sur le serveur. Un membre de la Cité a donc Garde de
   Blancherive (fonction) et Garde de Fort-Dragon (corps) ;
 - **Réserviste** pour la réserve, seul ; aucun rôle pour un départ.

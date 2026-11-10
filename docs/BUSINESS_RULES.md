@@ -10,17 +10,17 @@
 - Le Jarl est inscrit aux Effectifs au grade « Jarl », en tête de `Données!A`, au-dessus du Maréchal (décision du propriétaire, 12 octobre 2026). Le Régent impérial l'est au grade « Régent impérial » (« Régente impériale » est reconnu aussi). Ces deux grades ne se donnent ni ne se retirent depuis l'application (décisions du propriétaire, 12 octobre et 1er novembre 2026) : les formulaires d'ajout et de modification ne les proposent pas, leur fiche garde son grade figé, et le serveur refuse les deux. Le reste de la fiche reste modifiable. Un changement se fait à la main dans la feuille `Effectifs`.
 - Le Huscarl (grade « Huscarl », ou « Huscarl de Blancherive ») est un grade à part, placé sous le Jarl dans `Données!A` (même décision). Depuis le 3 novembre 2026 (décision du propriétaire), son corps décide de sa place à l'organigramme : un Huscarl de l'État-Major est le garde personnel du Jarl, rendu dans la branche « Autorité directe du Jarl », à droite du sommet, hors de la chaîne de l'État-Major ; un Huscarl d'un autre corps protège les thanes locaux et figure au bas de la colonne de son corps, sous tout le personnel, dans un bloc à part portant la mention « Protègent les thanes locaux », compté dans l'effectif du corps. Sous régence, les Huscarls de l'État-Major gardent leur place mais sont détachés du sommet : ni trait, ni mention « Autorité directe du Jarl ». Dans les deux cas le Huscarl n'est ni pointé ni soldé.
 - Le Hird du Jarl est dissous (1er novembre 2026) : il n'a plus de branche dans l'organigramme et n'est plus proposé comme corps. Ses fiches et ses lignes historiques restent.
-- Les Majors actifs de Rivebois et Bois-de-Chêne forment un commandement commun sous les ordres directs de l'État-Major central. Ces deux garnisons dépendent de ce commandement intermédiaire, y compris lorsque les postes de Major sont vacants.
-- Cité de Blancherive, Faubourgs, Cap Granite et Éclaireurs répondent directement à l'État-Major central. Les Capitaines restent en tête de chaque corps / garnison.
+- Les Faubourgs de Blancherive sont dissous (décision du propriétaire, 7 novembre 2026) : plus de colonne dans l'organigramme (`ORGANIGRAMME_GARNISONS`), plus de rôle Discord prérempli (`DISCORD_ROLES_CORPS_INITIAUX`), et le corps est à retirer de `Données!G` par le propriétaire pour ne plus être proposé aux Effectifs ; une ligne « Garnison des faubourgs » déjà écrite dans `RolesDiscord` est à effacer à la main. Les fiches qui portent encore ce corps le gardent jusqu'à leur mutation, leurs lignes de Présences restent, et la Paye continue de rattacher ces semaines passées à l'argentier (jeton `faubourg` conservé) : une solde due n'est jamais écartée.
+- Tous les corps et garnisons (Rivebois, Cité de Blancherive, Cap Granite, Bois-de-Chêne, Éclaireurs) répondent directement à l'État-Major central, sur une seule grille de cinq colonnes. Le commandement commun des Majors de Rivebois et Bois-de-Chêne n'existe plus (décision du propriétaire, 7 novembre 2026) : ses Majors rejoignent les Majors hors commandement. Les Capitaines restent en tête de chaque corps / garnison.
 - Un corps n'apparaît dans l'organigramme que s'il est déclaré dans `ORGANIGRAMME_GARNISONS` (`Organigramme.js`) ; ses membres actifs n'y figurent pas autrement. Tout nouveau corps doit y être ajouté.
 - L'Académie militaire de Blancherive (décision du propriétaire, 3 novembre 2026) est un corps spécial, hors des garnisons : déclarée dans `ORGANIGRAMME_ACADEMIE`, elle est rendue en bas de l'organigramme dans un encart détaché, à côté des Majors hors commandement et de la Réserve, toujours affichée même vide. Son chef n'est pas un Capitaine mais un Sergent-Chef, rendu en tête de l'encart (« Sergent-Instructeur ») ; le reste du personnel suit, groupé par grade affiché. Un Major de l'Académie rejoint les Majors hors commandement, comme ceux des corps directs. Ses membres sont pointés dans les Présences et soldés dans la Paye selon les mêmes critères que tout corps ; son financeur est l'argentier de la cour (jeton `academie`, `PAYE_FINANCEURS`). Le corps doit figurer dans `Données!G` pour être proposé aux Effectifs.
 
 ## Nom affiché d'un corps
 
-- La feuille garde le libellé de la liste des corps de `Données` ; l'application peut en afficher un autre. Aucun corps n'est renommé aujourd'hui.
+- La feuille garde le libellé de la liste des corps de `Données` ; l'application peut en afficher un autre. Un seul corps est renommé : « Cité de Blancherive » s'affiche **« Garde de Fort-Dragon »** (décision du propriétaire, 7 novembre 2026), sur l'organigramme comme sur toutes les pages. La feuille, les formulaires et le serveur gardent « Cité de Blancherive » ; le serveur tolère aussi le nouveau libellé (organigramme, Paye, Amendes, rôles Discord) si la feuille l'adopte un jour.
 - Le nom affiché est déclaré deux fois : `ORGANIGRAMME_GARNISONS` (serveur, organigramme) et `ui/src/corps.js` (toutes les autres pages). `scripts/test-organigramme.mjs` vérifie qu'ils concordent.
 - Seul l'affichage change : les valeurs écrites dans Effectifs et Présences, envoyées au serveur, comparées par les filtres, restent celles de la feuille. Les recherches trouvent les deux noms ; les groupes d'Effectifs, les sections de semaine et la liste des corps des Présences sont triés par nom affiché.
-- Les autres Majors actifs hors État-Major et hors commandement de Rivebois / Bois-de-Chêne sont regroupés à part en bas, à côté de la Réserve.
+- Les Majors actifs hors État-Major, quel que soit leur corps, sont regroupés à part en bas (« Majors hors commandement »), à côté de la Réserve et de l'Académie.
 - Tous les réservistes, quel que soit leur grade ou corps, apparaissent uniquement dans la Réserve commune.
 
 ## Grades affichés
@@ -127,11 +127,12 @@ doit-il demander, et à qui. Le registre des Présences est organisé par semain
 puis par corps ; l'argent, lui, vient d'un financeur par corps.
 
 - Financeurs. L'argentier de la cour couvre Cité de Blancherive, Éclaireurs,
-  État-Major et Faubourgs de Blancherive ; un Thane couvre chacune des
-  garnisons de Rivebois, Bois-de-Chêne et Cap Granite. Décision du
-  propriétaire du 7 octobre 2026 pour les Faubourgs, jusque-là payés par leur
-  Thane. Cette coupure ne suit plus celle du reversement des amendes : les
-  Faubourgs reversent à leurs propres collecteurs.
+  État-Major et l'Académie ; un Thane couvre chacune des garnisons de
+  Rivebois, Bois-de-Chêne et Cap Granite. Les Faubourgs de Blancherive,
+  payés par l'argentier depuis le 7 octobre 2026 (jusque-là par leur Thane),
+  sont dissous depuis le 7 novembre 2026 : leur jeton reste pour que leurs
+  semaines passées restent rattachées à l'argentier. Cette coupure ne suit
+  pas celle du reversement des amendes.
 - Le rattachement se fait par jeton distinctif recherché dans le libellé du corps,
   et non par égalité, afin d'accepter « Rivebois » comme « Garnison de Rivebois ».
   Le jeton « blancherive » seul n'est jamais utilisé : la Cité et les Faubourgs le

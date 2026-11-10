@@ -4,15 +4,18 @@
   La feuille garde le libellé de la liste Données!G : c'est lui qui est
   écrit dans Effectifs et Présences, envoyé au serveur, comparé par les
   filtres et les regroupements. Seul l'affichage le remplace, quand
-  l'application doit montrer un autre nom. Aucun corps n'est renommé
-  aujourd'hui.
+  l'application doit montrer un autre nom. La Cité de Blancherive s'affiche
+  « Garde de Fort-Dragon » (décision du propriétaire, 7 novembre 2026) ; la
+  feuille garde « Cité de Blancherive ».
 
   L'Organigramme nomme ses corps côté serveur (`ORGANIGRAMME_GARNISONS`,
   src/Organigramme.js) : un corps déclaré ici doit y porter le même nom.
   `scripts/test-organigramme.mjs` vérifie l'accord des deux tables.
 */
 
-export const NOMS_AFFICHES_CORPS = {};
+export const NOMS_AFFICHES_CORPS = {
+  "cite de blancherive": "Garde de Fort-Dragon"
+};
 
 const normaliser = valeur => String(valeur || "")
   .trim()

@@ -652,9 +652,9 @@
 .org-corps-heading{text-align:center;margin-bottom:26px}
 .org-corps-heading h2{font-size:22px;color:var(--org-ink);margin:7px 0}
 .org-corps-heading p{font-size:12px;color:var(--org-muted);margin:0}
-/* Six colonnes : deux pour le commandement commun, une par corps direct (Cité, Faubourgs, Cap Granite, Éclaireurs). Le trait part du milieu du commandement commun et s'arrête au milieu de la dernière colonne. */
-.org-corps-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;position:relative;padding-top:22px;align-items:start}
-.org-corps-grid:before{content:"";position:absolute;top:0;left:calc((100% - 80px)/6 + 8px);right:calc((100% - 80px)/12);height:1px;background:var(--org-line)}
+/* Cinq colonnes, une par corps (Rivebois, Cité, Cap Granite, Bois-de-Chêne, Éclaireurs), tous sous l'État-Major depuis la fin du commandement commun (7 novembre 2026 ; les Faubourgs sont dissous le même jour). Le trait va du milieu de la première colonne au milieu de la dernière. */
+.org-corps-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;position:relative;padding-top:22px;align-items:start}
+.org-corps-grid:before{content:"";position:absolute;top:0;left:calc((100% - 64px)/10);right:calc((100% - 64px)/10);height:1px;background:var(--org-line)}
 .org-corps-grid:after{content:"";position:absolute;left:50%;top:-20px;height:20px;width:1px;background:var(--org-line)}
 .org-corps-grid > .org-unit{position:relative;overflow:visible}
 .org-corps-grid > .org-unit:before{content:"";position:absolute;top:-23px;left:50%;width:1px;height:22px;background:var(--org-line)}
@@ -670,7 +670,7 @@
 .org-academie-direction .org-eyebrow{display:flex;align-items:center;gap:6px}
 .org-academie-direction .org-person-name{font-size:14px}
 .grade-regulier{margin-left:8px;font-weight:400;font-size:11px;opacity:.75}
-/* Sous 1400 px, les six colonnes deviendraient trop étroites : arbre sur deux colonnes. */
+/* Sous 1400 px, les cinq colonnes deviendraient trop étroites : arbre sur deux colonnes. */
 @media(max-width:1400px){
 .org-corps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
 .org-corps-grid:before{left:calc((100% - 32px)/6);right:calc((100% - 32px)/6)}
@@ -696,41 +696,18 @@
 .org-direct-label{font-size:9px}
 }
 
-/* Commandement intermédiaire commun à Rivebois et Bois-de-Chêne. */
-.org-local-command{grid-column:span 2;position:relative;min-width:0;border:1px solid #c8d1c3;border-radius:12px;background:#eef1e9;padding:18px 14px}
-.org-local-command:before{content:"";position:absolute;left:50%;top:-23px;height:22px;width:1px;background:var(--org-line)}
-.org-local-heading{text-align:center;margin-bottom:14px}
-.org-local-heading h3{margin:0;color:var(--org-ink);font-size:15px;line-height:1.4}
-.org-local-heading p{margin:6px 0 0;color:var(--org-muted);font-size:11px;line-height:1.5}
-.org-local-command > .org-command-node{max-width:320px;margin:auto}
-.org-local-corps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-top:36px;position:relative;align-items:start}
-.org-local-corps:before{content:"";position:absolute;left:50%;top:0;height:18px;width:1px;background:var(--org-line)}
-.org-local-corps:after{content:"";position:absolute;left:calc((100% - 12px)/4);right:calc((100% - 12px)/4);top:18px;height:1px;background:var(--org-line)}
-.org-local-corps > .org-unit{position:relative;overflow:visible}
-.org-local-corps > .org-unit:before{content:"";position:absolute;left:50%;top:-19px;height:18px;width:1px;background:var(--org-line)}
-.org-local-corps .org-unit-header{border-radius:11px 11px 0 0}
-/* Six colonnes : une carte de corps mesure environ 165 px à 1440 px. Marges resserrées pour qu'un grade composé (« Lieutenant-Chef ⓘ 1 ») tienne dans sa carte, garnisons du commandement commun comprises. */
+/* Cinq colonnes : une carte de corps mesure environ 200 px à 1440 px. Marges resserrées pour qu'un grade composé (« Lieutenant-Chef ⓘ 1 ») tienne dans sa carte. */
 @media(min-width:1401px){
 .org-corps-grid .org-unit-header,.org-corps-grid .org-captains,.org-corps-grid .org-roster summary,.org-corps-grid .org-roster-body{padding-left:12px;padding-right:12px}
 .org-corps-grid .org-rank-title{gap:6px}
 .org-corps-grid .org-unit-header h3{font-size:16px}
-.org-local-command{padding:18px 8px}
-.org-local-corps{gap:8px}
-.org-local-corps:after{left:calc((100% - 8px)/4);right:calc((100% - 8px)/4)}
 }
 @media(min-width:761px) and (max-width:1400px){
 .org-corps-grid{border-left:1px solid var(--org-line);margin-left:6px;padding-left:16px;padding-top:0}
 .org-corps-grid:before,.org-corps-grid:after{display:none}
-.org-local-command{grid-column:1/-1}
-.org-local-command:before{left:-17px;top:30px;height:1px;width:16px}
 .org-corps-grid > .org-unit:before,.org-corps-grid > .org-unit:nth-child(n+4):before{display:none}
 }
 @media(max-width:760px){
-.org-local-command{grid-column:auto;padding:14px 10px}
-.org-local-command:before{left:-17px;top:30px;height:1px;width:16px}
-.org-local-corps{grid-template-columns:1fr;border-left:1px solid var(--org-line);padding:0 0 0 12px;margin:24px 0 0 4px}
-.org-local-corps:before,.org-local-corps:after{display:none}
-.org-local-corps > .org-unit:before{left:-13px;top:27px;width:12px;height:1px}
 .org-corps-heading p{line-height:1.6}
 }
     .presence-week-filter{flex-wrap:wrap}.presence-week-filter input{min-height:38px;min-width:220px;border:1px solid #aaa;border-radius:7px;padding:7px 10px;background:#fff}.presence-corps-title{display:flex;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}

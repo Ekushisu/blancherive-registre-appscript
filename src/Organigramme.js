@@ -16,6 +16,9 @@ const ORGANIGRAMME_ACTIVE_STATUS =
 // CORPS / GARNISONS OFFICIELS
 // ============================================================
 
+// Les Faubourgs de Blancherive sont dissous (décision du propriétaire,
+// 7 novembre 2026) : plus de colonne, comme le Hird du Jarl. Une fiche qui
+// porte encore ce corps n'est pas rendue ici tant qu'elle n'est pas mutée.
 const ORGANIGRAMME_GARNISONS = [
 
   {
@@ -26,21 +29,18 @@ const ORGANIGRAMME_GARNISONS = [
     ]
   },
 
-  {
-    key: "faubourgs",
-    label: "Faubourgs de Blancherive",
-    aliases: [
-      "faubourgs de blancherive",
-      "faubourgs"
-    ]
-  },
-
+  // Nom affiché « Garde de Fort-Dragon » (décision du propriétaire,
+  // 7 novembre 2026) ; la feuille écrit « Cité de Blancherive ». Même
+  // nom dans `ui/src/corps.js`. Les alias acceptent les deux libellés.
   {
     key: "cite",
-    label: "Cité de Blancherive",
+    label: "Garde de Fort-Dragon",
     aliases: [
       "cite de blancherive",
-      "cité de blancherive"
+      "cité de blancherive",
+      "garde de fort-dragon",
+      "garde de fort dragon",
+      "fort-dragon"
     ]
   },
 
@@ -313,8 +313,10 @@ function getOrganigramme(
   // MAJORS
   //
   // Les Majors de l'État-Major prolongent la chaîne centrale.
-  // Rivebois et Bois-de-Chêne ont un commandement commun intermédiaire.
-  // Les autres Majors actifs restent dans un bloc indépendant.
+  // Les autres Majors actifs restent dans un bloc indépendant :
+  // le commandement commun de Rivebois et Bois-de-Chêne n'existe
+  // plus (décision du propriétaire, 7 novembre 2026), tous les
+  // corps répondent directement à l'État-Major.
   // ==========================================================
 
   const majors =
@@ -330,23 +332,15 @@ function getOrganigramme(
       );
 
   const majorsEtatMajor = majors.filter(personne => estEtatMajor(personne.corps));
-  const garnisonsCommandementLocal = ORGANIGRAMME_GARNISONS.filter(
-    garnison => garnison.key === "rivebois" || garnison.key === "bois-de-chene"
-  );
-  const estMajorLocal = personne => garnisonsCommandementLocal.some(
-    garnison => correspondAGarnison(personne.corps, garnison)
-  );
-  const majorsCommandementLocal = majors.filter(estMajorLocal);
-  const majorsIndependants = majors.filter(
-    personne => !estEtatMajor(personne.corps) && !estMajorLocal(personne)
-  );
+  const majorsIndependants = majors.filter(personne => !estEtatMajor(personne.corps));
 
 
   // ==========================================================
   // PERSONNEL POUVANT APPARAÎTRE DANS LES CORPS
   //
-  // Le Hird du Jarl, dissous, n'a plus de branche : un corps
-  // absent d'`ORGANIGRAMME_GARNISONS` n'est pas rendu. Les
+  // Le Hird du Jarl et les Faubourgs, dissous, n'ont plus de
+  // branche : un corps absent d'`ORGANIGRAMME_GARNISONS` n'est
+  // pas rendu. Les
   // Huscarls d'un corps y figurent, à part de son personnel.
   // ==========================================================
 
@@ -520,12 +514,6 @@ function getOrganigramme(
 
     majorsEtatMajor:
       majorsEtatMajor,
-
-    commandementLocal: {
-      nom: "Commandement de Rivebois et Bois-de-Chêne",
-      majors: majorsCommandementLocal,
-      garnisonKeys: garnisonsCommandementLocal.map(garnison => garnison.key)
-    },
 
     garnisons:
       garnisons,

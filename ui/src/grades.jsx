@@ -61,12 +61,11 @@ const DESCRIPTIONS = {
 };
 
 /*
-  Les Majors du commandement commun de Rivebois et Bois-de-Chêne exercent une
-  fonction distincte des Majors d'État-Major, pour un même nom de grade.
+  Variantes d'un grade pour une fonction particulière. Vide depuis la fin du
+  commandement commun de Rivebois et Bois-de-Chêne (7 novembre 2026) ; une
+  variante inconnue retombe sur la description du grade.
 */
-const VARIANTES = {
-  commandementLocal: "Supervise les garnisons locales des deux thaneries."
-};
+const VARIANTES = {};
 
 export function descriptionGrade(grade, variante) {
   if (variante && VARIANTES[variante]) return VARIANTES[variante];

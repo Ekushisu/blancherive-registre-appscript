@@ -1698,7 +1698,7 @@ button {
 }
 .org-corps-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
   position: relative;
   padding-top: 22px;
@@ -1708,8 +1708,8 @@ button {
   content: "";
   position: absolute;
   top: 0;
-  left: calc((100% - 80px)/6 + 8px);
-  right: calc((100% - 80px)/12);
+  left: calc((100% - 64px)/10);
+  right: calc((100% - 64px)/10);
   height: 1px;
   background: var(--org-line);
 }
@@ -1878,86 +1878,6 @@ button {
     font-size: 9px;
   }
 }
-.org-local-command {
-  grid-column: span 2;
-  position: relative;
-  min-width: 0;
-  border: 1px solid #c8d1c3;
-  border-radius: 12px;
-  background: #eef1e9;
-  padding: 18px 14px;
-}
-.org-local-command:before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -23px;
-  height: 22px;
-  width: 1px;
-  background: var(--org-line);
-}
-.org-local-heading {
-  text-align: center;
-  margin-bottom: 14px;
-}
-.org-local-heading h3 {
-  margin: 0;
-  color: var(--org-ink);
-  font-size: 15px;
-  line-height: 1.4;
-}
-.org-local-heading p {
-  margin: 6px 0 0;
-  color: var(--org-muted);
-  font-size: 11px;
-  line-height: 1.5;
-}
-.org-local-command > .org-command-node {
-  max-width: 320px;
-  margin: auto;
-}
-.org-local-corps {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding-top: 36px;
-  position: relative;
-  align-items: start;
-}
-.org-local-corps:before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 0;
-  height: 18px;
-  width: 1px;
-  background: var(--org-line);
-}
-.org-local-corps:after {
-  content: "";
-  position: absolute;
-  left: calc((100% - 12px)/4);
-  right: calc((100% - 12px)/4);
-  top: 18px;
-  height: 1px;
-  background: var(--org-line);
-}
-.org-local-corps > .org-unit {
-  position: relative;
-  overflow: visible;
-}
-.org-local-corps > .org-unit:before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -19px;
-  height: 18px;
-  width: 1px;
-  background: var(--org-line);
-}
-.org-local-corps .org-unit-header {
-  border-radius: 11px 11px 0 0;
-}
 @media (min-width: 1401px) {
   .org-corps-grid .org-unit-header,
   .org-corps-grid .org-captains,
@@ -1972,16 +1892,6 @@ button {
   .org-corps-grid .org-unit-header h3 {
     font-size: 16px;
   }
-  .org-local-command {
-    padding: 18px 8px;
-  }
-  .org-local-corps {
-    gap: 8px;
-  }
-  .org-local-corps:after {
-    left: calc((100% - 8px)/4);
-    right: calc((100% - 8px)/4);
-  }
 }
 @media (min-width: 761px) and (max-width: 1400px) {
   .org-corps-grid {
@@ -1994,47 +1904,12 @@ button {
   .org-corps-grid:after {
     display: none;
   }
-  .org-local-command {
-    grid-column: 1/-1;
-  }
-  .org-local-command:before {
-    left: -17px;
-    top: 30px;
-    height: 1px;
-    width: 16px;
-  }
   .org-corps-grid > .org-unit:before,
   .org-corps-grid > .org-unit:nth-child(n+4):before {
     display: none;
   }
 }
 @media (max-width: 760px) {
-  .org-local-command {
-    grid-column: auto;
-    padding: 14px 10px;
-  }
-  .org-local-command:before {
-    left: -17px;
-    top: 30px;
-    height: 1px;
-    width: 16px;
-  }
-  .org-local-corps {
-    grid-template-columns: 1fr;
-    border-left: 1px solid var(--org-line);
-    padding: 0 0 0 12px;
-    margin: 24px 0 0 4px;
-  }
-  .org-local-corps:before,
-  .org-local-corps:after {
-    display: none;
-  }
-  .org-local-corps > .org-unit:before {
-    left: -13px;
-    top: 27px;
-    width: 12px;
-    height: 1px;
-  }
   .org-corps-heading p {
     line-height: 1.6;
   }
@@ -7965,7 +7840,9 @@ svg.plan-prison {
   }
 
   // ui/src/corps.js
-  var NOMS_AFFICHES_CORPS = {};
+  var NOMS_AFFICHES_CORPS = {
+    "cite de blancherive": "Garde de Fort-Dragon"
+  };
   var normaliser = (valeur) => String(valeur || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   function libelleCorps(corps) {
     return NOMS_AFFICHES_CORPS[normaliser(corps)] || corps;
@@ -8015,9 +7892,7 @@ svg.plan-prison {
     cadet: "Garde en formation de la ch\xE2tellerie. Asserment\xE9, mais ne peut exercer son pouvoir sans l'accompagnement d'un garde.",
     recrue: "Prospect de la garde, en tenue civile. Non asserment\xE9, mis \xE0 l'\xE9preuve par les gardes."
   };
-  var VARIANTES = {
-    commandementLocal: "Supervise les garnisons locales des deux thaneries."
-  };
+  var VARIANTES = {};
   function descriptionGrade(grade, variante) {
     if (variante && VARIANTES[variante]) return VARIANTES[variante];
     const cle = cleGrade2(grade).replace(/s$/, "");
@@ -12235,16 +12110,12 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     }, [token]);
     if (error) return /* @__PURE__ */ React.createElement("div", { className: "error" }, error);
     if (!data) return /* @__PURE__ */ React.createElement("div", { className: "loading" }, "Chargement de l'organigramme...");
-    const local = data.commandementLocal;
-    const localKeys = (local == null ? void 0 : local.garnisonKeys) || [];
-    const directCorps = data.garnisons.filter((g) => !localKeys.includes(g.key));
-    const localCorps = data.garnisons.filter((g) => localKeys.includes(g.key));
     const huscarls = data.huscarls || [];
     const titreHuscarl = ((_a = huscarls[0]) == null ? void 0 : _a.grade) || "Huscarl";
     const regents = data.regents || [];
     const regence = !data.jarl && regents.length > 0;
     const titreSommet = !regence ? "Jarl" : regents.length > 1 ? "R\xE9gence imp\xE9riale" : regents[0].grade;
-    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Huscarls" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: regence ? regents : data.jarl ? [data.jarl] : [], grade: titreSommet })), /* @__PURE__ */ React.createElement("aside", { className: `org-direct-branch${regence ? " org-direct-branch-detachee" : ""}` }, !regence && /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: huscarls, grade: titreHuscarl })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Rivebois et Bois-de-Ch\xEAne rel\xE8vent d\u2019un commandement commun ; les autres corps r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, local && /* @__PURE__ */ React.createElement("section", { className: "org-local-command", "aria-label": local.nom }, /* @__PURE__ */ React.createElement("div", { className: "org-local-heading" }, /* @__PURE__ */ React.createElement("h3", null, local.nom), /* @__PURE__ */ React.createElement("p", null, "Sous les ordres directs de l\u2019\xC9tat-Major central")), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: local.majors, grade: "Majors", note: "Rivebois \xB7 Bois-de-Ch\xEAne", variante: "commandementLocal" }), /* @__PURE__ */ React.createElement("div", { className: "org-local-corps", "aria-label": "Garnisons sous les ordres du commandement commun" }, localCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, huscarls: g.huscarls })))), directCorps.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, huscarls: g.huscarls })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(OrgAcademie, { academie: data.academie }), /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Autres Majors actifs, hors \xC9tat-Major et commandement de Rivebois / Bois-de-Ch\xEAne", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve }))));
+    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "org-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Organigramme"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Garde de Blancherive \xB7 Cha\xEEne de commandement")), /* @__PURE__ */ React.createElement("span", { className: "org-seal" }, "Au service de la ch\xE2tellerie")), /* @__PURE__ */ React.createElement(RecentChanges, { onRefresh: async () => setData(await serverCall("getOrganigramme", token)) }), /* @__PURE__ */ React.createElement("section", { className: "org-hierarchy", "aria-label": "\xC9tat-Major et Huscarls" }, /* @__PURE__ */ React.createElement("div", { className: "org-command-heading" }, "\xC9tat-Major"), /* @__PURE__ */ React.createElement("div", { className: "org-sovereign" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: regence ? regents : data.jarl ? [data.jarl] : [], grade: titreSommet })), /* @__PURE__ */ React.createElement("aside", { className: `org-direct-branch${regence ? " org-direct-branch-detachee" : ""}` }, !regence && /* @__PURE__ */ React.createElement("div", { className: "org-direct-label" }, "Autorit\xE9 directe du Jarl"), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: huscarls, grade: titreHuscarl })), /* @__PURE__ */ React.createElement("div", { className: "org-command-chain" }, /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.marechaux, grade: "Mar\xE9chal" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.commandants, grade: "Commander" }), /* @__PURE__ */ React.createElement(CentralGroup, { personnes: data.majorsEtatMajor, grade: "Major", note: "\xC9tat-Major" }))), /* @__PURE__ */ React.createElement("section", { className: "org-corps-section", "aria-labelledby": "org-corps-title" }, /* @__PURE__ */ React.createElement("div", { className: "org-corps-heading" }, /* @__PURE__ */ React.createElement("span", { className: "org-eyebrow" }, "Sous l\u2019autorit\xE9 de l\u2019\xC9tat-Major central"), /* @__PURE__ */ React.createElement("h2", { id: "org-corps-title" }, "Corps de garde & garnisons"), /* @__PURE__ */ React.createElement("p", null, "Tous les corps et garnisons r\xE9pondent directement \xE0 l\u2019\xC9tat-Major.")), /* @__PURE__ */ React.createElement("div", { className: "org-corps-grid" }, data.garnisons.map((g) => /* @__PURE__ */ React.createElement(OrgCorps, { key: g.key, title: g.nom, people: g.membres, huscarls: g.huscarls })))), /* @__PURE__ */ React.createElement("div", { className: "org-detached" }, /* @__PURE__ */ React.createElement(OrgAcademie, { academie: data.academie }), /* @__PURE__ */ React.createElement(Independent, { title: "Majors hors commandement", subtitle: "Majors actifs des corps et garnisons, hors \xC9tat-Major", people: data.majors }), /* @__PURE__ */ React.createElement(Independent, { title: "R\xE9serve", subtitle: "Tous corps et grades confondus", people: data.reserve }))));
   }
   function PersonCard({ personne, center = false, showCorps = false }) {
     const memberChanges = useMemberChanges(personne == null ? void 0 : personne.memberId);

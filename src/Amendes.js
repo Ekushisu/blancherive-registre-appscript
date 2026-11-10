@@ -32,8 +32,9 @@ const AMENDES_DONNEES_SHEET_NAME = "Données";
 const AMENDES_EFFECTIFS_SHEET_NAME = "Effectifs";
 const AMENDES_COLLECTEUR_SPECIALITE = "Collecteur de la garde";
 const AMENDES_STATUT_ACTIF = "En service actif";
-const AMENDES_CORPS_REVERSEMENT_MUTUALISES = ["Cité de Blancherive", "Éclaireur", "Hird du Jarl", "État-Major"];
-const AMENDES_CORPS_COLLECTEURS_MUTUALISES = ["Cité de Blancherive", "État-Major"];
+// « Garde de Fort-Dragon » : nom affiché de la Cité, toléré si la feuille l'adopte un jour.
+const AMENDES_CORPS_REVERSEMENT_MUTUALISES = ["Cité de Blancherive", "Garde de Fort-Dragon", "Éclaireur", "Hird du Jarl", "État-Major"];
+const AMENDES_CORPS_COLLECTEURS_MUTUALISES = ["Cité de Blancherive", "Garde de Fort-Dragon", "État-Major"];
 const AMENDES_TIMEZONE = "Europe/Stockholm";
 const AMENDES_CHEFS_COLUMN = 8;
 const AMENDES_CHEFS_HEADER = "Chefs d'accusation (JSON)";

@@ -52,7 +52,9 @@ const DISCORD_SYNCHRO_OPERATIONS_MAX = 80;
   Corps reconnus par un fragment du libellé de la feuille. La Cité de
   Blancherive s'appelle « Garde de Fort-Dragon » sur le serveur ; ses membres
   ont aussi, comme tout membre en service, le rôle de fonction Garde de
-  Blancherive.
+  Blancherive. Les Faubourgs, dissous le 7 novembre 2026, ne sont plus
+  préremplis : la ligne « Garnison des faubourgs » d'une feuille déjà écrite
+  reste à effacer à la main, comme pour le Hird.
 */
 const DISCORD_ROLES_STATUT_ACTIF = ["Garde de Blancherive"];
 const DISCORD_ROLES_STATUT_RESERVE = ["Réserviste"];
@@ -61,11 +63,11 @@ const DISCORD_ROLES_GRADES_INITIAUX = [["garde", "Garde du domaine"]];
 const DISCORD_ROLES_CORPS_INITIAUX = [
   ["eclaireur", "Corps des éclaireurs"],
   ["etatmajor", "Etat major"],
-  ["faubourg", "Garnison des faubourgs"],
   ["rivebois", "Garnison de Rivebois"],
   ["boisdechene", "Garnison de Bois-de-Chêne"],
   ["capgranite", "Garnison de Cap Granite"],
-  ["cite", "Garde de Fort-Dragon"]
+  ["cite", "Garde de Fort-Dragon"],
+  ["fortdragon", "Garde de Fort-Dragon"]
 ];
 
 

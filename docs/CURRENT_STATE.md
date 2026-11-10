@@ -2,6 +2,40 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### La Cité de Blancherive s'affiche « Garde de Fort-Dragon » (7 novembre 2026)
+
+- Décision du propriétaire. Nom affiché seul, par le mécanisme prévu :
+  `NOMS_AFFICHES_CORPS` (`ui/src/corps.js`) et libellé de la garnison
+  `cite` dans `ORGANIGRAMME_GARNISONS`. La feuille, les formulaires et les
+  écritures gardent « Cité de Blancherive ». Le serveur tolère le nouveau
+  libellé (alias de l'organigramme, jetons de Paye, corps mutualisés des
+  Amendes, fragment Discord) au cas où la feuille l'adopterait. Aperçus
+  régénérés.
+
+### Fin du commandement commun de Rivebois et Bois-de-Chêne (7 novembre 2026)
+
+- Décision du propriétaire : ce commandement intermédiaire n'existe plus ;
+  les deux garnisons répondent directement à l'État-Major comme les autres.
+  `getOrganigramme` ne renvoie plus `commandementLocal` ; les Majors de ces
+  garnisons rejoignent `majors` (Majors hors commandement). Interface : grille
+  unique de cinq colonnes, encart et styles `org-local-*` retirés, variante
+  de grade `commandementLocal` retirée (`ui/src/grades.jsx`). Tests,
+  aperçus et règles à jour.
+
+### Faubourgs de Blancherive dissous (7 novembre 2026)
+
+- Décision du propriétaire : le corps n'existe plus. Traité comme le Hird :
+  entrée `faubourgs` retirée d'`ORGANIGRAMME_GARNISONS` (grille des corps à
+  cinq colonnes), rôle « Garnison des faubourgs » retiré de
+  `DISCORD_ROLES_CORPS_INITIAUX`, jeton `faubourg` conservé dans
+  `PAYE_FINANCEURS` pour les semaines passées. Une fiche qui porte encore
+  ce corps le garde jusqu'à sa mutation.
+- À faire dans le classeur par le propriétaire : retirer « Faubourgs de
+  Blancherive » de `Données!G`, effacer la ligne « Garnison des faubourgs »
+  de `RolesDiscord`, muter ou mettre hors service les derniers membres.
+- Tests (organigramme, synchro Discord) et aperçus (organigramme, effectifs,
+  présences, paye) mis à jour. Aucun push ni déploiement.
+
 ### Sortie de détention en acte, journal de la Prison, plan des cellules (7 novembre 2026)
 
 - Décision du propriétaire : la sortie d'un détenu n'est plus une case

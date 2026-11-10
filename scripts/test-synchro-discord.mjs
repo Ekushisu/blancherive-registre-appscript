@@ -180,10 +180,12 @@ assert.ok(feuille.rows.filter(r => r[0] === 'Grade').every(r => r[2] === r[1]), 
 const corpsPrerempli = Object.fromEntries(feuille.rows.filter(r => r[0] === 'Corps').map(r => [r[1], r[2]]));
 assert.deepEqual(corpsPrerempli, {
   'Cité de Blancherive': '', 'Garnison de Rivebois': '',
-  'Garnison de Bois-de-Chêne': 'Garnison de Bois-de-Chêne', 'Garde des Faubourgs': 'Garnison des faubourgs',
+  'Garnison de Bois-de-Chêne': 'Garnison de Bois-de-Chêne', 'Garde des Faubourgs': '',
   'Éclaireur': 'Corps des éclaireurs',
   'État-Major': 'Etat Major', 'Garnison de Cap Granite': 'Garnison de Cap Granite'
-});
+}, 'Faubourgs dissous : plus préremplis');
+// Ligne écrite à la main par le propriétaire avant la dissolution : elle vaut tant qu'elle n'est pas effacée.
+feuille.rows.find(r => r[0] === 'Corps' && r[1] === 'Garde des Faubourgs')[2] = 'Garnison des faubourgs';
 assert.deepEqual(feuille.formats, ['@'], 'Texte brut');
 assert.equal(feuille.gel, 1);
 assert.equal(ecritures().length, 0, 'Simulation : aucun changement');
@@ -401,7 +403,8 @@ assert.equal(reelle['Grade / Garde'], 'Garde du domaine');
 assert.equal(reelle['Grade / Maréchal'], 'Maréchal');
 assert.equal(reelle['Grade / Jarl'], '', 'Jarl au-dessus du bot : laissé vide');
 assert.equal(reelle['Corps / État-Major'], '', 'Etat major au-dessus du bot : laissé vide');
-assert.equal(reelle['Corps / Garde des Faubourgs'], 'Garnison des faubourgs', 'Nom exact du serveur');
+assert.equal(reelle['Corps / Garde des Faubourgs'], '', 'Faubourgs dissous : plus préremplis, même si Données les porte encore');
+assert.equal(reelle['Corps / Garnison de Cap Granite'], 'Garnison de Cap Granite', 'Nom exact du serveur');
 assert.equal(reelle['Corps / Garnison de Rivebois'], 'Garnison de Rivebois');
 assert.equal(reelle['Corps / Cité de Blancherive'], 'Garde de Fort-Dragon', 'La Cité s’appelle Garde de Fort-Dragon sur le serveur');
 const notesReelles = rapport.notes.join('\n');

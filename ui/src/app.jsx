@@ -1975,10 +1975,6 @@ function OrganigrammePage({token}) {
   useEffect(()=>{let active=true;serverCall("getOrganigramme",token).then(r=>{if(active)setData(r);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[token]);
   if(error)return <div className="error">{error}</div>;
   if(!data)return <div className="loading">Chargement de l'organigramme...</div>;
-  const local = data.commandementLocal;
-  const localKeys = local?.garnisonKeys || [];
-  const directCorps = data.garnisons.filter(g => !localKeys.includes(g.key));
-  const localCorps = data.garnisons.filter(g => localKeys.includes(g.key));
   // Titre du poste : le grade tel que Données!A l'écrit (« Huscarl » ou « Huscarl de Blancherive »).
   // Seuls les Huscarls de l'État-Major sont ici ; ceux d'un corps sont au bas de sa colonne.
   const huscarls = data.huscarls || [];
@@ -2001,16 +1997,11 @@ function OrganigrammePage({token}) {
       <div className="org-command-chain"><CentralGroup personnes={data.marechaux} grade="Maréchal"/><CentralGroup personnes={data.commandants} grade="Commander"/><CentralGroup personnes={data.majorsEtatMajor} grade="Major" note="État-Major"/></div>
     </section>
     <section className="org-corps-section" aria-labelledby="org-corps-title">
-      <div className="org-corps-heading"><span className="org-eyebrow">Sous l’autorité de l’État-Major central</span><h2 id="org-corps-title">Corps de garde & garnisons</h2><p>Rivebois et Bois-de-Chêne relèvent d’un commandement commun ; les autres corps répondent directement à l’État-Major.</p></div>
+      <div className="org-corps-heading"><span className="org-eyebrow">Sous l’autorité de l’État-Major central</span><h2 id="org-corps-title">Corps de garde & garnisons</h2><p>Tous les corps et garnisons répondent directement à l’État-Major.</p></div>
       <div className="org-corps-grid">
-        {local && <section className="org-local-command" aria-label={local.nom}>
-          <div className="org-local-heading"><h3>{local.nom}</h3><p>Sous les ordres directs de l’État-Major central</p></div>
-          <CentralGroup personnes={local.majors} grade="Majors" note="Rivebois · Bois-de-Chêne" variante="commandementLocal"/>
-          <div className="org-local-corps" aria-label="Garnisons sous les ordres du commandement commun">{localCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} huscarls={g.huscarls}/>)}</div>
-        </section>}
-        {directCorps.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} huscarls={g.huscarls}/>)}</div>
+        {data.garnisons.map(g=><OrgCorps key={g.key} title={g.nom} people={g.membres} huscarls={g.huscarls}/>)}</div>
     </section>
-    <div className="org-detached"><OrgAcademie academie={data.academie}/><Independent title="Majors hors commandement" subtitle="Autres Majors actifs, hors État-Major et commandement de Rivebois / Bois-de-Chêne" people={data.majors}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve}/></div>
+    <div className="org-detached"><OrgAcademie academie={data.academie}/><Independent title="Majors hors commandement" subtitle="Majors actifs des corps et garnisons, hors État-Major" people={data.majors}/><Independent title="Réserve" subtitle="Tous corps et grades confondus" people={data.reserve}/></div>
   </div></ChangesProvider>;
 }
 function PersonCard({personne,center=false,showCorps=false}) {

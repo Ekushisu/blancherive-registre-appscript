@@ -41,8 +41,8 @@ Générées par le script, donc rejouables à l’identique :
   montre l'alias de grade (« Sergent-Instructeur », le grade de la feuille en
   rappel).
 - `organigramme-1440.png`, `organigramme-390.png` : chaîne de commandement
-  sous régence impériale (Régent impérial au sommet, Huscarl détaché), les six
-  corps et garnisons sur la grille à six colonnes, avec les descriptions de
+  sous régence impériale (Régent impérial au sommet, Huscarl détaché), les cinq
+  corps et garnisons sur la grille à cinq colonnes (Faubourgs dissous), avec les descriptions de
   grades ; en bas, l'encart détaché de l'Académie militaire (Sergent-Instructeur
   en tête, Instructeurs groupés) à côté des Majors hors commandement et de la
   Réserve. Les noms, soulignés en pointillé, ouvrent la fiche de service.

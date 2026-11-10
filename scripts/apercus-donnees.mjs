@@ -50,7 +50,7 @@ const lignesPresences = [
   presence(23, 37, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", ".xxxx..", 320, false),
   presence(26, 37, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xxx....", 150, false),
   presence(28, 37, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, false),
-  presence(29, 37, "Garde des Faubourgs", "Ragnhild", "Fer-Juste", "Capitaine", "xxxx...", 320, false),
+  presence(29, 37, "Garnison de Bois-de-Chêne", "Ragnhild", "Fer-Juste", "Capitaine", "xxxx...", 320, false),
 
   presence(31, 36, "Garnison de Rivebois", "Brynjar", "Poing-de-Fer", "Commandant", "xxxxxxx", 700, true),
   presence(32, 36, "Garnison de Rivebois", "Torvald", "Hache-Vive", "Garde", "xxxxx..", 400, false),
@@ -59,14 +59,14 @@ const lignesPresences = [
   presence(35, 36, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxxx.x.", 400, false),
   presence(36, 36, "Éclaireur", "Runa", "Chante-Lame", "Cadet", "xx.....", 100, false),
   presence(37, 36, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxxx.", 480, false),
-  presence(38, 36, "Garde des Faubourgs", "Ragnhild", "Fer-Juste", "Capitaine", "xxxxx..", 400, false),
+  presence(38, 36, "Garnison de Bois-de-Chêne", "Ragnhild", "Fer-Juste", "Capitaine", "xxxxx..", 400, false),
 
   presence(41, 35, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxxx...", 200, false),
   presence(42, 35, "Cité de Blancherive", "Astrid", "Œil-de-Faucon", "Garde", "xxx....", 240, false),
   presence(43, 35, "Cap Granite", "Ulf", "Œil-Clair", "Garde", "xxxxx..", 400, true),
 
   presence(51, 34, "Garnison de Rivebois", "Eydis", "la Silencieuse", "Cadet", "xxx....", 150, false),
-  presence(52, 34, "Faubourgs de Blancherive", "Sif", "Pied-Sûr", "Garde", "xxxx...", 320, false)
+  presence(52, 34, "Garnison de Bois-de-Chêne", "Sif", "Pied-Sûr", "Garde", "xxxx...", 320, false)
 ];
 
 function totauxParCorps(lignes) {
@@ -657,12 +657,8 @@ export const organigramme = {
   marechaux: [],
   commandants: [membre("Haldvar", "de Blancherive", "Commander", "État-Major")],
   majorsEtatMajor: [membre("Ingrid", "Main-Leste", "Major", "État-Major")],
-  majors: [membre("Torsten", "Pierre-Grise", "Major", "Éclaireur")],
-  commandementLocal: {
-    nom: "Commandement de Rivebois et Bois-de-Chêne",
-    majors: [membre("Frida", "Val-Profond", "Major", "Garnison de Rivebois")],
-    garnisonKeys: ["rivebois", "bois-de-chene"]
-  },
+  // Plus de commandement commun : les Majors des corps sont tous « hors commandement ».
+  majors: [membre("Frida", "Val-Profond", "Major", "Garnison de Rivebois"), membre("Torsten", "Pierre-Grise", "Major", "Éclaireur")],
   garnisons: [
     {
       key: "rivebois",
@@ -690,7 +686,7 @@ export const organigramme = {
     },
     {
       key: "cite",
-      nom: "Cité de Blancherive",
+      nom: "Garde de Fort-Dragon",
       membres: [
         membre("Rolf", "Écu-Fendu", "Capitaine", "Cité de Blancherive"),
         membre("Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
@@ -698,17 +694,12 @@ export const organigramme = {
       ],
       huscarls: [membre("Jorund", "Main-Ferme", "Huscarl", "Cité de Blancherive")]
     },
-    {
-      key: "faubourgs",
-      nom: "Garde des Faubourgs",
-      membres: [membre("Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs")]
-    },
-    // Le serveur renvoie toujours les six corps, même vides : l'aperçu
-    // doit montrer la grille à cette densité.
+    // Le serveur renvoie toujours les cinq corps, même vides : l'aperçu
+    // doit montrer la grille à cette densité. Les Faubourgs sont dissous.
     {
       key: "cap-granite",
       nom: "Cap Granite",
-      membres: [membre("Ulf", "Œil-Clair", "Garde", "Cap Granite")]
+      membres: [membre("Hilda", "Pas-Furtif", "Lieutenant", "Cap Granite"), membre("Ulf", "Œil-Clair", "Garde", "Cap Granite")]
     },
     {
       key: "eclaireurs",
@@ -732,15 +723,14 @@ export const organigramme = {
 
 /*
   Effectifs : la forme suit `getEffectifs()` de `src/Effectifs.js`.
-  Huit corps sont représentés, afin que la bande d'onglets soit aussi chargée
+  Sept corps sont représentés, afin que la bande d'onglets soit aussi chargée
   qu'en production — c'est à cette densité que les défauts d'affichage mobile
-  apparaissent, pas avec deux corps.
+  apparaissent, pas avec deux corps. Les Faubourgs, dissous, n'y sont plus.
 */
 const CORPS = [
   "Cité de Blancherive",
   "Garnison de Rivebois",
   "Garnison de Bois-de-Chêne",
-  "Garde des Faubourgs",
   "Éclaireur",
   "Cap Granite",
   "État-Major",
@@ -794,7 +784,7 @@ export const effectifs = {
     membreEffectif(8, "Alva", "Pied-Léger", "Recrue", "Garnison de Rivebois", { assermente: false }),
     membreEffectif(9, "Torsten", "Pierre-Grise", "Major", "Garnison de Bois-de-Chêne"),
     membreEffectif(10, "Frida", "Val-Profond", "Garde", "Garnison de Bois-de-Chêne"),
-    membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Garde des Faubourgs"),
+    membreEffectif(11, "Hilda", "Pas-Furtif", "Lieutenant", "Cap Granite"),
     membreEffectif(12, "Runa", "Chante-Lame", "Garde", "Éclaireur", { specialite: "Pisteuse", discordId: discord(12) }),
     membreEffectif(13, "Ulfgar", "Bouclier-Noir", "Garde", "État-Major"),
     membreEffectif(14, "Olaf", "Dos-Voûté", "Garde", "Cité de Blancherive", { status: "Réserve", reserve: true }),

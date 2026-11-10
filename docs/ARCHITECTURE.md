@@ -127,8 +127,8 @@ Principaux modules :
 
 - `Paye.js`
   - regroupement des semaines closes impayées par financeur : argentier de la cour
-    pour Cité de Blancherive / Éclaireurs / État-Major / Faubourgs, un Thane pour
-    Rivebois, Bois-de-Chêne et Cap Granite
+    pour Cité de Blancherive / Éclaireurs / État-Major / Académie (et les semaines
+    passées des Faubourgs, dissous), un Thane pour Rivebois, Bois-de-Chêne et Cap Granite
   - lecture OFFICIER et INTENDANT ; règlement d'une semaine par les seuls OFFICIER,
     délégué à `ecrirePresenceCellule_` de `Presences.js`
   - n'écrit rien de lui-même et ne touche à aucune colonne autre que `Présences!O`
@@ -239,7 +239,7 @@ Le source frontend est dans `ui/` :
 - `ui/src/inventaire.jsx` : page Inventaire — cartes de coffres, formulaire de coffre, rangement d'un objet par la recherche au catalogue de `saisies.jsx`, tableau des stocks ;
 - `ui/src/permis.jsx` : page Permis de chasse — formulaire de délivrance (prénom, nom facultatif, date du jour par défaut), recherche par prénom en mémoire (`filtrerPermis`), tableau des permis avec bouton Révoquer pour l'officier ; contrôle du formulaire (`validerPermis`) identique aux règles du serveur ;
 - `ui/src/changes.jsx` : badges, panneau des nouveautés et suivi de lecture commun aux deux pages ;
-- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (aucun aujourd'hui) ; grade affiché selon le corps (`libelleGrade`, table `ALIAS_GRADES_CORPS` : Instructeur et Sergent-Instructeur à l'Académie militaire) ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS` et `ORGANIGRAMME_ACADEMIE` (`scripts/test-organigramme.mjs`, `scripts/test-alias-grades.mjs`) ;
+- `ui/src/corps.js` : nom affiché d'un corps (`libelleCorps`), quand il diffère du libellé de la feuille (la Cité de Blancherive s'affiche « Garde de Fort-Dragon ») ; grade affiché selon le corps (`libelleGrade`, table `ALIAS_GRADES_CORPS` : Instructeur et Sergent-Instructeur à l'Académie militaire) ; affichage seulement, à garder d'accord avec `ORGANIGRAMME_GARNISONS` et `ORGANIGRAMME_ACADEMIE` (`scripts/test-organigramme.mjs`, `scripts/test-alias-grades.mjs`) ;
 - `ui/src/change-state.js` : expiration et persistance locale des ID événements vus ;
 - `ui/src/discord.js` : membres du serveur Discord, demandés à la première fiche Effectifs ouverte en modification et gardés pour la page (`useMembresDiscord`), suggestions en mémoire (`suggestionsDiscord`, identifiant tapé à la main accepté), comptes déjà rattachés (`comptesRattaches`) ;
 - `ui/src/discord.jsx` : champ « Compte Discord » de la fiche d'un membre (`CompteDiscordField`), envoyé avec la fiche par `modifierEffectif` et seulement s'il a changé ;

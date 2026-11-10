@@ -40,8 +40,7 @@ assert.notEqual(descriptionGrade('Sergent-Chef'),descriptionGrade('Sergent'));
 assert.notEqual(descriptionGrade('Caporal-Chef'),descriptionGrade('Caporal'));
 
 // Les Majors du commandement de Rivebois / Bois-de-Chêne ont une fonction distincte.
-assert.match(descriptionGrade('Majors','commandementLocal'),/thaneries/);
-assert.notEqual(descriptionGrade('Majors','commandementLocal'),descriptionGrade('Major'));
+assert.equal(descriptionGrade('Major','commandementLocal'),descriptionGrade('Major'),'Commandement commun retiré : repli sur le grade');
 
 // Un grade absent de la doctrine ne doit rien afficher, sans erreur.
 // « Aspirant-Garde », supprimé le 15 septembre 2026, reste lisible dans les

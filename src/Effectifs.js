@@ -1017,7 +1017,8 @@ function lireOptionsColonneEffectifsWeb_(
   /*
     Corps : la liste de `Données` décide seule (décision du propriétaire,
     1er novembre 2026). Un corps dissous, retiré de cette liste comme le
-    Hird du Jarl, n'est plus proposé, même si des fiches le portent encore ;
+    Hird du Jarl ou les Faubourgs de Blancherive (7 novembre 2026), n'est
+    plus proposé, même si des fiches le portent encore ;
     ces fiches le gardent (`actuel`, `validerOptionEffectifsWeb_`). Sans
     liste dans `Données`, la lecture complète ci-dessous reprend.
   */

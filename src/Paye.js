@@ -11,8 +11,9 @@
 //
 // Financeurs :
 //   - Argentier de la cour : Cité de Blancherive, Éclaireurs,
-//     État-Major et Faubourgs de Blancherive (depuis le
-//     7 octobre 2026 pour ces derniers).
+//     État-Major, Académie, et les Faubourgs de Blancherive
+//     (du 7 octobre 2026 à leur dissolution, le 7 novembre 2026 :
+//     le jeton reste pour les semaines passées).
 //   - Un Thane par garnison : Rivebois, Bois-de-Chêne,
 //     Cap Granite.
 //
@@ -42,8 +43,9 @@ const PAYE_PRESENCES_SHEET = "Présences";
   Les jetons sont volontairement discriminants : aucun n'est
   contenu dans le libellé d'un autre corps. On n'utilise jamais
   « blancherive » seul, que portent à la fois la Cité et les
-  Faubourgs : ils relèvent aujourd'hui du même argentier, mais
-  la séparation doit survivre au prochain changement.
+  Faubourgs. Les Faubourgs sont dissous depuis le 7 novembre
+  2026 : leur jeton est conservé pour que les semaines passées
+  restent rattachées à l'argentier, jamais écartées.
 */
 
 const PAYE_FINANCEURS = [
@@ -55,6 +57,9 @@ const PAYE_FINANCEURS = [
     jetons: [
       "academie",
       "cite de blancherive",
+      // Nom affiché de la Cité ; toléré si la feuille l'adopte un jour.
+      "fort-dragon",
+      "fort dragon",
       "eclaireur",
       "etat-major",
       "etat major",

@@ -1,5 +1,27 @@
 # Journal de passation IA
 
+## 2026-11-07 — « Garde de Fort-Dragon », nom affiché de la Cité
+
+- Décision du propriétaire : la Cité de Blancherive s'affiche « Garde de
+  Fort-Dragon ». `NOMS_AFFICHES_CORPS` et `ORGANIGRAMME_GARNISONS` ; la
+  feuille ne change pas, le serveur tolère les deux libellés. Aperçus à jour.
+
+## 2026-11-07 — Fin du commandement commun de Rivebois et Bois-de-Chêne
+
+- Décision du propriétaire : plus de commandement intermédiaire, les deux
+  garnisons répondent directement à l'État-Major. `commandementLocal`
+  retiré de `getOrganigramme`, Majors concernés dans `majors` ; grille
+  unique de cinq colonnes, styles et variante de grade retirés. Tests,
+  aperçus, règles et état courant mis à jour.
+
+## 2026-11-07 — Faubourgs de Blancherive dissous
+
+- Décision du propriétaire : le corps des Faubourgs n'est plus. Même
+  traitement que le Hird : `ORGANIGRAMME_GARNISONS` sans `faubourgs` (grille
+  à cinq colonnes), `DISCORD_ROLES_CORPS_INITIAUX` sans « Garnison des
+  faubourgs », jeton de Paye conservé pour l'historique. Données!G et
+  `RolesDiscord` à nettoyer à la main. Tests, docs et aperçus à jour.
+
 ## 2026-11-07 — Sortie de détention en acte, journal, plan des cellules
 
 - Constat du propriétaire : des libérations sans motif, aucun moyen

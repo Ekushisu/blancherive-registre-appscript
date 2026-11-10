@@ -88,10 +88,10 @@ context.lireOrdreGradesOrganigramme = () => new Map([['capitaine', 0], ['garde',
 const data = context.getOrganigramme('test-token');
 const names = list => Array.from(list, p => p.nomComplet).sort();
 assert.deepEqual(names(data.majorsEtatMajor), ['Central', 'Central bis']);
-assert.deepEqual(names(data.majors), ['Détaché', 'Major Académie', 'Major du Hird']);
-assert.deepEqual(names(data.commandementLocal.majors), ['Major Chêne', 'Major Chêne alias', 'Major Rivebois']);
-assert.deepEqual(Array.from(data.commandementLocal.garnisonKeys), ['rivebois', 'bois-de-chene']);
-assert.deepEqual(Array.from(data.garnisons.filter(g => !data.commandementLocal.garnisonKeys.includes(g.key)), g => g.key).sort(), ['cap-granite', 'cite', 'eclaireurs', 'faubourgs']);
+// Plus de commandement commun de Rivebois et Bois-de-Chêne (7 novembre 2026) : leurs Majors rejoignent les Majors hors commandement.
+assert.deepEqual(names(data.majors), ['Détaché', 'Major Académie', 'Major Chêne', 'Major Chêne alias', 'Major Rivebois', 'Major du Hird']);
+assert.equal(data.commandementLocal, undefined, 'Commandement commun retiré');
+assert.deepEqual(Array.from(data.garnisons, g => g.key).sort(), ['bois-de-chene', 'cap-granite', 'cite', 'eclaireurs', 'rivebois'], 'Cinq corps, tous sous l’État-Major ; Faubourgs dissous');
 assert.deepEqual(names(data.reserve), ['Huscarl réserviste', 'Réserviste central', 'Réserviste du Hird', 'Réserviste local']);
 assert.equal(data.hird, undefined, 'Plus de branche du Hird');
 // Le Jarl en service tient le sommet ; un Jarl mort ne s'affiche plus.
@@ -106,7 +106,7 @@ for (const grade of ['Huscarl', ' huscarl de Blancherive ', 'HUSCARL']) assert.o
 for (const grade of ['Huscarls', 'Garde', '']) assert.ok(!context.estGradeHuscarl(grade), grade);
 for (const grade of ['Régent impérial', ' REGENT IMPERIAL ', 'Régente impériale']) assert.ok(context.estGradeRegent(grade), grade);
 for (const grade of ['Régent', 'Régence impériale', 'Jarl', '']) assert.ok(!context.estGradeRegent(grade), grade);
-assert.equal(data.garnisons.length, 6);
+assert.equal(data.garnisons.length, 5, 'Cinq corps depuis la dissolution des Faubourgs');
 // Académie militaire : hors des garnisons, chef Sergent-Chef, personnel trié par grade.
 assert.equal(data.academie.key, 'academie');
 assert.equal(data.academie.nom, 'Académie militaire de Blancherive');
@@ -134,7 +134,7 @@ assert.equal(libelleCorps('Rivebois'), 'Rivebois', 'Un corps sans nom affiché g
 assert.equal(libelleCorps(''), '');
 assert.deepEqual(Array.from(data.garnisons.find(g => g.key === 'rivebois').membres, p => p.grade), ['Capitaine', 'Garde']);
 const displayed = [data.jarl, ...data.regents, ...data.huscarls, ...data.marechaux, ...data.commandants, ...data.majorsEtatMajor,
-  ...data.commandementLocal.majors, ...data.majors, ...data.reserve, ...data.garnisons.flatMap(g => [...g.membres, ...g.huscarls]),
+  ...data.majors, ...data.reserve, ...data.garnisons.flatMap(g => [...g.membres, ...g.huscarls]),
   ...data.academie.chefs, ...data.academie.membres];
 assert.equal(new Set(names(displayed)).size, displayed.length, 'Aucun membre en double');
 for (const absent of ['Ancien', 'Ancien local', 'Ancien Jarl', 'Hird', 'Régent', 'Huscarl titré', 'Ancien élève']) assert.ok(!names(displayed).includes(absent), absent);
@@ -165,6 +165,4 @@ assert.equal(empty.academie.chefs.length, 0, 'Direction vacante');
 assert.equal(empty.academie.membres.length, 0);
 assert.equal(empty.majorsEtatMajor.length, 0);
 assert.equal(empty.reserve.length, 0);
-assert.equal(empty.commandementLocal.majors.length, 0);
-assert.equal(empty.commandementLocal.garnisonKeys.length, 2, 'Le rattachement reste identique même sans Major actif');
 console.log('Organigramme : sommet (Jarl, régence, vacance), répartition, réserve, exclusions, tri, absence de doublons et autorisations validés.');
