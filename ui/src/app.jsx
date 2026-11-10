@@ -27,10 +27,12 @@ import { useMembresDiscord, comptesRattaches } from "./discord.js";
 import { CompteDiscordField } from "./discord.jsx";
 import { lireRetourDiscord, verifierRetourDiscord, effacerRetourDiscord } from "./connexion-discord.js";
 import { FicheProvider, NomEffectif } from "./fiche.jsx";
+import { ActivationCompte, AccesCompte, MotDePasseDialog } from "./compte.jsx";
+import { lireInvitationUrl, effacerInvitationUrl, motRechercheCompte } from "./compte.js";
 
 const {useContext,useEffect,useMemo,useRef,useState}=React;
 
-// Nom du membre connecté par Discord ; vide pour une session par code, qui n'identifie personne.
+// Nom du membre connecté à son compte personnel (ou par Discord autrefois) ; vide pour une session par code, qui n'identifie personne.
 const MoiContext=React.createContext("");
 
 /*
@@ -56,19 +58,25 @@ function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberF
 
 function App(){
   const[token,setToken]=useState(lireJeton);
-  const[role,setRole]=useState(null);const[nom,setNom]=useState("");const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
+  const[role,setRole]=useState(null);const[nom,setNom]=useState("");const[via,setVia]=useState("");const[page,setPage]=useState("organigramme");const[codexFocus,setCodexFocus]=useState(null);
   const[discordRetour,setDiscordRetour]=useState({statut:"",erreur:""});
+  // Lien d'invitation (`?invitation=`, compte.jsx) : l'écran d'activation passe avant tout, session ouverte ou non.
+  const[invitation,setInvitation]=useState(null);const[motDePasseOuvert,setMotDePasseOuvert]=useState(false);
+  useEffect(()=>{lireInvitationUrl().then(i=>{if(!i)return;effacerInvitationUrl();setInvitation(i);});},[]);
   // Le visiteur public n'a que le Codex : on l'y place d'emblée.
-  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{if(i.jeton)ecrireJeton(i.jeton);setRole(i.role);setNom(i.nom||"");if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
+  useEffect(()=>{if(!token)return;serverCall("getSessionInfo",token).then(i=>{if(i.jeton)ecrireJeton(i.jeton);setRole(i.role);setNom(i.nom||"");setVia(i.via||"");if(i.role===ROLE_PUBLIC)setPage("codex");}).catch(logout);},[token]);
   // Retour de Discord : code et `state` dans l'adresse, traités une seule fois, puis retirés de l'adresse.
   useEffect(()=>{lireRetourDiscord().then(retour=>{if(!retour)return;effacerRetourDiscord();if(lireJeton())return;let code;try{code=verifierRetourDiscord(retour);}catch(e){setDiscordRetour({statut:"",erreur:e.message});return;}setDiscordRetour({statut:"connexion",erreur:""});serverCall("ouvrirSessionDiscord",code).then(t=>{ecrireJeton(t);setDiscordRetour({statut:"",erreur:""});setToken(t);}).catch(e=>setDiscordRetour({statut:"",erreur:e.message}));});},[]);
   const publicSeulement=role===ROLE_PUBLIC;
   const intendantSeulement=role==="INTENDANT";
-  function logout(){effacerJeton();setToken(null);setRole(null);setNom("");setPage("organigramme");}
+  function logout(){effacerJeton();setToken(null);setRole(null);setNom("");setVia("");setMotDePasseOuvert(false);setPage("organigramme");}
+  // Nouveau jeton (activation, mot de passe changé) : remplace la session en cours, quelle qu'elle soit.
+  function adopterJeton(t){ecrireJeton(t);setRole(null);setToken(t);}
+  if(invitation)return <ActivationCompte jeton={invitation.jeton} serverCall={serverCall} onActive={t=>{setInvitation(null);adopterJeton(t);}} onAbandon={()=>setInvitation(null)}/>;
   if(!token)return <Login serverCall={serverCall} discordRetour={discordRetour} onLogin={t=>{ecrireJeton(t);setToken(t);}}/>;
   if(!role)return <div className="loading">Chargement...</div>;
   // Un nom d'effectif ouvre sa fiche de service (fiche.jsx), pour tout rôle sauf le visiteur du Codex.
-  const registre=<div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} nom={nom} page={page} onPage={setPage} onLogout={logout}/><main className="content" id="main-content" tabIndex={-1}>
+  const registre=<div className="app"><a className="skip-link" href="#main-content">Aller au contenu</a><Header role={role} nom={nom} via={via} page={page} onPage={setPage} onLogout={logout} onMotDePasse={()=>setMotDePasseOuvert(true)}/>{motDePasseOuvert&&<MotDePasseDialog token={token} serverCall={serverCall} onFermer={()=>setMotDePasseOuvert(false)} onJeton={t=>{setMotDePasseOuvert(false);adopterJeton(t);}}/>}<main className="content" id="main-content" tabIndex={-1}>
     {page==="organigramme"&&!publicSeulement&&<OrganigrammePage token={token}/>}
     {page==="effectifs"&&role==="OFFICIER"&&<EffectifsPage token={token}/>}
     {page==="presences"&&!publicSeulement&&!intendantSeulement&&<PresencesPage token={token} canEdit={role==="OFFICIER"}/>}
@@ -113,6 +121,8 @@ function EffectifsPage({token}){
   // Membres du serveur Discord, demandés à la première fiche ouverte.
   const discord=useMembresDiscord(serverCall,token);
   const rattaches=useMemo(()=>comptesRattaches(data?.rows),[data]);
+  // État du compte personnel d'un membre, renvoyé par creerInvitationCompte / supprimerCompte : la ligne seule change.
+  const patchCompte=(memberId,compte)=>setData(d=>d?{...d,rows:d.rows.map(r=>r.memberId===memberId?{...r,compte}:r)}:d);
 
   useEffect(()=>{
     serverCall(
@@ -219,7 +229,9 @@ function EffectifsPage({token}){
         // « sans discord » liste les membres à rattacher pendant la passation.
         member.discordId
           ?"discord rattache"
-          :"sans discord"
+          :"sans discord",
+        // « sans compte », « lien remis », « compte actif » : la passation des comptes personnels.
+        motRechercheCompte(member.compte)
       ].join(" "))
         .includes(q);
     });
@@ -832,6 +844,8 @@ function EffectifsPage({token}){
                             }
                             discord={discord}
                             rattaches={rattaches}
+                            token={token}
+                            onCompte={patchCompte}
                             onSave={
                               async values=>{
                                 try{
@@ -950,6 +964,8 @@ function EffectifsPage({token}){
                       }
                       discord={discord}
                       rattaches={rattaches}
+                      token={token}
+                      onCompte={patchCompte}
                       showCorps
                       onSave={
                         async values=>{
@@ -1338,6 +1354,8 @@ function EffectifCard({
   options,
   discord,
   rattaches,
+  token,
+  onCompte,
   onSave,
   showCorps=false
 }){
@@ -1619,6 +1637,11 @@ function EffectifCard({
                 </span>
           }
         </div>
+
+        {/* Compte personnel de connexion : lien à remettre, retrait (compte.jsx). */}
+        {token&&onCompte&&
+          <AccesCompte member={member} token={token} serverCall={serverCall} onCompte={onCompte}/>
+        }
       </div>
 
       {!editing&&
@@ -1641,7 +1664,7 @@ function EffectifCard({
             ?<fieldset className="effectif-renommage">
               <legend>Nouveau nom</legend>
               <p className="effectif-renommage-avertissement" role="note">
-                Le nouveau nom remplace l’ancien dans toutes les semaines de Présences et sur les amendes et incarcérations qu’il a dressées : le membre garde son ancienneté. Connecté par Discord, il devra se reconnecter.
+                Le nouveau nom remplace l’ancien dans toutes les semaines de Présences et sur les amendes et incarcérations qu’il a dressées : le membre garde son ancienneté. S’il a un compte personnel, sa session se ferme et il se reconnecte sous son nouveau nom.
               </p>
               <div className="field">
                 <label htmlFor={`renommer-prenom-${member.row}`}>Prénom</label>
@@ -2092,7 +2115,7 @@ function AmendesPage({token,canDelete,onOpenCodex}){
 */
 function gardeSaisi(data,initial,garde){return data.gardeImpose&&!initial?data.gardeImpose:garde;}
 function ChampGarde({data,initial,value,onChange}){
-  if(data.gardeImpose&&!initial)return <input readOnly value={data.gardeImpose} className="champ-impose" title="Connecté par Discord : vous saisissez à votre nom."/>;
+  if(data.gardeImpose&&!initial)return <input readOnly value={data.gardeImpose} className="champ-impose" title="Session personnelle : vous saisissez à votre nom."/>;
   return <select required value={value} onChange={e=>onChange(e.target.value)}><option value="">Sélectionner…</option>{data.gardes.map(g=><option key={g}>{g}</option>)}{initial&&value&&!data.gardes.includes(value)&&<option value={value}>{value} (hors service actif)</option>}</select>;
 }
 

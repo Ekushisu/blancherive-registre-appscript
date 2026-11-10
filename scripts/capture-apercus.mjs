@@ -26,7 +26,7 @@ const outDir = path.join(rootDir, "docs", "apercus");
 // un écran de chargement silencieux.
 const reponses = {
   login: () => "jeton-de-demonstration",
-  getModesConnexion: () => ({ discord: null }),
+  getModesConnexion: () => ({ discord: null, codes: ["INTENDANT"] }),
   getSessionInfo: () => donnees.sessionInfo,
   getPresences: () => donnees.presences,
   getPresenceOfficerDashboard: () => donnees.presenceDashboard,
@@ -55,16 +55,11 @@ const reponses = {
 // des réponses serveur propres à la page, superposées aux réponses communes —
 // c'est ainsi que l'on capture une même page sous un autre rôle.
 const apercus = {
-  // Écran de connexion, Discord ouvert : bouton principal, code en dessous.
+  // Écran de connexion : nom et mot de passe personnel ; le code de l'intendance derrière un lien.
   connexion: {
-    attendre: ".discord-button",
+    attendre: "#login-nom",
     largeurs: [390, 1440],
-    sansJeton: true,
-    reponses: {
-      getModesConnexion: () => ({
-        discord: { url: "https://discord.com/oauth2/authorize?response_type=code&client_id=1&scope=identify" }
-      })
-    }
+    sansJeton: true
   },
   // Fiche de service, ouverte d'un clic sur un nom de l'organigramme.
   fiche: {
@@ -181,7 +176,7 @@ const apercus = {
     nav: "Paye",
     attendre: ".paye-card",
     largeurs: [1440],
-    reponses: { getSessionInfo: () => ({ role: "INTENDANT" }) }
+    reponses: { getSessionInfo: () => ({ role: "INTENDANT", via: "code" }) }
   },
   prison: {
     nav: "Prison",
@@ -203,7 +198,7 @@ const apercus = {
     nav: "Inventaire",
     attendre: ".inventaire-table",
     largeurs: [1440],
-    reponses: { getSessionInfo: () => ({ role: "INTENDANT" }) }
+    reponses: { getSessionInfo: () => ({ role: "INTENDANT", via: "code" }) }
   },
   permis: {
     nav: "Permis de chasse",
@@ -215,7 +210,7 @@ const apercus = {
     nav: "Permis de chasse",
     attendre: ".permis-table",
     largeurs: [1440],
-    reponses: { getSessionInfo: () => ({ role: "GARDE" }) },
+    reponses: { getSessionInfo: () => ({ role: "GARDE", nom: "Eydis Chante-Lame", via: "compte" }) },
     async preparer(page) {
       await page.getByRole("button", { name: "+ Nouveau permis" }).click();
       await page.waitForSelector("#permis-prenom");

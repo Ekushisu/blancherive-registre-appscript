@@ -354,12 +354,14 @@ le propriétaire le même jour.
   structurés à l'enregistrement. Ses saisies en texte libre, que le formulaire
   ne sait pas rééditer, restent intactes.
 
-## Saisie à son propre nom (session Discord)
+## Saisie à son propre nom (session nominative)
 
-Décision du propriétaire, 11 octobre 2026. Une session Discord sait qui est
-connecté ; une session par code commun ne le sait pas.
+Décision du propriétaire, 11 octobre 2026, étendue le 10 novembre 2026 aux
+comptes personnels (AUTH_AND_ROLES, « Connexion individuelle »). Une session
+nominative — compte personnel, ou Discord autrefois — sait qui est connecté ;
+une session par code commun ne le sait pas.
 
-- **Création d'une amende ou d'une incarcération** : connecté par Discord, le
+- **Création d'une amende ou d'une incarcération** : en session nominative, le
   garde inscrit est toujours celui qui saisit, **officier compris**. Le champ
   est figé dans le formulaire, et le serveur (`imposerGardeSession_`,
   `Amendes.js`) remplace toute valeur envoyée par le navigateur par le nom de
@@ -367,9 +369,17 @@ connecté ; une session par code commun ne le sait pas.
   refusé. Par code commun, le champ reste libre.
 - **Modification** : réservée aux officiers, elle reste le chemin de correction
   et garde le champ libre, avec le contrôle d'identité de la ligne.
-- **Case Payé** : connecté par Discord, un GARDE ne la change que sur les
+- **Case Payé** : en session nominative, un GARDE ne la change que sur les
   amendes dressées à son nom ; un officier, ou une session par code, sur
   toutes. Reversé reste aux officiers.
+- **Actes de la Prison** (sortie, annulation, note) : le garde qui signe est
+  celui de la session, par le même chemin (`ecrireActePrison_`).
+- **Modifications d'Effectifs** : la source du journal `HistoriqueEffectifs`
+  porte le nom de la session (« Application · Prénom Nom »).
+- Ce qui n'a pas de signataire reste sans nom : règlement d'une semaine de
+  Paye (`Présences!O`, une case), pointages, permis de chasse (décision du
+  2 novembre 2026), inventaire. En changer demande une colonne de plus et une
+  décision du propriétaire.
 
 ## Fiche de service
 

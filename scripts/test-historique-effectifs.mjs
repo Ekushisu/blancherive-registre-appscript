@@ -70,6 +70,8 @@ const context = vm.createContext({
 vm.runInContext(readFileSync('src/HistoriqueEffectifs.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/Discord.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/SynchroDiscord.js', 'utf8'), context);
+// La synchronisation recalcule aussi la table des comptes personnels (Comptes.js).
+vm.runInContext(readFileSync('src/Comptes.js', 'utf8'), context);
 const sync = () => context.synchroniserHistoriqueEffectifs_(ss);
 let result = sync();
 assert.equal(result.events.length, 0, 'Pas de fausses arrivées à l’initialisation');

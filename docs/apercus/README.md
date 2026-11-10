@@ -36,7 +36,8 @@ un message explicite plutôt que de laisser un écran de chargement muet.
 Générées par le script, donc rejouables à l’identique :
 
 - `effectifs-1440.png`, `effectifs-390.png` : onglets par corps, vue d'ensemble
-  et fiches de service. Le jeu de démonstration couvre huit corps, densité à
+  et fiches de service ; sur chaque fiche, le bloc « Connexion » du compte
+  personnel (compte actif, lien remis, sans compte). Le jeu de démonstration couvre huit corps, densité à
   laquelle les défauts d'affichage mobile apparaissent ; l'Académie militaire
   montre l'alias de grade (« Sergent-Instructeur », le grade de la feuille en
   rappel).
@@ -112,6 +113,10 @@ restent valables comme référence visuelle mais ne se régénèrent pas avec la
 commande ci-dessus.
 
 - `connexion-ordinateur.png`, `connexion-mobile.png` : entrée dans le registre.
+- `connexion-1440.png`, `connexion-390.png` : écran de connexion par compte
+  personnel (nom et mot de passe), « Code de l'intendance » derrière un lien,
+  consultation publique du Codex ; panneau centré sur la capture du jeu passée
+  en gravure (Blancherive depuis les pins).
 - `amendes-1440.png`, `amendes-390.png` : tableau à colonnes fixées et fiches mobiles.
 - `codex-1440.png`, `codex-390.png` : lecture du Codex, bandeau des
   nouveautés et puces « Nouveau » / « Modifié » sur les articles récents.

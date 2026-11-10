@@ -2,6 +2,46 @@
 
 Ce fichier décrit le snapshot reçu et doit être mis à jour après les changements importants.
 
+### Comptes personnels : connexion individuelle sans Discord (10 novembre 2026)
+
+- Décision du propriétaire : rétablir l'identité individuelle par un lien de
+  connexion remis par un officier, un mot de passe choisi par le membre, une
+  connexion par nom et mot de passe. Nouveau `Comptes.js` (feuille `Comptes`,
+  `COMPTES_SECRET`, `COMPTES_ACCES`), trois fonctions de jeton dans `Auth.js`
+  (`connecterCompte`, `activerCompte`, `changerMotDePasseCompte`),
+  `getModesConnexion().codes`, `getSessionInfo().via`. Interface :
+  `compte.jsx` / `compte.js`, écran de connexion refait (nom et mot de passe
+  en premier, code commun derrière un lien), bloc « Connexion » sur chaque
+  fiche des Effectifs, bouton « Changer mon mot de passe ». Détail :
+  AUTH_AND_ROLES « Connexion individuelle », DATA_MODEL « Comptes ».
+- Sens individuel rendu aux formulaires : tout ce qui se déclenchait sur une
+  session Discord (`imposerGardeSession_`, case Payé restreinte, nom en barre
+  latérale, repères « vous ») vaut pour `via: "compte"` ; la source des
+  modifications d'Effectifs porte le nom (« Application · Prénom Nom »).
+- Privilèges (décision provisoire du propriétaire, 10 novembre 2026) : tout ce
+  que faisait le code des officiers est ouvert à Sergent-Chef et plus, GARDE en
+  dessous, service actif seul — même seuil que la connexion Discord
+  (`DISCORD_SEUIL_OFFICIER`). Un modèle de privilèges par grade reste à
+  définir.
+- Abus prévenus (décision du propriétaire, même jour) : renouveler le lien d'un
+  compte déjà actif est réservé à Lieutenant et plus
+  (`COMPTES_SEUIL_NOUVEAU_LIEN`) ; feuille `JournalComptes` (qui a remis quel
+  lien à qui, activations, retraits, mots de passe), six derniers événements
+  et auteur du lien en cours montrés sur la fiche.
+- Codes communs : mécanisme inchangé. À faire par le propriétaire une fois les
+  comptes distribués : `AUTH_CODES = INTENDANT` dans les Script Properties
+  (coupe gardes et officiers, garde l'intendance). Procédure dans
+  AUTH_AND_ROLES « Mise en place ». Aucun push ni déploiement.
+- Écran de connexion refait à la demande du propriétaire (10 novembre 2026) :
+  panneau uni centré, sans parchemin texturé, sur la capture du jeu fournie
+  par le propriétaire, Blancherive depuis les pins, passée en gravure sépia
+  (`ui/assets/connexion-fond.jpg`, boussole et logo rognés ; `fort-dragon.jpg`
+  sort du bundle). Un autre fond se met en place en remplaçant l'import de
+  `CadreConnexion`.
+- Tests : `test-comptes.mjs`, `test-compte-ui.mjs` ; `test-auth-codes`,
+  `test-connexion-discord(-ui)`, `test-historique-effectifs` ajustés. Aperçus
+  connexion et effectifs régénérés.
+
 ### La Cité de Blancherive s'affiche « Garde de Fort-Dragon » (7 novembre 2026)
 
 - Décision du propriétaire. Nom affiché seul, par le mécanisme prévu :
@@ -1423,8 +1463,13 @@ sans quoi l'interface continue d'afficher l'ancien droit.
 ## Fonctionnel
 
 ### Auth
+- Comptes personnels depuis le 10 novembre 2026 : lien remis par un officier,
+  mot de passe choisi, connexion par nom ; rôle déduit de la fiche (OFFICIER
+  dès Sergent-Chef, service actif seul), session nominative de 30 jours
+  glissants (`Comptes.js`).
 - Login GARDE / OFFICIER / INTENDANT par code commun, chaque code activable
-  dans `AUTH_CODES` ; consultation publique `VISITEUR` sans code.
+  dans `AUTH_CODES` (à réduire à `INTENDANT` une fois les comptes
+  distribués) ; consultation publique `VISITEUR` sans code.
 - Token HMAC : code commun 3 jours, Discord 30 jours glissants, visiteur 2 h ;
   un code désactivé ou changé ferme ses sessions. Jeton gardé d'une ouverture
   du navigateur à l'autre.

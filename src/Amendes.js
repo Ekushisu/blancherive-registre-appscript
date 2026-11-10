@@ -349,21 +349,30 @@ function modifierAmende(token, row, data) {
 // ============================================================
 
 /*
-  Décision du propriétaire, 11 octobre 2026 : connecté par Discord, un membre
-  ne saisit une amende ou une incarcération qu'à son propre nom, officier
-  compris. Le serveur l'impose et ignore la valeur envoyée par le navigateur.
-  Une session par code n'identifie personne : le champ reste libre. La
-  modification d'une ligne, réservée aux officiers, reste le chemin de
-  correction et garde le champ libre.
+  Décision du propriétaire, 11 octobre 2026, étendue le 10 novembre 2026 aux
+  comptes personnels : dans une session nominative (compte personnel,
+  Comptes.js ; Discord autrefois), un membre ne saisit une amende ou une
+  incarcération qu'à son propre nom, officier compris. Le serveur l'impose et
+  ignore la valeur envoyée par le navigateur. Une session par code commun
+  n'identifie personne : le champ reste libre. La modification d'une ligne,
+  réservée aux officiers, reste le chemin de correction et garde le champ
+  libre. Même liste que `SESSIONS_NOMINATIVES` (Auth.js), répétée ici pour
+  que ce fichier se charge seul.
 */
+const SESSIONS_NOMINATIVES_REGISTRE = ["compte", "discord"];
+
+function sessionNominative_(auth) {
+  return Boolean(auth) && SESSIONS_NOMINATIVES_REGISTRE.includes(auth.via);
+}
+
 function gardeImposeSession_(auth) {
-  return auth && auth.via === "discord" ? String(auth.nom || "").trim() : "";
+  return sessionNominative_(auth) ? String(auth.nom || "").trim() : "";
 }
 
 function imposerGardeSession_(auth, data) {
-  if (!auth || auth.via !== "discord") return data;
+  if (!sessionNominative_(auth)) return data;
   const garde = gardeImposeSession_(auth);
-  if (!garde) throw new Error("Votre session Discord ne porte pas de nom : reconnectez-vous.");
+  if (!garde) throw new Error("Votre session ne porte pas de nom : reconnectez-vous.");
   return Object.assign({}, data || {}, { garde });
 }
 

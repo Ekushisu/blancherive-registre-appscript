@@ -120,6 +120,9 @@ function getEffectifs(token) {
     const fontColors = range.getFontColors();
     const fontWeights = range.getFontWeights();
 
+    // Compte personnel de connexion (Comptes.js) : état seul, jamais d'empreinte.
+    const etatsComptes = lireEtatsComptes_(ss);
+
     // Compte Discord rattaché (Discord.js) ; un lien en anomalie ne vaut pas.
     const liensDiscord = lireLiensDiscordEffectifs_(
       values,
@@ -243,6 +246,10 @@ function getEffectifs(token) {
 
         discordAnomalie:
           liensDiscord[i].anomalie,
+
+        compte:
+          etatsComptes.get(String(values[i][history.idIndex] || "")) ||
+          etatCompte_(null),
 
         styles: rowStyles
       });

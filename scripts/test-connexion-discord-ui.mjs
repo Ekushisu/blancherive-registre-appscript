@@ -121,14 +121,40 @@ const monter = async (modes, discordRetour) => {
 };
 const lien = () => nodes().find(n => n.type === 'a' && n.props.className?.includes('discord-button'));
 const champ = () => nodes().find(n => n.props?.id === 'access-code');
+const champNom = () => nodes().find(n => n.props?.id === 'login-nom');
+const champMdp = () => nodes().find(n => n.props?.id === 'login-mdp');
+const lienCode = () => nodes().find(n => n.type === 'button' && n.props.className === 'login-lien');
 const boutonCode = () => nodes().find(n => n.type === 'button' && text(n).includes('Entrer dans le registre'));
 
-// Discord fermé : écran d'avant, code en bouton principal.
-let appels = await monter({ discord: null });
+// Discord fermé : nom et mot de passe personnel en premier, le code commun derrière un lien.
+let appels = await monter({ discord: null, codes: ['OFFICIER', 'GARDE', 'INTENDANT'] });
 assert.deepEqual(appels, ['getModesConnexion']);
 assert.equal(lien(), undefined);
-assert.match(text(tree), /Identifiez-vous avec votre code de garde ou d’officier/);
+assert.match(text(tree), /votre nom tel qu’il figure au registre/);
+assert.ok(champNom() && champMdp(), 'Champs nom et mot de passe');
+assert.equal(champ(), undefined, 'Le code commun n’est pas affiché d’emblée');
 assert.equal(boutonCode().props.className, 'primary-button');
+assert.match(text(lienCode()), /Code d’accès commun/);
+lienCode().props.onClick();
+await render();
+assert.ok(champ(), 'Le lien ouvre le champ du code');
+assert.equal(champNom(), undefined);
+assert.match(text(tree), /Secours pendant la mise en place des comptes personnels/);
+lienCode().props.onClick();
+await render();
+assert.ok(champNom(), 'Retour au nom et au mot de passe');
+
+// Codes des gardes et officiers coupés : le lien ne parle plus que de l'intendance.
+await monter({ discord: null, codes: ['INTENDANT'] });
+assert.match(text(lienCode()), /Code de l’intendance/);
+lienCode().props.onClick();
+await render();
+assert.match(text(tree), /Argentier, Thanes et cuisines de la cour/);
+
+// Plus aucun code : pas de lien du tout.
+await monter({ discord: null, codes: [] });
+assert.equal(lienCode(), undefined);
+assert.ok(champNom());
 
 // Serveur injoignable : même écran, aucune erreur affichée.
 await monter(new Error('réseau'));
@@ -142,8 +168,8 @@ const href = lien().props.href;
 assert.match(href, new RegExp(`^${base.replace(/[?.]/g, '\\$&')}&state=[0-9a-f]{32}$`));
 assert.equal(lien().props.target, '_top', 'Toute la page part vers Discord, pas le cadre');
 assert.equal(boutonCode().props.className, 'secondary-button login-code-button');
-assert.match(text(tree), /Intendance et secours : code d’accès/);
-assert.match(text(tree), /ou avec un code d’accès/);
+assert.match(text(tree), /ou avec votre compte/);
+assert.ok(champNom() && champMdp(), 'Compte personnel sous le bouton Discord');
 stockage.clear();
 lien().props.onClick({ preventDefault() { assert.fail('Le lien doit partir'); } });
 assert.equal([...stockage.values()][0], new URL(href).searchParams.get('state'), 'State gardé au clic');
@@ -153,7 +179,8 @@ assert.equal(lien().props.href, href, 'State stable d’un rendu à l’autre');
 // Retour en cours : statut annoncé, tout figé, le lien ne repart pas.
 await monter({ discord: { url: base } }, { statut: 'connexion', erreur: '' });
 assert.match(text(nodes().find(n => n.props?.role === 'status')), /Connexion Discord en cours/);
-assert.equal(champ().props.disabled, true);
+assert.equal(champNom().props.disabled, true);
+assert.equal(champMdp().props.disabled, true);
 assert.equal(boutonCode().props.disabled, true);
 assert.equal(lien().props['aria-disabled'], true);
 let empeche = false;
@@ -163,6 +190,6 @@ assert.ok(empeche);
 // Erreur du retour : affichée comme une erreur de code.
 await monter({ discord: { url: base } }, { statut: '', erreur: 'Connexion Discord annulée.' });
 assert.equal(text(nodes().find(n => n.props?.role === 'alert')), 'Connexion Discord annulée.');
-assert.equal(champ().props['aria-describedby'], 'login-error');
+assert.equal(champMdp().props['aria-describedby'], 'login-error');
 
 console.log('Connexion Discord (navigateur) : state, retour dans l’adresse et écran de connexion validés.');

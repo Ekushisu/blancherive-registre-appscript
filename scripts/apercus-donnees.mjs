@@ -757,8 +757,12 @@ const membreEffectif = (id, prenom, nom, grade, corps, options = {}) => ({
   assermente: options.assermente !== false,
   discordId: options.discordId || "",
   discordAnomalie: options.discordAnomalie || "",
+  // Compte personnel de connexion (Comptes.js) : état seul.
+  compte: options.compte || { etat: "aucun", expire: "", activeLe: "", derniereConnexion: "" },
   styles: {}
 });
+const compteActif = (activeLe, derniereConnexion, historique = []) => ({ etat: "actif", expire: "", activeLe, derniereConnexion, inviteePar: "", lienRemisLe: "", historique });
+const lienRemis = (expire, inviteePar) => ({ etat: "invitation", expire, activeLe: "", derniereConnexion: "", inviteePar, lienRemisLe: new Date(Date.parse(expire) - 7 * 86400000).toISOString(), historique: [{ date: new Date(Date.parse(expire) - 7 * 86400000).toISOString(), action: "lien", par: inviteePar, detail: "Premier lien" }] });
 
 // Identifiants Discord fictifs, de 18 chiffres comme les vrais.
 const discord = n => String(300000000000000000n + BigInt(n));
@@ -774,9 +778,9 @@ export const effectifs = {
     styles: { grades: {}, corps: {}, specialites: {}, statuses: {} }
   },
   rows: [
-    membreEffectif(1, "Haldvar", "de Blancherive", "Commander", "Cité de Blancherive", { collecteur: true, discordId: discord(1) }),
-    membreEffectif(2, "Astrid", "Brise-Lame", "Capitaine", "Cité de Blancherive", { collecteur: true, discordId: discord(2) }),
-    membreEffectif(3, "Rorik", "Marche-Hiver", "Lieutenant", "Cité de Blancherive", { discordId: discord(3) }),
+    membreEffectif(1, "Haldvar", "de Blancherive", "Commander", "Cité de Blancherive", { collecteur: true, discordId: discord(1), compte: compteActif("2026-11-10T09:12:00Z", "2026-11-12T20:41:00Z") }),
+    membreEffectif(2, "Astrid", "Brise-Lame", "Capitaine", "Cité de Blancherive", { collecteur: true, discordId: discord(2), compte: compteActif("2026-11-10T18:03:00Z", "2026-11-11T07:55:00Z", [{ date: "2026-11-10T18:03:00Z", action: "activation", par: "Astrid Brise-Lame", detail: "Mot de passe choisi" }, { date: "2026-11-10T09:20:00Z", action: "lien", par: "Haldvar de Blancherive", detail: "Premier lien" }]) }),
+    membreEffectif(3, "Rorik", "Marche-Hiver", "Lieutenant", "Cité de Blancherive", { discordId: discord(3), compte: lienRemis("2026-11-17T18:30:00Z", "Astrid Brise-Lame") }),
     membreEffectif(4, "Mjoll", "Main-Sûre", "Sergent", "Cité de Blancherive"),
     membreEffectif(5, "Brynjar", "Poing-de-Fer", "Capitaine", "Garnison de Rivebois", { discordId: discord(5) }),
     membreEffectif(6, "Sigrid", "Vent-du-Nord", "Lieutenant-Chef", "Garnison de Rivebois", { discordId: discord(6) }),
@@ -858,7 +862,7 @@ export const permisChasse = {
   ]
 };
 
-export const sessionInfo = { role: "OFFICIER" };
+export const sessionInfo = { role: "OFFICIER", nom: "Astrid Brise-Lame", via: "compte" };
 
 /*
   Fiche de service : la forme suit `getFicheService()` de

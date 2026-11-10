@@ -226,7 +226,7 @@ assert.deepEqual({ role: contenu.role, via: contenu.via, membre: contenu.membre,
   { role: 'OFFICIER', via: 'discord', membre: uuid(1), discord: id(1), nom: 'Ragnhild Test' });
 assert.ok(!JSON.stringify(contenu).includes('acces-discord'), 'Le jeton Discord n’est pas transmis');
 assert.ok(!JSON.stringify(contenu).includes(SECRET_APPLI));
-assert.deepEqual({ ...context.getSessionInfo(jeton) }, { role: 'OFFICIER', nom: 'Ragnhild Test' });
+assert.deepEqual({ ...context.getSessionInfo(jeton) }, { role: 'OFFICIER', nom: 'Ragnhild Test', via: 'discord' });
 assert.equal(context.requireRole(jeton, ['OFFICIER']).role, 'OFFICIER');
 
 // Sergent : GARDE, refusé aux pages d'officier.

@@ -14,11 +14,12 @@
 
   Pour la même raison, toute fonction qui fabrique un jeton finit par `_` :
   `google.script.run` n'atteint pas les fonctions privées. Seules `login`,
-  `ouvrirSessionPublique` et `ouvrirSessionDiscord` délivrent un jeton au
+  `ouvrirSessionPublique`, `ouvrirSessionDiscord`, `connecterCompte`,
+  `activerCompte` et `changerMotDePasseCompte` délivrent un jeton au
   navigateur, et chacune décide elle-même du rôle ; `getSessionInfo` ne fait
-  que prolonger une session Discord déjà vérifiée, à l'identique. `scripts/test-auth-codes.mjs`
-  vérifie la liste des fonctions publiques de ce fichier et qu'aucune autre
-  fonction du dépôt n'appelle `createAuthToken_`.
+  que prolonger une session nominative déjà vérifiée, à l'identique.
+  `scripts/test-auth-codes.mjs` vérifie la liste des fonctions publiques de
+  ce fichier et qu'aucune autre fonction du dépôt n'appelle `createAuthToken_`.
 */
 const ROLE_PUBLIC = "VISITEUR";
 
@@ -57,13 +58,21 @@ const ROLES_CODE = ["OFFICIER", "GARDE", "INTENDANT"];
   - Discord : trente jours, prolongés à chaque visite (`getSessionInfo`), au
     plus une fois par jour. Ces sessions se ferment une à une par la table
     d'accès (fiche rétrogradée, partie, déliée) ou `AUTH_DISCORD`.
+  - Compte personnel (Comptes.js) : mêmes trente jours glissants ; la session
+    tombe quand la fiche ne donne plus ce rôle sous ce nom, ou quand le mot
+    de passe change (version du compte dans la table `COMPTES_ACCES`).
   - Visiteur du Codex : deux heures.
   Changer `AUTH_SECRET` ferme toutes les sessions, quelle que soit leur durée.
 */
 const DUREE_SESSION_CODE = 3 * 24 * 60 * 60 * 1000;
 const DUREE_SESSION_DISCORD = 30 * 24 * 60 * 60 * 1000;
 const RENOUVELLEMENT_SESSION_DISCORD = 24 * 60 * 60 * 1000;
+const DUREE_SESSION_COMPTE = DUREE_SESSION_DISCORD;
+const RENOUVELLEMENT_SESSION_COMPTE = RENOUVELLEMENT_SESSION_DISCORD;
 const DUREE_SESSION_PUBLIQUE = 2 * 60 * 60 * 1000;
+
+// Sessions qui savent qui est connecté ; un code commun n'identifie personne.
+const SESSIONS_NOMINATIVES = ["compte", "discord"];
 
 const LIBELLES_CODE = {
   OFFICIER: "des officiers",
@@ -231,9 +240,11 @@ function connexionDiscordActive_(props) {
 
 
 /*
-  Modes proposés par l'écran de connexion, avant toute session. Le code
-  d'accès est toujours proposé : c'est l'accès de l'intendance et le
-  secours. L'adresse d'autorisation Discord n'a rien de secret.
+  Modes proposés par l'écran de connexion, avant toute session. La connexion
+  par compte personnel est toujours proposée. `codes` liste les rôles dont le
+  code commun est encore accepté : l'écran en déduit le libellé du champ
+  (« code de l'intendance » quand gardes et officiers n'en ont plus). Cette
+  liste n'a rien de secret, pas plus que l'adresse d'autorisation Discord.
 */
 function getModesConnexion() {
 
@@ -246,8 +257,68 @@ function getModesConnexion() {
       : "";
 
   return {
-    discord: url ? { url: url } : null
+    discord: url ? { url: url } : null,
+    codes: rolesCodeActifs_(props)
   };
+}
+
+
+/*
+  Connexion par compte personnel (Comptes.js) : nom de la fiche et mot de
+  passe choisi par le membre. Le rôle vient de la fiche, jamais du compte ;
+  le jeton porte l'ID membre, le nom et la version du compte, confrontés à
+  la table `COMPTES_ACCES` à chaque appel.
+*/
+function connecterCompte(nom, motDePasse) {
+
+  const acces =
+    connecterCompteInterne_(nom, motDePasse);
+
+  return createAuthToken_(
+    acces.role,
+    DUREE_SESSION_COMPTE,
+    "compte",
+    { membre: acces.membre, nom: acces.nom, v: acces.version }
+  );
+}
+
+
+/*
+  Activation par le lien d'invitation remis par un officier : le membre
+  choisit son mot de passe et entre aussitôt dans le registre.
+*/
+function activerCompte(invitation, motDePasse) {
+
+  const acces =
+    activerCompteInterne_(invitation, motDePasse);
+
+  return createAuthToken_(
+    acces.role,
+    DUREE_SESSION_COMPTE,
+    "compte",
+    { membre: acces.membre, nom: acces.nom, v: acces.version }
+  );
+}
+
+
+/*
+  Changement de mot de passe par le titulaire. La version du compte change :
+  les autres sessions tombent, celle-ci reçoit un jeton neuf.
+*/
+function changerMotDePasseCompte(token, ancien, nouveau) {
+
+  const auth =
+    requireRole(token, ["GARDE", "OFFICIER"]);
+
+  const acces =
+    changerMotDePasseInterne_(auth, ancien, nouveau);
+
+  return createAuthToken_(
+    acces.role,
+    DUREE_SESSION_COMPTE,
+    "compte",
+    { membre: acces.membre, nom: acces.nom, v: acces.version }
+  );
 }
 
 
@@ -533,6 +604,30 @@ function verifyAuthToken(token) {
   }
 
 
+  /*
+    Session par compte personnel : refusée dès que la table d'accès
+    (Comptes.js) ne donne plus ce rôle à cette fiche sous ce nom, ou que
+    le mot de passe a changé depuis — compte retiré, fiche en réserve,
+    partie, rétrogradée, renommée, nouveau mot de passe.
+  */
+
+  if (payload.via === "compte") {
+
+    const table =
+      lireTableAccesComptes_(props);
+
+    if (
+      table[cleTableCompte_(payload.membre)] !==
+        entreeAccesCompte_(payload.role, payload.nom, payload.v)
+    ) {
+
+      throw new Error(
+        "Votre accès au registre a changé : reconnectez-vous."
+      );
+    }
+  }
+
+
   return payload;
 }
 
@@ -568,15 +663,16 @@ function getSessionInfo(token) {
     verifyAuthToken(token);
 
 
-  // Le nom n'existe que pour une session Discord : un code n'identifie personne.
+  // Le nom n'existe que pour une session nominative : un code n'identifie personne.
   const info = {
     role: auth.role,
-    nom: auth.nom || ""
+    nom: SESSIONS_NOMINATIVES.includes(auth.via) ? auth.nom || "" : "",
+    via: auth.via || ""
   };
 
 
   /*
-    Session Discord glissante : à chaque visite, au plus une fois
+    Session nominative glissante : à chaque visite, au plus une fois
     par jour, un jeton neuf de trente jours remplace l'ancien. Il
     n'est délivré qu'après `verifyAuthToken`, donc pour une fiche
     qui donne encore ce rôle à ce compte. Une session par code
@@ -596,6 +692,24 @@ function getSessionInfo(token) {
         membre: auth.membre,
         discord: auth.discord,
         nom: auth.nom
+      }
+    );
+  }
+
+
+  if (
+    auth.via === "compte" &&
+    auth.exp - Date.now() < DUREE_SESSION_COMPTE - RENOUVELLEMENT_SESSION_COMPTE
+  ) {
+
+    info.jeton = createAuthToken_(
+      auth.role,
+      DUREE_SESSION_COMPTE,
+      "compte",
+      {
+        membre: auth.membre,
+        nom: auth.nom,
+        v: auth.v
       }
     );
   }

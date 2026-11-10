@@ -17,17 +17,18 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync('src/Auth.js', 'utf8');
 
-// Surface publique : exactement ces sept fonctions.
+// Surface publique : exactement ces dix fonctions.
 const publiques = [...source.matchAll(/^function\s+([A-Za-z0-9_$]+)\s*\(/gm)]
   .map(m => m[1])
   .filter(nom => !nom.endsWith('_'))
   .sort();
 assert.deepEqual(publiques,
-  ['getModesConnexion', 'getSessionInfo', 'login', 'ouvrirSessionDiscord', 'ouvrirSessionPublique', 'requireRole', 'verifyAuthToken'],
+  ['activerCompte', 'changerMotDePasseCompte', 'connecterCompte', 'getModesConnexion', 'getSessionInfo', 'login',
+   'ouvrirSessionDiscord', 'ouvrirSessionPublique', 'requireRole', 'verifyAuthToken'],
   'Une fonction publique d’Auth.js est appelable par google.script.run : ' +
   'toute fonction qui fabrique un jeton doit finir par « _ »');
 
-// Seules trois fonctions délivrent un jeton, dans tout le dépôt.
+// Seules six fonctions délivrent un jeton, dans tout le dépôt (plus la prolongation de getSessionInfo).
 const emetteurs = [];
 for (const fichier of fs.readdirSync('src').filter(f => f.endsWith('.js'))) {
   const contenu = fs.readFileSync(`src/${fichier}`, 'utf8');
@@ -37,8 +38,10 @@ for (const fichier of fs.readdirSync('src').filter(f => f.endsWith('.js'))) {
     if (m[1] !== 'createAuthToken_' && /createAuthToken_\s*\(/.test(corps)) emetteurs.push(m[1]);
   });
 }
-// `getSessionInfo` ne fait que prolonger une session Discord déjà vérifiée (test-connexion-discord.mjs).
-assert.deepEqual(emetteurs.sort(), ['getSessionInfo', 'login', 'ouvrirSessionDiscord', 'ouvrirSessionPublique'],
+// `getSessionInfo` ne fait que prolonger une session nominative déjà vérifiée (test-connexion-discord.mjs, test-comptes.mjs).
+// Les trois fonctions des comptes personnels sont éprouvées par scripts/test-comptes.mjs.
+assert.deepEqual(emetteurs.sort(),
+  ['activerCompte', 'changerMotDePasseCompte', 'connecterCompte', 'getSessionInfo', 'login', 'ouvrirSessionDiscord', 'ouvrirSessionPublique'],
   'Une nouvelle fonction délivre un jeton : la relire, puis l’ajouter ici en connaissance de cause');
 
 let horloge = 1_000_000;
@@ -162,6 +165,10 @@ assert.throws(() => context.verifyAuthToken(intendant), /Token invalide/, 'Chang
 // Connexion Discord fermée dans le fichier livré, même avec la propriété à ACTIF : ni bouton, ni session, ni session déjà ouverte.
 regler({ AUTH_DISCORD: 'ACTIF', DISCORD_CLIENT_ID: '1', DISCORD_REDIRECT_URI: 'https://script.google.com/macros/s/ABC/exec' });
 assert.equal(context.getModesConnexion().discord, null, 'Aucun bouton Discord');
+assert.deepEqual([...context.getModesConnexion().codes], ['OFFICIER', 'GARDE', 'INTENDANT'], 'Codes actifs annoncés à l’écran de connexion');
+proprietes.AUTH_CODES = 'INTENDANT';
+assert.deepEqual([...context.getModesConnexion().codes], ['INTENDANT'], 'Codes des gardes et officiers coupés : seul celui de l’intendance est annoncé');
+delete proprietes.AUTH_CODES;
 assert.throws(() => context.ouvrirSessionDiscord('AbCdEf0123456789'), /n'est pas ouverte/);
 const sessionDiscord = context.createAuthToken_('OFFICIER', 60 * 60 * 1000, 'discord', { membre: 'u-1', discord: '1', nom: 'Ancien' });
 assert.throws(() => context.verifyAuthToken(sessionDiscord), /La connexion par Discord est fermée/, 'Une session Discord déjà ouverte est refusée');
@@ -174,7 +181,7 @@ const longue = context.login('garde');
 assert.equal(charge(longue).exp - debut, 3 * 24 * 60 * 60 * 1000);
 assert.equal(charge(context.ouvrirSessionPublique()).exp - debut, 2 * 60 * 60 * 1000);
 horloge += 2 * 24 * 60 * 60 * 1000;
-assert.deepEqual({ ...context.getSessionInfo(longue) }, { role: 'GARDE', nom: '' }, 'Session par code jamais prolongée');
+assert.deepEqual({ ...context.getSessionInfo(longue) }, { role: 'GARDE', nom: '', via: 'code' }, 'Session par code jamais prolongée');
 horloge = debut + 3 * 24 * 60 * 60 * 1000 + 1;
 assert.throws(() => context.verifyAuthToken(longue), /Session expirée/);
 

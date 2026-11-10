@@ -94,6 +94,8 @@ function synchroniserHistoriqueEffectifsSansVerrou_(ss, source) {
   effacerLiensDiscordOrphelins_(sheet, headers, values, schema);
   // Table d'accès des sessions Discord, recalculée à chaque passage (Discord.js).
   const accesDiscord = mettreAJourAccesDiscord_(ss, sheet, schema, values, idIndex, headers);
+  // Table d'accès des comptes personnels, et noms de la feuille Comptes (Comptes.js).
+  const accesComptes = mettreAJourAccesComptes_(ss, members);
   if (pending.length) {
     const start = journal.getLastRow() + 1;
     const required = start + pending.length - 1;
@@ -113,7 +115,7 @@ function synchroniserHistoriqueEffectifsSansVerrou_(ss, source) {
     corps: current.get(String(row[2])).corps,
     changes: JSON.parse(String(row[5])), source: String(row[7])
   })).reverse();
-  return { members, events, idIndex, days: HISTORIQUE_EFFECTIFS_DAYS, accesDiscord };
+  return { members, events, idIndex, days: HISTORIQUE_EFFECTIFS_DAYS, accesDiscord, accesComptes };
 }
 
 function historiqueEffectifsPourRole_(history, role) {
@@ -137,19 +139,32 @@ function installerDeclencheurHistoriqueEffectifs_(ss) {
   });
 }
 
+// Une édition à la main des Effectifs, ou de la feuille Comptes (compte retiré), recalcule les tables d'accès.
 function surModificationHistoriqueEffectifs_(e) {
-  if (!e || !e.source || e.source.getId() !== SPREADSHEET_ID || !e.range || e.range.getSheet().getName() !== "Effectifs") return;
+  if (!e || !e.source || e.source.getId() !== SPREADSHEET_ID || !e.range) return;
+  const feuille = e.range.getSheet().getName();
+  if (feuille !== "Effectifs" && feuille !== "Comptes") return;
   avecVerrouHistoriqueEffectifs_(() => synchroniserHistoriqueEffectifsSansVerrou_(e.source, "Google Sheets"));
 }
 
+/*
+  Source d'une modification par l'application : signée du nom de la session
+  quand elle en porte un (compte personnel, Discord autrefois) ; « Application »
+  seul par code commun, qui n'identifie personne.
+*/
+function sourceMutationEffectifs_(auth) {
+  const nom = auth && ["compte", "discord"].includes(auth.via) ? String(auth.nom || "").trim() : "";
+  return nom ? "Application · " + nom : "Application";
+}
+
 function executerMutationHistoriqueEffectifs_(token, data, mutation) {
-  requireRole(token, ["OFFICIER"]);
+  const auth = requireRole(token, ["OFFICIER"]);
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   let apres = null;
   avecVerrouHistoriqueEffectifs_(() => {
     synchroniserHistoriqueEffectifsSansVerrou_(ss, "Détection");
     try { mutation(token, data); }
-    finally { apres = synchroniserHistoriqueEffectifsSansVerrou_(ss, "Application"); }
+    finally { apres = synchroniserHistoriqueEffectifsSansVerrou_(ss, sourceMutationEffectifs_(auth)); }
   });
   // Rôles Discord, hors du verrou ; une panne n'annule jamais la modification (SynchroDiscord.js).
   appliquerRolesDiscordApresModification_(ss, apres);

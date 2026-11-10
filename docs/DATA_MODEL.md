@@ -107,8 +107,51 @@ rôles placés au-dessus du bot : ignorés et signalés par numéro de ligne.
 - `Effectifs` : colonne technique `ID membre` ajoutée après la dernière colonne utilisée, sans déplacer de colonne. UUID attribué aux membres et conservé lors des tris de lignes complètes. Ne pas modifier cette colonne ; inclure celle-ci dans les tris et déplacements manuels. Un UUID dupliqué est réattribué aux occurrences suivantes.
 - `HistoriqueEffectifs` : feuille créée automatiquement. Colonnes A:H : `ID événement`, `Date ISO`, `ID membre`, `Type`, `Nom`, `Changements JSON`, `État JSON`, `Source`.
 - `État JSON` conserve prénom, nom, grade, corps et statut pour comparer les états successifs. `Changements JSON` conserve les valeurs avant/après des arrivées, noms (type `nom`, « Prénom Nom », depuis le 12 octobre 2026), grades et corps. Les événements `reference` ne produisent pas de notification ; ils initialisent l'état ou suivent une modification non notifiée. Une ligne `initialisation` est écrite même si les effectifs sont vides.
+- `Source` : « Google Sheets », « Détection », ou « Application », suivie depuis le 10 novembre 2026 de « · Prénom Nom » quand la modification vient d'une session nominative (compte personnel).
 - Journal ajouté par blocs, jamais purgé automatiquement. Seuls les événements des 14 derniers jours des membres encore présents sont transmis à l'interface. Le rôle GARDE ne reçoit que ceux des membres actifs ou réservistes, comme l'organigramme.
 - Les états « Vu » sont conservés par ID événement dans le stockage local du navigateur, avec une durée de 14 jours. Ils ne sont ni communs à tous les officiers ni synchronisés entre appareils.
+
+## Comptes — comptes personnels de connexion
+
+Feuille créée par l'application à la première invitation (`Comptes.js`,
+décision du propriétaire du 10 novembre 2026 ; voir AUTH_AND_ROLES,
+« Connexion individuelle »). Une ligne par membre, tout au format texte `@` :
+
+| Col. | En-tête | Contenu |
+|---|---|---|
+| A | `ID membre` | même valeur que `Effectifs!ID membre` ; la ligne ne vaut que pour une fiche existante |
+| B | `Nom` | « Prénom Nom » de la fiche, informatif, rafraîchi par la synchronisation (renommage) ; c'est le nom tapé à la connexion |
+| C | `Sel` | aléatoire, propre à la ligne |
+| D | `Empreinte` | `<itérations>$<HMAC-SHA256 itéré, base64 web>` du sel et du mot de passe par `COMPTES_SECRET` ; vide tant que le compte n'est pas activé |
+| E | `Version` | incrémentée à chaque mot de passe choisi ; portée par le jeton, un changement ferme les sessions |
+| F | `Invitation` | empreinte HMAC du jeton du lien en cours, vide sinon |
+| G | `Invitation expire` | ISO, sept jours après la remise |
+| H | `Invitée par` | nom de l'officier (session nominative) ou « code des officiers » |
+| I | `Activé le` | ISO du dernier mot de passe choisi |
+| J | `Dernière connexion` | ISO |
+
+- Écriture : seulement par les helpers de `Comptes.js` (`ecrireCompte_`,
+  `supprimerLigneCompte_`), ligne entière sous verrou. Aucun mot de passe,
+  aucun jeton de lien en clair : la feuille seule ne permet ni de se connecter
+  ni de forger une empreinte (le secret est dans les Script Properties).
+- Supprimer une ligne à la main retire le compte : sessions fermées au passage
+  suivant de la synchronisation, que le déclencheur d'édition lance aussi sur
+  cette feuille.
+- Script Properties associées : `COMPTES_SECRET` (créé par le serveur, ne pas
+  copier ; le changer invalide tous les mots de passe) et `COMPTES_ACCES`
+  (table technique, recalculée ; ne pas éditer).
+
+### JournalComptes
+
+Feuille créée par l'application au premier événement, à ajout seul, écrite
+par `journaliserCompte_` seulement. Colonnes A:F : `Date ISO`, `ID membre`,
+`Nom`, `Action` (`lien`, `activation`, `retrait`, `mot de passe`), `Par`
+(nom de la session nominative, « code des officiers », ou le titulaire pour
+une activation ou un changement de mot de passe), `Détail` (« Premier lien »,
+« Lien remis à nouveau », « Nouveau lien, compte déjà actif », échéance ;
+« Mot de passe choisi » ; « Compte actif retiré » ; …). Jamais de secret ni
+d'empreinte. `getEffectifs` renvoie les six derniers événements d'un membre
+(`compte.historique`), du plus récent au plus ancien.
 
 ## Présences
 

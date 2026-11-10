@@ -18,6 +18,11 @@ Principaux modules :
     l'Organigramme de l'application les remplaçant
 
 - `Auth.js`
+  - connexion par compte personnel : `connecterCompte(nom, motDePasse)`,
+    `activerCompte(invitation, motDePasse)`, `changerMotDePasseCompte` ;
+    jeton `via: "compte"` portant `membre`, `nom` et `v`, confronté à la
+    table `COMPTES_ACCES` à chaque appel ; `getModesConnexion` renvoie
+    `codes`, les rôles dont le code commun est encore accepté
   - login par mot de passe de rôle, activable par rôle (`AUTH_CODES`) ; un code
     désactivé ferme aussi les sessions ouvertes avec lui
   - token HMAC, avec son origine `via`
@@ -32,6 +37,20 @@ Principaux modules :
     jeton `via: "discord"` portant `membre`, `discord` et `nom` ;
     `verifyAuthToken` le confronte à la table d'accès `DISCORD_ACCES` à chaque
     appel ; `getSessionInfo` renvoie le nom d'une session Discord
+
+- `Comptes.js`
+  - comptes personnels (décision du 10 novembre 2026) : feuille `Comptes`,
+    secret du serveur `COMPTES_SECRET`, empreintes HMAC itérées, liens
+    d'invitation à usage unique, pause après huit essais, table d'accès
+    `COMPTES_ACCES` recalculée par la synchronisation de l'historique
+    (`mettreAJourAccesComptes_`)
+  - publiques : `lireInvitationCompte` (sans jeton), `creerInvitationCompte`
+    (OFFICIER ; Lieutenant et plus pour un compte déjà actif,
+    `verifierSeuilNouveauLien_`) et `supprimerCompte` (OFFICIER) ; aucune ne
+    fabrique de jeton
+  - journal `JournalComptes` à ajout seul (`journaliserCompte_`,
+    `lireJournalComptes_`) : liens remis, activations, retraits, mots de passe
+  - `lireEtatsComptes_` : état par membre pour `getEffectifs` (`compte`)
 
 - `Organigramme.js`
   - lecture des effectifs et construction de l'organigramme
@@ -230,7 +249,9 @@ Le source frontend est dans `ui/` :
 - `ui/src/brouillon.js` : brouillon `sessionStorage` des formulaires de création Amendes/Prison, effacé à l'enregistrement ;
 - `ui/src/styles.css` : styles ;
 - `ui/src/theme.css` : thème parchemin/sépia et adaptations mobiles, chargé après les styles structurels ;
-- `ui/src/navigation.jsx` : connexion illustrée, navigation latérale sur ordinateur et inférieure sur mobile ;
+- `ui/src/navigation.jsx` : écrans d'entrée (`CadreConnexion` : capture du jeu passée en gravure sépia en fond pleine page, `ui/assets/connexion-fond.jpg`, panneau uni centré ; `Login` : nom et mot de passe personnel, code commun derrière un lien libellé d'après `getModesConnexion().codes`), navigation latérale sur ordinateur et inférieure sur mobile, nom de la session et bouton « Changer mon mot de passe » (`via === "compte"`) ;
+- `ui/src/compte.js` : comptes personnels, fonctions pures — lecture du paramètre `invitation` par `google.script.url`, contrôle du mot de passe, libellé du champ de code, description de l'état d'un compte (`decrireCompte`), mot de recherche ;
+- `ui/src/compte.jsx` : écran d'activation du lien (`ActivationCompte`), bloc « Connexion » de la fiche d'un membre (`AccesCompte` : lien à copier, retrait), dialogue de changement de mot de passe (`MotDePasseDialog`) ;
 - `ui/assets/` : copies web des illustrations/papier du manuel, incorporées au build ;
 - `ui/src/grades.jsx` : descriptions doctrinales des grades affichées dans l'Organigramme, table statique sans fonction serveur associée ;
 - `ui/src/semaine.js` : libellés de semaine calculés depuis le lundi ISO renvoyé par le serveur (`libelleSemaine`, `dateLundi`, `titreSemaine`, `numeroSemaine`, `retardSemaines`, tri décroissant) ; seul endroit où un numéro de semaine est produit ;
@@ -308,7 +329,16 @@ et `estGradeHuscarl` (`Organigramme.js`).
 `EFFECTIFS_WEB_ACTIVE_STATUS` et `EFFECTIFS_WEB_DONNEES_SHEET_NAME`
 (`Effectifs.js`), et `synchroniserHistoriqueEffectifs_` à la connexion.
 `Auth.js` utilise `urlAutorisationDiscord_`, `identifierCompteDiscord_`,
-`accesCompteDiscord_`, `lireTableAccesDiscord_` et `entreeAccesDiscord_`.
+`accesCompteDiscord_`, `lireTableAccesDiscord_` et `entreeAccesDiscord_`
+(`Discord.js`), et `connecterCompteInterne_`, `activerCompteInterne_`,
+`changerMotDePasseInterne_`, `lireTableAccesComptes_`, `cleTableCompte_` et
+`entreeAccesCompte_` (`Comptes.js`). `Comptes.js` utilise `roleRegistreDiscord_`,
+`lireOrdreGradesDiscord_` et `empreinteNomDiscord_` (`Discord.js`) et
+`synchroniserHistoriqueEffectifs_` ; en retour la synchronisation appelle
+`mettreAJourAccesComptes_`, et `Effectifs.js` `lireEtatsComptes_` : les suites
+qui chargent `HistoriqueEffectifs.js` chargent aussi `Comptes.js`.
+`Amendes.js` porte sa propre liste des sessions nominatives
+(`sessionNominative_`), identique à `SESSIONS_NOMINATIVES` d'`Auth.js`.
 `SynchroDiscord.js` utilise de `Discord.js` `lireConfigBotDiscord_`,
 `appelerDiscordBot_`, `lireMembresServeurDiscord_`, `lireOrdreGradesDiscord_`
 et `cleGradeDiscord_`, et l'index `accesDiscord` (grade, corps, statut) de la

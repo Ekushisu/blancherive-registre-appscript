@@ -358,3 +358,49 @@ input.champ-impose{background:#efe3c8;color:#594024;cursor:not-allowed}
 .plan-salle rect{fill:#fbf6ea}
 .plan-cellule rect{fill:#f2e8d1}.plan-porte{fill:#f6efdd}.plan-porte-principale{fill:#d9b24c}
 svg.plan-prison{width:100%;height:auto;max-width:380px;aspect-ratio:445/495}
+
+/* Comptes individuels (compte.jsx) : écran de connexion, activation du lien, bloc Connexion de la fiche d'un membre. */
+.login-aide{display:block;margin-top:14px;color:#87745a;font-size:12px;line-height:1.6}
+.login-lien{display:block;width:100%;margin-top:16px;padding:8px 0;border:0;background:transparent;color:#72501f;font-size:13px;text-decoration:underline;text-underline-offset:3px;text-align:center;cursor:pointer}
+.login-lien:hover{color:#49321e}.login-lien:disabled{opacity:.6;cursor:default}
+.login-card .login-aide+.login-lien{margin-top:10px}
+.session-boutons{display:flex;align-items:center;gap:6px}
+.effectifs-page .effectif-badge-compte{border-left-color:#5b7a4a;background:#e4ead95e;color:#3f5a30}
+.effectifs-page .effectif-badge-invitation{border-left-color:#b08a3c;background:#f3e7c75e;color:#6d5118}
+.acces-compte{display:grid;gap:10px;margin-top:12px;padding:12px 14px;border:1px solid #d9c9a6;border-left:3px solid #b08d50;border-radius:3px;background:#f6eed9}
+.acces-compte-etat{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.acces-compte-etat small{color:#6a583f;font-size:12px;line-height:1.6}
+.acces-compte-actions{display:flex;flex-wrap:wrap;gap:8px}
+.acces-compte-actions button{font-size:12px;padding:8px 12px;min-height:38px}
+.lien-invitation{display:grid;gap:8px;padding:12px;border:1px dashed #b08d50;border-radius:3px;background:#fffaf0}
+.lien-invitation p{margin:0;font-size:13px;line-height:1.6;color:#5e472a}
+.lien-invitation-champ{display:flex;gap:8px;min-width:0}
+.lien-invitation-champ input{flex:1;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #c7b594;border-radius:3px;background:#fff;color:var(--ink);font-size:12px;font-family:ui-monospace,Consolas,monospace}
+.lien-invitation-champ button{flex:none;min-height:40px;padding:8px 12px;font-size:12px}
+.mdp-dialogue{width:min(480px,100%)}.mdp-dialogue .law-modal-body{display:grid;gap:16px}.mdp-dialogue .field{display:grid;gap:6px}.mdp-dialogue .field input{width:100%;box-sizing:border-box}
+@media(max-width:600px){.lien-invitation-champ{flex-direction:column}.acces-compte-actions button{flex:1}}
+
+/* Écrans d'entrée (connexion, activation) : panorama gravé en fond pleine page, panneau uni au centre (10 novembre 2026). */
+.connexion{min-height:100dvh;display:grid;place-items:center;padding:32px 16px;box-sizing:border-box;background:#e9dcc0 var(--connexion-fond) center/cover no-repeat;position:relative;isolation:isolate}
+.connexion:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#f3e9d340 0%,#efe3c866 55%,#e6d6b3a6 100%)}
+.connexion-carte{width:100%;max-width:440px;box-sizing:border-box;padding:36px 40px 30px;background:#fdf8eef5;border:1px solid #c9b48a;border-radius:6px;box-shadow:0 24px 60px #3a281440,0 2px 6px #3a281426;backdrop-filter:blur(6px)}
+.connexion-entete{display:grid;justify-items:center;text-align:center;gap:4px;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid #dccba9}
+.connexion-sceau{display:grid;place-items:center;width:58px;height:70px;margin-bottom:8px;border:1px solid #b69351;border-radius:50% 50% 44% 44%;background:#f3e8d0;box-shadow:inset 0 0 0 4px #fdf8ee}
+.connexion-sceau img{width:44px;height:52px;object-fit:cover;border-radius:50% 50% 44% 44%;mix-blend-mode:multiply}
+.connexion-entete h1{margin:4px 0 0;font-family:Georgia,serif;font-weight:400;font-size:30px;letter-spacing:-.02em;line-height:1.15;color:#49321e}
+.connexion-devise{margin:2px 0 0;font-family:Georgia,serif;font-size:14px;letter-spacing:.06em;color:#7b6038}.connexion-devise em{color:#936729;font-style:italic}
+.connexion-carte .connexion-section{margin:0 0 6px}
+.connexion-carte h2{margin:0 0 14px;font-size:24px;font-weight:400;letter-spacing:-.02em;color:#49321e}
+.connexion-formulaire>p{font-size:14px;line-height:1.7;color:#756247;margin:0 0 20px}
+.connexion-formulaire label{display:block;color:#674d2c;font-size:12px;font-weight:600;margin-bottom:8px}
+.connexion-formulaire input{width:100%;box-sizing:border-box;min-height:48px;padding:12px 14px;border:1px solid #baa173;background:#fffdf7;border-radius:4px;margin-bottom:14px;font-size:16px;color:var(--ink)}
+.connexion-formulaire input:focus{outline:2px solid #b08d50;outline-offset:1px;border-color:#b08d50}
+.connexion-formulaire .primary-button,.connexion-formulaire .discord-button,.connexion-formulaire .login-code-button{width:100%;display:flex;justify-content:space-between;align-items:center;min-height:50px;padding:14px 18px;box-sizing:border-box;margin-top:4px}
+.connexion-formulaire .discord-button{text-decoration:none}.connexion-formulaire .discord-button[aria-disabled]{opacity:.6;pointer-events:none}
+.connexion-formulaire .error{margin-top:14px}
+.connexion-formulaire p.login-statut{color:#634526;font-weight:600;margin-bottom:16px}
+.connexion-formulaire .login-public{margin-top:20px;padding-top:18px}
+.connexion-formulaire .login-footnote{margin-top:18px;padding-top:16px}
+@media(max-width:600px){.connexion{padding:16px;align-items:start}.connexion-carte{padding:28px 20px 22px;border-radius:5px}.connexion-entete{padding-bottom:16px;margin-bottom:16px}.connexion-entete h1{font-size:26px}.connexion-carte h2{font-size:22px}.connexion-sceau{width:50px;height:60px}.connexion-sceau img{width:38px;height:45px}}
+
+.acces-compte-historique{font-size:12px;color:#6a583f}.acces-compte-historique summary{cursor:pointer;color:#72501f;font-weight:600}.acces-compte-historique ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px;line-height:1.5}

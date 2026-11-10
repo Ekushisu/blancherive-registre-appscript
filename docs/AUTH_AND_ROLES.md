@@ -39,6 +39,15 @@ d'écriture, sur aucune page.
 
 ## Authentification
 
+Deux voies, depuis le 10 novembre 2026 (décision du propriétaire) :
+- **compte personnel** (`Comptes.js`, section « Connexion individuelle » plus
+  bas) : chaque membre de la Garde se connecte avec son nom et un mot de passe
+  qu'il a choisi, après avoir reçu d'un officier un lien de connexion. La
+  session est nominative ;
+- **code commun** par rôle, décrit ci-dessous : accès de l'intendance et
+  secours. Les codes des gardes et des officiers sont à couper une fois les
+  comptes distribués (`AUTH_CODES = INTENDANT`, voir « Mise en place »).
+
 `Auth.js` utilise des Script Properties :
 - `PASSWORD_GARDE`
 - `PASSWORD_OFFICIER`
@@ -82,7 +91,8 @@ fabriqué ou si un code a fuité.
 
 Toute fonction de premier niveau sans `_` final est appelable depuis le
 navigateur par `google.script.run`, en accès anonyme. Seules `login`,
-`ouvrirSessionPublique` et `ouvrirSessionDiscord` délivrent un jeton, et chacune
+`ouvrirSessionPublique`, `ouvrirSessionDiscord`, `connecterCompte`,
+`activerCompte` et `changerMotDePasseCompte` délivrent un jeton, et chacune
 décide elle-même du rôle ; la fabrique du jeton est `createAuthToken_`, privée.
 
 Jusqu'au 10 octobre 2026, elle s'appelait `createAuthToken` et était donc
@@ -145,6 +155,123 @@ pourrait rouvrir les codes.
 rallumer un code que connaissent les radiés et les déserteurs, que Discord, lui,
 aurait écartés. Réactiver un rôle, c'est donc aussi changer la valeur de son
 `PASSWORD_<RÔLE>`. Le code ne peut pas l'imposer.
+
+## Connexion individuelle — comptes personnels (10 novembre 2026)
+
+Décision du propriétaire, 10 novembre 2026, après le refus de la connexion
+Discord par le staff : rétablir une identité individuelle sans Discord. Code
+dans `Comptes.js` (feuille `Comptes`, voir DATA_MODEL) et `Auth.js`,
+interface dans `ui/src/compte.jsx`, `ui/src/compte.js` et
+`ui/src/navigation.jsx`. Tests : `scripts/test-comptes.mjs`,
+`scripts/test-compte-ui.mjs`.
+
+### Parcours
+
+1. **Lien de connexion** — un OFFICIER, depuis la fiche d'un membre (page
+   Effectifs, bloc « Connexion »), génère un lien `…/exec?invitation=<jeton>`
+   (`creerInvitationCompte`) et le remet au membre, et à lui seul : message
+   privé, en main propre. Le lien vaut sept jours et une seule activation ; il
+   n'est pas conservé par le registre, qui n'en garde que l'empreinte. Pour un
+   nouveau membre, le lien se génère juste après l'ajout de sa fiche. Une
+   fiche qui ne donne pas accès (réserve, départ) n'a pas de lien à recevoir.
+2. **Activation** — le lien ouvre un écran où le membre voit sa fiche (nom,
+   grade, corps) et choisit un mot de passe : huit caractères au moins, jamais
+   son nom (`activerCompte`). Il entre aussitôt dans le registre.
+3. **Connexion** — nom tel que la fiche l'écrit (« Prénom Nom », sans égard à
+   la casse, aux accents ni aux espaces) et mot de passe (`connecterCompte`).
+   Huit essais infructueux sur un nom entraînent un quart d'heure de pause,
+   compté dans le cache du script. Un nom inconnu et un mot de passe faux
+   reçoivent le même refus.
+4. **Mot de passe oublié** — un officier génère un nouveau lien ; l'ancien mot
+   de passe reste valable jusqu'à l'activation, qui le remplace et ferme les
+   autres sessions. **Pour prévenir les abus** (un nouveau lien sur un compte
+   actif permet de prendre la place du titulaire), ce renouvellement est
+   réservé à **Lieutenant et plus** dans l'ordre de `Données!A`
+   (`COMPTES_SEUIL_NOUVEAU_LIEN`, décision du propriétaire du 10 novembre
+   2026) ; le premier lien d'un membre sans compte reste ouvert à tout
+   OFFICIER, et une session par code commun, sans grade, n'est pas limitée
+   (voie de mise en place, qui disparaît avec `AUTH_CODES = INTENDANT`). Le titulaire change lui-même son mot de passe depuis la
+   barre latérale (`changerMotDePasseCompte`, mot de passe actuel exigé,
+   autres sessions fermées).
+5. **Journal** — chaque lien remis (premier, remis à nouveau, renouvelé sur
+   un compte actif), chaque activation, retrait et changement de mot de passe
+   est consigné dans la feuille `JournalComptes` (date, membre, action, par
+   qui, détail), à ajout seul ; les six derniers événements d'un membre et
+   l'auteur du lien en cours sont montrés aux officiers sur sa fiche.
+6. **Retrait** — « Retirer le compte » (`supprimerCompte`, OFFICIER) efface
+   mot de passe et lien ; la session tombe à l'appel suivant. Supprimer la
+   ligne dans la feuille `Comptes` revient au même, au passage suivant de la
+   synchronisation (déclencheur d'édition installé sur cette feuille aussi).
+
+### Le tableur décide
+
+Comme pour Discord, le compte ne porte aucun droit : le rôle se déduit de la
+fiche `Effectifs` rattachée (`roleRegistreDiscord_`, Discord.js, réutilisé) :
+- **service actif seul** ; réserve, départ ou statut mal saisi : aucun accès,
+  même avec le bon mot de passe ;
+- **OFFICIER dès Sergent-Chef** (`DISCORD_SEUIL_OFFICIER`) et tout grade
+  au-dessus dans `Données!A2:A`, **GARDE en dessous** et pour un grade absent
+  de la liste. Décision provisoire du propriétaire, 10 novembre 2026 : tout ce
+  que faisait le code des officiers est ouvert aux Sergents-Chefs et plus ;
+  des privilèges plus fins par grade restent à définir.
+
+Table d'accès `COMPTES_ACCES` (Script Property, technique, ne pas éditer) :
+douze premiers caractères de l'ID membre → `O|nnnn|v` (initiale du rôle,
+empreinte du nom, version du compte). Recalculée à chaque synchronisation de
+l'historique des Effectifs (pages, modifications par l'application,
+déclencheur des éditions à la main, connexion, activation), relue par
+`verifyAuthToken` à chaque appel d'une session `via: "compte"`. Une fiche
+rétrogradée, promue, passée en réserve, partie ou renommée, un compte retiré ou
+un mot de passe changé ferment donc la session à l'appel suivant ; une
+promotion prend effet à la reconnexion. La synchronisation rafraîchit aussi la
+colonne Nom de la feuille `Comptes` : un membre renommé se connecte sous son
+nouveau nom.
+
+### Jeton et session
+
+Jeton habituel, `via: "compte"`, avec `membre` (ID membre), `nom` et `v`
+(version du compte). Trente jours, glissants comme Discord (`getSessionInfo`,
+au plus une fois par jour). `getSessionInfo` renvoie `via`, que l'interface
+utilise pour proposer le changement de mot de passe. Tout ce qu'une session
+Discord déclenchait vaut pour une session par compte : saisie à son propre nom
+(`imposerGardeSession_`, officier compris), case Payé restreinte pour un
+GARDE, nom dans la barre latérale, repères « vous », source « Application ·
+Prénom Nom » dans `HistoriqueEffectifs` pour les modifications d'Effectifs.
+
+### Secrets et empreintes
+
+- Le mot de passe n'est jamais écrit ni journalisé : la feuille garde un sel
+  par ligne et une empreinte HMAC-SHA256 itérée (`COMPTES_ITERATIONS`, 2 000
+  passes), calculée avec `COMPTES_SECRET` — propriété du script créée par le
+  serveur à la première invitation, jamais renvoyée au navigateur. Sans ce
+  secret, une copie de la feuille ne permet ni de retrouver un mot de passe ni
+  d'en forger un : un éditeur du classeur peut retirer un compte, pas se faire
+  passer pour son titulaire.
+- Effacer ou changer `COMPTES_SECRET` invalide tous les mots de passe et
+  toutes les invitations : chacun doit recevoir un nouveau lien. Il n'est pas
+  dérivé d'`AUTH_SECRET`, que l'on peut changer pour fermer les sessions sans
+  toucher aux mots de passe.
+- Le jeton d'invitation (32 caractères hexadécimaux, aléatoire) n'existe que
+  dans l'adresse remise ; la feuille n'en garde que l'empreinte HMAC. Les
+  comparaisons d'empreintes se font en temps constant.
+- Limite connue : Apps Script n'offre ni bcrypt ni PBKDF2 ; l'itération HMAC
+  et le secret du serveur en tiennent lieu. `connecterCompte`,
+  `activerCompte` et `lireInvitationCompte` sont publiques, comme `login` ;
+  la pause par nom limite les essais, pas les appels.
+
+### Mise en place
+
+1. `clasp push`, puis publication du déploiement à la main (voir AGENTS.md).
+2. Se connecter avec le code des officiers, ouvrir les Effectifs, générer son
+   propre lien et activer son compte.
+3. Remettre un lien à chaque officier, puis à chaque garde ; chaque nouveau
+   membre reçoit le sien à son inscription.
+4. Une fois les comptes distribués : `AUTH_CODES = INTENDANT` dans les Script
+   Properties. Les codes des gardes et des officiers sont alors refusés et
+   leurs sessions fermées à l'appel suivant ; l'écran de connexion ne propose
+   plus que « Code de l'intendance » derrière le formulaire nominatif. Les
+   propriétés `PASSWORD_GARDE` et `PASSWORD_OFFICIER` restent en place pour un
+   rallumage d'urgence (en changer la valeur avant).
 
 ## Connexion par Discord — retirée, code conservé
 
@@ -374,13 +501,13 @@ relire et corriger `RolesDiscord`, la protéger, régler `DISCORD_SYNCHRO` à
 `SIMULATION` le temps de quelques passages, puis à `ACTIF`. Le rôle du bot doit
 être au-dessus d'Officier de Blancherive et de tous les rôles de la feuille.
 
-### Ce que change une session Discord
+### Ce que change une session nominative (compte personnel ; Discord autrefois)
 
-- `ajouterAmende`, `ajouterPrison` : en session Discord, le garde inscrit est
+- `ajouterAmende`, `ajouterPrison` : en session nominative, le garde inscrit est
   celui de la session, officier compris (`imposerGardeSession_`) ;
   `getAmendeFormData` et `getPrisonFormData` le renvoient sous `gardeImpose`
   pour figer le champ.
-- `modifierAmendeCheckbox`, case Payé : en session Discord, un GARDE ne la
+- `modifierAmendeCheckbox`, case Payé : en session nominative, un GARDE ne la
   change que sur ses propres amendes ; `getAmendes` renvoie `encaissement`
   pour griser les autres cases. Seul le serveur l'impose.
 - Interface : le nom s'affiche dans la barre latérale et ouvre sa fiche de
@@ -470,7 +597,10 @@ Règles connues :
 - règlement d'une semaine depuis la page Paye ;
 - inventaire des coffres : création et modification des coffres, quantités,
   rangement groupé, déplacements ;
-- révocation d'un permis de chasse.
+- révocation d'un permis de chasse ;
+- lien de connexion d'un membre et retrait de son compte personnel
+  (`creerInvitationCompte`, `supprimerCompte`) ; le renouvellement du lien
+  d'un compte déjà actif exige en outre le grade de Lieutenant ou plus.
 
 ### INTENDANT
 - Organigramme en lecture, comme un GARDE : c'est de là que les cuisines de la

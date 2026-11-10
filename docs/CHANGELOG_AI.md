@@ -1,5 +1,27 @@
 # Journal de passation IA
 
+## 2026-11-10 — Comptes personnels : connexion individuelle sans Discord
+
+- Demande du propriétaire : remettre une authentification individuelle, un
+  sens individuel aux formulaires et à l'historique, neutraliser les codes
+  garde et officier (garder l'intendance). Réalisé : `Comptes.js` (feuille
+  `Comptes`, liens d'invitation à usage unique, empreintes HMAC itérées avec
+  secret du serveur, table `COMPTES_ACCES`), `connecterCompte` /
+  `activerCompte` / `changerMotDePasseCompte` dans `Auth.js`, règles de la
+  session Discord étendues à `via: "compte"` (`Amendes.js`,
+  `HistoriqueEffectifs.js`), écran de connexion et d'activation, bloc
+  « Connexion » des Effectifs, dialogue de mot de passe. Seuil provisoire :
+  OFFICIER dès Sergent-Chef. La coupure des codes se fait par
+  `AUTH_CODES = INTENDANT` après distribution des comptes. Docs, tests et
+  aperçus à jour.
+- Même jour, pour prévenir les abus : renouveler le lien d'un compte actif
+  réservé à Lieutenant et plus ; journal `JournalComptes` de qui remet quel
+  lien à qui (activations, retraits, mots de passe compris), montré sur la
+  fiche.
+- Même jour : écran de connexion refait (panneau centré uni, `CadreConnexion`,
+  partagé avec l'écran d'activation) sur la capture du jeu fournie par le
+  propriétaire, Blancherive depuis les pins, passée en gravure sépia.
+
 ## 2026-11-07 — « Garde de Fort-Dragon », nom affiché de la Cité
 
 - Décision du propriétaire : la Cité de Blancherive s'affiche « Garde de
