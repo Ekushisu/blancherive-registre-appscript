@@ -14,8 +14,11 @@
   OFFICIER dès Sergent-Chef. La coupure des codes se fait par
   `AUTH_CODES = INTENDANT` après distribution des comptes. Docs, tests et
   aperçus à jour.
-- Même jour, pour prévenir les abus : renouveler le lien d'un compte actif
-  réservé à Lieutenant et plus ; journal `JournalComptes` de qui remet quel
+- Même jour, privilèges par grade (`Privileges.js`) : renommage, affectation,
+  statut, spécialité dès Capitaine ; grade et inscription dès Lieutenant,
+  sous son grade seulement ; lien de connexion dès Lieutenant ; interface
+  grisée d'après `getEffectifs().session`, serveur juge.
+- Même jour, pour prévenir les abus : journal `JournalComptes` de qui remet quel
   lien à qui (activations, retraits, mots de passe compris), montré sur la
   fiche.
 - Même jour : écran de connexion refait (panneau centré uni, `CadreConnexion`,

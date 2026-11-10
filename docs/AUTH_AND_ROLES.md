@@ -184,13 +184,12 @@ interface dans `ui/src/compte.jsx`, `ui/src/compte.js` et
    reçoivent le même refus.
 4. **Mot de passe oublié** — un officier génère un nouveau lien ; l'ancien mot
    de passe reste valable jusqu'à l'activation, qui le remplace et ferme les
-   autres sessions. **Pour prévenir les abus** (un nouveau lien sur un compte
-   actif permet de prendre la place du titulaire), ce renouvellement est
-   réservé à **Lieutenant et plus** dans l'ordre de `Données!A`
-   (`COMPTES_SEUIL_NOUVEAU_LIEN`, décision du propriétaire du 10 novembre
-   2026) ; le premier lien d'un membre sans compte reste ouvert à tout
-   OFFICIER, et une session par code commun, sans grade, n'est pas limitée
-   (voie de mise en place, qui disparaît avec `AUTH_CODES = INTENDANT`). Le titulaire change lui-même son mot de passe depuis la
+   autres sessions. **Pour prévenir les abus** (un lien sur un compte actif
+   permet de prendre la place du titulaire), remettre un lien, premier ou
+   nouveau, est réservé à **Lieutenant et plus** (privilège `lien`,
+   `Privileges.js`, décision du propriétaire du 10 novembre 2026) ; une
+   session par code commun, sans grade, n'est pas limitée (voie de mise en
+   place, qui disparaît avec `AUTH_CODES = INTENDANT`). Le titulaire change lui-même son mot de passe depuis la
    barre latérale (`changerMotDePasseCompte`, mot de passe actuel exigé,
    autres sessions fermées).
 5. **Journal** — chaque lien remis (premier, remis à nouveau, renouvelé sur
@@ -599,8 +598,38 @@ Règles connues :
   rangement groupé, déplacements ;
 - révocation d'un permis de chasse ;
 - lien de connexion d'un membre et retrait de son compte personnel
-  (`creerInvitationCompte`, `supprimerCompte`) ; le renouvellement du lien
-  d'un compte déjà actif exige en outre le grade de Lieutenant ou plus.
+  (`creerInvitationCompte`, `supprimerCompte`) ; le lien exige en outre le
+  grade de Lieutenant ou plus.
+
+### Privilèges par grade dans les Effectifs (`Privileges.js`)
+
+Décision du propriétaire, 10 novembre 2026 : le rôle OFFICIER ouvre la page,
+le grade de la fiche de la session compartimente ce qu'elle y change.
+Seuils dans le code (`PRIVILEGES_SEUILS`), rang lu dans `Données!A2:A` :
+
+| Action | Grade minimal | Règle supplémentaire |
+|---|---|---|
+| Renommer un membre | Capitaine | |
+| Changer l'affectation (corps) | Capitaine | |
+| Changer le statut | Capitaine | |
+| Changer la spécialité | Capitaine | |
+| Attribuer ou changer un grade | Lieutenant | grade strictement sous le sien, et membre lui-même placé sous lui |
+| Inscrire un nouveau membre | Lieutenant | même règle : le grade donné est sous le sien |
+| Remettre un lien de connexion | Lieutenant | |
+| Assermentation, compte Discord | Sergent-Chef (OFFICIER) | |
+
+- Une session par code commun n'a pas de fiche : rien n'est limité (mise en
+  place par le propriétaire). Une session nominative dont la fiche est
+  introuvable, ou dont le grade n'est pas dans `Données!A`, n'a aucun
+  privilège et ne peut attribuer aucun grade.
+- Le serveur vérifie chaque champ qui change, avant toute écriture
+  (`modifierEffectifInterne_`, `ajouterEffectifInterne_`, qui reçoivent l'état
+  d'avant de la synchronisation). `getEffectifs` renvoie `session`
+  (`peut`, `gradesAttribuables`) pour que l'interface cache le bouton
+  « Nouveau membre », « Modifier le nom… », grise les listes et ne propose
+  que les grades sous le sien ; ce n'est qu'un confort.
+- `scripts/test-privileges.mjs` vérifie les seuils, la règle du grade sous le
+  sien et que chaque mutation appelle les contrôles avant d'écrire.
 
 ### INTENDANT
 - Organigramme en lecture, comme un GARDE : c'est de là que les cuisines de la

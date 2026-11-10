@@ -77,14 +77,14 @@ function enServiceActif(status) {
   return String(status || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "") === "en service actif";
 }
 
-export function AccesCompte({ member, token, serverCall, onCompte }) {
+export function AccesCompte({ member, token, serverCall, onCompte, peutLien = true }) {
   const [lien, setLien] = useState(null);
   const [erreur, setErreur] = useState("");
   const [busy, setBusy] = useState(false);
   const [copie, setCopie] = useState(false);
   const champ = useRef(null);
   const acces = enServiceActif(member.status);
-  const description = decrireCompte(member.compte, acces);
+  const description = decrireCompte(member.compte, acces && peutLien);
 
   if (!description.etiquette) return null;
 

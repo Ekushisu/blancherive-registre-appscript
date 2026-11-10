@@ -769,6 +769,8 @@ const discord = n => String(300000000000000000n + BigInt(n));
 
 export const effectifs = {
   gradeOrder: GRADES,
+  // Privilèges de la session (Privileges.js) : Astrid, Capitaine, peut tout sauf toucher aux grades au-dessus du sien.
+  session: { grade: "Capitaine", nominative: true, peut: { renommer: true, corps: true, statut: true, specialite: true, grade: true, lien: true }, gradesAttribuables: GRADES.slice(GRADES.indexOf("Capitaine") + 1) },
   changes: { events: [] },
   options: {
     grades: GRADES,

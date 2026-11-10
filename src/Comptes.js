@@ -45,8 +45,8 @@
   Fonctions publiques (appelables par google.script.run) :
   - `lireInvitationCompte(invitation)` : sans jeton, décrit la fiche que le
     lien ouvre (nom, grade, corps, expiration) pour l'écran d'activation ;
-  - `creerInvitationCompte(token, membre)` : OFFICIER, remet un lien ; un
-    nouveau lien pour un compte déjà actif exige Lieutenant et plus ;
+  - `creerInvitationCompte(token, membre)` : OFFICIER, Lieutenant et plus
+    (Privileges.js), remet un lien, premier ou nouveau ;
   - `supprimerCompte(token, membre)` : OFFICIER, retire le compte.
   Chaque lien remis, activation, retrait et changement de mot de passe est
   consigné dans la feuille `JournalComptes`, à ajout seul.
@@ -80,14 +80,13 @@ const COMPTES_JOURNAL_ENTETES = ["Date ISO", "ID membre", "Nom", "Action", "Par"
 const COMPTES_JOURNAL_AFFICHE = 6;
 
 /*
-  Remettre un nouveau lien à un membre qui a déjà un compte revient à pouvoir
-  prendre sa place : réservé à Lieutenant et au-dessus dans `Données!A`
-  (décision du propriétaire, 10 novembre 2026). Le premier lien d'un membre
-  sans compte reste ouvert à tout OFFICIER. Une session par code commun,
-  qui n'a pas de grade, n'est pas limitée : c'est la voie de mise en place
-  du propriétaire, qui disparaît avec `AUTH_CODES = INTENDANT`.
+  Remettre un lien de connexion, premier ou nouveau, est réservé à Lieutenant
+  et plus (Privileges.js, `lien` ; décision du propriétaire, 10 novembre
+  2026) : un lien sur un compte actif permet de prendre la place du
+  titulaire. Une session par code commun, sans fiche, n'est pas limitée :
+  voie de mise en place du propriétaire, qui disparaît avec
+  `AUTH_CODES = INTENDANT`.
 */
-const COMPTES_SEUIL_NOUVEAU_LIEN = "Lieutenant";
 
 // Itérations de l'empreinte : assez pour ralentir un essai, pas au point de
 // faire attendre la connexion (Apps Script n'offre ni bcrypt ni PBKDF2).
@@ -160,9 +159,10 @@ function creerInvitationCompte(token, membre) {
     );
   }
 
+  exigerPrivilege_(gradeSession_(ss, auth, membres), "lien");
+
   const existant = lireComptes_(ss).lignes.find(l => l.id === id);
   const renouvellement = Boolean(existant && existant.empreinte);
-  if (renouvellement) verifierSeuilNouveauLien_(ss, auth, membres);
 
   const url = urlWebAppCompte_();
   const props = PropertiesService.getScriptProperties();
@@ -190,25 +190,6 @@ function creerInvitationCompte(token, membre) {
     nom: nom,
     compte: etatCompte_(ligne, lireJournalComptes_(ss).get(id))
   };
-}
-
-
-/*
-  Grade de la session, pour le renouvellement d'un lien : Lieutenant et plus
-  dans l'ordre de `Données!A`. Une session sans fiche (code commun) passe.
-*/
-function verifierSeuilNouveauLien_(ss, auth, membres) {
-  if (!auth || !auth.membre) return;
-  const fiche = membres.find(m => m.id === auth.membre);
-  const ordre = lireOrdreGradesDiscord_(ss);
-  const seuil = ordre.indexOf(cleGradeDiscord_(COMPTES_SEUIL_NOUVEAU_LIEN));
-  const rang = fiche ? ordre.indexOf(cleGradeDiscord_(fiche.grade)) : -1;
-  if (seuil < 0 || rang < 0 || rang > seuil) {
-    throw new Error(
-      "Remettre un nouveau lien à un membre qui a déjà un compte est réservé aux " +
-      COMPTES_SEUIL_NOUVEAU_LIEN + "s et plus."
-    );
-  }
 }
 
 

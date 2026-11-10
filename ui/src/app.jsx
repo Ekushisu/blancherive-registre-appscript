@@ -52,6 +52,9 @@ function normalizeSearchText(value){return String(value||"").toLowerCase().norma
 function estGradeSommet(grade){return ["jarl","regent imperial","regente imperiale"].includes(normalizeSearchText(grade).trim());}
 // M\u00eame personne, sans casse, accents ni espaces superflus : comme le serveur rapproche les lignes.
 function memeNom(a,b){const n=v=>normalizeSearchText(v).replace(/\s+/g," ").trim();return Boolean(n(a))&&n(a)===n(b);}
+// Privilèges renvoyés par getEffectifs (`session`, Privileges.js) : sans réponse du serveur, tout est proposé et le serveur tranche.
+function peutSession(data,cle){const peut=data?.session?.peut;return !peut||peut[cle]!==false;}
+function gradeAttribuable(session,grade){const liste=session?.gradesAttribuables;return !Array.isArray(liste)||liste.includes(grade);}
 function formatHours(value){const n=Number(value);if(!Number.isFinite(n))return"";if(n<1)return`${Math.round(n*60)} min`;if(Number.isInteger(n))return`${n} h`;const h=Math.floor(n),m=Math.round((n-h)*60);return`${h} h ${m} min`;}
 function formatMontantCourt(value){return new Intl.NumberFormat("fr-FR").format(Number(value)||0);}
 function formatSeptims(value){const n=Number(value)||0;return`${new Intl.NumberFormat("fr-FR").format(n)} septim${Math.abs(n)>1?"s":""}`;}
@@ -538,7 +541,8 @@ function EffectifsPage({token}){
           </p>
         </div>
 
-        <button
+        {/* Inscrire un membre, c'est lui attribuer un grade : Lieutenant et plus (Privileges.js). */}
+        {peutSession(data,"grade")&&<button
           className="primary-button"
           onClick={()=>{
             setShowForm(
@@ -552,7 +556,7 @@ function EffectifsPage({token}){
             ?"Fermer"
             :"+ Nouveau membre"
           }
-        </button>
+        </button>}
       </div>
 
       <div className="effectifs-overview" aria-label="Vue d'ensemble des effectifs">
@@ -578,6 +582,7 @@ function EffectifsPage({token}){
       {showForm&&
         <NouvelEffectifForm
           options={data.options}
+          session={data.session}
           discord={discord}
           rattaches={rattaches}
           initialCorps={
@@ -846,6 +851,7 @@ function EffectifsPage({token}){
                             rattaches={rattaches}
                             token={token}
                             onCompte={patchCompte}
+                            session={data.session}
                             onSave={
                               async values=>{
                                 try{
@@ -966,6 +972,7 @@ function EffectifsPage({token}){
                       rattaches={rattaches}
                       token={token}
                       onCompte={patchCompte}
+                      session={data.session}
                       showCorps
                       onSave={
                         async values=>{
@@ -1042,6 +1049,7 @@ function EffectifsPage({token}){
 
 function NouvelEffectifForm({
   options,
+  session,
   discord,
   rattaches,
   initialCorps,
@@ -1154,8 +1162,8 @@ function NouvelEffectifForm({
               Sélectionner…
             </option>
 
-            {/* Jamais le Jarl ni le Régent impérial : leur grade se change dans la feuille. */}
-            {options.grades.filter(value=>!estGradeSommet(value)).map(
+            {/* Jamais le Jarl ni le Régent impérial : leur grade se change dans la feuille. Et seulement les grades sous le sien. */}
+            {options.grades.filter(value=>!estGradeSommet(value)&&gradeAttribuable(session,value)).map(
               value=>
                 <option
                   key={value}
@@ -1352,6 +1360,7 @@ function NouvelEffectifForm({
 function EffectifCard({
   member,
   options,
+  session,
   discord,
   rattaches,
   token,
@@ -1359,6 +1368,10 @@ function EffectifCard({
   onSave,
   showCorps=false
 }){
+  // Privilèges de la session (Privileges.js) : l'interface grise, le serveur refuse.
+  const peut=cle=>peutSession({session},cle);
+  // Le grade d'un membre placé au-dessus de soi ne se touche pas.
+  const gradeModifiable=peut("grade")&&gradeAttribuable(session,member.grade);
   const memberChanges=useMemberChanges(member.memberId);
   const[editing,setEditing]=
     useState(false);
@@ -1640,7 +1653,7 @@ function EffectifCard({
 
         {/* Compte personnel de connexion : lien à remettre, retrait (compte.jsx). */}
         {token&&onCompte&&
-          <AccesCompte member={member} token={token} serverCall={serverCall} onCompte={onCompte}/>
+          <AccesCompte member={member} token={token} serverCall={serverCall} onCompte={onCompte} peutLien={peut("lien")}/>
         }
       </div>
 
@@ -1695,7 +1708,7 @@ function EffectifCard({
                 Garder le nom actuel
               </button>
             </fieldset>
-            :<div className="effectif-renommage-ouvrir">
+            :peut("renommer")&&<div className="effectif-renommage-ouvrir">
               <button
                 type="button"
                 className="secondary-button"
@@ -1714,7 +1727,7 @@ function EffectifCard({
 
             <select
               value={grade}
-              disabled={sommet}
+              disabled={sommet||saving||!gradeModifiable}
               title={
                 sommet
                   ?`Le grade de ${member.grade} se change dans la feuille Effectifs.`
@@ -1735,8 +1748,8 @@ function EffectifCard({
                 )
               }
             >
-              {/* Le Jarl et le Régent impérial ne sont proposés que sur leur propre fiche. */}
-              {options.grades.filter(value=>sommet||!estGradeSommet(value)).map(
+              {/* Le Jarl et le Régent impérial ne sont proposés que sur leur propre fiche ; seuls les grades sous le sien sont proposés, le grade actuel reste affiché. */}
+              {options.grades.filter(value=>value===member.grade||((sommet||!estGradeSommet(value))&&gradeAttribuable(session,value))).map(
                 value=>
                   <option
                     key={value}
@@ -1753,7 +1766,7 @@ function EffectifCard({
               Corps
             </label>
 
-            <select
+            <select disabled={saving||!peut("corps")}
               value={corps}
               style={
                 effectifsAccent(
@@ -1795,7 +1808,7 @@ function EffectifCard({
 
             {options.specialites.length>0
               ?(
-                <select
+                <select disabled={saving||!peut("specialite")}
                   value={
                     specialite
                   }
@@ -1845,7 +1858,7 @@ function EffectifCard({
                 </select>
               )
               :(
-                <input
+                <input disabled={saving||!peut("specialite")}
                   value={
                     specialite
                   }
@@ -1864,7 +1877,7 @@ function EffectifCard({
               Statut
             </label>
 
-            <select
+            <select disabled={saving||!peut("statut")}
               value={status}
               style={
                 effectifsAccent(

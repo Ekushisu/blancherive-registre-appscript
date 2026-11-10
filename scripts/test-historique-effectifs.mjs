@@ -150,7 +150,8 @@ context.appliquerRolesDiscordApresModification_ = (classeur, apres) => {
   synchrosDiscord.push({ verrou: locked, classeur, acces: apres && apres.accesDiscord });
 };
 assert.throws(() => context.executerMutationHistoriqueEffectifs_('GARDE', {}, () => assert.fail()), /Accès refusé/);
-context.executerMutationHistoriqueEffectifs_('OFFICIER', {}, () => {
+context.executerMutationHistoriqueEffectifs_('OFFICIER', {}, (token, data, avant) => {
+  assert.ok(Array.isArray(avant.members), 'La mutation reçoit l’état d’avant (fiches)');
   assert.equal(locked, true); roster.rows[2][3] = 'Bois-de-Chêne';
 });
 assert.equal(locked, false);

@@ -38,6 +38,13 @@ Principaux modules :
     `verifyAuthToken` le confronte à la table d'accès `DISCORD_ACCES` à chaque
     appel ; `getSessionInfo` renvoie le nom d'une session Discord
 
+- `Privileges.js`
+  - privilèges par grade de la session dans les Effectifs (décision du
+    10 novembre 2026) : `PRIVILEGES_SEUILS` (renommer, corps, statut,
+    spécialité : Capitaine ; grade, lien : Lieutenant), `gradeSession_`,
+    `exigerPrivilege_`, `exigerGradeSousLeSien_` (grade strictement sous le
+    sien), `privilegesSession_` pour `getEffectifs().session`
+
 - `Comptes.js`
   - comptes personnels (décision du 10 novembre 2026) : feuille `Comptes`,
     secret du serveur `COMPTES_SECRET`, empreintes HMAC itérées, liens
@@ -45,9 +52,8 @@ Principaux modules :
     `COMPTES_ACCES` recalculée par la synchronisation de l'historique
     (`mettreAJourAccesComptes_`)
   - publiques : `lireInvitationCompte` (sans jeton), `creerInvitationCompte`
-    (OFFICIER ; Lieutenant et plus pour un compte déjà actif,
-    `verifierSeuilNouveauLien_`) et `supprimerCompte` (OFFICIER) ; aucune ne
-    fabrique de jeton
+    (OFFICIER, Lieutenant et plus par `Privileges.js`) et `supprimerCompte`
+    (OFFICIER) ; aucune ne fabrique de jeton
   - journal `JournalComptes` à ajout seul (`journaliserCompte_`,
     `lireJournalComptes_`) : liens remis, activations, retraits, mots de passe
   - `lireEtatsComptes_` : état par membre pour `getEffectifs` (`compte`)
@@ -60,6 +66,9 @@ Principaux modules :
 
 - `Effectifs.js`
   - API Web OFFICIER pour lire / ajouter / modifier les effectifs
+  - mutations compartimentées par grade (`Privileges.js`) : les fonctions
+    internes reçoivent l'état d'avant (`etat.members`) et vérifient chaque
+    champ qui change avant d'écrire
   - aucune suppression
 
 - `Discord.js`

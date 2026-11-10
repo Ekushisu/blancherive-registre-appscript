@@ -354,6 +354,17 @@ le propriétaire le même jour.
   structurés à l'enregistrement. Ses saisies en texte libre, que le formulaire
   ne sait pas rééditer, restent intactes.
 
+## Privilèges par grade dans les Effectifs
+
+Décision du propriétaire, 10 novembre 2026 (détail et tableau dans
+AUTH_AND_ROLES, « Privilèges par grade ») : la page des Effectifs reste
+ouverte à OFFICIER, mais ce qu'une session y change dépend du grade de sa
+fiche. Renommer, muter, changer le statut ou la spécialité : Capitaine et
+plus. Attribuer ou changer un grade, inscrire un membre : Lieutenant et
+plus, et jamais un grade égal ou supérieur au sien, ni sur un membre placé
+au-dessus de soi. Remettre un lien de connexion : Lieutenant et plus. Une
+session par code commun n'est pas limitée.
+
 ## Saisie à son propre nom (session nominative)
 
 Décision du propriétaire, 11 octobre 2026, étendue le 10 novembre 2026 aux

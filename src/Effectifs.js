@@ -72,7 +72,7 @@ const EFFECTIFS_WEB_TERMINAL_STATUS_GROUPS = [
 // ============================================================
 
 function getEffectifs(token) {
-  requireRole(token, ["OFFICIER"]);
+  const auth = requireRole(token, ["OFFICIER"]);
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName(EFFECTIFS_WEB_SHEET_NAME);
@@ -352,6 +352,9 @@ function getEffectifs(token) {
     changes: historiqueEffectifsPourRole_(history, "OFFICIER"),
     gradeOrder,
 
+    // Ce que la session peut changer, d'après le grade de sa fiche (Privileges.js) ; le serveur revérifie à chaque mutation.
+    session: privilegesSession_(ss, auth, history.members),
+
     options: {
       grades: lireOptionsColonneEffectifsWeb_(
         ss,
@@ -395,8 +398,8 @@ function ajouterEffectif(token, data) {
   return executerMutationHistoriqueEffectifs_(token, data, ajouterEffectifInterne_);
 }
 
-function ajouterEffectifInterne_(token, data) {
-  requireRole(token, ["OFFICIER"]);
+function ajouterEffectifInterne_(token, data, etat) {
+  const auth = requireRole(token, ["OFFICIER"]);
 
   if (!data) {
     throw new Error("Données du nouveau membre manquantes.");
@@ -435,6 +438,15 @@ function ajouterEffectifInterne_(token, data) {
   if (!sheet) {
     throw new Error('Feuille "Effectifs" introuvable.');
   }
+
+  /*
+    Inscrire un membre, c'est lui attribuer un grade : Lieutenant et plus,
+    et un grade strictement sous le sien (Privileges.js). `etat` vient de
+    la synchronisation qui précède la mutation.
+  */
+  const session = gradeSession_(ss, auth, (etat && etat.members) || []);
+  exigerPrivilege_(session, "grade");
+  exigerGradeSousLeSien_(session, grade, "attribuer");
 
   const schema = lireSchemaEffectifsWeb_(sheet);
 
@@ -656,8 +668,8 @@ function modifierEffectif(token, data) {
   return executerMutationHistoriqueEffectifs_(token, data, modifierEffectifInterne_);
 }
 
-function modifierEffectifInterne_(token, data) {
-  requireRole(token, ["OFFICIER"]);
+function modifierEffectifInterne_(token, data, etat) {
+  const auth = requireRole(token, ["OFFICIER"]);
 
   if (!data) {
     throw new Error("Données de modification manquantes.");
@@ -808,6 +820,26 @@ function modifierEffectifInterne_(token, data) {
 
   if (renommage) {
     verifierRenommagePresences_(ss, renommage.ancien, renommage.nouveau);
+  }
+
+  /*
+    Privilèges par grade de la session (Privileges.js), vérifiés sur
+    chaque champ qui change, avant toute écriture : renommage,
+    affectation, statut et spécialité dès Capitaine ; grade dès
+    Lieutenant, strictement sous le sien, sur un membre placé sous lui.
+    `etat` vient de la synchronisation qui précède la mutation.
+  */
+  const session = gradeSession_(ss, auth, (etat && etat.members) || []);
+
+  if (renommage) exigerPrivilege_(session, "renommer");
+  if (corps !== currentCorps) exigerPrivilege_(session, "corps");
+  if (status !== currentStatus) exigerPrivilege_(session, "statut");
+  if (specialite !== currentSpecialite) exigerPrivilege_(session, "specialite");
+
+  if (grade !== currentGrade) {
+    exigerPrivilege_(session, "grade");
+    exigerGradeSousLeSien_(session, currentGrade, "membre");
+    exigerGradeSousLeSien_(session, grade, "attribuer");
   }
 
   /*

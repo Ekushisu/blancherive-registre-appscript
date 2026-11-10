@@ -105,6 +105,7 @@ const context = vm.createContext({
 });
 vm.runInContext(readFileSync('src/Auth.js', 'utf8'), context);
 vm.runInContext(readFileSync('src/Discord.js', 'utf8'), context);
+vm.runInContext(readFileSync('src/Privileges.js', 'utf8'), context);
 // Les itérations réelles ralentissent la suite sans rien prouver de plus.
 const sourceComptes = readFileSync('src/Comptes.js', 'utf8');
 assert.ok(sourceComptes.includes('const COMPTES_ITERATIONS = 2000;'), 'Nombre d’itérations attendu');
@@ -255,7 +256,8 @@ context.synchroniserHistoriqueEffectifs_();
 const invitationEydisTest = context.creerInvitationCompte(officierCode, uuid(4));
 const sessionEydisTest = context.activerCompte(jetonInvitation(invitationEydisTest.url), 'Silence et Patience');
 assert.equal(charge(sessionEydisTest).role, 'OFFICIER');
-assert.throws(() => context.creerInvitationCompte(sessionEydisTest, uuid(2)), /réservé aux Lieutenants et plus/, 'Un Sergent-Chef ne renouvelle pas le lien d’un compte actif');
+assert.throws(() => context.creerInvitationCompte(sessionEydisTest, uuid(2)), /Remettre un lien de connexion est réservé aux Lieutenants et plus/, 'Un Sergent-Chef ne renouvelle pas le lien d’un compte actif');
+assert.throws(() => context.creerInvitationCompte(sessionEydisTest, uuid(1)), /réservé aux Lieutenants et plus/, 'Ni ne remet un premier lien');
 assert.ok(!journal().rows.some(r => r[3] === 'lien' && r[4] === 'Eydis Silencieuse'), 'Le refus n’est pas un lien');
 fiches[3].grade = 'Lieutenant';
 context.synchroniserHistoriqueEffectifs_();
@@ -267,12 +269,11 @@ assert.deepEqual(journal().rows.at(-1).slice(1, 5), [uuid(2), 'Sven Bouclier-de-
 assert.match(journal().rows.at(-1)[5], /^Nouveau lien, compte déjà actif/);
 assert.equal(renouvele.compte.historique[0].par, 'Eydis Silencieuse');
 assert.ok(renouvele.compte.historique.length <= 6);
-// Premier lien d'un membre sans compte : tout officier, Sergent-Chef compris.
+// Premier lien d'un membre sans compte : Lieutenant et plus aussi.
+assert.equal(context.creerInvitationCompte(sessionEydisLt, uuid(1)).compte.etat, 'invitation', 'Premier lien par un Lieutenant');
+assert.equal(journal().rows.at(-1)[4], 'Eydis Silencieuse');
 fiches[3].grade = 'Sergent-Chef';
 context.synchroniserHistoriqueEffectifs_();
-const sessionEydisSc = connecte('Eydis Silencieuse', 'Silence et Patience');
-assert.equal(context.creerInvitationCompte(sessionEydisSc, uuid(1)).compte.etat, 'invitation', 'Premier lien ouvert à tout officier');
-assert.equal(journal().rows.at(-1)[4], 'Eydis Silencieuse');
 context.supprimerCompte(officierCode, uuid(1));
 context.supprimerCompte(officierCode, uuid(4));
 context.synchroniserHistoriqueEffectifs_();
@@ -298,8 +299,8 @@ assert.throws(() => context.activerCompte(jetonInvitation(invitationEydis.url), 
 assert.equal(context.lireEtatsComptes_(ss).get(uuid(4)).etat, 'expire');
 horloge = debut;
 
-// Invitation signée du nom de l'officier en session personnelle.
-fiches[1].grade = 'Sergent-Chef';
+// Invitation signée du nom de l'officier en session personnelle (Lieutenant : privilège lien).
+fiches[1].grade = 'Lieutenant';
 context.synchroniserHistoriqueEffectifs_();
 const sessionSvenOfficier = connecte('Sven Bouclier-de-Bronze', 'Hache & Bouclier 3');
 const invitationEydis2 = context.creerInvitationCompte(sessionSvenOfficier, uuid(4));

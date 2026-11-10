@@ -162,8 +162,9 @@ function executerMutationHistoriqueEffectifs_(token, data, mutation) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   let apres = null;
   avecVerrouHistoriqueEffectifs_(() => {
-    synchroniserHistoriqueEffectifsSansVerrou_(ss, "Détection");
-    try { mutation(token, data); }
+    // L'état d'avant est transmis à la mutation : fiches à jour, dont celle de la session (Privileges.js).
+    const avant = synchroniserHistoriqueEffectifsSansVerrou_(ss, "Détection");
+    try { mutation(token, data, avant); }
     finally { apres = synchroniserHistoriqueEffectifsSansVerrou_(ss, sourceMutationEffectifs_(auth)); }
   });
   // Rôles Discord, hors du verrou ; une panne n'annule jamais la modification (SynchroDiscord.js).

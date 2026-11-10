@@ -23,9 +23,13 @@ Ce fichier décrit le snapshot reçu et doit être mis à jour après les change
   dessous, service actif seul — même seuil que la connexion Discord
   (`DISCORD_SEUIL_OFFICIER`). Un modèle de privilèges par grade reste à
   définir.
-- Abus prévenus (décision du propriétaire, même jour) : renouveler le lien d'un
-  compte déjà actif est réservé à Lieutenant et plus
-  (`COMPTES_SEUIL_NOUVEAU_LIEN`) ; feuille `JournalComptes` (qui a remis quel
+- Privilèges par grade (décision du propriétaire, même jour, `Privileges.js`) :
+  dans les Effectifs, renommage, affectation, statut et spécialité dès
+  Capitaine ; grade et inscription dès Lieutenant, strictement sous son grade
+  et sur un membre placé sous soi ; lien de connexion dès Lieutenant. Le
+  serveur vérifie avant d'écrire, l'interface cache ou grise d'après
+  `getEffectifs().session`. Détail : AUTH_AND_ROLES « Privilèges par grade ».
+- Abus prévenus : feuille `JournalComptes` (qui a remis quel
   lien à qui, activations, retraits, mots de passe), six derniers événements
   et auteur du lien en cours montrés sur la fiche.
 - Codes communs : mécanisme inchangé. À faire par le propriétaire une fois les

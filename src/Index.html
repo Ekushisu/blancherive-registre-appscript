@@ -11258,7 +11258,7 @@ La ligne sera retir\xE9e du registre.`)) return;
   function enServiceActif(status) {
     return String(status || "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "") === "en service actif";
   }
-  function AccesCompte({ member, token, serverCall: serverCall2, onCompte }) {
+  function AccesCompte({ member, token, serverCall: serverCall2, onCompte, peutLien = true }) {
     var _a, _b;
     const [lien, setLien] = useState14(null);
     const [erreur, setErreur] = useState14("");
@@ -11266,7 +11266,7 @@ La ligne sera retir\xE9e du registre.`)) return;
     const [copie, setCopie] = useState14(false);
     const champ = useRef10(null);
     const acces = enServiceActif(member.status);
-    const description = decrireCompte(member.compte, acces);
+    const description = decrireCompte(member.compte, acces && peutLien);
     if (!description.etiquette) return null;
     async function genererLien() {
       setBusy(true);
@@ -11400,6 +11400,15 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
   function memeNom(a, b) {
     const n = (v) => normalizeSearchText2(v).replace(/\s+/g, " ").trim();
     return Boolean(n(a)) && n(a) === n(b);
+  }
+  function peutSession(data, cle) {
+    var _a;
+    const peut = (_a = data == null ? void 0 : data.session) == null ? void 0 : _a.peut;
+    return !peut || peut[cle] !== false;
+  }
+  function gradeAttribuable(session, grade) {
+    const liste = session == null ? void 0 : session.gradesAttribuables;
+    return !Array.isArray(liste) || liste.includes(grade);
   }
   function formatHours(value) {
     const n = Number(value);
@@ -11777,7 +11786,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
     const countForCorps = (corps) => corps === "ALL" ? activeRows.length : activeRows.filter(
       (member) => member.corps === corps
     ).length;
-    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Effectifs"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Gestion des membres de la Garde \u2014 officiers uniquement.")), /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ React.createElement(ChangesProvider, { data: data.changes }, /* @__PURE__ */ React.createElement("div", { className: "effectifs-page" }, /* @__PURE__ */ React.createElement("div", { className: "page-header" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "page-title" }, "Effectifs"), /* @__PURE__ */ React.createElement("p", { className: "page-subtitle" }, "Gestion des membres de la Garde \u2014 officiers uniquement.")), peutSession(data, "grade") && /* @__PURE__ */ React.createElement(
       "button",
       {
         className: "primary-button",
@@ -11794,6 +11803,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
       NouvelEffectifForm,
       {
         options: data.options,
+        session: data.session,
         discord,
         rattaches,
         initialCorps: activeCorps === "ALL" ? "" : activeCorps,
@@ -11945,6 +11955,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
                   rattaches,
                   token,
                   onCompte: patchCompte,
+                  session: data.session,
                   onSave: async (values) => {
                     try {
                       setError("");
@@ -12003,6 +12014,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
               rattaches,
               token,
               onCompte: patchCompte,
+              session: data.session,
               showCorps: true,
               onSave: async (values) => {
                 try {
@@ -12045,6 +12057,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
   }
   function NouvelEffectifForm({
     options,
+    session,
     discord,
     rattaches,
     initialCorps,
@@ -12121,7 +12134,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
           })
         },
         /* @__PURE__ */ React.createElement("option", { value: "" }, "S\xE9lectionner\u2026"),
-        options.grades.filter((value) => !estGradeSommet(value)).map(
+        options.grades.filter((value) => !estGradeSommet(value) && gradeAttribuable(session, value)).map(
           (value) => /* @__PURE__ */ React.createElement(
             "option",
             {
@@ -12252,6 +12265,7 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
   function EffectifCard({
     member,
     options,
+    session,
     discord,
     rattaches,
     token,
@@ -12260,6 +12274,8 @@ Son mot de passe est effac\xE9 et sa session ferm\xE9e. Un nouveau lien recr\xE9
     showCorps = false
   }) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
+    const peut = (cle) => peutSession({ session }, cle);
+    const gradeModifiable = peut("grade") && gradeAttribuable(session, member.grade);
     const memberChanges = useMemberChanges(member.memberId);
     const [editing, setEditing] = useState15(false);
     const [discordId, setDiscordId] = useState15(
@@ -12413,7 +12429,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
         className: `effectif-badge ${member.assermente ? "effectif-badge-sworn" : "effectif-badge-muted"}`
       },
       member.assermente ? "\u2713 Asserment\xE9" : "Non asserment\xE9"
-    ), member.discordAnomalie ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-alerte", title: member.discordAnomalie }, "Discord : anomalie") : member.discordId ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-discord", title: `Compte Discord ${member.discordId}` }, "Discord") : !member.terminalGroup && /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-muted" }, "Sans Discord")), token && onCompte && /* @__PURE__ */ React.createElement(AccesCompte, { member, token, serverCall, onCompte })), !editing && /* @__PURE__ */ React.createElement(
+    ), member.discordAnomalie ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-alerte", title: member.discordAnomalie }, "Discord : anomalie") : member.discordId ? /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-discord", title: `Compte Discord ${member.discordId}` }, "Discord") : !member.terminalGroup && /* @__PURE__ */ React.createElement("span", { className: "effectif-badge effectif-badge-muted" }, "Sans Discord")), token && onCompte && /* @__PURE__ */ React.createElement(AccesCompte, { member, token, serverCall, onCompte, peutLien: peut("lien") })), !editing && /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -12450,7 +12466,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
         onClick: garderNom
       },
       "Garder le nom actuel"
-    )) : /* @__PURE__ */ React.createElement("div", { className: "effectif-renommage-ouvrir" }, /* @__PURE__ */ React.createElement(
+    )) : peut("renommer") && /* @__PURE__ */ React.createElement("div", { className: "effectif-renommage-ouvrir" }, /* @__PURE__ */ React.createElement(
       "button",
       {
         type: "button",
@@ -12463,7 +12479,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
       "select",
       {
         value: grade,
-        disabled: sommet,
+        disabled: sommet || saving || !gradeModifiable,
         title: sommet ? `Le grade de ${member.grade} se change dans la feuille Effectifs.` : void 0,
         style: effectifsAccent(
           (_e = (_d = options.styles) == null ? void 0 : _d.grades) == null ? void 0 : _e[grade],
@@ -12473,7 +12489,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
           e.target.value
         )
       },
-      options.grades.filter((value) => sommet || !estGradeSommet(value)).map(
+      options.grades.filter((value) => value === member.grade || (sommet || !estGradeSommet(value)) && gradeAttribuable(session, value)).map(
         (value) => /* @__PURE__ */ React.createElement(
           "option",
           {
@@ -12486,6 +12502,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Corps"), /* @__PURE__ */ React.createElement(
       "select",
       {
+        disabled: saving || !peut("corps"),
         value: corps,
         style: effectifsAccent(
           (_g = (_f = options.styles) == null ? void 0 : _f.corps) == null ? void 0 : _g[corps],
@@ -12509,6 +12526,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Sp\xE9cialit\xE9"), options.specialites.length > 0 ? /* @__PURE__ */ React.createElement(
       "select",
       {
+        disabled: saving || !peut("specialite"),
         value: specialite,
         style: effectifsAccent(
           (_i = (_h = options.styles) == null ? void 0 : _h.specialites) == null ? void 0 : _i[specialite],
@@ -12541,6 +12559,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     ) : /* @__PURE__ */ React.createElement(
       "input",
       {
+        disabled: saving || !peut("specialite"),
         value: specialite,
         onChange: (e) => setSpecialite(
           e.target.value
@@ -12549,6 +12568,7 @@ Toutes ses semaines de Pr\xE9sences, et les amendes et incarc\xE9rations qu\u201
     )), /* @__PURE__ */ React.createElement("div", { className: "field" }, /* @__PURE__ */ React.createElement("label", null, "Statut"), /* @__PURE__ */ React.createElement(
       "select",
       {
+        disabled: saving || !peut("statut"),
         value: status,
         style: effectifsAccent(
           (_k = (_j = options.styles) == null ? void 0 : _j.statuses) == null ? void 0 : _k[status],
